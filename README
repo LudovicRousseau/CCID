@@ -17,13 +17,13 @@ Supported CCID readers:
 =======================
 
 (in alphabetical order)
-- C3PO LTC31 [8]
+- Cherry XX33 keyboard [?]
+- Dell keyboard SK-3106 [?]
+- Dell smart card reader keyboard [?]
 - Gemplus GemPC 433 SL [2]
 - Gemplus GemPC Key [3]
 - Gemplus GemPC Twin [4]
 - OmniKey CardMan 3121 [5]
-- SCM Micro SCR 331 [6]
-- SCM Micro SCR 335 [7]
 
 
 Should work but untested by me:
@@ -37,14 +37,17 @@ manufacturers, please, contact me.
 - C3PO LTC32 [13]
 - SCM Micro SCR 331-DI [11]
 - SCM Micro SCR 333 [15]
-- SCM Micro SPR 532 [9]
 - Silitek SK-3105 keyboard [12] or C3PO TLTC2USB [14]
 
 
-Unsupported CCID readers:
-=========================
+Unsupported or partly supported CCID readers:
+=============================================
 
-None known.
+- Advanced Card Systems ACR 38 [16] (see Known problems n°1)
+- C3PO LTC31 [8] (see Known problems n°2)
+- SCM Micro SCR 335 [7] (see Known problems n°1)
+- SCM Micro SCR 331 [6] (see Known problems n°1)
+- SCM Micro SPR 532 [9] (see Known problems n°1)
 
 
 Supported operating systems:
@@ -88,12 +91,25 @@ replug your readers. You can also restart pcscd.
 Known problems:
 ===============
 
-MacOSX
-    libusb
-    """"""
-      There is a bug in libusb that crash the libusb library when you
-      unplug a reader and replug it in another USB socket.
-      So if you unplug a reader replug it in the same USB socket.
+1. USB timeout
+""""""""""""""
+    Some readers do timeout when a special USB frame is sent from the
+    reader. If the frame size if a multiple of wMaxPacketSize the
+    communication is stopped. You should contact the reader vendor to
+    upgrade the firmware of the reader or replace the reader.
+
+2. Kernel 2.6
+"""""""""""""
+    The reader works fine with Linux kernel 2.4 but does not with Linux
+    kernel 2.6. The ioctl() syscall returns EINVAL (Invalid argument)
+
+3. MacOSX libusb
+""""""""""""""""
+    There is a bug in libusb that crash the libusb library when you
+    unplug a reader and replug it in another USB socket.  So if you
+    unplug a reader replug it in the same USB socket.
+
+    see http://sourceforge.net/tracker/index.php?func=detail&aid=886778&group_id=1674&atid=101674
 
 
 Licence:
@@ -220,6 +236,7 @@ Bibliography:
 [13] http://www.c3po.es/ltc32.html
 [14] http://www.c3po.es/tltc2usb.html
 [15] http://www.scmmicro.com/security/SCR333.html
+[16] http://www.acs.com.hk/products_readers_acr38.asp
 
 $Id$
 
