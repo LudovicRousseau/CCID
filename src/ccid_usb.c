@@ -71,6 +71,7 @@ typedef struct
 {
 	usb_dev_handle *handle;
 	struct usb_device *dev;
+	int interface;
 
 	/*
 	 * Endpoints
@@ -386,6 +387,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					/* store device information */
 					usbDevice[reader_index].handle = dev_handle;
 					usbDevice[reader_index].dev = dev;
+					usbDevice[reader_index].interface = interface;
 
 					/* CCID common informations */
 					usbDevice[reader_index].ccid.real_bSeq = 0;
@@ -498,9 +500,6 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
  ****************************************************************************/
 status_t CloseUSB(unsigned int reader_index)
 {
-	struct usb_interface *usb_interface;
-	int interface;
-
 	/* device not opened */
 	if (usbDevice[reader_index].dev == NULL)
 		return STATUS_UNSUCCESSFUL;
@@ -509,20 +508,17 @@ status_t CloseUSB(unsigned int reader_index)
 		usbDevice[reader_index].dev->bus->dirname,
 		usbDevice[reader_index].dev->filename);
 
-  	usb_interface = get_ccid_usb_interface(usbDevice[reader_index].dev);
-	interface = usb_interface ?
-		usb_interface->altsetting->bInterfaceNumber :
-		usbDevice[reader_index].dev->config->interface->altsetting->bInterfaceNumber;
-	
 	/* reset so that bSeq starts at 0 again */
 	usb_reset(usbDevice[reader_index].handle);
 
-	usb_release_interface(usbDevice[reader_index].handle, interface);
+	usb_release_interface(usbDevice[reader_index].handle,
+		usbDevice[reader_index].interface);
 	usb_close(usbDevice[reader_index].handle);
 
 	/* mark the resource unused */
 	usbDevice[reader_index].handle = NULL;
 	usbDevice[reader_index].dev = NULL;
+	usbDevice[reader_index].interface = 0;
 
 	return STATUS_SUCCESS;
 } /* CloseUSB */
