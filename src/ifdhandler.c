@@ -30,6 +30,7 @@
 #include "ccid.h"
 #include "protocol_t1/atr.h"
 #include "protocol_t1/pps.h"
+#include "protocol_t1/protocol_t1.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
@@ -586,10 +587,12 @@ RESPONSECODE CardUp(int lun)
 		/* set T=1 context */
 		Protocol_T1_Init(t1, lun);
 
-		/* bloc size is limited by the reader */
-		t1 -> ifsd = MIN(t1 -> ifsd, ccid_desc -> dwMaxIFSD);
-
 		SetParameters(t1->lun, 1, 7, param);
+
+		/* negotiate IFSD */
+		Protocol_T1_Negociate_IFSD(t1, ccid_desc -> dwMaxIFSD);
+
+		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
 	}
 
 	/* PPS not negociated by reader, and TA1 present */
