@@ -21,9 +21,6 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* Define to 1 if you have the <PCSC/ifdhandler.h> header file. */
-#undef HAVE_PCSC_IFDHANDLER_H
-
 /* Define if you have POSIX threads libraries and header files. */
 #undef HAVE_PTHREAD
 
