@@ -282,7 +282,9 @@ int main(int argc, char *argv[])
 	PCSC_ERROR_CONT(rv, "SCardControl")
 
 	{
+#ifndef S_SPLINT_S
 		fd_set fd;
+#endif
 		struct timeval timeout;
 
 		FD_ZERO(&fd);
