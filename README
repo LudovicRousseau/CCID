@@ -131,6 +131,34 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 History:
 ========
 
+0.9.2 - 15 August 2004, Ludovic Rousseau
+    - T=1 TPDU code:
+      . the work on T=1 TPDU code was possible thanks to Gemplus
+        validation team who helped me test, debug and bring the code to
+        an EMV validation level. Thanks to Jérôme, Jean-Yves, Xavier and
+        the Gemplus readers department
+      . error code was not checked correctly
+      . avoid a (nearly) infinite loop when resynch are needed.
+      . correctly initialise an internal value to allow more than one
+        reader to work
+    - multi-slots readers
+      . add support for multi-slots readers. The only one I have is a
+        SCM Micro SCR 331-DI with a contact and a contactless interface.
+        The contactless interface may or may not work for you since the
+        reader uses proprietary (undocumented) commands.
+    - GemPC Twin serial reader
+      . perform a command (get the reader firmware) to be sure a GemPC
+        Twin (serial or pcmcia) reader is connected
+      . use a dynamic timeout when reading the serial port.
+        The first timeout used when detecting the reader is 2 seconds to
+        not wait too long if no reader is connected. Later timeouts are
+        set to 1 minute to allow long time APDU.
+    - use `pkg-config libpcsclite --cflags` to locate the pcsc-lite
+      header files
+    - use `pkg-config --print-errors --atleast-version=1.2.9-beta5 libpcsclite`
+      to test the pcsc-lite version
+    - code improvements thanks to the splint tool (http://www.splint.org/)
+
 0.9.1 - 1 July 2004, Ludovic Rousseau
     - I forgot to define IFD_PARITY_ERROR in a .h file
 
@@ -172,7 +200,6 @@ History:
     - add a mechanism to allow power on at 1.8V, 3V and then 5V as
       specified by ISO 7816. We still use 5V for now to avoid problems
       with non ISO compliant cards
-
 
 0.4.1 - 14 February 2004, Ludovic Rousseau
     - distribute missing files readers/supported_readers.txt and
