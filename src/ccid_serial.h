@@ -31,10 +31,5 @@ status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char
 status_t ReadSerial(unsigned int lun, unsigned int *length, unsigned char
 	*Buffer);
 
-int get_bytes(unsigned int lun, unsigned char *buffer, int length);
-
-int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length, int
-	min_length);
-
 status_t CloseSerial(unsigned int lun);
 

@@ -137,6 +137,13 @@ typedef struct
 /* no need to initialize to 0 since it is static */
 static _serialDevice serialDevice[PCSCLITE_MAX_READERS];
 
+/* unexported functions */
+static int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length,
+	int min_length);
+
+static int get_bytes(unsigned int lun, unsigned char *buffer, int length);
+
+
 /*****************************************************************************
  * 
  *				WriteSerial: Send bytes to the card reader
@@ -369,7 +376,8 @@ int get_bytes(unsigned int lun, unsigned char *buffer, int length)
  *				ReadChunk: read a minimum number of bytes
  *
  *****************************************************************************/
-int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length, int min_length)
+static int ReadChunk(unsigned int lun, unsigned char *buffer,
+	int buffer_length, int min_length)
 {
 	int fd = serialDevice[LunToReaderIndex(lun)].fd;
 # ifndef S_SPLINT_S
