@@ -55,8 +55,8 @@ install: install_ccid
 
 install_ccid: libccid.la
 	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
-	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB).$(VERSION)
 	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist | sed s/VERSION/$(VERSION)/ | sed s/TARGET/$(CCID_LIB)/ > $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/Info.plist
+	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB).$(VERSION)
 
 install_ccidtwin: libccidtwin.la
 	$(mkinstalldirs) $(DESTDIR)$(ccidtwindir)
