@@ -485,6 +485,7 @@ resync:
 				NULL);
 		t1->state = RESYNCH;
 		t1->more = FALSE;
+		retries = 1;
 		continue;
 	}
 
