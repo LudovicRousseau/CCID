@@ -92,39 +92,17 @@ typedef struct
 ATR;
 
 /*
- * Exported variables declaration
- */
-
-extern unsigned atr_f_table[16];
-extern double atr_d_table[16];
-extern unsigned atr_i_table[4];
-
-/*
  * Exported functions declaraton
  */
-
-/* Creation and deletion */
-extern ATR *ATR_New (void);
-extern void ATR_Delete (ATR * atr);
 
 /* Initialization */
 extern int ATR_InitFromArray (ATR * atr, BYTE buffer[ATR_MAX_SIZE], unsigned length);
 
 /* General smartcard characteristics */
 extern int ATR_GetConvention (ATR * atr, int *convention);
-extern int ATR_GetNumberOfProtocols (ATR * atr, unsigned *number_protocols);
-extern int ATR_GetProtocolType (ATR * atr, unsigned number_protocol, BYTE *protocol_type);
 
 /* ATR parameters and integer values */
-extern int ATR_GetInterfaceByte (ATR * atr, unsigned number, int character, BYTE * ib);
 extern int ATR_GetIntegerValue (ATR * atr, int name, BYTE * value);
 extern int ATR_GetParameter (ATR * atr, int name, double *parameter);
-extern int ATR_GetHistoricalBytes (ATR * atr, BYTE * hist, unsigned *length);
-extern int ATR_GetCheckByte (ATR * atr, BYTE * check_byte);
-extern int ATR_GetFsMax (ATR * atr, unsigned long *fsmax);
-
-/* Raw ATR retrieving */
-extern int ATR_GetRaw (ATR * atr, BYTE * buffer, unsigned *lenght);
-extern int ATR_GetSize (ATR * atr, unsigned *size);
 
 #endif /* _ATR_ */

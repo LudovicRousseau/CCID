@@ -61,17 +61,6 @@ atr_i_table[4] =
  * Exported funcions definition
  */
 
-ATR *
-ATR_New (void)
-{
-  ATR *atr;
-
-  /* Allocate memory */
-  atr = (ATR *) malloc (sizeof (ATR));
-
-  return atr;
-}
-
 int
 ATR_InitFromArray (ATR * atr, BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
 {
@@ -185,13 +174,6 @@ ATR_InitFromArray (ATR * atr, BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
   return (ATR_OK);
 }
 
-
-void
-ATR_Delete (ATR * atr)
-{
-  free (atr);
-}
-
 int
 ATR_GetConvention (ATR * atr, int *convention)
 {
@@ -201,53 +183,6 @@ ATR_GetConvention (ATR * atr, int *convention)
     (*convention) = ATR_CONVENTION_INVERSE;
   else
     return (ATR_MALFORMED);
-  return (ATR_OK);
-}
-
-int
-ATR_GetSize (ATR * atr, unsigned *size)
-{
-  (*size) = atr->length;
-  return (ATR_OK);
-}
-
-int
-ATR_GetNumberOfProtocols (ATR * atr, unsigned *number_protocols)
-{
-  (*number_protocols) = atr->pn;
-  return (ATR_OK);
-}
-
-int
-ATR_GetProtocolType (ATR * atr, unsigned number_protocol, BYTE *protocol_type)
-{
-  if ((number_protocol > atr->pn) || number_protocol < 2)
-    return ATR_NOT_FOUND;
-
-  if (atr->ib[number_protocol - 2][ATR_INTERFACE_BYTE_TD].present)
-    (*protocol_type) =
-      (atr->ib[number_protocol - 2][ATR_INTERFACE_BYTE_TD].value & 0x0F);
-  else
-    (*protocol_type) = ATR_PROTOCOL_TYPE_T0;
-
-  return (ATR_OK);
-}
-
-int
-ATR_GetInterfaceByte (ATR * atr, unsigned number, int character, BYTE * value)
-{
-  if (number > atr->pn || number < 1)
-    return (ATR_NOT_FOUND);
-
-  if (atr->ib[number - 1][character].present &&
-      (character == ATR_INTERFACE_BYTE_TA ||
-       character == ATR_INTERFACE_BYTE_TB ||
-       character == ATR_INTERFACE_BYTE_TC ||
-       character == ATR_INTERFACE_BYTE_TD))
-    (*value) = atr->ib[number - 1][character].value;
-  else
-    return (ATR_NOT_FOUND);
-
   return (ATR_OK);
 }
 
@@ -380,78 +315,5 @@ ATR_GetParameter (ATR * atr, int name, double *parameter)
     }
 
   return (ATR_NOT_FOUND);
-}
-
-int
-ATR_GetHistoricalBytes (ATR * atr, BYTE hist[ATR_MAX_HISTORICAL], unsigned *length)
-{
-  if (atr->hbn == 0)
-    return (ATR_NOT_FOUND);
-
-  (*length) = atr->hbn;
-  memcpy (hist, atr->hb, atr->hbn);
-  return (ATR_OK);
-}
-
-int
-ATR_GetRaw (ATR * atr, BYTE buffer[ATR_MAX_SIZE], unsigned *length)
-{
-  unsigned i, j;
-
-  buffer[0] = atr->TS;
-  buffer[1] = atr->T0;
-
-  j = 2;
-
-  for (i = 0; i < atr->pn; i++)
-    {
-      if (atr->ib[i][ATR_INTERFACE_BYTE_TA].present)
-	buffer[j++] = atr->ib[i][ATR_INTERFACE_BYTE_TA].value;
-
-      if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present)
-	buffer[j++] = atr->ib[i][ATR_INTERFACE_BYTE_TB].value;
-
-      if (atr->ib[i][ATR_INTERFACE_BYTE_TC].present)
-	buffer[j++] = atr->ib[i][ATR_INTERFACE_BYTE_TC].value;
-
-      if (atr->ib[i][ATR_INTERFACE_BYTE_TD].present)
-	buffer[j++] = atr->ib[i][ATR_INTERFACE_BYTE_TD].value;
-    }
-
-  if (atr->hbn > 0)
-    {
-      memcpy (&(buffer[j]), atr->hb, atr->hbn);
-      j += atr->hbn;
-    }
-
-  if ((atr->TCK).present)
-    buffer[j++] = (atr->TCK).value;
-
-  (*length) = j;
-
-  return ATR_OK;
-}
-
-int
-ATR_GetCheckByte (ATR * atr, BYTE * check_byte)
-{
-  if (!((atr->TCK).present))
-    return (ATR_NOT_FOUND);
-
-  (*check_byte) = (atr->TCK).value;
-  return (ATR_OK);
-}
-
-int
-ATR_GetFsMax (ATR * atr, unsigned long *fsmax)
-{
-  BYTE FI;
-
-  if (ATR_GetIntegerValue (atr, ATR_INTEGER_VALUE_FI, &FI) == ATR_OK)
-    (*fsmax) = atr_fs_table[FI];
-  else
-    (*fsmax) = atr_fs_table[1];
-
-  return (ATR_OK);
 }
 
