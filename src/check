@@ -76,15 +76,16 @@ then
 
 FILE MISSING!
 You must install the pcsc-lite software before compiling this software
-You can get it from http://linuxnet.com/middle.html or from a package of
-your operating system distribution
+You can get it from
+http://alioth.debian.org/project/showfiles.php?group_id=1225 or from a
+package of your operating system distribution
 EOF
 		exit 1
 	fi
 fi
 
 # check the version of pcsc-lite
-ac_version=\"1.1.2\"
+ac_version=\"1.2.0\"
 ac_hdr=pcsclite.h
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo -n "checking for pcsc-lite version >= $ac_version... "
@@ -120,7 +121,7 @@ then
 
 WRONG VERSION OF PCSC-LITE!
 You can get the latest version of pcsc-lite from
-http://alioth.debian.org/projects/pcsclite/
+http://alioth.debian.org/project/showfiles.php?group_id=1225
 EOF
 	exit 1
 fi
