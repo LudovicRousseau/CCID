@@ -62,17 +62,17 @@
 
 	<key>ifdVendorID</key>
 	<array>
-		VENDOR
+		MAGIC_VENDOR
 	</array>
 
 	<key>ifdProductID</key>
 	<array>
-		PRODUCT
+		MAGIC_PRODUCT
 	</array>
 
 	<key>ifdFriendlyName</key>
 	<array>
-		FRIENDLYNAME
+		MAGIC_FRIENDLYNAME
 	</array>
 
 	<key>Copyright</key>

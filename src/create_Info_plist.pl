@@ -54,17 +54,17 @@ open IN, "< $ARGV[1]" or die "Can't open $ARGV[1]: $!";
 
 while (<IN>)
 {
-	if (m/VENDOR/)
+	if (m/MAGIC_VENDOR/)
 	{
 		print @manuf;
 		next;
 	}
-	if (m/PRODUCT/)
+	if (m/MAGIC_PRODUCT/)
 	{
 		print @product;
 		next;
 	}
-	if (m/FRIENDLYNAME/)
+	if (m/MAGIC_FRIENDLYNAME/)
 	{
 		print @name;
 		next;
