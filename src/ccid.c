@@ -58,11 +58,11 @@ int ccid_open_hack(unsigned int reader_index)
 			/* Reader announces TPDU but can do APDU */
 			if (DriverOptions & DRIVER_OPTION_GEMPC_TWIN_KEY_APDU)
 			{
-				unsigned char cmd[] = "\xA0\x02";
+				unsigned char cmd[] = { 0xA0, 0x02 };
 				unsigned char res[10];
 				unsigned int length_res = sizeof(res);
 
-				if (CmdEscape(reader_index, cmd, sizeof(cmd)-1, res, &length_res) == IFD_SUCCESS)
+				if (CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res) == IFD_SUCCESS)
 				{
 					ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
 					ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
