@@ -1,6 +1,6 @@
 /*
     ccid.c: CCID common code
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2005   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -229,7 +229,7 @@ void ccid_error(int error, char *file, int line, char *function)
 				text = "Unknown CCID error";
 			break;
 	}
-	debug_msg("%s:%d:%s %s", file, line, function, text);
+	log_msg(PCSC_LOG_ERROR, "%s:%d:%s %s", file, line, function, text);
 
 } /* ccid_error */
 
