@@ -310,24 +310,14 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 					continue;
 				}
 
-				if (T1_I_BLOCK == t1_block_type(t1->previous_block[PCB]))
-				{
-					DEBUG_COMM("repeat I-Block");
-					slen = t1_build(t1, sdata, dad, T1_I_BLOCK,
-						&sbuf, &last_send);
-					continue;
-				}
-				else
-				{
-					DEBUG_COMM("R-Block required");
-					/* ISO 7816-3 Rule 7.4.2 */
-					if (retries == 0)
-						goto resync;
-					slen = t1_build(t1, sdata,
-							dad, T1_R_BLOCK | T1_OTHER_ERROR,
-							NULL, NULL);
-					continue;
-				}
+				DEBUG_COMM("R-Block required");
+				/* ISO 7816-3 Rule 7.4.2 */
+				if (retries == 0)
+					goto resync;
+				slen = t1_build(t1, sdata,
+						dad, T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+				continue;
 			}
 
 			if (t1->state == RECEIVING) {
