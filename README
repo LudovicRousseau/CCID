@@ -141,6 +141,25 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+0.9.3 - 14 March 2005, Ludovic Rousseau
+    - change the licence from GNU GPL to GNU Lesser GPL (LGPL)
+    - add support for ACS ACR 38, Kobil KAAN Base, Kobil KAAN Advanced,
+      Kobil KAAN SIM III, Kobil KAAN mIDentity, SCM Micro SCR 331,
+      SCM Micro SCR 331-DI, SCM Micro SCR 335, SCM Micro SCR 3310,
+      SCM Micro SCR 532, Cherry XX44 readers
+    - improve communication speed with readers featuring "Automatic PPS
+      made by the CCID"
+    - switch the Cherry xx33 reader in ISO mode if power up in EMV mode
+      fails.
+    - add support of character level readers. Thanks to O2Micro for the
+      patch
+    - add support for the O2Micro OZ776S reader but the reader firmware
+      is still bogus
+    - check firmware version to avoid firmwares with bugs. You can still
+      use a bogus firmware by setting DRIVER_OPTION_USE_BOGUS_FIRMWARE
+      in Info.plist
+    - some minor bugs removed
+
 0.9.2 - 15 August 2004, Ludovic Rousseau
     - T=1 TPDU code:
       . the work on T=1 TPDU code was possible thanks to Gemplus
