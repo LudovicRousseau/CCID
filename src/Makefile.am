@@ -46,7 +46,7 @@ libccidtwin_la_CFLAGS = -DTWIN_SERIAL
 parse_SOURCES = tokenparser.l parse.c parser.h
 parse_LDADD = libccid.la
 
-EXTRA_DIST = Info.plist reader.conf.in
+EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in
 
 tokenparser_macosx.l: tokenparser.l
 	cp -f $^ $@
