@@ -51,7 +51,7 @@ clean:
 	rm -f libccid.so
 	rm -rf $(BUNDLE)
 	rm -f ifd-ccid
-	rm -f tokenparser.o parse.o
+	rm -f tokenparser.o parse.o parse
 	rm -f Makefile.bak
 	rm -f config.log
 
