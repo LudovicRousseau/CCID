@@ -404,6 +404,7 @@ status_t CloseUSB(int lun)
 	
 	usb_release_interface(usbDevice[reader].handle, interface);
 
+	usb_reset(usbDevice[reader].handle);
 	usb_close(usbDevice[reader].handle);
 
 	/* mark the resource unused */
