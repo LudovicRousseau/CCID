@@ -348,7 +348,7 @@ int ATR_GetDefaultProtocol(ATR_t * atr, int *protocol)
 
 	if (PROTOCOL_UNSET == *protocol)
 	{
-		DEBUG_CRITICAL("no default protocol found in ATR. Using T=0");
+		DEBUG_INFO("no default protocol found in ATR. Using T=0");
 		*protocol = ATR_PROTOCOL_TYPE_T0;
 	}
 
