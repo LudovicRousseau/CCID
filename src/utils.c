@@ -62,6 +62,7 @@ int LunToReaderIndex(const DWORD Lun)
 		if (Lun == ReaderIndex[i])
 			return i;
 
+	DEBUG_CRITICAL2("Lun: %X not found", Lun);
 	return -1;
 } /* LunToReaderIndex */
 
