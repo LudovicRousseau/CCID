@@ -84,7 +84,7 @@ typedef struct
 static int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
 
 /* ne need to initialize to 0 since it is static */
-static _usbDevice usbDevice[PCSCLITE_MAX_READERS];
+static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
 
 #define PCSCLITE_MANUKEY_NAME                   "ifdVendorID"
 #define PCSCLITE_PRODKEY_NAME                   "ifdProductID"
@@ -263,7 +263,7 @@ status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
 					/* is it already opened? */
 					already_used = FALSE;
 
-					for (r=0; r<PCSCLITE_MAX_READERS; r++)
+					for (r=0; r<CCID_DRIVER_MAX_READERS; r++)
 					{
 						if (usbDevice[r].dev)
 						{
@@ -491,7 +491,7 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int lun)
 int get_desc(int channel, usb_dev_handle **handle, struct
 	usb_device **dev)
 {
-	if (channel < 0 || channel > PCSCLITE_MAX_READERS)
+	if (channel < 0 || channel > CCID_DRIVER_MAX_READERS)
 		return 1;
 
 	*handle = usbDevice[channel].handle;

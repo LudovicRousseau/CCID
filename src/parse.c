@@ -52,7 +52,7 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 	status_t res;
 	unsigned int channel;
 
-	for (channel=0; channel<PCSCLITE_MAX_READERS; channel++)
+	for (channel=0; channel<CCID_DRIVER_MAX_READERS; channel++)
 	{
 		res = OpenUSB(channel<<16, channel);
 		if (res != STATUS_SUCCESS)

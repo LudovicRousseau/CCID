@@ -135,7 +135,7 @@ typedef struct
 #include "ccid_serial.h"
 
 /* no need to initialize to 0 since it is static */
-static _serialDevice serialDevice[PCSCLITE_MAX_READERS];
+static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];
 
 /* unexported functions */
 static int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length,
@@ -486,7 +486,7 @@ status_t OpenSerialByName(unsigned int lun, char *dev_name)
 	DEBUG_COMM3("Lun: %X, Device: %d", lun, dev_name);
 
 	/* check if the same channel is not already used */
-	for (i=0; i<PCSCLITE_MAX_READERS; i++)
+	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
 	{
 		if (serialDevice[i].device &&
 			strcmp(serialDevice[i].device, dev_name) == 0)

@@ -32,7 +32,7 @@
  * returns TRUE in case of error */
 int CheckLun(DWORD Lun)
 {
-	if ((LunToReaderIndex(Lun) >= PCSCLITE_MAX_READERS) ||
+	if ((LunToReaderIndex(Lun) >= CCID_DRIVER_MAX_READERS) ||
 		LunToReaderIndex(Lun) < 0)
 		return TRUE;
 

@@ -41,7 +41,7 @@
 #endif
 
 /* Array of structures to hold the ATR and other state value of each slot */
-static CcidDesc CcidSlots[PCSCLITE_MAX_READERS];
+static CcidDesc CcidSlots[CCID_DRIVER_MAX_READERS];
 
 /* global mutex */
 #ifdef HAVE_PTHREAD
@@ -250,7 +250,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			if (*Length >= 1)
 			{
 				*Length = 1;
-				*Value = PCSCLITE_MAX_READERS;
+				*Value = CCID_DRIVER_MAX_READERS;
 			}
 			break;
 
