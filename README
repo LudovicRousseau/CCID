@@ -32,6 +32,7 @@ Supported CCID readers:
 - Gemplus GemPC Twin [4]
 - Kobil KAAN Base [19]
 - Kobil KAAN Advanced [20]
+- Kobil KAAN SIM III [21]
 - OmniKey CardMan 3121 [5]
 - SCM Micro SCR 331 [6]
   You shall upgrade the firmware [17] using version 5.18 or later.
@@ -317,6 +318,7 @@ Bibliography:
 [18] http://www.cherrycorp.com/english/advanced-line/advanced-line_smartboard_g83-6744.htm
 [19] http://www.kobil.com/e/products/smartcard/kaan-base.php
 [20] http://www.kobil.com/e/products/smartcard/kaan-advanced.php
+[21] http://www.kobil.de/d/products/smartcard/kaansim3.php
 
 $Id$
 
