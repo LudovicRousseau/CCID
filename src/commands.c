@@ -525,16 +525,19 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
 	unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
+	int ret;
 
 	DEBUG_COMM2("T=1: %d bytes", tx_length);
 
-	*rx_length = t1_transceive(&((get_ccid_slot(lun)) -> t1), 0, tx_buffer, tx_length, rx_buffer, *rx_length);
+	ret = t1_transceive(&((get_ccid_slot(lun)) -> t1), 0, tx_buffer, tx_length, rx_buffer, *rx_length);
 
-	if (*rx_length < 0)
+	if (ret < 0)
 	{
 		*rx_length = 0;
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
+	else
+		*rx_length = ret;
 
 	return return_value;
 } /* CmdXfrBlockTPDU_T1 */
