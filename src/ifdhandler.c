@@ -214,6 +214,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 		default:
 			return IFD_ERROR_TAG;
 	}
+
 	return IFD_SUCCESS;
 } /* IFDHGetCapabilities */
 
@@ -245,7 +246,7 @@ RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	/* if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR; */
 
-	return IFD_SUCCESS;
+	return IFD_NOT_SUPPORTED;
 } /* IFDHSetCapabilities */
 
 
@@ -272,7 +273,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	/* if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR; */
 
-	return IFD_SUCCESS;
+	return IFD_NOT_SUPPORTED;
 } /* IFDHSetProtocolParameters */
 
 
@@ -466,7 +467,7 @@ RESPONSECODE IFDHControl(DWORD Lun, PUCHAR TxBuffer,
 	if (RxLength)
 		*RxLength = 0;
 
-	return IFD_SUCCESS;
+	return IFD_NOT_SUPPORTED;
 } /* IFDHControl */
 
 
