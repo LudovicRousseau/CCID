@@ -303,7 +303,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				else
 				{
 					DEBUG_COMM("R-Block required");
-					if (retries == 0 || sent_length)
+					if (retries == 0)
 						goto resync;
 					slen = t1_build(t1, sdata,
 							dad, T1_R_BLOCK | T1_OTHER_ERROR,
