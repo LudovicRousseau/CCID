@@ -537,6 +537,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		};
 		int i;
 		t1_state_t *t1 = &(ccid_slot -> t1);
+		RESPONSECODE ret;
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
@@ -566,8 +567,9 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				break;
 			}
 
-		if (IFD_SUCCESS != SetParameters(reader_index, 1, sizeof(param), param))
-			return IFD_COMMUNICATION_ERROR;
+		ret = SetParameters(reader_index, 1, sizeof(param), param);
+		if (IFD_SUCCESS != ret)
+			return ret;
 	}
 	else
 	/* T=0 */
@@ -579,6 +581,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			0x0A,	/* WaitingInteger	*/
 			0x00	/* ClockStop		*/
 		};
+		RESPONSECODE ret;
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
@@ -595,8 +598,9 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		if (atr.ib[1][ATR_INTERFACE_BYTE_TC].present)
 			param[3] = atr.ib[1][ATR_INTERFACE_BYTE_TC].value;
 
-		if (IFD_SUCCESS != SetParameters(reader_index, 0, sizeof(param), param))
-			return IFD_COMMUNICATION_ERROR;
+		ret = SetParameters(reader_index, 0, sizeof(param), param);
+		if (IFD_SUCCESS != ret)
+			return ret;
 	}
 
 	/* set IFSC & IFSD in T=1 */
