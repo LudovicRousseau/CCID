@@ -41,6 +41,8 @@
 		<string>0x076B</string> <!-- 7, OmniKey -->
 
 		<string>0x0783</string>	<!-- 8, C3PO -->
+
+		<string>0x09C3</string>	<!-- 9, ActivCard -->
 	</array>
 
 	<key>ifdProductID</key>
@@ -56,6 +58,8 @@
 		<string>0x3021</string> <!-- 7 -->
 
 		<string>0x0003</string> <!-- 8 -->
+
+		<string>0x0008</string> <!-- 9 -->
 	</array>
 
 	<key>ifdFriendlyName</key>
@@ -71,6 +75,8 @@
 		<string>CardMan 3121</string> <!-- 7 -->
 
 		<string>LTC31</string>        <!-- 8 -->
+
+		<string>ActivCard</string>    <!-- 9 -->
 	</array>
 
 	<key>Copyright</key>
