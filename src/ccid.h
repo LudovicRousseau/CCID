@@ -110,6 +110,7 @@ typedef struct
 #define SCR331DI	0x04E65111
 #define CHERRYXX33	0x046A0005
 #define OZ776		0x0B977762
+#define SPR532		0x04E6E003
 
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
