@@ -59,6 +59,6 @@ PPS;
  * Exported functions declaration
  */
 
-int PPS_Exchange (Protocol_T1 * t1, BYTE * params, unsigned *length);
+int PPS_Exchange (int lun, BYTE * params, unsigned *length);
 
 #endif /* _PPS_ */
