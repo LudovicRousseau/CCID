@@ -42,6 +42,9 @@ if test "$PKGCONFIG" = "yes"; then
 	fi
 fi
 
+AM_CPPFLAGS=`pkg-config libpcsclite --cflags`
+AC_SUBST(AM_CPPFLAGS)
+
 dnl Add libtool support.
 AM_PROG_LIBTOOL
 
