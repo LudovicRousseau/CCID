@@ -17,7 +17,8 @@ COMMON = ccid.c \
 	ifdhandler.h \
 	pcscdefines.h \
 	utils.c \
-	utils.h
+	utils.h \
+	winsmcrd.h
 USB = ccid_usb.c ccid_usb.h
 SERIAL = ccid_serial.c ccid_serial.h
 T1 = protocol_t1/apdu.h \
