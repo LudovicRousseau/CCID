@@ -21,10 +21,10 @@
 #include <string.h>
 
 #include "pcscdefines.h"
+#include "defs.h"
 #include "ifdhandler.h"
 #include "config.h"
 #include "debug.h"
-#include "defs.h"
 #include "utils.h"
 #include "commands.h"
 
@@ -414,27 +414,27 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	 * IFD_ICC_NOT_PRESENT IFD_PROTOCOL_NOT_SUPPORTED
 	 */
 
-	RESPONSECODE return_value = IFD_SUCCESS;	/* Assume it will work */
+	RESPONSECODE return_value;
+	int rx_length;
 
 	DEBUG_INFO2("lun: %X", Lun);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
 
+	rx_length = *RxLength;
 	switch (SendPci.Protocol)
 	{
 		case T_0:
 		case T_1:
-			return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, RxLength,
+			return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, &rx_length,
 				RxBuffer);
 			break;
 
 		default:
 			return_value = IFD_PROTOCOL_NOT_SUPPORTED;
 	}
-
-	if (return_value != IFD_SUCCESS)
-		*RxLength = 0;
+	*RxLength = rx_length;
 
 	return return_value;
 } /* IFDHTransmitToICC */

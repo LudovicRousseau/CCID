@@ -24,6 +24,7 @@
 #include "config.h"
 #include "debug.h"
 #include "pcscdefines.h"
+#include "defs.h"
 #include "ifdhandler.h"
 #include "ccid.h"
 #include "commands.h"

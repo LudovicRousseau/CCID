@@ -24,10 +24,10 @@
 #include <string.h>
 
 #include "pcscdefines.h"
-#include "ifdhandler.h"
 #include "commands.h"
 #include "ccid.h"
 #include "defs.h"
+#include "ifdhandler.h"
 #include "config.h"
 #include "debug.h"
 
@@ -249,7 +249,7 @@ RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[])
  *
  ****************************************************************************/
 RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
-	PDWORD rx_length, unsigned char rx_buffer[])
+	int *rx_length, unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
@@ -303,7 +303,7 @@ clean_up_and_return:
  *
  ****************************************************************************/
 RESPONSECODE CmdXfrBlockShortAPDU(int lun, int tx_length,
-	unsigned char tx_buffer[], PDWORD rx_length, unsigned char rx_buffer[])
+	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	status_t res;
@@ -360,7 +360,7 @@ time_request:
  *
  ****************************************************************************/
 RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
-	PDWORD rx_length, unsigned char rx_buffer[])
+	int  *rx_length, unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	int Le;
