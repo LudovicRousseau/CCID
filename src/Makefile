@@ -41,7 +41,7 @@ endif
 # /home/rousseau/sc/pcsc/ccid-0.5.10 -> 0.5.10
 version=$(shell expr `pwd` : '.*-\([0-9.]*\)')
 
-objects = capabilities.o commands.o debug.o ifdhandler.o ccid_usb.o utils.o
+objects = commands.o debug.o ifdhandler.o ccid_usb.o utils.o
 parse_objects = parse.o
 sources = $(objects:%.o=%.c) $(parse_objects:%.o=%.c)
 

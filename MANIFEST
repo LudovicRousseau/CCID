@@ -12,7 +12,6 @@ readers/LTC31.txt
 readers/SCR331.txt
 readers/SCR335.txt
 README
-src/capabilities.c
 src/ccid_usb.c
 src/ccid_usb.h
 src/check
