@@ -33,6 +33,7 @@
 #include "ccid.h"
 #include "commands.h"
 #include "ifdhandler.h"
+#include "debug.h"
 
 /*
  * Not exported constants definition
@@ -44,8 +45,6 @@
 #define PROTOCOL_T1_DEFAULT_BWI         4
 #define PROTOCOL_T1_EDC_LRC             0
 #define PROTOCOL_T1_EDC_CRC             1
-
-/* #define DEBUG_PROTOCOL */
 
 /*
  * Not exported functions declaration
@@ -100,10 +99,8 @@ Protocol_T1_Init (Protocol_T1 * t1, int lun)
   /* Set initial send sequence (NS) */
   t1->ns = 1;
   
-#ifdef DEBUG_PROTOCOL
-  printf ("Protocol: T=1: IFSC=%d, IFSD=%d, EDC=%s\n",
+  DEBUG_COMM4 ("T=1: IFSC=%d, IFSD=%d, EDC=%s\n",
      t1->ifsc, t1->ifsd, (t1->edc == PROTOCOL_T1_EDC_LRC) ? "LRC" : "CRC");
-#endif
 
   return PROTOCOL_T1_OK;
 }
@@ -130,9 +127,7 @@ Protocol_T1_Command (Protocol_T1 * t1, APDU_Cmd * cmd, APDU_Rsp * rsp)
   /* Create an I-Block */
   block = T1_Block_NewIBlock (bytes, cmd->command, t1->ns, more);
 
-#ifdef DEBUG_PROTOCOL
-  printf ("Sending block I(%d,%d)\n", t1->ns, more);
-#endif
+  DEBUG_COMM3 ("Sending block I(%d,%d)\n", t1->ns, more);
 
   /* Send a block */
   ret = Protocol_T1_SendBlock (t1, block);
@@ -152,9 +147,7 @@ Protocol_T1_Command (Protocol_T1 * t1, APDU_Cmd * cmd, APDU_Rsp * rsp)
           /* Positive ACK R-Block received */
           if (rsp_type == T1_BLOCK_R_OK)
             {
-#ifdef DEBUG_PROTOCOL
-              printf ("Protocol: Received block R(%d)\n", T1_Block_GetNR (block));
-#endif                   
+              DEBUG_COMM2 ("Received block R(%d)\n", T1_Block_GetNR (block));
               /* Delete block */
               T1_Block_Delete (block);
  
@@ -172,9 +165,7 @@ Protocol_T1_Command (Protocol_T1 * t1, APDU_Cmd * cmd, APDU_Rsp * rsp)
               block =
                 T1_Block_NewIBlock (bytes, cmd->command + counter,
                                     t1->ns, more);
-#ifdef DEBUG_PROTOCOL
-              printf ("Protocol: Sending block I(%d,%d)\n", t1->ns, more);
-#endif
+              DEBUG_COMM3 ("Sending block I(%d,%d)\n", t1->ns, more);
               /* Send a block */
               ret = Protocol_T1_SendBlock (t1, block);
 
@@ -214,10 +205,9 @@ Protocol_T1_Command (Protocol_T1 * t1, APDU_Cmd * cmd, APDU_Rsp * rsp)
 
           if (rsp_type == T1_BLOCK_I)
             {
-#ifdef DEBUG_PROTOCOL
-              printf ("Protocol: Received block I(%d,%d)\n", 
+              DEBUG_COMM3 ("Received block I(%d,%d)\n", 
               T1_Block_GetNS(block), T1_Block_GetMore (block));
-#endif
+
               /* Calculate nr */
               nr = (T1_Block_GetNS (block) + 1) % 2;
                                
@@ -237,9 +227,8 @@ Protocol_T1_Command (Protocol_T1 * t1, APDU_Cmd * cmd, APDU_Rsp * rsp)
                 {
                   /* Create an R-Block */
                   block = T1_Block_NewRBlock (T1_BLOCK_R_OK, nr);
-#ifdef DEBUG_PROTOCOL
-                  printf ("Protocol: Sending block R(%d)\n", nr);
-#endif                    
+                  DEBUG_COMM2 ("Sending block R(%d)\n", nr);
+
                   /* Send R-Block */
                   ret = Protocol_T1_SendBlock (t1, block);
 
@@ -253,17 +242,15 @@ Protocol_T1_Command (Protocol_T1 * t1, APDU_Cmd * cmd, APDU_Rsp * rsp)
             {
               /* Get wtx multiplier */
               wtx = (*T1_Block_GetInf (block));
-#ifdef DEBUG_PROTOCOL
-              printf ("Protocol: Received block S(WTX request, %d)\n", wtx);
-#endif                                  
+              DEBUG_COMM2 ("Received block S(WTX request, %d)\n", wtx);
+
               /* Delete block */
               T1_Block_Delete (block);
              
               /* Create an WTX response S-Block */
               block = T1_Block_NewSBlock (T1_BLOCK_S_WTX_RES, 1, &wtx);
-#ifdef DEBUG_PROTOCOL
-              printf ("Protocol: Sending block S(WTX response, %d)\n", wtx);
-#endif                    
+              DEBUG_COMM2 ("Sending block S(WTX response, %d)\n", wtx);
+
               /* Send WTX response */
               ret = Protocol_T1_SendBlock (t1, block);
                   

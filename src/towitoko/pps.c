@@ -30,6 +30,7 @@
 #include "commands.h"
 #include "defs.h"
 #include "ifdhandler.h"
+#include "debug.h"
 
 /*
  * Not exported constants definition
@@ -61,19 +62,11 @@ PPS_Exchange (Protocol_T1 * t1, BYTE * params, unsigned *length)
   BYTE confirm[PPS_MAX_LENGTH];
   unsigned len_request, len_confirm;
   int ret;
-#ifdef DEBUG_PROTOCOL
-  int i;
-#endif
 
   len_request = PPS_GetLength (params);
   params[len_request - 1] = PPS_GetPCK(params, len_request - 1);
 
-#ifdef DEBUG_PROTOCOL
-  printf ("PPS: Sending request: ");
-  for (i = 0; i < len_request; i++)
-    printf ("%X ", params[i]);
-  printf ("\n");
-#endif
+  DEBUG_XXD ("PPS: Sending request: ", params, len_request);
 
   /* Send PPS request */
   if (CCID_Transmit (t1->lun, len_request, params) != IFD_SUCCESS)
@@ -86,12 +79,7 @@ PPS_Exchange (Protocol_T1 * t1, BYTE * params, unsigned *length)
 
   len_confirm = PPS_GetLength (confirm);
 
-#ifdef DEBUG_PROTOCOL
-  printf ("PPS: Receivig confirm: ");
-  for (i = 0; i < len_confirm; i++)
-    printf ("%X ", confirm[i]);
-  printf ("\n");
-#endif
+  DEBUG_XXD ("PPS: Receivig confirm: ", confirm, len_confirm);
 
   if (!PPS_Match (params, len_request, confirm, len_confirm))
     ret = PPS_HANDSAKE_ERROR;

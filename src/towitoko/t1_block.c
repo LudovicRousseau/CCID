@@ -24,13 +24,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* #define DEBUG_PROTOCOL */
-
-#ifdef DEBUG_PROTOCOL
-#include <stdio.h>
-#include "debug.h"
-#endif
-
 /*
  * Not exported constants definition
  */
