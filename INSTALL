@@ -23,6 +23,16 @@ abd "comm" are off. use --enable-debugcomm to enable communication debug
 and --disable-debuginfo to disable info debug messages for example.
 
 
+libusb not found
+~~~~~~~~~~~~~~~~
+
+If the ./configure script says something like:
+  configure: error: usb.h not found, use --enable-libusb=PATH
+You should use --enable-libusb=PATH to tell ./configure where to find
+the usb.h and libusb.so files. The ./configure script will use
+PATH/include/ to search for usb.h and PATH/lib/ to search for libusb.so
+
+
 Binary installation:
 """"""""""""""""""""
 
