@@ -1,6 +1,6 @@
 /*
     parse.c: parse CCID structure
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2004   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,9 +72,9 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 
 	if (channel == 0)
 		printf("No known CCID reader found\n");
-
-	for (channel--; channel!=0; channel--)
-		(void)IFDHCloseChannel(channel<<16);
+	else
+		for (channel--; channel!=0; channel--)
+			(void)IFDHCloseChannel(channel<<16);
 
 	return 0;
 } /* main */
