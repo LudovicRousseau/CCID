@@ -80,6 +80,9 @@ int main(int argc, char *argv[])
 	printf("SCardControl sample code\n");
 	printf("V 1.0 2004, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
 
+	printf("\nTHIS PROGRAM IS NOT DESIGNED AS A TESTING TOOL!\n");
+	printf("Do NOT use it unless you really know what you do.\n\n");
+
 	rv = SCardEstablishContext(SCARD_SCOPE_SYSTEM, NULL, NULL, &hContext);
 	if (rv != SCARD_S_SUCCESS)
 	{
