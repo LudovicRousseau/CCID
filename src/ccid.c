@@ -73,7 +73,7 @@ int ccid_open_hack(unsigned int reader_index)
 		/* SCM SCR331-DI contactless */
 		case SCR331DI:
 			/* the contactless reader is in the second slot */
-			if (ccid_descriptor->bMaxSlotIndex > 0)
+			if (ccid_descriptor->bCurrentSlotIndex > 0)
 			{
 				unsigned char cmd1[] = { 0x00 };
 				/*  command: 00 ??
@@ -93,10 +93,13 @@ int ccid_open_hack(unsigned int reader_index)
 				else
 				{
 					DEBUG_COMM("SCM SCR331-DI contactless init failed");
-
-					/* inhibit the contactless reader */
-					ccid_descriptor->bMaxSlotIndex = 0;
 				}
+
+				/* hack since the contactless reader do not share dwFeatures */
+				ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+				ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
+
+				ccid_descriptor->dwFeatures |= CCID_CLASS_AUTO_IFSD;
 			}
 			break;
 	}
