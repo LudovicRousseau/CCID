@@ -160,7 +160,9 @@ status_t OpenUSBByName(int lun, char *device)
 
 	/* general driver info */
 	if (!LTPBundleFindValueWithKey(infofile, "ifdManufacturerString", keyValue, 0))
+	{
 		DEBUG_CRITICAL2("Manufacturer: %s", keyValue);
+	}
 	else
 	{
 		DEBUG_CRITICAL2("LTPBundleFindValueWithKey error. Can't find %s?",
@@ -168,11 +170,15 @@ status_t OpenUSBByName(int lun, char *device)
 		return STATUS_UNSUCCESSFUL;
 	}
 	if (!LTPBundleFindValueWithKey(infofile, "ifdProductString", keyValue, 0))
+	{
 		DEBUG_CRITICAL2("ProductString: %s", keyValue);
+	}
 	else
 		return STATUS_UNSUCCESSFUL;
 	if (!LTPBundleFindValueWithKey(infofile, "Copyright", keyValue, 0))
+	{
 		DEBUG_CRITICAL2("Copyright: %s", keyValue);
+	}
 	else
 		return STATUS_UNSUCCESSFUL;
 	vendorID = strlen(keyValue);

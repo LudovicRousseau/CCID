@@ -229,12 +229,18 @@ slot_change:
 		return rv;
 
 	if (c == CARD_ABSENT)
+	{
 		DEBUG_COMM("Card removed");
+	}
 	else
 		if (c == CARD_PRESENT)
+		{
 			DEBUG_COMM("Card inserted");
+		}
 		else
+		{
 			DEBUG_COMM2("Unknown card movement: %d", buffer[3]);
+		}
 	goto start;
 
 sync:
