@@ -17,7 +17,6 @@ AC_PREFIX_DEFAULT(/usr/local)
 dnl Automake boilerplate.
 AC_CANONICAL_HOST
 
-
 dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AM_CONFIG_HEADER(config.h)
 
@@ -127,9 +126,10 @@ AC_ARG_ENABLE(multi-thread,
 	[ multithread="${enableval}" ], [ multithread=yes ] )
 
 if test "${multithread}" != no ; then
-	AC_CHECK_HEADERS(pthread.h, [], [ AC_MSG_ERROR([pthread.h not found]) ])
-	AC_CHECK_LIB(pthread, pthread_mutex_lock, [ LIBS="$LIBS -lpthread" ],
-		[ multithread=no ])
+	ACX_PTHREAD(
+		[ AC_DEFINE(HAVE_PTHREAD, 1,
+			[Define if you have POSIX threads libraries and header files.])
+	   	], [ AC_MSG_ERROR([POSIX thread support required]) ])
 fi
 AC_MSG_RESULT([multi threading         : $multithread])
 
@@ -217,6 +217,6 @@ AC_SUBST(bundle)
 AC_SUBST(usbdropdir)
 
 dnl Write Makefiles.
-AC_CONFIG_FILES(Makefile src/Makefile readers/Makefile)
+AC_CONFIG_FILES(Makefile aclocal/Makefile src/Makefile readers/Makefile)
 AC_OUTPUT
 

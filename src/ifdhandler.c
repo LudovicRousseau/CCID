@@ -28,7 +28,7 @@
 #include "utils.h"
 #include "commands.h"
 
-#ifdef HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD
 #include <pthread.h>
 #endif
 
@@ -36,7 +36,7 @@
 static CcidDesc CcidSlots[PCSCLITE_MAX_READERS];
 
 /* global mutex */
-#ifdef HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD
 static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
@@ -90,7 +90,7 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	/* Reset PowerFlags */
 	CcidSlots[LunToReaderIndex(Lun)].bPowerFlags = POWERFLAGS_RAZ;
 
-#ifdef HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD
 	pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
@@ -100,7 +100,7 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
-#ifdef HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD
 	pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
 
@@ -129,13 +129,13 @@ RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	CmdPowerOff(Lun);
 	/* No reader status check, if it failed, what can you do ? :) */
 
-#ifdef HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD
 	pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
 	ClosePort(Lun);
 
-#ifdef HAVE_PTHREAD_H
+#ifdef HAVE_PTHREAD
 	pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
 
@@ -185,6 +185,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 					.pcATRBuffer, *Length);
 			break;
 
+#ifdef HAVE_PTHREAD
 		case TAG_IFD_SIMULTANEOUS_ACCESS:
 			if (*Length >= 1)
 			{
@@ -200,6 +201,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Value = 1; /* Can talk to multiple readers at the same time */
 			}
 			break;
+#endif
 
 		case TAG_IFD_SLOTS_NUMBER:
 			if (*Length >= 1)
@@ -502,5 +504,4 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	return return_value;
 } /* IFDHICCPresence */
-
 
