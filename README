@@ -87,15 +87,6 @@ All platforms
         Another solution is to plug readers one after the other and not
         at the same time.
 
-MacOS X/Darwin
-    hotplug
-    """""""
-      Due to libusb work in progress the driver may crash on a reader
-      insertion after a few insert/remove actions.
-      So if your reader is always connected you should not have
-      problems.
-      A new version of libusb should fix this bug
-
 *BSD
     libusb
     """"""
