@@ -88,13 +88,12 @@ replug your readers. You can also restart pcscd.
 Known problems:
 ===============
 
-*BSD
+MacOSX
     libusb
     """"""
-      The libusb does not yet support USB interrupt endpoints. You will
-      notice that the driver will stop working as soon as you insert a
-      card in the reader.
-      A new version of libusb should fix this bug.
+      There is a bug in libusb that crash the libusb library when you
+      unplug a reader and replug it in another USB socket.
+      So if you unplug a reader replug it in the same USB socket.
 
 
 Licence:
