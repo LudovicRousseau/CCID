@@ -45,6 +45,14 @@ Known problems:
 ===============
 
 All platforms
+    T=1 and TPDU
+    """"""""""""
+      I do not yet included support of T=1 cards when the reader is in
+      TPDU mode.
+      If you have a T=1 card I recommand you to use a reader working in
+      APDU mode. T=1 and TPDU will be supported in a future version of
+      the driver.
+
     readers enumeration
     """""""""""""""""""
       You may have wrong reader identification if you connect two or
