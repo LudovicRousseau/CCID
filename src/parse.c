@@ -109,7 +109,7 @@ int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	else
 		printf(" iProduct: %s\n", buffer);
 
-	usb_interface = dev->config->interface->altsetting;
+	usb_interface = get_ccid_usb_interface(dev)->altsetting;
 	
 	printf(" bLength: %d\n", usb_interface->bLength);
 	
@@ -166,8 +166,13 @@ int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  bDescriptorType: 0x%02X\n", extra[1]);
 	if (extra[1] != 0x21)
 	{
-		printf("   UNSUPPORTED bDescriptorType\n");
-		return TRUE;
+		if (0xFF == extra[1])
+			printf("   PROPRIETARY bDescriptorType\n");
+		else
+		{
+			printf("   UNSUPPORTED bDescriptorType\n");
+			return TRUE;
+		}
 	}
 
 	printf("  bcdCCID: %X.%02X\n", extra[3], extra[2]);
