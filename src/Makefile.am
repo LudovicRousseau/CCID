@@ -35,22 +35,19 @@ EXTRA_DIST = Info.plist reader.conf.in
 install: install_ccid install_ccidtwin
 
 install_ccid: libccid.la
-	mkdir -p $(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
-	cp .libs/$(CCID_LIB) $(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB).$(VERSION)
-	sed s/VERSION/$(VERSION)/ $(srcdir)/Info.plist | sed s/TARGET/$(CCID_LIB)/ > $(CCID_BUNDLE)/Contents/Info.plist
-	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)
-	cp -r $(CCID_BUNDLE) $(DESTDIR)$(usbdropdir)
+	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
+	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB).$(VERSION)
+	sed s/VERSION/$(VERSION)/ $(srcdir)/Info.plist | sed s/TARGET/$(CCID_LIB)/ > $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/Info.plist
 
 install_ccidtwin: libccidtwin.la
-	perl -ne "s|TARGET|$(CCIDFTWIN_PATH)/$(CCIDTWIN_LIB).$(VERSION)| ; print" $(srcdir)/reader.conf.in > reader.conf
 	$(mkinstalldirs) $(DESTDIR)$(CCIDFTWIN_PATH)
 	cp .libs/$(CCIDTWIN_LIB) $(DESTDIR)$(CCIDFTWIN_PATH)/$(CCIDTWIN_LIB).$(VERSION)
 	if [ -e $(DESTDIR)/etc/reader.conf ] ; \
 	then \
-		@echo "Edit existing /etc/reader.conf" ; \
+		echo "Edit existing /etc/reader.conf" ; \
 	else \
 		$(mkinstalldirs) $(DESTDIR)/etc ; \
-		cp reader.conf $(DESTDIR)/etc/ ; \
+		perl -ne "s|TARGET|$(CCIDFTWIN_PATH)/$(CCIDTWIN_LIB).$(VERSION)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/etc/reader.conf ; \
 	fi
 
 uninstall: uninstall_ccid uninstall_ccidtwin
