@@ -299,35 +299,42 @@ clean_up_and_return:
 
 /*****************************************************************************
  *
- *					CmdXfrBlockShortAPDU
+ *					CCID_Transmit
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlockShortAPDU(int lun, int tx_length,
-	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[])
+RESPONSECODE CCID_Transmit(int lun, int tx_length, unsigned char tx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
-	status_t res;
-	int length;
-	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
-	DEBUG_COMM2("ShortAPDU: %d bytes", tx_length);
-
-	cmd[0] = 0x6F; /* IccPowerOff */
+	cmd[0] = 0x6F; /* XfrBlock */
 	i2dw(tx_length, cmd+1);	/* APDU length */
 	cmd[5] = 0;	/* slot number */
 	cmd[6] = ccid_descriptor->bSeq++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 	memcpy(cmd+10, tx_buffer, tx_length);
 
-	res = WritePort(lun, 10+tx_length, cmd);
-	if (res != STATUS_SUCCESS)
+	if (WritePort(lun, 10+tx_length, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
+
+	return IFD_SUCCESS;
+} /* CCID_Transmit */
+
+
+/*****************************************************************************
+ *
+ *					CCID_Receive
+ *
+ ****************************************************************************/
+RESPONSECODE CCID_Receive(int lun, int *rx_length, unsigned char rx_buffer[])
+{
+	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
+	int length;
+	RESPONSECODE return_value = IFD_SUCCESS;
 
 time_request:
 	length = sizeof(cmd);
-	res = ReadPort(lun, &length, cmd);
-	if (res != STATUS_SUCCESS)
+	if (ReadPort(lun, &length, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
@@ -351,7 +358,7 @@ time_request:
 	memcpy(rx_buffer, cmd+10, length);
 
 	return return_value;
-} /* CmdXfrBlockShortAPDU */
+} /* CCID_Receive */
 
 
 /*****************************************************************************
@@ -363,118 +370,14 @@ RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
 	int  *rx_length, unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
-	int Le;
 
 	DEBUG_COMM2("TPDU: %d bytes", tx_length);
 
-	/* Size should be command + one byte of length for
-	 * an outgoing TPDU (CLA, INS, P1, P2, P3) */
-	if (tx_length == (ISO_CMD_SIZE + ISO_LENGTH_SIZE))
-	{
-		return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer, rx_length,
-			rx_buffer);
-	}
-	else
-	{
-		/* just (CLA, INS, P1, P2) for an APDU */
-		if (tx_length == ISO_CMD_SIZE)
-		{
-			return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer,
-					rx_length, rx_buffer);
-		}
-		else
-		{
-			DWORD ntestlength;
-
-			if (tx_length > (ISO_CMD_SIZE + ISO_LENGTH_SIZE))
-			{
-				/* Check length to see if it is a full APDU or a TPDU */
-				ntestlength = tx_buffer[ISO_OFFSET_LENGTH] +
-					ISO_CMD_SIZE + ISO_LENGTH_SIZE;
-
-				if (tx_length == (ntestlength + ISO_LENGTH_SIZE))
-				{
-					DWORD old_rx_length = *rx_length;
-
-					/* tx_buffer holds a proper APDU */
-					Le = tx_buffer[tx_length-1];
-					return_value = CmdXfrBlockShortAPDU(lun, tx_length,
-						tx_buffer, rx_length, rx_buffer);
-
-#if 0
-					if ((return_value == IFD_SUCCESS) && (*rx_length == 2))
-					{
-						/* Buffer for Get Response */
-						tx_buffer[0] = 0x00;
-						tx_buffer[1] = 0xC0;
-						tx_buffer[2] = 0x00;
-						tx_buffer[3] = 0x00;
-
-						if (rx_buffer[0] == 0x61)
-						{
-							/* Get Response */
-							DEBUG_COMM2("TPDU: Automatic Get Response after 61%02X", rx_buffer[1]);
-							*rx_length = old_rx_length;
-
-							/* Card sent 61 xx
-							 * xx = 0 means 256 */
-							if (rx_buffer[1] == 0)
-								/* we want to receive what the APDU asked */
-								rx_buffer[1] = Le;
-							if (Le == 0)
-								/* we want what the card want to send */
-								Le = rx_buffer[1];
-
-							/* Get Response with P3 = min(Le, Lx) */
-							tx_buffer[4] = rx_buffer[1] < Le ? rx_buffer[1] : Le;
-
-							return_value = CmdXfrBlockShortAPDU(lun, tx_length,
-								tx_buffer, rx_length, rx_buffer);
-						}
-						if ((rx_buffer[0] == 0x90) && (rx_buffer[1] == 0x00))
-						{
-							/* Get Response */
-							DEBUG_COMM("TPDU: Automatic Get Response after 9000");
-							*rx_length = old_rx_length;
-
-							/* Card sent 90 00
-							 * Get Response with P3 = Le */
-							tx_buffer[4] = Le;
-
-							return_value = CmdXfrBlockShortAPDU(lun, tx_length,
-								tx_buffer, rx_length, rx_buffer);
-						}
-					}
-#endif
-				}
-				else
-				{
-					if (tx_length > (ntestlength + ISO_LENGTH_SIZE))
-					{
-						/* Data are too long */
-						return_value = IFD_COMMUNICATION_ERROR;
-
-						goto clean_up_and_return;
-					}
-					else
-					{
-						/* tx_buffer holds a proper TPDU */
-						return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer, rx_length, rx_buffer);
-					}
-				}
-			}
-			else
-			{
-				/* tx_buffer holds too little data to form an APDU+length */
-				return_value = IFD_COMMUNICATION_ERROR;
-
-				goto clean_up_and_return;
-			}
-		}
-	}
-
-clean_up_and_return:
-	return return_value;
+	return_value = CCID_Transmit(lun, tx_length, tx_buffer);
+	if (return_value != IFD_SUCCESS)
+		return return_value;
+	
+	return CCID_Receive(lun, rx_length, rx_buffer);
 } /* CmdXfrBlockTPDU */
 
 
