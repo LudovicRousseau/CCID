@@ -77,7 +77,6 @@ Protocol_T1_Negociate_IFSD(Protocol_T1 * t1, int ifsd)
 
 	Protocol_T1_ReceiveBlock(t1, &sblock);
 
-	DEBUG_XXD("data: ", sblock -> data, sblock -> length);
 	t1 -> ifsd = T1_Block_GetInf(sblock)[0];
 
 	return PROTOCOL_T1_OK;
