@@ -37,7 +37,7 @@
  *
  */
  
-#ifndef __CONFIG_H__
+#ifndef PACKAGE		/* PACKAGE is defined in ../config.h by ./configure */
 #error "file config.h NOT included"
 #endif
 
