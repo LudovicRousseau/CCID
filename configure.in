@@ -30,7 +30,6 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AM_PROG_LEX
-AC_CHECK_PROG([PKGCONFIG], [pkg-config], [yes])
 
 dnl check pcsc-lite version
 PKG_CHECK_MODULES(PCSC, libpcsclite >= 1.2.9-beta5, [],
