@@ -424,7 +424,10 @@ RESPONSECODE CmdXfrBlockTPDU_T1(int lun, int tx_length,
 		*rx_length = rsp.length;
 	}
 	else
+	{
+		*rx_length = 0;
 		return_value = IFD_COMMUNICATION_ERROR;
+	}
 
 	return return_value;
 } /* CmdXfrBlockTPDU_T1 */
