@@ -100,6 +100,7 @@ typedef struct
 #define GEMPCTWIN	0x08E63437
 #define CARDMAN3121	0x076B3021
 #define LTC31		0x07830003
+#define SCR331DI	0x04E65111
 
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
