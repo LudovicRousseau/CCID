@@ -36,10 +36,11 @@
 
 		<string>0x04E6</string> <!-- 4, SCM Microsystems -->
 		<string>0x04E6</string> <!-- 5 -->
+		<string>0x04E6</string> <!-- 6 -->
 
-		<string>0x076B</string> <!-- 6, OmniKey -->
+		<string>0x076B</string> <!-- 7, OmniKey -->
 
-		<string>0x0783</string>	<!-- 7, C3PO -->
+		<string>0x0783</string>	<!-- 8, C3PO -->
 	</array>
 
 	<key>ifdProductID</key>
@@ -50,10 +51,11 @@
 
 		<string>0x5115</string> <!-- 4 -->
 		<string>0xE001</string> <!-- 5 -->
+		<string>0xE003</string> <!-- 6 -->
 
-		<string>0x3021</string> <!-- 6 -->
+		<string>0x3021</string> <!-- 7 -->
 
-		<string>0x0003</string> <!-- 7 -->
+		<string>0x0003</string> <!-- 8 -->
 	</array>
 
 	<key>ifdFriendlyName</key>
@@ -64,10 +66,11 @@
 
 		<string>SCR 335</string>      <!-- 4 -->
 		<string>SCR 331</string>      <!-- 5 -->
+		<string>SPR 532</string>      <!-- 6 -->
 
-		<string>CardMan 3121</string> <!-- 6 -->
+		<string>CardMan 3121</string> <!-- 7 -->
 
-		<string>LTC31</string>        <!-- 7 -->
+		<string>LTC31</string>        <!-- 8 -->
 	</array>
 
 	<key>Copyright</key>
