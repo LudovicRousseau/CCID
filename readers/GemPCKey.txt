@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 001/041
- iManufacturer: Gemplus
- iProduct: USB SmartCard Reader
+ idVendor: 0x08E6
+  iManufacturer: Gemplus
+ idProduct: 0x3438
+  iProduct: USB SmartCard Reader
+ bcdDevice: 1.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0

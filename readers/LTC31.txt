@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 001/043
- iManufacturer: C3PO
- iProduct: LTC3x USB
+ idVendor: 0x0783
+  iManufacturer: C3PO
+ idProduct: 0x0003
+  iProduct: LTC3x USB
+ bcdDevice: 1.16 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0

@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 001/040
- Can't get iManufacturer string
- Can't get iProduct string
+ idVendor: 0x076B
+  iManufacturer: OMNIKEY AG
+ idProduct: 0x3021
+  iProduct: Smart Card Reader USB
+ bcdDevice: 1.01 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0

@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 003/006
- iManufacturer: Gemplus
- iProduct: Dell USB Smartcard Keyboard
+ idVendor: 0x413C
+  iManufacturer: Gemplus
+ idProduct: 0x2100
+  iProduct: Dell USB Smartcard Keyboard
+ bcdDevice: 0.10 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 1

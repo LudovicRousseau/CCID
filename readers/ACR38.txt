@@ -1,6 +1,9 @@
-Parsing Interface Descriptor for device: 003/011
- iManufacturer: ACS
- iProduct: ACR38 USB Reader
+Parsing Interface Descriptor for device: 001/024
+ idVendor: 0x072F
+  iManufacturer: ACS
+ idProduct: 0x90CC
+  iProduct: ACR38 USB Reader
+ bcdDevice: 1.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0

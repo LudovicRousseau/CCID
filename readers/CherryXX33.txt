@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 003/009
- iManufacturer: Cherry GmbH
- iProduct: SmartBoard XX33
+ idVendor: 0x046A
+  iManufacturer: Cherry GmbH
+ idProduct: 0x0005
+  iProduct: SmartBoard XX33
+ bcdDevice: 1.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 1

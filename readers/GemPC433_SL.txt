@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 001/038
- iManufacturer: GEMPLUS
- iProduct: Gemplus USB SmartCard Reader 433-Swap
+ idVendor: 0x08E6
+  iManufacturer: GEMPLUS
+ idProduct: 0x4433
+  iProduct: Gemplus USB SmartCard Reader 433-Swap
+ bcdDevice: 0.01 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
