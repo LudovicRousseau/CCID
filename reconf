@@ -12,6 +12,6 @@ set -x
 if test -f Makefile; then
   make distclean
 fi
-rm -rf *.cache *.m4 config.guess config.log config.status config.sub depcomp ltmain.sh
+rm -rf *.cache *.m4 build/{config.guess,config.sub,depcomp,ltmain.sh} config.log config.status
 autoreconf --verbose --install
 
