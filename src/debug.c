@@ -35,7 +35,7 @@ static char DebugBuffer[DEBUG_BUF_SIZE];
 
 #define LOG_TO_STDERR
 
-void debug_msg(char *fmt, ...)
+void log_msg(const int priority, const char *fmt, ...)
 {
 	va_list argptr;
 
@@ -46,9 +46,10 @@ void debug_msg(char *fmt, ...)
 #ifdef LOG_TO_STDERR
 	fprintf(stderr, "%s\n", DebugBuffer);
 #endif
-} /* debug_msg */
+} /* log_msg */
 
-void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
+void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
+	const int len)
 {
 	int i;
 	char *c, *debug_buf_end;
@@ -70,5 +71,5 @@ void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
 
 	fprintf(stderr, "%s\n", DebugBuffer);
 #endif
-} /* debug_xxd */
+} /* log_xxd */
 
