@@ -139,9 +139,6 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	/* Maybe we have a special treatment for this reader */
 	ccid_open_hack(Lun);
 
-	/* initialize T=1 context */
-	Protocol_T1_Close(&((get_ccid_slot(Lun)) -> t1));
-
 #ifdef HAVE_PTHREAD
 	pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
@@ -695,5 +692,5 @@ RESPONSECODE CardDown(int lun)
 	Protocol_T1_Close(&((get_ccid_slot(lun)) -> t1));
 
 	return IFD_SUCCESS;
-} /* CardUp */
+} /* CardDown */
 
