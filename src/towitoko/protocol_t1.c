@@ -66,22 +66,22 @@ Protocol_T1_ReceiveBlock (Protocol_T1 * t1, T1_Block ** block);
 int
 Protocol_T1_Negociate_IFSD(Protocol_T1 * t1, int ifsd)
 {
-	T1_Block *sblock;
+	T1_Block *block;
 	BYTE inf[1];
 	int ret;
 
 	inf[0] = ifsd;
-	sblock = T1_Block_NewSBlock(T1_BLOCK_S_IFS_REQ, 1, inf);
+	block = T1_Block_NewSBlock(T1_BLOCK_S_IFS_REQ, 1, inf);
 
-	ret = Protocol_T1_SendBlock(t1, sblock);
-	T1_Block_Delete(sblock);
+	ret = Protocol_T1_SendBlock(t1, block);
+	T1_Block_Delete(block);
 	if (PROTOCOL_T1_OK != ret)
 		return ret;
 
-	if (PROTOCOL_T1_OK == Protocol_T1_ReceiveBlock(t1, &sblock))
+	if (PROTOCOL_T1_OK == Protocol_T1_ReceiveBlock(t1, &block))
 	{
-		t1 -> ifsd = T1_Block_GetInf(sblock)[0];
-		T1_Block_Delete(sblock);
+		t1 -> ifsd = T1_Block_GetInf(block)[0];
+		T1_Block_Delete(block);
 	}
 
 	return PROTOCOL_T1_OK;
