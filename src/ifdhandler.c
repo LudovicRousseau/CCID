@@ -446,9 +446,8 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	}
 	else
 	{
-		/* PPS not negociated by reader, and TA1 present */
-		if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present &&
-			! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
+		/* TA1 present */
+		if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
 		{
 			unsigned int card_baudrate;
 			unsigned int default_baudrate;
