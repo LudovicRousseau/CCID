@@ -160,52 +160,12 @@ again:
 RESPONSECODE SecurePIN(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength)
-
 {
 	unsigned char cmd[11+14+CMD_BUF_SIZE];
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
-	int length = 0;
-
-	/* PIN verification data structure WITHOUT TeoPrologue */
-	if (TxBuffer[4] /* Lc */
-		+ 5 /* CLA, INS, P1, P2, Lc */
-		+ 11 /* CCID PIN verification data structure */ == TxLength)
-	{
-		i2dw(TxLength+3+1, cmd+1);	/* command length */
-
-		/* copy the CCID data structure */
-		memcpy(cmd +11, TxBuffer + TxBuffer[4] + 5, 11);
-
-		/* TeoPrologue not used */
-		memset(cmd +11 +11, 0, 3);
-
-		/* copy the APDU */
-		memcpy(cmd +11 +14, TxBuffer, TxLength-11);
-
-		length = 14 + TxLength;
-	}
-	/* PIN verification data structure WITH TeoPrologue */
-	else if (TxBuffer[4] /* Lc */
-		+ 5 /* CLA, INS, P1, P2, Lc */
-		+ 14 /* CCID PIN verification data structure */ == TxLength)
-	{
-		i2dw(TxLength+1, cmd+1);	/* command length */
-
-		/* copy the CCID data structure */
-		memcpy(cmd +11, TxBuffer + TxBuffer[4] + 5, 14);
-
-		/* copy the APDU */
-		memcpy(cmd +11 +14, TxBuffer, TxLength-14);
-
-		length = 11 + TxLength;
-	}
-	else
-	{
-		*RxLength = 0;
-		return IFD_COMMUNICATION_ERROR;
-	}
 
 	cmd[0] = 0x69;	/* Secure */
+	i2dw(TxLength+1, cmd+1);	/* command length (includes bPINOperation) */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = 0;		/* bBWI */
@@ -213,7 +173,10 @@ RESPONSECODE SecurePIN(unsigned int reader_index,
 	cmd[9] = 0;
 	cmd[10] = 0;	/* bPINOperation: PIN Verification */
 
-	if (WritePort(reader_index, length, cmd) != STATUS_SUCCESS)
+	/* CCID data structure + APDU */
+	memcpy(cmd + 11, TxBuffer, TxLength);
+
+	if (WritePort(reader_index, TxLength+1+10, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	return CCID_Receive(reader_index, RxLength, RxBuffer);
