@@ -126,8 +126,11 @@ int ccid_parse_interface_descriptor(char device_name[], usb_dev_handle *handle,
 		printf(" [Chip Card Interface Device Class (CCID)]\n");
 	else
 	{
-		printf("NOT A CCID DEVICE\n");
-		return TRUE;
+		printf(" NOT A CCID DEVICE\n");
+		if (usb_interface->bInterfaceClass != 0xFF)
+			return TRUE;
+		else
+			printf(" Class is 0xFF (proprietary)\n");
 	}
 	
 	printf(" bInterfaceSubClass: %d\n", usb_interface->bInterfaceSubClass);
