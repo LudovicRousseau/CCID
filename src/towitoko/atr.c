@@ -317,3 +317,41 @@ ATR_GetParameter (ATR * atr, int name, double *parameter)
   return (ATR_NOT_FOUND);
 }
 
+/*
+ * This function was greatly inspired by ATRDecodeAtr() and
+ * PHGetDefaultProtocol() from pcsc-lite
+ *
+ * It was rewritten by Ludovic Rousseau, 2004
+ */
+#define PROTOCOL_UNSET -1
+int ATR_GetDefaultProtocol(ATR * atr, int *protocol)
+{
+	int i;
+
+	/* default value */
+	*protocol = PROTOCOL_UNSET;
+
+	for (i=0; i<ATR_MAX_PROTOCOLS; i++)
+		if (atr->ib[i][ATR_INTERFACE_BYTE_TD].present && (PROTOCOL_UNSET == *protocol))
+		{
+			/* set to the first protocol byte found */
+			*protocol = atr->ib[i][ATR_INTERFACE_BYTE_TD].value & 0x0F;
+			DEBUG_COMM2("default protocol: T=%d", *protocol);
+		}
+
+	/* specific mode if TA2 present */
+	if (atr->ib[1][ATR_INTERFACE_BYTE_TA].present)
+	{
+		*protocol = atr->ib[1][ATR_INTERFACE_BYTE_TA].value & 0x0F;
+		DEBUG_COMM2("specific mode found: T=%d", *protocol);
+	}
+
+	if (PROTOCOL_UNSET == *protocol)
+	{
+		DEBUG_CRITICAL("no default protocol found in ATR. Using T=0");
+		*protocol = ATR_PROTOCOL_TYPE_T0;
+	}
+
+	return ATR_OK;
+}
+
