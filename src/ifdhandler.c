@@ -533,13 +533,29 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, LPCVOID TxBuffer,
 	if (IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE == dwControlCode)
 	{
 		if (FALSE == (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED))
+		{
+			DEBUG_INFO("ifd exchange (Escape command) not allowed");
 			return_value = IFD_COMMUNICATION_ERROR;
+		}
 		else
 		{
-			*pdwBytesReturned = RxLength;
+			int iBytesReturned;
+
+			iBytesReturned = RxLength;
 			return_value = CmdEscape(Lun, TxBuffer, TxLength, RxBuffer,
-				pdwBytesReturned);
+				&iBytesReturned);
+			*pdwBytesReturned = iBytesReturned;
 		}
+	}
+
+	if (IOCTL_SMARTCARD_VENDOR_VERIFY_PIN == dwControlCode)
+	{
+		int iBytesReturned;
+
+		iBytesReturned = RxLength;
+		return_value = SecurePIN(Lun, TxBuffer, TxLength, RxBuffer,
+			&iBytesReturned);
+		*pdwBytesReturned = iBytesReturned;
 	}
 
 	return return_value;

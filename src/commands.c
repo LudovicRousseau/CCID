@@ -83,7 +83,7 @@ again:
 		{
 			unsigned char cmd[] = "\x1F\x01";
 			unsigned char res[1];
-			unsigned long res_length = sizeof(res);
+			int res_length = sizeof(res);
 
 			if ((return_value = CmdEscape(lun, cmd, sizeof(cmd)-1, res,
 				&res_length)) != IFD_SUCCESS)
@@ -114,11 +114,77 @@ again:
 
 /*****************************************************************************
  *
+ *					SecurePIN
+ *
+ ****************************************************************************/
+RESPONSECODE SecurePIN(int lun, const unsigned char TxBuffer[], int TxLength,
+	unsigned char RxBuffer[], int *RxLength)
+{
+	unsigned char cmd[11+14+CMD_BUF_SIZE];
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	int length = 0;
+
+	/* PIN verification data structure WITHOUT TeoPrologue & bPINOperation */
+	if (TxBuffer[4] /* Lc */
+		+ 5 /* CLA, INS, P1, P2, Lc */
+		+ 11 /* CCID PIN verification data structure */ == TxLength)
+	{
+		i2dw(TxLength+3+1, cmd+1);	/* command length */
+
+		/* copy the CCID data structure */
+		memcpy(cmd +11, TxBuffer + TxBuffer[4] + 5, 11);
+
+		/* TeoPrologue not used */
+		memset(cmd +11 + 11, 0, 3);
+
+		/* copy the APDU */
+		memcpy(cmd +11 +14, TxBuffer, TxLength-11);
+
+		length = 14 + TxLength;
+	}
+	/* PIN verification data structure WITH TeoPrologue & bPINOperation */
+	else if (TxBuffer[4] /* Lc */
+		+ 5 /* CLA, INS, P1, P2, Lc */
+		+ 15 /* CCID PIN verification data structure */ == TxLength)
+	{
+		i2dw(TxLength, cmd+1);	/* command length */
+
+		/* copy the CCID data structure */
+		memcpy(cmd +10, TxBuffer + TxBuffer[4] + 5, 15);
+
+		/* copy the APDU */
+		memcpy(cmd +10 +15, TxBuffer, TxLength-15);
+
+		length = 10 + TxLength;
+	}
+	else
+	{
+		*RxLength = 0;
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	cmd[0] = 0x69;	/* Secure */
+	cmd[5] = 0;		/* slot number */
+	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[7] = 0;		/* bBWI */
+	cmd[8] = 0;		/* wLevelParameter */
+	cmd[9] = 0;
+	cmd[10] = 0;	/* bPINOperation: PIN Verification */
+
+	if (WritePort(lun, length, cmd) != STATUS_SUCCESS)
+		return IFD_COMMUNICATION_ERROR;
+
+	return CCID_Receive(lun, RxLength, RxBuffer);
+} /* SecurePIN */
+
+
+/*****************************************************************************
+ *
  *					Escape
  *
  ****************************************************************************/
 RESPONSECODE CmdEscape(int lun, const unsigned char TxBuffer[], int TxLength,
-	unsigned char RxBuffer[], unsigned long *RxLength)
+	unsigned char RxBuffer[], int *RxLength)
 {
 	unsigned char *cmd_in, *cmd_out;
 	status_t res;
@@ -324,7 +390,8 @@ clean_up_and_return:
  *					CCID_Transmit
  *
  ****************************************************************************/
-RESPONSECODE CCID_Transmit(int lun, int tx_length, unsigned char tx_buffer[])
+RESPONSECODE CCID_Transmit(int lun, int tx_length,
+	const unsigned char tx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);

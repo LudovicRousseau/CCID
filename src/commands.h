@@ -26,19 +26,23 @@
 #define ERROR_OFFSET 8
 
 RESPONSECODE CmdPowerOn(int lun, int * nlength, unsigned char buffer[]);
+RESPONSECODE SecurePIN(int lun, const unsigned char TxBuffer[], int TxLength,
+	unsigned char RxBuffer[], int *RxLength);
 RESPONSECODE CmdEscape(int lun, const unsigned char TxBuffer[], int TxLength,
-	unsigned char RxBuffer[], unsigned long *RxLength);
+	unsigned char RxBuffer[], int *RxLength);
 RESPONSECODE CmdPowerOff(int lun);
 RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[]);
 RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
 	int *rx_length, unsigned char rx_buffer[], int protoccol);
-RESPONSECODE CCID_Transmit(int lun, int tx_length, unsigned char tx_buffer[]);
+RESPONSECODE CCID_Transmit(int lun, int tx_length,
+	const unsigned char tx_buffer[]);
 RESPONSECODE CCID_Receive(int lun, int *rx_length, unsigned char rx_buffer[]);
 RESPONSECODE CmdXfrBlockTPDU_T0(int lun, int tx_length,
 	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[]);
 RESPONSECODE CmdXfrBlockTPDU_T1(int lun, int tx_length,
 	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[]);
-RESPONSECODE SetParameters(int lun, char protocol, int length, unsigned char buffer[]);
+RESPONSECODE SetParameters(int lun, char protocol, int length,
+	unsigned char buffer[]);
 
 void i2dw(int value, unsigned char *buffer);
 
