@@ -1,0 +1,727 @@
+/*
+ * Implementation of T=1
+ *
+ * Copyright (C) 2003, Olaf Kirch <okir@suse.de>
+ */
+
+#include <PCSC/pcsclite.h>
+#include <PCSC/ifdhandler.h>
+#include "commands.h"
+#include "buffer.h"
+#include "debug.h"
+#include "proto-t1.h"
+#include "checksum.h"
+
+#include <sys/poll.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* T=1 protocol constants */
+#define T1_I_BLOCK		0x00
+#define T1_R_BLOCK		0x80
+#define T1_S_BLOCK		0xC0
+#define T1_MORE_BLOCKS		0x20
+
+/* I block */
+#define T1_I_SEQ_SHIFT		6
+
+/* R block */
+#define T1_IS_ERROR(pcb)	((pcb) & 0x0F)
+#define T1_EDC_ERROR		0x01
+#define T1_OTHER_ERROR		0x02
+#define T1_R_SEQ_SHIFT		4
+
+/* S block stuff */
+#define T1_S_IS_RESPONSE(pcb)	((pcb) & T1_S_RESPONSE)
+#define T1_S_TYPE(pcb)		((pcb) & 0x0F)
+#define T1_S_RESPONSE		0x20
+#define T1_S_RESYNC		0x00
+#define T1_S_IFS		0x01
+#define T1_S_ABORT		0x02
+#define T1_S_WTX		0x03
+
+#define swap_nibbles(x) ( (x >> 4) | ((x & 0xF) << 4) )
+
+#ifndef TRUE
+#define TRUE 1
+#define FALSE 0
+#endif
+
+#define NAD 0
+#define PCB 1
+#define LEN 2
+#define DATA 3
+
+/* internal state, do not mess with it. */
+/* should be != DEAD after reset/init */
+enum {
+	SENDING, RECEIVING, RESYNCH, DEAD
+};
+
+static void		t1_set_checksum(t1_state_t *, int);
+static unsigned	int	t1_block_type(unsigned char);
+static unsigned int	t1_seq(unsigned char);
+static unsigned	int	t1_build(t1_state_t *, unsigned char *,
+				unsigned char, unsigned char,
+				ct_buf_t *, size_t *);
+unsigned int	t1_rebuild(t1_state_t *t1, unsigned char *block);
+static unsigned int	t1_compute_checksum(t1_state_t *,
+				unsigned char *, size_t);
+static int		t1_verify_checksum(t1_state_t *, unsigned char *,
+				size_t);
+static int		t1_xcv(t1_state_t *, unsigned char *, size_t, size_t);
+
+/*
+ * Set default T=1 protocol parameters
+ */
+static void
+t1_set_defaults(t1_state_t *t1)
+{
+	t1->retries  = 3;
+	/* This timeout is rather insane, but we need this right now
+	 * to support cryptoflex keygen */
+	t1->ifsc     = 32;
+	t1->ifsd     = 32;
+	t1->nr	     = 0;
+	t1->ns	     = 0;
+	t1->wtx	     = 0;
+}
+
+void
+t1_set_checksum(t1_state_t *t1, int csum)
+{
+	switch (csum) {
+	case IFD_PROTOCOL_T1_CHECKSUM_LRC:
+		t1->rc_bytes = 1;
+		t1->checksum = csum_lrc_compute;
+		break;
+	case IFD_PROTOCOL_T1_CHECKSUM_CRC:
+		t1->rc_bytes = 2;
+		t1->checksum = csum_crc_compute;
+		break;
+	}
+}
+
+/*
+ * Attach t1 protocol
+ */
+int
+t1_init(t1_state_t *t1)
+{
+	t1_set_defaults(t1);
+	t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
+	t1_set_param(t1, IFD_PROTOCOL_STATE, SENDING);
+	t1_set_param(t1, IFD_PROTOCOL_MORE, FALSE);
+
+	return 0;
+}
+
+/*
+ * Detach t1 protocol
+ */
+void
+t1_release(t1_state_t *t1)
+{
+	/* NOP */
+}
+
+/*
+ * Get/set parmaters for T1 protocol
+ */
+int
+t1_set_param(t1_state_t *t1, int type, long value)
+{
+	switch (type) {
+	case IFD_PROTOCOL_T1_CHECKSUM_LRC:
+	case IFD_PROTOCOL_T1_CHECKSUM_CRC:
+		t1_set_checksum(t1, type);
+		break;
+	case IFD_PROTOCOL_T1_IFSC:
+		t1->ifsc = value;
+		break;
+	case IFD_PROTOCOL_T1_IFSD:
+		t1->ifsd = value;
+		break;
+	case IFD_PROTOCOL_STATE:
+		t1->state = value;
+		break;
+	case IFD_PROTOCOL_MORE:
+		t1->more = value;
+		break;
+	default:
+		DEBUG_INFO2("Unsupported parameter %d", type);
+		return -1;
+	}
+
+	return 0;
+}
+
+/*
+ * Send an APDU through T=1
+ */
+int
+t1_transceive(t1_state_t *t1, int dad,
+		const void *snd_buf, size_t snd_len,
+		void *rcv_buf, size_t rcv_len)
+{
+	ct_buf_t	sbuf, rbuf, tbuf;
+	unsigned char	sdata[T1_BUFFER_SIZE], sblk[5];
+	unsigned int	slen, retries, resyncs, sent_length = 0;
+	size_t		last_send = 0;
+
+	if (snd_len == 0)
+		return -1;
+
+	/* we can't talk to a dead card / reader. Reset it! */
+	if (t1->state == DEAD)
+		return -1;
+
+	t1->state = SENDING;
+	retries = t1->retries;
+	resyncs = 3;
+
+	/* Initialize send/recv buffer */
+	ct_buf_set(&sbuf, (void *) snd_buf, snd_len);
+	ct_buf_init(&rbuf, rcv_buf, rcv_len);
+
+	/* Send the first block */
+	slen = t1_build(t1, sdata, dad, T1_I_BLOCK, &sbuf, &last_send);
+
+	while (1) {
+		unsigned char	pcb;
+		int		n;
+
+		retries--;
+
+		n = t1_xcv(t1, sdata, slen, sizeof(sdata));
+		if (-2 == n)
+		{
+			DEBUG_COMM("Parity error");
+			if (retries == 0)
+				goto resync;
+
+			/* ISO 7816-3 Rule 7.2 */
+			if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+			{
+				DEBUG_COMM("Rule 7.2");
+				slen = t1_rebuild(t1, sdata);
+				continue;
+			}
+
+			slen = t1_build(t1, sdata,
+					dad, T1_R_BLOCK | T1_EDC_ERROR,
+					NULL, NULL);
+			continue;
+		}
+
+		if (n < 0) {
+			DEBUG_CRITICAL("fatal: transmit/receive failed");
+			t1->state = DEAD;
+			goto error;
+		}
+
+		if ((sdata[NAD] != swap_nibbles(dad)) /* wrong NAD */
+			|| (sdata[LEN] == 0xFF))	/* length == 0xFF (illegal) */
+		{
+			DEBUG_COMM("R-BLOCK required");
+			if (retries == 0)
+				goto resync;
+
+			/* ISO 7816-3 Rule 7.2 */
+			if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+			{
+				DEBUG_COMM("Rule 7.2");
+				slen = t1_rebuild(t1, sdata);
+				continue;
+			}
+
+			slen = t1_build(t1, sdata,
+				dad, T1_R_BLOCK | T1_OTHER_ERROR,
+				NULL, NULL);
+			continue;
+		}
+
+		if (!t1_verify_checksum(t1, sdata, n)) {
+			DEBUG_COMM("checksum failed");
+			if (retries == 0)
+				goto resync;
+
+			/* ISO 7816-3 Rule 7.2 */
+			if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+			{
+				DEBUG_COMM("Rule 7.2");
+				slen = t1_rebuild(t1, sdata);
+				continue;
+			}
+
+			slen = t1_build(t1, sdata,
+				dad, T1_R_BLOCK | T1_EDC_ERROR,
+				NULL, NULL);
+			continue;
+		}
+
+		pcb = sdata[PCB];
+		switch (t1_block_type(pcb)) {
+		case T1_R_BLOCK:
+#if 0
+			if (T1_IS_ERROR(pcb)) {
+				DEBUG_COMM2("received error block, err=%d",
+					     T1_IS_ERROR(pcb));
+				goto resync;
+			}
+#endif
+			if ((sdata[LEN] != 0x00)	/* length != 0x00 (illegal) */
+				|| ((t1_seq(pcb) != t1->nr)	/* wrong sequence number & no bit more */
+					&& ! t1->more)
+				|| (pcb & 0x20) /* b6 of pcb is set */
+			   )
+			{
+				DEBUG_COMM4("received: %d, expected: %d, more: %d",
+					t1_seq(pcb), t1->ns, t1->more);
+
+				/* ISO 7816-3 Rule 7.2 */
+				if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+				{
+					DEBUG_COMM("Rule 7.2");
+					slen = t1_rebuild(t1, sdata);
+					continue;
+				}
+
+				if (T1_I_BLOCK == t1_block_type(t1->previous_block[1]))
+				{
+					DEBUG_COMM("repeat I-Block");
+					slen = t1_build(t1, sdata, dad, T1_I_BLOCK,
+						&sbuf, &last_send);
+					continue;
+				}
+				else
+				{
+					DEBUG_COMM("R-Block required");
+					if (retries == 0 || sent_length)
+						goto resync;
+					slen = t1_build(t1, sdata,
+							dad, T1_R_BLOCK | T1_OTHER_ERROR,
+							NULL, NULL);
+					continue;
+				}
+			}
+
+			if (t1->state == RECEIVING) {
+				slen = t1_build(t1, sdata,
+						dad, T1_R_BLOCK,
+						NULL, NULL);
+				break;
+			}
+
+			/* If the card terminal requests the next
+			 * sequence number, it received the previous
+			 * block successfully */
+			if (t1_seq(pcb) != t1->ns) {
+				ct_buf_get(&sbuf, NULL, last_send);
+				sent_length += last_send;
+				last_send = 0;
+				t1->ns ^= 1;
+			}
+
+			/* If there's no data available, the ICC
+			 * shouldn't be asking for more */
+			if (ct_buf_avail(&sbuf) == 0)
+				goto resync;
+
+			slen = t1_build(t1, sdata, dad, T1_I_BLOCK,
+					&sbuf, &last_send);
+			break;
+
+		case T1_I_BLOCK:
+			/* The first I-block sent by the ICC indicates
+			 * the last block we sent was received successfully. */
+			if (t1->state == SENDING) {
+				DEBUG_COMM("");
+				ct_buf_get(&sbuf, NULL, last_send);
+				last_send = 0;
+				t1->ns ^= 1;
+			}
+
+			t1->state = RECEIVING;
+
+			/* If the block sent by the card doesn't match
+			 * what we expected it to send, reply with
+			 * an R block */
+			if (t1_seq(pcb) != t1->nr) {
+				DEBUG_COMM("wrong nr");
+				slen = t1_build(t1, sdata, dad,
+						T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+				continue;
+			}
+
+			t1->nr ^= 1;
+
+			if (ct_buf_put(&rbuf, sdata + 3, sdata[LEN]) < 0)
+				goto error;
+
+			if ((pcb & T1_MORE_BLOCKS) == 0)
+				goto done;
+
+			slen = t1_build(t1, sdata, dad, T1_R_BLOCK, NULL, NULL);
+			break;
+
+		case T1_S_BLOCK:
+			if (T1_S_IS_RESPONSE(pcb) && t1->state == RESYNCH) {
+				DEBUG_COMM("S-Block answer received");
+				t1->state = SENDING;
+				sent_length =0;
+				last_send = 0;
+				resyncs = 3;
+				retries = t1->retries;
+				ct_buf_init(&rbuf, rcv_buf, rcv_len);
+				slen = t1_build(t1, sdata, dad, T1_I_BLOCK,
+						&sbuf, &last_send);
+				continue;
+			}
+
+			if (T1_S_IS_RESPONSE(pcb))
+			{
+				if (retries == 0)
+					goto resync;
+
+				/* ISO 7816-3 Rule 7.2 */
+				if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+				{
+					DEBUG_COMM("Rule 7.2");
+					slen = t1_rebuild(t1, sdata);
+					continue;
+				}
+
+				DEBUG_CRITICAL("wrong response S-BLOCK received");
+				slen = t1_build(t1, sdata,
+						dad, T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+				continue;
+			}
+
+			ct_buf_init(&tbuf, sblk, sizeof(sblk));
+
+			DEBUG_COMM("S-Block request received");
+			switch (T1_S_TYPE(pcb)) {
+			case T1_S_RESYNC:
+				if (sdata[LEN] != 0)
+				{
+					DEBUG_COMM2("Wrong length: %d", sdata[LEN]);
+					slen = t1_build(t1, sdata, dad,
+						T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+					continue;
+				}
+
+				DEBUG_COMM("Resync requested");
+				/* the card is not allowed to send a resync. */
+				goto resync;
+				break;
+			case T1_S_ABORT:
+				if (sdata[LEN] != 0)
+				{
+					DEBUG_COMM2("Wrong length: %d", sdata[LEN]);
+					slen = t1_build(t1, sdata, dad,
+						T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+					continue;
+				}
+
+				DEBUG_CRITICAL("abort requested");
+				goto resync;
+			case T1_S_IFS:
+				if (sdata[LEN] != 1)
+				{
+					DEBUG_COMM2("Wrong length: %d", sdata[LEN]);
+					slen = t1_build(t1, sdata, dad,
+						T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+					continue;
+				}
+
+				DEBUG_CRITICAL2("CT sent S-block with ifs=%u", sdata[DATA]);
+				if (sdata[DATA] == 0) 
+					goto resync;
+				t1->ifsc = sdata[DATA];
+				ct_buf_putc(&tbuf, sdata[DATA]);
+				break;
+			case T1_S_WTX:
+				if (sdata[LEN] != 1)
+				{
+					DEBUG_COMM2("Wrong length: %d", sdata[LEN]);
+					slen = t1_build(t1, sdata, dad,
+						T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+					continue;
+				}
+
+				DEBUG_CRITICAL2("CT sent S-block with wtx=%u", sdata[DATA]);
+				t1->wtx = sdata[DATA];
+				ct_buf_putc(&tbuf, sdata[DATA]);
+				break;
+			default:
+				DEBUG_CRITICAL2("T=1: Unknown S block type 0x%02x", T1_S_TYPE(pcb));
+				goto resync;
+			}
+
+			slen = t1_build(t1, sdata, dad,
+				T1_S_BLOCK | T1_S_RESPONSE | T1_S_TYPE(pcb),
+				&tbuf, NULL);
+		}
+
+		/* Everything went just splendid */
+		retries = t1->retries;
+		continue;
+
+resync:
+		/* the number or resyncs is limited, too */
+		if (resyncs == 0)
+			goto error;
+		resyncs--;
+		t1->ns = 0;
+		t1->nr = 0;
+		slen = t1_build(t1, sdata, dad, T1_S_BLOCK|T1_S_RESYNC, NULL,
+				NULL);
+		t1->state = RESYNCH;
+		t1->more = FALSE;
+		continue;
+	}
+
+done:
+	return ct_buf_avail(&rbuf);
+
+error:
+	t1->state = DEAD;
+	return -1;
+}
+
+static unsigned
+t1_block_type(unsigned char pcb)
+{
+	switch (pcb & 0xC0) {
+	case T1_R_BLOCK:
+		return T1_R_BLOCK;
+	case T1_S_BLOCK:
+		return T1_S_BLOCK;
+	default:
+		return T1_I_BLOCK;
+	}
+}
+
+static unsigned int
+t1_seq(unsigned char pcb)
+{
+	switch (pcb & 0xC0) {
+	case T1_R_BLOCK:
+		return (pcb >> T1_R_SEQ_SHIFT) & 1;
+	case T1_S_BLOCK:
+		return 0;
+	default:
+		return (pcb >> T1_I_SEQ_SHIFT) & 1;
+	}
+}
+
+unsigned int
+t1_build(t1_state_t *t1, unsigned char *block,
+		unsigned char dad, unsigned char pcb,
+		ct_buf_t *bp, size_t *lenp)
+{
+	unsigned int	len;
+	char more = FALSE;
+
+	len = bp? ct_buf_avail(bp) : 0;
+	if (len > t1->ifsc) {
+		pcb |= T1_MORE_BLOCKS;
+		len = t1->ifsc;
+		more = TRUE;
+	}
+
+	/* Add the sequence number */
+	switch (t1_block_type(pcb)) {
+	case T1_R_BLOCK:
+		pcb |= t1->nr << T1_R_SEQ_SHIFT;
+		break;
+	case T1_I_BLOCK:
+		pcb |= t1->ns << T1_I_SEQ_SHIFT;
+		t1->more = more;
+		DEBUG_COMM2("more bit: %d", more);
+		break;
+	}
+
+	block[0] = dad;
+	block[1] = pcb;
+	block[2] = len;
+
+	if (len)
+		memcpy(block + 3, ct_buf_head(bp), len);
+	if (lenp)
+		*lenp = len;
+
+	len = t1_compute_checksum(t1, block, len + 3);
+
+	/* memorize the last sent block */
+	/* only 4 bytes since we are only interesed in R-blocks */
+	memcpy(t1->previous_block, block, 4);
+
+	return len;
+}
+
+unsigned int
+t1_rebuild(t1_state_t *t1, unsigned char *block)
+{
+	unsigned char pcb = t1 -> previous_block[1];
+
+	/* copy the last sent block */
+	if (T1_R_BLOCK == t1_block_type(pcb))
+		memcpy(block, t1 -> previous_block, 4);
+	else
+	{
+		DEBUG_CRITICAL2("previous block was not R-Block: %02X", pcb);
+		return 0;
+	}
+
+	return 4;
+}
+
+/*
+ * Protocol struct
+ */
+#if 0
+struct ifd_protocol_ops	ifd_protocol_t1 = {
+	IFD_PROTOCOL_T1,	/* id */
+	"T=1",			/* name */
+	sizeof(t1_state_t),	/* size */
+	t1_init,		/* init */
+	t1_release,		/* release */
+	t1_set_param,		/* set_param */
+	t1_get_param,		/* get_param */
+	t1_resynchronize,	/* resynchronize */
+	t1_transceive,		/* transceive */
+	NULL,			/* sync_read */
+	NULL,			/* sync_write */
+};
+#endif
+
+/*
+ * Build/verify checksum
+ */
+unsigned int
+t1_compute_checksum(t1_state_t *t1, unsigned char *data, size_t len)
+{
+	return len + t1->checksum(data, len, data + len);
+}
+
+int
+t1_verify_checksum(t1_state_t *t1, unsigned char *rbuf, size_t len)
+{
+	unsigned char	csum[2];
+	int		m, n;
+
+	m = len - t1->rc_bytes;
+	n = t1->rc_bytes;
+
+	if (m < 0)
+		return 0;
+
+	t1->checksum(rbuf, m, csum);
+	if (!memcmp(rbuf + m, csum, n))
+		return 1;
+
+	return 0;
+}
+
+/*
+ * Send/receive block
+ */
+int
+t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
+{
+	int		n, m;
+
+	DEBUG_XXD("sending: ", block, slen);
+
+	n = CCID_Transmit(t1 -> lun, slen, block, t1->wtx);
+	t1->wtx = 0;	/* reset to default value */
+	if (n != IFD_SUCCESS)
+		return n;
+
+	/* Get the response en bloc */
+	n = CCID_Receive(t1 -> lun, &rmax, block);
+	if (n == IFD_PARITY_ERROR)
+		return -2;
+	if (n != IFD_SUCCESS)
+		return -1;
+
+	n = rmax;
+	if (n >= 0) {
+		m = block[2] + 3 + t1->rc_bytes;
+		if (m < n)
+			n = m;
+	}
+
+	if (n >= 0)
+		DEBUG_XXD("received: ", block, n);
+
+	return n;
+}
+
+int
+t1_negociate_ifsd(t1_state_t *t1, int dad, int ifsd)
+{
+	ct_buf_t	sbuf;
+	unsigned char sdata[T1_BUFFER_SIZE];
+	unsigned int slen;
+	unsigned int retries;
+	size_t snd_len;
+	int n;
+	unsigned char snd_buf[1];
+
+	retries = t1->retries;
+
+	/* S-block IFSD request */
+	snd_buf[0] = ifsd;
+	snd_len = 1;
+
+	/* Initialize send/recv buffer */
+	ct_buf_set(&sbuf, (void *) snd_buf, snd_len);
+
+	while (TRUE)
+	{
+		/* Build the block */
+		slen = t1_build(t1, sdata, 0, T1_S_BLOCK | T1_S_IFS, &sbuf, NULL);
+
+		/* Send the block */
+		n = t1_xcv(t1, sdata, slen, sizeof(sdata));
+
+		retries--;
+		if (retries == 0)
+			goto error;
+
+		if (-1 == n)
+		{
+			DEBUG_CRITICAL("fatal: transmit/receive failed");
+			goto error;
+		}
+
+		if ((-2 == n)								/* Parity error */
+			|| (sdata[DATA] != ifsd)				/* Wrong ifsd received */
+			|| (sdata[NAD] != swap_nibbles(dad))	/* wrong NAD */
+			|| (!t1_verify_checksum(t1, sdata, n))	/* checksum failed */
+			|| ((n != 5) || (sdata[LEN] != 1))		/* wrong length */
+			|| (sdata[PCB] != (T1_S_BLOCK | T1_S_RESPONSE | T1_S_IFS))) /* wrong PCB */
+			continue;
+
+		/* no more error */
+		goto done;
+	}
+
+done:
+	return n;
+
+error:
+	t1->state = DEAD;
+	return -1;
+}
+
