@@ -498,8 +498,8 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 } /* IFDHTransmitToICC */
 
 
-RESPONSECODE IFDHControl(DWORD Lun, PUCHAR TxBuffer,
-	DWORD TxLength, PUCHAR RxBuffer, PDWORD RxLength)
+RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
+	DWORD TxLength, PUCHAR RxBuffer, DWORD RxLength, PDWORD pdwBytesReturned)
 {
 	/*
 	 * This function performs a data exchange with the reader (not the
@@ -516,16 +516,16 @@ RESPONSECODE IFDHControl(DWORD Lun, PUCHAR TxBuffer,
 	 * Notes: RxLength should be zero on error.
 	 */
 
-	DEBUG_INFO2("lun: %X", Lun);
+	DEBUG_INFO3("lun: %X, ControlCode: 0x%X", Lun, dwControlCode);
 
-	/* if (CheckLun(Lun))
-		return IFD_COMMUNICATION_ERROR; */
+	if (CheckLun(Lun))
+		return IFD_COMMUNICATION_ERROR;
 
 	/* Set the return length to 0 to avoid problems */
-	if (RxLength)
-		*RxLength = 0;
+	if (pdwBytesReturned)
+		*pdwBytesReturned = 0;
 
-	return IFD_NOT_SUPPORTED;
+	return IFD_SUCCESS;
 } /* IFDHControl */
 
 
