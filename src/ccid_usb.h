@@ -29,9 +29,9 @@ status_t CloseUSB(int lun);
 
 #ifdef __USB_H__
 int get_desc(int channel, usb_dev_handle **handle, struct usb_device **dev);
+struct usb_interface *get_ccid_usb_interface(struct usb_device *dev);
 #endif
 #ifdef __CCID_USB__
 int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
-struct usb_interface *get_ccid_usb_interface(struct usb_device *dev);
 #endif
 
