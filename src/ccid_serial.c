@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <PCSC/ifdhandler.h>
 
 #include "defs.h"
 #include "ccid_ifdhandler.h"
@@ -39,6 +40,7 @@
 #include "debug.h"
 #include "ccid.h"
 #include "utils.h"
+#include "commands.h"
 
 /* communication timeout in seconds */
 #define SERIAL_TIMEOUT 2
@@ -546,6 +548,24 @@ status_t OpenSerialByName(int lun, char *dev_name)
 
 	serialDevice[reader].buffer_offset = 0;
 	serialDevice[reader].buffer_offset_last = 0;
+
+	/* perform a command to be sure a GemPC Twin reader is connected
+	 * get the reader firmware */
+	{
+		char tx_buffer[] = "\x02";
+		char rx_buffer[50];
+		int rx_length = sizeof(rx_buffer);
+
+		if (IFD_SUCCESS != CmdEscape(lun, tx_buffer, sizeof(tx_buffer),
+			rx_buffer, &rx_length))
+		{
+			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not co,,ected");
+			return STATUS_UNSUCCESSFUL;
+		}
+
+		rx_buffer[rx_length] = '\0';
+		DEBUG_INFO2("Firmware: %s", rx_buffer);
+	}
 
 	return STATUS_SUCCESS;
 } /* OpenSerialByName */
