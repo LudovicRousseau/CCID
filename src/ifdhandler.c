@@ -553,14 +553,18 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	switch (pcbuffer[7])	/* bStatus */
 	{
 		case 0x00:
-			return_value = IFD_ICC_PRESENT;
-			break;
-
 		case 0x01:
 			return_value = IFD_ICC_PRESENT;
 			break;
 
 		case 0x02:
+			/* Reset ATR buffer */
+			CcidSlots[LunToReaderIndex(Lun)].nATRLength = 0;
+			*CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer = '\0';
+
+			/* Reset PowerFlags */
+			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags = POWERFLAGS_RAZ;
+
 			return_value = IFD_ICC_NOT_PRESENT;
 			break;
 	}
@@ -710,6 +714,13 @@ RESPONSECODE CardDown(int lun)
 {
 	/* clear T=1 context */
 	Protocol_T1_Close(&((get_ccid_slot(lun)) -> t1));
+
+	/* Reset ATR buffer */
+	CcidSlots[LunToReaderIndex(lun)].nATRLength = 0;
+	*CcidSlots[LunToReaderIndex(lun)].pcATRBuffer = '\0';
+
+	/* Reset PowerFlags */
+	CcidSlots[LunToReaderIndex(lun)].bPowerFlags = POWERFLAGS_RAZ;
 
 	return IFD_SUCCESS;
 } /* CardDown */
