@@ -51,5 +51,3 @@ RESPONSECODE CCID_Receive(unsigned int lun, unsigned int *rx_length,
 RESPONSECODE SetParameters(unsigned int lun, char protocol, unsigned int length,
 	unsigned char buffer[]);
 
-void i2dw(int value, unsigned char *buffer);
-

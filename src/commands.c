@@ -56,6 +56,8 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 
+static void i2dw(int value, unsigned char *buffer);
+
 
 /*****************************************************************************
  *
@@ -581,7 +583,7 @@ RESPONSECODE SetParameters(unsigned int lun, char protocol, unsigned int length,
  *					i2dw
  *
  ****************************************************************************/
-void i2dw(int value, unsigned char buffer[])
+static void i2dw(int value, unsigned char buffer[])
 {
 	buffer[0] = value & 0xFF;
 	buffer[1] = (value >> 8) & 0xFF;
