@@ -24,7 +24,7 @@
 status_t OpenSerial(int lun, int channel);
 status_t WriteSerial(int lun, int length, unsigned char *Buffer);
 status_t ReadSerial(int lun, int *length, unsigned char *Buffer);
-int skip_echo(unsigned char *buffer, int buffer_length);
-int ReadChunk(int fd, unsigned char *buffer, int buffer_length, int min_length, int lun);
+int get_bytes(int lun, unsigned char *buffer, int length);
+int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length);
 status_t CloseSerial(int lun);
 

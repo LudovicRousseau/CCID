@@ -40,7 +40,7 @@
 #include "utils.h"
 
 /* communication timeout in seconds */
-#define SERIAL_TIMEOUT 10
+#define SERIAL_TIMEOUT 2
 
 #define SYNC 0x03
 #define CTRL_ACK 0x06
@@ -67,19 +67,32 @@
  * 1 : LRC (0x16)
  *
  * Card insertion/withdrawal
- * 1 : SYNC
- * 1 : CTRL
  * 1 : RDR_to_PC_NotifySlotChange (0x50)
  * 1 : bmSlotIccState
  *     0x02 if card absent
  *     0x03 is card present
- * 1 : LRC
  *
  * Time request
  * T=1 : normal CCID command
  * T=0 : 1 byte (value between 0x80 and 0xFF)
  *
  */
+
+/*
+ * You may get read timeout after a card movement.
+ * This is because you will get the echo of the CCID command
+ * but not the result of the command.
+ *
+ * This is not an applicative issue since the card is either removed (and
+ * powered off) or just inserted (and not yet powered on).
+ */
+
+/* 271 = max size for short APDU
+ * 2 bytes for header
+ * 1 byte checksum
+ * doubled for echo
+ */
+#define GEMPCTWIN_MAXBUF (271 +2 +1) * 2
 
 typedef struct
 {
@@ -92,6 +105,21 @@ typedef struct
 	 * channel used (1..4)
 	 */
 	int channel;
+
+	/*
+	 * serial communication buffer
+	 */
+	unsigned char buffer[GEMPCTWIN_MAXBUF];
+
+	/*
+	 * next available byte
+	 */
+	int buffer_offset;
+
+	/*
+	 * number of available bytes
+	 */
+	int buffer_offset_last;
 
 	/*
 	 * CCID infos common to USB and serial
@@ -107,12 +135,6 @@ static _serialDevice serialDevice[PCSCLITE_MAX_READERS] = {
 	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { -1, -1 }
 };
 
-/* 271 = max size for short APDU
- * 2 bytes for header
- * 1 byte checksum
- * doubled for echo */
-#define GEMPCTWIN_MAXBUF (271 +2 +1) *2
-
 /*****************************************************************************
  * 
  *				WriteSerial: Send bytes to the card reader
@@ -121,7 +143,6 @@ static _serialDevice serialDevice[PCSCLITE_MAX_READERS] = {
 status_t WriteSerial(int lun, int length, unsigned char *buffer)
 {
 	int i;
-	int reader = LunToReaderIndex(lun);
 	unsigned char lrc;
 	unsigned char low_level_buffer[GEMPCTWIN_MAXBUF];
 
@@ -155,7 +176,8 @@ status_t WriteSerial(int lun, int length, unsigned char *buffer)
 	DEBUG_XXD(debug_header, low_level_buffer, length+3);
 #endif
 
-	if (write(serialDevice[reader].fd, low_level_buffer, length+3) != length+3)
+	if (write(serialDevice[LunToReaderIndex(lun)].fd, low_level_buffer,
+		length+3) != length+3)
 	{
 		DEBUG_CRITICAL2("WriteSerial: write error: %s", strerror(errno));
 		return STATUS_UNSUCCESSFUL;
@@ -172,108 +194,98 @@ status_t WriteSerial(int lun, int length, unsigned char *buffer)
  *****************************************************************************/
 status_t ReadSerial(int lun, int *length, unsigned char *buffer)
 {
-	int fd = serialDevice[LunToReaderIndex(lun)].fd;
-	static unsigned char low_level_buffer[GEMPCTWIN_MAXBUF];
-	int buffer_size, len, rv, already_read, to_read;
-	unsigned char *reader_to_pc;
-	unsigned char lrc;
-	int skipped, i;
-#ifdef DEBUG_LEVEL_COMM
-	char debug_header[] = "<- 121234 ";
+	unsigned char c;
+	int rv;
+	int echo;
+	int to_read;
+	int i;
 
-	sprintf(debug_header, "<- %06X ", (int)lun);
-#endif
+	/* we get the echo first */
+	echo = TRUE;
 
-	buffer_size = *length;
+start:
+	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+		return rv;
 
-	/* error by default (zero length) */
-	*length = 0;
+	if (c == RDR_to_PC_NotifySlotChange)
+		goto slot_change;
 
-	rv = ReadChunk(fd, low_level_buffer, sizeof(low_level_buffer), 3, lun);
-	if (rv < 0)
-		return STATUS_UNSUCCESSFUL;
+	if (c == SYNC)
+		goto sync;
 
-	/* Nb of bytes already read */
-	already_read = rv;
+	if (c >= 0x80)
+		goto start;
 
-#ifdef DEBUG_LEVEL_COMM
-	DEBUG_XXD(debug_header, low_level_buffer, rv);
-#endif
+	DEBUG_CRITICAL2("Got 0x%02X", c);
+	return STATUS_COMM_ERROR;
 
-	/* skip the echo of the previous command */
-	skipped = skip_echo(low_level_buffer, sizeof(low_level_buffer));
-	if (skipped == 0)
-		return STATUS_UNSUCCESSFUL;
+slot_change:
+	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+		return rv;
 
-	/* Nb of bytes until the end of the buffer */
-	len = sizeof(low_level_buffer) - skipped;
-	already_read -= skipped;
-	reader_to_pc = low_level_buffer + skipped;
+	if (c == CARD_ABSENT)
+		DEBUG_COMM("Card removed");
+	else
+		if (c == CARD_PRESENT)
+			DEBUG_COMM("Card inserted");
+		else
+			DEBUG_COMM2("Unknown card movement: %d", buffer[3]);
+	goto start;
 
-	to_read = 2 +1; /* minimal frame size */
+sync:
+	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+		return rv;
 
-	while (already_read < to_read)
+	if (c == CTRL_ACK)
+		goto ack;
+
+	if (c == CTRL_NAK)
+		goto nak;
+
+	DEBUG_CRITICAL2("Got 0x%02X instead of ACK/NAK", c);
+	return STATUS_COMM_ERROR;
+
+nak:
+	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+		return rv;
+
+	if (c != (SYNC ^ CTRL_NAK))
 	{
-		rv = ReadChunk(fd, reader_to_pc + already_read, len, 1, lun);
-		if (rv < 0)
-			return STATUS_UNSUCCESSFUL;
-
-		already_read += rv;
-		len -= rv;
+		DEBUG_CRITICAL2("Wrong LRC: 0x%02X", c);
+		return STATUS_COMM_ERROR;
 	}
+	else
+		goto start;
 
-	if (reader_to_pc[0] != SYNC)
-	{
-		DEBUG_CRITICAL2("No SYNC byte found: 0x%02X", buffer[0]);
-		return STATUS_UNSUCCESSFUL;
-	}
+ack:
+	/* normal CCID frame */
+	if ((rv = get_bytes(lun, buffer, 5)) != STATUS_SUCCESS)
+		return rv;
 
-	if (reader_to_pc[1] != CTRL_ACK)
-	{
-		DEBUG_CRITICAL2("No ACK byte found: 0x%02X", buffer[0]);
-		return 0;
-	}
+	/* total frame size */
+	to_read = 10+dw2i(buffer, 1);
 
-	/* read up to CCID frame length */
-	to_read = 5; /* bMessageType + dwLength */
-	while (already_read < to_read)
-	{
-		rv = ReadChunk(fd, reader_to_pc + already_read, len, 1, lun);
-		if (rv < 0)
-			return STATUS_UNSUCCESSFUL;
+	if ((rv = get_bytes(lun, buffer+5, to_read-5)) != STATUS_SUCCESS)
+		return rv;
 
-		already_read += rv;
-		len -= rv;
-	}
+	/* lrc */
+	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+		return rv;
 
-	/* normal CCID command */
-	to_read = 10+3+dw2i(reader_to_pc, 3);
-
-	while (already_read < to_read)
-	{
-		rv = ReadChunk(fd, reader_to_pc + already_read, len, 1, lun);
-		if (rv < 0)
-			return STATUS_UNSUCCESSFUL;
-
-		already_read += rv;
-		len -= rv;
-	}
-
-	lrc = 0;
 	for (i=0; i<to_read; i++)
-		lrc ^= reader_to_pc[i];
+		c ^= buffer[i];
 
-	if (lrc != 0)
-		DEBUG_CRITICAL2("Wrong lrc: 0x%02X", lrc);
+	if (c != (SYNC ^ CTRL_ACK))
+	{
+		DEBUG_CRITICAL2("Wrong LRC: 0x%02X", c);
+		//return STATUS_COMM_ERROR;
+	}
 
-#ifdef DEBUG_LEVEL_COMM
-	DEBUG_XXD(debug_header, reader_to_pc, to_read);
-#endif
-
-	/* copy up to buffer_size bytes */
-	*length = to_read-3;
-
-	memcpy(buffer, reader_to_pc+2, *length);
+	if (echo)
+	{
+		echo = FALSE;
+		goto start;
+	}
 
 	return STATUS_SUCCESS;
 } /* ReadSerial */
@@ -281,57 +293,46 @@ status_t ReadSerial(int lun, int *length, unsigned char *buffer)
 
 /*****************************************************************************
  * 
- *				skip_echo: skip the echo of the previous command
+ *				get_bytes: get n bytes
  *
  *****************************************************************************/
-int skip_echo(unsigned char *buffer, int buffer_length)
+int get_bytes(int lun, unsigned char *buffer, int length)
 {
-	unsigned char lrc;
-	int i;
+	int offset = serialDevice[LunToReaderIndex(lun)].buffer_offset;
+	int offset_last = serialDevice[LunToReaderIndex(lun)].buffer_offset_last;
 
-	if (buffer[0] != SYNC)
+	/* enough data are available */
+	if (offset + length <= offset_last)
 	{
-		DEBUG_CRITICAL2("No SYNC byte found: 0x%02X", buffer[0]);
-		return 0;
+		memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset, length);
+		serialDevice[LunToReaderIndex(lun)].buffer_offset += length;
+	}
+	else
+	{
+		int present, rv;
+
+		/* copy available data */
+		present = offset_last - offset;
+
+		if (present > 0)
+			memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset, present);
+
+		/* get fresh data */
+		rv = ReadChunk(lun, serialDevice[LunToReaderIndex(lun)].buffer, sizeof(serialDevice[LunToReaderIndex(lun)].buffer), length - present);
+		if (rv < 0)
+			return STATUS_COMM_ERROR;
+
+		/* fill the buffer */
+		memcpy(buffer + present, serialDevice[LunToReaderIndex(lun)].buffer,
+			length - present);
+		serialDevice[LunToReaderIndex(lun)].buffer_offset = length - present;
+		serialDevice[LunToReaderIndex(lun)].buffer_offset_last = rv;
 	}
 
-	if (buffer[1] != CTRL_ACK)
-	{
-		DEBUG_CRITICAL2("No ACK byte found: 0x%02X", buffer[0]);
-		return 0;
-	}
+DEBUG_XXD("pouet: ", buffer, length);
 
-	if (buffer[2] == RDR_to_PC_NotifySlotChange)
-	{
-		switch (buffer[3])
-		{
-			case CARD_PRESENT:
-				DEBUG_INFO("Card inserted");
-				break;
-
-			case CARD_ABSENT:
-				DEBUG_INFO("Card removed");
-				break;
-
-			default:
-				DEBUG_INFO2("Unknown card movement: %d", buffer[3]);
-				break;
-		}
-		
-		lrc = 0;
-		for (i=0; i<5; i++)
-			lrc ^= buffer[i];
-
-		if (lrc != 0)
-			DEBUG_CRITICAL2("Wrong lrc: 0x%02", lrc);
-
-		/* Card insertion/withdrawal */
-		return 5;
-	}
-
-	/* normal CCID command, 2 for SYNC CTRL, 1 for length offset in CCID cmd */
-	return 2 + 10 + dw2i(buffer, 2 +1) +1;
-} /* skip_echo */
+	return STATUS_SUCCESS;
+} /* get_bytes */
 
 
 /*****************************************************************************
@@ -339,8 +340,9 @@ int skip_echo(unsigned char *buffer, int buffer_length)
  *				ReadChunk: read a minimum number of bytes
  *
  *****************************************************************************/
-int ReadChunk(int fd, unsigned char *buffer, int buffer_length, int min_length, int lun)
+int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length)
 {
+	int fd = serialDevice[LunToReaderIndex(lun)].fd;
 	fd_set fdset;
 	struct timeval t;
 	int i, rv;
@@ -350,7 +352,6 @@ int ReadChunk(int fd, unsigned char *buffer, int buffer_length, int min_length, 
 	sprintf(debug_header, "<- %06X ", (int)lun);
 #endif
 
-time_request:
 	/* use select() to, eventually, timeout */
 	FD_ZERO(&fdset);
 	FD_SET(fd, &fdset);
@@ -377,18 +378,13 @@ time_request:
 		return -1;
 	}
 
-	if ((rv == 1) && (buffer[0] >= 0x80))
-	{
-		DEBUG_COMM2("Time request: 0x%02X", buffer[0]);
-		goto time_request;
-	}
+#ifdef DEBUG_LEVEL_COMM
+	DEBUG_XXD(debug_header, buffer, rv);
+#endif
 
 	/* too short */
 	if (rv < min_length)
 	{
-#ifdef DEBUG_LEVEL_COMM
-		DEBUG_XXD(debug_header, buffer, rv);
-#endif
 		DEBUG_COMM3("ReadSerial: only %d byte(s) read, needed %d", rv,
 			min_length);
 
@@ -502,6 +498,9 @@ status_t OpenSerial(int lun, int channel)
 	serialDevice[reader].ccid.readerID = GEMPCTWIN;
 	serialDevice[reader].ccid.dwMaxCCIDMessageLength = 271;
 	serialDevice[reader].ccid.dwFeatures = 0x00010230;
+
+	serialDevice[reader].buffer_offset = 0;
+	serialDevice[reader].buffer_offset_last = 0;
 
 	ccid_open_hack(lun);
 
