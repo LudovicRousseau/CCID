@@ -69,5 +69,7 @@ int LunToReaderIndex(const DWORD Lun)
 int ReleaseReaderIndex(const int index)
 {
 	ReaderIndex[index] = -1;
+
+	return 0;
 } /* ReleaseReaderIndex */
 
