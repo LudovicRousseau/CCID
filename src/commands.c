@@ -401,6 +401,7 @@ RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
 					return_value = CmdXfrBlockShortAPDU(lun, tx_length,
 						tx_buffer, rx_length, rx_buffer);
 
+#if 0
 					if ((return_value == IFD_SUCCESS) && (*rx_length == 2))
 					{
 						/* Buffer for Get Response */
@@ -444,6 +445,7 @@ RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
 								tx_buffer, rx_length, rx_buffer);
 						}
 					}
+#endif
 				}
 				else
 				{
