@@ -133,6 +133,8 @@ extern "C" {
 			     PUCHAR, PDWORD );
   RESPONSECODE IFDHICCPresence( DWORD );
   
+  CcidDesc *get_ccid_slot(int lun);
+
 #ifdef __cplusplus
 }
 #endif 

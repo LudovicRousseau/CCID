@@ -510,3 +510,9 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	return return_value;
 } /* IFDHICCPresence */
 
+
+CcidDesc *get_ccid_slot(int lun)
+{
+	return &CcidSlots[LunToReaderIndex(lun)];
+} /* get_ccid_slot */
+
