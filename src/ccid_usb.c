@@ -99,6 +99,7 @@ status_t OpenUSB(int lun, int Channel)
 	struct usb_dev_handle *dev_handle;
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	int vendorID, productID;
+	char infofile[FILENAME_MAX];
 
 	DEBUG_COMM3("OpenUSB: Lun: %X, Channel: %X", lun, Channel);
 
@@ -125,20 +126,23 @@ status_t OpenUSB(int lun, int Channel)
 		return STATUS_UNSUCCESSFUL;
 	}
 
+	/* Info.plist full patch filename */
+	snprintf(infofile, sizeof(infofile), "%s/Contents/Info.plist", PCSCLITE_HP_DROPDIR);
+
 	/* general driver info */
-	if (!LTPBundleFindValueWithKey(PCSCLITE_HP_DROPDIR "/Contents/Info.plist", "ifdManufacturerString", keyValue, 0))
+	if (!LTPBundleFindValueWithKey(infofile, "ifdManufacturerString", keyValue, 0))
 		DEBUG_CRITICAL2("Manufacturer: %s", keyValue);
 	else
 	{
 		DEBUG_CRITICAL2("LTPBundleFindValueWithKey error. Can't find %s?",
-			PCSCLITE_HP_DROPDIR "/Contents/Info.plist");
+			infofile);
 		return STATUS_UNSUCCESSFUL;
 	}
-	if (!LTPBundleFindValueWithKey(PCSCLITE_HP_DROPDIR "/Contents/Info.plist", "ifdProductString", keyValue, 0))
+	if (!LTPBundleFindValueWithKey(infofile, "ifdProductString", keyValue, 0))
 		DEBUG_CRITICAL2("ProductString: %s", keyValue);
 	else
 		return STATUS_UNSUCCESSFUL;
-	if (!LTPBundleFindValueWithKey(PCSCLITE_HP_DROPDIR "/Contents/Info.plist", "Copyright", keyValue, 0))
+	if (!LTPBundleFindValueWithKey(infofile, "Copyright", keyValue, 0))
 		DEBUG_CRITICAL2("Copyright: %s", keyValue);
 	else
 		return STATUS_UNSUCCESSFUL;
@@ -148,15 +152,15 @@ status_t OpenUSB(int lun, int Channel)
 		alias ^= keyValue[vendorID];
 
 	/* for any supported reader */
-	while (LTPBundleFindValueWithKey(PCSCLITE_HP_DROPDIR "/Contents/Info.plist", PCSCLITE_MANUKEY_NAME, keyValue, alias) == 0)
+	while (LTPBundleFindValueWithKey(infofile, PCSCLITE_MANUKEY_NAME, keyValue, alias) == 0)
 	{
-		vendorID = strtol(keyValue, 0, 16);
+		vendorID = strtoul(keyValue, 0, 16);
 
-		if (LTPBundleFindValueWithKey(PCSCLITE_HP_DROPDIR "/Contents/Info.plist", PCSCLITE_PRODKEY_NAME, keyValue, alias))
+		if (LTPBundleFindValueWithKey(infofile, PCSCLITE_PRODKEY_NAME, keyValue, alias))
 			goto end;
-		productID = strtol(keyValue, 0, 16);
+		productID = strtoul(keyValue, 0, 16);
 
-		if (LTPBundleFindValueWithKey(PCSCLITE_HP_DROPDIR "/Contents/Info.plist", PCSCLITE_NAMEKEY_NAME, keyValue, alias))
+		if (LTPBundleFindValueWithKey(infofile, PCSCLITE_NAMEKEY_NAME, keyValue, alias))
 			goto end;
 
 		/* on any USB buses */
@@ -195,16 +199,18 @@ status_t OpenUSB(int lun, int Channel)
 
 					if (!already_used)
 					{
+						DEBUG_COMM2("Trying to open USB bus/device: %s",
+							 device_name);
+
 						dev_handle = usb_open(dev);
 						if (dev_handle)
 						{
 							int interface;
 
-							DEBUG_COMM2("Trying to open USB bus/device: %s", device_name);
-
 							if (dev->config == NULL)
 							{
-								DEBUG_CRITICAL2("No dev->config found for %s", device_name);
+								DEBUG_CRITICAL2("No dev->config found for %s",
+									 device_name);
 								return STATUS_UNSUCCESSFUL;
 							}
 
@@ -220,7 +226,8 @@ status_t OpenUSB(int lun, int Channel)
 							DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
 								dev->descriptor.idVendor,
 								dev->descriptor.idProduct, keyValue);
-							DEBUG_INFO2("Using USB bus/device: %s", device_name);
+							DEBUG_INFO2("Using USB bus/device: %s",
+								 device_name);
 
 							/* Get Endpoints values*/
 							get_end_points(dev, &usbDevice[reader]);
@@ -235,7 +242,8 @@ status_t OpenUSB(int lun, int Channel)
 							goto end;
 						}
 						else
-							DEBUG_CRITICAL3("Can't usb_open(%s): %s", device_name,
+							DEBUG_CRITICAL3("Can't usb_open(%s): %s",
+								device_name,
 								strerror(errno));
 					}
 					else
@@ -352,12 +360,22 @@ status_t CloseUSB(int lun)
 } /* CloseUSB */
 
 
+/*****************************************************************************
+ *
+ *					ccid_get_seq
+ *
+ ****************************************************************************/
 int ccid_get_seq(int lun)
 {
 	return usbDevice[LunToReaderIndex(lun)].bSeq++;
 } /* ccid_get_seq */
 
 
+/*****************************************************************************
+ *
+ *					ccid_error
+ *
+ ****************************************************************************/
 void ccid_error(int error, char *file, int line)
 {
 	char *text;
@@ -445,6 +463,11 @@ void ccid_error(int error, char *file, int line)
 
 } /* ccid_error */
 
+/*****************************************************************************
+ *
+ *					get_desc
+ *
+ ****************************************************************************/
 int get_desc(int channel, char *device_name[], usb_dev_handle **handle, struct
 	usb_device **dev)
 {
@@ -458,6 +481,11 @@ int get_desc(int channel, char *device_name[], usb_dev_handle **handle, struct
 	return 0;
 } /* get_desc */
 
+/*****************************************************************************
+ *
+ *					get_end_points
+ *
+ ****************************************************************************/
 int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 {
 	int i;
