@@ -161,7 +161,7 @@ t1_set_param(t1_state_t *t1, int type, long value)
  * Send an APDU through T=1
  */
 int
-t1_transceive(t1_state_t *t1, int dad,
+t1_transceive(t1_state_t *t1, unsigned int dad,
 		const void *snd_buf, size_t snd_len,
 		void *rcv_buf, size_t rcv_len)
 {
@@ -649,7 +649,7 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 }
 
 int
-t1_negociate_ifsd(t1_state_t *t1, int dad, int ifsd)
+t1_negociate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd)
 {
 	ct_buf_t	sbuf;
 	unsigned char sdata[T1_BUFFER_SIZE];

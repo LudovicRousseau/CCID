@@ -61,13 +61,13 @@ typedef struct {
 	unsigned char	previous_block[4];	/* to store the last R-block */
 } t1_state_t;
 
-int t1_transceive(t1_state_t *t1, int dad,
+int t1_transceive(t1_state_t *t1, unsigned int dad,
 		const void *snd_buf, size_t snd_len,
 		void *rcv_buf, size_t rcv_len);
 int t1_init(t1_state_t *t1);
 void t1_release(t1_state_t *t1);
 int t1_set_param(t1_state_t *t1, int type, long value);
-int t1_negociate_ifsd(t1_state_t *t1, int dad, int ifsd);
+int t1_negociate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd);
 
 #endif
 
