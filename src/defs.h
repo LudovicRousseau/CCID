@@ -21,11 +21,26 @@
  * $Id$
  */
 
+#include "pcscdefines.h"
+#include "protocol_t1/protocol_t1.h"
+
 typedef struct CCID_DESC
 {
+	/*
+	 * ATR
+	 */
 	DWORD nATRLength;
 	UCHAR pcATRBuffer[MAX_ATR_SIZE];
+
+	/*
+	 * Card state
+	 */
 	UCHAR bPowerFlags;
+
+	/*
+	 * T=1 Protocol context
+	 */
+	Protocol_T1 t1;
 } CcidDesc;
 
 /* Powerflag (used to detect quick insertion removals unnoticed by the 
