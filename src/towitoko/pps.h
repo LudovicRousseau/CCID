@@ -34,6 +34,11 @@
 #define PPS_HANDSAKE_ERROR	2	/* Agreement not reached */
 #define PPS_PROTOCOL_ERROR	3	/* Error starting protocol */
 #define PPS_MAX_LENGTH		6
+
+#define PPS_HAS_PPS1(block)	((block[1] & 0x10) == 0x10)
+#define PPS_HAS_PPS2(block)	((block[1] & 0x20) == 0x20)
+#define PPS_HAS_PPS3(block)	((block[1] & 0x40) == 0x40)
+
 /*
  * Exported data types definition
  */

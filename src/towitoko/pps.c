@@ -20,31 +20,16 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "protocol_t1.h"
 #include "pps.h"
 #include "atr.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <PCSC/ifdhandler.h>
 
 #include "commands.h"
 #include "defs.h"
-#include "ifdhandler.h"
 #include "debug.h"
-
-/*
- * Not exported constants definition
- */
-
-#define PPS_DEFAULT_PROTOCOL	0x00
-
-/*
- * Not exported macros definition
- */
-
-#define PPS_HAS_PPS1(block)	((block[1] & 0x10) == 0x10)
-#define PPS_HAS_PPS2(block)	((block[1] & 0x20) == 0x20)
-#define PPS_HAS_PPS3(block)	((block[1] & 0x40) == 0x40)
 
 /*
  * Not exported funtions declaration
