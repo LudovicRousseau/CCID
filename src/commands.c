@@ -433,6 +433,43 @@ RESPONSECODE CmdXfrBlockTPDU_T1(int lun, int tx_length,
 
 /*****************************************************************************
  *
+ *					SetParameters
+ *
+ ****************************************************************************/
+RESPONSECODE SetParameters(int lun, char protocol, int length, unsigned char buffer[])
+{
+	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+
+	DEBUG_COMM2("length: %d bytes", length);
+
+	cmd[0] = 0x61; /* SetParameters */
+	i2dw(length, cmd+1);	/* APDU length */
+	cmd[5] = 0;	/* slot number */
+	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[7] = protocol;	/* bProtocolNum */
+	cmd[8] = cmd[9] = 0; /* RFU */
+	memcpy(cmd+10, buffer, length);
+
+	if (WritePort(lun, 10+length, cmd) != STATUS_SUCCESS)
+		return IFD_COMMUNICATION_ERROR;
+
+	length = sizeof(cmd);
+	if (ReadPort(lun, &length, cmd) != STATUS_SUCCESS)
+		return IFD_COMMUNICATION_ERROR;
+
+	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
+	{
+		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	return IFD_SUCCESS;
+} /* SetParameters */
+
+
+/*****************************************************************************
+ *
  *					i2dw
  *
  ****************************************************************************/
