@@ -1,6 +1,6 @@
 /*
     ifdhandler.c: IFDH API
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2005   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -995,8 +995,7 @@ void init_driver(void)
 		LogLevel = strtoul(keyValue, NULL, 0);
 
 		/* print the log level used */
-		debug_msg("%s:%d:%s LogLevel: 0x%.4X", __FILE__, __LINE__, __FUNCTION__,
-			LogLevel);
+		DEBUG_INFO2("LogLevel: 0x%.4X", LogLevel);
 	}
 
 	/* Driver options */
@@ -1006,8 +1005,7 @@ void init_driver(void)
 		DriverOptions = strtoul(keyValue, NULL, 0);
 
 		/* print the log level used */
-		debug_msg("%s:%d:%s DriverOptions: 0x%.4X", __FILE__, __LINE__,
-			__FUNCTION__, DriverOptions);
+		DEBUG_INFO2("DriverOptions: 0x%.4X", DriverOptions);
 	}
 
 	/* initialise the Lun to reader_index mapping */
