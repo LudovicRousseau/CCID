@@ -554,9 +554,9 @@ status_t OpenSerialByName(unsigned int lun, char *dev_name)
 	/* perform a command to be sure a GemPC Twin reader is connected
 	 * get the reader firmware */
 	{
-		char tx_buffer[] = "\x02";
-		char rx_buffer[50];
-		int rx_length = sizeof(rx_buffer);
+		unsigned char tx_buffer[] = "\x02";
+		unsigned char rx_buffer[50];
+		unsigned int rx_length = sizeof(rx_buffer);
 
 		if (IFD_SUCCESS != CmdEscape(lun, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length))
