@@ -88,12 +88,14 @@
 #define DEBUG_COMM(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
 #define DEBUG_COMM2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
 #define DEBUG_COMM3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
+#define DEBUG_COMM4(fmt, data1, data2, data3) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
 #define DEBUG
 #define DEBUG_XXD(msg, buffer, size) debug_xxd(msg, buffer, size)
 #else
 #define DEBUG_COMM(fmt)
 #define DEBUG_COMM2(fmt, data)
 #define DEBUG_COMM3(fmt, data1, data2)
+#define DEBUG_COMM3(fmt, data1, data2, data3)
 #endif
 
 #ifndef DEBUG_XXD
