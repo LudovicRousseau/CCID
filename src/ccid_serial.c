@@ -537,6 +537,8 @@ status_t OpenSerialByName(int lun, char *dev_name)
 	serialDevice[reader].ccid.dwMaxCCIDMessageLength = 271;
 	serialDevice[reader].ccid.dwMaxIFSD = 254;
 	serialDevice[reader].ccid.dwFeatures = 0x00010230;
+	serialDevice[reader].ccid.dwDefaultClock = 4000;
+	serialDevice[reader].ccid.dwMaxDataRate = 344086;
 
 	serialDevice[reader].buffer_offset = 0;
 	serialDevice[reader].buffer_offset_last = 0;

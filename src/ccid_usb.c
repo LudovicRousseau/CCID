@@ -124,8 +124,6 @@ status_t OpenUSBByName(int lun, char *device)
 			DEBUG_CRITICAL2("device name can't be parsed: %s", device);
 			return STATUS_UNSUCCESSFUL;
 		}
-
-	printf("%x %x\n", device_vendor, device_product);
 	}
 
 	if (busses == NULL)
@@ -297,6 +295,8 @@ status_t OpenUSBByName(int lun, char *device)
 					usbDevice[reader].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
 					usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
 					usbDevice[reader].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
+					usbDevice[reader].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);
+					usbDevice[reader].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
 
 					goto end;
 				}
