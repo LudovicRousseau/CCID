@@ -1,6 +1,6 @@
 /*
     debug.c: log (or not) messages
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2004   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,8 +24,6 @@
 
 #include "config.h"
 #include "debug.h"
-
-#ifdef DEBUG
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -67,6 +65,4 @@ void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
 
 	fprintf(stderr, "%s\n", DebugBuffer);
 } /* debug_xxd */
-
-#endif
 
