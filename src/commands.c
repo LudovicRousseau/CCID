@@ -408,13 +408,13 @@ RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
 						tx_buffer[1] = 0xC0;
 						tx_buffer[2] = 0x00;
 						tx_buffer[3] = 0x00;
-						tx_length = 5;
-						*rx_length = old_rx_length;
 
 						if (rx_buffer[0] == 0x61)
 						{
 							/* Get Response */
 							DEBUG_COMM2("TPDU: Automatic Get Response after 61%02X", rx_buffer[1]);
+							*rx_length = old_rx_length;
+
 							/* Card sent 61 xx
 							 * xx = 0 means 256 */
 							if (rx_buffer[1] == 0)
@@ -434,6 +434,8 @@ RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
 						{
 							/* Get Response */
 							DEBUG_COMM("TPDU: Automatic Get Response after 9000");
+							*rx_length = old_rx_length;
+
 							/* Card sent 90 00
 							 * Get Response with P3 = Le */
 							tx_buffer[4] = Le;
