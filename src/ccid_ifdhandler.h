@@ -1,100 +1,120 @@
-/*****************************************************************
-/
-/ File   :   ifdhandler.h
-/ Author :   David Corcoran <corcoran@linuxnet.com>
-/ Date   :   June 15, 2000
-/ Purpose:   This provides reader specific low-level calls.
-/            See http://www.linuxnet.com for more information.
-/ License:   See file LICENSE.BSD
-/
-/ $Id$
-/
-******************************************************************/
+/*
+ * This provides reader specific low-level calls.
+ *
+ * MUSCLE SmartCard Development ( http://www.linuxnet.com )
+ *
+ * Copyright (C) 1999-2004
+ *  David Corcoran <corcoran@linuxnet.com>
+ *  Damien Sauveron <damien.sauveron@labri.fr>
+ *
+ * $Id$
+ */
 
 #ifndef _ifd_handler_h_
 #define _ifd_handler_h_
 
 #ifdef __cplusplus
-extern "C" {
-#endif 
-  
-  /* List of data structures available to ifdhandler */
-  
-  typedef struct _DEVICE_CAPABILITIES {
-    
-    LPSTR Vendor_Name;          /* Tag 0x0100        */
-    LPSTR IFD_Type;		/* Tag 0x0101        */
-    DWORD IFD_Version;		/* Tag 0x0102        */
-    LPSTR IFD_Serial;		/* Tag 0x0103        */
-    DWORD IFD_Channel_ID;  	/* Tag 0x0110        */
-    
-    DWORD Asynch_Supported;	/* Tag 0x0120        */
-    DWORD Default_Clock;	/* Tag 0x0121        */
-    DWORD Max_Clock;		/* Tag 0x0122        */
-    DWORD Default_Data_Rate;	/* Tag 0x0123        */
-    DWORD Max_Data_Rate;	/* Tag 0x0124        */
-    DWORD Max_IFSD;		/* Tag 0x0125        */
-    DWORD Synch_Supported;	/* Tag 0x0126        */
-    DWORD Power_Mgmt;		/* Tag 0x0131        */
-    DWORD Card_Auth_Devices;	/* Tag 0x0140        */
-    DWORD User_Auth_Device;	/* Tag 0x0142        */
-    DWORD Mechanics_Supported;	/* Tag 0x0150        */
-    DWORD Vendor_Features;	/* Tag 0x0180 - 0x01F0   User Defined. */
-    
-  } DEVICE_CAPABILITIES, *PDEVICE_CAPABILITIES;
-  
-  typedef struct _ICC_STATE {
-    
-    UCHAR ICC_Presence;		/* Tag 0x0300        */
-    UCHAR ICC_Interface_Status;	/* Tag 0x0301        */
-    UCHAR ATR[MAX_ATR_SIZE];	/* Tag 0x0303        */
-    UCHAR ICC_Type;		/* Tag 0x0304        */
-    
-  } ICC_STATE, *PICC_STATE;
-  
-  typedef struct _PROTOCOL_OPTIONS {
-    
-    DWORD Protocol_Type;	/* Tag 0x0201        */
-    DWORD Current_Clock;	/* Tag 0x0202        */
-    DWORD Current_F;		/* Tag 0x0203        */
-    DWORD Current_D;		/* Tag 0x0204        */
-    DWORD Current_N;		/* Tag 0x0205        */
-    DWORD Current_W;		/* Tag 0x0206        */
-    DWORD Current_IFSC;		/* Tag 0x0207        */
-    DWORD Current_IFSD;		/* Tag 0x0208        */
-    DWORD Current_BWT;		/* Tag 0x0209        */
-    DWORD Current_CWT;		/* Tag 0x020A        */
-    DWORD Current_EBC;		/* Tag 0x020B        */
-  } PROTOCOL_OPTIONS, *PPROTOCOL_OPTIONS;
-  
-  typedef struct _SCARD_IO_HEADER {
-    DWORD Protocol;
-    DWORD Length;
-  } SCARD_IO_HEADER, *PSCARD_IO_HEADER;
-  
-  /* End of structure list */
+extern "C"
+{
+#endif
 
+	/*
+	 * List of data structures available to ifdhandler 
+	 */
 
-  
-  /* The list of tags should be alot more but
-     this is all I use in the meantime        */
-  
-#define TAG_IFD_ATR					0x0303
-#define TAG_IFD_SLOTNUM				0x0180
-#define TAG_IFD_THREAD_SAFE			0x0FAD
-#define TAG_IFD_SLOTS_NUMBER		0x0FAE
-#define TAG_IFD_SIMULTANEOUS_ACCESS	0x0FAF
-  
-  /* End of tag list                          */
+	typedef struct _DEVICE_CAPABILITIES
+	{
+		LPSTR Vendor_Name;		/* Tag 0x0100 */
+		LPSTR IFD_Type;			/* Tag 0x0101 */
+		DWORD IFD_Version;		/* Tag 0x0102 */
+		LPSTR IFD_Serial;		/* Tag 0x0103 */
+		DWORD IFD_Channel_ID;	/* Tag 0x0110 */
 
+		DWORD Asynch_Supported;	/* Tag 0x0120 */
+		DWORD Default_Clock;	/* Tag 0x0121 */
+		DWORD Max_Clock;		/* Tag 0x0122 */
+		DWORD Default_Data_Rate;	/* Tag 0x0123 */
+		DWORD Max_Data_Rate;	/* Tag 0x0124 */
+		DWORD Max_IFSD;			/* Tag 0x0125 */
+		DWORD Synch_Supported;	/* Tag 0x0126 */
+		DWORD Power_Mgmt;		/* Tag 0x0131 */
+		DWORD Card_Auth_Devices;	/* Tag 0x0140 */
+		DWORD User_Auth_Device;	/* Tag 0x0142 */
+		DWORD Mechanics_Supported;	/* Tag 0x0150 */
+		DWORD Vendor_Features;	/* Tag 0x0180 - 0x01F0 User Defined. */
+	}
+	DEVICE_CAPABILITIES, *PDEVICE_CAPABILITIES;
 
-    
-  /* List of defines available to ifdhandler */
-  
+	typedef struct _ICC_STATE
+	{
+		UCHAR ICC_Presence;		/* Tag 0x0300 */
+		UCHAR ICC_Interface_Status;	/* Tag 0x0301 */
+		UCHAR ATR[MAX_ATR_SIZE];	/* Tag 0x0303 */
+		UCHAR ICC_Type;			/* Tag 0x0304 */
+	}
+	ICC_STATE, *PICC_STATE;
+
+	typedef struct _PROTOCOL_OPTIONS
+	{
+		DWORD Protocol_Type;	/* Tag 0x0201 */
+		DWORD Current_Clock;	/* Tag 0x0202 */
+		DWORD Current_F;		/* Tag 0x0203 */
+		DWORD Current_D;		/* Tag 0x0204 */
+		DWORD Current_N;		/* Tag 0x0205 */
+		DWORD Current_W;		/* Tag 0x0206 */
+		DWORD Current_IFSC;		/* Tag 0x0207 */
+		DWORD Current_IFSD;		/* Tag 0x0208 */
+		DWORD Current_BWT;		/* Tag 0x0209 */
+		DWORD Current_CWT;		/* Tag 0x020A */
+		DWORD Current_EBC;		/* Tag 0x020B */
+	}
+	PROTOCOL_OPTIONS, *PPROTOCOL_OPTIONS;
+
+	typedef struct _SCARD_IO_HEADER
+	{
+		DWORD Protocol;
+		DWORD Length;
+	}
+	SCARD_IO_HEADER, *PSCARD_IO_HEADER;
+
+	/*
+	 * End of structure list 
+	 */
+
+	/*
+	 * The list of tags should be alot more but this is all I use in the
+	 * meantime 
+	 */
+
+#define TAG_IFD_ATR                     0x0303
+#define TAG_IFD_SLOTNUM                 0x0180
+#define TAG_IFD_SLOT_THREAD_SAFE        0x0FAC
+#define TAG_IFD_THREAD_SAFE             0x0FAD
+#define TAG_IFD_SLOTS_NUMBER            0x0FAE
+#define TAG_IFD_SIMULTANEOUS_ACCESS     0x0FAF
+
+	/*
+	 * End of tag list 
+	 */
+
+	/*
+	 * IFD Handler version number enummerations 
+	 */
+#define IFD_HVERSION_1_0               0x00010000
+#define IFD_HVERSION_2_0               0x00020000
+#define IFD_HVERSION_3_0               0x00030000
+	/*
+	 * End of version number enummerations 
+	 */
+
+	/*
+	 * List of defines available to ifdhandler 
+	 */
+
 #define IFD_POWER_UP			500
 #define IFD_POWER_DOWN			501
 #define IFD_RESET			502
-  
+
 #define IFD_NEGOTIATE_PTS1		1
 #define IFD_NEGOTIATE_PTS2		2
 #define IFD_NEGOTIATE_PTS3              4
@@ -115,31 +135,43 @@ extern "C" {
 #define IFD_NOT_SUPPORTED		614
 #define IFD_ICC_PRESENT			615
 #define IFD_ICC_NOT_PRESENT		616
-  
-  /* List of Defined Functions Available to IFD_Handler */
-  
-  RESPONSECODE IFDHCreateChannel ( DWORD, DWORD );
-  RESPONSECODE IFDHCloseChannel ( DWORD );
-  RESPONSECODE IFDHGetCapabilities ( DWORD, DWORD, PDWORD, 
-				     PUCHAR );
-  RESPONSECODE IFDHSetCapabilities ( DWORD, DWORD, DWORD, PUCHAR );
-  RESPONSECODE IFDHSetProtocolParameters ( DWORD, DWORD, UCHAR, 
-					   UCHAR, UCHAR, UCHAR );
-  RESPONSECODE IFDHPowerICC ( DWORD, DWORD, PUCHAR, PDWORD );
-  RESPONSECODE IFDHTransmitToICC ( DWORD, SCARD_IO_HEADER, PUCHAR, 
-				   DWORD, PUCHAR, PDWORD, 
-				   PSCARD_IO_HEADER );
-  RESPONSECODE IFDHControl ( DWORD, PUCHAR, DWORD, 
-			     PUCHAR, PDWORD );
-  RESPONSECODE IFDHICCPresence( DWORD );
-  
-  CcidDesc *get_ccid_slot(int lun);
-  RESPONSECODE CardUp(int lun);
-  RESPONSECODE CardDown(int lun);
+
+	/*
+	 * List of Defined Functions Available to IFD_Handler 3.0 
+	 *
+	 * All the functions of IFD_Handler 2.0 are available
+	 * IFDHCreateChannelByName() is new
+	 * IFDHControl() API changed
+	 */
+
+	RESPONSECODE IFDHCreateChannelByName(DWORD, LPSTR);
+	RESPONSECODE IFDHControl(DWORD, DWORD, PUCHAR, DWORD, PUCHAR, DWORD,
+		PDWORD);
+
+	/*
+	 * List of Defined Functions Available to IFD_Handler 2.0 
+	 */
+
+	RESPONSECODE IFDHCreateChannel(DWORD, DWORD);
+	RESPONSECODE IFDHCloseChannel(DWORD);
+	RESPONSECODE IFDHGetCapabilities(DWORD, DWORD, PDWORD, PUCHAR);
+	RESPONSECODE IFDHSetCapabilities(DWORD, DWORD, DWORD, PUCHAR);
+	RESPONSECODE IFDHSetProtocolParameters(DWORD, DWORD, UCHAR,
+		UCHAR, UCHAR, UCHAR);
+	RESPONSECODE IFDHPowerICC(DWORD, DWORD, PUCHAR, PDWORD);
+	RESPONSECODE IFDHTransmitToICC(DWORD, SCARD_IO_HEADER, PUCHAR,
+		DWORD, PUCHAR, PDWORD, PSCARD_IO_HEADER);
+	RESPONSECODE IFDHICCPresence(DWORD);
+
+	/*
+	 * CCID driver specific functions
+	 */
+	CcidDesc *get_ccid_slot(int lun);
+	RESPONSECODE CardUp(int lun);
+	RESPONSECODE CardDown(int lun);
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
-#endif /* _ifd_hander_h_ */
-
+#endif
