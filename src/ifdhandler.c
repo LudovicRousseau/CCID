@@ -539,7 +539,8 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				break;
 			}
 
-		SetParameters(Lun, 1, sizeof(param), param);
+		if (IFD_SUCCESS != SetParameters(Lun, 1, sizeof(param), param))
+			return IFD_COMMUNICATION_ERROR;
 	}
 	else
 	/* T=0 */
@@ -567,7 +568,8 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		if (atr.ib[1][ATR_INTERFACE_BYTE_TC].present)
 			param[3] = atr.ib[1][ATR_INTERFACE_BYTE_TC].value;
 
-		SetParameters(Lun, 0, sizeof(param), param);
+		if (IFD_SUCCESS != SetParameters(Lun, 0, sizeof(param), param))
+			return IFD_COMMUNICATION_ERROR;
 	}
 
 	/* set IFSC & IFSD in T=1 */
