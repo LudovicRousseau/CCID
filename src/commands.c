@@ -180,6 +180,24 @@ RESPONSECODE SecurePIN(unsigned int reader_index,
 	/* CCID data structure + APDU */
 	memcpy(cmd + 11, TxBuffer, TxLength);
 
+	/* SPR532 and Case 1 APDU */
+	if ((SPR532 == ccid_descriptor->readerID) && (TxLength - 14 == 4))
+	{
+		RESPONSECODE return_value;
+		unsigned char cmd[] = { 0x80,0x02, 0x00 };
+		unsigned char res[1];
+		unsigned int res_length = sizeof(res);
+
+		/* the SPR532 will append the PIN code without any padding */
+		return_value = CmdEscape(reader_index, cmd, sizeof(cmd), res,
+			&res_length);
+		if (return_value != IFD_SUCCESS)
+		{
+			ccid_error(res[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);
+			return return_value;
+		}
+	}
+
 	if (WritePort(reader_index, TxLength+1+10, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
