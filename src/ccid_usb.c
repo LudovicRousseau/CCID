@@ -251,7 +251,7 @@ status_t OpenUSBByName(int lun, char *device)
 							usb_interface = get_ccid_usb_interface(dev);
 							if (usb_interface == NULL)
 							{
-								DEBUG_CRITICAL("Can't find a CCID interface on %s", device_name);
+								DEBUG_CRITICAL2("Can't find a CCID interface on %s", device_name);
 								return STATUS_UNSUCCESSFUL;
 							}			
 
