@@ -28,12 +28,13 @@
 #include <errno.h>
 #include <usb.h>
 
-#include "pcscdefines.h"
+#include "ccid.h"
 #include "config.h"
 #include "debug.h"
+#include "defs.h"
 #include "utils.h"
 #include "parser.h"
-#include "ccid.h"
+#include "ccid_ifdhandler.h"
 
 
 /* read timeout
@@ -76,6 +77,8 @@ typedef struct
 
 /* The _usbDevice structure must be defined before including ccid_usb.h */
 #include "ccid_usb.h"
+
+static int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
 
 static _usbDevice usbDevice[PCSCLITE_MAX_READERS] = {
 	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { NULL, NULL, 0, 0 }
@@ -496,7 +499,7 @@ int get_desc(int channel, usb_dev_handle **handle, struct
  *					get_end_points
  *
  ****************************************************************************/
-int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
+static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 {
 	int i;
 	int bEndpointAddress;
