@@ -31,6 +31,12 @@ AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AM_PROG_LEX
 AC_CHECK_PROG([PKGCONFIG], [pkg-config], [yes])
+if test "$PKGCONFIG" = "yes"; then
+	if ! `pkg-config --print-errors --atleast-version=1.2.9-beta5 libpcsclite`
+	then
+		AC_MSG_ERROR([install pcsc-lite 1.2.9-beta5 or later])
+	fi
+fi
 
 dnl Add libtool support.
 AM_PROG_LIBTOOL
@@ -44,7 +50,7 @@ AC_CHECK_HEADERS(errno.h fcntl.h stdlib.h unistd.h termios.h string.h errno.h sy
 	[AC_MSG_WARN([some header files not found])])
 
 AC_CHECK_HEADERS(PCSC/ifdhandler.h,,
-	[AC_MSG_ERROR([PCSC/ifdhandler.h not found, install pcsc-lite 1.2.9-beta3 or later])],
+	[AC_MSG_ERROR([PCSC/ifdhandler.h not found, install pcsc-lite 1.2.9-beta5 or later])],
 	[ #include <PCSC/pcsclite.h> ])
 
 
