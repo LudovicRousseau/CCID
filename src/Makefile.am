@@ -16,21 +16,22 @@ SERIAL = ccid_serial.c ccid_serial.h
 
 # needed for MacOS X
 if NEED_PARSER
-CCID_PARSER = tokenparser.l
-else
-PARSE_PARSER = tokenparser.l
+TOKEN_PARSER = tokenparser_macosx.l
 endif
 
-libccid_la_SOURCES = $(COMMON) $(USB) $(CCID_PARSER)
+libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER)
 libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@
 
 libccidtwin_la_SOURCES = $(COMMON) $(SERIAL)
 libccidtwin_la_CFLAGS = -DTWIN_SERIAL
 
-parse_SOURCES = $(PARSE_PARSER) parse.c parser.h
+parse_SOURCES = tokenparser.l parse.c parser.h
 parse_LDADD = libccid.la
 
 EXTRA_DIST = Info.plist reader.conf.in
+
+tokenparser_macosx.l: tokenparser.l
+	cp -f $^ $@
 
 install: install_ccid install_ccidtwin
 
