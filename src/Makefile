@@ -31,6 +31,7 @@ ifeq ($(OSTYPE),darwin)
 TARGET_LIB = libccid.dylib
 PARSE =
 BUNDLE_HOST = MacOS
+LDFLAGS += -framework CoreFoundation -framework IOKit
 else
 TARGET_LIB = libccid.so
 PARSE = parse
@@ -48,7 +49,7 @@ all: check expert
 
 check: check_stamp
 check_stamp:
-	./check
+	LDFLAGS="$(LDFLAGS)" ./check
 	touch check_stamp
 
 expert: $(PARSE) $(TARGET_LIB)
@@ -84,7 +85,7 @@ distclean: clean
 
 install: all
 	mkdir -p $(BUNDLE)/Contents/$(BUNDLE_HOST)/
-	cp libccid.so $(BUNDLE)/Contents/$(BUNDLE_HOST)/$(TARGET_LIB).$(version)
+	cp $(TARGET_LIB) $(BUNDLE)/Contents/$(BUNDLE_HOST)/$(TARGET_LIB).$(version)
 	sed s/VERSION/$(version)/ Info.plist | sed s/TARGET/$(TARGET_LIB)/ > $(BUNDLE)/Contents/Info.plist
 	mkdir -p $(DESTDIR)/pcsc/drivers/
 	cp -r $(BUNDLE) $(DESTDIR)/pcsc/drivers/
