@@ -23,6 +23,9 @@
 
 #include <stdio.h>
 #include <string.h> 
+# ifdef S_SPLINT_S
+# include <sys/types.h>
+# endif
 #include <usb.h>
 
 #include "defs.h"
