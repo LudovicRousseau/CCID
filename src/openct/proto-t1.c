@@ -65,7 +65,7 @@ static unsigned int	t1_seq(unsigned char);
 static unsigned	int	t1_build(t1_state_t *, unsigned char *,
 				unsigned char, unsigned char,
 				ct_buf_t *, size_t *);
-unsigned int	t1_rebuild(t1_state_t *t1, unsigned char *block);
+static unsigned int	t1_rebuild(t1_state_t *t1, unsigned char *block);
 static unsigned int	t1_compute_checksum(t1_state_t *,
 				unsigned char *, size_t);
 static int		t1_verify_checksum(t1_state_t *, unsigned char *,
@@ -88,7 +88,7 @@ t1_set_defaults(t1_state_t *t1)
 	t1->wtx	     = 0;
 }
 
-void
+static void
 t1_set_checksum(t1_state_t *t1, int csum)
 {
 	switch (csum) {
@@ -523,7 +523,7 @@ t1_seq(unsigned char pcb)
 	}
 }
 
-unsigned int
+static unsigned int
 t1_build(t1_state_t *t1, unsigned char *block,
 		unsigned char dad, unsigned char pcb,
 		ct_buf_t *bp, size_t *lenp)
@@ -568,7 +568,7 @@ t1_build(t1_state_t *t1, unsigned char *block,
 	return len;
 }
 
-unsigned int
+static unsigned int
 t1_rebuild(t1_state_t *t1, unsigned char *block)
 {
 	unsigned char pcb = t1 -> previous_block[1];
@@ -588,13 +588,13 @@ t1_rebuild(t1_state_t *t1, unsigned char *block)
 /*
  * Build/verify checksum
  */
-unsigned int
+static unsigned int
 t1_compute_checksum(t1_state_t *t1, unsigned char *data, size_t len)
 {
 	return len + t1->checksum(data, len, data + len);
 }
 
-int
+static int
 t1_verify_checksum(t1_state_t *t1, unsigned char *rbuf, size_t len)
 {
 	unsigned char	csum[2];
@@ -616,7 +616,7 @@ t1_verify_checksum(t1_state_t *t1, unsigned char *rbuf, size_t len)
 /*
  * Send/receive block
  */
-int
+static int
 t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 {
 	int		n, m;
