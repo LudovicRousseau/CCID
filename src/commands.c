@@ -723,6 +723,7 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 	unsigned char rcv_buf[])
 {
 	int is_rcv;
+	unsigned char cmd[5];
 	unsigned char tmp_buf[512];
 	unsigned int exp_len, in_len;
 	unsigned char ins, *in_buf;
@@ -747,7 +748,6 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 		is_rcv = 0;
 
 	/* Command to send to the smart card (must be 5 bytes, from 7816 p.15) */
-	unsigned char cmd[5];
 	memset(cmd, 0, sizeof(cmd));
 	if (snd_len == 4)
 	{
