@@ -25,7 +25,8 @@
 #include <string.h> 
 #include <usb.h>
 
-#include "pcscdefines.h"
+#include "defs.h"
+#include "ccid_ifdhandler.h"
 #include "ccid.h"
 #include "ccid_usb.h"
 

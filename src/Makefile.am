@@ -9,16 +9,14 @@ bin_PROGRAMS = parse
 
 COMMON = ccid.c \
 	ccid.h \
+	ccid_ifdhandler.h \
 	commands.c \
 	commands.h \
 	debug.h \
 	defs.h \
 	ifdhandler.c \
-	ifdhandler.h \
-	pcscdefines.h \
 	utils.c \
-	utils.h \
-	winsmcrd.h
+	utils.h
 USB = ccid_usb.c ccid_usb.h
 SERIAL = ccid_serial.c ccid_serial.h
 T1 = protocol_t1/apdu.h \

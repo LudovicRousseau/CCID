@@ -46,9 +46,8 @@
  * Type definitions
  */
 
-#include "pcscdefines.h"
+#include <pcsclite.h>
 
-typedef unsigned char      BYTE;
 #ifndef __cplusplus
 typedef int                bool;
 #endif

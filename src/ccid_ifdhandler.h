@@ -33,11 +33,14 @@ extern int LogLevel;
 extern int DriverOptions;
 
 /*
+ * Maximum number of CCID readers supported simultaneously
+ */
+#define PCSCLITE_MAX_READERS 16
+
+/*
  * CCID driver specific functions
  */
 CcidDesc *get_ccid_slot(int lun);
-RESPONSECODE CardUp(int lun);
-RESPONSECODE CardDown(int lun);
 
 #endif
 

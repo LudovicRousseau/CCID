@@ -24,6 +24,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
+
 #include "protocol_t1.h"
 #include "t1_block.h"
 #include "atr.h"
@@ -32,7 +35,7 @@
 #include "defs.h"
 #include "ccid.h"
 #include "commands.h"
-#include "ifdhandler.h"
+#include "ccid_ifdhandler.h"
 #include "debug.h"
 
 /*

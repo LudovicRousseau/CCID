@@ -26,7 +26,8 @@
 #define ERROR_OFFSET 8
 
 RESPONSECODE CmdPowerOn(int lun, int * nlength, unsigned char buffer[]);
-RESPONSECODE CmdEscape(int lun, int command);
+RESPONSECODE CmdEscape(int lun, const unsigned char TxBuffer[], int TxLength,
+	unsigned char RxBuffer[], unsigned long *RxLength);
 RESPONSECODE CmdPowerOff(int lun);
 RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[]);
 RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],

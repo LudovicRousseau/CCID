@@ -21,7 +21,11 @@
  * $Id$
  */
 
-#include "pcscdefines.h"
+#include <pcsclite.h>
+
+#include "ccid.h"
+#include "defs.h"
+#include "ccid_ifdhandler.h"
 #include "utils.h"
 
 /* Check if the Lun is not to large for the pgSlots table

@@ -21,7 +21,8 @@
  * $Id$
  */
 
-#include "pcscdefines.h"
+#include <pcsclite.h>
+
 #include "protocol_t1/protocol_t1.h"
 
 typedef struct CCID_DESC
@@ -42,6 +43,13 @@ typedef struct CCID_DESC
 	 */
 	Protocol_T1 t1;
 } CcidDesc;
+
+typedef enum {
+	STATUS_SUCCESS               = 0xFA,
+	STATUS_UNSUCCESSFUL          = 0xFB,
+	STATUS_COMM_ERROR            = 0xFC,
+	STATUS_DEVICE_PROTOCOL_ERROR = 0xFD
+} status_t;
 
 /* Powerflag (used to detect quick insertion removals unnoticed by the 
  * resource manager)Initial value */

@@ -33,7 +33,8 @@
 #include <sys/time.h>
 #include <sys/types.h>
 
-#include "pcscdefines.h"
+#include "defs.h"
+#include "ccid_ifdhandler.h"
 #include "config.h"
 #include "debug.h"
 #include "ccid.h"
