@@ -60,7 +60,7 @@ int ccid_open_hack(int lun)
 			{
 				unsigned char cmd[] = "\xA0\x02";
 				unsigned char res[10];
-				unsigned long length_res = sizeof(res);
+				int length_res = sizeof(res);
 
 				if (CmdEscape(lun, cmd, sizeof(cmd)-1, res, &length_res) == IFD_SUCCESS)
 				{
@@ -93,24 +93,8 @@ void ccid_error(int error, char *file, int line)
 			text = "Wrong command length";
 			break;
 
-		case 0x02:
-			text = "Reader detects an excessive current. Card powered off";
-			break;
-
-		case 0x03:
-			text = "Reader detects a defective voltage. Card powered off";
-			break;
-
 		case 0x05:
-			text = "Slot number is invalid (it must be set to 0)";
-			break;
-
-		case 0x07:
-		case 0x08:
-		case 0x09:
-		case 0x0A:
-		case 0x15:
-			text = "Byte displayed is invalid";
+			text = "Invalid slot number";
 			break;
 
 		case 0xA2:
@@ -119,6 +103,10 @@ void ccid_error(int error, char *file, int line)
 
 		case 0xA3:
 			text = "ATR too long (> 33)";
+			break;
+
+		case 0xAB:
+			text = "No data exchanged";
 			break;
 
 		case 0xB0:
@@ -137,8 +125,36 @@ void ccid_error(int error, char *file, int line)
 			text = "Wrong APDU command length";
 			break;
 
+		case 0xE0:
+			text = "Slot busy";
+			break;
+
+		case 0xEF:
+			text = "PIN cancelled";
+			break;
+
+		case 0xF0:
+			text = "PIN timeout";
+			break;
+
+		case 0xF2:
+			text = "Busy with autosequence";
+			break;
+
+		case 0xF3:
+			text = "Deactivated protocol";
+			break;
+
 		case 0xF4:
 			text = "Procedure byte conflict";
+			break;
+
+		case 0xF5:
+			text = "Class not supported";
+			break;
+
+		case 0xF6:
+			text = "Protocol not supported";
 			break;
 
 		case 0xF7:
@@ -149,6 +165,14 @@ void ccid_error(int error, char *file, int line)
 			text = "Invalid ATR first byte";
 			break;
 
+		case 0xFB:
+			text = "Hardware error";
+			break;
+			
+		case 0xFC:
+			text = "Overrun error";
+			break;
+
 		case 0xFD:
 			text = "Parity error during exchange";
 			break;
@@ -157,10 +181,21 @@ void ccid_error(int error, char *file, int line)
 			text = "Card absent or mute";
 			break;
 
-		default:
-			text = "Unknown CCID error";
+		case 0xFF:
+			text = "Activity aborted by Host";
 			break;
 
+		default:
+			if ((error >= 1) && (error <= 127))
+			{
+				char var_text[20];
+
+				sprintf(var_text, "error on byte %d", error);
+				text = var_text;
+			}
+			else
+				text = "Unknown CCID error";
+			break;
 	}
 	debug_msg("%s:%d %s", file, line, text);
 
