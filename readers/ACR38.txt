@@ -18,8 +18,10 @@ Parsing Interface Descriptor for device: 001/024
   bDescriptorType: 0x21
   bcdCCID: 1.00
   bMaxSlotIndex: 0x00
-  bVoltageSupport: 0x01
+  bVoltageSupport: 0x07
    5.0V
+   3.0V
+   1.8V
   dwProtocols: 0x0000 0x0003
    T=0
    T=1
@@ -27,7 +29,7 @@ Parsing Interface Descriptor for device: 001/024
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0x00
   dwDataRate: 10752 bps
-  dwMaxDataRate: 129032 bps
+  dwMaxDataRate: 250000 bps
   bNumDataRatesSupported: 0
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
