@@ -43,12 +43,9 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(errno.h fcntl.h stdlib.h unistd.h termios.h string.h errno.h sys/time.h sys/types.h stdarg.h,,
 	[AC_MSG_WARN([some header files not found])])
 
-AC_CHECK_HEADERS(pcsclite.h,,
-	[AC_MSG_ERROR([pcsclite.h not found, install pcsc-lite])])
-
-AC_CHECK_HEADERS(ifdhandler.h,,
-	[AC_MSG_ERROR([ifdhandler.h not found, install pcsc-lite 1.2.9-beta3 or later])],
-	[ #include <pcsclite.h> ])
+AC_CHECK_HEADERS(PCSC/ifdhandler.h,,
+	[AC_MSG_ERROR([PCSC/ifdhandler.h not found, install pcsc-lite 1.2.9-beta3 or later])],
+	[ #include <PCSC/pcsclite.h> ])
 
 
 dnl Checks for typedefs, structures, and compiler characteristics.
