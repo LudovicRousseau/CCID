@@ -21,9 +21,9 @@
  * $Id$
  */
 
-#include <pcsclite.h>
+#include <PCSC/pcsclite.h>
 
-#include "protocol_t1/protocol_t1.h"
+#include "openct/proto-t1.h"
 
 typedef struct CCID_DESC
 {
@@ -41,7 +41,7 @@ typedef struct CCID_DESC
 	/*
 	 * T=1 Protocol context
 	 */
-	Protocol_T1 t1;
+	t1_state_t t1;
 } CcidDesc;
 
 typedef enum {
