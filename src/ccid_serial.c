@@ -570,7 +570,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	/* perform a command to be sure a GemPC Twin reader is connected
 	 * get the reader firmware */
 	{
-		unsigned char tx_buffer[] = "\x02";
+		unsigned char tx_buffer[] = { 0x02 };
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
