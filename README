@@ -127,6 +127,7 @@ History:
     - support of APDU mode instead of just TPDU if the reader support
       it. Thanks to Jean-Luc Giraud for the idea and inspiration I got
       from his "concurrent" driver.
+    - support of "time request" from the card.
     - parse: new indentation for more readability of supported features.
     - switch the GemPC Key and GemPC Twin in APDU mode since they
       support it but do not announce it in the dwFeatures.
@@ -141,8 +142,8 @@ History:
     - First public release
 
 
-Bibliographie:
-==============
+Bibliography:
+=============
 
 [1] http://www.usb.org/developers/devclass_docs/ccid_classspec_1_00a.pdf
 [2] http://www.gemplus.com/products/gempc433/
