@@ -110,11 +110,11 @@ again:
 			((GEMPC433 == ccid_descriptor->readerID)
 			|| (CHERRYXX33 == ccid_descriptor->readerID)))
 		{
-			unsigned char cmd[] = "\x1F\x01";
+			unsigned char cmd[] = {0x1F, 0x01};
 			unsigned char res[1];
 			unsigned int res_length = sizeof(res);
 
-			if ((return_value = CmdEscape(reader_index, cmd, sizeof(cmd)-1, res,
+			if ((return_value = CmdEscape(reader_index, cmd, sizeof(cmd), res,
 				&res_length)) != IFD_SUCCESS)
 				return return_value;
 
