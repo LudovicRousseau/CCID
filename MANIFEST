@@ -23,7 +23,6 @@ src/debug.c
 src/debug.h
 src/defs.h
 src/.dependencies
-src/dep_stamp
 src/ifdhandler.c
 src/ifdhandler.h
 src/Info.plist
