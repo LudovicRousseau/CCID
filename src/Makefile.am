@@ -1,5 +1,7 @@
 # $Id$
 
+SUBDIRS = protocol_t1
+
 CCID_BUNDLE = ifd-ccid.bundle
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
@@ -19,9 +21,10 @@ TOKEN_PARSER = tokenparser_macosx.l
 endif
 
 libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER)
-libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@
+libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@ \
+	protocol_t1/libt1.a
 
-libccidtwin_la_SOURCES = $(COMMON) $(SERIAL)
+libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) protocol_t1/libt1.a
 libccidtwin_la_CFLAGS = -DTWIN_SERIAL
 
 parse_SOURCES = tokenparser.l parse.c parser.h
