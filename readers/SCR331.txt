@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 001/036
- iManufacturer: SCM Microsystems Inc.
- iProduct: SCRx31 USB Smart Card Reader
+ idVendor: 0x04E6
+  iManufacturer: SCM Microsystems Inc.
+ idProduct: 0xE001
+  iProduct: SCRx31 USB Smart Card Reader
+ bcdDevice: 5.16 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -21,10 +24,10 @@ Parsing Interface Descriptor for device: 001/036
    T=0
    T=1
   dwDefaultClock: 4.000 MHz
-  dwMaximumClock: 4.000 MHz
+  dwMaximumClock: 12.000 MHz
   bNumClockSupported: 0x00
   dwDataRate: 9600 bps
-  dwMaxDataRate: 115200 bps
+  dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
