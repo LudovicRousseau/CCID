@@ -28,10 +28,10 @@
 # endif
 #include <usb.h>
 
+#include <ifdhandler.h>
 #include "defs.h"
 #include "ccid_ifdhandler.h"
 #include "ccid.h"
-#include "ccid_usb.h"
 
 #ifndef TRUE
 #define TRUE 1
@@ -54,10 +54,10 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 
 	for (channel=0; channel<CCID_DRIVER_MAX_READERS; channel++)
 	{
-		res = OpenUSB(channel<<16, channel);
-		if (res != STATUS_SUCCESS)
+		res = IFDHCreateChannel(channel<<16, channel);
+		if (res != IFD_SUCCESS)
 		{
-			fprintf(stderr, "ccid_OpenUSB: 0x%02X\n", res);
+			fprintf(stderr, "ccid_OpenUSB: %d\n", res);
 			break;
 		}
 		else
@@ -73,8 +73,8 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 	if (channel == 0)
 		printf("No known CCID reader found\n");
 
-	for (;channel!=0; channel--)
-		(void)CloseUSB(channel<<16);
+	for (channel--; channel!=0; channel--)
+		(void)IFDHCloseChannel(channel<<16);
 
 	return 0;
 } /* main */
