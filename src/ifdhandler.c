@@ -952,6 +952,9 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 		}
 	}
 
+	DEBUG_PERIODIC2("Card %s",
+		IFD_ICC_PRESENT == return_value ? "present" : "absent");
+
 	return return_value;
 } /* IFDHICCPresence */
 
