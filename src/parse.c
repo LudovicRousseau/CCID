@@ -126,26 +126,20 @@ int ccid_parse_interface_descriptor(char device_name[], usb_dev_handle *handle,
 		printf(" [Chip Card Interface Device Class (CCID)]\n");
 	else
 	{
-		printf(" NOT A CCID DEVICE\n");
+		printf("\n  NOT A CCID DEVICE\n");
 		if (usb_interface->bInterfaceClass != 0xFF)
 			return TRUE;
 		else
-			printf(" Class is 0xFF (proprietary)\n");
+			printf("  Class is 0xFF (proprietary)\n");
 	}
 	
 	printf(" bInterfaceSubClass: %d\n", usb_interface->bInterfaceSubClass);
 	if (usb_interface->bInterfaceSubClass)
-	{
 		printf("  UNSUPPORTED SubClass\n");
-		return TRUE;
-	}
 
 	printf(" bInterfaceProtocol: %d\n", usb_interface->bInterfaceProtocol);
 	if (usb_interface->bInterfaceProtocol)
-	{
 		printf("  UNSUPPORTED InterfaceProtocol\n");
-		return TRUE;
-	}
 
 	printf(" iInterface: %d\n", usb_interface->iInterface);
 
