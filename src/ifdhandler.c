@@ -536,11 +536,17 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			0x00	/* NADValue		*/
 		};
 		int i;
+		t1_state_t *t1 = &(ccid_slot -> t1);
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
 			param[0] = pps[2];
+ 
+		/* CRC checksum? */
+		if (2 == t1->rc_bytes)
+			param[1] &= 0x01;
 
+		/* the CCID should ignore this bit */
 		if (ATR_CONVENTION_INVERSE == convention)
 			param[1] &= 0x02;
 
