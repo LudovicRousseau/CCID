@@ -249,6 +249,10 @@ int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  bClassEnveloppe: %d\n", extra[49]);
 	printf("  wLcdLayout: 0x%04X\n", (extra[51] << 8)+extra[50]);
 	printf("  bPINSupport: 0x%02X\n", extra[52]);
+	if (extra[52] & 0x01)
+		printf("   PIN Verification supported\n");
+	if (extra[52] & 0x02)
+		printf("   PIN Modification supported\n");
 	printf("  bMaxCCIDBusySlots: %d\n", extra[53]);
 
 	return FALSE;
