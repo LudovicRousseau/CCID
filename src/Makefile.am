@@ -4,8 +4,6 @@ CCID_BUNDLE = ifd-ccid.bundle
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
 
-AM_CPPFLAGS = @AM_CPPFLAGS@
-
 lib_LTLIBRARIES = libccid.la libccidtwin.la
 bin_PROGRAMS = parse
 
@@ -40,12 +38,14 @@ endif
 
 libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(T1)
 libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@
+libccid_la_CFLAGS = @PCSC_CFLAGS@
 
 libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(T1)
-libccidtwin_la_CFLAGS = -DTWIN_SERIAL
+libccidtwin_la_CFLAGS = @PCSC_CFLAGS@ -DTWIN_SERIAL
 
 parse_SOURCES = tokenparser.l parse.c parser.h debug.c
 parse_LDADD = libccid.la
+parse_CFLAGS = @PCSC_CFLAGS@
 
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE
