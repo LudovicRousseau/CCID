@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	unsigned char bSendBuffer[MAX_BUFFER_SIZE];
 	unsigned char bRecvBuffer[MAX_BUFFER_SIZE];
 	DWORD length;
-	char attribute[1];
+	unsigned char attribute[1];
 	DWORD attribute_length;
 	SCARD_IO_REQUEST pioRecvPci;
 
