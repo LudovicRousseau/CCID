@@ -100,17 +100,6 @@ Protocol_T1_Init (Protocol_T1 * t1, int lun)
   /* Set initial send sequence (NS) */
   t1->ns = 1;
   
-  /* PPS */
-  {
-  	int len = 3;
-	BYTE pps[] = {0xFF, 0x11, 0x94, 0};
-	BYTE param[] = {0x94, 0x10, 0x00, 0x43, 0x00, 0x20, 0x00};
-
-  	PPS_Exchange(t1, pps, &len);
-
-	SetParameters(t1->lun, 1, 7, param);
-  }
-
 #ifdef DEBUG_PROTOCOL
   printf ("Protocol: T=1: IFSC=%d, IFSD=%d, EDC=%s\n",
      t1->ifsc, t1->ifsd, (t1->edc == PROTOCOL_T1_EDC_LRC) ? "LRC" : "CRC");
