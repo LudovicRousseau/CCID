@@ -842,15 +842,27 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 	RESPONSECODE return_value = IFD_COMMUNICATION_ERROR;
+	int oldLogLevel;
 
 	DEBUG_PERIODIC2("lun: %X", Lun);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
 
-	if (CmdGetSlotStatus(Lun, pcbuffer) != IFD_SUCCESS)
+	/* if DEBUG_LEVEL_PERIODIC is not set we remove DEBUG_LEVEL_COMM */
+	oldLogLevel = LogLevel;
+	if (! (LogLevel & DEBUG_LEVEL_PERIODIC))
+		LogLevel &= ~DEBUG_LEVEL_COMM;
+
+	return_value = CmdGetSlotStatus(Lun, pcbuffer);
+
+	/* set back the old LogLevel */
+	LogLevel = oldLogLevel;
+
+	if (return_value != IFD_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
+	return_value = IFD_COMMUNICATION_ERROR;
 	switch (pcbuffer[7])	/* bStatus */
 	{
 		case 0x00:
