@@ -82,7 +82,8 @@ esac
 CFLAGS="$CFLAGS -Wall -fno-common"
 
 dnl --enable-libusb=PATH
-AC_ARG_ENABLE(libusb, [  --enable-libusb=PATH    libusb path (default /usr)],
+AC_ARG_ENABLE(libusb,
+	AC_HELP_STRING([--enable-libusb=PATH],[libusb path (default /usr)]),
 	[
 		case ${enableval} in
 			"" | "yes" | "YES")
@@ -113,10 +114,24 @@ dnl check shat to use for dlopen
 AC_SUBST(LIBDL)
 AC_CHECK_LIB(dl, dlopen, [LIBDL="$LIBDL -ldl" ac_cv_func_dlopen_ldl=yes], ac_cv_func_dlopen_ldl=no)
 
+dnl --enable-multi-thread
+AC_ARG_ENABLE(multi-thread,
+	AC_HELP_STRING([--enable-multi-thread],[enable multi threading
+	(default=yes)]),
+	[ multithread="${enableval}" ], [ multithread=yes ] )
+
+if test "${multithread}" != no ; then
+	AC_CHECK_HEADERS(pthread.h, [], [ AC_MSG_ERROR([pthread.h not found]) ])
+	AC_CHECK_LIB(pthread, pthread_mutex_lock, [ LIBS="$LIBS -lpthread" ],
+		[ multithread=no ])
+fi
+AC_MSG_RESULT([multi threading         : $multithread])
+
 dnl --enable-bundle=NAME
 AC_ARG_ENABLE(bundle,
-[  --enable-bundle=NAME    bundle directory name (default ifd-ccid.bundle)],
-[bundle="${enableval}"], [bundle=false])
+	AC_HELP_STRING([--enable-bundle=NAME],[bundle directory name
+	(default ifd-ccid.bundle)]),
+	[bundle="${enableval}"], [bundle=false])
 if test "${bundle}" = false ; then
 	bundle="ifd-ccid.bundle"
 fi
@@ -125,8 +140,9 @@ AC_DEFINE_UNQUOTED(BUNDLE, "$bundle", [bundle directory name])
 
 dnl --enable-usbdropdir=DIR
 AC_ARG_ENABLE(usbdropdir,
-[  --enable-usbdropdir=DIR directory containing USB drivers                                                (default /usr/local/pcsc/drivers)],
-[usbdropdir="${enableval}"], [usbdropdir=false])
+	AC_HELP_STRING([--enable-usbdropdir=DIR],[directory containing USB
+	drivers (default /usr/local/pcsc/drivers)]),
+	[usbdropdir="${enableval}"], [usbdropdir=false])
 if test "${usbdropdir}" = false ; then
 	usbdropdir="/usr/local/pcsc/drivers"
 fi
@@ -135,8 +151,9 @@ AC_DEFINE_UNQUOTED(PCSCLITE_HP_DROPDIR, "$usbdropdir", [directory containing USB
 
 dnl --enable-debugcritical
 AC_ARG_ENABLE(debugcritical,
-[  --enable-debugcritical  print critical debug messages (default yes)],
-[ debugcritical="${enableval}" ], [ debugcritical=yes ])
+	AC_HELP_STRING([--enable-debugcritical],[print critical debug
+	messages (default yes)]), [ debugcritical="${enableval}" ],
+	[ debugcritical=yes ])
 dnl yes by default
 if test "${debugcritical}" != yes
 then
@@ -148,8 +165,9 @@ fi
 
 dnl --enable-debuginfo
 AC_ARG_ENABLE(debuginfo,
-[  --enable-debuginfo      print info debug messages (default yes)],
-[ debuginfo="${enableval}" ], [ debuginfo=yes ])
+	AC_HELP_STRING([--enable-debuginfo],[print info debug messages
+	(default yes)]),
+	[ debuginfo="${enableval}" ], [ debuginfo=yes ])
 dnl yes by default
 if test "${debuginfo}" != yes
 then
@@ -161,8 +179,9 @@ fi
 
 dnl --enable-debugperiodic
 AC_ARG_ENABLE(debugperiodic,
-[  --enable-debugperiodic  print periodic debug messages (default no)],
-[ debugperiodic="${enableval}" ], [ debugperiodic=no ])
+	AC_HELP_STRING([--enable-debugperiodic],[print periodic debug
+	messages (default no)]),
+	[ debugperiodic="${enableval}" ], [ debugperiodic=no ])
 dnl no by default
 if test "${debugperiodic}" != no
 then
@@ -174,8 +193,9 @@ fi
 
 dnl --enable-debugcomm
 AC_ARG_ENABLE(debugcomm,
-[  --enable-debugcomm      print comm debug messages (default no)],
-[ debugcomm="${enableval}" ], [ debugcomm=no ])
+	AC_HELP_STRING([--enable-debugcomm],[print comm debug messages
+	(default no)]),
+	[ debugcomm="${enableval}" ], [ debugcomm=no ])
 dnl no by default
 if test "${debugcomm}" != no
 then
