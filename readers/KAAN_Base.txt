@@ -3,7 +3,7 @@ Parsing Interface Descriptor for device: 002/019
   iManufacturer: KOBIL
  idProduct: 0x3001
   iProduct: KAAN Base
- bcdDevice: 0.33 (firmware release?)
+ bcdDevice: 0.37 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -35,13 +35,14 @@ Parsing Interface Descriptor for device: 002/019
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x000202BA
+  dwFeatures: 0x000206BA
    Automatic parameter configuration based on ATR data
    Automatic ICC voltage selection
    Automatic ICC clock frequency change according to parameters
    Automatic baud rate change according to frequency and Fi, Di parameters
    Automatic PPS made by the ICC
    NAD value other than 00 accepted (T=1)
+   Automatic IFSD exchange as first exchange (T=1)
    Short APDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 255
