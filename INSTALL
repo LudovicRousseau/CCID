@@ -7,6 +7,7 @@ Installation from source:
 get the ccid-x.y.z.tar.gz archive
 $ tar xzvf ccid-x.y.z.tar.gz
 $ cd ccid-x.y.z
+$ ./configure
 $ make
 $ sudo make install
 
@@ -14,10 +15,13 @@ By default pcscd and my ccid driver use /usr/local/pcsc/drivers/ as
 directory for hotplug drivers. If pcscd uses a different directory
 (Debian pcscd uses /usr/lib/pcsc/drivers/) do:
 
-$ make clean
-$ PCSCLITE_HP_DROPDIR=your_dir_path make
-$ sudo make install
-  
+$ ./configure --enable-usbdropdir=/usr/lib/pcsc/drivers/
+
+You can also enable/disable some debug messages. By default messages of
+level "critical" and "info" are enabled and messages of level "periodic"
+abd "comm" are off. use --enable-debugcomm to enable communication debug
+and --disable-debuginfo to disable info debug messages for example.
+
 
 Binary installation:
 """"""""""""""""""""
