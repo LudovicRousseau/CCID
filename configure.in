@@ -31,8 +31,12 @@ AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AM_PROG_LEX
 AC_CHECK_PROG([PKGCONFIG], [pkg-config], [yes])
+
+dnl pcsc-lite install .pc files in /usr/local/lib/pkgconfig by default
+PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+export PKG_CONFIG_PATH
 if test "$PKGCONFIG" = "yes"; then
-	if ! `pkg-config --print-errors --atleast-version=1.2.9-beta5 libpcsclite`
+	if ! `PKG_CONFIG_PATH=/usr/local/lib/pkgconfig pkg-config --print-errors --atleast-version=1.2.9-beta5 libpcsclite`
 	then
 		AC_MSG_ERROR([install pcsc-lite 1.2.9-beta5 or later])
 	fi
