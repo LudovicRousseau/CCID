@@ -34,7 +34,7 @@
 #define FALSE 0
 #endif
 
-int ccid_parse_interface_descriptor(char device_name[], usb_dev_handle *handle,
+int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	struct usb_device *dev);
 
 
@@ -58,12 +58,11 @@ int main(int argc, char *argv[])
 		}
 		else
 		{
-			char *device_name;
 			usb_dev_handle *handle;
 			struct usb_device *dev;
 
-			get_desc(channel, &device_name, &handle, &dev);
-			res = ccid_parse_interface_descriptor(device_name, handle, dev);
+			get_desc(channel, &handle, &dev);
+			res = ccid_parse_interface_descriptor(handle, dev);
 		}
 	}
 
@@ -82,7 +81,7 @@ int main(int argc, char *argv[])
  *					Parse a CCID USB Descriptor
  *
  ****************************************************************************/
-int ccid_parse_interface_descriptor(char device_name[], usb_dev_handle *handle,
+int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	struct usb_device *dev)
 {
 	struct usb_interface_descriptor *usb_interface;
@@ -92,7 +91,8 @@ int ccid_parse_interface_descriptor(char device_name[], usb_dev_handle *handle,
 	/*
 	 * Interface Descriptor
 	 */
-	printf("Parsing Interface Descriptor for device: %s\n", device_name);
+	printf("Parsing Interface Descriptor for device: %s/%s\n",
+		dev->bus->dirname, dev->filename);
 
 	/*
 	 * Vendor/model name

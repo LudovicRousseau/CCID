@@ -28,8 +28,7 @@ status_t ReadUSB(int lun, int *length, unsigned char *Buffer);
 status_t CloseUSB(int lun);
 
 #ifdef __USB_H__
-int get_desc(int channel, char *device_name[], usb_dev_handle **handle,
-	struct usb_device **dev);
+int get_desc(int channel, usb_dev_handle **handle, struct usb_device **dev);
 #endif
 #ifdef __CCID_USB__
 int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
