@@ -901,7 +901,6 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 		case 0x01:
 			return_value = IFD_ICC_PRESENT;
 			/* use default slot */
-			ccid_descriptor->bCurrentSlotIndex = 0;
 			break;
 
 		case 0x02:
@@ -918,7 +917,7 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	/* SCR331-DI contactless reader */
 	if ((SCR331DI == ccid_descriptor->readerID)
-		&& (ccid_descriptor->bMaxSlotIndex > 0))
+		&& (ccid_descriptor->bCurrentSlotIndex > 0))
 	{
 		unsigned char cmd[] = { 0x11 };
 		/*  command: 11 ??
@@ -939,17 +938,17 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 		LogLevel = oldLogLevel;
 
 		if (0x01 == res[0])
-		{
 			return_value = IFD_ICC_PRESENT;
+		else
+		{
+			/* Reset ATR buffer */
+			CcidSlots[reader_index].nATRLength = 0;
+			*CcidSlots[reader_index].pcATRBuffer = '\0';
 
-			/* the contactless reader is in the slot 1 */
-			ccid_descriptor->bCurrentSlotIndex = 1;
+			/* Reset PowerFlags */
+			CcidSlots[reader_index].bPowerFlags = POWERFLAGS_RAZ;
 
-			/* hack since the contactless reader do not share dwFeatures */
-			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
-			ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
-
-			ccid_descriptor->dwFeatures |= CCID_CLASS_AUTO_IFSD;
+			return_value = IFD_ICC_NOT_PRESENT;
 		}
 	}
 
