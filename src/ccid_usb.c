@@ -118,6 +118,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	char infofile[FILENAME_MAX];
 	unsigned int device_vendor, device_product;
 	char *dirname = NULL, *filename = NULL;
+	static int previous_reader_index = -1;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
@@ -278,8 +279,26 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					/* this reader is already managed by us */
 					if (already_used)
 					{
-						DEBUG_INFO3("USB device %s/%s already in use. Checking next one.",
-							bus->dirname, dev->filename);
+						if ((previous_reader_index != -1)
+							&& (strcmp(usbDevice[previous_reader_index].dev->bus->dirname, bus->dirname)  == 0)
+							&& (strcmp(usbDevice[previous_reader_index].dev->filename, dev->filename) == 0)
+							&& usbDevice[previous_reader_index].ccid.bCurrentSlotIndex < usbDevice[previous_reader_index].ccid.bMaxSlotIndex)
+						{
+							/* we reuse the same device
+							 * and the reader is multi-slot */
+							usbDevice[reader_index] = usbDevice[previous_reader_index];
+							usbDevice[reader_index].ccid.pbSeq = usbDevice[previous_reader_index].ccid.pbSeq;
+							usbDevice[reader_index].ccid.bCurrentSlotIndex++;
+							DEBUG_INFO2("Opening slot: %d",
+								usbDevice[reader_index].ccid.bCurrentSlotIndex);
+							goto end;
+						}
+						else
+						{
+							DEBUG_INFO3("USB device %s/%s already in use."
+								" Checking next one.",
+								bus->dirname, dev->filename);
+						}
 
 						continue;
 					}
@@ -361,6 +380,10 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 end:
 	if (usbDevice[reader_index].handle == NULL)
 		return STATUS_UNSUCCESSFUL;
+
+	/* memorise the current reader_index so we can detect
+	 * a new OpenUSBByName on a multi slot reader */
+	previous_reader_index = reader_index;
 
 	return STATUS_SUCCESS;
 } /* OpenUSBByName */
