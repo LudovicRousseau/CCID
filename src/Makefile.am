@@ -19,16 +19,17 @@ COMMON = ccid.c \
 	utils.h
 USB = ccid_usb.c ccid_usb.h
 SERIAL = ccid_serial.c ccid_serial.h
-T1 = protocol_t1/apdu.h \
-	protocol_t1/atr.c \
-	protocol_t1/atr.h \
-	protocol_t1/defines.h \
-	protocol_t1/pps.c \
-	protocol_t1/pps.h \
-	protocol_t1/protocol_t1.c \
-	protocol_t1/protocol_t1.h \
-	protocol_t1/t1_block.c \
-	protocol_t1/t1_block.h
+T1 = towitoko/atr.c \
+	towitoko/atr.h \
+	towitoko/defines.h \
+	towitoko/pps.c \
+	towitoko/pps.h \
+	openct/buffer.c \
+	openct/buffer.h \
+	openct/checksum.c \
+	openct/checksum.h \
+	openct/proto-t1.c \
+	openct/proto-t1.h
 
 # needed for MacOS X or when used without pcsc-lite (Solaris)
 if NEED_PARSER
@@ -44,7 +45,8 @@ libccidtwin_la_CFLAGS = -DTWIN_SERIAL
 parse_SOURCES = tokenparser.l parse.c parser.h debug.c
 parse_LDADD = libccid.la
 
-EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in
+EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
+	towitoko/COPYING towitoko/README openct/LICENSE
 
 tokenparser_fake.l: tokenparser.l
 	cp -f $^ $@
