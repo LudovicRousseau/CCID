@@ -124,7 +124,7 @@ RESPONSECODE SecurePIN(int lun, const unsigned char TxBuffer[],
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 	int length = 0;
 
-	/* PIN verification data structure WITHOUT TeoPrologue & bPINOperation */
+	/* PIN verification data structure WITHOUT TeoPrologue */
 	if (TxBuffer[4] /* Lc */
 		+ 5 /* CLA, INS, P1, P2, Lc */
 		+ 11 /* CCID PIN verification data structure */ == TxLength)
@@ -135,27 +135,27 @@ RESPONSECODE SecurePIN(int lun, const unsigned char TxBuffer[],
 		memcpy(cmd +11, TxBuffer + TxBuffer[4] + 5, 11);
 
 		/* TeoPrologue not used */
-		memset(cmd +11 + 11, 0, 3);
+		memset(cmd +11 +11, 0, 3);
 
 		/* copy the APDU */
 		memcpy(cmd +11 +14, TxBuffer, TxLength-11);
 
 		length = 14 + TxLength;
 	}
-	/* PIN verification data structure WITH TeoPrologue & bPINOperation */
+	/* PIN verification data structure WITH TeoPrologue */
 	else if (TxBuffer[4] /* Lc */
 		+ 5 /* CLA, INS, P1, P2, Lc */
-		+ 15 /* CCID PIN verification data structure */ == TxLength)
+		+ 14 /* CCID PIN verification data structure */ == TxLength)
 	{
-		i2dw(TxLength, cmd+1);	/* command length */
+		i2dw(TxLength+1, cmd+1);	/* command length */
 
 		/* copy the CCID data structure */
-		memcpy(cmd +10, TxBuffer + TxBuffer[4] + 5, 15);
+		memcpy(cmd +11, TxBuffer + TxBuffer[4] + 5, 14);
 
 		/* copy the APDU */
-		memcpy(cmd +10 +15, TxBuffer, TxLength-15);
+		memcpy(cmd +11 +14, TxBuffer, TxLength-14);
 
-		length = 10 + TxLength;
+		length = 11 + TxLength;
 	}
 	else
 	{
