@@ -6,10 +6,11 @@ USB CCID IFD Handler
 specifications from the USB working group.
 
 
-Author:
-=======
+Authors:
+========
 
 - Ludovic Rousseau <ludovic.rousseau@free.fr>
+- Carlos Prados for the TPDU T=1 code (taken from his towitoto driver)
 
 
 Supported CCID readers:
@@ -56,14 +57,6 @@ Known problems:
 ===============
 
 All platforms
-    T=1 and TPDU
-    """"""""""""
-      I do not yet included support of T=1 cards when the reader is in
-      TPDU mode.
-      If you have a T=1 card I recommand you to use a reader working in
-      APDU mode. T=1 and TPDU will be supported in a future version of
-      the driver.
-
     readers enumeration
     """""""""""""""""""
       You may have wrong reader identification if you connect two or
@@ -128,6 +121,35 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 History:
 ========
+
+0.4.0 - 13 February 2004, Ludovic Rousseau
+    - support of T=1 with TPDU readers. A lot of the T=1 code comes from
+      Carlos Prados towitoko driver.
+      My code is GNU GPL, his code is GNU LGPL so the global driver is
+      GNU GPL
+    - PPS negotiation if the reader does not do it automatically
+    - add support for the Silitek SK-3105 keyboard. It's a USB device
+      with multiple interfaces
+    - use the create_Info_plist.pl script to generate the installed
+      Info.plist from an Info.plist template and a list of supported
+      readers. The Info.plist was too "complex" to maintain by hand
+      since it now contains 11 entries
+    - add support of IFDHCreateChannelByName to avoid wrong reader
+      enumeration. This is not complete if you have multiple _identical_
+      readers. You need to use a > 1.2.0 pcsc-lite version (not yet
+      released at that time)
+    - build but do not install the serial ccidtwin driver by default
+      since it is useless on computers without a serial port or without
+      this reader for example.
+    - read and write timeouts are not symmetric. write timout can be
+      shorter since the reader and card is not supposed to do anything
+      before receiving (write) a command
+    - do not try to find usb.h and other libusb files if
+      --disable-libusb is used. Needed if you only want to build the
+      serial driver.  Thanks to Niki Waibel for the patch
+    - add a --enable-ccidtwindir argument to ./configure to specify the
+      serial GemPC Twin installation directory
+    - debug and code improvements and simplifications
 
 0.3.2 - 4 November 2003, Ludovic Rousseau
     - src/commands.c: correct a stupid bug that occurs with an APDU with
