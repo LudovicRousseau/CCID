@@ -88,13 +88,16 @@ static bool
 PPS_Match (BYTE * request, unsigned len_request, BYTE * confirm, unsigned len_confirm)
 {
   /* See if the reply differs from request */
-  if ((len_request != len_confirm) ||
-      (!memcmp (request, confirm, len_request)))
-    {
-      /* See if the card specifies other than default FI and D */
-      if ((PPS_HAS_PPS1 (confirm)) && (confirm[2] != request[2]))
+  if ((len_request == len_confirm) &&	/* same length */
+      memcmp (request, confirm, len_request))	/* different contents */
 	return FALSE;
-    }
+
+  if (len_request < len_confirm)	/* confirm longer than request */
+    return FALSE;
+
+  /* See if the card specifies other than default FI and D */
+  if ((PPS_HAS_PPS1 (confirm)) && (confirm[2] != request[2]))
+    return FALSE;
 
   return TRUE;
 }
@@ -128,3 +131,4 @@ PPS_GetPCK (BYTE * block, unsigned length)
 
   return pck;
 }
+
