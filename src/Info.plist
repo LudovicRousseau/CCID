@@ -22,6 +22,9 @@
 	<key>ifdLogLevel</key>
 	<string>0x0003</string>
 
+	<key>ifdDriverOptions</key>
+	<string>0x0000</string>
+
 	<key>CFBundleExecutable</key>
 	<string>TARGET.VERSION</string>
 
