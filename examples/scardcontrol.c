@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	unsigned char bRecvBuffer[MAX_BUFFER_SIZE];
 	DWORD length;
 	char attribute[1];
-	int attribute_length;
+	DWORD attribute_length;
 
 	printf("SCardControl sample code\n");
 	printf("V 1.0 2004, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
@@ -222,7 +222,6 @@ int main(int argc, char *argv[])
 	bSendBuffer[offset++] = 0x00;	/* '\0' */
 
 	/* CCID PIN verification data structure */
-	bSendBuffer[offset++] = 0x00;	/* bPINOperation */
 	bSendBuffer[offset++] = 0x00;	/* bTimeOut */
 	bSendBuffer[offset++] = 0x82;	/* bmFormatString */
 	bSendBuffer[offset++] = 0x04;	/* bmPINBlockString (PIN length) */
@@ -232,11 +231,11 @@ int main(int argc, char *argv[])
 	bSendBuffer[offset++] = 0x02;	/* bEntryValidationCondition */
 	bSendBuffer[offset++] = 0x00;	/* bNumberMessage */
 	bSendBuffer[offset++] = 0x04;	/* wLangId: english */
-	bSendBuffer[offset++] = 0x09;	/*  */
+	bSendBuffer[offset++] = 0x09;	/* " */
 	bSendBuffer[offset++] = 0x00;	/* bMsgIndex */
 	bSendBuffer[offset++] = 0x00;	/* bTeoPrologue */
-	bSendBuffer[offset++] = 0x00;
-	bSendBuffer[offset++] = 0x00;
+	bSendBuffer[offset++] = 0x00;	/* " */
+	bSendBuffer[offset++] = 0x00;	/* " */
 
 	printf(" command:");
 	for (i=0; i<offset; i++)
