@@ -1,6 +1,9 @@
-Parsing Interface Descriptor for device: 001/037
- iManufacturer: SCM Microsystems Inc.
- iProduct: SCR33x USB Smart Card Reader
+Parsing Interface Descriptor for device: 003/037
+ idVendor: 0x04E6
+  iManufacturer: SCM Microsystems Inc.
+ idProduct: 0x5115
+  iProduct: SCR33x USB Smart Card Reader
+ bcdDevice: 4.16 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0

@@ -1,11 +1,17 @@
- iManufacturer: SCM Microsystems Inc.
- iProduct: SCR331-DI USB Smart Card Reader
+Parsing Interface Descriptor for device: 002/003
+ idVendor: 0x04E6
+  iManufacturer: SCM Microsystems Inc.
+ idProduct: 0x5111
+  iProduct: SCR331-DI USB Smart Card Reader
+ bcdDevice: 6.20 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
- bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceClass: 0xFF
+  NOT A CCID DEVICE
+  Class is 0xFF (proprietary)
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
  iInterface: 4
@@ -13,7 +19,7 @@
   bLength: 0x36
   bDescriptorType: 0x21
   bcdCCID: 1.00
-  bMaxSlotIndex: 0x00
+  bMaxSlotIndex: 0x01
   bVoltageSupport: 0x01
    5.0V
   dwProtocols: 0x0000 0x0003

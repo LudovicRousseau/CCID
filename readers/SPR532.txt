@@ -1,7 +1,9 @@
-ccid_usb.c:220 Found Vendor/Product: 04E6/E003 (SPR 532)
 Parsing Interface Descriptor for device: 001/057
- iManufacturer: SCM Microsystems Inc.
- iProduct: SPRx32 USB Smart Card Reader
+ idVendor: 0x04E6
+  iManufacturer: SCM Microsystems Inc.
+ idProduct: 0xE003
+  iProduct: SPRx32 USB Smart Card Reader
+ bcdDevice: 4.15 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
