@@ -29,11 +29,10 @@
 #include "debug.h"
 #include "defs.h"
 #include "utils.h"
-#include "ccid_usb.h"
 #include "commands.h"
 
-// Array of structures to hold the ATR and other state value of each slot
-static CcidDesc CcidSlots[PCSCLITE_MAX_CHANNELS];
+/* Array of structures to hold the ATR and other state value of each slot */
+static CcidDesc CcidSlots[PCSCLITE_MAX_READERS];
 
 
 RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
@@ -78,14 +77,14 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
 
-	// Reset ATR buffer
+	/* Reset ATR buffer */
 	CcidSlots[LunToReaderIndex(Lun)].nATRLength = 0;
 	*CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer = '\0';
 
-	// Reset PowerFlags
+	/* Reset PowerFlags */
 	CcidSlots[LunToReaderIndex(Lun)].bPowerFlags = POWERFLAGS_RAZ;
 
-	if (OpenUSB(Lun, Channel) != STATUS_SUCCESS)
+	if (OpenPort(Lun, Channel) != STATUS_SUCCESS)
 	{
 		DEBUG_CRITICAL("OpenReader failed");
 		return_value = IFD_COMMUNICATION_ERROR;
@@ -114,9 +113,9 @@ RESPONSECODE IFDHCloseChannel(DWORD Lun)
 		return IFD_COMMUNICATION_ERROR;
 
 	CmdPowerOff(Lun);
-	// No reader status check, if it failed, what can you do ? :)
+	/* No reader status check, if it failed, what can you do ? :) */
 
-	CloseUSB(Lun);
+	ClosePort(Lun);
 
 	return IFD_SUCCESS;
 } /* IFDHCloseChannel */
@@ -151,9 +150,9 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	switch (Tag)
 	{
 		case TAG_IFD_ATR:
-			// If Length is not zero, powerICC has been performed.
-			// Otherwise, return NULL pointer
-			// Buffer size is stored in *Length
+			/* If Length is not zero, powerICC has been performed.
+			 * Otherwise, return NULL pointer
+			 * Buffer size is stored in *Length */
 			*Length = (*Length < CcidSlots[LunToReaderIndex(Lun)]
 				.nATRLength) ?
 				*Length : CcidSlots[LunToReaderIndex(Lun)]
@@ -168,7 +167,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			if (*Length >= 1)
 			{
 				*Length = 1;
-				*Value = PCSCLITE_MAX_CHANNELS;
+				*Value = PCSCLITE_MAX_READERS;
 			}
 			break;
 
@@ -207,7 +206,7 @@ RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	 * IFD_ERROR_VALUE_READ_ONLY
 	 */
 
-	// By default, say it worked
+	/* By default, say it worked */
 
 	DEBUG_PERIODIC2("entering IFDHSetCapabilities (lun: %X)", Lun);
 
@@ -290,7 +289,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 
 	DEBUG_INFO2("entering IFDHPowerICC (lun: %X)", Lun);
 
-	// By default, assume it won't work :)
+	/* By default, assume it won't work :) */
 	*AtrLength = 0;
 
 	if (CheckLun(Lun))
@@ -308,13 +307,13 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 				goto end;
 			}
 
-			// Power up successful, set state variable to memorise it
+			/* Power up successful, set state variable to memorise it */
 			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags |=
 				MASK_POWERFLAGS_PUP;
 			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags &=
 				~MASK_POWERFLAGS_PDWN;
 
-			// Reset is returned, even if TCK is wrong
+			/* Reset is returned, even if TCK is wrong */
 			CcidSlots[LunToReaderIndex(Lun)].nATRLength = *AtrLength =
 				(nlength < MAX_ATR_SIZE) ? nlength : MAX_ATR_SIZE;
 			memcpy(Atr, pcbuffer, *AtrLength);
@@ -323,14 +322,14 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			break;
 
 		case IFD_POWER_DOWN:
-			// Clear ATR buffer
+			/* Clear ATR buffer */
 			CcidSlots[LunToReaderIndex(Lun)].nATRLength = 0;
 			*CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer = '\0';
 
-			// Memorise the request
+			/* Memorise the request */
 			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags |=
 				MASK_POWERFLAGS_PDWN;
-			// send the command
+			/* send the command */
 			return_value = CmdPowerOff(Lun);
 			break;
 
@@ -382,113 +381,16 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	 * IFD_ICC_NOT_PRESENT IFD_PROTOCOL_NOT_SUPPORTED
 	 */
 
-	RESPONSECODE return_value = IFD_SUCCESS;	// Assume it will work
-	char protocol;
+	RESPONSECODE return_value = IFD_SUCCESS;	/* Assume it will work */
 
 	DEBUG_INFO2("entering IFDHTransmitToICC (lun: %X)", Lun);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
 
-	protocol = SendPci.Protocol;
-
-	// if the reader is in EMV mode use ISO_EXCHANGE instead of ISO_INPUT
-	// and ISO_OUTPUT. This is done with T=1 protocol
-	if (CcidSlots[LunToReaderIndex(Lun)].bPowerFlags & MASK_POWERFLAGS_EMV)
-		protocol = T_1;
-
-	// Check if command is going to fit in buffer
-	if (TxLength > CMD_BUF_SIZE)
-	{
-		// Buffer too small, send an error
-		return_value = IFD_COMMUNICATION_ERROR;
-		goto clean_up_and_return;
-	}
-
-	switch (protocol)
+	switch (SendPci.Protocol)
 	{
 		case T_0:
-			// Size should be command + one byte of length for
-			// an outgoing TPDU (CLA, INS, P1, P2, P3)
-			if (TxLength == (ISO_CMD_SIZE + ISO_LENGTH_SIZE))
-			{
-printf("%s %d\n", __FILE__, __LINE__);
-				return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, RxLength,
-					RxBuffer);
-			}
-			else
-			{
-				// just (CLA, INS, P1, P2) for an APDU
-				if (TxLength == ISO_CMD_SIZE)
-				{
-printf("%s %d\n", __FILE__, __LINE__);
-					return_value = CmdXfrBlock(Lun, TxLength, TxBuffer,
-							RxLength, RxBuffer);
-				}
-				else
-				{
-					DWORD ntestlength;
-
-printf("%s %d %ld %d\n", __FILE__, __LINE__, TxLength, ISO_CMD_SIZE + ISO_LENGTH_SIZE);
-					if (TxLength > (ISO_CMD_SIZE + ISO_LENGTH_SIZE))
-					{
-						// Check length to see if it is a full APDU or a TPDU
-						ntestlength = TxBuffer[ISO_OFFSET_LENGTH] +
-							ISO_CMD_SIZE + ISO_LENGTH_SIZE;
-
-printf("%s %d %ld\n", __FILE__, __LINE__, ntestlength);
-						if (TxLength == (ntestlength + ISO_LENGTH_SIZE))
-						{
-							DWORD old_RxLength = *RxLength;
-
-							// TxBuffer holds a proper APDU
-							return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, RxLength, RxBuffer);
-
-							// Get Response
-							if ((return_value == IFD_SUCCESS) &&
-								(*RxLength == 2))
-							{
-								TxBuffer[0] = 0x00;
-								TxBuffer[1] = 0xC0;
-								TxBuffer[2] = 0x00;
-								TxBuffer[3] = 0x00;
-								TxBuffer[4] = RxBuffer[1];
-								*RxLength = old_RxLength;
-								TxLength = 5;
-
-								return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, RxLength, RxBuffer);
-							}
-						}
-						else
-						{
-							if (TxLength > (ntestlength + ISO_LENGTH_SIZE))
-							{
-printf("%s %d\n", __FILE__, __LINE__);
-								// Data are too long
-								return_value = IFD_COMMUNICATION_ERROR;
-
-								goto clean_up_and_return;
-							}
-							else
-							{
-printf("%s %d\n", __FILE__, __LINE__);
-								// TxBuffer holds a proper TPDU
-								return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, RxLength, RxBuffer);
-							}
-						}
-					}
-					else
-					{
-printf("%s %d\n", __FILE__, __LINE__);
-						// TxBuffer holds too little data to form an APDU+length
-						return_value = IFD_COMMUNICATION_ERROR;
-
-						goto clean_up_and_return;
-					}
-				}
-			}
-			break;
-
 		case T_1:
 			return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, RxLength,
 				RxBuffer);
@@ -498,7 +400,6 @@ printf("%s %d\n", __FILE__, __LINE__);
 			return_value = IFD_PROTOCOL_NOT_SUPPORTED;
 	}
 
-clean_up_and_return:
 	if (return_value != IFD_SUCCESS)
 		*RxLength = 0;
 
@@ -572,8 +473,4 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	return return_value;
 } /* IFDHICCPresence */
 
-void IFDSetEmv(DWORD lun)
-{
-	CcidSlots[LunToReaderIndex(lun)].bPowerFlags |= MASK_POWERFLAGS_EMV;
-} /* IFDSetEmv */
 
