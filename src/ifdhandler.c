@@ -28,6 +28,8 @@
 #include "utils.h"
 #include "commands.h"
 #include "ccid.h"
+#include "protocol_t1/atr.h"
+#include "protocol_t1/pps.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
@@ -392,9 +394,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			memcpy(CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer,
 				pcbuffer, *AtrLength);
 
-			/* set T=1 context */
-			Protocol_T1_Init(&((get_ccid_slot(Lun)) -> t1), Lun);
-
+			return_value = CardUp(Lun);
 			break;
 
 		case IFD_POWER_DOWN:
@@ -408,9 +408,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			/* send the command */
 			return_value = CmdPowerOff(Lun);
 
-			/* clear T=1 context */
-			Protocol_T1_Close(&((get_ccid_slot(Lun)) -> t1));
-
+			return_value = CardDown(Lun);
 			break;
 
 		default:
@@ -553,4 +551,78 @@ CcidDesc *get_ccid_slot(int lun)
 {
 	return &CcidSlots[LunToReaderIndex(lun)];
 } /* get_ccid_slot */
+
+
+RESPONSECODE CardUp(int lun)
+{
+	ATR atr;
+	BYTE protocol = ATR_PROTOCOL_TYPE_T0;
+	unsigned int np;
+	CcidDesc *ccid_slot = get_ccid_slot(lun);
+	_ccid_descriptor *ccid_desc = get_ccid_descriptor(lun);
+
+	/* Get ATR of the card */
+	ATR_InitFromArray(&atr, ccid_slot -> pcATRBuffer, ccid_slot -> nATRLength);
+
+	ATR_GetNumberOfProtocols(&atr, &np);
+
+	/*
+	 * Get protocol offered by interface bytes T*2 if available,
+	 * (that is, if TD1 is available), * otherwise use default T=0
+	 */
+	if (np>1)
+		ATR_GetProtocolType(&atr, 2, &protocol);
+
+	if ((protocol == ATR_PROTOCOL_TYPE_T1) &&
+		(ccid_desc->dwFeatures & CCID_CLASS_TPDU))
+	{
+		BYTE param[] = {0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00};
+		Protocol_T1 *t1 = &(ccid_slot -> t1);
+
+		/* get TA1 */
+		if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
+			param[0] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+		/* set T=1 context */
+		Protocol_T1_Init(t1, lun);
+
+		/* bloc size is limited by the reader */
+		t1 -> ifsd = MIN(t1 -> ifsd, ccid_desc -> dwMaxIFSD);
+
+		SetParameters(t1->lun, 1, 7, param);
+	}
+
+	/* PPS not negociated by reader, and TA1 present */
+	if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present &&
+		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
+	{
+		Protocol_T1 *t1 = &(ccid_slot -> t1);
+  		int len = 3;
+		BYTE pps[] = {
+			0xFF,	/* PTSS */
+			0x10,	/* PTS0: PTS1 present */
+			0,		/* PTS1 */
+			0};		/* PCK: will be calculated */
+
+		/* TD1: protocol */
+		if (atr.ib[0][ATR_INTERFACE_BYTE_TD].present)
+			pps[1] |= (atr.ib[0][ATR_INTERFACE_BYTE_TD].value & 0x0F);
+
+		/* TA1 */
+		pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+  		PPS_Exchange(t1, pps, &len);
+	}
+
+	return IFD_SUCCESS;
+} /* CardUp */
+
+
+RESPONSECODE CardDown(int lun)
+{
+	/* clear T=1 context */
+	Protocol_T1_Close(&((get_ccid_slot(lun)) -> t1));
+
+	return IFD_SUCCESS;
+} /* CardUp */
 

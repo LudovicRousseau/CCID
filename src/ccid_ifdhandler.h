@@ -134,6 +134,8 @@ extern "C" {
   RESPONSECODE IFDHICCPresence( DWORD );
   
   CcidDesc *get_ccid_slot(int lun);
+  RESPONSECODE CardUp(int lun);
+  RESPONSECODE CardDown(int lun);
 
 #ifdef __cplusplus
 }
