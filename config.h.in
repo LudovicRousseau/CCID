@@ -15,6 +15,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if you have the `pcsclite' library (-lpcsclite). */
+#undef HAVE_LIBPCSCLITE
+
 /* Define to 1 if you have the `memcpy' function. */
 #undef HAVE_MEMCPY
 
