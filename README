@@ -40,6 +40,7 @@ Supported CCID readers:
 - SCM Micro SCR 335 [7]
   The firmware of this reader can't be upgraded so be sure to buy a
   recent model with firmware 5.14 or later
+- SCM Micro SCR 3310
 - SCM Micro SPR 532 [9]
   You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
   firmware upgrade.
