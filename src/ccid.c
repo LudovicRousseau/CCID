@@ -45,6 +45,11 @@ int ccid_open_hack(int lun)
 			ccid_descriptor->dwFeatures |= CCID_CLASS_TPDU;
 			break;
 
+#if 0
+			/*
+			 * Do not switch to APDU mode since it also swicth in EMV mode and
+			 * may not work with non EMV cards
+			 */
 		case GEMPCKEY:
 		case GEMPCTWIN:
 			/* Reader announces TPDU but can do APDU */
@@ -54,6 +59,7 @@ int ccid_open_hack(int lun)
 				ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
 			}
 			break;
+#endif
 	}
 
 	return 0;
