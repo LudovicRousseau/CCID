@@ -45,6 +45,7 @@ Parsing Interface Descriptor for device: 001/003
   bClassEnveloppe: 0
   wLcdLayout: 0x0000
   bPINSupport: 0x01
+   PIN Verification supported
   bMaxCCIDBusySlots: 1
 
 
