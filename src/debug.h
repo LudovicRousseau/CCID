@@ -95,7 +95,7 @@
 #define DEBUG_COMM(fmt)
 #define DEBUG_COMM2(fmt, data)
 #define DEBUG_COMM3(fmt, data1, data2)
-#define DEBUG_COMM3(fmt, data1, data2, data3)
+#define DEBUG_COMM4(fmt, data1, data2, data3)
 #endif
 
 #ifndef DEBUG_XXD
