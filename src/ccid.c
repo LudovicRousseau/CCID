@@ -82,6 +82,7 @@ int ccid_open_hack(unsigned int lun)
 void ccid_error(int error, char *file, int line, char *function)
 {
 	char *text;
+	char var_text[20];
 
 	switch (error)
 	{
@@ -188,8 +189,6 @@ void ccid_error(int error, char *file, int line, char *function)
 		default:
 			if ((error >= 1) && (error <= 127))
 			{
-				char var_text[20];
-
 				sprintf(var_text, "error on byte %d", error);
 				text = var_text;
 			}
