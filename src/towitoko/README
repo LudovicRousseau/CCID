@@ -1,0 +1,11 @@
+All the files in the src/protocol_t1/ directory comes from Carlos
+Prados Towitoko smartcard readers driver.
+
+I hacked the source files a bit to include them in my CCID driver. So
+bugs are mine and not Carlos' fault.  As indicated in the source files
+headers this code is protected by the GNU Lesser General Public License.
+
+I used version 2.0.7 of Carlos driver available at
+http://www.geocities.com/cprados/
+
+$Id$
