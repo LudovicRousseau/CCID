@@ -17,7 +17,7 @@ EXTRA_DIST = reconf ChangeLog \
 	$(AUX_DIST)
 
 MAINTAINERCLEANFILES = $(AUX_DIST)
-DISTCLEANFILES = ChangeLog.cvs
+DISTCLEANFILES = ChangeLog
 
 # Automatically update the libtool script if it becomes out-of-date.
 LIBTOOL_DEPS = @LIBTOOL_DEPS@
@@ -25,8 +25,8 @@ libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
 ChangeLog:
-	rcs2log | perl -e 'while (<>) { s/rousseau /Ludovic Rousseau /; \
-	s+/cvsroot/pcsclite/PCSC/++g; print ; }' > $@
+	rcs2log | perl -pe 's/rousseau /Ludovic Rousseau /; \
+	s+/cvsroot/pcsclite/PCSC/++g;' > $@
 
-.PHONY: ChangeLog.cvs
+.PHONY: ChangeLog
 
