@@ -79,8 +79,10 @@ Protocol_T1_Negociate_IFSD(Protocol_T1 * t1, int ifsd)
 		return ret;
 
 	if (PROTOCOL_T1_OK == Protocol_T1_ReceiveBlock(t1, &sblock))
+	{
 		t1 -> ifsd = T1_Block_GetInf(sblock)[0];
-	T1_Block_Delete(sblock);
+		T1_Block_Delete(sblock);
+	}
 
 	return PROTOCOL_T1_OK;
 } /* Protocol_T1_Negociate_IFSD */
@@ -329,7 +331,7 @@ Protocol_T1_ReceiveBlock (Protocol_T1 * t1, T1_Block ** block)
   int len = sizeof(cmd);
 
   /* Receive T=1 block */
-  if (CCID_Receive(t1->lun, &len, cmd) != IFD_SUCCESS)
+  if ((CCID_Receive(t1->lun, &len, cmd) != IFD_SUCCESS) || (len < 4))
     {
       ret = PROTOCOL_T1_ICC_ERROR;
       (*block) = NULL;
