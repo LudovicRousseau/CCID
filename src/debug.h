@@ -23,17 +23,16 @@
 
 /*
  * DEBUG_CRITICAL("text");
- * 	print "text" is DEBUG_LEVEL_CRITICAL and DEBUG_STDERR is defined
- * 	send "text" to syslog if DEBUG_LEVEL_CRITICAL is defined
+ * 	log "text" if (LogLevel & DEBUG_LEVEL_CRITICAL) is TRUE
  *
- * DEBUG_CRITICAL2("text: %d", 1234)
- *  print "text: 1234" is DEBUG_LEVEL_CRITICAL and DEBUG_STDERR is defined
- *  send "text: 1234" to syslog if DEBUG_LEVEL_CRITICAL is defined
+ * DEBUG_CRITICAL2("text: %d", 1234);
+ *  log "text: 1234" if (DEBUG_LEVEL_CRITICAL & DEBUG_LEVEL_CRITICAL) is TRUE
  * the format string can be anything printf() can understand
  * 
- * same thing for DEBUG_INFO and DEBUG_COMM
+ * same thing for DEBUG_INFO, DEBUG_COMM and DEBUG_PERIODIC
  *
- * DEBUG_XXD(msg, buffer, size) is only defined if DEBUG_LEVEL_COMM if defined
+ * DEBUG_XXD(msg, buffer, size);
+ *  log a dump of buffer if (LogLevel & DEBUG_LEVEL_COMM) is TRUE
  *
  */
  
@@ -49,58 +48,48 @@
 #define __FUNCTION__ ""
 #endif
 
-#ifdef DEBUG_LEVEL_CRITICAL
-#define DEBUG_CRITICAL(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
-#define DEBUG_CRITICAL2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
-#define DEBUG_CRITICAL3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
-#define DEBUG_CRITICAL4(fmt, data1, data2, data3) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
-#define DEBUG
-#else
-#define DEBUG_CRITICAL(fmt)
-#define DEBUG_CRITICAL2(fmt, data)
-#define DEBUG_CRITICAL3(fmt, data1, data2)
-#define DEBUG_CRITICAL4(fmt, data1, data2, data3)
-#endif
+extern int LogLevel;
 
-#ifdef DEBUG_LEVEL_INFO
-#define DEBUG_INFO(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
-#define DEBUG_INFO2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
-#define DEBUG_INFO3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
-#define DEBUG_INFO4(fmt, data1, data2, data3) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
-#define DEBUG
-#else
-#define DEBUG_INFO(fmt)
-#define DEBUG_INFO2(fmt, data)
-#define DEBUG_INFO3(fmt, data1, data2)
-#define DEBUG_INFO4(fmt, data1, data2, data3)
-#endif
+#define DEBUG_LEVEL_CRITICAL 1
+#define DEBUG_LEVEL_INFO     2
+#define DEBUG_LEVEL_PERIODIC 4
+#define DEBUG_LEVEL_COMM     8
 
-#ifdef DEBUG_LEVEL_PERIODIC
-#define DEBUG_PERIODIC(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
-#define DEBUG_PERIODIC2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
-#define DEBUG
-#else
-#define DEBUG_PERIODIC(fmt)
-#define DEBUG_PERIODIC2(fmt, data)
-#endif
 
-#ifdef DEBUG_LEVEL_COMM
-#define DEBUG_COMM(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
-#define DEBUG_COMM2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
-#define DEBUG_COMM3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
-#define DEBUG_COMM4(fmt, data1, data2, data3) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
-#define DEBUG
-#define DEBUG_XXD(msg, buffer, size) debug_xxd(msg, buffer, size)
-#else
-#define DEBUG_COMM(fmt)
-#define DEBUG_COMM2(fmt, data)
-#define DEBUG_COMM3(fmt, data1, data2)
-#define DEBUG_COMM4(fmt, data1, data2, data3)
-#endif
+/* DEBUG_CRITICAL */
+#define DEBUG_CRITICAL(fmt) if (LogLevel & DEBUG_LEVEL_CRITICAL) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
 
-#ifndef DEBUG_XXD
-#define DEBUG_XXD(msg, buffer, size)
-#endif
+#define DEBUG_CRITICAL2(fmt, data) if (LogLevel & DEBUG_LEVEL_CRITICAL) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
+
+#define DEBUG_CRITICAL3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_CRITICAL) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
+
+#define DEBUG_CRITICAL4(fmt, data1, data2, data3) if (LogLevel & DEBUG_LEVEL_CRITICAL) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
+
+/* DEBUG_INFO */
+#define DEBUG_INFO(fmt) if (LogLevel & DEBUG_LEVEL_INFO) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
+
+#define DEBUG_INFO2(fmt, data) if (LogLevel & DEBUG_LEVEL_INFO) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
+
+#define DEBUG_INFO3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_INFO) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
+
+#define DEBUG_INFO4(fmt, data1, data2, data3) if (LogLevel & DEBUG_LEVEL_INFO) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
+
+/* DEBUG_PERIODIC */
+#define DEBUG_PERIODIC(fmt) if (LogLevel & DEBUG_LEVEL_PERIODIC) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
+
+#define DEBUG_PERIODIC2(fmt, data) if (LogLevel & DEBUG_LEVEL_PERIODIC) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
+
+/* DEBUG_COMM */
+#define DEBUG_COMM(fmt) if (LogLevel & DEBUG_LEVEL_COMM) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
+
+#define DEBUG_COMM2(fmt, data) if (LogLevel & DEBUG_LEVEL_COMM)debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
+
+#define DEBUG_COMM3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_COMM)debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
+
+#define DEBUG_COMM4(fmt, data1, data2, data3) if (LogLevel & DEBUG_LEVEL_COMM)debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
+
+/* DEBUG_XXD */
+#define DEBUG_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_COMM) debug_xxd(msg, buffer, size)
 
 void debug_msg(char *fmt, ...);
 void debug_xxd(const char *msg, const unsigned char *buffer, const int size);
