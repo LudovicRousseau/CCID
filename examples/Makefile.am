@@ -2,7 +2,6 @@
 
 noinst_PROGRAMS = scardcontrol
 scardcontrol_SOURCES = scardcontrol.c
-scardcontrol_LDADD = -lpcsclite
-
-AM_CPPFLAGS = @AM_CPPFLAGS@
+scardcontrol_CFLAGS = @PCSC_CFLAGS@
+scardcontrol_LDADD = @PCSC_LIBS@
 
