@@ -50,7 +50,7 @@ int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 {
 	status_t res;
-	int channel;
+	unsigned int channel;
 
 	for (channel=0; channel<PCSCLITE_MAX_READERS; channel++)
 	{
@@ -73,7 +73,7 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 	if (channel == 0)
 		printf("No known CCID reader found\n");
 
-	for (;channel>=0; channel--)
+	for (;channel!=0; channel--)
 		CloseUSB(channel<<16);
 
 	return 0;
