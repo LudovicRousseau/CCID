@@ -64,6 +64,26 @@ Protocol_T1_ReceiveBlock (Protocol_T1 * t1, T1_Block ** block);
  */
 
 int
+Protocol_T1_Negociate_IFSD(Protocol_T1 * t1, int ifsd)
+{
+	T1_Block *sblock;
+	BYTE inf[1];
+
+	inf[0] = ifsd;
+	sblock = T1_Block_NewSBlock(T1_BLOCK_S_IFS_REQ, 1, inf);
+
+	Protocol_T1_SendBlock(t1, sblock);
+	T1_Block_Delete(sblock);
+
+	Protocol_T1_ReceiveBlock(t1, &sblock);
+
+	DEBUG_XXD("data: ", sblock -> data, sblock -> length);
+	t1 -> ifsd = T1_Block_GetInf(sblock)[0];
+
+	return PROTOCOL_T1_OK;
+} /* Protocol_T1_Negociate_IFSD */
+
+int
 Protocol_T1_Init (Protocol_T1 * t1, int lun)
 {
   BYTE ta, tc;
@@ -99,9 +119,6 @@ Protocol_T1_Init (Protocol_T1 * t1, int lun)
   /* Set initial send sequence (NS) */
   t1->ns = 1;
   
-  DEBUG_COMM4 ("T=1: IFSC=%d, IFSD=%d, EDC=%s\n",
-     t1->ifsc, t1->ifsd, (t1->edc == PROTOCOL_T1_EDC_LRC) ? "LRC" : "CRC");
-
   return PROTOCOL_T1_OK;
 }
 

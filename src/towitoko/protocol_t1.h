@@ -55,6 +55,10 @@ Protocol_T1;
  * Exported functions declaration
  */
 
+/* negociate IFSD */
+int
+Protocol_T1_Negociate_IFSD(Protocol_T1 * t1, int ifsd);
+
 /* Create a new protocol handler */
 extern Protocol_T1 * 
 Protocol_T1_New (void);
