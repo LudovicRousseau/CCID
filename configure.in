@@ -99,21 +99,23 @@ AC_ARG_ENABLE(libusb,
 )
 
 dnl check if libusb is available
-AC_SUBST(LIBUSB)
-AC_CHECK_HEADERS(usb.h, [],
-	[ AC_MSG_ERROR([usb.h not found, use --enable-libusb=PATH]) ])
+if test "${use_libusb}" != false ; then
+	AC_SUBST(LIBUSB)
+	AC_CHECK_HEADERS(usb.h, [],
+		[ AC_MSG_ERROR([usb.h not found, use --enable-libusb=PATH]) ])
 
-ac_save_LIBS="$LIBS"
-LIBS="$LIBS $COREFOUNDATION $IOKIT"
-AC_CHECK_LIB(usb, usb_init, [LIBUSB="$LIBUSB -lusb"],
-	[ AC_MSG_ERROR([libusb not found]) ])
-LIBS="$ac_save_LIBS"
+	ac_save_LIBS="$LIBS"
+	LIBS="$LIBS $COREFOUNDATION $IOKIT"
+	AC_CHECK_LIB(usb, usb_init, [LIBUSB="$LIBUSB -lusb"],
+		[ AC_MSG_ERROR([libusb not found]) ])
+	LIBS="$ac_save_LIBS"
 
-ac_save_LIBS="$LIBS"
-LIBS="$LIBS $COREFOUNDATION $IOKIT"
-AC_CHECK_LIB(usb, usb_get_string_simple, [LIBUSB="$LIBUSB -lusb"],
-	[ AC_MSG_ERROR([your libusb is too old. install version 0.1.7 or above]) ])
-LIBS="$ac_save_LIBS"
+	ac_save_LIBS="$LIBS"
+	LIBS="$LIBS $COREFOUNDATION $IOKIT"
+	AC_CHECK_LIB(usb, usb_get_string_simple, [LIBUSB="$LIBUSB -lusb"],
+		[ AC_MSG_ERROR([your libusb is too old. install version 0.1.7 or above]) ])
+	LIBS="$ac_save_LIBS"
+fi
 
 dnl check shat to use for dlopen
 AC_SUBST(LIBDL)
