@@ -23,11 +23,11 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <pcsclite.h>
-#include <ifdhandler.h>
+#include <PCSC/pcsclite.h>
+#include <PCSC/ifdhandler.h>
 
 #include "commands.h"
-#include "protocol_t1/protocol_t1.h"
+#include "openct/proto-t1.h"
 #include "ccid.h"
 #include "defs.h"
 #include "ccid_ifdhandler.h"
@@ -75,7 +75,7 @@ again:
 
 	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 
 		/* Protocol error in EMV mode */
 		if (buffer[ERROR_OFFSET] == 0xBB &&
@@ -230,7 +230,7 @@ RESPONSECODE CmdEscape(int lun, const unsigned char TxBuffer[],
 
 	if (cmd_out[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd_out[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		ccid_error(cmd_out[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -277,7 +277,7 @@ RESPONSECODE CmdPowerOff(int lun)
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -315,7 +315,7 @@ RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[])
 
 	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -432,7 +432,7 @@ time_request:
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		*rx_length = 0; /* nothing received */
 		return IFD_COMMUNICATION_ERROR;
 	}
@@ -549,7 +549,7 @@ RESPONSECODE SetParameters(int lun, char protocol, unsigned int length,
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		return IFD_COMMUNICATION_ERROR;
 	}
 
