@@ -92,6 +92,11 @@ typedef struct
 #define CCID_CLASS_PIN_MODIFY		0x02
 
 /* See CCID specs ch. 4.2.1 */
+#define CCID_ICC_PRESENT_ACTIVE		0x00	/* 00 0000 00 */
+#define CCID_ICC_PRESENT_INACTIVE	0x01	/* 00 0000 01 */
+#define CCID_ICC_ABSENT				0x02	/* 00 0000 20 */
+#define CCID_ICC_STATUS_MASK		0x03	/* 00 0000 11 */
+
 #define CCID_COMMAND_FAILED			0x40	/* 01 0000 00 */
 #define CCID_TIME_EXTENSION			0x80	/* 10 0000 00 */
 
