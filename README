@@ -58,42 +58,6 @@ Supported operating systems:
 Known problems:
 ===============
 
-All platforms
-    readers enumeration
-    """""""""""""""""""
-      You may have wrong reader identification if you connect two or
-      more reader at the exact same time.
-
-      The daemon pcscd and the CCID driver do not list connected readers
-      in the same order. The driver has no way to know which reader has
-      been detected as a new reader by pcscd.
-      
-      So if you plug two readers at the same time (for example if you
-      start pcscd with two readers connected or if you plug a USB hub
-      with two readers on the hub) you may have this (with two readers
-      foo and bar):
-      - pcscd scans the USB bus and finds a new CCID reader foo and
-        calls the driver
-      - the CCID driver scan the USB bus and finds a new different
-        reader bar
-      - pcscd continues scanning the USB bus and finds the second reader
-        bar and calls the driver
-      - the CCID driver scan the USB bus and finds an unused reader foo.
-
-        Now the reader foo will be called bar by pcscd and bar will be
-        called foo. This may not be a problem if the two readers have
-        the same name. But it is strange to insert a card in the
-        physical reader foo and see pcscd detect the card insertion in
-        the reader he calls bar.
-        
-        The solution is to use IFDHCreateChannelByName() instead of
-        IFDHCreateChannel() and specify the USB device to use. But pcscd
-        does not implement IFDHCreateChannelByName() yet. Maybe in the
-        future.
-        
-        Another solution is to plug readers one after the other and not
-        at the same time.
-
 *BSD
     libusb
     """"""
