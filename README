@@ -10,7 +10,10 @@ Authors:
 ========
 
 - Ludovic Rousseau <ludovic.rousseau@free.fr>
-- Carlos Prados for the TPDU T=1 code (taken from his towitoto driver)
+- Carlos Prados for the PPS and ATR parsing code (taken from his
+  towitoto driver) in towitoko/ directory.
+- Olaf Kirch for the T=1 TPDU code (from the OpenCT package) in openct/
+  directory. I (Ludovic Rousseau) greatly improved this code.
 
 
 Supported CCID readers:
@@ -132,6 +135,46 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 History:
 ========
+
+0.9.0 - 1 July 2004, Ludovic Rousseau
+    - The T=1 TPDU automata from Carlos Prados' Towitoko driver is very
+      limited and do not support error management mechanisms.
+      I then used the T=1 TPDU automata from OpenCT (OpenSC project).
+      This automata is much more powerful but still lacks a lot of error
+      management code.
+      I then added all the needed code to reach the quality level
+      requested by the EMV standard.
+    - add support for new readers:
+      . Advanced Card Systems ACR 38
+      . Cherry XX33
+      . Dell keyboard SK-3106
+      . Dell smart card reader keyboard
+      . SCR 333
+    - add support of multi procotol cards (T=0 and T=1)
+    - the debug level is now dynamic and set in the Info.plist file (no
+      need to recompile the driver any more)
+    - add support for the libusb naming scheme: usb:%04x/%04x:libusb:%s
+    - INSTALL: add a "configuring the driver for the serial reader
+      (GemPC Twin)" part
+    - use `pkg-config libpcsclite --variable=usbdropdir` so you do not
+      have to use --enable-usbdropdir=DIR or --enable-ccidtwindir=DIR
+      even if pcscd does not use the default /usr/local/pcsc/drivers
+    - add support of IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE and
+      IOCTL_SMARTCARD_VENDOR_VERIFY_PIN in IFDHControl()
+    - read ifdDriverOptions from Info.plist to limit the use of
+      IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE (idea from Peter Williams)
+    - provide an example of use of SCardControl()
+      IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE and
+      IOCTL_SMARTCARD_VENDOR_VERIFY_PIN in example/
+    - add a --enable-pcsclite option (default to yes) so that the driver
+      can be compiled for a different framework (one needing
+      tokenparser.l like Solaris)
+    - Reset action is power off and power on, not just power on
+    - use the include files from pcsc-lite
+    - add a mechanism to allow power on at 1.8V, 3V and then 5V as
+      specified by ISO 7816. We still use 5V for now to avoid problems
+      with non ISO compliant cards
+
 
 0.4.1 - 14 February 2004, Ludovic Rousseau
     - distribute missing files readers/supported_readers.txt and
