@@ -46,6 +46,13 @@
  * we don't have to wait a long time since the card was doing nothing */
 #define USB_WRITE_TIMEOUT (5 * 1000)  /* 5 seconds timeout */
 
+/*
+ * Proprietary USB Class (0xFF) are (or are not) accepted
+ * A proprietary class is used for devices released before the final CCID
+ * specifications were ready.
+ * We should not have problems with non CCID devices becasue the
+ * Manufacturer and Product ID are also used to identify the device */
+#define ALLOW_PROPRIETARY_CLASS
 
 #define BUS_DEVICE_STRSIZE 32
 
