@@ -1,0 +1,177 @@
+dnl Process this file with autoconf to produce a configure script.
+dnl You may need to use autoconf 2.56 or newer
+
+dnl $Id$
+
+dnl Require autoconf 2.52
+AC_PREREQ(2.52)
+
+AC_INIT(ccid, 0.3.0)
+AC_CONFIG_SRCDIR(src/ifdhandler.c)
+AC_CONFIG_AUX_DIR(build)
+AM_INIT_AUTOMAKE
+
+dnl Default install dir
+AC_PREFIX_DEFAULT(/usr/local)
+
+dnl Automake boilerplate.
+AC_CANONICAL_HOST
+
+
+dnl create a config.h file (Automake will add -DHAVE_CONFIG_H)
+AM_CONFIG_HEADER(config.h)
+
+dnl Options
+AM_MAINTAINER_MODE
+
+dnl Checks for programs.
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+AC_PROG_LN_S
+AM_PROG_LEX
+
+AC_CHECK_FUNCS(strerror)
+AC_CHECK_FUNCS(strncpy)
+
+AC_CHECK_HEADERS(errno.h)
+
+dnl Add libtool support.
+AM_PROG_LIBTOOL
+
+dnl Automatically update the libtool script if it becomes out-of-date.
+AC_SUBST(LIBTOOL_DEPS)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(fcntl.h stdlib.h unistd.h termios.h string.h errno.h sys/time.h sys/types.h stdarg.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+dnl Checks for library functions.
+AC_CHECK_FUNCS(select strerror strncpy memcpy)
+
+dnl Select OS specific versions of source files.
+AC_SUBST(BUNDLE_HOST)
+AC_SUBST(DYN_LIB_EXT)
+case "$host" in
+*-*-darwin*)
+	BUNDLE_HOST="MacOS"
+	DYN_LIB_EXT="dylib"
+	AM_CONDITIONAL(NEED_PARSER, true)
+
+	AC_SUBST(COREFOUNDATION)
+	COREFOUNDATION="-Wl,-framework,CoreFoundation"
+
+	AC_SUBST(IOKIT)
+	IOKIT="-Wl,-framework,IOKit"
+	if test "$GCC" = "yes"; then
+		CFLAGS="$CFLAGS -no-cpp-precomp"
+	fi
+	;;
+*)
+	BUNDLE_HOST="Linux"
+	DYN_LIB_EXT="so"
+	AM_CONDITIONAL(NEED_PARSER, false)
+esac
+
+CFLAGS="$CFLAGS -Wall -fno-common"
+
+dnl check if libusb is available
+AC_SUBST(LIBUSB)
+AC_CHECK_HEADERS(usb.h)
+ac_save_LIBS="$LIBS"
+LIBS="$LIBS $COREFOUNDATION $IOKIT"
+AC_CHECK_LIB(usb, usb_init, [LIBUSB="$LIBUSB -lusb"],
+[ AC_MSG_ERROR([libusb not found]) ])
+LIBS="$ac_save_LIBS"
+
+dnl check shat to use for dlopen
+AC_SUBST(LIBDL)
+AC_CHECK_LIB(dl, dlopen, [LIBDL="$LIBDL -ldl" ac_cv_func_dlopen_ldl=yes], ac_cv_func_dlopen_ldl=no)
+
+dnl --enable-bundle=NAME
+AC_ARG_ENABLE(bundle,
+[  --enable-bundle=NAME    bundle directory name (default ifd-ccid.bundle)],
+[bundle="${enableval}"], [bundle=false])
+if test "${bundle}" = false ; then
+	bundle="ifd-ccid.bundle"
+fi
+AC_MSG_RESULT([bundle directory name   : $bundle])
+AC_DEFINE_UNQUOTED(BUNDLE, "$bundle", [bundle directory name])
+
+dnl --enable-usbdropdir=DIR
+AC_ARG_ENABLE(usbdropdir,
+[  --enable-usbdropdir=DIR directory containing USB drivers                                                (default /usr/local/pcsc/drivers)],
+[usbdropdir="${enableval}"], [usbdropdir=false])
+if test "${usbdropdir}" = false ; then
+	usbdropdir="/usr/local/pcsc/drivers"
+fi
+AC_MSG_RESULT([USB drop directory      : $usbdropdir])
+AC_DEFINE_UNQUOTED(PCSCLITE_HP_DROPDIR, "$usbdropdir", [directory containing USB drivers])
+
+dnl --enable-debugcritical
+AC_ARG_ENABLE(debugcritical,
+[  --enable-debugcritical  print critical debug messages (default yes)],
+[ debugcritical="${enableval}" ], [ debugcritical=yes ])
+dnl yes by default
+if test "${debugcritical}" != yes
+then
+	AC_MSG_RESULT([critical debug messages : no])
+else
+	AC_MSG_RESULT([critical debug messages : yes])
+	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_CRITICAL, 1, [print critical debug messages])
+fi
+
+dnl --enable-debuginfo
+AC_ARG_ENABLE(debuginfo,
+[  --enable-debuginfo      print info debug messages (default yes)],
+[ debuginfo="${enableval}" ], [ debuginfo=yes ])
+dnl yes by default
+if test "${debuginfo}" != yes
+then
+	AC_MSG_RESULT([info debug messages     : no])
+else
+	AC_MSG_RESULT([info debug messages     : yes])
+	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_INFO, 1, [print info debug messages])
+fi
+
+dnl --enable-debugperiodic
+AC_ARG_ENABLE(debugperiodic,
+[  --enable-debugperiodic  print periodic debug messages (default no)],
+[ debugperiodic="${enableval}" ], [ debugperiodic=no ])
+dnl no by default
+if test "${debugperiodic}" != no
+then
+	AC_MSG_RESULT([periodic debug messages : yes])
+	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_PERIODIC, 1, [print periodic debug messages])
+else
+	AC_MSG_RESULT([periodic debug messages : no])
+fi
+
+dnl --enable-debugcomm
+AC_ARG_ENABLE(debugcomm,
+[  --enable-debugcomm      print comm debug messages (default no)],
+[ debugcomm="${enableval}" ], [ debugcomm=no ])
+dnl no by default
+if test "${debugcomm}" != no
+then
+	AC_MSG_RESULT([comm debug messages     : yes])
+	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_COMM, 1, [print comm debug messages])
+else
+	AC_MSG_RESULT([comm debug messages     : no])
+fi
+
+dnl Setup dist stuff
+AC_SUBST(ac_aux_dir)
+AC_SUBST(bundle)
+AC_SUBST(usbdropdir)
+
+dnl Write Makefiles.
+AC_CONFIG_FILES(Makefile src/Makefile)
+AC_OUTPUT
+
