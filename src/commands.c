@@ -355,7 +355,10 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
-		return_value = IFD_COMMUNICATION_ERROR;
+
+		/* card absent or mute is not an communication error */
+		if (buffer[ERROR_OFFSET] != 0xFE)
+			return_value = IFD_COMMUNICATION_ERROR;
 	}
 
 	return return_value;
