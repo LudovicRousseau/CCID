@@ -35,8 +35,7 @@
 #include "parser.h"
 
 
-//#define USB_TIMEOUT 60000	/* 1 minute timeout */
-#define USB_TIMEOUT 1000	/* 1 second timeout */
+#define USB_TIMEOUT 60000	/* 1 minute timeout */
 
 #define BUS_DEVICE_STRSIZE 32
 
