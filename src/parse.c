@@ -38,7 +38,7 @@
 #define FALSE 0
 #endif
 
-int ccid_parse_interface_descriptor(usb_dev_handle *handle,
+static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	struct usb_device *dev);
 
 
@@ -85,7 +85,7 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
  *					Parse a CCID USB Descriptor
  *
  ****************************************************************************/
-int ccid_parse_interface_descriptor(usb_dev_handle *handle,
+static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	struct usb_device *dev)
 {
 	struct usb_interface_descriptor *usb_interface;
