@@ -27,6 +27,7 @@
 #include "defs.h"
 #include "ccid_ifdhandler.h"
 #include "utils.h"
+#include "debug.h"
 
 int ReaderIndex[CCID_DRIVER_MAX_READERS];
 
@@ -49,6 +50,7 @@ int GetNewReaderIndex(const DWORD Lun)
 			return i;
 		}
 
+	DEBUG_CRITICAL("ReaderIndex[] is full");
 	return -1;
 } /* GetReaderIndex */
 
