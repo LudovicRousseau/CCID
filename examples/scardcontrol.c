@@ -258,8 +258,8 @@ int main(int argc, char *argv[])
 	bSendBuffer[offset++] = 0x82;	/* bmFormatString */
 	bSendBuffer[offset++] = 0x04;	/* bmPINBlockString (PIN length) */
 	bSendBuffer[offset++] = 0x00;	/* bmPINLengthFormat */
-	bSendBuffer[offset++] = 0x04;	/* wPINMaxExtraDigit: min */
 	bSendBuffer[offset++] = 0x04;	/* wPINMaxExtraDigit: max */
+	bSendBuffer[offset++] = 0x04;	/* wPINMaxExtraDigit: min */
 	bSendBuffer[offset++] = 0x02;	/* bEntryValidationCondition */
 	bSendBuffer[offset++] = 0x00;	/* bNumberMessage */
 	bSendBuffer[offset++] = 0x04;	/* wLangId: english */
