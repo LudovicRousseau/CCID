@@ -116,6 +116,11 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 History:
 ========
 
+0.2.0 - 26 August 2003, Ludovic Rousseau
+    - Works under MacOS X
+    - Info.plist: use an <array></array> for the alias enumeration
+    - Makefile rework for *BSD and MacOS X
+
 0.1.0 - 13 August 2003, Ludovic Rousseau
     - First public release
 
