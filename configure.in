@@ -30,6 +30,7 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AM_PROG_LEX
+AC_CHECK_PROG([PKGCONFIG], [pkg-config], [yes])
 
 AC_CHECK_FUNCS(strerror)
 AC_CHECK_FUNCS(strncpy)
@@ -153,7 +154,11 @@ AC_ARG_ENABLE(usbdropdir,
 	[usbdropdir="${enableval}"], [usbdropdir=false])
 if test "${usbdropdir}" = false ; then
 	if test "$prefix" = NONE ; then
-		usbdropdir=`pkg-config libpcsclite --variable=usbdropdir`
+		if test "$PKGCONFIG" = yes ; then
+			usbdropdir=`pkg-config libpcsclite --variable=usbdropdir`
+		else
+			usbdropdir=""
+		fi
 		if test -z "$usbdropdir" ; then
 			usbdropdir="$ac_default_prefix/pcsc/drivers"
 		fi
@@ -171,7 +176,12 @@ AC_ARG_ENABLE(ccidtwindir,
 	[ccidtwindir="${enableval}"], [ccidtwindir=false])
 if test "${ccidtwindir}" = false ; then
 	if test "$prefix" = NONE ; then
-		ccidtwindir=`pkg-config libpcsclite --variable=usbdropdir`
+		if test "$PKGCONFIG" = yes ; then
+			ccidtwindir=`pkg-config libpcsclite --variable=usbdropdir`
+		else
+			AC_MSG_RESULT([You should install pkg-config to get this configured automatically from pcsc-lite installation])
+			ccidtwindir=""
+		fi
 		if test -z "$ccidtwindir" ; then
 			ccidtwindir="$ac_default_prefix/pcsc/drivers"
 		fi
