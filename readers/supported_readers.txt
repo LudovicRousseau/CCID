@@ -28,3 +28,6 @@
 # Dell
 0x413c:0x2100:Dell keyboard SK-3106
 0x413c:0X2101:Dell smart card reader keyboard
+
+# Cherry
+0x046a:0x0005:Cherry XX33
