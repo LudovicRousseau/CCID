@@ -55,6 +55,36 @@ Supported operating systems:
   to libusb)
 
 
+Debug informations:
+===================
+
+The driver uses the debug function provided by pcscd. So if pcscd sends
+its debug to stdout (pcscd --foreground) then the CCID will also send
+its debug to stdout. If pcscd sends its debug to syslog (by default)
+then the CCID will also send its debug to syslog.
+
+You can change the debug level using the Info.plist configuraion file.
+The Info.plist is installed, by default, in
+/usr/local/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist
+
+The debug level is set in the ifdLogLevel field. It is a binary OR
+combinaison of 4 different levels.
+- 1: critical: important error messages
+- 2: info:     informative messages like what reader was detected
+- 4: periodic: periodic info when pcscd test if a card is present (every
+               1/10 of a second)
+- 8: comm:     a dump of all the bytes exchanged between the host and the
+               reader
+
+By default the debug level is set to 3 (1 + 2) and correspond to the
+critical and info levels.
+
+You have to restart the driver so it read the configuration file again
+and use the new debug level value.  To restart the driver you just need
+to unplug all your CCID readers so the the driver is unloaded and then
+replug your readers. You can also restart pcscd.
+
+
 Known problems:
 ===============
 

@@ -19,25 +19,6 @@ pkg-config file so you do not have to know where the files are searched
 for.
 
 
-more (or less) debug messages
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can also enable/disable some debug messages. The driver provides 4
-levels of debug:
-- critical: important error messages
-- info:     informative messages like what reader was detected
-- periodic: periodic info when pcscd test if a card is present (ever
-            1/10 of a second)
-- comm:     a dump of all the bytes exchanged between the host and the
-            reader
-
-By default messages of level "critical" and "info" are enabled and
-messages of level "periodic" abd "comm" are off.
-
-For example use --enable-debugcomm to enable communication debug and
---disable-debuginfo to disable info debug messages for example.
-
-
 libusb not found
 ~~~~~~~~~~~~~~~~
 
