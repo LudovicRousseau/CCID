@@ -22,9 +22,11 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
 
 #include "pcscdefines.h"
 #include "commands.h"
+#include "protocol_t1/protocol_t1.h"
 #include "ccid.h"
 #include "defs.h"
 #include "ifdhandler.h"
@@ -249,7 +251,7 @@ RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[])
  *
  ****************************************************************************/
 RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
-	int *rx_length, unsigned char rx_buffer[])
+	int *rx_length, unsigned char rx_buffer[], int protocol)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
@@ -276,19 +278,27 @@ RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
 	switch (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK)
 	{
 		case CCID_CLASS_TPDU:
-			return_value = CmdXfrBlockTPDU(lun, tx_length, tx_buffer, rx_length,
-				rx_buffer);
+			if (protocol == T_0)
+				return_value = CmdXfrBlockTPDU_T0(lun, tx_length, tx_buffer,
+					rx_length, rx_buffer);
+			else
+				if (protocol == T_1)
+					return_value = CmdXfrBlockTPDU_T1(lun, tx_length,
+						tx_buffer, rx_length, rx_buffer);
+				else
+					return_value = IFD_PROTOCOL_NOT_SUPPORTED;
 			break;
 
 		case CCID_CLASS_SHORT_APDU:
 		case CCID_CLASS_EXTENDED_APDU:
 			/* We only support extended APDU if the reader can support the
 			 * command length. See test above */
-			return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer,
+			return_value = CmdXfrBlockTPDU_T0(lun, tx_length, tx_buffer,
 				rx_length, rx_buffer);
 			break;
 
 		default:
+			*rx_length = 0;
 			return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -363,22 +373,62 @@ time_request:
 
 /*****************************************************************************
  *
- *					CmdXfrBlockTPDU
+ *					CmdXfrBlockTPDU_T0
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
-	int  *rx_length, unsigned char rx_buffer[])
+RESPONSECODE CmdXfrBlockTPDU_T0(int lun, int tx_length,
+	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 
-	DEBUG_COMM2("TPDU: %d bytes", tx_length);
+	DEBUG_COMM2("T=0: %d bytes", tx_length);
 
 	return_value = CCID_Transmit(lun, tx_length, tx_buffer);
 	if (return_value != IFD_SUCCESS)
 		return return_value;
 	
 	return CCID_Receive(lun, rx_length, rx_buffer);
-} /* CmdXfrBlockTPDU */
+} /* CmdXfrBlockTPDU_T0 */
+
+
+/*****************************************************************************
+ *
+ *					CmdXfrBlockTPDU_T1
+ *
+ ****************************************************************************/
+RESPONSECODE CmdXfrBlockTPDU_T1(int lun, int tx_length,
+	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[])
+{
+	RESPONSECODE return_value;
+	APDU_Cmd cmd;
+	APDU_Rsp rsp;
+
+	DEBUG_COMM2("T=1: %d bytes", tx_length);
+
+	/* set up command APDU */
+	cmd.command = tx_buffer;
+	cmd.length = tx_length;
+
+	return_value = Protocol_T1_Command(&((get_ccid_slot(lun)) -> t1), &cmd,
+		&rsp);
+
+	if (return_value == PROTOCOL_T1_OK)
+	{
+		return_value = IFD_SUCCESS;
+
+		/* copy the response */
+		memcpy(rx_buffer, rsp.response, rsp.length);
+
+		/* free the allocated response buffer */
+		free(rsp.response);
+
+		*rx_length = rsp.length;
+	}
+	else
+		return_value = IFD_COMMUNICATION_ERROR;
+
+	return return_value;
+} /* CmdXfrBlockTPDU_T1 */
 
 
 /*****************************************************************************
