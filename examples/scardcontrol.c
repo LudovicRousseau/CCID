@@ -238,20 +238,6 @@ int main(int argc, char *argv[])
 	/* verify PIN */
 	printf(" Secure verify PIN\n");
 	offset = 0;
-	/* APDU: 00 20 00 00 08 30 30 30 30 00 00 00 00 */
-	bSendBuffer[offset++] = 0x00;	/* CLA */
-	bSendBuffer[offset++] = 0x20;	/* INS: VERIFY */
-	bSendBuffer[offset++] = 0x00;	/* P1 */
-	bSendBuffer[offset++] = 0x00;	/* P2 */
-	bSendBuffer[offset++] = 0x08;	/* Lc: 8 data bytes */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
 
 	/* CCID PIN verification data structure */
 	bSendBuffer[offset++] = 0x00;	/* bTimeOut */
@@ -268,6 +254,21 @@ int main(int argc, char *argv[])
 	bSendBuffer[offset++] = 0x00;	/* bTeoPrologue */
 	bSendBuffer[offset++] = 0x00;	/* " */
 	bSendBuffer[offset++] = 0x00;	/* " */
+
+	/* APDU: 00 20 00 00 08 30 30 30 30 00 00 00 00 */
+	bSendBuffer[offset++] = 0x00;	/* CLA */
+	bSendBuffer[offset++] = 0x20;	/* INS: VERIFY */
+	bSendBuffer[offset++] = 0x00;	/* P1 */
+	bSendBuffer[offset++] = 0x00;	/* P2 */
+	bSendBuffer[offset++] = 0x08;	/* Lc: 8 data bytes */
+	bSendBuffer[offset++] = 0x30;	/* '0' */
+	bSendBuffer[offset++] = 0x30;	/* '0' */
+	bSendBuffer[offset++] = 0x30;	/* '0' */
+	bSendBuffer[offset++] = 0x30;	/* '0' */
+	bSendBuffer[offset++] = 0x00;	/* '\0' */
+	bSendBuffer[offset++] = 0x00;	/* '\0' */
+	bSendBuffer[offset++] = 0x00;	/* '\0' */
+	bSendBuffer[offset++] = 0x00;	/* '\0' */
 
 	printf(" command:");
 	for (i=0; i<offset; i++)
