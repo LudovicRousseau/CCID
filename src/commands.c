@@ -34,6 +34,18 @@
 #include "config.h"
 #include "debug.h"
 
+/*
+ * Possible values :
+ * 3 -> 1.8V, 3V, 5V
+ * 2 -> 3V, 5V
+ * 1 -> 5V only
+ */
+/*
+ * To be safe we only use 5V
+ * otherwise we would have to parse the ATR and get the value of TAi (i>2) when
+ * in T=15
+ */
+#define DEFAULT_VOLTAGE 1 /* start with 5 volts */
 
 /*****************************************************************************
  *
@@ -47,18 +59,22 @@ RESPONSECODE CmdPowerOn(int lun, unsigned int * nlength, unsigned char buffer[])
 	int atr_len, length, count = 1;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	char voltage;
 
 	/* store length of buffer[] */
 	length = *nlength;
+
+	if (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
+		voltage = 0;	/* automatic voltage selection */
+	else
+		voltage = DEFAULT_VOLTAGE;
+
 again:
 	cmd[0] = 0x62; /* IccPowerOn */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = 0;	/* slot number */
 	cmd[6] = ccid_descriptor->bSeq++;
-	if (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
-		cmd[7] = 0x00;	/* Automatic voltage selection */
-	else
-		cmd[7] = 0x01;	/* 5.0V */
+	cmd[7] = voltage;
 	cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(lun, sizeof(cmd), cmd);
@@ -94,6 +110,13 @@ again:
 				goto again;
 			else
 				DEBUG_CRITICAL("Can't set reader in ISO mode");
+		}
+
+		/* continue with 3 volts and 5 volts */
+		if (voltage > 1)
+		{
+			voltage--;
+			goto again;
 		}
 
 		return IFD_COMMUNICATION_ERROR;
