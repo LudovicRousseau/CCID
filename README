@@ -84,7 +84,15 @@ MacOS X/Darwin
       insertion after a few insert/remove actions.
       So if your reader is always connected you should not have
       problems.
-      A new version of libusb should fix this bug
+      A new version of libusb should fix this bug.
+
+*BSD
+    libusb
+    """"""
+      The libusb does not yet support USB interrupt endpoints. You will
+      notice that the driver will stop working as soon as you insert a
+      card in the reader.
+      A new version of libusb should fix this bug.
 
 
 Licence:
