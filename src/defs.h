@@ -28,31 +28,51 @@ typedef struct CCID_DESC
 	UCHAR bPowerFlags;
 } CcidDesc;
 
-// Powerflag (used to detect quick insertion removals unnoticed by the 
-// resource manager)Initial value
+/* Powerflag (used to detect quick insertion removals unnoticed by the 
+ * resource manager)Initial value */
 #define POWERFLAGS_RAZ 0x00
-//Flag set when a power up has been requested
+/* Flag set when a power up has been requested */
 #define MASK_POWERFLAGS_PUP 0x01
-//Flag set when a power down is requested
+/* Flag set when a power down is requestedA */
 #define MASK_POWERFLAGS_PDWN 0x02
-// Flag set when reader and card are EMV (use only APDU exchange)
-#define MASK_POWERFLAGS_EMV 0x04
 
-// Communication buffer size (max=cmd+adpu+Lc+data+Le)
+/* Communication buffer size (max=cmd+adpu+Lc+data+Le) */
 #define CMD_BUF_SIZE (1+4+1+256+1)
-// Larger communication buffer size (max=reader status+data+sw)
+/* Larger communication buffer size (max=reader status+data+sw) */
 #define RESP_BUF_SIZE (1+256+2)
 
-// Protocols 
+/* Protocols */
 #define T_0 0
 #define T_1 1
 
-// Size of an ISO command (CLA+INS+P1+P2)
+/* Size of an ISO command (CLA+INS+P1+P2) */
 #define ISO_CMD_SIZE 4
-//Offset of the length byte in an TPDU
+/* Offset of the length byte in an TPDU */
 #define ISO_OFFSET_LENGTH 4
-//Offset of the data in a TPDU
+/* Offset of the data in a TPDU */
 #define ISO_OFFSET_TPDU_DATA 5
-//ISO length size (1 in general)
+/* ISO length size (1 in general) */
 #define ISO_LENGTH_SIZE 1
+
+
+/*
+ * communication ports abstraction
+ */
+#ifdef TWIN_SERIAL
+
+#define OpenPort OpenSerial
+#define ClosePort CloseSerial
+#define ReadPort ReadSerial
+#define WritePort WriteSerial
+#include "ccid_serial.h"
+
+#else
+
+#define OpenPort OpenUSB
+#define ClosePort CloseUSB
+#define ReadPort ReadUSB
+#define WritePort WriteUSB
+#include "ccid_usb.h"
+
+#endif
 
