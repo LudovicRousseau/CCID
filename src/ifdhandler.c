@@ -383,6 +383,11 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	ccid_slot = get_ccid_slot(reader_index);
 	ccid_desc = get_ccid_descriptor(reader_index);
 
+	/* Do not send CCID command SetParameters or PPS to the CCID
+	 * The CCID will do this himself */
+	if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
+		return IFD_SUCCESS;
+
 	/* Get ATR of the card */
 	ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer, ccid_slot->nATRLength);
 
