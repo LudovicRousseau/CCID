@@ -69,6 +69,9 @@ RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 		return IFD_COMMUNICATION_ERROR;
 	}
 
+	/* Maybe we have a special treatment for this reader */
+	ccid_open_hack(Lun);
+
 #ifdef HAVE_PTHREAD
 	pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
