@@ -34,9 +34,11 @@ move them in the supported list above. If you are one of the
 manufacturers, please, contact me.
 
 - ActivCard USB reader 2.0 [10]
+- C3PO LTC32 [13]
 - SCM Micro SCR 331-DI [11]
+- SCM Micro SCR 333 [15]
 - SCM Micro SPR 532 [9]
-- Silitek SK-3105 keyboard [12]
+- Silitek SK-3105 keyboard [12] or C3PO TLTC2USB [14]
 
 
 Unsupported CCID readers:
@@ -217,11 +219,14 @@ Bibliography:
 [5] http://www.omnikey.com/en/produkt_details.php3?produkt=1&variante=47
 [6] http://www.scmmicro.com/security/SCR331.html
 [7] http://www.scmmicro.com/security/SCR335.html
-[8] http://www.c3po.es/pcsc.htm
+[8] http://www.c3po.es/ltc31.html
 [9] http://www.scmmicro.com/security/SPR532.html
 [10] http://www.activcard.com/products/usb_reader.html
 [11] http://www.scmmicro.com/security/SCR331-DI.html
 [12] http://www.silitek.com/prod/getProduct.do?xml_id=4_2&menu_id=4_2_8&cid=1_8_5
+[13] http://www.c3po.es/ltc32.html
+[14] http://www.c3po.es/tltc2usb.html
+[15] http://www.scmmicro.com/security/SCR333.html
 
 $Id$
 
