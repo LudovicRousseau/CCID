@@ -46,11 +46,18 @@ manufacturers, please, contact me.
 Unsupported or partly supported CCID readers:
 =============================================
 
-- Advanced Card Systems ACR 38 [16] (see Known problems n°1)
-- C3PO LTC31 [8] (see Known problems n°2)
-- SCM Micro SCR 335 [7] (see Known problems n°1)
-- SCM Micro SCR 331 [6] (see Known problems n°1)
-- SCM Micro SPR 532 [9] (see Known problems n°1)
+- Advanced Card Systems ACR 38 [16]
+- SCM Micro SCR 335 [7]
+- SCM Micro SCR 331 [6]
+- SCM Micro SPR 532 [9]
+    These readers do timeout when a special USB frame is sent from the
+    reader. If the frame size if a multiple of wMaxPacketSize the
+    communication is stopped. You should contact the reader vendor to
+    upgrade the firmware of the reader or replace the reader.
+
+- C3PO LTC31 [8]
+    The reader works fine with Linux kernel 2.4 but does not with Linux
+    kernel 2.6. The ioctl() syscall returns EINVAL (Invalid argument)
 
 
 Supported operating systems:
@@ -94,20 +101,8 @@ replug your readers. You can also restart pcscd.
 Known problems:
 ===============
 
-1. USB timeout
-""""""""""""""
-    Some readers do timeout when a special USB frame is sent from the
-    reader. If the frame size if a multiple of wMaxPacketSize the
-    communication is stopped. You should contact the reader vendor to
-    upgrade the firmware of the reader or replace the reader.
-
-2. Kernel 2.6
+MacOSX libusb
 """""""""""""
-    The reader works fine with Linux kernel 2.4 but does not with Linux
-    kernel 2.6. The ioctl() syscall returns EINVAL (Invalid argument)
-
-3. MacOSX libusb
-""""""""""""""""
     There is a bug in libusb that crash the libusb library when you
     unplug a reader and replug it in another USB socket.  So if you
     unplug a reader replug it in the same USB socket.
