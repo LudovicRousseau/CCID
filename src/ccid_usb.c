@@ -113,12 +113,14 @@ status_t OpenUSBByName(int lun, char *device)
 	int vendorID, productID;
 	char infofile[FILENAME_MAX];
 	int device_vendor, device_product;
+	char *dirname = NULL, *filename = NULL;
 
 	DEBUG_COMM3("Lun: %X, Device: %s", lun, device);
 
 	/* device name specified */
 	if (device)
 	{
+		/* format: usb:%04x/%04x, vendor, product */
 		if (strncmp("usb:", device, 4) != 0)
 		{
 			DEBUG_CRITICAL2("device name does not start with \"usb:\": %s",
@@ -130,6 +132,33 @@ status_t OpenUSBByName(int lun, char *device)
 		{
 			DEBUG_CRITICAL2("device name can't be parsed: %s", device);
 			return STATUS_UNSUCCESSFUL;
+		}
+
+		/* format usb:%04x/%04x:libusb:%s
+		 * with %s set to %s:%s, dirname, filename */
+		if ((dirname = strstr(device, "libusb:")) != NULL)
+		{
+			/* dirname points to the first char after libusb: */
+			dirname += strlen("libusb:");
+
+			/* search the : (separation) char */
+			filename = strchr(dirname, ':');
+
+			if (filename)
+			{
+				/* end the dirname string */
+				*filename = '\0';
+
+				/* filename points to the first char after : */
+				filename++;
+			}
+			else
+			{
+				/* parse failed */
+				dirname = NULL;
+
+				DEBUG_CRITICAL2("can't parse using libusb scheme: %s", device);
+			}
 		}
 	}
 
@@ -214,6 +243,11 @@ status_t OpenUSBByName(int lun, char *device)
 			/* any device on this bus */
 			for (dev = bus->devices; dev; dev = dev->next)
 			{
+				/* device defined by name? */
+				if (dirname && (strcmp(dirname, bus->dirname)
+					|| strcmp(filename, dev->filename)))
+					continue;
+
 				if (dev->descriptor.idVendor == vendorID
 					&& dev->descriptor.idProduct == productID)
 				{
