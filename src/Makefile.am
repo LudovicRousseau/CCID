@@ -4,6 +4,8 @@ CCID_BUNDLE = ifd-ccid.bundle
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
 
+AM_CPPFLAGS = `pkg-config libpcsclite --cflags`
+
 lib_LTLIBRARIES = libccid.la libccidtwin.la
 bin_PROGRAMS = parse
 
