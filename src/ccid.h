@@ -48,6 +48,16 @@ typedef struct
 	 */
 	int dwFeatures;
 
+	/*
+	 * Default Clock
+	 */
+	int dwDefaultClock;
+
+	/*
+	 * Max Data Rate
+	 */
+	int dwMaxDataRate;
+
 } _ccid_descriptor;
 
 #define CCID_CLASS_AUTO_CONF_ATR	0x00000002
@@ -69,6 +79,7 @@ typedef struct
 #define GEMPCKEY	0x08E63438
 #define GEMPCTWIN	0x08E63437
 #define CARDMAN3121	0x076B3021
+#define LTC31		0x07830003
 
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
