@@ -127,6 +127,20 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 History:
 ========
 
+0.3.1 - 23 September 2003, Ludovic Rouseau
+    - add --enable-multi-thread (enabled by default) for thread safe
+      support an APDU multiplexing. You will need pcsc-lite-1.2.0-rc3 or
+      above to use this feature.
+    - add --enable-libusb=PATH option is your libusb is not installed in
+      /usr or /usr/local
+    - honor DESTDIR in install rules (closes [ #300110 ]). Thanks to
+      Ville Skyttä for the patch.
+    - src/ccid.c: do not switch the GemPC Key and GemPC Twin in APDU
+      mode since it also swicth in EMV mode and may not work with non
+      EMV cards
+    - src/ccid_serial.c: complete reimplementation of the Twin serial
+      protocol using a finite state automata (code much simpler)
+
 0.3.0 - 10 September 2003, Ludovic Rousseau
     - support of GemPC Twin connected to a serial port. Thanks to Niki
       W. Waibel for a working prototype.
