@@ -552,7 +552,8 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	serialDevice[reader].ccid.bSeq = 0;
+	serialDevice[reader].ccid.real_bSeq = 0;
+	serialDevice[reader].ccid.pbSeq = &serialDevice[reader].ccid.real_bSeq;
 	serialDevice[reader].ccid.readerID = GEMPCTWIN;
 	serialDevice[reader].ccid.dwMaxCCIDMessageLength = 271;
 	serialDevice[reader].ccid.dwMaxIFSD = 254;

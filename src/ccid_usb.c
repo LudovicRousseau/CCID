@@ -340,7 +340,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].dev = dev;
 
 					/* CCID common informations */
-					usbDevice[reader_index].ccid.bSeq = 0;
+					usbDevice[reader_index].ccid.real_bSeq = 0;
+					usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
 					usbDevice[reader_index].ccid.readerID =
 						(dev->descriptor.idVendor << 16) +
 						dev->descriptor.idProduct;
