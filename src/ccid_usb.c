@@ -342,6 +342,7 @@ status_t OpenUSBByName(int lun, char *device)
 						(dev->descriptor.idVendor << 16) +
 						dev->descriptor.idProduct;
 					usbDevice[reader].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
+					usbDevice[reader].ccid.bPINSupport = usb_interface->altsetting->extra[52];
 					usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
 					usbDevice[reader].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
 					usbDevice[reader].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);

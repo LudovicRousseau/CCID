@@ -274,6 +274,14 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			}
 			break;
 
+		case IOCTL_SMARTCARD_VENDOR_VERIFY_PIN:
+			if (*Length >= 1)
+			{
+				*Length = 1;
+				*Value = get_ccid_descriptor(Lun) -> bPINSupport & CCID_CLASS_PIN_VERIFY;
+			}
+			break;
+
 		default:
 			return IFD_ERROR_TAG;
 	}

@@ -74,6 +74,8 @@ int main(int argc, char *argv[])
 	unsigned char bSendBuffer[MAX_BUFFER_SIZE];
 	unsigned char bRecvBuffer[MAX_BUFFER_SIZE];
 	DWORD length;
+	char attribute[1];
+	int attribute_length;
 
 	printf("SCardControl sample code\n");
 	printf("V 1.0 2004, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
@@ -150,7 +152,7 @@ int main(int argc, char *argv[])
 	else
 		reader_nb = 0;
 
-	/* connect to a card */
+	/* connect to a reader (even without a card) */
 	dwActiveProtocol = -1;
 	rv = SCardConnect(hContext, readers[reader_nb], SCARD_SHARE_DIRECT,
 		SCARD_PROTOCOL_ANY, &hCard, &dwActiveProtocol);
@@ -188,6 +190,18 @@ int main(int argc, char *argv[])
 		printf(" %02X", pbAtr[i]);
 	printf("\n");
 	PCSC_ERROR_CONT(rv, "SCardStatus")
+
+	/* does the reader support PIN verification? */
+	attribute_length = sizeof(attribute);
+	rv = SCardGetAttrib(hCard, IOCTL_SMARTCARD_VENDOR_VERIFY_PIN, attribute,
+		&attribute_length);
+	PCSC_ERROR_CONT(rv, "SCardGetAttrib")
+	if (FALSE == attribute[0])
+	{
+		printf("Reader %s does not support PIN verification\n",
+			readers[reader_nb]);
+		goto end;
+	}
 
 	/* verify PIN */
 	printf(" Secure verify PIN\n");
@@ -228,6 +242,8 @@ int main(int argc, char *argv[])
 	for (i=0; i<offset; i++)
 		printf(" %02X", bSendBuffer[i]);
 	printf("\n");
+	printf("Enter your PIN:");
+	fflush(stdout);
 	rv = SCardControl(hCard, IOCTL_SMARTCARD_VENDOR_VERIFY_PIN, bSendBuffer,
 		offset, bRecvBuffer, sizeof(bRecvBuffer), &length);
 

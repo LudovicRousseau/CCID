@@ -44,9 +44,14 @@ typedef struct
 	int dwMaxIFSD;
 
 	/*
-	 * Features supported by the reader (directly from class Descriptor)
+	 * Features supported by the reader (directly from Class Descriptor)
 	 */
 	int dwFeatures;
+
+	/*
+	 * PIN support of the reader (directly from Class Descriptor)
+	 */
+	char bPINSupport;
 
 	/*
 	 * Default Clock
@@ -60,6 +65,7 @@ typedef struct
 
 } _ccid_descriptor;
 
+/* Features from dwFeatures */
 #define CCID_CLASS_AUTO_CONF_ATR	0x00000002
 #define CCID_CLASS_AUTO_VOLTAGE		0x00000008
 #define CCID_CLASS_AUTO_BAUD		0x00000020
@@ -69,6 +75,10 @@ typedef struct
 #define CCID_CLASS_SHORT_APDU		0x00020000
 #define CCID_CLASS_EXTENDED_APDU	0x00040000
 #define CCID_CLASS_EXCHANGE_MASK	0x00070000
+
+/* Features from bPINSupport */
+#define CCID_CLASS_PIN_VERIFY		0x01
+#define CCID_CLASS_PIN_MODIFY		0x02
 
 /* See CCID specs ch. 4.2.1 */
 #define CCID_COMMAND_FAILED			0x40	/* 01 0000 00 */
