@@ -102,7 +102,7 @@ status_t OpenUSB(int lun, int Channel)
 	int vendorID, productID;
 	char infofile[FILENAME_MAX];
 
-	DEBUG_COMM3("OpenUSB: Lun: %X, Channel: %X", lun, Channel);
+	DEBUG_COMM3("Lun: %X, Channel: %X", lun, Channel);
 
 	if (busses == NULL)
 		usb_init();

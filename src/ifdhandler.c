@@ -78,7 +78,7 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	 */
 	RESPONSECODE return_value = IFD_SUCCESS;
 
-	DEBUG_INFO2("Entering IFDHCreateChannel (lun: %X)", Lun);
+	DEBUG_INFO2("lun: %X", Lun);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
@@ -96,7 +96,7 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 
 	if (OpenPort(Lun, Channel) != STATUS_SUCCESS)
 	{
-		DEBUG_CRITICAL("OpenReader failed");
+		DEBUG_CRITICAL("OpenPort failed");
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -121,7 +121,7 @@ RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	 * IFD_SUCCESS IFD_COMMUNICATION_ERROR
 	 */
 
-	DEBUG_INFO2("entering IFDHCloseChannel (lun: %X)", Lun);
+	DEBUG_INFO2("lun: %X", Lun);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
@@ -164,7 +164,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	 * IFD_SUCCESS IFD_ERROR_TAG
 	 */
 
-	DEBUG_INFO3("entering IFDHGetCapabilities (lun: %X) tag: %02X", Lun, Tag);
+	DEBUG_INFO3("lun: %X, tag: %02X", Lun, Tag);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
@@ -241,7 +241,7 @@ RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 
 	/* By default, say it worked */
 
-	DEBUG_PERIODIC2("entering IFDHSetCapabilities (lun: %X)", Lun);
+	DEBUG_PERIODIC2("lun: %X", Lun);
 
 	/* if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR; */
@@ -268,7 +268,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	 * IFD_PROTOCOL_NOT_SUPPORTED
 	 */
 
-	DEBUG_INFO2("entering IFDHSetProtocolParameters (lun: %X)", Lun);
+	DEBUG_INFO2("lun: %X", Lun);
 
 	/* if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR; */
@@ -320,7 +320,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	RESPONSECODE return_value = IFD_SUCCESS;
 	unsigned char pcbuffer[RESP_BUF_SIZE];
 
-	DEBUG_INFO2("entering IFDHPowerICC (lun: %X)", Lun);
+	DEBUG_INFO2("lun: %X", Lun);
 
 	/* By default, assume it won't work :) */
 	*AtrLength = 0;
@@ -416,7 +416,7 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 
 	RESPONSECODE return_value = IFD_SUCCESS;	/* Assume it will work */
 
-	DEBUG_INFO2("entering IFDHTransmitToICC (lun: %X)", Lun);
+	DEBUG_INFO2("lun: %X", Lun);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
@@ -458,7 +458,7 @@ RESPONSECODE IFDHControl(DWORD Lun, PUCHAR TxBuffer,
 	 * Notes: RxLength should be zero on error.
 	 */
 
-	DEBUG_INFO2("entering IFDHControl (lun: %X)", Lun);
+	DEBUG_INFO2("lun: %X", Lun);
 
 	/* if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR; */
@@ -484,7 +484,7 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 	RESPONSECODE return_value = IFD_COMMUNICATION_ERROR;
 
-	DEBUG_PERIODIC2("entering IFDHICCPresence (lun: %X)", Lun);
+	DEBUG_PERIODIC2("lun: %X", Lun);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;

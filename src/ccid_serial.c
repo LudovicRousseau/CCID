@@ -154,7 +154,7 @@ status_t WriteSerial(int lun, int length, unsigned char *buffer)
 
 	if (length > GEMPCTWIN_MAXBUF-3)
 	{
-		DEBUG_CRITICAL3("WriteSerial: command too long: %d for max %d",
+		DEBUG_CRITICAL3("command too long: %d for max %d",
 			length, GEMPCTWIN_MAXBUF-3);
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -179,7 +179,7 @@ status_t WriteSerial(int lun, int length, unsigned char *buffer)
 	if (write(serialDevice[LunToReaderIndex(lun)].fd, low_level_buffer,
 		length+3) != length+3)
 	{
-		DEBUG_CRITICAL2("WriteSerial: write error: %s", strerror(errno));
+		DEBUG_CRITICAL2("write error: %s", strerror(errno));
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -316,12 +316,12 @@ int get_bytes(int lun, unsigned char *buffer, int length)
 	int offset = serialDevice[LunToReaderIndex(lun)].buffer_offset;
 	int offset_last = serialDevice[LunToReaderIndex(lun)].buffer_offset_last;
 
-	DEBUG_COMM3("get_bytes: available: %d, needed: %d", offset_last-offset,
+	DEBUG_COMM3("available: %d, needed: %d", offset_last-offset,
 		length);
 	/* enough data are available */
 	if (offset + length <= offset_last)
 	{
-		DEBUG_COMM("get_bytes: data available");
+		DEBUG_COMM("data available");
 		memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset, length);
 		serialDevice[LunToReaderIndex(lun)].buffer_offset += length;
 	}
@@ -334,13 +334,13 @@ int get_bytes(int lun, unsigned char *buffer, int length)
 
 		if (present > 0)
 		{
-			DEBUG_COMM2("get_bytes: some data available: %d", present);
+			DEBUG_COMM2("some data available: %d", present);
 			memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset,
 				present);
 		}
 
 		/* get fresh data */
-		DEBUG_COMM2("get_bytes: get more data: %d", length - present);
+		DEBUG_COMM2("get more data: %d", length - present);
 		rv = ReadChunk(lun, serialDevice[LunToReaderIndex(lun)].buffer, sizeof(serialDevice[LunToReaderIndex(lun)].buffer), length - present);
 		if (rv < 0)
 			return STATUS_COMM_ERROR;
@@ -350,7 +350,7 @@ int get_bytes(int lun, unsigned char *buffer, int length)
 			length - present);
 		serialDevice[LunToReaderIndex(lun)].buffer_offset = length - present;
 		serialDevice[LunToReaderIndex(lun)].buffer_offset_last = rv;
-		DEBUG_COMM3("get_bytes: offset: %d, last_offset: %d",
+		DEBUG_COMM3("offset: %d, last_offset: %d",
 			serialDevice[LunToReaderIndex(lun)].buffer_offset,
 			serialDevice[LunToReaderIndex(lun)].buffer_offset_last);
 	}
@@ -411,7 +411,7 @@ int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length)
 #endif
 
 		already_read += rv;
-		DEBUG_COMM3("ReadChunk, read: %d, to read: %d", already_read,
+		DEBUG_COMM3("read: %d, to read: %d", already_read,
 			min_length);
 	}
 
@@ -431,7 +431,7 @@ status_t OpenSerial(int lun, int channel)
 	int i;
 	int reader = LunToReaderIndex(lun);
 
-	DEBUG_COMM3("OpenSerial: Lun: %X, Channel: %d", lun, channel);
+	DEBUG_COMM3("Lun: %X, Channel: %d", lun, channel);
 
 	/*
 	 * Conversion of old-style ifd-hanler 1.0 CHANNELID 
