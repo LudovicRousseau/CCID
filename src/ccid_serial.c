@@ -526,8 +526,6 @@ status_t OpenSerial(int lun, int channel)
 	serialDevice[reader].buffer_offset = 0;
 	serialDevice[reader].buffer_offset_last = 0;
 
-	ccid_open_hack(lun);
-
 	return STATUS_SUCCESS;
 } /* OpenSerial */
 

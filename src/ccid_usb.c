@@ -251,10 +251,6 @@ status_t OpenUSB(int lun, int Channel)
 							usbDevice[reader].ccid.dwFeatures = dw2i(dev->config->interface->altsetting->extra, 40);
 							usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(dev->config->interface->altsetting->extra, 44);
 
-							/* Maybe we have a special treatment
-							 * for this reader */
-							ccid_open_hack(lun);
-
 							goto end;
 						}
 						else
