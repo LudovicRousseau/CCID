@@ -89,13 +89,17 @@ int ccid_parse_interface_descriptor(char device_name[], usb_dev_handle *handle,
 	/*
 	 * Vendor/model name
 	 */
-	usb_get_string_simple(handle, dev->descriptor.iManufacturer,
-		buffer, sizeof(buffer));
-	printf(" iManufacturer: %s\n", buffer);
+	if (usb_get_string_simple(handle, dev->descriptor.iManufacturer,
+		buffer, sizeof(buffer)) < 0)
+		printf(" Can't get iManufacturer string\n");
+	else
+		printf(" iManufacturer: %s\n", buffer);
 
-	usb_get_string_simple(handle, dev->descriptor.iProduct,
-		buffer, sizeof(buffer));
-	printf(" iProduct: %s\n", buffer);
+	if (usb_get_string_simple(handle, dev->descriptor.iProduct,
+		buffer, sizeof(buffer)) < 0)
+		printf(" Can't get iProduct string\n");
+	else
+		printf(" iProduct: %s\n", buffer);
 
 	usb_interface = dev->config->interface->altsetting;
 	
