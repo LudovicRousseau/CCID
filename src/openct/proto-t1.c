@@ -107,12 +107,14 @@ t1_set_checksum(t1_state_t *t1, int csum)
  * Attach t1 protocol
  */
 int
-t1_init(t1_state_t *t1)
+t1_init(t1_state_t *t1, int lun)
 {
 	t1_set_defaults(t1);
 	t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
 	t1_set_param(t1, IFD_PROTOCOL_T1_STATE, SENDING);
 	t1_set_param(t1, IFD_PROTOCOL_T1_MORE, FALSE);
+
+	t1->lun = lun;
 
 	return 0;
 }

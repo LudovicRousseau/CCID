@@ -705,7 +705,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 				pcbuffer, *AtrLength);
 
 			/* initialise T=1 context */
-			t1_init(&(get_ccid_slot(Lun) -> t1));
+			t1_init(&(get_ccid_slot(Lun) -> t1), Lun);
 			break;
 
 		default:
