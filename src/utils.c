@@ -44,7 +44,10 @@ int GetNewReaderIndex(const DWORD Lun)
 
 	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
 		if (-1 == ReaderIndex[i])
+		{
+			ReaderIndex[i] = Lun;
 			return i;
+		}
 
 	return -1;
 } /* GetReaderIndex */
