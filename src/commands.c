@@ -578,7 +578,10 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
-		return IFD_COMMUNICATION_ERROR;
+		if (0x00 == cmd[ERROR_OFFSET])	/* command not supported */
+			return IFD_NOT_SUPPORTED;
+		else
+			return IFD_COMMUNICATION_ERROR;
 	}
 
 	return IFD_SUCCESS;
