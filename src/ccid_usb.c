@@ -55,14 +55,6 @@ typedef struct
 	struct usb_device *dev;
 
 	/*
-	 * Used to store device name string %s/%s (dirname/filename) like:
-	 * (/proc/bus/usb/) 001/002 (Linux)
-	 * /dev/usb0//dev/ (FreeBSD)
-	 * /dev/usb0//dev/ugen0 (OpenBSD)
-	 */
-	char device_name[BUS_DEVICE_STRSIZE];
-
-	/*
 	 * Endpoints
 	 */
 	int bulk_in;
@@ -79,7 +71,7 @@ typedef struct
 #include "ccid_usb.h"
 
 static _usbDevice usbDevice[PCSCLITE_MAX_READERS] = {
-	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { NULL, NULL, "", 0, 0 }
+	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { NULL, NULL, 0, 0 }
 };
 
 #define PCSCLITE_MANUKEY_NAME                   "ifdVendorID"
@@ -113,8 +105,28 @@ status_t OpenUSBByName(int lun, char *device)
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	int vendorID, productID;
 	char infofile[FILENAME_MAX];
+	int device_vendor, device_product;
 
-	DEBUG_COMM3("Lun: %X, Device: %X", lun, device);
+	DEBUG_COMM3("Lun: %X, Device: %s", lun, device);
+
+	/* device name specified */
+	if (device)
+	{
+		if (strncmp("usb:", device, 4) != 0)
+		{
+			DEBUG_CRITICAL2("device name does not start with \"usb:\": %s",
+				device);
+			return STATUS_UNSUCCESSFUL;
+		}
+
+		if (sscanf(device, "usb:%x/%x", &device_vendor, &device_product) != 2)
+		{
+			DEBUG_CRITICAL2("device name can't be parsed: %s", device);
+			return STATUS_UNSUCCESSFUL;
+		}
+
+	printf("%x %x\n", device_vendor, device_product);
+	}
 
 	if (busses == NULL)
 		usb_init();
@@ -175,6 +187,14 @@ status_t OpenUSBByName(int lun, char *device)
 		if (LTPBundleFindValueWithKey(infofile, PCSCLITE_NAMEKEY_NAME, keyValue, alias))
 			goto end;
 
+		/* go to next supported reader for next round */
+		alias++;
+
+		/* the device was specified but is not the one we are trying to find */
+		if (device
+			&& (vendorID != device_vendor || productID != device_product))
+			continue;
+
 		/* on any USB buses */
 		for (bus = busses; bus; bus = bus->next)
 		{
@@ -187,129 +207,100 @@ status_t OpenUSBByName(int lun, char *device)
 					&& dev->descriptor.idProduct == productID)
 				{
 					int r, already_used;
-					char device_name[BUS_DEVICE_STRSIZE];
-
-					if (snprintf(device_name, BUS_DEVICE_STRSIZE,
-/* This need to be in sync with PCSC/src/hotplug_libusb.c */                    #ifdef __linux__
-#define LINUX_USB_PATH  "/proc/bus/usb/"
-						LINUX_USB_PATH "%s/%s", bus->dirname, dev->filename
-#else                   
-#ifdef __FreeBSD__                  
-						"%s", dev->filename
-#else                   
-						"%s.00", dev->filename
-#endif                  
-#endif
-						) < 0)
-					{
-						DEBUG_CRITICAL2("Device name too long: %s", device_name);
-						return STATUS_UNSUCCESSFUL;
-					}
+					struct usb_interface *usb_interface = NULL;
+					int interface;
 
 					/* is it already opened? */
 					already_used = FALSE;
 
-					/* select by name? */
-					if (device)
+					for (r=0; r<PCSCLITE_MAX_READERS; r++)
 					{
-						if (strcmp(device, device_name) != 0)
-							/* not the good reader, try next one */
-							already_used = TRUE;
-					}
-					else
-					{
-						for (r=0; r<PCSCLITE_MAX_READERS; r++)
+						if (usbDevice[r].dev)
 						{
-							if (usbDevice[r].dev)
-							{
-								DEBUG_COMM3("Checking new device '%s' against old '%s'",
-									device_name, usbDevice[r].device_name);
-								if (strcmp(usbDevice[r].device_name, device_name) == 0)
-									already_used = TRUE;
-							}
+							DEBUG_COMM3("Checking device: %s/%s",
+								bus->dirname, dev->filename);
+							/* same busname, same filename */
+							if (strcmp(usbDevice[r].dev->bus->dirname, bus->dirname) == 0 && strcmp(usbDevice[r].dev->filename, dev->filename) == 0)
+								already_used = TRUE;
 						}
 					}
 
-					if (!already_used)
+					/* this reader is already managed by us */
+					if (already_used)
 					{
-						DEBUG_COMM2("Trying to open USB bus/device: %s",
-							 device_name);
+						DEBUG_INFO3("USB device %s/%s already in use. Checking next one.",
+							bus->dirname, dev->filename);
 
-						dev_handle = usb_open(dev);
-						if (dev_handle)
-						{
-							struct usb_interface *usb_interface = NULL;
-							int interface;
-
-							if (dev->config == NULL)
-							{
-								DEBUG_CRITICAL2("No dev->config found for %s",
-									 device_name);
-								return STATUS_UNSUCCESSFUL;
-							}
-
-							usb_interface = get_ccid_usb_interface(dev);
-							if (usb_interface == NULL)
-							{
-								DEBUG_CRITICAL2("Can't find a CCID interface on %s", device_name);
-								return STATUS_UNSUCCESSFUL;
-							}			
-
-							if (usb_interface->altsetting->extralen != 54)
-							{
-								DEBUG_CRITICAL3("Extra field for %s has a wrong length: %d", device_name, usb_interface->altsetting->extralen);
-								return STATUS_UNSUCCESSFUL;
-							}
-
-							interface = usb_interface->altsetting->bInterfaceNumber;
-							if (usb_claim_interface(dev_handle, interface) < 0)
-							{
-								DEBUG_CRITICAL3("Can't claim interface %s: %s",
-									device_name, strerror(errno));
-								return STATUS_UNSUCCESSFUL;
-							}
-
-							DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
-								dev->descriptor.idVendor,
-								dev->descriptor.idProduct, keyValue);
-							DEBUG_INFO2("Using USB bus/device: %s",
-								 device_name);
-
-							/* Get Endpoints values*/
-							get_end_points(dev, &usbDevice[reader]);
-
-							/* store device information */
-							usbDevice[reader].handle = dev_handle;
-							usbDevice[reader].dev = dev;
-							strncpy(usbDevice[reader].device_name,
-								device_name, BUS_DEVICE_STRSIZE);
-
-							/* CCID common informations */
-							usbDevice[reader].ccid.bSeq = 1;
-							usbDevice[reader].ccid.readerID =
-								(dev->descriptor.idVendor << 16) +
-								dev->descriptor.idProduct;
-							usbDevice[reader].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
-							usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
-
-							goto end;
-						}
-						else
-							DEBUG_CRITICAL3("Can't usb_open(%s): %s",
-								device_name,
-								strerror(errno));
+						continue;
 					}
-					else
+
+					DEBUG_COMM3("Trying to open USB bus/device: %s/%s",
+						 bus->dirname, dev->filename);
+
+					dev_handle = usb_open(dev);
+					if (dev_handle == NULL)
 					{
-						DEBUG_INFO2("USB device %s already in use. Checking next one.",
-							device_name);
+						DEBUG_CRITICAL4("Can't usb_open(%s/%s): %s",
+							bus->dirname, dev->filename, strerror(errno));
+
+						continue;
 					}
+
+					/* now we found a free reader and we try to use it */
+					if (dev->config == NULL)
+					{
+						DEBUG_CRITICAL3("No dev->config found for %s/%s",
+							 bus->dirname, dev->filename);
+						return STATUS_UNSUCCESSFUL;
+					}
+
+					usb_interface = get_ccid_usb_interface(dev);
+					if (usb_interface == NULL)
+					{
+						DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
+							bus->dirname, dev->filename);
+						return STATUS_UNSUCCESSFUL;
+					}			
+
+					if (usb_interface->altsetting->extralen != 54)
+					{
+						DEBUG_CRITICAL4("Extra field for %s/%s has a wrong length: %d", bus->dirname, dev->filename, usb_interface->altsetting->extralen);
+						return STATUS_UNSUCCESSFUL;
+					}
+
+					interface = usb_interface->altsetting->bInterfaceNumber;
+					if (usb_claim_interface(dev_handle, interface) < 0)
+					{
+						DEBUG_CRITICAL4("Can't claim interface %s/%s: %s",
+							bus->dirname, dev->filename, strerror(errno));
+						return STATUS_UNSUCCESSFUL;
+					}
+
+					DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
+						dev->descriptor.idVendor,
+						dev->descriptor.idProduct, keyValue);
+					DEBUG_INFO3("Using USB bus/device: %s/%s",
+						 bus->dirname, dev->filename);
+
+					/* Get Endpoints values*/
+					get_end_points(dev, &usbDevice[reader]);
+
+					/* store device information */
+					usbDevice[reader].handle = dev_handle;
+					usbDevice[reader].dev = dev;
+
+					/* CCID common informations */
+					usbDevice[reader].ccid.bSeq = 1;
+					usbDevice[reader].ccid.readerID =
+						(dev->descriptor.idVendor << 16) +
+						dev->descriptor.idProduct;
+					usbDevice[reader].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
+					usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
+
+					goto end;
 				}
 			}
 		}
-
-		/* go to next supported reader */
-		alias++;
 	}
 end:
 	if (usbDevice[reader].handle == NULL)
@@ -342,8 +333,9 @@ status_t WriteUSB(int lun, int length, unsigned char *buffer)
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL3("usb_bulk_write(%s): %s",
-			usbDevice[reader].device_name, strerror(errno));
+		DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
+			usbDevice[reader].dev->bus->dirname,
+			usbDevice[reader].dev->filename, strerror(errno));
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -372,8 +364,9 @@ status_t ReadUSB(int lun, int * length, unsigned char *buffer)
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL3("usb_bulk_read(%s): %s",
-			usbDevice[reader].device_name, strerror(errno));
+		DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
+			usbDevice[reader].dev->bus->dirname,
+			usbDevice[reader].dev->filename, strerror(errno));
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -400,7 +393,8 @@ status_t CloseUSB(int lun)
 	if (usbDevice[reader].dev == NULL)
 		return STATUS_UNSUCCESSFUL;
 
-	DEBUG_COMM2("Closing USB device: %s", usbDevice[reader].device_name);
+	DEBUG_COMM3("Closing USB device: %s/%s",
+		usbDevice[reader].dev->bus->dirname, usbDevice[reader].dev->filename);
 
   	usb_interface = get_ccid_usb_interface(usbDevice[reader].dev);
 	interface = usb_interface ?
@@ -414,7 +408,6 @@ status_t CloseUSB(int lun)
 	/* mark the resource unused */
 	usbDevice[reader].handle = NULL;
 	usbDevice[reader].dev = NULL;
-	usbDevice[reader].device_name[0] = '\0';
 
 	return STATUS_SUCCESS;
 } /* CloseUSB */
@@ -436,13 +429,12 @@ _ccid_descriptor *get_ccid_descriptor(int lun)
  *					get_desc
  *
  ****************************************************************************/
-int get_desc(int channel, char *device_name[], usb_dev_handle **handle, struct
+int get_desc(int channel, usb_dev_handle **handle, struct
 	usb_device **dev)
 {
 	if (channel < 0 || channel > PCSCLITE_MAX_READERS)
 		return 1;
 
-	*device_name = usbDevice[channel].device_name;
 	*handle = usbDevice[channel].handle;
 	*dev = usbDevice[channel].dev;
 
