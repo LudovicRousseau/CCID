@@ -907,7 +907,7 @@ void init_driver(void)
 	if (0 == LTPBundleFindValueWithKey(infofile, "ifdLogLevel", keyValue, 0))
 	{
 		/* convert from hex or dec or octal */
-		LogLevel = strtoul(keyValue, 0, 16);
+		LogLevel = strtoul(keyValue, NULL, 0);
 
 		/* print the log level used */
 		debug_msg("%s:%d:%s LogLevel: 0x%.4X", __FILE__, __LINE__, __FUNCTION__,
@@ -918,7 +918,7 @@ void init_driver(void)
 	if (0 == LTPBundleFindValueWithKey(infofile, "ifdDriverOptions", keyValue, 0))
 	{
 		/* convert from hex or dec or octal */
-		DriverOptions = strtoul(keyValue, 0, 16);
+		DriverOptions = strtoul(keyValue, NULL, 0);
 
 		/* print the log level used */
 		debug_msg("%s:%d:%s DriverOptions: 0x%.4X", __FILE__, __LINE__,
