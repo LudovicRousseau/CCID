@@ -214,9 +214,9 @@ status_t OpenUSB(int lun, int Channel)
 								return STATUS_UNSUCCESSFUL;
 							}
 
-							if (dev->config->interface->altsetting->extralen < 54)
+							if (dev->config->interface->altsetting->extralen != 54)
 							{
-								DEBUG_CRITICAL3("Extra field too short for %s: %d", device_name, dev->config->interface->altsetting->extralen);
+								DEBUG_CRITICAL3("Extra field for %s has a wrong length: %d", device_name, dev->config->interface->altsetting->extralen);
 								return STATUS_UNSUCCESSFUL;
 							}
 
