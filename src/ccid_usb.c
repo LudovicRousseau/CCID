@@ -58,6 +58,13 @@
  * Manufacturer and Product ID are also used to identify the device */
 #define ALLOW_PROPRIETARY_CLASS
 
+/*
+ * The O2Micro OZ776S reader has a wrong USB descriptor
+ * The extra[] field is associated with the last endpoint instead of the
+ * main USB descriptor
+ */
+#define O2MICRO_OZ776_PATCH
+
 #define BUS_DEVICE_STRSIZE 32
 
 typedef struct
@@ -588,8 +595,31 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 		}
 	}
 	else
-		/* we keep this in case a reader reports a bad class value */
+		/* only one interface found */
 		usb_interface = dev->config->interface;
+
+#ifdef O2MICRO_OZ776_PATCH
+	if (usb_interface != NULL
+		&& (OZ776 == (dev->descriptor.idVendor << 16)
+		+ dev->descriptor.idProduct)
+		&& (0 == usb_interface->altsetting->extralen)) /* this is the bug */
+	{
+		int i;
+
+		for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)
+		{
+			/* find the extra[] array */
+			if (54 == usb_interface->altsetting->endpoint[i].extralen)
+			{
+				/* get the extra[] from the endpoint */
+				usb_interface->altsetting->extralen = 54;
+				usb_interface->altsetting->extra =
+					usb_interface->altsetting->endpoint[i].extra;
+				break;
+			}
+		}
+	}
+#endif
 
 	return usb_interface;
 } /* get_ccid_usb_interface */
