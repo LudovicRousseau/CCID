@@ -28,7 +28,6 @@ src/ifdhandler.c
 src/ifdhandler.h
 src/Info.plist
 src/Makefile
-src/parse
 src/parse.c
 src/parser.h
 src/pcscdefines.h
