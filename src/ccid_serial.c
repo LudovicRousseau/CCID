@@ -535,6 +535,7 @@ status_t OpenSerialByName(int lun, char *dev_name)
 	serialDevice[reader].ccid.bSeq = 0;
 	serialDevice[reader].ccid.readerID = GEMPCTWIN;
 	serialDevice[reader].ccid.dwMaxCCIDMessageLength = 271;
+	serialDevice[reader].ccid.dwMaxIFSD = 254;
 	serialDevice[reader].ccid.dwFeatures = 0x00010230;
 
 	serialDevice[reader].buffer_offset = 0;

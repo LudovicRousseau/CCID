@@ -39,6 +39,11 @@ typedef struct
 	int dwMaxCCIDMessageLength;
 
 	/*
+	 * Maximum IFSD
+	 */
+	int dwMaxIFSD;
+
+	/*
 	 * Features supported by the reader (directly from class Descriptor)
 	 */
 	int dwFeatures;
@@ -46,10 +51,11 @@ typedef struct
 } _ccid_descriptor;
 
 #define CCID_CLASS_AUTO_VOLTAGE		0x00000008
-#define CCID_CLASS_EXCHANGE_MASK	0x00070000
+#define CCID_CLASS_AUTO_PPS_CUR		0x00000080
 #define CCID_CLASS_TPDU				0x00010000
 #define CCID_CLASS_SHORT_APDU		0x00020000
 #define CCID_CLASS_EXTENDED_APDU	0x00040000
+#define CCID_CLASS_EXCHANGE_MASK	0x00070000
 
 /* See CCID specs ch. 4.2.1 */
 #define CCID_COMMAND_FAILED			0x40	/* 01 0000 00 */

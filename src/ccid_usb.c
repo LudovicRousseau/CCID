@@ -296,6 +296,7 @@ status_t OpenUSBByName(int lun, char *device)
 						dev->descriptor.idProduct;
 					usbDevice[reader].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
 					usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
+					usbDevice[reader].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
 
 					goto end;
 				}
