@@ -28,5 +28,3 @@ ChangeLog:
 	rcs2log | perl -pe 's/rousseau /Ludovic Rousseau /; \
 	s+/cvsroot/pcsclite/PCSC/++g;' > $@
 
-.PHONY: ChangeLog
-
