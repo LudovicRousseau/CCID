@@ -567,13 +567,36 @@ RESPONSECODE CardUp(int lun)
 
 	ATR_GetNumberOfProtocols(&atr, &np);
 
+	/* PPS not negociated by reader, and TA1 present */
+	if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present &&
+		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR) &&
+		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_BAUD))
+	{
+  		int len = 3;
+		BYTE pps[] = {
+			0xFF,	/* PTSS */
+			0x10,	/* PTS0: PTS1 present */
+			0,		/* PTS1 */
+			0};		/* PCK: will be calculated */
+
+		/* TD1: protocol */
+		if (atr.ib[0][ATR_INTERFACE_BYTE_TD].present)
+			pps[1] |= (atr.ib[0][ATR_INTERFACE_BYTE_TD].value & 0x0F);
+
+		/* PTS1 = TA1 */
+		pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+  		PPS_Exchange(lun, pps, &len);
+	}
+
 	/*
 	 * Get protocol offered by interface bytes T*2 if available,
-	 * (that is, if TD1 is available), * otherwise use default T=0
+	 * (that is, if TD1 is available), otherwise use default T=0
 	 */
 	if (np>1)
 		ATR_GetProtocolType(&atr, 2, &protocol);
 
+	/* SetParameters and negociate IFSD */
 	if ((protocol == ATR_PROTOCOL_TYPE_T1) &&
 		(ccid_desc->dwFeatures & CCID_CLASS_TPDU))
 	{
@@ -588,33 +611,17 @@ RESPONSECODE CardUp(int lun)
 		Protocol_T1_Init(t1, lun);
 
 		SetParameters(t1->lun, 1, 7, param);
+	}
 
-		/* negotiate IFSD */
+	/* negotiate IFSD in T=1 */
+	if ((protocol == ATR_PROTOCOL_TYPE_T1) &&
+		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD))
+	{
+		Protocol_T1 *t1 = &(ccid_slot -> t1);
+
 		Protocol_T1_Negociate_IFSD(t1, ccid_desc -> dwMaxIFSD);
 
 		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
-	}
-
-	/* PPS not negociated by reader, and TA1 present */
-	if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present &&
-		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
-	{
-		Protocol_T1 *t1 = &(ccid_slot -> t1);
-  		int len = 3;
-		BYTE pps[] = {
-			0xFF,	/* PTSS */
-			0x10,	/* PTS0: PTS1 present */
-			0,		/* PTS1 */
-			0};		/* PCK: will be calculated */
-
-		/* TD1: protocol */
-		if (atr.ib[0][ATR_INTERFACE_BYTE_TD].present)
-			pps[1] |= (atr.ib[0][ATR_INTERFACE_BYTE_TD].value & 0x0F);
-
-		/* TA1 */
-		pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
-
-  		PPS_Exchange(t1, pps, &len);
 	}
 
 	return IFD_SUCCESS;
