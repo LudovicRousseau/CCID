@@ -1,6 +1,6 @@
 /*
     debug.c: log (or not) messages
-    Copyright (C) 2003-2004   Ludovic Rousseau
+    Copyright (C) 2003-2005   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,6 +33,8 @@
 
 static char DebugBuffer[DEBUG_BUF_SIZE];
 
+#define LOG_TO_STDERR
+
 void debug_msg(char *fmt, ...)
 {
 	va_list argptr;
@@ -41,7 +43,9 @@ void debug_msg(char *fmt, ...)
 	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
 	va_end(argptr);
 
+#ifdef LOG_TO_STDERR
 	fprintf(stderr, "%s\n", DebugBuffer);
+#endif
 } /* debug_msg */
 
 void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
@@ -60,9 +64,11 @@ void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
 		c += strlen(c);
 	}
 
+#ifdef LOG_TO_STDERR
 	if (c >= debug_buf_end)
 		fprintf(stderr, "Debug buffer too short\n");
 
 	fprintf(stderr, "%s\n", DebugBuffer);
+#endif
 } /* debug_xxd */
 
