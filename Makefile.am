@@ -13,7 +13,7 @@ AUX_DIST = \
 	$(ac_aux_dir)/mkinstalldirs \
 	$(ac_aux_dir)/ylwrap
 
-EXTRA_DIST = bootstrap ChangeLog \
+EXTRA_DIST = bootstrap reconf ChangeLog \
 	$(AUX_DIST)
 
 MAINTAINERCLEANFILES = $(AUX_DIST)
