@@ -425,7 +425,10 @@ RESPONSECODE CCID_Receive(int lun, unsigned int *rx_length,
 time_request:
 	length = sizeof(cmd);
 	if (ReadPort(lun, &length, cmd) != STATUS_SUCCESS)
+	{
+		*rx_length = 0;
 		return IFD_COMMUNICATION_ERROR;
+	}
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
