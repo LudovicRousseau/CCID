@@ -110,6 +110,12 @@ AC_CHECK_LIB(usb, usb_init, [LIBUSB="$LIBUSB -lusb"],
 	[ AC_MSG_ERROR([libusb not found]) ])
 LIBS="$ac_save_LIBS"
 
+ac_save_LIBS="$LIBS"
+LIBS="$LIBS $COREFOUNDATION $IOKIT"
+AC_CHECK_LIB(usb, usb_get_string_simple, [LIBUSB="$LIBUSB -lusb"],
+	[ AC_MSG_ERROR([your libusb is too old. install version 0.1.7 or above]) ])
+LIBS="$ac_save_LIBS"
+
 dnl check shat to use for dlopen
 AC_SUBST(LIBDL)
 AC_CHECK_LIB(dl, dlopen, [LIBDL="$LIBDL -ldl" ac_cv_func_dlopen_ldl=yes], ac_cv_func_dlopen_ldl=no)
