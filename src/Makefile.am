@@ -54,7 +54,7 @@ install_ccidtwin: libccidtwin.la
 uninstall: uninstall_ccid uninstall_ccidtwin
 
 uninstall_ccid:
-	rm -f $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)
+	rm -rf $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)
 
 uninstall_ccidtwin:
 	rm -f $(DESTDIR)$(CCIDFTWIN_PATH)/$(CCIDTWIN_LIB).$(VERSION)
