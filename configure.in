@@ -184,6 +184,8 @@ AC_ARG_ENABLE(pcsclite,
 if test "${pcsclite}" = no ; then
 	AM_CONDITIONAL(WITHOUT_PCSC, true)
 	AM_CONDITIONAL(NEED_PARSER, true)
+else
+	AM_CONDITIONAL(WITHOUT_PCSC, false)
 fi
 AC_MSG_RESULT([compiled for pcsc-lite  : $pcsclite])
 
