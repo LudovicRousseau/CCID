@@ -19,9 +19,6 @@
 
 #include <stdio.h>
 #include <string.h>
-#ifdef HAVE_PTHREAD_H
-#include <pthread.h>
-#endif
 
 #include "pcscdefines.h"
 #include "ifdhandler.h"
@@ -31,8 +28,17 @@
 #include "utils.h"
 #include "commands.h"
 
+#ifdef HAVE_PTHREAD_H
+#include <pthread.h>
+#endif
+
 /* Array of structures to hold the ATR and other state value of each slot */
 static CcidDesc CcidSlots[PCSCLITE_MAX_READERS];
+
+/* global mutex */
+#ifdef HAVE_PTHREAD_H
+static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 
 RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
@@ -84,11 +90,19 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	/* Reset PowerFlags */
 	CcidSlots[LunToReaderIndex(Lun)].bPowerFlags = POWERFLAGS_RAZ;
 
+#ifdef HAVE_PTHREAD_H
+	pthread_mutex_lock(&ifdh_context_mutex);
+#endif
+
 	if (OpenPort(Lun, Channel) != STATUS_SUCCESS)
 	{
 		DEBUG_CRITICAL("OpenReader failed");
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
+
+#ifdef HAVE_PTHREAD_H
+	pthread_mutex_unlock(&ifdh_context_mutex);
+#endif
 
 	return return_value;
 } /* IFDHCreateChannel */
@@ -115,7 +129,15 @@ RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	CmdPowerOff(Lun);
 	/* No reader status check, if it failed, what can you do ? :) */
 
+#ifdef HAVE_PTHREAD_H
+	pthread_mutex_lock(&ifdh_context_mutex);
+#endif
+
 	ClosePort(Lun);
+
+#ifdef HAVE_PTHREAD_H
+	pthread_mutex_unlock(&ifdh_context_mutex);
+#endif
 
 	return IFD_SUCCESS;
 } /* IFDHCloseChannel */
@@ -142,7 +164,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	 * IFD_SUCCESS IFD_ERROR_TAG
 	 */
 
-	DEBUG_INFO2("entering IFDHGetCapabilities (lun: %X)", Lun);
+	DEBUG_INFO3("entering IFDHGetCapabilities (lun: %X) tag: %02X", Lun, Tag);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
@@ -168,6 +190,14 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			{
 				*Length = 1;
 				*Value = PCSCLITE_MAX_READERS;
+			}
+			break;
+
+		case TAG_IFD_THREAD_SAFE:
+			if (*Length >= 1)
+			{
+				*Length = 1;
+				*Value = 1; /* Can talk to multiple readers at the same time */
 			}
 			break;
 
