@@ -48,12 +48,12 @@
 #define DEFAULT_VOLTAGE 1 /* start with 5 volts */
 
 /* internal functions */
-static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
-	unsigned char tx_buffer[], unsigned int *rx_length,
+static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
+	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 
-static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
-	unsigned char tx_buffer[], unsigned int *rx_length,
+static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int reader_index,
+	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 
 static void i2dw(int value, unsigned char *buffer);
@@ -64,14 +64,14 @@ static void i2dw(int value, unsigned char *buffer);
  *					CmdPowerOn
  *
  ****************************************************************************/
-RESPONSECODE CmdPowerOn(unsigned int lun, unsigned int * nlength,
+RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned char buffer[])
 {
 	unsigned char cmd[10];
 	status_t res;
 	int atr_len, length, count = 1;
 	RESPONSECODE return_value = IFD_SUCCESS;
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	char voltage;
 
 	/* store length of buffer[] */
@@ -90,7 +90,7 @@ again:
 	cmd[7] = voltage;
 	cmd[8] = cmd[9] = 0; /* RFU */
 
-	res = WritePort(lun, sizeof(cmd), cmd);
+	res = WritePort(reader_index, sizeof(cmd), cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -98,7 +98,7 @@ again:
 	/* needed if we go back after a switch to ISO mode */
 	*nlength = length;
 
-	res = ReadPort(lun, nlength, buffer);
+	res = ReadPort(reader_index, nlength, buffer);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -114,7 +114,7 @@ again:
 			unsigned char res[1];
 			unsigned int res_length = sizeof(res);
 
-			if ((return_value = CmdEscape(lun, cmd, sizeof(cmd)-1, res,
+			if ((return_value = CmdEscape(reader_index, cmd, sizeof(cmd)-1, res,
 				&res_length)) != IFD_SUCCESS)
 				return return_value;
 
@@ -153,11 +153,13 @@ again:
  *					SecurePIN
  *
  ****************************************************************************/
-RESPONSECODE SecurePIN(unsigned int lun, const unsigned char TxBuffer[],
-	unsigned int TxLength, unsigned char RxBuffer[], unsigned int *RxLength)
+RESPONSECODE SecurePIN(unsigned int reader_index,
+	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char RxBuffer[], unsigned int *RxLength)
+
 {
 	unsigned char cmd[11+14+CMD_BUF_SIZE];
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int length = 0;
 
 	/* PIN verification data structure WITHOUT TeoPrologue */
@@ -207,10 +209,10 @@ RESPONSECODE SecurePIN(unsigned int lun, const unsigned char TxBuffer[],
 	cmd[9] = 0;
 	cmd[10] = 0;	/* bPINOperation: PIN Verification */
 
-	if (WritePort(lun, length, cmd) != STATUS_SUCCESS)
+	if (WritePort(reader_index, length, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
-	return CCID_Receive(lun, RxLength, RxBuffer);
+	return CCID_Receive(reader_index, RxLength, RxBuffer);
 } /* SecurePIN */
 
 
@@ -219,14 +221,15 @@ RESPONSECODE SecurePIN(unsigned int lun, const unsigned char TxBuffer[],
  *					Escape
  *
  ****************************************************************************/
-RESPONSECODE CmdEscape(unsigned int lun, const unsigned char TxBuffer[],
-	unsigned int TxLength, unsigned char RxBuffer[], unsigned int *RxLength)
+RESPONSECODE CmdEscape(unsigned int reader_index,
+	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char RxBuffer[], unsigned int *RxLength)
 {
 	unsigned char *cmd_in, *cmd_out;
 	status_t res;
 	unsigned int length_in, length_out;
 	RESPONSECODE return_value = IFD_SUCCESS;
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	/* allocate buffers */
 	length_in = 10 + TxLength;
@@ -249,7 +252,7 @@ RESPONSECODE CmdEscape(unsigned int lun, const unsigned char TxBuffer[],
 	/* copy the command */
 	memcpy(&cmd_in[10], TxBuffer, TxLength);
 
-	res = WritePort(lun, length_in, cmd_in);
+	res = WritePort(reader_index, length_in, cmd_in);
 	free(cmd_in);
 	if (res != STATUS_SUCCESS)
 	{
@@ -257,7 +260,7 @@ RESPONSECODE CmdEscape(unsigned int lun, const unsigned char TxBuffer[],
 		return IFD_COMMUNICATION_ERROR;
 	}
 
-	res = ReadPort(lun, &length_out, cmd_out);
+	res = ReadPort(reader_index, &length_out, cmd_out);
 	if (res != STATUS_SUCCESS)
 	{
 		free(cmd_out);
@@ -288,13 +291,13 @@ RESPONSECODE CmdEscape(unsigned int lun, const unsigned char TxBuffer[],
  *					CmdPowerOff
  *
  ****************************************************************************/
-RESPONSECODE CmdPowerOff(unsigned int lun)
+RESPONSECODE CmdPowerOff(unsigned int reader_index)
 {
 	unsigned char cmd[10];
 	status_t res;
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	cmd[0] = 0x63; /* IccPowerOff */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
@@ -302,12 +305,12 @@ RESPONSECODE CmdPowerOff(unsigned int lun)
 	cmd[6] = ccid_descriptor->bSeq++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
-	res = WritePort(lun, sizeof(cmd), cmd);
+	res = WritePort(reader_index, sizeof(cmd), cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	length = sizeof(cmd);
-	res = ReadPort(lun, &length, cmd);
+	res = ReadPort(reader_index, &length, cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -326,13 +329,13 @@ RESPONSECODE CmdPowerOff(unsigned int lun)
  *					CmdGetSlotStatus
  *
  ****************************************************************************/
-RESPONSECODE CmdGetSlotStatus(unsigned int lun, unsigned char buffer[])
+RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 {
 	unsigned char cmd[10];
 	status_t res;
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	cmd[0] = 0x65; /* GetSlotStatus */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
@@ -340,12 +343,12 @@ RESPONSECODE CmdGetSlotStatus(unsigned int lun, unsigned char buffer[])
 	cmd[6] = ccid_descriptor->bSeq++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
-	res = WritePort(lun, sizeof(cmd), cmd);
+	res = WritePort(reader_index, sizeof(cmd), cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	length = SIZE_GET_SLOT_STATUS;
-	res = ReadPort(lun, &length, buffer);
+	res = ReadPort(reader_index, &length, buffer);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -364,12 +367,12 @@ RESPONSECODE CmdGetSlotStatus(unsigned int lun, unsigned char buffer[])
  *					CmdXfrBlock
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlock(unsigned int lun, unsigned int tx_length,
+RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[], int protocol)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	/* command length too big for CCID reader? */
 	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength)
@@ -394,11 +397,11 @@ RESPONSECODE CmdXfrBlock(unsigned int lun, unsigned int tx_length,
 	{
 		case CCID_CLASS_TPDU:
 			if (protocol == T_0)
-				return_value = CmdXfrBlockTPDU_T0(lun, tx_length, tx_buffer,
-					rx_length, rx_buffer);
+				return_value = CmdXfrBlockTPDU_T0(reader_index,
+					tx_length, tx_buffer, rx_length, rx_buffer);
 			else
 				if (protocol == T_1)
-					return_value = CmdXfrBlockTPDU_T1(lun, tx_length,
+					return_value = CmdXfrBlockTPDU_T1(reader_index, tx_length,
 						tx_buffer, rx_length, rx_buffer);
 				else
 					return_value = IFD_PROTOCOL_NOT_SUPPORTED;
@@ -408,8 +411,8 @@ RESPONSECODE CmdXfrBlock(unsigned int lun, unsigned int tx_length,
 		case CCID_CLASS_EXTENDED_APDU:
 			/* We only support extended APDU if the reader can support the
 			 * command length. See test above */
-			return_value = CmdXfrBlockTPDU_T0(lun, tx_length, tx_buffer,
-				rx_length, rx_buffer);
+			return_value = CmdXfrBlockTPDU_T0(reader_index,
+				tx_length, tx_buffer, rx_length, rx_buffer);
 			break;
 
 		default:
@@ -427,11 +430,11 @@ clean_up_and_return:
  *					CCID_Transmit
  *
  ****************************************************************************/
-RESPONSECODE CCID_Transmit(unsigned int lun, unsigned int tx_length,
+RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	const unsigned char tx_buffer[], unsigned char bBWI)
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	cmd[0] = 0x6F; /* XfrBlock */
 	i2dw(tx_length, cmd+1);	/* APDU length */
@@ -441,7 +444,7 @@ RESPONSECODE CCID_Transmit(unsigned int lun, unsigned int tx_length,
 	cmd[8] = cmd[9] = 0; /* RFU */
 	memcpy(cmd+10, tx_buffer, tx_length);
 
-	if (WritePort(lun, 10+tx_length, cmd) != STATUS_SUCCESS)
+	if (WritePort(reader_index, 10+tx_length, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	return IFD_SUCCESS;
@@ -453,7 +456,7 @@ RESPONSECODE CCID_Transmit(unsigned int lun, unsigned int tx_length,
  *					CCID_Receive
  *
  ****************************************************************************/
-RESPONSECODE CCID_Receive(unsigned int lun, unsigned int *rx_length,
+RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	unsigned char rx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
@@ -461,7 +464,7 @@ RESPONSECODE CCID_Receive(unsigned int lun, unsigned int *rx_length,
 
 time_request:
 	length = sizeof(cmd);
-	if (ReadPort(lun, &length, cmd) != STATUS_SUCCESS)
+	if (ReadPort(reader_index, &length, cmd) != STATUS_SUCCESS)
 	{
 		*rx_length = 0;
 		return IFD_COMMUNICATION_ERROR;
@@ -499,19 +502,19 @@ time_request:
  *					CmdXfrBlockTPDU_T0
  *
  ****************************************************************************/
-static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
-	unsigned char tx_buffer[], unsigned int *rx_length,
+static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
+	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 
 	DEBUG_COMM2("T=0: %d bytes", tx_length);
 
-	return_value = CCID_Transmit(lun, tx_length, tx_buffer, 0);
+	return_value = CCID_Transmit(reader_index, tx_length, tx_buffer, 0);
 	if (return_value != IFD_SUCCESS)
 		return return_value;
 	
-	return CCID_Receive(lun, rx_length, rx_buffer);
+	return CCID_Receive(reader_index, rx_length, rx_buffer);
 } /* CmdXfrBlockTPDU_T0 */
 
 
@@ -520,8 +523,8 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
  *					CmdXfrBlockTPDU_T1
  *
  ****************************************************************************/
-static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
-	unsigned char tx_buffer[], unsigned int *rx_length,
+static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int reader_index,
+	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
@@ -529,7 +532,8 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
 
 	DEBUG_COMM2("T=1: %d bytes", tx_length);
 
-	ret = t1_transceive(&((get_ccid_slot(lun)) -> t1), 0, tx_buffer, tx_length, rx_buffer, *rx_length);
+	ret = t1_transceive(&((get_ccid_slot(reader_index)) -> t1), 0,
+		tx_buffer, tx_length, rx_buffer, *rx_length);
 
 	if (ret < 0)
 	{
@@ -548,11 +552,11 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
  *					SetParameters
  *
  ****************************************************************************/
-RESPONSECODE SetParameters(unsigned int lun, char protocol, unsigned int length,
-	unsigned char buffer[])
+RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
+	unsigned int length, unsigned char buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	DEBUG_COMM2("length: %d bytes", length);
 
@@ -564,11 +568,11 @@ RESPONSECODE SetParameters(unsigned int lun, char protocol, unsigned int length,
 	cmd[8] = cmd[9] = 0; /* RFU */
 	memcpy(cmd+10, buffer, length);
 
-	if (WritePort(lun, 10+length, cmd) != STATUS_SUCCESS)
+	if (WritePort(reader_index, 10+length, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	length = sizeof(cmd);
-	if (ReadPort(lun, &length, cmd) != STATUS_SUCCESS)
+	if (ReadPort(reader_index, &length, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)

@@ -96,9 +96,9 @@ static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
  *					OpenUSB
  *
  ****************************************************************************/
-status_t OpenUSB(unsigned int lun, /*@unused@*/ int Channel)
+status_t OpenUSB(unsigned int reader_index, /*@unused@*/ int Channel)
 {
-	return OpenUSBByName(lun, NULL);
+	return OpenUSBByName(reader_index, NULL);
 } /* OpenUSB */
 
 
@@ -107,10 +107,9 @@ status_t OpenUSB(unsigned int lun, /*@unused@*/ int Channel)
  *					OpenUSBByName
  *
  ****************************************************************************/
-status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
+status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 {
 	static struct usb_bus *busses = NULL;
-	unsigned int reader = LunToReaderIndex(lun);
 	int alias = 0;
 	struct usb_bus *bus;
 	struct usb_dev_handle *dev_handle;
@@ -120,7 +119,7 @@ status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
 	unsigned int device_vendor, device_product;
 	char *dirname = NULL, *filename = NULL;
 
-	DEBUG_COMM3("Lun: %X, Device: %s", lun, device);
+	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
 	/* device name specified */
 	if (device)
@@ -181,10 +180,11 @@ status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	/* is the lun already used? */
-	if (usbDevice[reader].handle != NULL)
+	/* is the reader_index already used? */
+	if (usbDevice[reader_index].handle != NULL)
 	{
-		DEBUG_CRITICAL2("USB driver with lun %X already in use", lun);
+		DEBUG_CRITICAL2("USB driver with index %X already in use",
+			reader_index);
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -333,33 +333,33 @@ status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
 						 bus->dirname, dev->filename);
 
 					/* Get Endpoints values*/
-					get_end_points(dev, &usbDevice[reader]);
+					get_end_points(dev, &usbDevice[reader_index]);
 
 					/* store device information */
-					usbDevice[reader].handle = dev_handle;
-					usbDevice[reader].dev = dev;
+					usbDevice[reader_index].handle = dev_handle;
+					usbDevice[reader_index].dev = dev;
 
 					/* CCID common informations */
-					usbDevice[reader].ccid.bSeq = 0;
-					usbDevice[reader].ccid.readerID =
+					usbDevice[reader_index].ccid.bSeq = 0;
+					usbDevice[reader_index].ccid.readerID =
 						(dev->descriptor.idVendor << 16) +
 						dev->descriptor.idProduct;
-					usbDevice[reader].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
-					usbDevice[reader].ccid.bPINSupport = usb_interface->altsetting->extra[52];
-					usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
-					usbDevice[reader].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
-					usbDevice[reader].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);
-					usbDevice[reader].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
-					usbDevice[reader].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
-					usbDevice[reader].ccid.bCurrentSlotIndex = 0;
-					usbDevice[reader].ccid.defaultFeatures = usbDevice[reader].ccid.dwFeatures;
+					usbDevice[reader_index].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
+					usbDevice[reader_index].ccid.bPINSupport = usb_interface->altsetting->extra[52];
+					usbDevice[reader_index].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
+					usbDevice[reader_index].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
+					usbDevice[reader_index].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);
+					usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
+					usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
+					usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
+					usbDevice[reader_index].ccid.defaultFeatures = usbDevice[reader_index].ccid.dwFeatures;
 					goto end;
 				}
 			}
 		}
 	}
 end:
-	if (usbDevice[reader].handle == NULL)
+	if (usbDevice[reader_index].handle == NULL)
 		return STATUS_UNSUCCESSFUL;
 
 	return STATUS_SUCCESS;
@@ -371,28 +371,29 @@ end:
  *					WriteUSB
  *
  ****************************************************************************/
-status_t WriteUSB(unsigned int lun, unsigned int length, unsigned char *buffer)
+status_t WriteUSB(unsigned int reader_index, unsigned int length,
+	unsigned char *buffer)
 {
 	int rv;
-	unsigned int reader = LunToReaderIndex(lun);
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "-> 121234 ";
 
-	sprintf(debug_header, "-> %06X ", (int)lun);
+	sprintf(debug_header, "-> %06X ", (int)reader_index);
 #endif
 
 #ifdef DEBUG_LEVEL_COMM
 	DEBUG_XXD(debug_header, buffer, length);
 #endif
 
-	rv = usb_bulk_write(usbDevice[reader].handle, usbDevice[reader].bulk_out,
-		(char *)buffer, length, USB_WRITE_TIMEOUT);
+	rv = usb_bulk_write(usbDevice[reader_index].handle,
+		usbDevice[reader_index].bulk_out, (char *)buffer, length,
+		USB_WRITE_TIMEOUT);
 
 	if (rv < 0)
 	{
 		DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
-			usbDevice[reader].dev->bus->dirname,
-			usbDevice[reader].dev->filename, strerror(errno));
+			usbDevice[reader_index].dev->bus->dirname,
+			usbDevice[reader_index].dev->filename, strerror(errno));
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -405,25 +406,26 @@ status_t WriteUSB(unsigned int lun, unsigned int length, unsigned char *buffer)
  *					ReadUSB
  *
  ****************************************************************************/
-status_t ReadUSB(unsigned int lun, unsigned int * length, unsigned char *buffer)
+status_t ReadUSB(unsigned int reader_index, unsigned int * length,
+	unsigned char *buffer)
 {
 	int rv;
-	unsigned int reader = LunToReaderIndex(lun);
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "<- 121234 ";
 
-	sprintf(debug_header, "<- %06X ", (int)lun);
+	sprintf(debug_header, "<- %06X ", (int)reader_index);
 #endif
 
-	rv = usb_bulk_read(usbDevice[reader].handle, usbDevice[reader].bulk_in,
-		(char *)buffer, *length, USB_READ_TIMEOUT);
+	rv = usb_bulk_read(usbDevice[reader_index].handle,
+		usbDevice[reader_index].bulk_in, (char *)buffer, *length,
+		USB_READ_TIMEOUT);
 
 	if (rv < 0)
 	{
 		*length = 0;
 		DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
-			usbDevice[reader].dev->bus->dirname,
-			usbDevice[reader].dev->filename, strerror(errno));
+			usbDevice[reader_index].dev->bus->dirname,
+			usbDevice[reader_index].dev->filename, strerror(errno));
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -442,33 +444,33 @@ status_t ReadUSB(unsigned int lun, unsigned int * length, unsigned char *buffer)
  *					CloseUSB
  *
  ****************************************************************************/
-status_t CloseUSB(unsigned int lun)
+status_t CloseUSB(unsigned int reader_index)
 {
 	struct usb_interface *usb_interface;
 	int interface;
-	unsigned int reader = LunToReaderIndex(lun);
 
 	/* device not opened */
-	if (usbDevice[reader].dev == NULL)
+	if (usbDevice[reader_index].dev == NULL)
 		return STATUS_UNSUCCESSFUL;
 
 	DEBUG_COMM3("Closing USB device: %s/%s",
-		usbDevice[reader].dev->bus->dirname, usbDevice[reader].dev->filename);
+		usbDevice[reader_index].dev->bus->dirname,
+		usbDevice[reader_index].dev->filename);
 
-  	usb_interface = get_ccid_usb_interface(usbDevice[reader].dev);
+  	usb_interface = get_ccid_usb_interface(usbDevice[reader_index].dev);
 	interface = usb_interface ?
 		usb_interface->altsetting->bInterfaceNumber :
-		usbDevice[reader].dev->config->interface->altsetting->bInterfaceNumber;
+		usbDevice[reader_index].dev->config->interface->altsetting->bInterfaceNumber;
 	
 	/* reset so that bSeq starts at 0 again */
-	usb_reset(usbDevice[reader].handle);
+	usb_reset(usbDevice[reader_index].handle);
 
-	usb_release_interface(usbDevice[reader].handle, interface);
-	usb_close(usbDevice[reader].handle);
+	usb_release_interface(usbDevice[reader_index].handle, interface);
+	usb_close(usbDevice[reader_index].handle);
 
 	/* mark the resource unused */
-	usbDevice[reader].handle = NULL;
-	usbDevice[reader].dev = NULL;
+	usbDevice[reader_index].handle = NULL;
+	usbDevice[reader_index].dev = NULL;
 
 	return STATUS_SUCCESS;
 } /* CloseUSB */
@@ -479,9 +481,9 @@ status_t CloseUSB(unsigned int lun)
  *					get_ccid_descriptor
  *
  ****************************************************************************/
-_ccid_descriptor *get_ccid_descriptor(unsigned int lun)
+_ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
 {
-	return &usbDevice[LunToReaderIndex(lun)].ccid;
+	return &usbDevice[reader_index].ccid;
 } /* get_ccid_descriptor */
 
 

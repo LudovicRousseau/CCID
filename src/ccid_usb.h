@@ -21,15 +21,17 @@
  * $Id$
  */
 
-status_t OpenUSB(unsigned int lun, int channel);
+status_t OpenUSB(unsigned int reader_index, int channel);
 
-status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device);
+status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device);
 
-status_t WriteUSB(unsigned int lun, unsigned int length, unsigned char *Buffer);
+status_t WriteUSB(unsigned int reader_index, unsigned int length,
+	unsigned char *Buffer);
 
-status_t ReadUSB(unsigned int lun, unsigned int *length, unsigned char *Buffer);
+status_t ReadUSB(unsigned int reader_index, unsigned int *length,
+	unsigned char *Buffer);
 
-status_t CloseUSB(unsigned int lun);
+status_t CloseUSB(unsigned int reader_index);
 
 #ifdef __USB_H__
 int get_desc(int channel, usb_dev_handle **handle, struct usb_device **dev);

@@ -37,9 +37,9 @@
  *					ccid_open_hack
  *
  ****************************************************************************/
-int ccid_open_hack(unsigned int lun)
+int ccid_open_hack(unsigned int reader_index)
 {
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	switch (ccid_descriptor->readerID)
 	{
@@ -62,7 +62,7 @@ int ccid_open_hack(unsigned int lun)
 				unsigned char res[10];
 				unsigned int length_res = sizeof(res);
 
-				if (CmdEscape(lun, cmd, sizeof(cmd)-1, res, &length_res) == IFD_SUCCESS)
+				if (CmdEscape(reader_index, cmd, sizeof(cmd)-1, res, &length_res) == IFD_SUCCESS)
 				{
 					ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
 					ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
@@ -85,8 +85,8 @@ int ccid_open_hack(unsigned int lun)
 				unsigned char res[20];
 				unsigned int length_res = sizeof(res);
 
-				if ((IFD_SUCCESS == CmdEscape(lun, cmd1, sizeof(cmd1), res, &length_res))
-					&& (IFD_SUCCESS == CmdEscape(lun, cmd2, sizeof(cmd2), res, &length_res)))
+				if ((IFD_SUCCESS == CmdEscape(reader_index, cmd1, sizeof(cmd1), res, &length_res))
+					&& (IFD_SUCCESS == CmdEscape(reader_index, cmd2, sizeof(cmd2), res, &length_res)))
 				{
 					DEBUG_COMM("SCM SCR331-DI contactless detected");
 				}

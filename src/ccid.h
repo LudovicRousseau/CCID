@@ -113,9 +113,9 @@ typedef struct
 #define ESC_GEMPC_SET_APDU_MODE		2
 
 
-int ccid_open_hack(unsigned int lun);
+int ccid_open_hack(unsigned int reader_index);
 void ccid_error(int error, char *file, int line, char *function);
-_ccid_descriptor *get_ccid_descriptor(unsigned int lun);
+_ccid_descriptor *get_ccid_descriptor(unsigned int reader_index);
 
 /* convert a 4 byte integer in USB format into an int */
 #define dw2i(a, x) ((((((a[x+3] << 8) + a[x+2]) << 8) + a[x+1]) << 8) + a[x])

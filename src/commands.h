@@ -25,29 +25,32 @@
 #define STATUS_OFFSET 7
 #define ERROR_OFFSET 8
 
-RESPONSECODE CmdPowerOn(unsigned int lun, unsigned int * nlength,
+RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned char buffer[]);
 
-RESPONSECODE SecurePIN(unsigned int lun, const unsigned char TxBuffer[],
-	unsigned int TxLength, unsigned char RxBuffer[], unsigned int *RxLength);
+RESPONSECODE SecurePIN(unsigned int reader_index,
+	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char RxBuffer[], unsigned int *RxLength);
 
-RESPONSECODE CmdEscape(unsigned int lun, const unsigned char TxBuffer[],
-	unsigned int TxLength, unsigned char RxBuffer[], unsigned int *RxLength);
+RESPONSECODE CmdEscape(unsigned int reader_index,
+	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char RxBuffer[], unsigned int *RxLength);
 
-RESPONSECODE CmdPowerOff(unsigned int lun);
+RESPONSECODE CmdPowerOff(unsigned int reader_index);
 
-RESPONSECODE CmdGetSlotStatus(unsigned int lun, unsigned char buffer[]);
+RESPONSECODE CmdGetSlotStatus(unsigned int reader_index,
+	unsigned char buffer[]);
 
-RESPONSECODE CmdXfrBlock(unsigned int lun, unsigned int tx_length,
+RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[], int protoccol);
 
-RESPONSECODE CCID_Transmit(unsigned int lun, unsigned int tx_length,
+RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	const unsigned char tx_buffer[], unsigned char bBWI);
 
-RESPONSECODE CCID_Receive(unsigned int lun, unsigned int *rx_length,
+RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 
-RESPONSECODE SetParameters(unsigned int lun, char protocol, unsigned int length,
-	unsigned char buffer[]);
+RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
+	unsigned int length, unsigned char buffer[]);
 

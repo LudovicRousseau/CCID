@@ -48,7 +48,7 @@ extern int DriverOptions;
 /*
  * CCID driver specific functions
  */
-CcidDesc *get_ccid_slot(unsigned int lun);
+CcidDesc *get_ccid_slot(unsigned int reader_index);
 
 #endif
 

@@ -138,10 +138,11 @@ typedef struct
 static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];
 
 /* unexported functions */
-static int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length,
-	int min_length);
+static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
+	int buffer_length, int min_length);
 
-static int get_bytes(unsigned int lun, unsigned char *buffer, int length);
+static int get_bytes(unsigned int reader_index, unsigned char *buffer,
+	int length);
 
 
 /*****************************************************************************
@@ -149,7 +150,8 @@ static int get_bytes(unsigned int lun, unsigned char *buffer, int length);
  *				WriteSerial: Send bytes to the card reader
  *
  *****************************************************************************/
-status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char *buffer)
+status_t WriteSerial(unsigned int reader_index, unsigned int length,
+	unsigned char *buffer)
 {
 	int i;
 	unsigned char lrc;
@@ -158,7 +160,7 @@ status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char *buffe
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "-> 123456 ";
 
-	sprintf(debug_header, "-> %06X ", lun);
+	sprintf(debug_header, "-> %06X ", reader_index);
 #endif
 
 	if (length > GEMPCTWIN_MAXBUF-3)
@@ -185,7 +187,7 @@ status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char *buffe
 	DEBUG_XXD(debug_header, low_level_buffer, length+3);
 #endif
 
-	if (write(serialDevice[LunToReaderIndex(lun)].fd, low_level_buffer,
+	if (write(serialDevice[reader_index].fd, low_level_buffer,
 		length+3) != length+3)
 	{
 		DEBUG_CRITICAL2("write error: %s", strerror(errno));
@@ -201,8 +203,8 @@ status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char *buffe
  *				ReadSerial: Receive bytes from the card reader
  *
  *****************************************************************************/
-status_t ReadSerial(unsigned int lun, /*@unused@*/ unsigned int *length,
-	unsigned char *buffer)
+status_t ReadSerial(unsigned int reader_index,
+	/*@unused@*/ unsigned int *length, unsigned char *buffer)
 {
 	unsigned char c;
 	int rv;
@@ -215,7 +217,7 @@ status_t ReadSerial(unsigned int lun, /*@unused@*/ unsigned int *length,
 
 start:
 	DEBUG_COMM("start");
-	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c == RDR_to_PC_NotifySlotChange)
@@ -235,7 +237,7 @@ start:
 
 slot_change:
 	DEBUG_COMM("slot change");
-	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c == CARD_ABSENT)
@@ -255,7 +257,7 @@ slot_change:
 
 sync:
 	DEBUG_COMM("sync");
-	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c == CTRL_ACK)
@@ -269,7 +271,7 @@ sync:
 
 nak:
 	DEBUG_COMM("nak");
-	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c != (SYNC ^ CTRL_NAK))
@@ -283,14 +285,14 @@ nak:
 ack:
 	DEBUG_COMM("ack");
 	/* normal CCID frame */
-	if ((rv = get_bytes(lun, buffer, 5)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(reader_index, buffer, 5)) != STATUS_SUCCESS)
 		return rv;
 
 	/* total frame size */
 	to_read = 10+dw2i(buffer, 1);
 
 	DEBUG_COMM2("frame size: %d", to_read);
-	if ((rv = get_bytes(lun, buffer+5, to_read-5)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(reader_index, buffer+5, to_read-5)) != STATUS_SUCCESS)
 		return rv;
 
 #ifdef DEBUG_LEVEL_COMM
@@ -299,7 +301,7 @@ ack:
 
 	/* lrc */
 	DEBUG_COMM("lrc");
-	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	DEBUG_COMM2("lrc: 0x%02X", c);
@@ -324,10 +326,10 @@ ack:
  *				get_bytes: get n bytes
  *
  *****************************************************************************/
-int get_bytes(unsigned int lun, unsigned char *buffer, int length)
+int get_bytes(unsigned int reader_index, unsigned char *buffer, int length)
 {
-	int offset = serialDevice[LunToReaderIndex(lun)].buffer_offset;
-	int offset_last = serialDevice[LunToReaderIndex(lun)].buffer_offset_last;
+	int offset = serialDevice[reader_index].buffer_offset;
+	int offset_last = serialDevice[reader_index].buffer_offset_last;
 
 	DEBUG_COMM3("available: %d, needed: %d", offset_last-offset,
 		length);
@@ -335,8 +337,8 @@ int get_bytes(unsigned int lun, unsigned char *buffer, int length)
 	if (offset + length <= offset_last)
 	{
 		DEBUG_COMM("data available");
-		memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset, length);
-		serialDevice[LunToReaderIndex(lun)].buffer_offset += length;
+		memcpy(buffer, serialDevice[reader_index].buffer + offset, length);
+		serialDevice[reader_index].buffer_offset += length;
 	}
 	else
 	{
@@ -348,24 +350,25 @@ int get_bytes(unsigned int lun, unsigned char *buffer, int length)
 		if (present > 0)
 		{
 			DEBUG_COMM2("some data available: %d", present);
-			memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset,
+			memcpy(buffer, serialDevice[reader_index].buffer + offset,
 				present);
 		}
 
 		/* get fresh data */
 		DEBUG_COMM2("get more data: %d", length - present);
-		rv = ReadChunk(lun, serialDevice[LunToReaderIndex(lun)].buffer, sizeof(serialDevice[LunToReaderIndex(lun)].buffer), length - present);
+		rv = ReadChunk(reader_index, serialDevice[reader_index].buffer,
+			sizeof(serialDevice[reader_index].buffer), length - present);
 		if (rv < 0)
 			return STATUS_COMM_ERROR;
 
 		/* fill the buffer */
-		memcpy(buffer + present, serialDevice[LunToReaderIndex(lun)].buffer,
+		memcpy(buffer + present, serialDevice[reader_index].buffer,
 			length - present);
-		serialDevice[LunToReaderIndex(lun)].buffer_offset = length - present;
-		serialDevice[LunToReaderIndex(lun)].buffer_offset_last = rv;
+		serialDevice[reader_index].buffer_offset = length - present;
+		serialDevice[reader_index].buffer_offset_last = rv;
 		DEBUG_COMM3("offset: %d, last_offset: %d",
-			serialDevice[LunToReaderIndex(lun)].buffer_offset,
-			serialDevice[LunToReaderIndex(lun)].buffer_offset_last);
+			serialDevice[reader_index].buffer_offset,
+			serialDevice[reader_index].buffer_offset_last);
 	}
 
 	return STATUS_SUCCESS;
@@ -377,10 +380,10 @@ int get_bytes(unsigned int lun, unsigned char *buffer, int length)
  *				ReadChunk: read a minimum number of bytes
  *
  *****************************************************************************/
-static int ReadChunk(unsigned int lun, unsigned char *buffer,
+static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 	int buffer_length, int min_length)
 {
-	int fd = serialDevice[LunToReaderIndex(lun)].fd;
+	int fd = serialDevice[reader_index].fd;
 # ifndef S_SPLINT_S
 	fd_set fdset;
 # endif
@@ -390,7 +393,7 @@ static int ReadChunk(unsigned int lun, unsigned char *buffer,
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "<- 123456 ";
 
-	sprintf(debug_header, "<- %06X ", lun);
+	sprintf(debug_header, "<- %06X ", reader_index);
 #endif
 
 	already_read = 0;
@@ -440,11 +443,11 @@ static int ReadChunk(unsigned int lun, unsigned char *buffer,
  *				OpenSerial: open the port
  *
  *****************************************************************************/
-status_t OpenSerial(unsigned int lun, int channel)
+status_t OpenSerial(unsigned int reader_index, int channel)
 {
 	char dev_name[FILENAME_MAX];
 
-	DEBUG_COMM3("Lun: %X, Channel: %d", lun, channel);
+	DEBUG_COMM3("Reader index: %X, Channel: %d", reader_index, channel);
 
 	/*
 	 * Conversion of old-style ifd-hanler 1.0 CHANNELID 
@@ -469,7 +472,7 @@ status_t OpenSerial(unsigned int lun, int channel)
 
 	sprintf(dev_name, "/dev/pcsc/%d", (int) channel);
 
-	return OpenSerialByName(lun, dev_name);
+	return OpenSerialByName(reader_index, dev_name);
 } /* OpenSerial */
 
 /*****************************************************************************
@@ -477,13 +480,13 @@ status_t OpenSerial(unsigned int lun, int channel)
  *				OpenSerialByName: open the port
  *
  *****************************************************************************/
-status_t OpenSerialByName(unsigned int lun, char *dev_name)
+status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 {
 	struct termios current_termios;
 	int i;
-	unsigned int reader = LunToReaderIndex(lun);
+	unsigned int reader = reader_index;
 
-	DEBUG_COMM3("Lun: %X, Device: %d", lun, dev_name);
+	DEBUG_COMM3("Reader index: %X, Device: %d", reader_index, dev_name);
 
 	/* check if the same channel is not already used */
 	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
@@ -570,7 +573,7 @@ status_t OpenSerialByName(unsigned int lun, char *dev_name)
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
-		if (IFD_SUCCESS != CmdEscape(lun, tx_buffer, sizeof(tx_buffer),
+		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length))
 		{
 			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not co,,ected");
@@ -590,9 +593,9 @@ status_t OpenSerialByName(unsigned int lun, char *dev_name)
  *				CloseSerial: close the port
  *
  *****************************************************************************/
-status_t CloseSerial(unsigned int lun)
+status_t CloseSerial(unsigned int reader_index)
 {
-	unsigned int reader = LunToReaderIndex(lun);
+	unsigned int reader = reader_index;
 
 	close(serialDevice[reader].fd);
 	serialDevice[reader].fd = -1;
@@ -609,9 +612,9 @@ status_t CloseSerial(unsigned int lun)
  *					get_ccid_descriptor
  *
  ****************************************************************************/
-_ccid_descriptor *get_ccid_descriptor(unsigned int lun)
+_ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
 {
-	return &serialDevice[LunToReaderIndex(lun)].ccid;
+	return &serialDevice[reader_index].ccid;
 } /* get_ccid_descriptor */
 
 
