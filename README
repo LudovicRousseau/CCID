@@ -23,6 +23,7 @@ Supported CCID readers:
 - OmniKey CardMan 3121 [5]
 - SCM Micro SCR 331 [6]
 - SCM Micro SCR 335 [7]
+- SCM Micro SPR 532 [9]
 
 
 Unsupported CCID readers:
@@ -187,6 +188,7 @@ Bibliography:
 [6] http://www.scmmicro.com/security/SCR331.html
 [7] http://www.scmmicro.com/security/SCR335.html
 [8] http://www.c3po.es/pcsc.htm
+[9] http://www.scmmicro.com/security/SPR532.html
 
 $Id$
 
