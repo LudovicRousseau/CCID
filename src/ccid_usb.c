@@ -352,7 +352,7 @@ status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
 					usbDevice[reader].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
 					usbDevice[reader].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
 					usbDevice[reader].ccid.bCurrentSlotIndex = 0;
-
+					usbDevice[reader].ccid.defaultFeatures = usbDevice[reader].ccid.dwFeatures;
 					goto end;
 				}
 			}
