@@ -96,7 +96,7 @@ static _usbDevice usbDevice[PCSCLITE_MAX_READERS];
  *					OpenUSB
  *
  ****************************************************************************/
-status_t OpenUSB(unsigned int lun, int Channel)
+status_t OpenUSB(unsigned int lun, /*@unused@*/ int Channel)
 {
 	return OpenUSBByName(lun, NULL);
 } /* OpenUSB */

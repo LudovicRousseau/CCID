@@ -201,7 +201,8 @@ status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char *buffe
  *				ReadSerial: Receive bytes from the card reader
  *
  *****************************************************************************/
-status_t ReadSerial(unsigned int lun, unsigned int *length, unsigned char *buffer)
+status_t ReadSerial(unsigned int lun, /*@unused@*/ unsigned int *length,
+	unsigned char *buffer)
 {
 	unsigned char c;
 	int rv;

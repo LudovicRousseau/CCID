@@ -44,7 +44,7 @@ int ccid_parse_interface_descriptor(usb_dev_handle *handle,
  *					main
  *
  ****************************************************************************/
-int main(int argc, char *argv[])
+int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 {
 	status_t res;
 	int channel;

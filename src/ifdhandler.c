@@ -288,7 +288,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 
 
 RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
-	DWORD Length, PUCHAR Value)
+	/*@unused@*/ DWORD Length, /*@unused@*/ PUCHAR Value)
 {
 	/*
 	 * This function should set the slot/card capabilities for a
@@ -718,7 +718,7 @@ end:
 
 RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	PUCHAR TxBuffer, DWORD TxLength,
-	PUCHAR RxBuffer, PDWORD RxLength, PSCARD_IO_HEADER RecvPci)
+	PUCHAR RxBuffer, PDWORD RxLength, /*@unused@*/ PSCARD_IO_HEADER RecvPci)
 {
 	/*
 	 * This function performs an APDU exchange with the card/slot

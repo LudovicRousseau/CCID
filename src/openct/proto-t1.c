@@ -121,7 +121,7 @@ t1_init(t1_state_t *t1)
  * Detach t1 protocol
  */
 void
-t1_release(t1_state_t *t1)
+t1_release(/*@unused@*/ t1_state_t *t1)
 {
 	/* NOP */
 }
