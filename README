@@ -19,6 +19,7 @@ Supported CCID readers:
 - Gemplus GemPC 433 SL [2]
 - Gemplus GemPC Key [3]
 - Gemplus GemPC Twin [4]
+- LTC31 from C3PO [8]
 - OmniKey CardMan 3121 [5]
 - SCM Micro SCR 331 [6]
 - SCM Micro SCR 335 [7]
@@ -27,10 +28,7 @@ Supported CCID readers:
 Unsupported CCID readers:
 =========================
 
-- LTC31 from C3PO [8]
-  Communication errors between the card and the reader. Some cards can't
-  send an ATR.  I have the exact same symptoms with the Windows driver
-  provided by C3PO.
+None known.
 
 
 Supported operating systems:
