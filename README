@@ -27,7 +27,10 @@ Supported CCID readers:
 Unsupported CCID readers:
 =========================
 
-- none known
+- LTC31 from C3PO [8]
+  Communication errors between the card and the reader. Some cards can't
+  send an ATR.  I have the exact same symptoms with the Windows driver
+  provided by C3PO.
 
 
 Supported operating systems:
@@ -84,7 +87,7 @@ MacOS X/Darwin
       insertion after a few insert/remove actions.
       So if your reader is always connected you should not have
       problems.
-      A new version of libusb should fix this bug.
+      A new version of libusb should fix this bug
 
 *BSD
     libusb
@@ -116,6 +119,19 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 History:
 ========
 
+0.3.0 - 10 September 2003, Ludovic Rousseau
+    - support of GemPC Twin connected to a serial port. Thanks to Niki
+      W. Waibel for a working prototype.
+    - support of auto voltage at power up if the reader support it
+      instead of forcing a 5V in all cases.
+    - support of APDU mode instead of just TPDU if the reader support
+      it. Thanks to Jean-Luc Giraud for the idea and inspiration I got
+      from his "concurrent" driver.
+    - parse: new indentation for more readability of supported features.
+    - switch the GemPC Key and GemPC Twin in APDU mode since they
+      support it but do not announce it in the dwFeatures.
+    - new build process using autoconf/automake.
+
 0.2.0 - 26 August 2003, Ludovic Rousseau
     - Works under MacOS X
     - Info.plist: use an <array></array> for the alias enumeration
@@ -135,6 +151,7 @@ Bibliographie:
 [5] http://www.omnikey.com/en/produkt_details.php3?produkt=1&variante=47
 [6] http://www.scmmicro.com/security/SCR331.html
 [7] http://www.scmmicro.com/security/SCR335.html
+[8] http://www.c3po.es/pcsc.htm
 
 $Id$
 
