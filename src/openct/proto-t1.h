@@ -23,6 +23,7 @@
 #define __PROTO_T1_H__
 
 #include <unistd.h>
+#include <stdint.h>
 
 enum {
 	IFD_PROTOCOL_RECV_TIMEOUT = 0x0000,
@@ -54,8 +55,7 @@ typedef struct {
 	unsigned int	retries;
 	unsigned int	rc_bytes;
 
-	unsigned int	(*checksum)(const unsigned char *,
-					size_t, unsigned char *);
+	unsigned int	(*checksum)(const uint8_t *, size_t, unsigned char *);
 
 	char			more;	/* more data bit */
 	unsigned char	previous_block[4];	/* to store the last R-block */
