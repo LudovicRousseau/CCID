@@ -1,0 +1,7 @@
+The files buffer.[c|h], checksum.c and proto-t1.c comes from the OpenCT
+project <http://www.opensc.org/>
+
+I (Ludovic Rousseau) greatly patched proto-t1.c to add all the needed
+code to reach the quality level requested by the EMV standard.
+
+$Id$
