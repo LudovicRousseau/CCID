@@ -149,7 +149,7 @@ status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char *buffe
 	unsigned char low_level_buffer[GEMPCTWIN_MAXBUF];
 
 #ifdef DEBUG_LEVEL_COMM
-	char debug_header[] = "-> 121234 ";
+	char debug_header[] = "-> 123456 ";
 
 	sprintf(debug_header, "-> %06X ", lun);
 #endif
@@ -379,7 +379,7 @@ int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length, int mi
 	int i, rv = 0;
 	int already_read;
 #ifdef DEBUG_LEVEL_COMM
-	char debug_header[] = "<- 121234 ";
+	char debug_header[] = "<- 123456 ";
 
 	sprintf(debug_header, "<- %06X ", lun);
 #endif
