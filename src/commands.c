@@ -340,7 +340,6 @@ RESPONSECODE CCID_Receive(int lun, int *rx_length, unsigned char rx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	int length;
-	RESPONSECODE return_value = IFD_SUCCESS;
 
 time_request:
 	length = sizeof(cmd);
@@ -351,7 +350,7 @@ time_request:
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
 		*rx_length = 0; /* nothing received */
-		return_value = IFD_COMMUNICATION_ERROR;
+		return IFD_COMMUNICATION_ERROR;
 	}
 
 	if (cmd[STATUS_OFFSET] & CCID_TIME_EXTENSION)
@@ -367,7 +366,7 @@ time_request:
 		length = *rx_length;
 	memcpy(rx_buffer, cmd+10, length);
 
-	return return_value;
+	return IFD_SUCCESS;
 } /* CCID_Receive */
 
 
