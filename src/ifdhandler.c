@@ -406,6 +406,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			}
 
 			return_value = CardDown(Lun);
+			break;
 
 		case IFD_POWER_UP:
 		case IFD_RESET:
