@@ -31,7 +31,7 @@ extern "C" {
   typedef void               VOID;
 #endif
 
-  // do not use RESPONSECODE (long, 64 bits) when 32 bits are enough
+  /* do not use RESPONSECODE (long, 64 bits) when 32 bits are enough */
   typedef int ifd_t;
 
   typedef enum {
@@ -43,7 +43,7 @@ extern "C" {
 
   #define MAX_RESPONSE_SIZE  264
   #define MAX_ATR_SIZE       33
-  #define PCSCLITE_MAX_CHANNELS           16      /* Maximum channels     */
+  #define PCSCLITE_MAX_READERS           16      /* Maximum channels     */
 #ifdef __cplusplus
 }
 #endif

@@ -24,11 +24,11 @@
 #include "pcscdefines.h"
 #include "utils.h"
 
-// Check if the Lun is not to large for the pgSlots table
-// returns TRUE in case of error
+/* Check if the Lun is not to large for the pgSlots table
+ * returns TRUE in case of error */
 int CheckLun(DWORD Lun)
 {
-	if ((LunToReaderIndex(Lun) >= PCSCLITE_MAX_CHANNELS) ||
+	if ((LunToReaderIndex(Lun) >= PCSCLITE_MAX_READERS) ||
 		LunToReaderIndex(Lun) < 0)
 		return TRUE;
 
