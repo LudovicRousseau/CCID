@@ -239,9 +239,9 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	if (extra[40] & 0x20)
 		printf("   Automatic baud rate change according to frequency and Fi, Di parameters\n");
 	if (extra[40] & 0x40)
-		printf("   Automatic parameters negotiation made by the ICC\n");
+		printf("   Automatic parameters negotiation made by the CCID\n");
 	if (extra[40] & 0x80)
-		printf("   Automatic PPS made by the ICC\n");
+		printf("   Automatic PPS made by the CCID\n");
 	if (extra[41] & 0x01)
 		printf("   CCID can set ICC in clock stop mode\n");
 	if (extra[41] & 0x02)
