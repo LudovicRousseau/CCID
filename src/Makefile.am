@@ -1,7 +1,5 @@
 # $Id$
 
-SUBDIRS = protocol_t1
-
 CCID_BUNDLE = ifd-ccid.bundle
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
@@ -9,22 +7,40 @@ CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
 lib_LTLIBRARIES = libccid.la libccidtwin.la
 bin_PROGRAMS = parse
 
-COMMON = ccid.c ccid.h \
-	commands.c commands.h debug.c debug.h defs.h ifdhandler.c \
-	ifdhandler.h pcscdefines.h utils.c utils.h
+COMMON = ccid.c \
+	ccid.h \
+	commands.c \
+	commands.h \
+	debug.c \
+	debug.h \
+	defs.h \
+	ifdhandler.c \
+	ifdhandler.h \
+	pcscdefines.h \
+	utils.c \
+	utils.h
 USB = ccid_usb.c ccid_usb.h
 SERIAL = ccid_serial.c ccid_serial.h
+T1 = protocol_t1/apdu.h \
+	protocol_t1/atr.c \
+	protocol_t1/atr.h \
+	protocol_t1/defines.h \
+	protocol_t1/pps.c \
+	protocol_t1/pps.h \
+	protocol_t1/protocol_t1.c \
+	protocol_t1/protocol_t1.h \
+	protocol_t1/t1_block.c \
+	protocol_t1/t1_block.h
 
 # needed for MacOS X
 if NEED_PARSER
 TOKEN_PARSER = tokenparser_macosx.l
 endif
 
-libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER)
-libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@ \
-	protocol_t1/libt1.a
+libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(T1)
+libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@
 
-libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) protocol_t1/libt1.a
+libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(T1)
 libccidtwin_la_CFLAGS = -DTWIN_SERIAL
 
 parse_SOURCES = tokenparser.l parse.c parser.h
