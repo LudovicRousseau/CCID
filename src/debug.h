@@ -36,10 +36,6 @@
  *
  */
  
-#ifndef PACKAGE		/* PACKAGE is defined in ../config.h by ./configure */
-#error "file config.h NOT included"
-#endif
-
 #ifndef _GCDEBUG_H_
 #define  _GCDEBUG_H_
 
