@@ -72,7 +72,7 @@ install: all
 dep: dep_stamp
 dep_stamp:
 	@echo "Making dependencies..."
-	makedepend -f - -I. -DPCSCLITE_MAX_CHANNELS=16 $(sources) > .dependencies
+	makedepend -f - -I. -DPCSCLITE_MAX_CHANNELS=16 $(sources) > .dependencies || true
 	touch dep_stamp
 
 .dependencies: dep
