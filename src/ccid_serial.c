@@ -241,7 +241,7 @@ slot_change:
 		}
 		else
 		{
-			DEBUG_COMM2("Unknown card movement: %d", buffer[3]);
+			DEBUG_COMM2("Unknown card movement: %d", c);
 		}
 	goto start;
 
