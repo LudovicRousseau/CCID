@@ -48,14 +48,6 @@ RESPONSECODE CCID_Transmit(unsigned int lun, unsigned int tx_length,
 RESPONSECODE CCID_Receive(unsigned int lun, unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 
-RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
-	unsigned char tx_buffer[], unsigned int *rx_length,
-	unsigned char rx_buffer[]);
-
-RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
-	unsigned char tx_buffer[], unsigned int *rx_length,
-	unsigned char rx_buffer[]);
-
 RESPONSECODE SetParameters(unsigned int lun, char protocol, unsigned int length,
 	unsigned char buffer[]);
 

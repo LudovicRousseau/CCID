@@ -47,6 +47,16 @@
  */
 #define DEFAULT_VOLTAGE 1 /* start with 5 volts */
 
+/* internal functions */
+static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
+	unsigned char tx_buffer[], unsigned int *rx_length,
+	unsigned char rx_buffer[]);
+
+static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
+	unsigned char tx_buffer[], unsigned int *rx_length,
+	unsigned char rx_buffer[]);
+
+
 /*****************************************************************************
  *
  *					CmdPowerOn
@@ -487,7 +497,7 @@ time_request:
  *					CmdXfrBlockTPDU_T0
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
+static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[])
 {
@@ -508,7 +518,7 @@ RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int lun, unsigned int tx_length,
  *					CmdXfrBlockTPDU_T1
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
+static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int lun, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[])
 {
