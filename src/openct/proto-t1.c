@@ -418,7 +418,6 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				DEBUG_COMM("Resync requested");
 				/* the card is not allowed to send a resync. */
 				goto resync;
-				break;
 			case T1_S_ABORT:
 				if (sdata[LEN] != 0)
 				{
