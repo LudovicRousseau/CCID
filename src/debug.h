@@ -53,11 +53,13 @@
 #define DEBUG_CRITICAL(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
 #define DEBUG_CRITICAL2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
 #define DEBUG_CRITICAL3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
+#define DEBUG_CRITICAL4(fmt, data1, data2, data3) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
 #define DEBUG
 #else
 #define DEBUG_CRITICAL(fmt)
 #define DEBUG_CRITICAL2(fmt, data)
 #define DEBUG_CRITICAL3(fmt, data1, data2)
+#define DEBUG_CRITICAL4(fmt, data1, data2, data3)
 #endif
 
 #ifdef DEBUG_LEVEL_INFO
