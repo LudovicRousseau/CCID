@@ -6,7 +6,7 @@ dnl $Id$
 dnl Require autoconf 2.52
 AC_PREREQ(2.52)
 
-AC_INIT(ccid, 0.4.2)
+AC_INIT(ccid, 0.9.0)
 AC_CONFIG_SRCDIR(src/ifdhandler.c)
 AC_CONFIG_AUX_DIR(build)
 AM_INIT_AUTOMAKE
