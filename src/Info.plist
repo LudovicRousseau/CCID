@@ -47,6 +47,18 @@
 		If set the GemPC Twin and GemPC Key readers with be configured
 		so that the T=1 TPDU protocol is done by the firmware instead of
 		the driver
+	
+	4: DRIVER_OPTION_USE_BOGUS_FIRMWARE
+		Some reader firmwares have bugs. By default the driver refuses
+		to work with such firmware versions. If your reader is rejected
+		because of the firmware (log message: "Firmware (x.y) is
+		bogus!") you can:
+		- upgrade your reader firmware (not all readers can do that)
+		or
+		- get another reader with a new/bugfree firmware
+		or
+		- activate this option but you will have problems depending on
+		  the bug
 
 	Default value: 0
 	-->

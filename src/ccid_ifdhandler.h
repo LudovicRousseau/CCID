@@ -33,6 +33,7 @@
 
 #define DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED 1
 #define DRIVER_OPTION_GEMPC_TWIN_KEY_APDU 2
+#define DRIVER_OPTION_USE_BOGUS_FIRMWARE 4
 
 extern int LogLevel;
 extern int DriverOptions;
