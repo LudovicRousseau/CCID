@@ -3,7 +3,7 @@ Parsing Interface Descriptor for device: 001/057
   iManufacturer: SCM Microsystems Inc.
  idProduct: 0xE003
   iProduct: SPRx32 USB Smart Card Reader
- bcdDevice: 4.15 (firmware release?)
+ bcdDevice: 5.04 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -12,10 +12,8 @@ Parsing Interface Descriptor for device: 001/057
  bInterfaceClass: 0xFF
   NOT A CCID DEVICE
   Class is 0xFF (proprietary)
- bInterfaceSubClass: 1
-  UNSUPPORTED SubClass
- bInterfaceProtocol: 1
-  UNSUPPORTED InterfaceProtocol
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
  iInterface: 4
  CCID Class Descriptor
   bLength: 0x36
@@ -31,7 +29,7 @@ Parsing Interface Descriptor for device: 001/057
   dwMaximumClock: 12.000 MHz
   bNumClockSupported: 0x00
   dwDataRate: 9600 bps
-  dwMaxDataRate: 115200 bps
+  dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
