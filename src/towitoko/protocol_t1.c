@@ -86,7 +86,7 @@ Protocol_T1_Init (Protocol_T1 * t1, int lun)
     t1->ifsc = PROTOCOL_T1_DEFAULT_IFSC;
 
   /* Towitoko does not allow IFSC > 251 */
-  t1->ifsc = MIN (t1->ifsc, PROTOCOL_T1_MAX_IFSC);
+  /*t1->ifsc = MIN (t1->ifsc, PROTOCOL_T1_MAX_IFSC);*/
 
   /* Set IFSD */
   t1->ifsd = PROTOCOL_T1_DEFAULT_IFSD;
