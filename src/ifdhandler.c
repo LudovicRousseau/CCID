@@ -679,6 +679,14 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 
 			/* clear T=1 context */
 			t1_release(&(get_ccid_slot(Lun) -> t1));
+
+			/* reset to default values
+			 * see hack in IFDHICCPresence() for SCR331-DI */
+			{
+				_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(Lun);
+
+				ccid_descriptor->dwFeatures = ccid_descriptor->defaultFeatures;
+			}
 			break;
 
 		case IFD_POWER_UP:
@@ -845,6 +853,7 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 	RESPONSECODE return_value = IFD_COMMUNICATION_ERROR;
 	int oldLogLevel;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(Lun);
 
 	DEBUG_PERIODIC2("lun: %X", Lun);
 
@@ -870,6 +879,8 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 		case 0x00:
 		case 0x01:
 			return_value = IFD_ICC_PRESENT;
+			/* use default slot */
+			ccid_descriptor->bCurrentSlotIndex = 0;
 			break;
 
 		case 0x02:
@@ -882,6 +893,43 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 			return_value = IFD_ICC_NOT_PRESENT;
 			break;
+	}
+
+	/* SCR331-DI contactless reader */
+	if ((SCR331DI == ccid_descriptor->readerID)
+		&& (ccid_descriptor->bMaxSlotIndex > 0))
+	{
+		unsigned char cmd[] = { 0x11 };
+		/*  command: 11 ??
+		 * response: 00 11 01 ?? no card
+		 *           01 04 00 ?? card present */
+
+		unsigned char res[10];
+		unsigned int length_res = sizeof(res);
+
+		/* if DEBUG_LEVEL_PERIODIC is not set we remove DEBUG_LEVEL_COMM */
+		oldLogLevel = LogLevel;
+		if (! (LogLevel & DEBUG_LEVEL_PERIODIC))
+			LogLevel &= ~DEBUG_LEVEL_COMM;
+
+		CmdEscape(Lun, cmd, sizeof(cmd), res, &length_res);
+
+		/* set back the old LogLevel */
+		LogLevel = oldLogLevel;
+
+		if (0x01 == res[0])
+		{
+			return_value = IFD_ICC_PRESENT;
+
+			/* the contactless reader is in the slot 1 */
+			ccid_descriptor->bCurrentSlotIndex = 1;
+
+			/* hack since the contactless reader do not share dwFeatures */
+			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+			ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
+
+			ccid_descriptor->dwFeatures |= CCID_CLASS_AUTO_IFSD;
+		}
 	}
 
 	return return_value;
