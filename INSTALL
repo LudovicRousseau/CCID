@@ -8,15 +8,14 @@ get the ccid-x.y.z.tar.gz archive and do:
 
 $ tar xzvf ccid-x.y.z.tar.gz
 $ cd ccid-x.y.z
-$ dropdir=$(pkg-config libpcsclite --variable=usbdropdir)
-$ ./configure --enable-usbdropdir=$dropdir
+$ ./configure
 $ make
 $ sudo make install
 
 By default pcscd and my ccid driver use /usr/local/pcsc/drivers/ as
-directory for hotplug drivers. But pcscd store this value in a
-pkg-config file so you do not have to know where the files are searched
-for.
+directory for hotplug drivers. The ./configure script try to get the
+directory used by pcscd using 'pkg-config libpcsclite --variable=usbdropdir'
+So you should not have to use the --enable-usbdropdir=DIR argument.
 
 
 libusb not found
@@ -35,8 +34,7 @@ serial reader
 The GemPCTwin reader can also be connected on a serial port. By default
 the serial driver is built but not installed. You must explicitely do:
 
-$ dropdir=$(pkg-config libpcsclite --variable=usbdropdir)
-$ ./configure --enable-ccidtwindir=$dropdir/serial
+$ ./configure
 $ make -C src install_ccidtwin
 
 
@@ -49,9 +47,10 @@ Just do:
 $ ./configure --disable-libusb
 $ cd src ; make libccidtwin.la ; sudo make install_ccidtwin
 
-You can use --enable-ccidtwindir=DIR to specify the target directory to
-use. The default is $(prefix)/pcsc/drivers/serial with $(prefix) default
-value /usr/local.
+By default ./configure try to get the directory used by pcscd using
+'pkg-config libpcsclite --variable=usbdropdir' and add '/serial'.
+You should not have to use --enable-ccidtwindir=DIR to specify the
+target directory to use. 
 
 
 configuring the driver for the serial reader (GemPC Twin)
