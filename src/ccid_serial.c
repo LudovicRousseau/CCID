@@ -487,7 +487,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	int i;
 	unsigned int reader = reader_index;
 
-	DEBUG_COMM3("Reader index: %X, Device: %d", reader_index, dev_name);
+	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, dev_name);
 
 	/* check if the same channel is not already used */
 	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
