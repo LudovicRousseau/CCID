@@ -143,6 +143,13 @@ int ccid_parse_interface_descriptor(char device_name[], usb_dev_handle *handle,
 
 	printf(" iInterface: %d\n", usb_interface->iInterface);
 
+	if (usb_interface->extralen < 54)
+	{
+		printf("USB extra length is too short: %d\n", usb_interface->extralen);
+		printf("\n  NOT A CCID DEVICE\n");
+		return TRUE;
+	}
+
 	/*
 	 * CCID Class Descriptor
 	 */

@@ -105,9 +105,7 @@ status_t OpenUSB(int lun, int Channel)
 	DEBUG_COMM3("OpenUSB: Lun: %X, Channel: %X", lun, Channel);
 
 	if (busses == NULL)
-	{
 		usb_init();
-	} 
 
 	usb_find_busses();
 	usb_find_devices();
@@ -213,6 +211,12 @@ status_t OpenUSB(int lun, int Channel)
 							{
 								DEBUG_CRITICAL2("No dev->config found for %s",
 									 device_name);
+								return STATUS_UNSUCCESSFUL;
+							}
+
+							if (dev->config->interface->altsetting->extralen < 54)
+							{
+								DEBUG_CRITICAL3("Extra field too short for %s: %d", device_name, dev->config->interface->altsetting->extralen);
 								return STATUS_UNSUCCESSFUL;
 							}
 
