@@ -26,8 +26,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <string.h>
-#include <wintypes.h>
-#include <winscard.h>
+#include <PCSC/winscard.h>
 
 #ifndef TRUE
 #define TRUE 1
@@ -62,7 +61,7 @@ int main(int argc, char *argv[])
 	LONG rv;
 	SCARDCONTEXT hContext;
 	DWORD dwReaders;
-	LPSTR mszReaders;
+	LPTSTR mszReaders;
 	char *ptr, **readers = NULL;
 	int nbReaders;
 	SCARDHANDLE hCard;
@@ -76,6 +75,7 @@ int main(int argc, char *argv[])
 	DWORD length;
 	char attribute[1];
 	DWORD attribute_length;
+	SCARD_IO_REQUEST pioRecvPci;
 
 	printf("SCardControl sample code\n");
 	printf("V 1.0 2004, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
@@ -159,8 +159,8 @@ int main(int argc, char *argv[])
 	printf(" Protocol: %ld\n", dwActiveProtocol);
 	PCSC_ERROR_EXIT(rv, "SCardConnect")
 
-	/* get firmware */
-	printf(" Get Firmware\n");
+	/* get GemPC firmware */
+	printf(" Get GemPC Firmware\n");
 
 	/* this is specific to Gemplus readers */
 	bSendBuffer[0] = 0x02;
@@ -203,6 +203,35 @@ int main(int argc, char *argv[])
 		goto end;
 	}
 
+	/* connect to a reader (even without a card) */
+	dwActiveProtocol = -1;
+	rv = SCardReconnect(hCard, SCARD_SHARE_SHARED,
+		SCARD_PROTOCOL_T0, SCARD_UNPOWER_CARD, &dwActiveProtocol);
+	printf(" Protocol: %ld\n", dwActiveProtocol);
+	PCSC_ERROR_EXIT(rv, "SCardReconnect")
+
+	/* APDU select DF */
+	memcpy(bSendBuffer, "\x00\xA4\x04\x00\x05\x47\x54\x4F\x4B\x31", 10);
+	length = sizeof(bRecvBuffer);
+	rv = SCardTransmit(hCard, SCARD_PCI_T0, bSendBuffer, 10,
+		&pioRecvPci, bRecvBuffer, &length);
+	printf(" card response:");
+	for (i=0; i<length; i++)
+		printf(" %02X", bRecvBuffer[i]);
+	printf("\n");
+	PCSC_ERROR_EXIT(rv, "SCardTransmit")
+
+	/* APDU select EF */
+	memcpy(bSendBuffer, "\x00\xA4\x02\x00\x02\x00\x04", 7);
+	length = sizeof(bRecvBuffer);
+	rv = SCardTransmit(hCard, SCARD_PCI_T0, bSendBuffer, 7,
+		&pioRecvPci, bRecvBuffer, &length);
+	printf(" card response:");
+	for (i=0; i<length; i++)
+		printf(" %02X", bRecvBuffer[i]);
+	printf("\n");
+	PCSC_ERROR_EXIT(rv, "SCardTransmit")
+
 	/* verify PIN */
 	printf(" Secure verify PIN\n");
 	offset = 0;
@@ -241,7 +270,7 @@ int main(int argc, char *argv[])
 	for (i=0; i<offset; i++)
 		printf(" %02X", bSendBuffer[i]);
 	printf("\n");
-	printf("Enter your PIN:");
+	printf("Enter your PIN: ");
 	fflush(stdout);
 	rv = SCardControl(hCard, IOCTL_SMARTCARD_VENDOR_VERIFY_PIN, bSendBuffer,
 		offset, bRecvBuffer, sizeof(bRecvBuffer), &length);
@@ -251,6 +280,27 @@ int main(int argc, char *argv[])
 		printf(" %02X", bRecvBuffer[i]);
 	printf("\n");
 	PCSC_ERROR_CONT(rv, "SCardControl")
+
+	{
+		fd_set fd;
+		struct timeval timeout;
+
+		FD_ZERO(&fd);
+		FD_SET(STDIN_FILENO, &fd);	/* stdin */
+		timeout.tv_sec = 0;			/* timeout = 0 */
+		timeout.tv_usec = 0;
+
+		/* we only try to read stdin if the pinpad is on a keyboard
+		 * we do not read stdin for a SPR 532 for example */
+		if (select(1, &fd, NULL, NULL, &timeout) > 0)
+		{
+			/* read the fake digits */
+			char in[10];	/* 4 digits + \n + \0 */
+			fgets(in, sizeof(in), stdin);
+
+			printf("keyboard sent: %s", in);
+		}
+	}
 
 	/* card disconnect */
 	rv = SCardDisconnect(hCard, SCARD_UNPOWER_CARD);
