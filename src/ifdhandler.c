@@ -370,51 +370,45 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
 
-	switch (Action)
+	if ((IFD_POWER_DOWN == Action) || (IFD_RESET == Action))
 	{
-		case IFD_POWER_UP:
-		case IFD_RESET:
-			nlength = sizeof(pcbuffer);
-			if (CmdPowerOn(Lun, &nlength, pcbuffer) != IFD_SUCCESS)
-			{
-				DEBUG_CRITICAL("PowerUp failed");
-				return_value = IFD_ERROR_POWER_ACTION;
-				goto end;
-			}
+		/* Clear ATR buffer */
+		CcidSlots[LunToReaderIndex(Lun)].nATRLength = 0;
+		*CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer = '\0';
 
-			/* Power up successful, set state variable to memorise it */
-			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags |=
-				MASK_POWERFLAGS_PUP;
-			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags &=
-				~MASK_POWERFLAGS_PDWN;
+		/* Memorise the request */
+		CcidSlots[LunToReaderIndex(Lun)].bPowerFlags |=
+			MASK_POWERFLAGS_PDWN;
+		/* send the command */
+		return_value = CmdPowerOff(Lun);
 
-			/* Reset is returned, even if TCK is wrong */
-			CcidSlots[LunToReaderIndex(Lun)].nATRLength = *AtrLength =
-				(nlength < MAX_ATR_SIZE) ? nlength : MAX_ATR_SIZE;
-			memcpy(Atr, pcbuffer, *AtrLength);
-			memcpy(CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer,
-				pcbuffer, *AtrLength);
+		return_value = CardDown(Lun);
+	}
 
-			return_value = CardUp(Lun);
-			break;
+	if ((IFD_POWER_UP == Action) || (IFD_RESET == Action))
+	{
+		nlength = sizeof(pcbuffer);
+		if (CmdPowerOn(Lun, &nlength, pcbuffer) != IFD_SUCCESS)
+		{
+			DEBUG_CRITICAL("PowerUp failed");
+			return_value = IFD_ERROR_POWER_ACTION;
+			goto end;
+		}
 
-		case IFD_POWER_DOWN:
-			/* Clear ATR buffer */
-			CcidSlots[LunToReaderIndex(Lun)].nATRLength = 0;
-			*CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer = '\0';
+		/* Power up successful, set state variable to memorise it */
+		CcidSlots[LunToReaderIndex(Lun)].bPowerFlags |=
+			MASK_POWERFLAGS_PUP;
+		CcidSlots[LunToReaderIndex(Lun)].bPowerFlags &=
+			~MASK_POWERFLAGS_PDWN;
 
-			/* Memorise the request */
-			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags |=
-				MASK_POWERFLAGS_PDWN;
-			/* send the command */
-			return_value = CmdPowerOff(Lun);
+		/* Reset is returned, even if TCK is wrong */
+		CcidSlots[LunToReaderIndex(Lun)].nATRLength = *AtrLength =
+			(nlength < MAX_ATR_SIZE) ? nlength : MAX_ATR_SIZE;
+		memcpy(Atr, pcbuffer, *AtrLength);
+		memcpy(CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer,
+			pcbuffer, *AtrLength);
 
-			return_value = CardDown(Lun);
-			break;
-
-		default:
-			DEBUG_CRITICAL("Action not supported");
-			return_value = IFD_NOT_SUPPORTED;
+		return_value = CardUp(Lun);
 	}
 end:
 
