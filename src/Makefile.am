@@ -45,7 +45,6 @@ libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(T1)
 libccidtwin_la_CFLAGS = -DTWIN_SERIAL
 
 parse_SOURCES = tokenparser.l parse.c parser.h debug.c
-parse_CFLAGS = `pkg-config libpcsclite --cflags`
 parse_LDADD = libccid.la
 
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
