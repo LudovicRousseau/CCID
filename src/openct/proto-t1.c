@@ -203,6 +203,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 		if (-2 == n)
 		{
 			DEBUG_COMM("Parity error");
+			/* ISO 7816-3 Rule 7.4.2 */
 			if (retries == 0)
 				goto resync;
 
@@ -230,6 +231,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 			|| (sdata[LEN] == 0xFF))	/* length == 0xFF (illegal) */
 		{
 			DEBUG_COMM("R-BLOCK required");
+			/* ISO 7816-3 Rule 7.4.2 */
 			if (retries == 0)
 				goto resync;
 
@@ -249,6 +251,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 
 		if (!t1_verify_checksum(t1, sdata, n)) {
 			DEBUG_COMM("checksum failed");
+			/* ISO 7816-3 Rule 7.4.2 */
 			if (retries == 0)
 				goto resync;
 
@@ -269,17 +272,31 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 		pcb = sdata[PCB];
 		switch (t1_block_type(pcb)) {
 		case T1_R_BLOCK:
-#if 0
-			if (T1_IS_ERROR(pcb)) {
-				DEBUG_COMM2("received error block, err=%d",
-					     T1_IS_ERROR(pcb));
-				goto resync;
-			}
-#endif
 			if ((sdata[LEN] != 0x00)	/* length != 0x00 (illegal) */
-				|| ((t1_seq(pcb) != t1->nr)	/* wrong sequence number & no bit more */
+				|| (pcb & 0x20)			/* b6 of pcb is set */
+			   )
+			{
+				DEBUG_COMM("R-Block required");
+				/* ISO 7816-3 Rule 7.4.2 */
+				if (retries == 0)
+					goto resync;
+
+				/* ISO 7816-3 Rule 7.2 */
+				if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+				{
+					DEBUG_COMM("Rule 7.2");
+					slen = t1_rebuild(t1, sdata);
+					continue;
+				}
+
+				slen = t1_build(t1, sdata,
+						dad, T1_R_BLOCK | T1_OTHER_ERROR,
+						NULL, NULL);
+				continue;
+			}
+
+			if (((t1_seq(pcb) != t1->ns)	/* wrong sequence number & no bit more */
 					&& ! t1->more)
-				|| (pcb & 0x20) /* b6 of pcb is set */
 			   )
 			{
 				DEBUG_COMM4("received: %d, expected: %d, more: %d",
@@ -303,6 +320,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				else
 				{
 					DEBUG_COMM("R-Block required");
+					/* ISO 7816-3 Rule 7.4.2 */
 					if (retries == 0)
 						goto resync;
 					slen = t1_build(t1, sdata,
@@ -313,6 +331,15 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 			}
 
 			if (t1->state == RECEIVING) {
+				/* ISO 7816-3 Rule 7.2 */
+				if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+				{
+					DEBUG_COMM("Rule 7.2");
+					slen = t1_rebuild(t1, sdata);
+					continue;
+				}
+
+				DEBUG_COMM("");
 				slen = t1_build(t1, sdata,
 						dad, T1_R_BLOCK,
 						NULL, NULL);
@@ -374,7 +401,9 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 
 		case T1_S_BLOCK:
 			if (T1_S_IS_RESPONSE(pcb) && t1->state == RESYNCH) {
+				/* ISO 7816-3 Rule 6.2 */
 				DEBUG_COMM("S-Block answer received");
+				/* ISO 7816-3 Rule 6.3 */
 				t1->state = SENDING;
 				sent_length =0;
 				last_send = 0;
@@ -388,6 +417,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 
 			if (T1_S_IS_RESPONSE(pcb))
 			{
+				/* ISO 7816-3 Rule 7.4.2 */
 				if (retries == 0)
 					goto resync;
 
@@ -423,6 +453,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				DEBUG_COMM("Resync requested");
 				/* the card is not allowed to send a resync. */
 				goto resync;
+
 			case T1_S_ABORT:
 				if (sdata[LEN] != 0)
 				{
@@ -433,8 +464,10 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 					continue;
 				}
 
+				/* ISO 7816-3 Rule 9 */
 				DEBUG_CRITICAL("abort requested");
 				goto resync;
+				
 			case T1_S_IFS:
 				if (sdata[LEN] != 1)
 				{
@@ -451,6 +484,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				t1->ifsc = sdata[DATA];
 				ct_buf_putc(&tbuf, sdata[DATA]);
 				break;
+
 			case T1_S_WTX:
 				if (sdata[LEN] != 1)
 				{
@@ -465,6 +499,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				t1->wtx = sdata[DATA];
 				ct_buf_putc(&tbuf, sdata[DATA]);
 				break;
+
 			default:
 				DEBUG_CRITICAL2("T=1: Unknown S block type 0x%02x", T1_S_TYPE(pcb));
 				goto resync;
@@ -481,8 +516,11 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 
 resync:
 		/* the number or resyncs is limited, too */
+		/* ISO 7816-3 Rule 6.4 */
 		if (resyncs == 0)
 			goto error;
+
+		/* ISO 7816-3 Rule 6 */
 		resyncs--;
 		t1->ns = 0;
 		t1->nr = 0;
@@ -682,6 +720,7 @@ t1_negociate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd)
 		n = t1_xcv(t1, sdata, slen, sizeof(sdata));
 
 		retries--;
+		/* ISO 7816-3 Rule 7.4.2 */
 		if (retries == 0)
 			goto error;
 
