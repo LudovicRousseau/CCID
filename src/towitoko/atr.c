@@ -39,19 +39,19 @@ atr_num_ib_table[16] =
  * Exported variables definition
  */
 
-unsigned
+static unsigned
 atr_f_table[16] = 
 { 
   372, 372, 558, 744, 1116, 1488, 1860, 0, 0, 512, 768, 1024, 1536, 2048, 0, 0 
 };
 
-unsigned 
+static unsigned 
 atr_d_table[16] = 
 { 
   0, 1, 2, 4, 8, 16, 32, 0, 12, 20, 0, 0, 0, 0, 0, 0 
 };
 
-unsigned 
+static unsigned 
 atr_i_table[4] = 
 { 
   25, 50, 100, 0 
