@@ -50,6 +50,7 @@ typedef struct
 
 } _ccid_descriptor;
 
+#define CCID_CLASS_AUTO_CONF_ATR	0x00000002
 #define CCID_CLASS_AUTO_VOLTAGE		0x00000008
 #define CCID_CLASS_AUTO_PPS_CUR		0x00000080
 #define CCID_CLASS_TPDU				0x00010000
