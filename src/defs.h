@@ -48,7 +48,7 @@ typedef struct CCID_DESC
 #define POWERFLAGS_RAZ 0x00
 /* Flag set when a power up has been requested */
 #define MASK_POWERFLAGS_PUP 0x01
-/* Flag set when a power down is requestedA */
+/* Flag set when a power down is requested */
 #define MASK_POWERFLAGS_PDWN 0x02
 
 /* Communication buffer size (max=cmd+adpu+Lc+data+Le) */
