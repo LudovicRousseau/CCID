@@ -241,12 +241,24 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		printf("   NAD value other than 00 accepted (T=1)\n");
 	if (extra[41] & 0x04)
 		printf("   Automatic IFSD exchange as first exchange (T=1)\n");
-	if (extra[42] & 0x01)
-		printf("   TPDU level exchange\n");
-	if (extra[42] & 0x02)
-		printf("   Short APDU level exchange\n");
-	if (extra[42] & 0x04)
-		printf("   Short and Extended APDU level exchange\n");
+	switch (extra[42] & 0x07)
+	{
+		case 0x00:
+			printf("   Character level exchange\n");
+			break;
+
+		case 0x01:
+			printf("   TPDU level exchange\n");
+			break;
+
+		case 0x02:
+			printf("   Short APDU level exchange\n");
+			break;
+
+		case 0x04:
+			printf("   Short and Extended APDU level exchange\n");
+			break;
+	}
 
 	printf("  dwMaxCCIDMessageLength: %d bytes\n", dw2i(extra, 44));
 	printf("  bClassGetResponse: %d\n", extra[48]);
