@@ -1,0 +1,58 @@
+INSTALATION PROCEDURE
+=====================
+
+Installation from source:
+"""""""""""""""""""""""""
+
+get the ccid-x.y.z.tar.gz archive
+$ tar xzvf ccid-x.y.z.tar.gz
+$ cd ccid-x.y.z
+$ make
+$ sudo make install
+
+By default pcscd and my ccid driver use /usr/local/pcsc/drivers/ as
+directory for hotplug drivers. If pcscd uses a different directory
+(Debian pcscd uses /usr/lib/pcsc/drivers/) do:
+
+$ make clean
+$ PCSCLITE_HP_DROPDIR=your_dir_path make
+$ sudo make install
+  
+
+Binary installation:
+""""""""""""""""""""
+
+Contact your distribution support.
+
+
+Test procedure:
+"""""""""""""""
+
+- check the reader is supported by the driver.
+  Get your reader USB identification using the lsusb(1) command:
+  $ lsusb
+  [...]
+  Bus 001 Device 048: ID 08e6:4433 Gemplus
+
+  Look for 08E6 (ifdVendorID) and 4433 (ifdProductID) in
+  /usr/local/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist
+  Of course your numbers will be different.
+
+  If you can't find them add them (if you know what you do) and/or mail me.
+
+- (re)start pcscd with debug on stdout. Simply do 'pcscd --debug stdout'
+  (you will need to have root priviledges). And look for:
+  [...]
+  readerfactory.c:1319 RFInitializeReader: Attempting startup of ReaderName
+  readerfactory.c:1061 RFBindFunctions: Loading IFD Handler 2.0
+  ifdhandler.c:76 Entering IFDHCreateChannel (lun: 0)
+  ccid_usb.c:131 Manufacturer: Ludovic Rousseau (ludovic.rousseau@free.fr)
+  ccid_usb.c:139 ProductString: Generic CCID reader v0.1.0
+  ccid_usb.c:143 Copyright: This driver is protected by terms of the GNU General Public License version 2, or (at your option) any later version.
+  ccid_usb.c:223 Found Vendor/Product: 08E6/4433 (GemPC433 SL)
+  ccid_usb.c:224 Using USB bus/device: 001/047
+
+  If you don't see this the driver is not installed correctly or your
+  reader is not supported.
+
+$Id$
