@@ -110,7 +110,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x04e6, 0x5115, 0x0516 },	/* SCR 331 */
 	{ 0x04e6, 0x5115, 0x0620 },	/* SCR 331-DI */
 	{ 0x04e6, 0x5115, 0x0514 },	/* SCR 335 */
-	{ 0x04e6, 0xe003, 0x0415 },	/* SPR 532 */
+	{ 0x04e6, 0xe003, 0x0504 },	/* SPR 532 */
 };
 
 
