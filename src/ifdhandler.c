@@ -35,6 +35,7 @@
 #include "protocol_t1/pps.h"
 #include "protocol_t1/protocol_t1.h"
 #include "parser.h"
+#include "winsmcrd.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
@@ -223,7 +224,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	 * IFD_SUCCESS IFD_ERROR_TAG
 	 */
 
-	DEBUG_INFO3("lun: %X, tag: %02X", Lun, Tag);
+	DEBUG_INFO3("lun: %X, tag: 0x%X", Lun, Tag);
 
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
@@ -231,13 +232,12 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	switch (Tag)
 	{
 		case TAG_IFD_ATR:
+		case SCARD_ATTR_ATR_STRING:
 			/* If Length is not zero, powerICC has been performed.
 			 * Otherwise, return NULL pointer
 			 * Buffer size is stored in *Length */
-			*Length = (*Length < CcidSlots[LunToReaderIndex(Lun)]
-				.nATRLength) ?
-				*Length : CcidSlots[LunToReaderIndex(Lun)]
-				.nATRLength;
+			*Length = (*Length < CcidSlots[LunToReaderIndex(Lun)].nATRLength) ?
+				*Length : CcidSlots[LunToReaderIndex(Lun)].nATRLength;
 
 			if (*Length)
 				memcpy(Value, CcidSlots[LunToReaderIndex(Lun)]
@@ -300,7 +300,7 @@ RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 
 	/* By default, say it worked */
 
-	DEBUG_PERIODIC2("lun: %X", Lun);
+	DEBUG_INFO3("lun: %X, tag: 0x%X", Lun, Tag);
 
 	/* if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR; */
