@@ -28,14 +28,40 @@
 #include "ccid_ifdhandler.h"
 #include "utils.h"
 
-/* Check if the Lun is not to large for the pgSlots table
- * returns TRUE in case of error */
-int CheckLun(DWORD Lun)
-{
-	if ((LunToReaderIndex(Lun) >= CCID_DRIVER_MAX_READERS) ||
-		LunToReaderIndex(Lun) < 0)
-		return TRUE;
+int ReaderIndex[CCID_DRIVER_MAX_READERS];
 
-	return FALSE;
-} /* CheckLun */
+void InitReaderIndex(void)
+{
+	int i;
+
+	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+		ReaderIndex[i] = -1;
+} /* InitReaderIndex */
+
+int GetNewReaderIndex(const DWORD Lun)
+{
+	int i;
+
+	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+		if (-1 == ReaderIndex[i])
+			return i;
+
+	return -1;
+} /* GetReaderIndex */
+
+int LunToReaderIndex(const DWORD Lun)
+{
+	int i;
+
+	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+		if (Lun == ReaderIndex[i])
+			return i;
+
+	return -1;
+} /* LunToReaderIndex */
+
+int ReleaseReaderIndex(const int index)
+{
+	ReaderIndex[index] = -1;
+} /* ReleaseReaderIndex */
 

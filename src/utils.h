@@ -1,6 +1,6 @@
 /*
     utils.c:
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2004   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,12 +21,13 @@
  * $Id$
  */
 
-#define LunToReaderIndex(Lun) (Lun>>16)
-
 #ifndef TRUE
 #define FALSE 0
 #define TRUE 1
 #endif
 
-int CheckLun(DWORD Lun);
+void InitReaderIndex(void);
+int GetNewReaderIndex(const DWORD Lun);
+int LunToReaderIndex(DWORD Lun);
+int ReleaseReaderIndex(const int index);
 
