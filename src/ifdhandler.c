@@ -773,8 +773,8 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 } /* IFDHTransmitToICC */
 
 
-RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, LPCVOID TxBuffer,
-	DWORD TxLength, LPVOID RxBuffer, DWORD RxLength, PDWORD pdwBytesReturned)
+RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
+	DWORD TxLength, PUCHAR RxBuffer, DWORD RxLength, PDWORD pdwBytesReturned)
 {
 	/*
 	 * This function performs a data exchange with the reader (not the
