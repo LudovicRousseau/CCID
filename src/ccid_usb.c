@@ -33,9 +33,10 @@
 #include "debug.h"
 #include "utils.h"
 #include "parser.h"
+#include "ccid.h"
 
 
-#define USB_TIMEOUT 60000	/* 1 minute timeout */
+#define USB_TIMEOUT (60 * 1000)	/* 1 minute timeout */
 
 #define BUS_DEVICE_STRSIZE 32
 
@@ -53,32 +54,23 @@ typedef struct
 	char device_name[BUS_DEVICE_STRSIZE];
 
 	/*
-	 * CCID Sequence number
-	 */
-	int bSeq;
-
-	/*
 	 * Endpoints
 	 */
 	int bulk_in;
 	int bulk_out;
+
+	/*
+	 * CCID infos common to USB and serial
+	 */
+	_ccid_descriptor ccid;
+
 } _usbDevice;
 
-// The _usbDevice structure must be defined before including ccid_usb.h
+/* The _usbDevice structure must be defined before including ccid_usb.h */
 #include "ccid_usb.h"
 
-#if (PCSCLITE_MAX_CHANNELS-16)
-#error Edit this file and set the number of initialiser to PCSCLITE_MAX_CHANNELS (default was 16 but it has changed)
-#endif
-static _usbDevice usbDevice[PCSCLITE_MAX_CHANNELS] = {
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 },
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 },
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 },
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 },
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 },
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 },
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 },
-	{ NULL, NULL, "", 0, 0, 0 }, { NULL, NULL, "", 0, 0, 0 }
+static _usbDevice usbDevice[PCSCLITE_MAX_READERS] = {
+	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { NULL, NULL, "", 0, 0 }
 };
 
 #define PCSCLITE_MANUKEY_NAME                   "ifdVendorID"
@@ -127,7 +119,8 @@ status_t OpenUSB(int lun, int Channel)
 	}
 
 	/* Info.plist full patch filename */
-	snprintf(infofile, sizeof(infofile), "%s/Contents/Info.plist", PCSCLITE_HP_DROPDIR);
+	snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
+		PCSCLITE_HP_DROPDIR, BUNDLE);
 
 	/* general driver info */
 	if (!LTPBundleFindValueWithKey(infofile, "ifdManufacturerString", keyValue, 0))
@@ -186,7 +179,7 @@ status_t OpenUSB(int lun, int Channel)
 
 					/* is it already opened? */
 					already_used = FALSE;
-					for (r=0; r<PCSCLITE_MAX_CHANNELS; r++)
+					for (r=0; r<PCSCLITE_MAX_READERS; r++)
 					{
 						if (usbDevice[r].dev)
 						{
@@ -237,7 +230,18 @@ status_t OpenUSB(int lun, int Channel)
 							usbDevice[reader].dev = dev;
 							strncpy(usbDevice[reader].device_name,
 								device_name, BUS_DEVICE_STRSIZE);
-							usbDevice[reader].bSeq = 1;
+
+							/* CCID common informations */
+							usbDevice[reader].ccid.bSeq = 1;
+							usbDevice[reader].ccid.readerID =
+								(dev->descriptor.idVendor << 16) +
+								dev->descriptor.idProduct;
+							usbDevice[reader].ccid.dwFeatures = dw2i(dev->config->interface->altsetting->extra, 40);
+							usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(dev->config->interface->altsetting->extra, 44);
+
+							/* Maybe we have a special treatment
+							 * for this reader */
+							ccid_open_hack(lun);
 
 							goto end;
 						}
@@ -362,106 +366,14 @@ status_t CloseUSB(int lun)
 
 /*****************************************************************************
  *
- *					ccid_get_seq
+ *					get_ccid_descriptor
  *
  ****************************************************************************/
-int ccid_get_seq(int lun)
+_ccid_descriptor *get_ccid_descriptor(int lun)
 {
-	return usbDevice[LunToReaderIndex(lun)].bSeq++;
-} /* ccid_get_seq */
+	return &usbDevice[LunToReaderIndex(lun)].ccid;
+} /* get_ccid_descriptor */
 
-
-/*****************************************************************************
- *
- *					ccid_error
- *
- ****************************************************************************/
-void ccid_error(int error, char *file, int line)
-{
-	char *text;
-
-	switch (error)
-	{
-		case 0x00:
-			text = "Command not supported or not allowed";
-			break;
-
-		case 0x01:
-			text = "Wrong command length";
-			break;
-
-		case 0x02:
-			text = "Reader detects an excessive current. Card powered off";
-			break;
-
-		case 0x03:
-			text = "Reader detects a defective voltage. Card powered off";
-			break;
-
-		case 0x05:
-			text = "Slot number is invalid (it must be set to 0)";
-			break;
-
-		case 0x07:
-		case 0x08:
-		case 0x09:
-		case 0x0A:
-		case 0x15:
-			text = "Byte displayed is invalid";
-			break;
-
-		case 0xA2:
-			text = "Card short-circuiting. Card powered off";
-			break;
-
-		case 0xA3:
-			text = "ATR too long (> 33)";
-			break;
-
-		case 0xB0:
-			text = "Reader in EMV mode and T=1 message too long";
-			break;
-
-		case 0xBB:
-			text = "Protocol error in EMV mode";
-			break;
-
-		case 0xBD:
-			text = "Card error during T=1 exchange";
-			break;
-
-		case 0xBE:
-			text = "Wrong APDU command length";
-			break;
-
-		case 0xF4:
-			text = "Procedure byte conflict";
-			break;
-
-		case 0xF7:
-			text = "Invalid ATR checksum byte (TCK)";
-			break;
-
-		case 0xF8:
-			text = "Invalid ATR first byte";
-			break;
-
-		case 0xFD:
-			text = "Parity error during exchange";
-			break;
-
-		case 0xFE:
-			text = "Card absent or mute";
-			break;
-
-		default:
-			text = "Unknown CCID error";
-			break;
-
-	}
-	debug_msg("%s:%d %s", file, line, text);
-
-} /* ccid_error */
 
 /*****************************************************************************
  *
@@ -471,7 +383,7 @@ void ccid_error(int error, char *file, int line)
 int get_desc(int channel, char *device_name[], usb_dev_handle **handle, struct
 	usb_device **dev)
 {
-	if (channel < 0 || channel > PCSCLITE_MAX_CHANNELS)
+	if (channel < 0 || channel > PCSCLITE_MAX_READERS)
 		return 1;
 
 	*device_name = usbDevice[channel].device_name;
