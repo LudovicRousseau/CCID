@@ -17,10 +17,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-/* $Id */
+/* $Id$ */
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "pcscdefines.h"
 #include "defs.h"
@@ -33,6 +34,7 @@
 #include "protocol_t1/atr.h"
 #include "protocol_t1/pps.h"
 #include "protocol_t1/protocol_t1.h"
+#include "parser.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
@@ -46,10 +48,18 @@ static CcidDesc CcidSlots[PCSCLITE_MAX_READERS];
 static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
+static int DebugInitialized = FALSE;
+int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
+
+static void init_debug(void);
+
 
 RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
+
+	if (! DebugInitialized)
+		init_debug();
 
 	DEBUG_INFO3("lun: %X, device: %s", Lun, lpcDevice);
 
@@ -120,6 +130,9 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	 * IFD_SUCCESS IFD_COMMUNICATION_ERROR
 	 */
 	RESPONSECODE return_value = IFD_SUCCESS;
+
+	if (! DebugInitialized)
+		init_debug();
 
 	DEBUG_INFO2("lun: %X", Lun);
 
@@ -700,4 +713,27 @@ RESPONSECODE CardDown(int lun)
 
 	return IFD_SUCCESS;
 } /* CardDown */
+
+
+void init_debug(void)
+{
+	char keyValue[TOKEN_MAX_VALUE_SIZE];
+	char infofile[FILENAME_MAX];
+
+	/* Info.plist full patch filename */
+	snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
+		PCSCLITE_HP_DROPDIR, BUNDLE);
+
+	if (LTPBundleFindValueWithKey(infofile, "ifdLogLevel", keyValue, 0))
+		return;
+
+	/* convert from hex or dec or octal */
+	LogLevel = strtoul(keyValue, 0, 16);
+
+	/* print the log level used */
+	debug_msg("%s:%d:%s LogLevel: 0x%.4X", __FILE__, __LINE__, __FUNCTION__,
+		LogLevel);
+
+	DebugInitialized = TRUE;
+} /* init_debug */
 
