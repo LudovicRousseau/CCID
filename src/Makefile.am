@@ -32,7 +32,9 @@ EXTRA_DIST = Info.plist reader.conf.in
 tokenparser_macosx.l: tokenparser.l
 	cp -f $^ $@
 
-install: install_ccid install_ccidtwin
+# do not install the serial driver by default
+# use explicitely 'make install_ccidtwin'
+install: install_ccid
 
 install_ccid: libccid.la
 	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
@@ -50,7 +52,9 @@ install_ccidtwin: libccidtwin.la
 		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/etc/reader.conf ; \
 	fi
 
-uninstall: uninstall_ccid uninstall_ccidtwin
+# do not uninstall the serial driver by default
+# use explicitely 'make uninstall_ccidtwin'
+uninstall: uninstall_ccid
 
 uninstall_ccid:
 	rm -rf $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)

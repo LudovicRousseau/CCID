@@ -47,8 +47,17 @@ the usb.h and libusb.so files. The ./configure script will use
 PATH/include/ to search for usb.h and PATH/lib/ to search for libusb.so
 
 
-serial reader only
-~~~~~~~~~~~~~~~~~~
+serial reader
+~~~~~~~~~~~~~
+
+The GemPCTwin reader can also be connected on a serial port. By default
+the serial driver is built but not installed. You must explicitely do:
+$ ./configure
+$ make -C src install_ccidtwin
+
+
+builing serial reader only
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is possible to generate the driver for the GemPC Twin using serial
 communication only (for example on an embedded system without USB).
