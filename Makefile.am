@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = src
+SUBDIRS = src readers
 
 AUX_DIST = \
 	$(ac_aux_dir)/aclocal.m4 \

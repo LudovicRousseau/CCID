@@ -172,6 +172,6 @@ AC_SUBST(bundle)
 AC_SUBST(usbdropdir)
 
 dnl Write Makefiles.
-AC_CONFIG_FILES(Makefile src/Makefile)
+AC_CONFIG_FILES(Makefile src/Makefile readers/Makefile)
 AC_OUTPUT
 
