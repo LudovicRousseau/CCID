@@ -33,7 +33,12 @@ AM_PROG_LEX
 
 dnl check pcsc-lite version
 PKG_CHECK_MODULES(PCSC, libpcsclite >= 1.2.9-beta5, [],
-	[AC_MSG_WARN([install pcsc-lite 1.2.9-beta5 or later])])
+	[ if test -f /usr/local/lib/pkgconfig/libpcsclite.pc ; then
+		AC_MSG_ERROR([use PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure])
+	  else
+		AC_MSG_WARN([install pcsc-lite 1.2.9-beta5 or later])
+	  fi
+	])
 
 OLD_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS $PCSC_CFLAGS"
