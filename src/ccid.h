@@ -63,6 +63,16 @@ typedef struct
 	 */
 	int dwMaxDataRate;
 
+	/*
+	 * Number of available slots
+	 */
+	char bMaxSlotIndex;
+
+	/*
+	 * Slot in use
+	 */
+	char bCurrentSlotIndex;
+
 } _ccid_descriptor;
 
 /* Features from dwFeatures */
