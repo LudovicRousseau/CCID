@@ -107,7 +107,7 @@ status_t OpenUSB(unsigned int lun, int Channel)
 status_t OpenUSBByName(unsigned int lun, char *device)
 {
 	static struct usb_bus *busses = NULL;
-	int reader = LunToReaderIndex(lun);
+	unsigned int reader = LunToReaderIndex(lun);
 	int alias = 0;
 	struct usb_bus *bus;
 	struct usb_dev_handle *dev_handle;
@@ -369,7 +369,7 @@ end:
 status_t WriteUSB(unsigned int lun, unsigned int length, unsigned char *buffer)
 {
 	int rv;
-	int reader = LunToReaderIndex(lun);
+	unsigned int reader = LunToReaderIndex(lun);
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "-> 121234 ";
 
@@ -403,7 +403,7 @@ status_t WriteUSB(unsigned int lun, unsigned int length, unsigned char *buffer)
 status_t ReadUSB(unsigned int lun, unsigned int * length, unsigned char *buffer)
 {
 	int rv;
-	int reader = LunToReaderIndex(lun);
+	unsigned int reader = LunToReaderIndex(lun);
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "<- 121234 ";
 
@@ -441,7 +441,7 @@ status_t CloseUSB(unsigned int lun)
 {
 	struct usb_interface *usb_interface;
 	int interface;
-	int reader = LunToReaderIndex(lun);
+	unsigned int reader = LunToReaderIndex(lun);
 
 	/* device not opened */
 	if (usbDevice[reader].dev == NULL)

@@ -472,7 +472,7 @@ status_t OpenSerialByName(unsigned int lun, char *dev_name)
 {
 	struct termios current_termios;
 	int i;
-	int reader = LunToReaderIndex(lun);
+	unsigned int reader = LunToReaderIndex(lun);
 
 	DEBUG_COMM3("Lun: %X, Device: %d", lun, dev_name);
 
@@ -580,7 +580,7 @@ status_t OpenSerialByName(unsigned int lun, char *dev_name)
  *****************************************************************************/
 status_t CloseSerial(unsigned int lun)
 {
-	int reader = LunToReaderIndex(lun);
+	unsigned int reader = LunToReaderIndex(lun);
 
 	close(serialDevice[reader].fd);
 	serialDevice[reader].fd = -1;
