@@ -113,6 +113,9 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	else
 		printf(" iProduct: %s\n", buffer);
 
+	printf(" bcdDevice: %X.%02X (firmware release?)\n",
+		dev->descriptor.bcdDevice >> 8, dev->descriptor.bcdDevice & 0xFF);
+
 	usb_interface = get_ccid_usb_interface(dev)->altsetting;
 	
 	printf(" bLength: %d\n", usb_interface->bLength);
