@@ -664,7 +664,7 @@ RESPONSECODE CardUp(int lun)
 		/* T=1 */
 		if (protocol == ATR_PROTOCOL_TYPE_T1)
 		{
-			BYTE param[] = {0x01, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00};
+			BYTE param[] = {0x11, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00};
 			Protocol_T1 *t1 = &(ccid_slot -> t1);
 
 			/* get TA1 Fi/Di */
@@ -690,9 +690,9 @@ RESPONSECODE CardUp(int lun)
 		else
 		/* T=0 */
 		{
-			BYTE param[] = {0x00, 0x00, 0x00, 0x0a, 0x00};
+			BYTE param[] = {0x11, 0x00, 0x00, 0x0a, 0x00};
 
-			/* get TA1 Fi/Di */
+			/* get TA1 Fi/Di, default 0x11 */
 			if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
 				param[0] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
 
