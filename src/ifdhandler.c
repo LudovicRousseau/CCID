@@ -569,24 +569,40 @@ RESPONSECODE CardUp(int lun)
 
 	/* PPS not negociated by reader, and TA1 present */
 	if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present &&
-		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR) &&
-		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_BAUD))
+		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
 	{
-  		int len = 3;
-		BYTE pps[] = {
-			0xFF,	/* PTSS */
-			0x10,	/* PTS0: PTS1 present */
-			0,		/* PTS1 */
-			0};		/* PCK: will be calculated */
+		unsigned int baudrate;
+		double f, d;
 
-		/* TD1: protocol */
-		if (atr.ib[0][ATR_INTERFACE_BYTE_TD].present)
-			pps[1] |= (atr.ib[0][ATR_INTERFACE_BYTE_TD].value & 0x0F);
+		ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
 
-		/* PTS1 = TA1 */
-		pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+		/* Baudrate = f x D/F */
+		baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock * d / f);
 
-  		PPS_Exchange(lun, pps, &len);
+		/* if the reader is fast enough */
+		if (baudrate < ccid_desc->dwMaxDataRate)
+		{
+			int len = 3;
+			BYTE pps[] = {
+				0xFF,	/* PTSS */
+				0x10,	/* PTS0: PTS1 present */
+				0,		/* PTS1 */
+				0};		/* PCK: will be calculated */
+
+			/* TD1: protocol */
+			if (atr.ib[0][ATR_INTERFACE_BYTE_TD].present)
+				pps[1] |= (atr.ib[0][ATR_INTERFACE_BYTE_TD].value & 0x0F);
+
+			/* PTS1 = TA1 */
+			pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+			PPS_Exchange(lun, pps, &len);
+		}
+		else
+		{
+			DEBUG_INFO3("The reader is too slow (%d bauds) for the card (%d bauds)", ccid_desc->dwMaxDataRate, baudrate);
+		}
 	}
 
 	/*
@@ -596,22 +612,63 @@ RESPONSECODE CardUp(int lun)
 	if (np>1)
 		ATR_GetProtocolType(&atr, 2, &protocol);
 
-	/* SetParameters and negociate IFSD */
-	if ((protocol == ATR_PROTOCOL_TYPE_T1) &&
-		(ccid_desc->dwFeatures & CCID_CLASS_TPDU))
+	/* SetParameters */
+	//if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_BAUD))
 	{
-		BYTE param[] = {0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00};
-		Protocol_T1 *t1 = &(ccid_slot -> t1);
+		int convention;
 
-		/* get TA1 */
-		if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
-			param[0] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+		ATR_GetConvention(&atr, &convention);
 
-		/* set T=1 context */
-		Protocol_T1_Init(t1, lun);
+		/* T=1 */
+		if (protocol == ATR_PROTOCOL_TYPE_T1)
+		{
+			BYTE param[] = {0x01, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00};
+			Protocol_T1 *t1 = &(ccid_slot -> t1);
 
-		SetParameters(t1->lun, 1, 7, param);
+			/* get TA1 Fi/Di */
+			if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
+				param[0] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+			if (convention == ATR_CONVENTION_INVERSE)
+				param[1] &= 0x02;
+
+			/* get TC1 Extra guard time */
+			if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
+				param[2] = atr.ib[0][ATR_INTERFACE_BYTE_TC].value;
+
+			/* get TB3 BWI/BCI */
+			if (atr.ib[2][ATR_INTERFACE_BYTE_TB].present)
+				param[3] = atr.ib[2][ATR_INTERFACE_BYTE_TB].value;
+
+			/* set T=1 context */
+			Protocol_T1_Init(t1, lun);
+
+			SetParameters(lun, 1, sizeof(param), param);
+		}
+		else
+		/* T=0 */
+		{
+			BYTE param[] = {0x00, 0x00, 0x00, 0x0a, 0x00};
+
+			/* get TA1 Fi/Di */
+			if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
+				param[0] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+			if (convention == ATR_CONVENTION_INVERSE)
+				param[1] &= 0x02;
+
+			/* get TC1 Extra guard time */
+			if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
+				param[2] = atr.ib[0][ATR_INTERFACE_BYTE_TC].value;
+
+			/* TC2 WWT */
+			if (atr.ib[1][ATR_INTERFACE_BYTE_TC].present)
+				param[3] = atr.ib[1][ATR_INTERFACE_BYTE_TC].value;
+
+			SetParameters(lun, 0, sizeof(param), param);
+		}
 	}
+
 
 	/* negotiate IFSD in T=1 */
 	if ((protocol == ATR_PROTOCOL_TYPE_T1) &&
