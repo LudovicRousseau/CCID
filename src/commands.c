@@ -511,32 +511,13 @@ RESPONSECODE CmdXfrBlockTPDU_T1(int lun, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[])
 {
-	RESPONSECODE return_value;
-	APDU_Cmd cmd;
-	APDU_Rsp rsp;
+	RESPONSECODE return_value = IFD_SUCCESS;
 
 	DEBUG_COMM2("T=1: %d bytes", tx_length);
 
-	/* set up command APDU */
-	cmd.command = tx_buffer;
-	cmd.length = tx_length;
+	*rx_length = t1_transceive(&((get_ccid_slot(lun)) -> t1), 0, tx_buffer, tx_length, rx_buffer, *rx_length);
 
-	return_value = Protocol_T1_Command(&((get_ccid_slot(lun)) -> t1), &cmd,
-		&rsp);
-
-	if (return_value == PROTOCOL_T1_OK)
-	{
-		return_value = IFD_SUCCESS;
-
-		/* copy the response */
-		memcpy(rx_buffer, rsp.response, rsp.length);
-
-		/* free the allocated response buffer */
-		free(rsp.response);
-
-		*rx_length = rsp.length;
-	}
-	else
+	if (*rx_length < 0)
 	{
 		*rx_length = 0;
 		return_value = IFD_COMMUNICATION_ERROR;
