@@ -111,8 +111,8 @@ t1_init(t1_state_t *t1)
 {
 	t1_set_defaults(t1);
 	t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
-	t1_set_param(t1, IFD_PROTOCOL_STATE, SENDING);
-	t1_set_param(t1, IFD_PROTOCOL_MORE, FALSE);
+	t1_set_param(t1, IFD_PROTOCOL_T1_STATE, SENDING);
+	t1_set_param(t1, IFD_PROTOCOL_T1_MORE, FALSE);
 
 	return 0;
 }
@@ -143,10 +143,10 @@ t1_set_param(t1_state_t *t1, int type, long value)
 	case IFD_PROTOCOL_T1_IFSD:
 		t1->ifsd = value;
 		break;
-	case IFD_PROTOCOL_STATE:
+	case IFD_PROTOCOL_T1_STATE:
 		t1->state = value;
 		break;
-	case IFD_PROTOCOL_MORE:
+	case IFD_PROTOCOL_T1_MORE:
 		t1->more = value;
 		break;
 	default:
