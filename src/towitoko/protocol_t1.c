@@ -60,7 +60,7 @@ static int
 Protocol_T1_ReceiveBlock (Protocol_T1 * t1, T1_Block ** block);
 
 /*
- * Exproted funtions definition
+ * Exported funtions definition
  */
 
 int
@@ -68,16 +68,19 @@ Protocol_T1_Negociate_IFSD(Protocol_T1 * t1, int ifsd)
 {
 	T1_Block *sblock;
 	BYTE inf[1];
+	int ret;
 
 	inf[0] = ifsd;
 	sblock = T1_Block_NewSBlock(T1_BLOCK_S_IFS_REQ, 1, inf);
 
-	Protocol_T1_SendBlock(t1, sblock);
+	ret = Protocol_T1_SendBlock(t1, sblock);
 	T1_Block_Delete(sblock);
+	if (PROTOCOL_T1_OK != ret)
+		return ret;
 
-	Protocol_T1_ReceiveBlock(t1, &sblock);
-
-	t1 -> ifsd = T1_Block_GetInf(sblock)[0];
+	if (PROTOCOL_T1_OK == Protocol_T1_ReceiveBlock(t1, &sblock))
+		t1 -> ifsd = T1_Block_GetInf(sblock)[0];
+	T1_Block_Delete(sblock);
 
 	return PROTOCOL_T1_OK;
 } /* Protocol_T1_Negociate_IFSD */
@@ -328,8 +331,6 @@ Protocol_T1_ReceiveBlock (Protocol_T1 * t1, T1_Block ** block)
   /* Receive T=1 block */
   if (CCID_Receive(t1->lun, &len, cmd) != IFD_SUCCESS)
     {
-      if (len >= ERROR_OFFSET)
-        ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);	/* bError */
       ret = PROTOCOL_T1_ICC_ERROR;
       (*block) = NULL;
     }
