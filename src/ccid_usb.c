@@ -522,16 +522,18 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
  *					get_desc
  *
  ****************************************************************************/
-int get_desc(int channel, usb_dev_handle **handle, struct
+int get_desc(int lun, usb_dev_handle **handle, struct
 	usb_device **dev)
 {
-	if (channel < 0 || channel > CCID_DRIVER_MAX_READERS)
-		return 1;
+	int reader_index;
 
-	*handle = usbDevice[channel].handle;
-	*dev = usbDevice[channel].dev;
+	if (-1 == (reader_index = LunToReaderIndex(lun)))
+		return FALSE;
 
-	return 0;
+	*handle = usbDevice[reader_index].handle;
+	*dev = usbDevice[reader_index].dev;
+
+	return TRUE;
 } /* get_desc */
 
 
