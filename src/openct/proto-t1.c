@@ -202,7 +202,7 @@ t1_transceive(t1_state_t *t1, int dad,
 				goto resync;
 
 			/* ISO 7816-3 Rule 7.2 */
-			if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+			if (T1_R_BLOCK == t1_block_type(t1->previous_block[PCB]))
 			{
 				DEBUG_COMM("Rule 7.2");
 				slen = t1_rebuild(t1, sdata);
@@ -229,7 +229,7 @@ t1_transceive(t1_state_t *t1, int dad,
 				goto resync;
 
 			/* ISO 7816-3 Rule 7.2 */
-			if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+			if (T1_R_BLOCK == t1_block_type(t1->previous_block[PCB]))
 			{
 				DEBUG_COMM("Rule 7.2");
 				slen = t1_rebuild(t1, sdata);
@@ -248,7 +248,7 @@ t1_transceive(t1_state_t *t1, int dad,
 				goto resync;
 
 			/* ISO 7816-3 Rule 7.2 */
-			if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+			if (T1_R_BLOCK == t1_block_type(t1->previous_block[PCB]))
 			{
 				DEBUG_COMM("Rule 7.2");
 				slen = t1_rebuild(t1, sdata);
@@ -281,14 +281,14 @@ t1_transceive(t1_state_t *t1, int dad,
 					t1_seq(pcb), t1->ns, t1->more);
 
 				/* ISO 7816-3 Rule 7.2 */
-				if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+				if (T1_R_BLOCK == t1_block_type(t1->previous_block[PCB]))
 				{
 					DEBUG_COMM("Rule 7.2");
 					slen = t1_rebuild(t1, sdata);
 					continue;
 				}
 
-				if (T1_I_BLOCK == t1_block_type(t1->previous_block[1]))
+				if (T1_I_BLOCK == t1_block_type(t1->previous_block[PCB]))
 				{
 					DEBUG_COMM("repeat I-Block");
 					slen = t1_build(t1, sdata, dad, T1_I_BLOCK,
@@ -387,7 +387,7 @@ t1_transceive(t1_state_t *t1, int dad,
 					goto resync;
 
 				/* ISO 7816-3 Rule 7.2 */
-				if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
+				if (T1_R_BLOCK == t1_block_type(t1->previous_block[PCB]))
 				{
 					DEBUG_COMM("Rule 7.2");
 					slen = t1_rebuild(t1, sdata);
