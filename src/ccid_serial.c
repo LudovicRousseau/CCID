@@ -372,7 +372,9 @@ int get_bytes(unsigned int lun, unsigned char *buffer, int length)
 int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length, int min_length)
 {
 	int fd = serialDevice[LunToReaderIndex(lun)].fd;
+# ifndef S_SPLINT_S
 	fd_set fdset;
+# endif
 	struct timeval t;
 	int i, rv = 0;
 	int already_read;
