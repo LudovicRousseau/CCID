@@ -65,8 +65,10 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 			usb_dev_handle *handle;
 			struct usb_device *dev;
 
-			get_desc(channel, &handle, &dev);
-			res = ccid_parse_interface_descriptor(handle, dev);
+			if (get_desc(channel<<16, &handle, &dev))
+				res = ccid_parse_interface_descriptor(handle, dev);
+			else
+				fprintf(stderr, "Reader %d not found\n", channel);
 		}
 	}
 
