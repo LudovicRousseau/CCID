@@ -586,25 +586,6 @@ t1_rebuild(t1_state_t *t1, unsigned char *block)
 }
 
 /*
- * Protocol struct
- */
-#if 0
-struct ifd_protocol_ops	ifd_protocol_t1 = {
-	IFD_PROTOCOL_T1,	/* id */
-	"T=1",			/* name */
-	sizeof(t1_state_t),	/* size */
-	t1_init,		/* init */
-	t1_release,		/* release */
-	t1_set_param,		/* set_param */
-	t1_get_param,		/* get_param */
-	t1_resynchronize,	/* resynchronize */
-	t1_transceive,		/* transceive */
-	NULL,			/* sync_read */
-	NULL,			/* sync_write */
-};
-#endif
-
-/*
  * Build/verify checksum
  */
 unsigned int
