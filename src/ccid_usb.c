@@ -491,7 +491,12 @@ struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
 		int ii;
 		for (ii=0; ii<dev->config->bNumInterfaces; ii++)
 		{
-			if (dev->config->interface[ii].altsetting->bInterfaceClass == 0xb)
+			/* CCID Class? */
+			if (dev->config->interface[ii].altsetting->bInterfaceClass == 0xb
+#ifdef ALLOW_PROPRIETARY_CLASS
+				|| dev->config->interface[ii].altsetting->bInterfaceClass == 0xff
+#endif
+				)
 			{
 				usb_interface = &dev->config->interface[ii];
 				break;
