@@ -106,9 +106,9 @@ again:
 	{
 		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 
-		/* Protocol error in EMV mode */
-		if (buffer[ERROR_OFFSET] == 0xBB &&
-			ccid_descriptor->readerID == GEMPC433)
+		if (0xBB == buffer[ERROR_OFFSET] &&	/* Protocol error in EMV mode */
+			((GEMPC433 == ccid_descriptor->readerID)
+			|| (CHERRYXX33 == ccid_descriptor->readerID)))
 		{
 			unsigned char cmd[] = "\x1F\x01";
 			unsigned char res[1];
