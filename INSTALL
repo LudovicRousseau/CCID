@@ -70,6 +70,44 @@ use. The default is $(prefix)/pcsc/drivers/serial with $(prefix) default
 value /usr/local.
 
 
+configuring the driver for the serial reader (GemPC Twin)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You have to create or edit the file /etc/reader.conf. The file should
+contain something like:
+
+FRIENDLYNAME      "GemPC Twin"
+DEVICENAME        /dev/ttyS0
+LIBPATH           /usr/local/pcsc/drivers/serial/libccidtwin.so.0.4.2
+CHANNELID         1
+
+You may have to adapt the library path to your configuration and library
+version.
+
+If you use a recent pcsc-lite (1.2.9 or more)
+
+  /dev/ttyS0 (DEVICENAME field) is the first serial port under Linux
+  (known as COM1 under DOS/Windows). Of course if your reader is
+  connected to another serial port you have to adapt that.
+
+
+If you use an old pcsc-lite (1.2.0 or less)
+
+  The reader is designated by CHANNELID. 1 is the first serial port
+  (/dev/ttyS0 or COM1), etc.
+  The driver uses the files /dev/pcsc/[1-4] to identify the serial
+  device.  These /dev/pcsc/[1-4] files should be symbolic links to the
+  real serial devices.
+
+  To create the /dev/pcsc/[1-4] files do (as root):
+  # mkdir /dev/pcsc
+  # cd /dev/pcsc
+  # ln -s ../ttyS0 /dev/pcsc/1
+  # ln -s ../ttyS1 /dev/pcsc/2
+  # ln -s ../ttyS2 /dev/pcsc/3
+  # ln -s ../ttyS3 /dev/pcsc/4
+
+
 Binary installation:
 """"""""""""""""""""
 
