@@ -238,6 +238,7 @@ status_t OpenUSBByName(int lun, char *device)
 						dev_handle = usb_open(dev);
 						if (dev_handle)
 						{
+							struct usb_interface *usb_interface = NULL;
 							int interface;
 
 							if (dev->config == NULL)
@@ -247,13 +248,20 @@ status_t OpenUSBByName(int lun, char *device)
 								return STATUS_UNSUCCESSFUL;
 							}
 
-							if (dev->config->interface->altsetting->extralen != 54)
+							usb_interface = get_ccid_usb_interface(dev);
+							if (usb_interface == NULL)
 							{
-								DEBUG_CRITICAL3("Extra field for %s has a wrong length: %d", device_name, dev->config->interface->altsetting->extralen);
+								DEBUG_CRITICAL("Can't find a CCID interface on %s", device_name);
+								return STATUS_UNSUCCESSFUL;
+							}			
+
+							if (usb_interface->altsetting->extralen != 54)
+							{
+								DEBUG_CRITICAL3("Extra field for %s has a wrong length: %d", device_name, usb_interface->altsetting->extralen);
 								return STATUS_UNSUCCESSFUL;
 							}
 
-							interface = dev->config->interface->altsetting->bInterfaceNumber;
+							interface = usb_interface->altsetting->bInterfaceNumber;
 							if (usb_claim_interface(dev_handle, interface) < 0)
 							{
 								DEBUG_CRITICAL3("Can't claim interface %s: %s",
@@ -281,8 +289,8 @@ status_t OpenUSBByName(int lun, char *device)
 							usbDevice[reader].ccid.readerID =
 								(dev->descriptor.idVendor << 16) +
 								dev->descriptor.idProduct;
-							usbDevice[reader].ccid.dwFeatures = dw2i(dev->config->interface->altsetting->extra, 40);
-							usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(dev->config->interface->altsetting->extra, 44);
+							usbDevice[reader].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
+							usbDevice[reader].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
 
 							goto end;
 						}
@@ -384,6 +392,8 @@ status_t ReadUSB(int lun, int * length, unsigned char *buffer)
  ****************************************************************************/
 status_t CloseUSB(int lun)
 {
+	struct usb_interface *usb_interface;
+	int interface;
 	int reader = LunToReaderIndex(lun);
 
 	/* device not opened */
@@ -392,7 +402,12 @@ status_t CloseUSB(int lun)
 
 	DEBUG_COMM2("Closing USB device: %s", usbDevice[reader].device_name);
 
-	usb_release_interface(usbDevice[reader].handle, usbDevice[reader].dev->config->interface->altsetting->bInterfaceNumber);
+  	usb_interface = get_ccid_usb_interface(usbDevice[reader].dev);
+	interface = usb_interface ?
+		usb_interface->altsetting->bInterfaceNumber :
+		usbDevice[reader].dev->config->interface->altsetting->bInterfaceNumber;
+	
+	usb_release_interface(usbDevice[reader].handle, interface);
 
 	usb_close(usbDevice[reader].handle);
 
@@ -444,16 +459,17 @@ int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 {
 	int i;
 	int bEndpointAddress;
-
+	struct usb_interface *usb_interface = get_ccid_usb_interface(dev);
+	
 	/*
 	 * 3 Endpoints maximum: Interrupt In, Bulk In, Bulk Out
 	 */
 	for (i=0; i<3; i++)
 	{
-		if (dev->config->interface->altsetting->endpoint[i].bmAttributes != USB_ENDPOINT_TYPE_BULK)
+		if (usb_interface->altsetting->endpoint[i].bmAttributes != USB_ENDPOINT_TYPE_BULK)
 			continue;
 
-		bEndpointAddress = dev->config->interface->altsetting->endpoint[i].bEndpointAddress;
+		bEndpointAddress = usb_interface->altsetting->endpoint[i].bEndpointAddress;
 
 		if ((bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_ENDPOINT_IN)
 			usb_device->bulk_in = bEndpointAddress;
@@ -464,4 +480,34 @@ int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 
 	return 0;
 } /* get_end_points */
+
+
+/*****************************************************************************
+ *
+ *					get_ccid_usb_interface
+ *
+ ****************************************************************************/
+struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
+{
+	struct usb_interface *usb_interface = NULL; 
+
+	/* if multiple interfaces use the first one with CCID class type */
+	if (dev->config->bNumInterfaces > 1)
+	{
+		int ii;
+		for (ii=0; ii<dev->config->bNumInterfaces; ii++)
+		{
+			if (dev->config->interface[ii].altsetting->bInterfaceClass == 0xb)
+			{
+				usb_interface = &dev->config->interface[ii];
+				break;
+			}
+		}
+	}
+	else
+		/* we keep this in case a reader reports a bad class value */
+		usb_interface = dev->config->interface;
+
+	return usb_interface;
+} /* get_ccid_usb_interface */
 

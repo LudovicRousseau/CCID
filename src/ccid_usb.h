@@ -1,6 +1,6 @@
 /*
     ccid_usb.h:  USB access routines using the libusb library
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2004   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,5 +33,6 @@ int get_desc(int channel, char *device_name[], usb_dev_handle **handle,
 #endif
 #ifdef __CCID_USB__
 int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
+struct usb_interface *get_ccid_usb_interface(struct usb_device *dev);
 #endif
 
