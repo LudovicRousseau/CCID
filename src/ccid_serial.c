@@ -204,6 +204,7 @@ status_t ReadSerial(int lun, int *length, unsigned char *buffer)
 	echo = TRUE;
 
 start:
+	DEBUG_COMM("start");
 	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
@@ -214,12 +215,16 @@ start:
 		goto sync;
 
 	if (c >= 0x80)
+	{	
+		DEBUG_COMM2("time request: 0x%02X", c);
 		goto start;
+	}
 
 	DEBUG_CRITICAL2("Got 0x%02X", c);
 	return STATUS_COMM_ERROR;
 
 slot_change:
+	DEBUG_COMM("slot change");
 	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
@@ -233,6 +238,7 @@ slot_change:
 	goto start;
 
 sync:
+	DEBUG_COMM("sync");
 	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
@@ -246,6 +252,7 @@ sync:
 	return STATUS_COMM_ERROR;
 
 nak:
+	DEBUG_COMM("nak");
 	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
@@ -258,6 +265,7 @@ nak:
 		goto start;
 
 ack:
+	DEBUG_COMM("ack");
 	/* normal CCID frame */
 	if ((rv = get_bytes(lun, buffer, 5)) != STATUS_SUCCESS)
 		return rv;
@@ -265,13 +273,20 @@ ack:
 	/* total frame size */
 	to_read = 10+dw2i(buffer, 1);
 
+	DEBUG_COMM2("frame size: %d", to_read);
 	if ((rv = get_bytes(lun, buffer+5, to_read-5)) != STATUS_SUCCESS)
 		return rv;
 
+#ifdef DEBUG_LEVEL_COMM
+		DEBUG_XXD("frame: ", buffer, to_read);
+#endif
+
 	/* lrc */
+	DEBUG_COMM("lrc");
 	if ((rv = get_bytes(lun, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
+	DEBUG_COMM2("lrc: 0x%02X", c);
 	for (i=0; i<to_read; i++)
 		c ^= buffer[i];
 
@@ -301,9 +316,12 @@ int get_bytes(int lun, unsigned char *buffer, int length)
 	int offset = serialDevice[LunToReaderIndex(lun)].buffer_offset;
 	int offset_last = serialDevice[LunToReaderIndex(lun)].buffer_offset_last;
 
+	DEBUG_COMM3("get_bytes: available: %d, needed: %d", offset_last-offset,
+		length);
 	/* enough data are available */
 	if (offset + length <= offset_last)
 	{
+		DEBUG_COMM("get_bytes: data available");
 		memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset, length);
 		serialDevice[LunToReaderIndex(lun)].buffer_offset += length;
 	}
@@ -315,9 +333,14 @@ int get_bytes(int lun, unsigned char *buffer, int length)
 		present = offset_last - offset;
 
 		if (present > 0)
-			memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset, present);
+		{
+			DEBUG_COMM2("get_bytes: some data available: %d", present);
+			memcpy(buffer, serialDevice[LunToReaderIndex(lun)].buffer + offset,
+				present);
+		}
 
 		/* get fresh data */
+		DEBUG_COMM2("get_bytes: get more data: %d", length - present);
 		rv = ReadChunk(lun, serialDevice[LunToReaderIndex(lun)].buffer, sizeof(serialDevice[LunToReaderIndex(lun)].buffer), length - present);
 		if (rv < 0)
 			return STATUS_COMM_ERROR;
@@ -327,9 +350,10 @@ int get_bytes(int lun, unsigned char *buffer, int length)
 			length - present);
 		serialDevice[LunToReaderIndex(lun)].buffer_offset = length - present;
 		serialDevice[LunToReaderIndex(lun)].buffer_offset_last = rv;
+		DEBUG_COMM3("get_bytes: offset: %d, last_offset: %d",
+			serialDevice[LunToReaderIndex(lun)].buffer_offset,
+			serialDevice[LunToReaderIndex(lun)].buffer_offset_last);
 	}
-
-DEBUG_XXD("pouet: ", buffer, length);
 
 	return STATUS_SUCCESS;
 } /* get_bytes */
@@ -345,53 +369,53 @@ int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length)
 	int fd = serialDevice[LunToReaderIndex(lun)].fd;
 	fd_set fdset;
 	struct timeval t;
-	int i, rv;
+	int i, rv = 0;
+	int already_read;
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "<- 121234 ";
 
 	sprintf(debug_header, "<- %06X ", (int)lun);
 #endif
 
-	/* use select() to, eventually, timeout */
-	FD_ZERO(&fdset);
-	FD_SET(fd, &fdset);
-	t.tv_sec = SERIAL_TIMEOUT;
-	t.tv_usec = 0;
-
-	i = select(fd+1, &fdset, NULL, NULL, &t);
-	if (i == -1)
+	already_read = 0;
+	while (already_read < min_length)
 	{
-		DEBUG_CRITICAL2("select: %s", strerror(errno));
-		return -1;
-	}
-	else
-		if (i == 0)
+		/* use select() to, eventually, timeout */
+		FD_ZERO(&fdset);
+		FD_SET(fd, &fdset);
+		t.tv_sec = SERIAL_TIMEOUT;
+		t.tv_usec = 0;
+
+		i = select(fd+1, &fdset, NULL, NULL, &t);
+		if (i == -1)
 		{
-			DEBUG_COMM2("Timeout! (%d sec)", SERIAL_TIMEOUT);
+			DEBUG_CRITICAL2("select: %s", strerror(errno));
+			return -1;
+		}
+		else
+			if (i == 0)
+			{
+				DEBUG_COMM2("Timeout! (%d sec)", SERIAL_TIMEOUT);
+				return -1;
+			}
+
+		rv = read(fd, buffer + already_read, buffer_length - already_read);
+		if (rv < 0)
+		{
+			DEBUG_COMM2("read error: %s", strerror(errno));
 			return -1;
 		}
 
-	rv = read(fd, buffer, buffer_length);
-	if (rv < 0)
-	{
-		DEBUG_COMM2("read error: %s", strerror(errno));
-		return -1;
-	}
-
 #ifdef DEBUG_LEVEL_COMM
-	DEBUG_XXD(debug_header, buffer, rv);
+		DEBUG_XXD(debug_header, buffer + already_read, rv);
 #endif
 
-	/* too short */
-	if (rv < min_length)
-	{
-		DEBUG_COMM3("ReadSerial: only %d byte(s) read, needed %d", rv,
+		already_read += rv;
+		DEBUG_COMM3("ReadChunk, read: %d, to read: %d", already_read,
 			min_length);
-
-		return -1;
 	}
 
-	return rv;
+	return already_read;
 } /* ReadChunk */
 
 
