@@ -74,7 +74,7 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 		printf("No known CCID reader found\n");
 
 	for (;channel!=0; channel--)
-		CloseUSB(channel<<16);
+		(void)CloseUSB(channel<<16);
 
 	return 0;
 } /* main */

@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
 		{
 			/* read the fake digits */
 			char in[10];	/* 4 digits + \n + \0 */
-			fgets(in, sizeof(in), stdin);
+			(void)fgets(in, sizeof(in), stdin);
 
 			printf("keyboard sent: %s", in);
 		}

@@ -187,14 +187,14 @@ RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
 
-	CmdPowerOff(Lun);
+	(void)CmdPowerOff(Lun);
 	/* No reader status check, if it failed, what can you do ? :) */
 
 #ifdef HAVE_PTHREAD
 	pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
-	ClosePort(Lun);
+	(void)ClosePort(Lun);
 
 #ifdef HAVE_PTHREAD
 	pthread_mutex_unlock(&ifdh_context_mutex);
