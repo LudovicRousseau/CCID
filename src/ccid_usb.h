@@ -23,7 +23,7 @@
 
 status_t OpenUSB(unsigned int lun, int channel);
 
-status_t OpenUSBByName(unsigned int lun, char *device);
+status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device);
 
 status_t WriteUSB(unsigned int lun, unsigned int length, unsigned char *Buffer);
 
@@ -34,6 +34,6 @@ status_t CloseUSB(unsigned int lun);
 #ifdef __USB_H__
 int get_desc(int channel, usb_dev_handle **handle, struct usb_device **dev);
 
-struct usb_interface *get_ccid_usb_interface(struct usb_device *dev);
+/*@null@*/ struct usb_interface *get_ccid_usb_interface(struct usb_device *dev);
 #endif
 

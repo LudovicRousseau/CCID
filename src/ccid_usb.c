@@ -107,7 +107,7 @@ status_t OpenUSB(unsigned int lun, /*@unused@*/ int Channel)
  *					OpenUSBByName
  *
  ****************************************************************************/
-status_t OpenUSBByName(unsigned int lun, char *device)
+status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
 {
 	static struct usb_bus *busses = NULL;
 	unsigned int reader = LunToReaderIndex(lun);
@@ -538,7 +538,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
  *					get_ccid_usb_interface
  *
  ****************************************************************************/
-struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
+/*@null@*/ struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
 {
 	struct usb_interface *usb_interface = NULL; 
 

@@ -107,7 +107,7 @@ typedef struct
 	/*
 	 * device used ("/dev/ttyS?" under Linux)
 	 */
-	char *device;
+	/*@null@*/ char *device;
 
 	/*
 	 * serial communication buffer
