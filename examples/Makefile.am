@@ -4,5 +4,5 @@ noinst_PROGRAMS = scardcontrol
 scardcontrol_SOURCES = scardcontrol.c
 scardcontrol_LDADD = -lpcsclite
 
-AM_CPPFLAGS = `pkg-config libpcsclite --cflags`
+AM_CPPFLAGS = @AM_CPPFLAGS@
 
