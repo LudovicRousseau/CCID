@@ -23,7 +23,17 @@ Supported CCID readers:
 - OmniKey CardMan 3121 [5]
 - SCM Micro SCR 331 [6]
 - SCM Micro SCR 335 [7]
+
+
+Should work but untested by me:
+===============================
+
+I would like to get these readers to perform test and validation and
+move them in the supported list above. If you are one of the
+manufacturers, please, contact me.
+
 - SCM Micro SPR 532 [9]
+- ActivCard USB reader 2.0 [10]
 
 
 Unsupported CCID readers:
@@ -180,6 +190,7 @@ Bibliography:
 [7] http://www.scmmicro.com/security/SCR335.html
 [8] http://www.c3po.es/pcsc.htm
 [9] http://www.scmmicro.com/security/SPR532.html
+[10] http://www.activcard.com/products/usb_reader.html
 
 $Id$
 
