@@ -27,6 +27,7 @@
 #include "debug.h"
 #include "utils.h"
 #include "commands.h"
+#include "ccid.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
@@ -102,6 +103,9 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 
 	/* Maybe we have a special treatment for this reader */
 	ccid_open_hack(Lun);
+
+	/* initialize T=1 context */
+	Protocol_T1_Close(&((get_ccid_slot(Lun)) -> t1));
 
 #ifdef HAVE_PTHREAD
 	pthread_mutex_unlock(&ifdh_context_mutex);
@@ -355,6 +359,10 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			memcpy(Atr, pcbuffer, *AtrLength);
 			memcpy(CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer,
 				pcbuffer, *AtrLength);
+
+			/* set T=1 context */
+			Protocol_T1_Init(&((get_ccid_slot(Lun)) -> t1), Lun);
+
 			break;
 
 		case IFD_POWER_DOWN:
@@ -367,6 +375,10 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 				MASK_POWERFLAGS_PDWN;
 			/* send the command */
 			return_value = CmdPowerOff(Lun);
+
+			/* clear T=1 context */
+			Protocol_T1_Close(&((get_ccid_slot(Lun)) -> t1));
+
 			break;
 
 		default:
@@ -426,17 +438,8 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		return IFD_COMMUNICATION_ERROR;
 
 	rx_length = *RxLength;
-	switch (SendPci.Protocol)
-	{
-		case T_0:
-		case T_1:
-			return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, &rx_length,
-				RxBuffer);
-			break;
-
-		default:
-			return_value = IFD_PROTOCOL_NOT_SUPPORTED;
-	}
+	return_value = CmdXfrBlock(Lun, TxLength, TxBuffer, &rx_length, RxBuffer,
+		SendPci.Protocol);
 	*RxLength = rx_length;
 
 	return return_value;
