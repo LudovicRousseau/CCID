@@ -24,7 +24,7 @@ CFLAGS += -fPIC -I. -I/usr/local/include -DPCSCLITE_HP_DROPDIR=\"$(PCSCLITE_HP_D
 LDFLAGS += -L/usr/local/lib -lusb
 
 # needed to correctly generate the lexer on MacOS X
-YLWRAP = ylwrap
+YLWRAP = ./ylwrap
 CPPFLAGS = -fno-common
 
 ifeq ($(OSTYPE),darwin)
