@@ -30,9 +30,9 @@ T1 = protocol_t1/apdu.h \
 	protocol_t1/t1_block.c \
 	protocol_t1/t1_block.h
 
-# needed for MacOS X
+# needed for MacOS X or when used without pcsc-lite (Solaris)
 if NEED_PARSER
-TOKEN_PARSER = tokenparser_macosx.l
+TOKEN_PARSER = tokenparser_fake.l
 endif
 
 libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(T1)
@@ -46,7 +46,7 @@ parse_LDADD = libccid.la
 
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in
 
-tokenparser_macosx.l: tokenparser.l
+tokenparser_fake.l: tokenparser.l
 	cp -f $^ $@
 
 # do not install the serial driver by default
