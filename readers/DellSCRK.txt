@@ -1,6 +1,9 @@
 Parsing Interface Descriptor for device: 001/017
- iManufacturer: Dell
- iProduct: Dell Smart Card Reader Keyboard
+ idVendor: 0x413C
+  iManufacturer: Dell
+ idProduct: 0x2101
+  iProduct: Dell Smart Card Reader Keyboard
+ bcdDevice: 1.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 1
