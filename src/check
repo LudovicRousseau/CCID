@@ -22,9 +22,6 @@
 
 exec 5>./config.log
 
-#CFLAGS=-I/usr/local/include
-LDFLAGS=-L/usr/local/lib
-
 ac_ext=c
 ac_cpp='cpp $CFLAGS'
 ac_cc=cc
