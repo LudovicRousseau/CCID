@@ -36,7 +36,16 @@
 #include "ccid.h"
 
 
-#define USB_TIMEOUT (60 * 1000)	/* 1 minute timeout */
+/* read timeout
+ * we must wait enough so that the card can finish its calculation
+ * the card, and then the reader should send TIME REQUEST bytes
+ * so this timeout should never occur */
+#define USB_READ_TIMEOUT (60 * 1000)	/* 1 minute timeout */
+
+/* write timeout
+ * we don't have to wait a long time since the card was doing nothing */
+#define USB_WRITE_TIMEOUT (5 * 1000)  /* 5 seconds timeout */
+
 
 #define BUS_DEVICE_STRSIZE 32
 
@@ -288,7 +297,7 @@ status_t WriteUSB(int lun, int length, unsigned char *buffer)
 	DEBUG_XXD(debug_header, buffer, length);
 #endif
 
-	rv = usb_bulk_write(usbDevice[reader].handle, usbDevice[reader].bulk_out, buffer, length, USB_TIMEOUT);
+	rv = usb_bulk_write(usbDevice[reader].handle, usbDevice[reader].bulk_out, buffer, length, USB_WRITE_TIMEOUT);
 
 	if (rv < 0)
 	{
@@ -317,7 +326,7 @@ status_t ReadUSB(int lun, int * length, unsigned char *buffer)
 #endif
 
 
-	rv = usb_bulk_read(usbDevice[reader].handle, usbDevice[reader].bulk_in, buffer, *length, USB_TIMEOUT);
+	rv = usb_bulk_read(usbDevice[reader].handle, usbDevice[reader].bulk_in, buffer, *length, USB_READ_TIMEOUT);
 	*length = rv;
 
 	if (rv < 0)
