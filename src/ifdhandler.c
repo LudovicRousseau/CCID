@@ -462,6 +462,10 @@ RESPONSECODE IFDHControl(DWORD Lun, PUCHAR TxBuffer,
 	/* if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR; */
 
+	/* Set the return length to 0 to avoid problems */
+	if (RxLength)
+		*RxLength = 0;
+
 	return IFD_SUCCESS;
 } /* IFDHControl */
 
