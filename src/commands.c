@@ -173,6 +173,10 @@ RESPONSECODE SecurePIN(unsigned int reader_index,
 	cmd[9] = 0;
 	cmd[10] = 0;	/* bPINOperation: PIN Verification */
 
+	/* check that the command is not too large */
+	if (TxLength > 14+CMD_BUF_SIZE)
+		return IFD_NOT_SUPPORTED;
+
 	/* CCID data structure + APDU */
 	memcpy(cmd + 11, TxBuffer, TxLength);
 
@@ -425,6 +429,11 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	cmd[7] = bBWI;	/* extend block waiting timeout */
 	cmd[8] = rx_length & 0xFF;	/* Expected length */
 	cmd[9] = (rx_length >> 8) & 0xFF;
+
+	/* check that the command is not too large */
+	if (tx_length > CMD_BUF_SIZE)
+		return IFD_NOT_SUPPORTED;
+
 	memcpy(cmd+10, tx_buffer, tx_length);
 
 	if (WritePort(reader_index, 10+tx_length, cmd) != STATUS_SUCCESS)
@@ -869,6 +878,11 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = protocol;	/* bProtocolNum */
 	cmd[8] = cmd[9] = 0; /* RFU */
+
+	/* check that the command is not too large */
+	if (length > CMD_BUF_SIZE)
+		return IFD_NOT_SUPPORTED;
+
 	memcpy(cmd+10, buffer, length);
 
 	if (WritePort(reader_index, 10+length, cmd) != STATUS_SUCCESS)
