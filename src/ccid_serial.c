@@ -1,6 +1,6 @@
 /*
  * ccid_serial.c: communicate with a GemPC Twin smart card reader
- * Copyright (C) 2001-2003 Ludovic Rousseau <ludovic.rousseau@free.fr>
+ * Copyright (C) 2001-2004 Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
  * Thanks to Niki W. Waibel <niki.waibel@gmx.net> for a prototype version
  * 
@@ -42,8 +42,9 @@
 #include "utils.h"
 #include "commands.h"
 
-/* communication timeout in seconds */
-#define SERIAL_TIMEOUT 2
+/* communication timeout in seconds
+ * the value is set at the end of OpenSerialByName() */
+int SerialTimeout;
 
 #define SYNC 0x03
 #define CTRL_ACK 0x06
@@ -402,7 +403,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		/* use select() to, eventually, timeout */
 		FD_ZERO(&fdset);
 		FD_SET(fd, &fdset);
-		t.tv_sec = SERIAL_TIMEOUT;
+		t.tv_sec = SerialTimeout;
 		t.tv_usec = 0;
 
 		i = select(fd+1, &fdset, NULL, NULL, &t);
@@ -414,7 +415,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		else
 			if (i == 0)
 			{
-				DEBUG_COMM2("Timeout! (%d sec)", SERIAL_TIMEOUT);
+				DEBUG_COMM2("Timeout! (%d sec)", SerialTimeout);
 				return -1;
 			}
 
@@ -572,12 +573,18 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
+		/* 2 seconds timeout to not wait too long if no reader is connected */
+		SerialTimeout = 2;
+
 		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length))
 		{
-			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not co,,ected");
+			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not connected");
 			return STATUS_UNSUCCESSFUL;
 		}
+
+		/* normal timeout: 1 minute to allow long time APDU */
+		SerialTimeout = 60;
 
 		rx_buffer[rx_length] = '\0';
 		DEBUG_INFO2("Firmware: %s", rx_buffer);
