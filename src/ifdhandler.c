@@ -905,15 +905,15 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 		return IFD_COMMUNICATION_ERROR;
 
 	return_value = IFD_COMMUNICATION_ERROR;
-	switch (pcbuffer[7])	/* bStatus */
+	switch (pcbuffer[7] & CCID_ICC_STATUS_MASK)	/* bStatus */
 	{
-		case 0x00:
-		case 0x01:
+		case CCID_ICC_PRESENT_ACTIVE:
+		case CCID_ICC_PRESENT_INACTIVE:
 			return_value = IFD_ICC_PRESENT;
 			/* use default slot */
 			break;
 
-		case 0x02:
+		case CCID_ICC_ABSENT:
 			/* Reset ATR buffer */
 			CcidSlots[reader_index].nATRLength = 0;
 			*CcidSlots[reader_index].pcATRBuffer = '\0';
