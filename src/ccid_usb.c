@@ -411,15 +411,17 @@ status_t ReadUSB(int lun, unsigned int * length, unsigned char *buffer)
 
 	rv = usb_bulk_read(usbDevice[reader].handle, usbDevice[reader].bulk_in,
 		(char *)buffer, *length, USB_READ_TIMEOUT);
-	*length = rv;
 
 	if (rv < 0)
 	{
+		*length = 0;
 		DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
 			usbDevice[reader].dev->bus->dirname,
 			usbDevice[reader].dev->filename, strerror(errno));
 		return STATUS_UNSUCCESSFUL;
 	}
+
+	*length = rv;
 
 #ifdef DEBUG_LEVEL_COMM
 	DEBUG_XXD(debug_header, buffer, *length);
