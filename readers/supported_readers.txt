@@ -34,3 +34,7 @@
 
 # Advanced Card Systems
 0x072f:0x90cc:ACR 38
+
+# O2 Micro
+0x0b97:0x7762:Oz776
+
