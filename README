@@ -20,6 +20,10 @@ Supported CCID readers:
 =======================
 
 (in alphabetical order)
+- Advanced Card Systems ACR 38 [16]
+  old versions of this reader have a bug: the reader do timeout when a
+  special USB frame is sent from the reader. If the frame size if a
+  multiple of wMaxPacketSize the communication is stopped.
 - Cherry XX33 keyboard [?]
 - Dell keyboard SK-3106 [?]
 - Dell smart card reader keyboard [?]
@@ -55,12 +59,6 @@ manufacturers, please, contact me.
 
 Unsupported or partly supported CCID readers:
 =============================================
-
-- Advanced Card Systems ACR 38 [16]
-    This reader do timeout when a special USB frame is sent from the
-    reader. If the frame size if a multiple of wMaxPacketSize the
-    communication is stopped. You should contact the reader vendor to
-    upgrade the firmware of the reader or replace the reader.
 
 - C3PO LTC31 [8]
     The reader works fine with Linux kernel 2.4 but does not with Linux
@@ -311,7 +309,7 @@ Bibliography:
 [13] http://www.c3po.es/ltc32.html
 [14] http://www.c3po.es/tltc2usb.html
 [15] http://www.scmmicro.com/security/SCR333.html
-[16] http://www.acs.com.hk/products_readers_acr38.asp
+[16] http://www.acs.com.hk/Product_Readers.asp?productID=59&PCate=Products_PC_Linked_SmartCard_Readers
 [17] http://www.scmmicro.com/support/pcs_product_drivers.html
 [18] http://www.cherrycorp.com/english/advanced-line/advanced-line_smartboard_g83-6744.htm
 
