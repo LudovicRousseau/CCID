@@ -45,7 +45,7 @@ extern int DriverOptions;
 /*
  * CCID driver specific functions
  */
-CcidDesc *get_ccid_slot(int lun);
+CcidDesc *get_ccid_slot(unsigned int lun);
 
 #endif
 

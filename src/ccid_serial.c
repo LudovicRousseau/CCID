@@ -142,7 +142,7 @@ static _serialDevice serialDevice[PCSCLITE_MAX_READERS];
  *				WriteSerial: Send bytes to the card reader
  *
  *****************************************************************************/
-status_t WriteSerial(int lun, unsigned int length, unsigned char *buffer)
+status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char *buffer)
 {
 	int i;
 	unsigned char lrc;
@@ -151,7 +151,7 @@ status_t WriteSerial(int lun, unsigned int length, unsigned char *buffer)
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "-> 121234 ";
 
-	sprintf(debug_header, "-> %06X ", (int)lun);
+	sprintf(debug_header, "-> %06X ", lun);
 #endif
 
 	if (length > GEMPCTWIN_MAXBUF-3)
@@ -194,7 +194,7 @@ status_t WriteSerial(int lun, unsigned int length, unsigned char *buffer)
  *				ReadSerial: Receive bytes from the card reader
  *
  *****************************************************************************/
-status_t ReadSerial(int lun, unsigned int *length, unsigned char *buffer)
+status_t ReadSerial(unsigned int lun, unsigned int *length, unsigned char *buffer)
 {
 	unsigned char c;
 	int rv;
@@ -316,7 +316,7 @@ ack:
  *				get_bytes: get n bytes
  *
  *****************************************************************************/
-int get_bytes(int lun, unsigned char *buffer, int length)
+int get_bytes(unsigned int lun, unsigned char *buffer, int length)
 {
 	int offset = serialDevice[LunToReaderIndex(lun)].buffer_offset;
 	int offset_last = serialDevice[LunToReaderIndex(lun)].buffer_offset_last;
@@ -369,7 +369,7 @@ int get_bytes(int lun, unsigned char *buffer, int length)
  *				ReadChunk: read a minimum number of bytes
  *
  *****************************************************************************/
-int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length)
+int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length, int min_length)
 {
 	int fd = serialDevice[LunToReaderIndex(lun)].fd;
 	fd_set fdset;
@@ -429,7 +429,7 @@ int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length)
  *				OpenSerial: open the port
  *
  *****************************************************************************/
-status_t OpenSerial(int lun, int channel)
+status_t OpenSerial(unsigned int lun, int channel)
 {
 	char dev_name[FILENAME_MAX];
 
@@ -466,7 +466,7 @@ status_t OpenSerial(int lun, int channel)
  *				OpenSerialByName: open the port
  *
  *****************************************************************************/
-status_t OpenSerialByName(int lun, char *dev_name)
+status_t OpenSerialByName(unsigned int lun, char *dev_name)
 {
 	struct termios current_termios;
 	int i;
@@ -576,7 +576,7 @@ status_t OpenSerialByName(int lun, char *dev_name)
  *				CloseSerial: close the port
  *
  *****************************************************************************/
-status_t CloseSerial(int lun)
+status_t CloseSerial(unsigned int lun)
 {
 	int reader = LunToReaderIndex(lun);
 
@@ -595,7 +595,7 @@ status_t CloseSerial(int lun)
  *					get_ccid_descriptor
  *
  ****************************************************************************/
-_ccid_descriptor *get_ccid_descriptor(int lun)
+_ccid_descriptor *get_ccid_descriptor(unsigned int lun)
 {
 	return &serialDevice[LunToReaderIndex(lun)].ccid;
 } /* get_ccid_descriptor */

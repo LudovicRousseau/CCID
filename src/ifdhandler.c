@@ -886,7 +886,7 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 } /* IFDHICCPresence */
 
 
-CcidDesc *get_ccid_slot(int lun)
+CcidDesc *get_ccid_slot(unsigned int lun)
 {
 	return &CcidSlots[LunToReaderIndex(lun)];
 } /* get_ccid_slot */

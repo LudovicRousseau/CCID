@@ -21,11 +21,20 @@
  * $Id$
  */
 
-status_t OpenSerial(int lun, int channel);
-status_t OpenSerialByName(int lun, char *dev_name);
-status_t WriteSerial(int lun, unsigned int length, unsigned char *Buffer);
-status_t ReadSerial(int lun, unsigned int *length, unsigned char *Buffer);
-int get_bytes(int lun, unsigned char *buffer, int length);
-int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length);
-status_t CloseSerial(int lun);
+status_t OpenSerial(unsigned int lun, int channel);
+
+status_t OpenSerialByName(unsigned int lun, char *dev_name);
+
+status_t WriteSerial(unsigned int lun, unsigned int length, unsigned char
+	*Buffer);
+
+status_t ReadSerial(unsigned int lun, unsigned int *length, unsigned char
+	*Buffer);
+
+int get_bytes(unsigned int lun, unsigned char *buffer, int length);
+
+int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length, int
+	min_length);
+
+status_t CloseSerial(unsigned int lun);
 

@@ -37,7 +37,7 @@
  *					ccid_open_hack
  *
  ****************************************************************************/
-int ccid_open_hack(int lun)
+int ccid_open_hack(unsigned int lun)
 {
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 

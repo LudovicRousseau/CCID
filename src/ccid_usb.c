@@ -93,7 +93,7 @@ static _usbDevice usbDevice[PCSCLITE_MAX_READERS];
  *					OpenUSB
  *
  ****************************************************************************/
-status_t OpenUSB(int lun, int Channel)
+status_t OpenUSB(unsigned int lun, int Channel)
 {
 	return OpenUSBByName(lun, NULL);
 } /* OpenUSB */
@@ -104,7 +104,7 @@ status_t OpenUSB(int lun, int Channel)
  *					OpenUSBByName
  *
  ****************************************************************************/
-status_t OpenUSBByName(int lun, char *device)
+status_t OpenUSBByName(unsigned int lun, char *device)
 {
 	static struct usb_bus *busses = NULL;
 	int reader = LunToReaderIndex(lun);
@@ -366,7 +366,7 @@ end:
  *					WriteUSB
  *
  ****************************************************************************/
-status_t WriteUSB(int lun, unsigned int length, unsigned char *buffer)
+status_t WriteUSB(unsigned int lun, unsigned int length, unsigned char *buffer)
 {
 	int rv;
 	int reader = LunToReaderIndex(lun);
@@ -400,7 +400,7 @@ status_t WriteUSB(int lun, unsigned int length, unsigned char *buffer)
  *					ReadUSB
  *
  ****************************************************************************/
-status_t ReadUSB(int lun, unsigned int * length, unsigned char *buffer)
+status_t ReadUSB(unsigned int lun, unsigned int * length, unsigned char *buffer)
 {
 	int rv;
 	int reader = LunToReaderIndex(lun);
@@ -437,7 +437,7 @@ status_t ReadUSB(int lun, unsigned int * length, unsigned char *buffer)
  *					CloseUSB
  *
  ****************************************************************************/
-status_t CloseUSB(int lun)
+status_t CloseUSB(unsigned int lun)
 {
 	struct usb_interface *usb_interface;
 	int interface;
@@ -474,7 +474,7 @@ status_t CloseUSB(int lun)
  *					get_ccid_descriptor
  *
  ****************************************************************************/
-_ccid_descriptor *get_ccid_descriptor(int lun)
+_ccid_descriptor *get_ccid_descriptor(unsigned int lun)
 {
 	return &usbDevice[LunToReaderIndex(lun)].ccid;
 } /* get_ccid_descriptor */
