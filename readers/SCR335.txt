@@ -3,7 +3,7 @@ Parsing Interface Descriptor for device: 003/037
   iManufacturer: SCM Microsystems Inc.
  idProduct: 0x5115
   iProduct: SCR33x USB Smart Card Reader
- bcdDevice: 4.16 (firmware release?)
+ bcdDevice: 5.14 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -27,7 +27,7 @@ Parsing Interface Descriptor for device: 003/037
   dwMaximumClock: 12.000 MHz
   bNumClockSupported: 0x00
   dwDataRate: 9600 bps
-  dwMaxDataRate: 115200 bps
+  dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
