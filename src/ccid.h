@@ -26,7 +26,8 @@ typedef struct
 	/*
 	 * CCID Sequence number
 	 */
-	unsigned char bSeq;
+	unsigned char *pbSeq;
+	unsigned char real_bSeq;
 
 	/*
 	 * VendorID << 16 + ProductID
