@@ -287,7 +287,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			if (*Length >= 1)
 			{
 				*Length = 1;
-				*Value = 1; /* Can talk to multiple slots at the same time */
+				*Value = 0; /* Can NOT talk to multiple slots at the same time */
 			}
 			break;
 
