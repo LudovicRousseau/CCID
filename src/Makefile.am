@@ -36,7 +36,11 @@ if NEED_PARSER
 TOKEN_PARSER = tokenparser_fake.l
 endif
 
-libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(T1)
+if WITHOUT_PCSC
+PROVIDED_BY_PCSC = debug.c
+endif
+
+libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(PROVIDED_BY_PCSC) $(T1)
 libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@
 libccid_la_CFLAGS = @PCSC_CFLAGS@
 
