@@ -381,7 +381,7 @@ int ReadChunk(unsigned int lun, unsigned char *buffer, int buffer_length, int mi
 #ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "<- 121234 ";
 
-	sprintf(debug_header, "<- %06X ", (int)lun);
+	sprintf(debug_header, "<- %06X ", lun);
 #endif
 
 	already_read = 0;
