@@ -26,9 +26,15 @@
 #define ERROR_OFFSET 8
 
 RESPONSECODE CmdPowerOn(int lun, int * nlength, unsigned char buffer[]);
-RESPONSECODE Escape(int lun, int command);
+RESPONSECODE CmdEscape(int lun, int command);
 RESPONSECODE CmdPowerOff(int lun);
 RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[]);
 RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
 	PDWORD rx_length, unsigned char rx_buffer[]);
+RESPONSECODE CmdXfrBlockShortAPDU(int lun, int tx_length,
+	unsigned char tx_buffer[], PDWORD rx_length, unsigned char rx_buffer[]);
+RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
+	PDWORD rx_length, unsigned char rx_buffer[]);
+
+void i2dw(int value, unsigned char *buffer);
 

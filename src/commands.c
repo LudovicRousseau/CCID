@@ -26,19 +26,24 @@
 #include "pcscdefines.h"
 #include "ifdhandler.h"
 #include "commands.h"
-#include "ccid_usb.h"
+#include "ccid.h"
 #include "defs.h"
 #include "config.h"
 #include "debug.h"
 
-#define SET_ISO_MODE 1
 
+/*****************************************************************************
+ *
+ *					CmdPowerOn
+ *
+ ****************************************************************************/
 RESPONSECODE CmdPowerOn(int lun, int * nlength, unsigned char buffer[])
 {
 	unsigned char cmd[10];
 	status_t res;
 	int atr_len, length, count = 1;
 	RESPONSECODE return_value = IFD_SUCCESS;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
 	/* store length of buffer[] */
 	length = *nlength;
@@ -46,11 +51,14 @@ again:
 	cmd[0] = 0x62; /* IccPowerOn */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = 0;	/* slot number */
-	cmd[6] = ccid_get_seq(lun);
-	cmd[7] = 0x01;	/* 5.0V */
+	cmd[6] = ccid_descriptor->bSeq++;
+	if (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
+		cmd[7] = 0x00;	/* Automatic voltage selection */
+	else
+		cmd[7] = 0x01;	/* 5.0V */
 	cmd[8] = cmd[9] = 0; /* RFU */
 
-	res = WriteUSB(lun, sizeof(cmd), cmd);
+	res = WritePort(lun, sizeof(cmd), cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -58,19 +66,19 @@ again:
 	/* needed if we go back after a switch to ISO mode */
 	*nlength = length;
 
-	res = ReadUSB(lun, nlength, buffer);
+	res = ReadPort(lun, nlength, buffer);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
-	if (buffer[STATUS_OFFSET] & 0x40)
+	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
 
 		/* Protocol error in EMV mode */
-		if (buffer[ERROR_OFFSET] == 0xBB)
+		if (buffer[ERROR_OFFSET] == 0xBB &&
+			ccid_descriptor->readerID == GEMPC433)
 		{
-			DEBUG_INFO("Switch reader in ISO mode");
-			if ((return_value = Escape(lun, SET_ISO_MODE)) != IFD_SUCCESS)
+			if ((return_value = CmdEscape(lun, ESC_GEMPC_SET_ISO_MODE)) != IFD_SUCCESS)
 				return return_value;
 
 			/* avoid looping if we can't switch mode */
@@ -95,25 +103,42 @@ again:
 	return return_value;
 } /* CmdPowerOn */
 
-RESPONSECODE Escape(int lun, int command)
+
+/*****************************************************************************
+ *
+ *					Escape
+ *
+ ****************************************************************************/
+RESPONSECODE CmdEscape(int lun, int command)
 {
 	unsigned char cmd[12];
 	status_t res;
 	int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
 	cmd[0] = 0x6B; /* PC_to_RDR_Escape */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = 0;	/* slot number */
-	cmd[6] = ccid_get_seq(lun);
+	cmd[6] = ccid_descriptor->bSeq++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
 	switch (command)
 	{
 		/* Gemplus proprietary */
-		case SET_ISO_MODE:
+		case ESC_GEMPC_SET_ISO_MODE:
+			DEBUG_INFO("Switch reader in ISO mode");
 			cmd[10] = 0x1F;	/* switch mode */
 			cmd[11] = 0x01;	/* set ISO mode */
+			cmd[1] = 2;	/* length of data */
+			length = 12;
+			break;
+
+		/* Gemplus proprietary */
+		case ESC_GEMPC_SET_APDU_MODE:
+			DEBUG_INFO("Switch reader in APDU mode");
+			cmd[10] = 0xA0;	/* switch mode */
+			cmd[11] = 0x02;	/* set APDU mode */
 			cmd[1] = 2;	/* length of data */
 			length = 12;
 			break;
@@ -123,16 +148,16 @@ RESPONSECODE Escape(int lun, int command)
 			return return_value;
 	}
 
-	res = WriteUSB(lun, length, cmd);
+	res = WritePort(lun, length, cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	length = sizeof(cmd);
-	res = ReadUSB(lun, &length, cmd);
+	res = ReadPort(lun, &length, cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
-	if (cmd[STATUS_OFFSET] & 0x40)
+	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
@@ -141,29 +166,36 @@ RESPONSECODE Escape(int lun, int command)
 	return return_value;
 } /* Escape */
 
+
+/*****************************************************************************
+ *
+ *					CmdPowerOff
+ *
+ ****************************************************************************/
 RESPONSECODE CmdPowerOff(int lun)
 {
 	unsigned char cmd[10];
 	status_t res;
 	int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
 	cmd[0] = 0x63; /* IccPowerOff */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = 0;	/* slot number */
-	cmd[6] = ccid_get_seq(lun);
+	cmd[6] = ccid_descriptor->bSeq++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
-	res = WriteUSB(lun, sizeof(cmd), cmd);
+	res = WritePort(lun, sizeof(cmd), cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	length = sizeof(cmd);
-	res = ReadUSB(lun, &length, cmd);
+	res = ReadPort(lun, &length, cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
-	if (cmd[STATUS_OFFSET] & 0x40)
+	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
@@ -172,29 +204,36 @@ RESPONSECODE CmdPowerOff(int lun)
 	return return_value;
 } /* CmdPowerOff */
 
+
+/*****************************************************************************
+ *
+ *					CmdGetSlotStatus
+ *
+ ****************************************************************************/
 RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[])
 {
 	unsigned char cmd[10];
 	status_t res;
 	int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
 	cmd[0] = 0x65; /* GetSlotStatus */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = 0;	/* slot number */
-	cmd[6] = ccid_get_seq(lun);
+	cmd[6] = ccid_descriptor->bSeq++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
-	res = WriteUSB(lun, sizeof(cmd), cmd);
+	res = WritePort(lun, sizeof(cmd), cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	length = SIZE_GET_SLOT_STATUS;
-	res = ReadUSB(lun, &length, buffer);
+	res = ReadPort(lun, &length, buffer);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
-	if (buffer[STATUS_OFFSET] & 0x40)
+	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
@@ -203,35 +242,105 @@ RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[])
 	return return_value;
 } /* CmdGetSlotStatus */
 
+
+/*****************************************************************************
+ *
+ *					CmdXfrBlock
+ *
+ ****************************************************************************/
 RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
 	PDWORD rx_length, unsigned char rx_buffer[])
+{
+	RESPONSECODE return_value = IFD_SUCCESS;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+
+	/* command length too big for CCID reader? */
+	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength)
+	{
+		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
+			tx_length, ccid_descriptor->dwMaxCCIDMessageLength);
+		return_value = IFD_COMMUNICATION_ERROR;
+		goto clean_up_and_return;
+	}
+
+	/* command length too big for CCID driver? */
+	if (tx_length > CMD_BUF_SIZE)
+	{
+		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
+			tx_length, CMD_BUF_SIZE);
+		return_value = IFD_COMMUNICATION_ERROR;
+		goto clean_up_and_return;
+	}
+
+	/* APDU or TPDU? */
+	switch (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK)
+	{
+		case CCID_CLASS_TPDU:
+			return_value = CmdXfrBlockTPDU(lun, tx_length, tx_buffer, rx_length,
+				rx_buffer);
+			break;
+
+		case CCID_CLASS_SHORT_APDU:
+		case CCID_CLASS_EXTENDED_APDU:
+			/* We only support extended APDU if the reader can support the
+			 * command length. See test above */
+			return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer,
+				rx_length, rx_buffer);
+			break;
+
+		default:
+			return_value = IFD_COMMUNICATION_ERROR;
+	}
+
+clean_up_and_return:
+	return return_value;
+} /* CmdXfrBlock */
+
+
+/*****************************************************************************
+ *
+ *					CmdXfrBlockShortAPDU
+ *
+ ****************************************************************************/
+RESPONSECODE CmdXfrBlockShortAPDU(int lun, int tx_length,
+	unsigned char tx_buffer[], PDWORD rx_length, unsigned char rx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	status_t res;
 	int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
+
+	DEBUG_COMM2("ShortAPDU: %d bytes", tx_length);
 
 	cmd[0] = 0x6F; /* IccPowerOff */
 	i2dw(tx_length, cmd+1);	/* APDU length */
 	cmd[5] = 0;	/* slot number */
-	cmd[6] = ccid_get_seq(lun);
+	cmd[6] = ccid_descriptor->bSeq++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 	memcpy(cmd+10, tx_buffer, tx_length);
 
-	res = WriteUSB(lun, 10+tx_length, cmd);
+	res = WritePort(lun, 10+tx_length, cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
+time_request:
 	length = sizeof(cmd);
-	res = ReadUSB(lun, &length, cmd);
+	res = ReadPort(lun, &length, cmd);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
-	if (cmd[STATUS_OFFSET] & 0x40)
+	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
 		*rx_length = 0; /* nothing received */
 		return_value = IFD_COMMUNICATION_ERROR;
+	}
+
+	if (cmd[STATUS_OFFSET] & CCID_TIME_EXTENSION)
+	{
+		DEBUG_CRITICAL2("Time extension requested: 0x%02X", cmd[ERROR_OFFSET]);
+		goto time_request;
 	}
 
 	length = dw2i(cmd, 1);
@@ -242,8 +351,134 @@ RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
 	memcpy(rx_buffer, cmd+10, length);
 
 	return return_value;
-} /* CmdXfrBlock */
+} /* CmdXfrBlockShortAPDU */
 
+
+/*****************************************************************************
+ *
+ *					CmdXfrBlockTPDU
+ *
+ ****************************************************************************/
+RESPONSECODE CmdXfrBlockTPDU(int lun, int tx_length, unsigned char tx_buffer[],
+	PDWORD rx_length, unsigned char rx_buffer[])
+{
+	RESPONSECODE return_value = IFD_SUCCESS;
+	int Le;
+
+	DEBUG_COMM2("TPDU: %d bytes", tx_length);
+
+	/* Size should be command + one byte of length for
+	 * an outgoing TPDU (CLA, INS, P1, P2, P3) */
+	if (tx_length == (ISO_CMD_SIZE + ISO_LENGTH_SIZE))
+	{
+		return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer, rx_length,
+			rx_buffer);
+	}
+	else
+	{
+		/* just (CLA, INS, P1, P2) for an APDU */
+		if (tx_length == ISO_CMD_SIZE)
+		{
+			return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer,
+					rx_length, rx_buffer);
+		}
+		else
+		{
+			DWORD ntestlength;
+
+			if (tx_length > (ISO_CMD_SIZE + ISO_LENGTH_SIZE))
+			{
+				/* Check length to see if it is a full APDU or a TPDU */
+				ntestlength = tx_buffer[ISO_OFFSET_LENGTH] +
+					ISO_CMD_SIZE + ISO_LENGTH_SIZE;
+
+				if (tx_length == (ntestlength + ISO_LENGTH_SIZE))
+				{
+					DWORD old_rx_length = *rx_length;
+
+					/* tx_buffer holds a proper APDU */
+					Le = tx_buffer[tx_length-1];
+					return_value = CmdXfrBlockShortAPDU(lun, tx_length,
+						tx_buffer, rx_length, rx_buffer);
+
+					if ((return_value == IFD_SUCCESS) && (*rx_length == 2))
+					{
+						/* Buffer for Get Response */
+						tx_buffer[0] = 0x00;
+						tx_buffer[1] = 0xC0;
+						tx_buffer[2] = 0x00;
+						tx_buffer[3] = 0x00;
+						tx_length = 5;
+						*rx_length = old_rx_length;
+
+						if (rx_buffer[0] == 0x61)
+						{
+							/* Get Response */
+							DEBUG_COMM2("TPDU: Automatic Get Response after 61%02X", rx_buffer[1]);
+							/* Card sent 61 xx
+							 * xx = 0 means 256 */
+							if (rx_buffer[1] == 0)
+								/* we want to receive what the APDU asked */
+								rx_buffer[1] = Le;
+							if (Le == 0)
+								/* we want what the card want to send */
+								Le = rx_buffer[1];
+
+							/* Get Response with P3 = min(Le, Lx) */
+							tx_buffer[4] = rx_buffer[1] < Le ? rx_buffer[1] : Le;
+
+							return_value = CmdXfrBlockShortAPDU(lun, tx_length,
+								tx_buffer, rx_length, rx_buffer);
+						}
+						if ((rx_buffer[0] == 0x90) && (rx_buffer[1] == 0x00))
+						{
+							/* Get Response */
+							DEBUG_COMM("TPDU: Automatic Get Response after 9000");
+							/* Card sent 90 00
+							 * Get Response with P3 = Le */
+							tx_buffer[4] = Le;
+
+							return_value = CmdXfrBlockShortAPDU(lun, tx_length,
+								tx_buffer, rx_length, rx_buffer);
+						}
+					}
+				}
+				else
+				{
+					if (tx_length > (ntestlength + ISO_LENGTH_SIZE))
+					{
+						/* Data are too long */
+						return_value = IFD_COMMUNICATION_ERROR;
+
+						goto clean_up_and_return;
+					}
+					else
+					{
+						/* tx_buffer holds a proper TPDU */
+						return_value = CmdXfrBlockShortAPDU(lun, tx_length, tx_buffer, rx_length, rx_buffer);
+					}
+				}
+			}
+			else
+			{
+				/* tx_buffer holds too little data to form an APDU+length */
+				return_value = IFD_COMMUNICATION_ERROR;
+
+				goto clean_up_and_return;
+			}
+		}
+	}
+
+clean_up_and_return:
+	return return_value;
+} /* CmdXfrBlockTPDU */
+
+
+/*****************************************************************************
+ *
+ *					i2dw
+ *
+ ****************************************************************************/
 void i2dw(int value, unsigned char buffer[])
 {
 	buffer[0] = value & 0xFF;
