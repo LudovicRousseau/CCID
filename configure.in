@@ -177,62 +177,6 @@ AC_MSG_RESULT([serial twin install dir : $ccidtwindir])
 AC_DEFINE_UNQUOTED(PCSCLITE_HP_DROPDIR, "$ccidtwindir", [directory containing USB drivers])
 
 
-dnl --enable-debugcritical
-AC_ARG_ENABLE(debugcritical,
-	AC_HELP_STRING([--enable-debugcritical],[print critical debug
-	messages (default yes)]), [ debugcritical="${enableval}" ],
-	[ debugcritical=yes ])
-dnl yes by default
-if test "${debugcritical}" != yes
-then
-	AC_MSG_RESULT([critical debug messages : no])
-else
-	AC_MSG_RESULT([critical debug messages : yes])
-	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_CRITICAL, 1, [print critical debug messages])
-fi
-
-dnl --enable-debuginfo
-AC_ARG_ENABLE(debuginfo,
-	AC_HELP_STRING([--enable-debuginfo],[print info debug messages
-	(default yes)]),
-	[ debuginfo="${enableval}" ], [ debuginfo=yes ])
-dnl yes by default
-if test "${debuginfo}" != yes
-then
-	AC_MSG_RESULT([info debug messages     : no])
-else
-	AC_MSG_RESULT([info debug messages     : yes])
-	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_INFO, 1, [print info debug messages])
-fi
-
-dnl --enable-debugperiodic
-AC_ARG_ENABLE(debugperiodic,
-	AC_HELP_STRING([--enable-debugperiodic],[print periodic debug
-	messages (default no)]),
-	[ debugperiodic="${enableval}" ], [ debugperiodic=no ])
-dnl no by default
-if test "${debugperiodic}" != no
-then
-	AC_MSG_RESULT([periodic debug messages : yes])
-	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_PERIODIC, 1, [print periodic debug messages])
-else
-	AC_MSG_RESULT([periodic debug messages : no])
-fi
-
-dnl --enable-debugcomm
-AC_ARG_ENABLE(debugcomm,
-	AC_HELP_STRING([--enable-debugcomm],[print comm debug messages
-	(default no)]),
-	[ debugcomm="${enableval}" ], [ debugcomm=no ])
-dnl no by default
-if test "${debugcomm}" != no
-then
-	AC_MSG_RESULT([comm debug messages     : yes])
-	AC_DEFINE_UNQUOTED(DEBUG_LEVEL_COMM, 1, [print comm debug messages])
-else
-	AC_MSG_RESULT([comm debug messages     : no])
-fi
-
 dnl Setup dist stuff
 AC_SUBST(ac_aux_dir)
 AC_SUBST(bundle)

@@ -3,18 +3,6 @@
 /* bundle directory name */
 #undef BUNDLE
 
-/* print comm debug messages */
-#undef DEBUG_LEVEL_COMM
-
-/* print critical debug messages */
-#undef DEBUG_LEVEL_CRITICAL
-
-/* print info debug messages */
-#undef DEBUG_LEVEL_INFO
-
-/* print periodic debug messages */
-#undef DEBUG_LEVEL_PERIODIC
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
