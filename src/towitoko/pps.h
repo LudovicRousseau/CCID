@@ -64,6 +64,7 @@ PPS;
  * Exported functions declaration
  */
 
-int PPS_Exchange (int lun, BYTE * params, unsigned *length);
+int PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1);
 
 #endif /* _PPS_ */
+

@@ -42,7 +42,7 @@ static unsigned PPS_GetLength (BYTE * block);
 static BYTE PPS_GetPCK (BYTE * block, unsigned length);
 
 int
-PPS_Exchange (int lun, BYTE * params, unsigned *length)
+PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
 {
   BYTE confirm[PPS_MAX_LENGTH];
   unsigned len_request, len_confirm;
@@ -70,6 +70,12 @@ PPS_Exchange (int lun, BYTE * params, unsigned *length)
     ret = PPS_HANDSAKE_ERROR;
   else
     ret = PPS_OK;
+
+  *pps1 = 0x11;	/* default TA1 */
+
+  /* if PPS1 is echoed */
+  if (PPS_HAS_PPS1 (params) && PPS_HAS_PPS1 (confirm))
+      *pps1 = confirm[2];
 
   /* Copy PPS handsake */
   memcpy (params, confirm, len_confirm);
