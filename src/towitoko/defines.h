@@ -46,7 +46,7 @@
  * Type definitions
  */
 
-#include <pcsclite.h>
+#include <PCSC/wintypes.h>
 
 #ifndef __cplusplus
 typedef int                bool;
@@ -55,14 +55,6 @@ typedef int                bool;
 /*
  * Utility macros
  */
-
-#ifndef MAX
-#define MAX(a,b)	((a)>(b)?(a):(b))
-#endif
-
-#ifndef MIN
-#define MIN(a,b)	((a)<(b)?(a):(b))
-#endif
 
 /* Invert order of bits in a byte: b7->b0, b0->b7 */
 #ifndef INVERT_BYTE
