@@ -102,9 +102,9 @@ typedef struct
 	int fd;
 
 	/*
-	 * channel used (1..4)
+	 * device used ("/dev/ttyS?" under Linux)
 	 */
-	int channel;
+	char *device;
 
 	/*
 	 * serial communication buffer
@@ -132,7 +132,7 @@ typedef struct
 #include "ccid_serial.h"
 
 static _serialDevice serialDevice[PCSCLITE_MAX_READERS] = {
-	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { -1, -1 }
+	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { -1, NULL }
 };
 
 /*****************************************************************************
@@ -427,9 +427,6 @@ int ReadChunk(int lun, unsigned char *buffer, int buffer_length, int min_length)
 status_t OpenSerial(int lun, int channel)
 {
 	char dev_name[FILENAME_MAX];
-	struct termios current_termios;
-	int i;
-	int reader = LunToReaderIndex(lun);
 
 	DEBUG_COMM3("Lun: %X, Channel: %d", lun, channel);
 
@@ -456,12 +453,29 @@ status_t OpenSerial(int lun, int channel)
 
 	sprintf(dev_name, "/dev/pcsc/%d", (int) channel);
 
+	return OpenSerialByName(lun, dev_name);
+} /* OpenSerial */
+
+/*****************************************************************************
+ * 
+ *				OpenSerialByName: open the port
+ *
+ *****************************************************************************/
+status_t OpenSerialByName(int lun, char *dev_name)
+{
+	struct termios current_termios;
+	int i;
+	int reader = LunToReaderIndex(lun);
+
+	DEBUG_COMM3("Lun: %X, Device: %d", lun, dev_name);
+
 	/* check if the same channel is not already used */
 	for (i=0; i<PCSCLITE_MAX_READERS; i++)
 	{
-		if (serialDevice[i].channel == channel)
+		if (serialDevice[i].device &&
+			strcmp(serialDevice[i].device, dev_name) == 0)
 		{
-			DEBUG_CRITICAL2("Channel %s already in use", dev_name);
+			DEBUG_CRITICAL2("Device %s already in use", dev_name);
 			return STATUS_UNSUCCESSFUL;
 		}
 	}
@@ -475,7 +489,7 @@ status_t OpenSerial(int lun, int channel)
 	}
 
 	/* set channel used */
-	serialDevice[reader].channel = channel;
+	serialDevice[reader].device = strdup(dev_name);
 
 	/* empty in and out serial buffers */
 	if (tcflush(serialDevice[reader].fd, TCIOFLUSH))
@@ -527,7 +541,7 @@ status_t OpenSerial(int lun, int channel)
 	serialDevice[reader].buffer_offset_last = 0;
 
 	return STATUS_SUCCESS;
-} /* OpenSerial */
+} /* OpenSerialByName */
 
 
 /*****************************************************************************
@@ -540,9 +554,10 @@ status_t CloseSerial(int lun)
 	int reader = LunToReaderIndex(lun);
 
 	close(serialDevice[reader].fd);
-
 	serialDevice[reader].fd = -1;
-	serialDevice[reader].channel = -1;
+
+	free(serialDevice[reader].device);
+	serialDevice[reader].device = NULL;
 
 	return STATUS_SUCCESS;
 } /* CloseSerial */

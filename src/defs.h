@@ -75,6 +75,7 @@ typedef struct CCID_DESC
  */
 #ifdef TWIN_SERIAL
 
+#define OpenPortByName OpenSerialByName
 #define OpenPort OpenSerial
 #define ClosePort CloseSerial
 #define ReadPort ReadSerial
@@ -83,6 +84,7 @@ typedef struct CCID_DESC
 
 #else
 
+#define OpenPortByName OpenUSBByName
 #define OpenPort OpenUSB
 #define ClosePort CloseUSB
 #define ReadPort ReadUSB

@@ -42,6 +42,38 @@ static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 
+RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
+{
+	DEBUG_INFO3("lun: %X, device: %s", Lun, lpcDevice);
+
+	if (CheckLun(Lun))
+		return IFD_COMMUNICATION_ERROR;
+
+	// Reset ATR buffer
+	CcidSlots[LunToReaderIndex(Lun)].nATRLength = 0;
+	*CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer = '\0';
+
+	// Reset PowerFlags
+	CcidSlots[LunToReaderIndex(Lun)].bPowerFlags = POWERFLAGS_RAZ;
+
+#ifdef HAVE_PTHREAD
+	pthread_mutex_lock(&ifdh_context_mutex);
+#endif
+
+	if (OpenPortByName(Lun, lpcDevice) != STATUS_SUCCESS)
+	{
+		DEBUG_CRITICAL("OpenPortByName failed");
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+#ifdef HAVE_PTHREAD
+	pthread_mutex_unlock(&ifdh_context_mutex);
+#endif
+
+	return IFD_SUCCESS;
+} /* IFDHCreateChannelByName */
+
+
 RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 {
 	/*

@@ -1,6 +1,6 @@
 /*
     ccid_usb.c: USB access routines using the libusb library
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2004   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,8 +55,8 @@ typedef struct
 	struct usb_device *dev;
 
 	/*
-	 * Used to store device name string %s/%s like:
-	 * 001/002 (Linux)
+	 * Used to store device name string %s/%s (dirname/filename) like:
+	 * (/proc/bus/usb/) 001/002 (Linux)
 	 * /dev/usb0//dev/ (FreeBSD)
 	 * /dev/usb0//dev/ugen0 (OpenBSD)
 	 */
@@ -86,12 +86,24 @@ static _usbDevice usbDevice[PCSCLITE_MAX_READERS] = {
 #define PCSCLITE_PRODKEY_NAME                   "ifdProductID"
 #define PCSCLITE_NAMEKEY_NAME                   "ifdFriendlyName"
 
+
 /*****************************************************************************
  *
  *					OpenUSB
  *
  ****************************************************************************/
 status_t OpenUSB(int lun, int Channel)
+{
+	return OpenUSBByName(lun, NULL);
+} /* OpenUSB */
+
+
+/*****************************************************************************
+ *
+ *					OpenUSBByName
+ *
+ ****************************************************************************/
+status_t OpenUSBByName(int lun, char *device)
 {
 	static struct usb_bus *busses = NULL;
 	int reader = LunToReaderIndex(lun);
@@ -102,7 +114,7 @@ status_t OpenUSB(int lun, int Channel)
 	int vendorID, productID;
 	char infofile[FILENAME_MAX];
 
-	DEBUG_COMM3("Lun: %X, Channel: %X", lun, Channel);
+	DEBUG_COMM3("Lun: %X, Device: %X", lun, device);
 
 	if (busses == NULL)
 		usb_init();
@@ -177,8 +189,18 @@ status_t OpenUSB(int lun, int Channel)
 					int r, already_used;
 					char device_name[BUS_DEVICE_STRSIZE];
 
-					if (snprintf(device_name, BUS_DEVICE_STRSIZE, "%s/%s",
-						bus->dirname, dev->filename) < 0)
+					if (snprintf(device_name, BUS_DEVICE_STRSIZE,
+/* This need to be in sync with PCSC/src/hotplug_libusb.c */                    #ifdef __linux__
+#define LINUX_USB_PATH  "/proc/bus/usb/"
+						LINUX_USB_PATH "%s/%s", bus->dirname, dev->filename
+#else                   
+#ifdef __FreeBSD__                  
+						"%s", dev->filename
+#else                   
+						"%s.00", dev->filename
+#endif                  
+#endif
+						) < 0)
 					{
 						DEBUG_CRITICAL2("Device name too long: %s", device_name);
 						return STATUS_UNSUCCESSFUL;
@@ -186,14 +208,25 @@ status_t OpenUSB(int lun, int Channel)
 
 					/* is it already opened? */
 					already_used = FALSE;
-					for (r=0; r<PCSCLITE_MAX_READERS; r++)
+
+					/* select by name? */
+					if (device)
 					{
-						if (usbDevice[r].dev)
+						if (strcmp(device, device_name) != 0)
+							/* not the good reader, try next one */
+							already_used = TRUE;
+					}
+					else
+					{
+						for (r=0; r<PCSCLITE_MAX_READERS; r++)
 						{
-							DEBUG_COMM3("Checking new device '%s' against old '%s'",
-								device_name, usbDevice[r].device_name);
-							if (strcmp(usbDevice[r].device_name, device_name) == 0)
-								already_used = TRUE;
+							if (usbDevice[r].dev)
+							{
+								DEBUG_COMM3("Checking new device '%s' against old '%s'",
+									device_name, usbDevice[r].device_name);
+								if (strcmp(usbDevice[r].device_name, device_name) == 0)
+									already_used = TRUE;
+							}
 						}
 					}
 
@@ -275,7 +308,7 @@ end:
 		return STATUS_UNSUCCESSFUL;
 
 	return STATUS_SUCCESS;
-} /* OpenUSB */
+} /* OpenUSBByName */
 
 
 /*****************************************************************************
@@ -400,6 +433,7 @@ int get_desc(int channel, char *device_name[], usb_dev_handle **handle, struct
 
 	return 0;
 } /* get_desc */
+
 
 /*****************************************************************************
  *
