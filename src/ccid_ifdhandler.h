@@ -131,7 +131,6 @@ extern "C" {
   RESPONSECODE IFDHControl ( DWORD, PUCHAR, DWORD, 
 			     PUCHAR, PDWORD );
   RESPONSECODE IFDHICCPresence( DWORD );
-  void IFDSetEmv(DWORD lun);
   
 #ifdef __cplusplus
 }
