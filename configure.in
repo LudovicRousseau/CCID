@@ -83,7 +83,7 @@ case "$host" in
 	AM_CONDITIONAL(NEED_PARSER, false)
 esac
 
-CFLAGS="$CFLAGS -Wall -fno-common"
+CFLAGS="$CFLAGS -Wall"
 
 dnl --enable-libusb=PATH
 AC_ARG_ENABLE(libusb,
@@ -205,6 +205,11 @@ AC_SUBST(usbdropdir)
 AC_SUBST(ccidtwindir)
 
 dnl Write Makefiles.
-AC_CONFIG_FILES(Makefile aclocal/Makefile src/Makefile readers/Makefile)
+AC_CONFIG_FILES(Makefile
+	aclocal/Makefile
+	src/Makefile
+	readers/Makefile
+	examples/Makefile)
+
 AC_OUTPUT
 
