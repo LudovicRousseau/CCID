@@ -290,7 +290,7 @@ status_t OpenUSBByName(int lun, char *device)
 					usbDevice[reader].dev = dev;
 
 					/* CCID common informations */
-					usbDevice[reader].ccid.bSeq = 1;
+					usbDevice[reader].ccid.bSeq = 0;
 					usbDevice[reader].ccid.readerID =
 						(dev->descriptor.idVendor << 16) +
 						dev->descriptor.idProduct;
