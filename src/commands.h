@@ -46,11 +46,13 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 	unsigned char rx_buffer[], int protoccol);
 
 RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
-	const unsigned char tx_buffer[], unsigned char bBWI);
+	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI);
 
 RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 
 RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	unsigned int length, unsigned char buffer[]);
+
+int isCharLevel(int reader_index);
 

@@ -656,20 +656,53 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 
 	DEBUG_XXD("sending: ", block, slen);
 
-	n = CCID_Transmit(t1 -> lun, slen, block, t1->wtx);
-	t1->wtx = 0;	/* reset to default value */
-	if (n != IFD_SUCCESS)
-		return n;
+	if (isCharLevel(t1->lun))
+	{
+		rmax = 3;
 
-	/* Get the response en bloc */
-	n = CCID_Receive(t1 -> lun, &rmax, block);
-	if (n == IFD_PARITY_ERROR)
-		return -2;
-	if (n != IFD_SUCCESS)
-		return -1;
+		n = CCID_Transmit(t1 -> lun, slen, block, rmax, t1->wtx);
+		if (n != IFD_SUCCESS)
+			return n;
 
-	n = rmax;
-	if (n >= 0) {
+		n = CCID_Receive(t1 -> lun, &rmax, block);
+		if (n == IFD_PARITY_ERROR)
+			return -2;
+		if (n != IFD_SUCCESS)
+			return -1;
+
+		rmax = block[2] + 1;
+
+		n = CCID_Transmit(t1 -> lun, 0, block, rmax, t1->wtx);
+		if (n != IFD_SUCCESS)
+			return n;
+
+		n = CCID_Receive(t1 -> lun, &rmax, &block[3]);
+		if (n == IFD_PARITY_ERROR)
+			return -2;
+		if (n != IFD_SUCCESS)
+			return -1;
+
+		n = rmax + 3;
+	}
+	else
+	{
+		n = CCID_Transmit(t1 -> lun, slen, block, 0, t1->wtx);
+		t1->wtx = 0;	/* reset to default value */
+		if (n != IFD_SUCCESS)
+			return n;
+
+		/* Get the response en bloc */
+		n = CCID_Receive(t1 -> lun, &rmax, block);
+		if (n == IFD_PARITY_ERROR)
+			return -2;
+		if (n != IFD_SUCCESS)
+			return -1;
+
+		n = rmax;
+	}
+
+	if (n >= 0)
+	{
 		m = block[2] + 3 + t1->rc_bytes;
 		if (m < n)
 			n = m;
