@@ -107,8 +107,8 @@ struct _bogus_firmware
 
 static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0b97, 0x7762, 0x0111 },	/* Oz776S */ /* the firmware version if not correct since I don't have received a working reader yet */
-	{ 0x04e6, 0x5115, 0x0516 },	/* SCR 331 */
-	{ 0x04e6, 0x5115, 0x0620 },	/* SCR 331-DI */
+	{ 0x04e6, 0xe001, 0x0516 },	/* SCR 331 */
+	{ 0x04e6, 0x5111, 0x0620 },	/* SCR 331-DI */
 	{ 0x04e6, 0x5115, 0x0514 },	/* SCR 335 */
 	{ 0x04e6, 0xe003, 0x0504 },	/* SPR 532 */
 };
