@@ -62,7 +62,7 @@ RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 
 	if (OpenPortByName(Lun, lpcDevice) != STATUS_SUCCESS)
 	{
-		DEBUG_CRITICAL("OpenPortByName failed");
+		DEBUG_CRITICAL("failed");
 		return IFD_COMMUNICATION_ERROR;
 	}
 
@@ -129,7 +129,7 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 
 	if (OpenPort(Lun, Channel) != STATUS_SUCCESS)
 	{
-		DEBUG_CRITICAL("OpenPort failed");
+		DEBUG_CRITICAL("failed");
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -414,7 +414,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			break;
 
 		default:
-			DEBUG_CRITICAL("IFDHPowerICC Action not supported");
+			DEBUG_CRITICAL("Action not supported");
 			return_value = IFD_NOT_SUPPORTED;
 	}
 end:
