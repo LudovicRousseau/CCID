@@ -465,7 +465,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				* ATR_DEFAULT_D / ATR_DEFAULT_F);
 
 			/* if the reader is fast enough */
-			if ((card_baudrate < ccid_desc->dwMaxDataRate)
+			if ((card_baudrate <= ccid_desc->dwMaxDataRate)
 				/* and the card does not try to lower the default speed */
 				&& (card_baudrate > default_baudrate ))
 			{
