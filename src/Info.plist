@@ -20,7 +20,7 @@
 	<string>0x00000001</string>
 
 	<key>CFBundleExecutable</key>
-	<string>libccid.so.VERSION</string>
+	<string>TARGET.VERSION</string>
 
 	<key>ifdManufacturerString</key>
 	<string>Ludovic Rousseau (ludovic.rousseau@free.fr)</string>
@@ -29,40 +29,46 @@
 	<string>Generic CCID reader vVERSION</string>
 
 	<key>ifdVendorID</key>
-	<string>0x08E6</string> <!-- 1, Gemplus -->
-	<string>0x08E6</string>	<!-- 2 -->
-	<string>0x08E6</string> <!-- 3 -->
+	<array>
+		<string>0x08E6</string> <!-- 1, Gemplus -->
+		<string>0x08E6</string>	<!-- 2 -->
+		<string>0x08E6</string> <!-- 3 -->
 
-	<string>0x04E6</string> <!-- 4, SCM Microsystems -->
-	<string>0x04E6</string> <!-- 5 -->
+		<string>0x04E6</string> <!-- 4, SCM Microsystems -->
+		<string>0x04E6</string> <!-- 5 -->
 
-	<string>0x076B</string> <!-- 6, OmniKey -->
+		<string>0x076B</string> <!-- 6, OmniKey -->
 
-	<string>0x0783</string>	<!-- 7, C3PO -->
+		<string>0x0783</string>	<!-- 7, C3PO -->
+	</array>
 
 	<key>ifdProductID</key>
-	<string>0x3437</string> <!-- 1 -->
-	<string>0x3438</string> <!-- 2 -->
-	<string>0x4433</string> <!-- 3 -->
+	<array>
+		<string>0x3437</string> <!-- 1 -->
+		<string>0x3438</string> <!-- 2 -->
+		<string>0x4433</string> <!-- 3 -->
 
-	<string>0x5115</string> <!-- 4 -->
-	<string>0xE001</string> <!-- 5 -->
+		<string>0x5115</string> <!-- 4 -->
+		<string>0xE001</string> <!-- 5 -->
 
-	<string>0x3021</string> <!-- 6 -->
+		<string>0x3021</string> <!-- 6 -->
 
-	<string>0x0003</string> <!-- 7 -->
+		<string>0x0003</string> <!-- 7 -->
+	</array>
 
 	<key>ifdFriendlyName</key>
-	<string>GemPC Twin</string>   <!-- 1 -->
-	<string>GemPC Key</string>    <!-- 2 -->
-	<string>GemPC433 SL</string>  <!-- 3 -->
+	<array>
+		<string>GemPC Twin</string>   <!-- 1 -->
+		<string>GemPC Key</string>    <!-- 2 -->
+		<string>GemPC433 SL</string>  <!-- 3 -->
 
-	<string>SCR 335</string>      <!-- 4 -->
-	<string>SCR 331</string>      <!-- 5 -->
+		<string>SCR 335</string>      <!-- 4 -->
+		<string>SCR 331</string>      <!-- 5 -->
 
-	<string>CardMan 3121</string> <!-- 6 -->
+		<string>CardMan 3121</string> <!-- 6 -->
 
-	<string>LTC31</string>        <!-- 7 -->
+		<string>LTC31</string>        <!-- 7 -->
+	</array>
 
 	<key>Copyright</key>
 	<string>This driver is protected by terms of the GNU General Public License version 2, or (at your option) any later version.</string>
