@@ -211,8 +211,7 @@ status_t OpenUSB(int lun, int Channel)
 							if (usb_claim_interface(dev_handle, interface) < 0)
 							{
 								DEBUG_CRITICAL3("Can't claim interface %s: %s",
-									usbDevice[reader].device_name,
-									strerror(errno));
+									device_name, strerror(errno));
 								return STATUS_UNSUCCESSFUL;
 							}
 
