@@ -38,7 +38,7 @@ Parsing Interface Descriptor for device: 001/036
    Automatic ICC voltage selection
    Automatic ICC clock frequency change according to parameters
    Automatic baud rate change according to frequency and Fi, Di parameters
-   Automatic PPS made by the ICC
+   Automatic PPS made by the CCID
    TPDU level exchange
   dwMaxCCIDMessageLength: 263 bytes
   bClassGetResponse: 255
