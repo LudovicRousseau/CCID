@@ -122,6 +122,11 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 History:
 ========
 
+0.4.1 - 14 February 2004, Ludovic Rousseau
+    - distribute missing files readers/supported_readers.txt and
+      src/create_Info_plist.pl
+      'make install' failed because of this.
+
 0.4.0 - 13 February 2004, Ludovic Rousseau
     - support of T=1 with TPDU readers. A lot of the T=1 code comes from
       Carlos Prados towitoko driver.
