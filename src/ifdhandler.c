@@ -872,12 +872,14 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	RESPONSECODE return_value = IFD_COMMUNICATION_ERROR;
 	int oldLogLevel;
 	int reader_index;
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(Lun);
+	_ccid_descriptor *ccid_descriptor;
 
 	DEBUG_PERIODIC2("lun: %X", Lun);
 
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
+
+	ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	/* if DEBUG_LEVEL_PERIODIC is not set we remove DEBUG_LEVEL_COMM */
 	oldLogLevel = LogLevel;
