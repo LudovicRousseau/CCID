@@ -25,3 +25,5 @@
 # Silitek
 0x047B:0x020B:SK-3105
 
+# Dell
+0x413c:0x2100:Dell keyboard SK-3106
