@@ -101,17 +101,19 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	/*
 	 * Vendor/model name
 	 */
+	printf(" idVendor: 0x%04X\n", dev->descriptor.idVendor);
 	if (usb_get_string_simple(handle, dev->descriptor.iManufacturer,
 		buffer, sizeof(buffer)) < 0)
-		printf(" Can't get iManufacturer string\n");
+		printf("  Can't get iManufacturer string\n");
 	else
-		printf(" iManufacturer: %s\n", buffer);
+		printf("  iManufacturer: %s\n", buffer);
 
+	printf(" idProduct: 0x%04X\n", dev->descriptor.idProduct);
 	if (usb_get_string_simple(handle, dev->descriptor.iProduct,
 		buffer, sizeof(buffer)) < 0)
-		printf(" Can't get iProduct string\n");
+		printf("  Can't get iProduct string\n");
 	else
-		printf(" iProduct: %s\n", buffer);
+		printf("  iProduct: %s\n", buffer);
 
 	printf(" bcdDevice: %X.%02X (firmware release?)\n",
 		dev->descriptor.bcdDevice >> 8, dev->descriptor.bcdDevice & 0xFF);
