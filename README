@@ -125,6 +125,20 @@ Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 History:
 ========
 
+0.3.2 - 4 November 2003, Ludovic Rousseau
+    - src/commands.c: correct a stupid bug that occurs with an APDU with
+      2 bytes response.
+    - Info.plist: add SPR 532 in list of supported readers
+    - parse.c: do not exit if the InterfaceClass is 0xFF (proprietary).
+      It is the case with old readers manufactured before the final
+      release of the CCID specs.
+    - move LTC31 reader from unsupported to supported reader list. It
+      was my f ault since in used odd INS byte in my test applet and odd
+      INS bytes are forbidden by ISO 7816-4 ch. 5.4.2 Instruction byte.
+      Thanks to Josep Moné s Teixidor for pointing the problem.
+    - src/commands.c: comment out the automatic GET RESPONSE part. I
+      don't think it should be in the driver. Maybe in pcscd instead?
+
 0.3.1 - 23 September 2003, Ludovic Rouseau
     - add --enable-multi-thread (enabled by default) for thread safe
       support an APDU multiplexing. You will need pcsc-lite-1.2.0-rc3 or
