@@ -22,20 +22,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
 
-#include "pcscdefines.h"
+#include "ccid.h"
 #include "defs.h"
-#include "ifdhandler.h"
+#include "ccid_ifdhandler.h"
 #include "config.h"
 #include "debug.h"
 #include "utils.h"
 #include "commands.h"
-#include "ccid.h"
 #include "protocol_t1/atr.h"
 #include "protocol_t1/pps.h"
 #include "protocol_t1/protocol_t1.h"
 #include "parser.h"
-#include "winsmcrd.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
@@ -49,10 +49,14 @@ static CcidDesc CcidSlots[PCSCLITE_MAX_READERS];
 static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-static int DebugInitialized = FALSE;
 int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
+int DriverOptions = 0;
+static int DebugInitialized = FALSE;
 
-static void init_debug(void);
+/* local functions */
+static void init_driver(void);
+static RESPONSECODE CardUp(int lun);
+static RESPONSECODE CardDown(int lun);
 
 
 RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
@@ -60,7 +64,7 @@ RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	RESPONSECODE return_value = IFD_SUCCESS;
 
 	if (! DebugInitialized)
-		init_debug();
+		init_driver();
 
 	DEBUG_INFO3("lun: %X, device: %s", Lun, lpcDevice);
 
@@ -133,7 +137,7 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	RESPONSECODE return_value = IFD_SUCCESS;
 
 	if (! DebugInitialized)
-		init_debug();
+		init_driver();
 
 	DEBUG_INFO2("lun: %X", Lun);
 
@@ -499,8 +503,8 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 } /* IFDHTransmitToICC */
 
 
-RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
-	DWORD TxLength, PUCHAR RxBuffer, DWORD RxLength, PDWORD pdwBytesReturned)
+RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, LPCVOID TxBuffer,
+	DWORD TxLength, LPVOID RxBuffer, DWORD RxLength, PDWORD pdwBytesReturned)
 {
 	/*
 	 * This function performs a data exchange with the reader (not the
@@ -516,17 +520,29 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
 	 *
 	 * Notes: RxLength should be zero on error.
 	 */
+	RESPONSECODE return_value = IFD_COMMUNICATION_ERROR;
 
 	DEBUG_INFO3("lun: %X, ControlCode: 0x%X", Lun, dwControlCode);
 
-	if (CheckLun(Lun))
-		return IFD_COMMUNICATION_ERROR;
+	if (CheckLun(Lun) || (NULL == pdwBytesReturned) || (NULL == RxBuffer))
+		return return_value;
 
 	/* Set the return length to 0 to avoid problems */
-	if (pdwBytesReturned)
-		*pdwBytesReturned = 0;
+	*pdwBytesReturned = 0;
 
-	return IFD_SUCCESS;
+	if (IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE == dwControlCode)
+	{
+		if (FALSE == (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED))
+			return_value = IFD_COMMUNICATION_ERROR;
+		else
+		{
+			*pdwBytesReturned = RxLength;
+			return_value = CmdEscape(Lun, TxBuffer, TxLength, RxBuffer,
+				pdwBytesReturned);
+		}
+	}
+
+	return return_value;
 } /* IFDHControl */
 
 
@@ -727,7 +743,7 @@ RESPONSECODE CardDown(int lun)
 } /* CardDown */
 
 
-void init_debug(void)
+void init_driver(void)
 {
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	char infofile[FILENAME_MAX];
@@ -736,16 +752,29 @@ void init_debug(void)
 	snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
 
-	if (LTPBundleFindValueWithKey(infofile, "ifdLogLevel", keyValue, 0))
-		return;
+	/* Log level */
+	if (0 == LTPBundleFindValueWithKey(infofile, "ifdLogLevel", keyValue, 0))
+	{
+		/* convert from hex or dec or octal */
+		LogLevel = strtoul(keyValue, 0, 16);
 
-	/* convert from hex or dec or octal */
-	LogLevel = strtoul(keyValue, 0, 16);
+		/* print the log level used */
+		debug_msg("%s:%d:%s LogLevel: 0x%.4X", __FILE__, __LINE__, __FUNCTION__,
+			LogLevel);
+	}
 
-	/* print the log level used */
-	debug_msg("%s:%d:%s LogLevel: 0x%.4X", __FILE__, __LINE__, __FUNCTION__,
-		LogLevel);
+	/* Driver options */
+	if (0 == LTPBundleFindValueWithKey(infofile, "ifdDriverOptions", keyValue, 0))
+	{
+		/* convert from hex or dec or octal */
+		DriverOptions = strtoul(keyValue, 0, 16);
+
+		/* print the log level used */
+		debug_msg("%s:%d:%s DriverOptions: 0x%.4X", __FILE__, __LINE__,
+			__FUNCTION__, DriverOptions);
+	}
+
 
 	DebugInitialized = TRUE;
-} /* init_debug */
+} /* init_driver */
 
