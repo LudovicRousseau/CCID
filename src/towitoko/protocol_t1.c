@@ -331,7 +331,7 @@ Protocol_T1_ReceiveBlock (Protocol_T1 * t1, T1_Block ** block)
 {
   unsigned char cmd[T1_BLOCK_MAX_SIZE]; /* CCID + T1 block */
   int ret;
-  int len = sizeof(cmd);
+  unsigned int len = sizeof(cmd);
 
   /* Receive T=1 block */
   if ((CCID_Receive(t1->lun, &len, cmd) != IFD_SUCCESS) || (len < 4))

@@ -71,11 +71,11 @@ RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	if (CheckLun(Lun))
 		return IFD_COMMUNICATION_ERROR;
 
-	// Reset ATR buffer
+	/* Reset ATR buffer */
 	CcidSlots[LunToReaderIndex(Lun)].nATRLength = 0;
 	*CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer = '\0';
 
-	// Reset PowerFlags
+	/* Reset PowerFlags */
 	CcidSlots[LunToReaderIndex(Lun)].bPowerFlags = POWERFLAGS_RAZ;
 
 #ifdef HAVE_PTHREAD
@@ -379,7 +379,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	 * IFD_NOT_SUPPORTED
 	 */
 
-	int nlength;
+	unsigned int nlength;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	unsigned char pcbuffer[RESP_BUF_SIZE];
 
@@ -487,7 +487,7 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	 */
 
 	RESPONSECODE return_value;
-	int rx_length;
+	unsigned int rx_length;
 
 	DEBUG_INFO2("lun: %X", Lun);
 
@@ -539,7 +539,7 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, LPCVOID TxBuffer,
 		}
 		else
 		{
-			int iBytesReturned;
+			unsigned int iBytesReturned;
 
 			iBytesReturned = RxLength;
 			return_value = CmdEscape(Lun, TxBuffer, TxLength, RxBuffer,
@@ -550,7 +550,7 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, LPCVOID TxBuffer,
 
 	if (IOCTL_SMARTCARD_VENDOR_VERIFY_PIN == dwControlCode)
 	{
-		int iBytesReturned;
+		unsigned int iBytesReturned;
 
 		iBytesReturned = RxLength;
 		return_value = SecurePIN(Lun, TxBuffer, TxLength, RxBuffer,
@@ -641,7 +641,7 @@ RESPONSECODE CardUp(int lun)
 		/* if the reader is fast enough */
 		if (baudrate < ccid_desc->dwMaxDataRate)
 		{
-			int len = 3;
+			unsigned int len = 3;
 			BYTE pps[] = {
 				0xFF,	/* PTSS */
 				0x10,	/* PTS0: PTS1 present */
@@ -671,7 +671,6 @@ RESPONSECODE CardUp(int lun)
 		ATR_GetProtocolType(&atr, 2, &protocol);
 
 	/* SetParameters */
-	//if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_BAUD))
 	{
 		int convention;
 

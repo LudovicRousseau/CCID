@@ -132,16 +132,15 @@ typedef struct
 /* The _serialDevice structure must be defined before including ccid_serial.h */
 #include "ccid_serial.h"
 
-static _serialDevice serialDevice[PCSCLITE_MAX_READERS] = {
-	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { -1, NULL }
-};
+/* no need to initialize to 0 since it is static */
+static _serialDevice serialDevice[PCSCLITE_MAX_READERS];
 
 /*****************************************************************************
  * 
  *				WriteSerial: Send bytes to the card reader
  *
  *****************************************************************************/
-status_t WriteSerial(int lun, int length, unsigned char *buffer)
+status_t WriteSerial(int lun, unsigned int length, unsigned char *buffer)
 {
 	int i;
 	unsigned char lrc;
@@ -193,7 +192,7 @@ status_t WriteSerial(int lun, int length, unsigned char *buffer)
  *				ReadSerial: Receive bytes from the card reader
  *
  *****************************************************************************/
-status_t ReadSerial(int lun, int *length, unsigned char *buffer)
+status_t ReadSerial(int lun, unsigned int *length, unsigned char *buffer)
 {
 	unsigned char c;
 	int rv;
@@ -298,10 +297,7 @@ ack:
 		c ^= buffer[i];
 
 	if (c != (SYNC ^ CTRL_ACK))
-	{
 		DEBUG_CRITICAL2("Wrong LRC: 0x%02X", c);
-		//return STATUS_COMM_ERROR;
-	}
 
 	if (echo)
 	{
@@ -489,7 +485,7 @@ status_t OpenSerialByName(int lun, char *dev_name)
 
 	serialDevice[reader].fd = open(dev_name, O_RDWR | O_NOCTTY);
 
-	if (serialDevice[reader].fd <= 0)
+	if (-1 == serialDevice[reader].fd)
 	{
 		DEBUG_CRITICAL3("open %s: %s", dev_name, strerror(errno));
 		return STATUS_UNSUCCESSFUL;

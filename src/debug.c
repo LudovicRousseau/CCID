@@ -47,7 +47,7 @@ void debug_msg(char *fmt, ...)
 void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
 {
 	int i;
-	unsigned char *c, *debug_buf_end;
+	char *c, *debug_buf_end;
 
 	debug_buf_end = DebugBuffer + DEBUG_BUF_SIZE - 5;
 
@@ -56,7 +56,7 @@ void debug_xxd(const char *msg, const unsigned char *buffer, const int len)
 
 	for (i = 0; (i < len) && (c < debug_buf_end); ++i)
 	{
-		sprintf(c, "%02X ", buffer[i]);
+		sprintf(c, "%02X ", (unsigned char)buffer[i]);
 		c += strlen(c);
 	}
 

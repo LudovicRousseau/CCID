@@ -24,7 +24,6 @@
 #define _ATR_
 
 #include "defines.h"
-//#include "io_serial.h"
 
 /*
  * Exported constants definition

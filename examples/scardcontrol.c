@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	SCARDHANDLE hCard;
 	DWORD dwActiveProtocol, dwReaderLen, dwState, dwProt, dwAtrLen;
 	BYTE pbAtr[MAX_ATR_SIZE] = "";
-	BYTE pbReader[MAX_READERNAME] = "";
+	char pbReader[MAX_READERNAME] = "";
 	int reader_nb;
 	int i, offset;
 	unsigned char bSendBuffer[MAX_BUFFER_SIZE];

@@ -40,7 +40,7 @@
  *					CmdPowerOn
  *
  ****************************************************************************/
-RESPONSECODE CmdPowerOn(int lun, int * nlength, unsigned char buffer[])
+RESPONSECODE CmdPowerOn(int lun, unsigned int * nlength, unsigned char buffer[])
 {
 	unsigned char cmd[10];
 	status_t res;
@@ -83,7 +83,7 @@ again:
 		{
 			unsigned char cmd[] = "\x1F\x01";
 			unsigned char res[1];
-			int res_length = sizeof(res);
+			unsigned int res_length = sizeof(res);
 
 			if ((return_value = CmdEscape(lun, cmd, sizeof(cmd)-1, res,
 				&res_length)) != IFD_SUCCESS)
@@ -117,8 +117,8 @@ again:
  *					SecurePIN
  *
  ****************************************************************************/
-RESPONSECODE SecurePIN(int lun, const unsigned char TxBuffer[], int TxLength,
-	unsigned char RxBuffer[], int *RxLength)
+RESPONSECODE SecurePIN(int lun, const unsigned char TxBuffer[],
+	unsigned int TxLength, unsigned char RxBuffer[], unsigned int *RxLength)
 {
 	unsigned char cmd[11+14+CMD_BUF_SIZE];
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
@@ -183,12 +183,12 @@ RESPONSECODE SecurePIN(int lun, const unsigned char TxBuffer[], int TxLength,
  *					Escape
  *
  ****************************************************************************/
-RESPONSECODE CmdEscape(int lun, const unsigned char TxBuffer[], int TxLength,
-	unsigned char RxBuffer[], int *RxLength)
+RESPONSECODE CmdEscape(int lun, const unsigned char TxBuffer[],
+	unsigned int TxLength, unsigned char RxBuffer[], unsigned int *RxLength)
 {
 	unsigned char *cmd_in, *cmd_out;
 	status_t res;
-	int length_in, length_out;
+	unsigned int length_in, length_out;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
@@ -256,7 +256,7 @@ RESPONSECODE CmdPowerOff(int lun)
 {
 	unsigned char cmd[10];
 	status_t res;
-	int length;
+	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
@@ -294,7 +294,7 @@ RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[])
 {
 	unsigned char cmd[10];
 	status_t res;
-	int length;
+	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
@@ -328,8 +328,9 @@ RESPONSECODE CmdGetSlotStatus(int lun, unsigned char buffer[])
  *					CmdXfrBlock
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlock(int lun, int tx_length, unsigned char tx_buffer[],
-	int *rx_length, unsigned char rx_buffer[], int protocol)
+RESPONSECODE CmdXfrBlock(int lun, unsigned int tx_length,
+	unsigned char tx_buffer[], unsigned int *rx_length,
+	unsigned char rx_buffer[], int protocol)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
@@ -390,7 +391,7 @@ clean_up_and_return:
  *					CCID_Transmit
  *
  ****************************************************************************/
-RESPONSECODE CCID_Transmit(int lun, int tx_length,
+RESPONSECODE CCID_Transmit(int lun, unsigned int tx_length,
 	const unsigned char tx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
@@ -415,10 +416,11 @@ RESPONSECODE CCID_Transmit(int lun, int tx_length,
  *					CCID_Receive
  *
  ****************************************************************************/
-RESPONSECODE CCID_Receive(int lun, int *rx_length, unsigned char rx_buffer[])
+RESPONSECODE CCID_Receive(int lun, unsigned int *rx_length,
+	unsigned char rx_buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
-	int length;
+	unsigned int length;
 
 time_request:
 	length = sizeof(cmd);
@@ -454,8 +456,9 @@ time_request:
  *					CmdXfrBlockTPDU_T0
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlockTPDU_T0(int lun, int tx_length,
-	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[])
+RESPONSECODE CmdXfrBlockTPDU_T0(int lun, unsigned int tx_length,
+	unsigned char tx_buffer[], unsigned int *rx_length,
+	unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 
@@ -474,8 +477,9 @@ RESPONSECODE CmdXfrBlockTPDU_T0(int lun, int tx_length,
  *					CmdXfrBlockTPDU_T1
  *
  ****************************************************************************/
-RESPONSECODE CmdXfrBlockTPDU_T1(int lun, int tx_length,
-	unsigned char tx_buffer[], int *rx_length, unsigned char rx_buffer[])
+RESPONSECODE CmdXfrBlockTPDU_T1(int lun, unsigned int tx_length,
+	unsigned char tx_buffer[], unsigned int *rx_length,
+	unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value;
 	APDU_Cmd cmd;
@@ -517,7 +521,8 @@ RESPONSECODE CmdXfrBlockTPDU_T1(int lun, int tx_length,
  *					SetParameters
  *
  ****************************************************************************/
-RESPONSECODE SetParameters(int lun, char protocol, int length, unsigned char buffer[])
+RESPONSECODE SetParameters(int lun, char protocol, unsigned int length,
+	unsigned char buffer[])
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);

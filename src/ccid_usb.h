@@ -23,8 +23,8 @@
 
 status_t OpenUSB(int lun, int channel);
 status_t OpenUSBByName(int lun, char *device);
-status_t WriteUSB(int lun, int length, unsigned char *Buffer);
-status_t ReadUSB(int lun, int *length, unsigned char *Buffer);
+status_t WriteUSB(int lun, unsigned int length, unsigned char *Buffer);
+status_t ReadUSB(int lun, unsigned int *length, unsigned char *Buffer);
 status_t CloseUSB(int lun);
 
 #ifdef __USB_H__

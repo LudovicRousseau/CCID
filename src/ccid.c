@@ -60,7 +60,7 @@ int ccid_open_hack(int lun)
 			{
 				unsigned char cmd[] = "\xA0\x02";
 				unsigned char res[10];
-				int length_res = sizeof(res);
+				unsigned int length_res = sizeof(res);
 
 				if (CmdEscape(lun, cmd, sizeof(cmd)-1, res, &length_res) == IFD_SUCCESS)
 				{

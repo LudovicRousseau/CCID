@@ -80,9 +80,8 @@ typedef struct
 
 static int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
 
-static _usbDevice usbDevice[PCSCLITE_MAX_READERS] = {
-	[ 0 ... (PCSCLITE_MAX_READERS-1) ] = { NULL, NULL, 0, 0 }
-};
+/* ne need to initialize to 0 since it is static */
+static _usbDevice usbDevice[PCSCLITE_MAX_READERS];
 
 #define PCSCLITE_MANUKEY_NAME                   "ifdVendorID"
 #define PCSCLITE_PRODKEY_NAME                   "ifdProductID"
@@ -115,7 +114,7 @@ status_t OpenUSBByName(int lun, char *device)
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	int vendorID, productID;
 	char infofile[FILENAME_MAX];
-	int device_vendor, device_product;
+	unsigned int device_vendor, device_product;
 	char *dirname = NULL, *filename = NULL;
 
 	DEBUG_COMM3("Lun: %X, Device: %s", lun, device);
@@ -366,7 +365,7 @@ end:
  *					WriteUSB
  *
  ****************************************************************************/
-status_t WriteUSB(int lun, int length, unsigned char *buffer)
+status_t WriteUSB(int lun, unsigned int length, unsigned char *buffer)
 {
 	int rv;
 	int reader = LunToReaderIndex(lun);
@@ -380,7 +379,8 @@ status_t WriteUSB(int lun, int length, unsigned char *buffer)
 	DEBUG_XXD(debug_header, buffer, length);
 #endif
 
-	rv = usb_bulk_write(usbDevice[reader].handle, usbDevice[reader].bulk_out, buffer, length, USB_WRITE_TIMEOUT);
+	rv = usb_bulk_write(usbDevice[reader].handle, usbDevice[reader].bulk_out,
+		(char *)buffer, length, USB_WRITE_TIMEOUT);
 
 	if (rv < 0)
 	{
@@ -399,7 +399,7 @@ status_t WriteUSB(int lun, int length, unsigned char *buffer)
  *					ReadUSB
  *
  ****************************************************************************/
-status_t ReadUSB(int lun, int * length, unsigned char *buffer)
+status_t ReadUSB(int lun, unsigned int * length, unsigned char *buffer)
 {
 	int rv;
 	int reader = LunToReaderIndex(lun);
@@ -409,8 +409,8 @@ status_t ReadUSB(int lun, int * length, unsigned char *buffer)
 	sprintf(debug_header, "<- %06X ", (int)lun);
 #endif
 
-
-	rv = usb_bulk_read(usbDevice[reader].handle, usbDevice[reader].bulk_in, buffer, *length, USB_READ_TIMEOUT);
+	rv = usb_bulk_read(usbDevice[reader].handle, usbDevice[reader].bulk_in,
+		(char *)buffer, *length, USB_READ_TIMEOUT);
 	*length = rv;
 
 	if (rv < 0)
@@ -452,9 +452,10 @@ status_t CloseUSB(int lun)
 		usb_interface->altsetting->bInterfaceNumber :
 		usbDevice[reader].dev->config->interface->altsetting->bInterfaceNumber;
 	
-	usb_release_interface(usbDevice[reader].handle, interface);
-
+	/* reset so that bSeq starts at 0 again */
 	usb_reset(usbDevice[reader].handle);
+
+	usb_release_interface(usbDevice[reader].handle, interface);
 	usb_close(usbDevice[reader].handle);
 
 	/* mark the resource unused */
