@@ -4,18 +4,19 @@ INSTALATION PROCEDURE
 Installation from source:
 """""""""""""""""""""""""
 
-get the ccid-x.y.z.tar.gz archive
+get the ccid-x.y.z.tar.gz archive and do:
+
 $ tar xzvf ccid-x.y.z.tar.gz
 $ cd ccid-x.y.z
-$ ./configure
+$ dropdir=$(pkg-config libpcsclite --variable=usbdropdir)
+$ ./configure --enable-usbdropdir=$dropdir
 $ make
 $ sudo make install
 
 By default pcscd and my ccid driver use /usr/local/pcsc/drivers/ as
-directory for hotplug drivers. If pcscd uses a different directory
-(Debian pcscd uses /usr/lib/pcsc/drivers/) do:
-
-$ ./configure --enable-usbdropdir=/usr/lib/pcsc/drivers/
+directory for hotplug drivers. But pcscd store this value in a
+pkg-config file so you do not have to know where the files are searched
+for.
 
 
 more (or less) debug messages
@@ -52,7 +53,9 @@ serial reader
 
 The GemPCTwin reader can also be connected on a serial port. By default
 the serial driver is built but not installed. You must explicitely do:
-$ ./configure
+
+$ dropdir=$(pkg-config libpcsclite --variable=usbdropdir)
+$ ./configure --enable-ccidtwindir=$dropdir/serial
 $ make -C src install_ccidtwin
 
 
