@@ -37,7 +37,7 @@ RESPONSECODE CmdXfrBlock(int lun, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[], int protoccol);
 RESPONSECODE CCID_Transmit(int lun, unsigned int tx_length,
-	const unsigned char tx_buffer[]);
+	const unsigned char tx_buffer[], unsigned char bBWI);
 RESPONSECODE CCID_Receive(int lun, unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 RESPONSECODE CmdXfrBlockTPDU_T0(int lun, unsigned int tx_length,

@@ -415,7 +415,7 @@ clean_up_and_return:
  *
  ****************************************************************************/
 RESPONSECODE CCID_Transmit(int lun, unsigned int tx_length,
-	const unsigned char tx_buffer[])
+	const unsigned char tx_buffer[], unsigned char bBWI)
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
@@ -424,7 +424,8 @@ RESPONSECODE CCID_Transmit(int lun, unsigned int tx_length,
 	i2dw(tx_length, cmd+1);	/* APDU length */
 	cmd[5] = 0;	/* slot number */
 	cmd[6] = ccid_descriptor->bSeq++;
-	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
+	cmd[7] = bBWI;	/* extend block waiting timeout */
+	cmd[8] = cmd[9] = 0; /* RFU */
 	memcpy(cmd+10, tx_buffer, tx_length);
 
 	if (WritePort(lun, 10+tx_length, cmd) != STATUS_SUCCESS)
@@ -490,7 +491,7 @@ RESPONSECODE CmdXfrBlockTPDU_T0(int lun, unsigned int tx_length,
 
 	DEBUG_COMM2("T=0: %d bytes", tx_length);
 
-	return_value = CCID_Transmit(lun, tx_length, tx_buffer);
+	return_value = CCID_Transmit(lun, tx_length, tx_buffer, 0);
 	if (return_value != IFD_SUCCESS)
 		return return_value;
 	
