@@ -22,8 +22,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <pcsclite.h>
-#include <ifdhandler.h>
+#include <PCSC/pcsclite.h>
+#include <PCSC/ifdhandler.h>
 
 #include "ccid.h"
 #include "defs.h"
@@ -32,9 +32,8 @@
 #include "debug.h"
 #include "utils.h"
 #include "commands.h"
-#include "protocol_t1/atr.h"
-#include "protocol_t1/pps.h"
-#include "protocol_t1/protocol_t1.h"
+#include "towitoko/atr.h"
+#include "towitoko/pps.h"
 #include "parser.h"
 
 #ifdef HAVE_PTHREAD
@@ -55,11 +54,9 @@ static int DebugInitialized = FALSE;
 
 /* local functions */
 static void init_driver(void);
-static RESPONSECODE CardUp(int lun);
-static RESPONSECODE CardDown(int lun);
 
 
-RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
+RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 
@@ -328,23 +325,283 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	 * This function should set the PTS of a particular card/slot using
 	 * the three PTS parameters sent
 	 *
-	 * Protocol - 0 .... 14 T=0 .... T=14 Flags - Logical OR of possible
-	 * values: IFD_NEGOTIATE_PTS1 IFD_NEGOTIATE_PTS2 IFD_NEGOTIATE_PTS3 to
-	 * determine which PTS values to negotiate. PTS1,PTS2,PTS3 - PTS
-	 * Values.
+	 * Protocol - 0 .... 14 T=0 .... T=14
+	 * Flags - Logical OR of possible values:
+	 *  IFD_NEGOTIATE_PTS1
+	 *  IFD_NEGOTIATE_PTS2
+	 *  IFD_NEGOTIATE_PTS3
+	 * to determine which PTS values to negotiate.
+	 * PTS1,PTS2,PTS3 - PTS Values.
 	 *
 	 * returns:
-	 *
-	 * IFD_SUCCESS IFD_ERROR_PTS_FAILURE IFD_COMMUNICATION_ERROR
-	 * IFD_PROTOCOL_NOT_SUPPORTED
+	 *  IFD_SUCCESS
+	 *  IFD_ERROR_PTS_FAILURE
+	 *  IFD_COMMUNICATION_ERROR
+	 *  IFD_PROTOCOL_NOT_SUPPORTED
 	 */
 
-	DEBUG_INFO2("lun: %X", Lun);
+	BYTE pps[PPS_MAX_LENGTH];
+	ATR atr;
+	unsigned int len;
+	int convention;
 
-	/* if (CheckLun(Lun))
-		return IFD_COMMUNICATION_ERROR; */
+	/* Set ccid desc params */
+	CcidDesc *ccid_slot;
+	_ccid_descriptor *ccid_desc;
 
-	return IFD_NOT_SUPPORTED;
+	DEBUG_INFO3("lun: %X, protocol T=%d", Lun, Protocol-1);
+
+	if (CheckLun(Lun))
+		return IFD_COMMUNICATION_ERROR;
+
+	/* Set to zero buffer */
+	memset(pps, 0, sizeof(pps));
+	memset(&atr, 0, sizeof(atr));
+
+	/* Get ccid params */
+	ccid_slot = get_ccid_slot(Lun);
+	ccid_desc = get_ccid_descriptor(Lun);
+
+	/* Get ATR of the card */
+	ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer, ccid_slot->nATRLength);
+
+	if (SCARD_PROTOCOL_T0 == Protocol)
+		pps[1] |= ATR_PROTOCOL_TYPE_T0;
+	else
+		if (SCARD_PROTOCOL_T1 == Protocol)
+			pps[1] |= ATR_PROTOCOL_TYPE_T1;
+		else
+			return IFD_PROTOCOL_NOT_SUPPORTED;
+
+	/* TA2 present -> specific mode */
+	if (atr.ib[1][ATR_INTERFACE_BYTE_TA].present)
+	{
+		if (pps[1] != (atr.ib[1][ATR_INTERFACE_BYTE_TA].value & 0x0F))
+		{
+			/* wrong protocol */
+			DEBUG_COMM3("Specific mode in T=%d and T=%d requested",
+				atr.ib[1][ATR_INTERFACE_BYTE_TA].value & 0x0F, pps[1]);
+
+			return IFD_PROTOCOL_NOT_SUPPORTED;
+		}
+	}
+
+	/* TCi (i>2) indicates CRC instead of LRC */
+	if (SCARD_PROTOCOL_T1 == Protocol)
+	{
+		t1_state_t *t1 = &(ccid_slot -> t1);
+		int i;
+
+		/* TCi (i>2) present? */
+		for (i=2; i<ATR_MAX_PROTOCOLS; i++)
+			if (atr.ib[i][ATR_INTERFACE_BYTE_TC].present)
+			{
+				if (0 == atr.ib[i][ATR_INTERFACE_BYTE_TC].value)
+				{
+					DEBUG_COMM("Use LRC");
+					t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
+				}
+				else
+					if (1 == atr.ib[i][ATR_INTERFACE_BYTE_TC].value)
+					{
+						DEBUG_COMM("Use CRC");
+						t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_CRC, 0);
+					}
+					else
+						DEBUG_COMM2("Wrong value for TCi: %d",
+							atr.ib[i][ATR_INTERFACE_BYTE_TC].value);
+
+				/* only the first TCi (i>2) must be used */
+				break;
+			}
+	}
+
+	/* PTS1? */
+	if (Flags & IFD_NEGOTIATE_PTS1)
+	{
+		/* just use the value passed in argument */
+		pps[1] |= 0x10; /* PTS1 presence */
+		pps[2] = PTS1;
+	}
+	else
+	{
+		/* PPS not negociated by reader, and TA1 present */
+		if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present &&
+			! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
+		{
+			unsigned int card_baudrate;
+			unsigned int default_baudrate;
+			double f, d;
+
+			ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+			ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+
+			/* Baudrate = f x D/F */
+			card_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock
+				* d / f);
+
+			default_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock
+				* ATR_DEFAULT_D / ATR_DEFAULT_F);
+
+			/* if the reader is fast enough */
+			if ((card_baudrate < ccid_desc->dwMaxDataRate)
+				/* and the card does not try to lower the default speed */
+				&& (card_baudrate > default_baudrate ))
+			{
+				pps[1] |= 0x10; /* PTS1 presence */
+				pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+				DEBUG_COMM2("Set speed to %d bauds", card_baudrate);
+			}
+		}
+	}
+
+	/* PTS2? */
+	if (Flags & IFD_NEGOTIATE_PTS2)
+	{
+		pps[1] |= 0x20; /* PTS2 presence */
+		pps[3] = PTS2;
+	}
+
+	/* PTS3? */
+	if (Flags & IFD_NEGOTIATE_PTS3)
+	{
+		pps[1] |= 0x40; /* PTS3 presence */
+		pps[4] = PTS3;
+	}
+
+	/* Generate PPS */
+	pps[0] = 0xFF;
+
+	/* Automatic PPS made by the ICC? */
+	if ((! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
+		/* TA2 absent: negociable mode */
+		&& (! atr.ib[1][ATR_INTERFACE_BYTE_TA].present))
+	{
+		int default_protocol;
+
+		if (ATR_MALFORMED == ATR_GetDefaultProtocol(&atr, &default_protocol))
+			return IFD_PROTOCOL_NOT_SUPPORTED;
+
+		/* if the requested protocol is not the default one
+		 * or a TA1/PPS1 is present */
+		if (((pps[1] & 0x0F) != default_protocol) || (PPS_HAS_PPS1(pps)))
+			if (PPS_Exchange(Lun, pps, &len, &pps[2]) != PPS_OK)
+			{
+				DEBUG_INFO("PPS_Exchange Failed");
+
+				return IFD_ERROR_PTS_FAILURE;
+			}
+	}
+
+	/* Now we must set the reader parameters */
+	ATR_GetConvention(&atr, &convention);
+
+	/* specific mode and implicit parameters? (b5 of TA2) */
+	if (atr.ib[1][ATR_INTERFACE_BYTE_TA].present
+		&& (atr.ib[1][ATR_INTERFACE_BYTE_TA].value & 0x10))
+		return IFD_COMMUNICATION_ERROR;
+
+	/* T=1 */
+	if (SCARD_PROTOCOL_T1 == Protocol)
+	{
+		BYTE param[] = {
+			0x11,	/* Fi/Di		*/
+			0x10,	/* TCCKS		*/
+			0x00,	/* GuardTime	*/
+			0x4D,	/* BWI/BCI		*/
+			0x00,	/* ClockStop	*/
+			0x20,	/* IFSC			*/
+			0x00	/* NADValue		*/
+		};
+		int i;
+
+		/* TA1 is not default */
+		if (PPS_HAS_PPS1(pps))
+			param[0] = pps[2];
+
+		if (ATR_CONVENTION_INVERSE == convention)
+			param[1] &= 0x02;
+
+		/* get TC1 Extra guard time */
+		if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
+			param[2] = atr.ib[0][ATR_INTERFACE_BYTE_TC].value;
+
+		/* TBi (i>2) present? BWI/BCI */
+		for (i=2; i<ATR_MAX_PROTOCOLS; i++)
+			if (atr.ib[i][ATR_INTERFACE_BYTE_TB].present)
+			{
+				DEBUG_COMM3("BWI/BCI (TB%d) present: %d", i+1,
+					atr.ib[i][ATR_INTERFACE_BYTE_TB].value);
+				param[3] = atr.ib[i][ATR_INTERFACE_BYTE_TB].value;
+
+				/* only the first TBi (i>2) must be used */
+				break;
+			}
+
+		SetParameters(Lun, 1, sizeof(param), param);
+	}
+	else
+	/* T=0 */
+	{
+		BYTE param[] = {
+			0x11,	/* Fi/Di			*/
+			0x00,	/* TCCKS			*/
+			0x00,	/* GuardTime		*/
+			0x0A,	/* WaitingInteger	*/
+			0x00	/* ClockStop		*/
+		};
+
+		/* TA1 is not default */
+		if (PPS_HAS_PPS1(pps))
+			param[0] = pps[2];
+
+		if (ATR_CONVENTION_INVERSE == convention)
+			param[1] &= 0x02;
+
+		/* get TC1 Extra guard time */
+		if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
+			param[2] = atr.ib[0][ATR_INTERFACE_BYTE_TC].value;
+
+		/* TC2 WWT */
+		if (atr.ib[1][ATR_INTERFACE_BYTE_TC].present)
+			param[3] = atr.ib[1][ATR_INTERFACE_BYTE_TC].value;
+
+		SetParameters(Lun, 0, sizeof(param), param);
+	}
+
+	/* set IFSC & IFSD in T=1 */
+	if (SCARD_PROTOCOL_T1 == Protocol)
+	{
+		t1_state_t *t1 = &(ccid_slot -> t1);
+		int i;
+
+		/* TAi (i>2) present? */
+		for (i=2; i<ATR_MAX_PROTOCOLS; i++)
+			if (atr.ib[i][ATR_INTERFACE_BYTE_TA].present)
+			{
+				DEBUG_COMM3("IFSC (TA%d) present: %d", i+1,
+					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
+				t1_set_param(t1, IFD_PROTOCOL_T1_IFSC,
+					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
+
+				/* only the first TAi (i>2) must be used */
+				break;
+			}
+
+		/* IFSD not negociated by the reader? */
+		if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD))
+		{
+			DEBUG_COMM2("Negociate IFSD at %d",  ccid_desc -> dwMaxIFSD);
+			if (t1_negociate_ifsd(t1, 0, ccid_desc -> dwMaxIFSD) < 0)
+				return IFD_COMMUNICATION_ERROR;
+		}
+		t1_set_param(t1, IFD_PROTOCOL_T1_IFSD, ccid_desc -> dwMaxIFSD);
+
+		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
+	}
+
+	return IFD_SUCCESS;
 } /* IFDHSetProtocolParameters */
 
 
@@ -409,6 +666,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			/* Memorise the request */
 			CcidSlots[LunToReaderIndex(Lun)].bPowerFlags |=
 				MASK_POWERFLAGS_PDWN;
+
 			/* send the command */
 			if (IFD_SUCCESS != CmdPowerOff(Lun))
 			{
@@ -417,7 +675,8 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 				goto end;
 			}
 
-			return_value = CardDown(Lun);
+			/* clear T=1 context */
+			t1_release(&(get_ccid_slot(Lun) -> t1));
 			break;
 
 		case IFD_POWER_UP:
@@ -443,7 +702,8 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			memcpy(CcidSlots[LunToReaderIndex(Lun)].pcATRBuffer,
 				pcbuffer, *AtrLength);
 
-			return_value = CardUp(Lun);
+			/* initialise T=1 context */
+			t1_init(&(get_ccid_slot(Lun) -> t1));
 			break;
 
 		default:
@@ -620,152 +880,6 @@ CcidDesc *get_ccid_slot(int lun)
 } /* get_ccid_slot */
 
 
-RESPONSECODE CardUp(int lun)
-{
-	ATR atr;
-	BYTE protocol = ATR_PROTOCOL_TYPE_T0;
-	unsigned int np;
-	CcidDesc *ccid_slot = get_ccid_slot(lun);
-	_ccid_descriptor *ccid_desc = get_ccid_descriptor(lun);
-
-	/* Get ATR of the card */
-	ATR_InitFromArray(&atr, ccid_slot -> pcATRBuffer, ccid_slot -> nATRLength);
-
-	ATR_GetNumberOfProtocols(&atr, &np);
-
-	/* PPS not negociated by reader, and TA1 present */
-	if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present &&
-		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
-	{
-		unsigned int baudrate;
-		double f, d;
-
-		ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
-		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
-
-		/* Baudrate = f x D/F */
-		baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock * d / f);
-
-		/* if the reader is fast enough */
-		if (baudrate < ccid_desc->dwMaxDataRate)
-		{
-			unsigned int len = 3;
-			BYTE pps[] = {
-				0xFF,	/* PTSS */
-				0x10,	/* PTS0: PTS1 present */
-				0,		/* PTS1 */
-				0};		/* PCK: will be calculated */
-
-			/* TD1: protocol */
-			if (atr.ib[0][ATR_INTERFACE_BYTE_TD].present)
-				pps[1] |= (atr.ib[0][ATR_INTERFACE_BYTE_TD].value & 0x0F);
-
-			/* PTS1 = TA1 */
-			pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
-
-			PPS_Exchange(lun, pps, &len);
-		}
-		else
-		{
-			DEBUG_INFO3("The reader is too slow (%d bauds) for the card (%d bauds)", ccid_desc->dwMaxDataRate, baudrate);
-		}
-	}
-
-	/*
-	 * Get protocol offered by interface bytes T*2 if available,
-	 * (that is, if TD1 is available), otherwise use default T=0
-	 */
-	if (np>1)
-		ATR_GetProtocolType(&atr, 2, &protocol);
-
-	/* SetParameters */
-	{
-		int convention;
-
-		ATR_GetConvention(&atr, &convention);
-
-		/* T=1 */
-		if (protocol == ATR_PROTOCOL_TYPE_T1)
-		{
-			BYTE param[] = {0x11, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00};
-			Protocol_T1 *t1 = &(ccid_slot -> t1);
-
-			/* get TA1 Fi/Di */
-			if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
-				param[0] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
-
-			if (convention == ATR_CONVENTION_INVERSE)
-				param[1] &= 0x02;
-
-			/* get TC1 Extra guard time */
-			if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
-				param[2] = atr.ib[0][ATR_INTERFACE_BYTE_TC].value;
-
-			/* get TB3 BWI/BCI */
-			if (atr.ib[2][ATR_INTERFACE_BYTE_TB].present)
-				param[3] = atr.ib[2][ATR_INTERFACE_BYTE_TB].value;
-
-			/* set T=1 context */
-			Protocol_T1_Init(t1, lun);
-
-			SetParameters(lun, 1, sizeof(param), param);
-		}
-		else
-		/* T=0 */
-		{
-			BYTE param[] = {0x11, 0x00, 0x00, 0x0a, 0x00};
-
-			/* get TA1 Fi/Di, default 0x11 */
-			if (atr.ib[0][ATR_INTERFACE_BYTE_TA].present)
-				param[0] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
-
-			if (convention == ATR_CONVENTION_INVERSE)
-				param[1] &= 0x02;
-
-			/* get TC1 Extra guard time */
-			if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
-				param[2] = atr.ib[0][ATR_INTERFACE_BYTE_TC].value;
-
-			/* TC2 WWT */
-			if (atr.ib[1][ATR_INTERFACE_BYTE_TC].present)
-				param[3] = atr.ib[1][ATR_INTERFACE_BYTE_TC].value;
-
-			SetParameters(lun, 0, sizeof(param), param);
-		}
-	}
-
-
-	/* negotiate IFSD in T=1 */
-	if ((protocol == ATR_PROTOCOL_TYPE_T1) &&
-		! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD))
-	{
-		Protocol_T1 *t1 = &(ccid_slot -> t1);
-
-		Protocol_T1_Negociate_IFSD(t1, ccid_desc -> dwMaxIFSD);
-
-		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
-	}
-
-	return IFD_SUCCESS;
-} /* CardUp */
-
-
-RESPONSECODE CardDown(int lun)
-{
-	/* clear T=1 context */
-	Protocol_T1_Close(&((get_ccid_slot(lun)) -> t1));
-
-	/* Reset ATR buffer */
-	CcidSlots[LunToReaderIndex(lun)].nATRLength = 0;
-	*CcidSlots[LunToReaderIndex(lun)].pcATRBuffer = '\0';
-
-	/* Reset PowerFlags */
-	CcidSlots[LunToReaderIndex(lun)].bPowerFlags = POWERFLAGS_RAZ;
-
-	return IFD_SUCCESS;
-} /* CardDown */
-
-
 void init_driver(void)
 {
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
@@ -796,7 +910,6 @@ void init_driver(void)
 		debug_msg("%s:%d:%s DriverOptions: 0x%.4X", __FILE__, __LINE__,
 			__FUNCTION__, DriverOptions);
 	}
-
 
 	DebugInitialized = TRUE;
 } /* init_driver */
