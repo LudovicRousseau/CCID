@@ -69,6 +69,36 @@ int ccid_open_hack(unsigned int lun)
 				}
 			}
 			break;
+
+		/* SCM SCR331-DI contactless */
+		case SCR331DI:
+			/* the contactless reader is in the second slot */
+			if (ccid_descriptor->bMaxSlotIndex > 0)
+			{
+				unsigned char cmd1[] = { 0x00 };
+				/*  command: 00 ??
+				 * response: 06 10 03 03 00 00 00 01 FE FF FF FE 01 ?? */
+				unsigned char cmd2[] = { 0x02 };
+				/*  command: 02 ??
+				 * response: 00 ?? */
+
+				unsigned char res[20];
+				unsigned int length_res = sizeof(res);
+
+				if ((IFD_SUCCESS == CmdEscape(lun, cmd1, sizeof(cmd1), res, &length_res))
+					&& (IFD_SUCCESS == CmdEscape(lun, cmd2, sizeof(cmd2), res, &length_res)))
+				{
+					DEBUG_COMM("SCM SCR331-DI contactless detected");
+				}
+				else
+				{
+					DEBUG_COMM("SCM SCR331-DI contactless init failed");
+
+					/* inhibit the contactless reader */
+					ccid_descriptor->bMaxSlotIndex = 0;
+				}
+			}
+			break;
 	}
 
 	return 0;
