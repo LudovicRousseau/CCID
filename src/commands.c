@@ -142,7 +142,7 @@ again:
 	else
 		*nlength = atr_len;
 
-	memcpy(buffer, buffer+10, atr_len);
+	memmove(buffer, buffer+10, atr_len);
 
 	return return_value;
 } /* CmdPowerOn */
