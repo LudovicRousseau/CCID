@@ -43,6 +43,8 @@
 		<string>0x0783</string>	<!-- 8, C3PO -->
 
 		<string>0x09C3</string>	<!-- 9, ActivCard -->
+
+		<string>0x047B</string> <!-- 10, Silitek -->
 	</array>
 
 	<key>ifdProductID</key>
@@ -60,6 +62,8 @@
 		<string>0x0003</string> <!-- 8 -->
 
 		<string>0x0008</string> <!-- 9 -->
+
+		<string>0x020B</string> <!-- 10 -->
 	</array>
 
 	<key>ifdFriendlyName</key>
@@ -77,6 +81,8 @@
 		<string>LTC31</string>        <!-- 8 -->
 
 		<string>ActivCard</string>    <!-- 9 -->
+
+		<string>SK-3105</string>      <!-- 10 -->
 	</array>
 
 	<key>Copyright</key>
