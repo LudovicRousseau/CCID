@@ -1,7 +1,7 @@
 /*****************************************************************
 
   File   :   configfile.ll
-  Author :   David Corcoran
+  Author :   David Corcoran, Ludovic Rousseau
   Date   :   February 12, 1999, modified 4/6/2003
   Purpose:   Reads lexical config files and updates database.
              See http://www.linuxnet.com for more information.
@@ -27,6 +27,8 @@ static int desiredIndex = 0;
 void tperrorCheck (char *pcToken_error);
 
 %}
+
+%option nounput
 
 %%
 
