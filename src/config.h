@@ -33,10 +33,10 @@
 #define DEBUG_LEVEL_INFO
 
 /* periodic info: messages caused by pcsclite scanning every second */
-#define DEBUG_LEVEL_PERIODIC
+//#define DEBUG_LEVEL_PERIODIC
 
 /* low level communications */
-#define DEBUG_LEVEL_COMM
+//#define DEBUG_LEVEL_COMM
 
 #endif
 
