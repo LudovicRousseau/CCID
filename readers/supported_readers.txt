@@ -31,6 +31,7 @@
 
 # Cherry
 0x046a:0x0005:Cherry XX33
+0x046a:0x0010:Cherry XX44
 
 # Advanced Card Systems
 0x072f:0x90cc:ACR 38
