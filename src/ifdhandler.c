@@ -544,11 +544,11 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
  
 		/* CRC checksum? */
 		if (2 == t1->rc_bytes)
-			param[1] &= 0x01;
+			param[1] |= 0x01;
 
 		/* the CCID should ignore this bit */
 		if (ATR_CONVENTION_INVERSE == convention)
-			param[1] &= 0x02;
+			param[1] |= 0x02;
 
 		/* get TC1 Extra guard time */
 		if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
@@ -585,7 +585,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			param[0] = pps[2];
 
 		if (ATR_CONVENTION_INVERSE == convention)
-			param[1] &= 0x02;
+			param[1] |= 0x02;
 
 		/* get TC1 Extra guard time */
 		if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
