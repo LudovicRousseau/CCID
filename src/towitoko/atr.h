@@ -89,21 +89,23 @@ typedef struct
   BYTE hb[ATR_MAX_HISTORICAL];
   unsigned hbn;
 }
-ATR;
+ATR_t;
 
 /*
  * Exported functions declaraton
  */
 
 /* Initialization */
-extern int ATR_InitFromArray (ATR * atr, BYTE buffer[ATR_MAX_SIZE], unsigned length);
+extern int ATR_InitFromArray(ATR_t * atr, BYTE buffer[ATR_MAX_SIZE],
+	unsigned length);
 
 /* General smartcard characteristics */
-extern int ATR_GetConvention (ATR * atr, int *convention);
-extern int ATR_GetDefaultProtocol (ATR * atr, int *protocol);
+extern int ATR_GetConvention(ATR_t * atr, int *convention);
+extern int ATR_GetDefaultProtocol(ATR_t * atr, int *protocol);
 
 /* ATR parameters and integer values */
-extern int ATR_GetIntegerValue (ATR * atr, int name, BYTE * value);
-extern int ATR_GetParameter (ATR * atr, int name, double *parameter);
+extern int ATR_GetIntegerValue(ATR_t * atr, int name, BYTE * value);
+extern int ATR_GetParameter(ATR_t * atr, int name, double *parameter);
 
 #endif /* _ATR_ */
+
