@@ -37,6 +37,10 @@ enum {
 
 #define T1_BUFFER_SIZE		(3 + 254 + 2)
 
+/* see /usr/include/PCSC/ifdhandler.h for other values
+ * this one is for internal use only */
+#define IFD_PARITY_ERROR 699
+
 typedef struct {
 	int		lun;
 	int		state;
