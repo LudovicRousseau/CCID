@@ -13,7 +13,7 @@ AUX_DIST = \
 	$(ac_aux_dir)/mkinstalldirs \
 	$(ac_aux_dir)/ylwrap
 
-EXTRA_DIST = bootstrap ChangeLog.cvs \
+EXTRA_DIST = bootstrap ChangeLog \
 	$(AUX_DIST)
 
 MAINTAINERCLEANFILES = $(AUX_DIST)
@@ -24,7 +24,7 @@ LIBTOOL_DEPS = @LIBTOOL_DEPS@
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
-ChangeLog.cvs:
+ChangeLog:
 	rcs2log | perl -e 'while (<>) { s/rousseau /Ludovic Rousseau /; \
 	s+/cvsroot/pcsclite/PCSC/++g; print ; }' > $@
 
