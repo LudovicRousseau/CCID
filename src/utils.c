@@ -21,7 +21,7 @@
  * $Id$
  */
 
-#include <pcsclite.h>
+#include <PCSC/pcsclite.h>
 
 #include "ccid.h"
 #include "defs.h"
