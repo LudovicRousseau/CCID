@@ -458,7 +458,10 @@ time_request:
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		*rx_length = 0; /* nothing received */
-		return IFD_COMMUNICATION_ERROR;
+		if (0xFD == cmd[ERROR_OFFSET]) /* Parity error during exchange */
+			return IFD_PARITY_ERROR;
+		else
+			return IFD_COMMUNICATION_ERROR;
 	}
 
 	if (cmd[STATUS_OFFSET] & CCID_TIME_EXTENSION)
