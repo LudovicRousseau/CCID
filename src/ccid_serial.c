@@ -561,7 +561,6 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	serialDevice[reader].ccid.dwMaxDataRate = 344086;
 	serialDevice[reader].ccid.bMaxSlotIndex = 0;
 	serialDevice[reader].ccid.bCurrentSlotIndex = 0;
-	serialDevice[reader].ccid.defaultFeatures = serialDevice[reader].ccid.dwFeatures;
 
 	serialDevice[reader].buffer_offset = 0;
 	serialDevice[reader].buffer_offset_last = 0;

@@ -49,12 +49,6 @@ typedef struct
 	int dwFeatures;
 
 	/*
-	 * default value of dwFeatures
-	 * we need this for the SCR331-DI that has two slots with different Features
-	 */
-	int defaultFeatures;
-
-	/*
 	 * PIN support of the reader (directly from Class Descriptor)
 	 */
 	char bPINSupport;

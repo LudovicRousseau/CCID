@@ -695,14 +695,6 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 
 			/* clear T=1 context */
 			t1_release(&(get_ccid_slot(reader_index) -> t1));
-
-			/* reset to default values
-			 * see hack in IFDHICCPresence() for SCR331-DI */
-			{
-				_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
-
-				ccid_descriptor->dwFeatures = ccid_descriptor->defaultFeatures;
-			}
 			break;
 
 		case IFD_POWER_UP:
