@@ -1,0 +1,10 @@
+.deps
+*.la
+.libs
+*.lo
+Makefile
+Makefile.in
+parse
+tokenparser.c
+tokenparser_macosx.c
+tokenparser_macosx.l
