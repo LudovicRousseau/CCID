@@ -44,10 +44,15 @@
 #ifndef _GCDEBUG_H_
 #define  _GCDEBUG_H_
 
+/* You can't do #ifndef __FUNCTION__ */
+#if !defined(__GNUC__) && !defined(__IBMC__)
+#define __FUNCTION__ ""
+#endif
+
 #ifdef DEBUG_LEVEL_CRITICAL
-#define DEBUG_CRITICAL(fmt) debug_msg("%s:%d " fmt, __FILE__, __LINE__)
-#define DEBUG_CRITICAL2(fmt, data) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data)
-#define DEBUG_CRITICAL3(fmt, data1, data2) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data1, data2)
+#define DEBUG_CRITICAL(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
+#define DEBUG_CRITICAL2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
+#define DEBUG_CRITICAL3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
 #define DEBUG
 #else
 #define DEBUG_CRITICAL(fmt)
@@ -56,10 +61,10 @@
 #endif
 
 #ifdef DEBUG_LEVEL_INFO
-#define DEBUG_INFO(fmt) debug_msg("%s:%d " fmt, __FILE__, __LINE__)
-#define DEBUG_INFO2(fmt, data) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data)
-#define DEBUG_INFO3(fmt, data1, data2) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data1, data2)
-#define DEBUG_INFO4(fmt, data1, data2, data3) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data1, data2, data3)
+#define DEBUG_INFO(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
+#define DEBUG_INFO2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
+#define DEBUG_INFO3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
+#define DEBUG_INFO4(fmt, data1, data2, data3) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2, data3)
 #define DEBUG
 #else
 #define DEBUG_INFO(fmt)
@@ -69,8 +74,8 @@
 #endif
 
 #ifdef DEBUG_LEVEL_PERIODIC
-#define DEBUG_PERIODIC(fmt) debug_msg("%s:%d " fmt, __FILE__, __LINE__)
-#define DEBUG_PERIODIC2(fmt, data) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data)
+#define DEBUG_PERIODIC(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
+#define DEBUG_PERIODIC2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
 #define DEBUG
 #else
 #define DEBUG_PERIODIC(fmt)
@@ -78,9 +83,9 @@
 #endif
 
 #ifdef DEBUG_LEVEL_COMM
-#define DEBUG_COMM(fmt) debug_msg("%s:%d " fmt, __FILE__, __LINE__)
-#define DEBUG_COMM2(fmt, data) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data)
-#define DEBUG_COMM3(fmt, data1, data2) debug_msg("%s:%d " fmt, __FILE__, __LINE__, data1, data2)
+#define DEBUG_COMM(fmt) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__)
+#define DEBUG_COMM2(fmt, data) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data)
+#define DEBUG_COMM3(fmt, data1, data2) debug_msg("%s:%d:%s " fmt, __FILE__, __LINE__, __FUNCTION__, data1, data2)
 #define DEBUG
 #define DEBUG_XXD(msg, buffer, size) debug_xxd(msg, buffer, size)
 #else
