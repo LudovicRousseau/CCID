@@ -168,6 +168,9 @@ if test "${usbdropdir}" = false ; then
 fi
 AC_MSG_RESULT([USB drop directory      : $usbdropdir])
 AC_DEFINE_UNQUOTED(PCSCLITE_HP_DROPDIR, "$usbdropdir", [directory containing USB drivers])
+if test "${usbdropdir}" = "" ; then
+	AC_MSG_ERROR([use --enable-usbdropdir=DIR])
+fi
 
 dnl --enable-ccidtwindir=DIR
 AC_ARG_ENABLE(ccidtwindir,
