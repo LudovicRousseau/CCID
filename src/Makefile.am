@@ -11,7 +11,6 @@ COMMON = ccid.c \
 	ccid.h \
 	commands.c \
 	commands.h \
-	debug.c \
 	debug.h \
 	defs.h \
 	ifdhandler.c \
@@ -43,7 +42,7 @@ libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@
 libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(T1)
 libccidtwin_la_CFLAGS = -DTWIN_SERIAL
 
-parse_SOURCES = tokenparser.l parse.c parser.h
+parse_SOURCES = tokenparser.l parse.c parser.h debug.c
 parse_LDADD = libccid.la
 
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in
