@@ -22,8 +22,8 @@
  */
 
 #include <stdio.h>
-#include <pcsclite.h>
-#include <ifdhandler.h>
+#include <PCSC/pcsclite.h>
+#include <PCSC/ifdhandler.h>
 
 #include "config.h"
 #include "debug.h"
@@ -79,7 +79,7 @@ int ccid_open_hack(int lun)
  *					ccid_error
  *
  ****************************************************************************/
-void ccid_error(int error, char *file, int line)
+void ccid_error(int error, char *file, int line, char *function)
 {
 	char *text;
 
@@ -197,7 +197,7 @@ void ccid_error(int error, char *file, int line)
 				text = "Unknown CCID error";
 			break;
 	}
-	debug_msg("%s:%d %s", file, line, text);
+	debug_msg("%s:%d:%s %s", file, line, function, text);
 
 } /* ccid_error */
 

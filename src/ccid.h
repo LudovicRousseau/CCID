@@ -97,7 +97,7 @@ typedef struct
 
 
 int ccid_open_hack(int lun);
-void ccid_error(int error, char *file, int line);
+void ccid_error(int error, char *file, int line, char *function);
 _ccid_descriptor *get_ccid_descriptor(int lun);
 
 /* convert a 4 byte integer in USB format into an int */
