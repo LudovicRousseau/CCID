@@ -6,5 +6,5 @@ Makefile
 Makefile.in
 parse
 tokenparser.c
-tokenparser_macosx.c
-tokenparser_macosx.l
+tokenparser_fake.c
+tokenparser_fake.l
