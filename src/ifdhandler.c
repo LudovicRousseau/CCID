@@ -17,6 +17,8 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/* $Id */
+
 #include <stdio.h>
 #include <string.h>
 
@@ -47,6 +49,8 @@ static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 {
+	RESPONSECODE return_value = IFD_SUCCESS;
+
 	DEBUG_INFO3("lun: %X, device: %s", Lun, lpcDevice);
 
 	if (CheckLun(Lun))
@@ -66,7 +70,7 @@ RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	if (OpenPortByName(Lun, lpcDevice) != STATUS_SUCCESS)
 	{
 		DEBUG_CRITICAL("failed");
-		return IFD_COMMUNICATION_ERROR;
+		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
 	/* Maybe we have a special treatment for this reader */
@@ -76,7 +80,7 @@ RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
 
-	return IFD_SUCCESS;
+	return return_value;
 } /* IFDHCreateChannelByName */
 
 
