@@ -27,6 +27,16 @@ Supported CCID readers:
 - Gemplus GemPC Key [3]
 - Gemplus GemPC Twin [4]
 - OmniKey CardMan 3121 [5]
+- SCM Micro SCR 331 [6]
+  You shall upgrade the firmware [17] using version 5.18 or later.
+- SCM Micro SCR 331-DI [11]
+  You shall upgrade the firmware [17] using version 6.22 or later.
+- SCM Micro SCR 335 [7]
+  The firmware of this reader can't be upgraded so be sure to buy a
+  recent model with firmware 5.14 or later
+- SCM Micro SPR 532 [9]
+  You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
+  firmware upgrade.
 
 
 Should work but untested by me:
@@ -38,7 +48,6 @@ manufacturers, please, contact me.
 
 - ActivCard USB reader 2.0 [10]
 - C3PO LTC32 [13]
-- SCM Micro SCR 331-DI [11]
 - SCM Micro SCR 333 [15]
 - Silitek SK-3105 keyboard [12] or C3PO TLTC2USB [14]
 
@@ -47,10 +56,7 @@ Unsupported or partly supported CCID readers:
 =============================================
 
 - Advanced Card Systems ACR 38 [16]
-- SCM Micro SCR 335 [7]
-- SCM Micro SCR 331 [6]
-- SCM Micro SPR 532 [9]
-    These readers do timeout when a special USB frame is sent from the
+    This reader do timeout when a special USB frame is sent from the
     reader. If the frame size if a multiple of wMaxPacketSize the
     communication is stopped. You should contact the reader vendor to
     upgrade the firmware of the reader or replace the reader.
@@ -305,6 +311,7 @@ Bibliography:
 [14] http://www.c3po.es/tltc2usb.html
 [15] http://www.scmmicro.com/security/SCR333.html
 [16] http://www.acs.com.hk/products_readers_acr38.asp
+[17] http://www.scmmicro.com/support/pcs_product_drivers.html
 
 $Id$
 
