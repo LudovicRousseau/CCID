@@ -21,12 +21,15 @@
  * $Id$
  */
 
+#include <stdio.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
+
 #include "config.h"
 #include "debug.h"
-#include "pcscdefines.h"
-#include "defs.h"
-#include "ifdhandler.h"
 #include "ccid.h"
+#include "defs.h"
+#include "ccid_ifdhandler.h"
 #include "commands.h"
 
 /*****************************************************************************
@@ -46,7 +49,6 @@ int ccid_open_hack(int lun)
 			ccid_descriptor->dwFeatures |= CCID_CLASS_TPDU;
 			break;
 
-#if 0
 			/*
 			 * Do not switch to APDU mode since it also swicth in EMV mode and
 			 * may not work with non EMV cards
@@ -54,13 +56,19 @@ int ccid_open_hack(int lun)
 		case GEMPCKEY:
 		case GEMPCTWIN:
 			/* Reader announces TPDU but can do APDU */
-			if (CmdEscape(lun, ESC_GEMPC_SET_APDU_MODE) == IFD_SUCCESS)
+			if (DriverOptions & DRIVER_OPTION_GEMPC_TWIN_KEY_APDU)
 			{
-				ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
-				ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
+				unsigned char cmd[] = "\xA0\x02";
+				unsigned char res[10];
+				unsigned long length_res = sizeof(res);
+
+				if (CmdEscape(lun, cmd, sizeof(cmd)-1, res, &length_res) == IFD_SUCCESS)
+				{
+					ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+					ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
+				}
 			}
 			break;
-#endif
 	}
 
 	return 0;

@@ -23,13 +23,14 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
 
-#include "pcscdefines.h"
 #include "commands.h"
 #include "protocol_t1/protocol_t1.h"
 #include "ccid.h"
 #include "defs.h"
-#include "ifdhandler.h"
+#include "ccid_ifdhandler.h"
 #include "config.h"
 #include "debug.h"
 
@@ -80,7 +81,12 @@ again:
 		if (buffer[ERROR_OFFSET] == 0xBB &&
 			ccid_descriptor->readerID == GEMPC433)
 		{
-			if ((return_value = CmdEscape(lun, ESC_GEMPC_SET_ISO_MODE)) != IFD_SUCCESS)
+			unsigned char cmd[] = "\x1F\x01";
+			unsigned char res[1];
+			unsigned long res_length = sizeof(res);
+
+			if ((return_value = CmdEscape(lun, cmd, sizeof(cmd)-1, res,
+				&res_length)) != IFD_SUCCESS)
 				return return_value;
 
 			/* avoid looping if we can't switch mode */
@@ -111,59 +117,65 @@ again:
  *					Escape
  *
  ****************************************************************************/
-RESPONSECODE CmdEscape(int lun, int command)
+RESPONSECODE CmdEscape(int lun, const unsigned char TxBuffer[], int TxLength,
+	unsigned char RxBuffer[], unsigned long *RxLength)
 {
-	unsigned char cmd[12];
+	unsigned char *cmd_in, *cmd_out;
 	status_t res;
-	int length;
+	int length_in, length_out;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(lun);
 
-	cmd[0] = 0x6B; /* PC_to_RDR_Escape */
-	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
-	cmd[5] = 0;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
-	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
+	/* allocate buffers */
+	length_in = 10 + TxLength;
+	if (NULL == (cmd_in = malloc(length_in)))
+		return IFD_COMMUNICATION_ERROR;
 
-	switch (command)
+	length_out = 10 + *RxLength;
+	if (NULL == (cmd_out = malloc(length_out)))
 	{
-		/* Gemplus proprietary */
-		case ESC_GEMPC_SET_ISO_MODE:
-			DEBUG_INFO("Switch reader in ISO mode");
-			cmd[10] = 0x1F;	/* switch mode */
-			cmd[11] = 0x01;	/* set ISO mode */
-			cmd[1] = 2;	/* length of data */
-			length = 12;
-			break;
-
-		/* Gemplus proprietary */
-		case ESC_GEMPC_SET_APDU_MODE:
-			DEBUG_INFO("Switch reader in APDU mode");
-			cmd[10] = 0xA0;	/* switch mode */
-			cmd[11] = 0x02;	/* set APDU mode */
-			cmd[1] = 2;	/* length of data */
-			length = 12;
-			break;
-
-		default:
-			DEBUG_CRITICAL2("Unkown Escape command: %d", command);
-			return return_value;
+		free(cmd_in);
+		return IFD_COMMUNICATION_ERROR;
 	}
 
-	res = WritePort(lun, length, cmd);
-	if (res != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	cmd_in[0] = 0x6B; /* PC_to_RDR_Escape */
+	i2dw(length_in - 10, cmd_in+1);	/* dwLength */
+	cmd_in[5] = 0;	/* slot number */
+	cmd_in[6] = ccid_descriptor->bSeq++;
+	cmd_in[7] = cmd_in[8] = cmd_in[9] = 0; /* RFU */
 
-	length = sizeof(cmd);
-	res = ReadPort(lun, &length, cmd);
-	if (res != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	/* copy the command */
+	memcpy(&cmd_in[10], TxBuffer, TxLength);
 
-	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
+	res = WritePort(lun, length_in, cmd_in);
+	free(cmd_in);
+	if (res != STATUS_SUCCESS)
 	{
-		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
+		free(cmd_out);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	res = ReadPort(lun, &length_out, cmd_out);
+	if (res != STATUS_SUCCESS)
+	{
+		free(cmd_out);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	if (cmd_out[STATUS_OFFSET] & CCID_COMMAND_FAILED)
+	{
+		ccid_error(cmd_out[ERROR_OFFSET], __FILE__, __LINE__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
+
+	/* copy the response */
+	length_out = dw2i(cmd_out, 1);
+	if (length_out > *RxLength)
+		length_out = *RxLength;
+	*RxLength = length_out;
+	memcpy(RxBuffer, &cmd_out[10], length_out);
+
+	free(cmd_out);
 
 	return return_value;
 } /* Escape */
