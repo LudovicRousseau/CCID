@@ -17,10 +17,24 @@ directory for hotplug drivers. If pcscd uses a different directory
 
 $ ./configure --enable-usbdropdir=/usr/lib/pcsc/drivers/
 
-You can also enable/disable some debug messages. By default messages of
-level "critical" and "info" are enabled and messages of level "periodic"
-abd "comm" are off. use --enable-debugcomm to enable communication debug
-and --disable-debuginfo to disable info debug messages for example.
+
+more (or less) debug messages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can also enable/disable some debug messages. The driver provides 4
+levels of debug:
+- critical: important error messages
+- info:     informative messages like what reader was detected
+- periodic: periodic info when pcscd test if a card is present (ever
+            1/10 of a second)
+- comm:     a dump of all the bytes exchanged between the host and the
+            reader
+
+By default messages of level "critical" and "info" are enabled and
+messages of level "periodic" abd "comm" are off.
+
+For example use --enable-debugcomm to enable communication debug and
+--disable-debuginfo to disable info debug messages for example.
 
 
 libusb not found
@@ -31,6 +45,20 @@ If the ./configure script says something like:
 You should use --enable-libusb=PATH to tell ./configure where to find
 the usb.h and libusb.so files. The ./configure script will use
 PATH/include/ to search for usb.h and PATH/lib/ to search for libusb.so
+
+
+serial reader only
+~~~~~~~~~~~~~~~~~~
+
+It is possible to generate the driver for the GemPC Twin using serial
+communication only (for example on an embedded system without USB).
+Just do:
+$ ./configure --disable-libusb
+$ cd src ; make libccidtwin.la ; sudo make install_ccidtwin
+
+You can use --enable-ccidtwindir=DIR to specify the target directory to
+use. The default is $(prefix)/pcsc/drivers/serial with $(prefix) default
+value /usr/local.
 
 
 Binary installation:

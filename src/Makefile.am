@@ -3,7 +3,6 @@
 CCID_BUNDLE = ifd-ccid.bundle
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
-CCIDFTWIN_PATH = $(prefix)/pcsc/drivers/serial
 
 lib_LTLIBRARIES = libccid.la libccidtwin.la
 bin_PROGRAMS = parse
@@ -41,14 +40,14 @@ install_ccid: libccid.la
 	sed s/VERSION/$(VERSION)/ $(srcdir)/Info.plist | sed s/TARGET/$(CCID_LIB)/ > $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/Info.plist
 
 install_ccidtwin: libccidtwin.la
-	$(mkinstalldirs) $(DESTDIR)$(CCIDFTWIN_PATH)
-	cp .libs/$(CCIDTWIN_LIB) $(DESTDIR)$(CCIDFTWIN_PATH)/$(CCIDTWIN_LIB).$(VERSION)
+	$(mkinstalldirs) $(DESTDIR)$(ccidtwindir)
+	cp .libs/$(CCIDTWIN_LIB) $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)
 	if [ -e $(DESTDIR)/etc/reader.conf ] ; \
 	then \
 		echo "Edit existing /etc/reader.conf" ; \
 	else \
 		$(mkinstalldirs) $(DESTDIR)/etc ; \
-		perl -ne "s|TARGET|$(CCIDFTWIN_PATH)/$(CCIDTWIN_LIB).$(VERSION)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/etc/reader.conf ; \
+		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/etc/reader.conf ; \
 	fi
 
 uninstall: uninstall_ccid uninstall_ccidtwin
@@ -57,5 +56,5 @@ uninstall_ccid:
 	rm -rf $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)
 
 uninstall_ccidtwin:
-	rm -f $(DESTDIR)$(CCIDFTWIN_PATH)/$(CCIDTWIN_LIB).$(VERSION)
+	rm -f $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)
 
