@@ -62,7 +62,7 @@ atr_i_table[4] =
  */
 
 int
-ATR_InitFromArray (ATR * atr, BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
+ATR_InitFromArray (ATR_t * atr, BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
 {
   BYTE TDi;
   BYTE buffer[ATR_MAX_SIZE];
@@ -175,7 +175,7 @@ ATR_InitFromArray (ATR * atr, BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
 }
 
 int
-ATR_GetConvention (ATR * atr, int *convention)
+ATR_GetConvention (ATR_t * atr, int *convention)
 {
   if (atr->TS == 0x3B)
     (*convention) = ATR_CONVENTION_DIRECT;
@@ -187,7 +187,7 @@ ATR_GetConvention (ATR * atr, int *convention)
 }
 
 int
-ATR_GetIntegerValue (ATR * atr, int name, BYTE * value)
+ATR_GetIntegerValue (ATR_t * atr, int name, BYTE * value)
 {
   int ret;
 
@@ -263,7 +263,7 @@ ATR_GetIntegerValue (ATR * atr, int name, BYTE * value)
 }
 
 int
-ATR_GetParameter (ATR * atr, int name, double *parameter)
+ATR_GetParameter (ATR_t * atr, int name, double *parameter)
 {
   BYTE FI, DI, II, PI1, PI2, N;
 
@@ -324,7 +324,7 @@ ATR_GetParameter (ATR * atr, int name, double *parameter)
  * It was rewritten by Ludovic Rousseau, 2004
  */
 #define PROTOCOL_UNSET -1
-int ATR_GetDefaultProtocol(ATR * atr, int *protocol)
+int ATR_GetDefaultProtocol(ATR_t * atr, int *protocol)
 {
 	int i;
 

@@ -361,7 +361,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	 */
 
 	BYTE pps[PPS_MAX_LENGTH];
-	ATR atr;
+	ATR_t atr;
 	unsigned int len;
 	int convention;
 	int reader_index;
