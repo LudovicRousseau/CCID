@@ -223,11 +223,11 @@ status_t OpenUSBByName(unsigned int lun, /*@null@*/ char *device)
 	/* for any supported reader */
 	while (LTPBundleFindValueWithKey(infofile, PCSCLITE_MANUKEY_NAME, keyValue, alias) == 0)
 	{
-		vendorID = strtoul(keyValue, 0, 16);
+		vendorID = strtoul(keyValue, NULL, 0);
 
 		if (LTPBundleFindValueWithKey(infofile, PCSCLITE_PRODKEY_NAME, keyValue, alias))
 			goto end;
-		productID = strtoul(keyValue, 0, 16);
+		productID = strtoul(keyValue, NULL, 0);
 
 		if (LTPBundleFindValueWithKey(infofile, PCSCLITE_NAMEKEY_NAME, keyValue, alias))
 			goto end;
