@@ -62,7 +62,7 @@ PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
   if (CCID_Receive (lun, &len_confirm, confirm) != IFD_SUCCESS)
     return PPS_ICC_ERROR;
 
-  DEBUG_XXD ("PPS: Receivig confirm: ", confirm, len_confirm);
+  DEBUG_XXD ("PPS: Receiving confirm: ", confirm, len_confirm);
 
   if (!PPS_Match (params, len_request, confirm, len_confirm))
     ret = PPS_HANDSAKE_ERROR;
