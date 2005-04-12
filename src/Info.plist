@@ -70,7 +70,7 @@
 	<string>Ludovic Rousseau (ludovic.rousseau@free.fr)</string>
 
 	<key>ifdProductString</key>
-	<string>Generic CCID reader vVERSION</string>
+	<string>Generic CCID driver vVERSION</string>
 
 	<key>ifdVendorID</key>
 	<array>
