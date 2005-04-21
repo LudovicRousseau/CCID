@@ -22,8 +22,11 @@
 #ifndef __PROTO_T1_H__
 #define __PROTO_T1_H__
 
-#include <unistd.h>
+#include "config.h"
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
+#include <unistd.h>
 
 enum {
 	IFD_PROTOCOL_RECV_TIMEOUT = 0x0000,

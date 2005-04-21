@@ -22,7 +22,10 @@
 #ifndef __CHECKSUM_H__
 #define __CHECKSUM_H__
 
+#include "config.h"
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
 #include <unistd.h>
 
 extern unsigned int	csum_lrc_compute(const uint8_t *, size_t, unsigned char *);
