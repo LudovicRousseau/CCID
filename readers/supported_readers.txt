@@ -46,3 +46,6 @@
 0x0d46:0x3003:KAAN SIM III
 0x0d46:0x4000:KANN mIDentity
 
+# Eutron
+0x073D:0x0C00:SIM Pocket Combo
+
