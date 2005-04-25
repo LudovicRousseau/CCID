@@ -54,6 +54,7 @@ static int DebugInitialized = FALSE;
 
 /* local functions */
 static void init_driver(void);
+static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 
 
 RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
@@ -389,6 +390,9 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 	/* Get ATR of the card */
 	ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer, ccid_slot->nATRLength);
+
+	/* Apply Extra EGT patch for bogus cards */
+	extra_egt(&atr, ccid_desc, Protocol);
 
 	if (SCARD_PROTOCOL_T0 == Protocol)
 		pps[1] |= ATR_PROTOCOL_TYPE_T0;
@@ -1008,4 +1012,75 @@ void init_driver(void)
 
 	DebugInitialized = TRUE;
 } /* init_driver */
+
+
+void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
+{
+	/*
+	 * This function apply an extra EGT value for card who comply
+	 * with followings criterias.
+	 * If the extra EGT are not apply to the reader, the communication
+	 * with the smart card will be impossible.
+	 * It is a smart card bug wich are not compatible with ISO 7816-3 
+	 * standard.
+	 */
+
+	int card_baudrate;
+	int default_baudrate;
+	int i;
+	double f, d;
+
+	/* if TA1 not present */
+	if (! atr->ib[0][ATR_INTERFACE_BYTE_TA].present)
+		return;
+
+	ATR_GetParameter(atr, ATR_PARAMETER_D, &d);
+	ATR_GetParameter(atr, ATR_PARAMETER_F, &f);
+
+	/* Baudrate = f x D/F */
+	card_baudrate = 1000 * ccid_desc->dwDefaultClock * d / f;
+
+	default_baudrate = 1000 * ccid_desc->dwDefaultClock
+		* ATR_DEFAULT_D / ATR_DEFAULT_F;
+
+	/* TA1 > 11? */
+	if (card_baudrate <= default_baudrate)
+		return;
+
+	/* Current EGT = 0 or FF? */
+	if (atr->ib[0][ATR_INTERFACE_BYTE_TC].present &&
+		((0x00 == atr->ib[0][ATR_INTERFACE_BYTE_TC].value) ||
+			(0xFF == atr->ib[0][ATR_INTERFACE_BYTE_TC].value)))
+	{
+		if (SCARD_PROTOCOL_T0 == Protocol)
+		{
+			/* Init TC1 */
+			atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
+			atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
+			DEBUG_INFO("Extra EGT patch applied for T=0");
+		}
+
+		if (SCARD_PROTOCOL_T1 == Protocol)
+		{
+			/* TBi (i>2) present? BWI/BCI */
+			for (i=2; i<ATR_MAX_PROTOCOLS; i++)
+			{
+				if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present)
+				{
+					/* CWI >= 2 ? */
+					if ((atr->ib[i][ATR_INTERFACE_BYTE_TB].value & 0x0F) >= 2)
+					{
+						/* Init TC1 */
+						atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
+						atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
+						DEBUG_INFO("Extra EGT patch applied for T=1");
+					}
+
+					/* only the first TBi (i>2) must be used */
+					break;
+				}
+			}
+		}
+	}
+} /* extra_egt */
 
