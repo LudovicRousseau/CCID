@@ -252,8 +252,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Length : CcidSlots[reader_index].nATRLength;
 
 			if (*Length)
-				memcpy(Value, CcidSlots[reader_index]
-					.pcATRBuffer, *Length);
+				memcpy(Value, CcidSlots[reader_index].pcATRBuffer, *Length);
 			break;
 
 #ifdef HAVE_PTHREAD
@@ -546,7 +545,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
 			param[0] = pps[2];
- 
+
 		/* CRC checksum? */
 		if (2 == t1->rc_bytes)
 			param[1] |= 0x01;
@@ -629,7 +628,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		/* IFSD not negociated by the reader? */
 		if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD))
 		{
-			DEBUG_COMM2("Negociate IFSD at %d",  ccid_desc -> dwMaxIFSD);
+			DEBUG_COMM2("Negociate IFSD at %d", ccid_desc -> dwMaxIFSD);
 			if (t1_negociate_ifsd(t1, 0, ccid_desc -> dwMaxIFSD) < 0)
 				return IFD_COMMUNICATION_ERROR;
 		}
@@ -702,8 +701,7 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			*CcidSlots[reader_index].pcATRBuffer = '\0';
 
 			/* Memorise the request */
-			CcidSlots[reader_index].bPowerFlags |=
-				MASK_POWERFLAGS_PDWN;
+			CcidSlots[reader_index].bPowerFlags |= MASK_POWERFLAGS_PDWN;
 
 			/* send the command */
 			if (IFD_SUCCESS != CmdPowerOff(reader_index))
@@ -728,17 +726,14 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			}
 
 			/* Power up successful, set state variable to memorise it */
-			CcidSlots[reader_index].bPowerFlags |=
-				MASK_POWERFLAGS_PUP;
-			CcidSlots[reader_index].bPowerFlags &=
-				~MASK_POWERFLAGS_PDWN;
+			CcidSlots[reader_index].bPowerFlags |= MASK_POWERFLAGS_PUP;
+			CcidSlots[reader_index].bPowerFlags &= ~MASK_POWERFLAGS_PDWN;
 
 			/* Reset is returned, even if TCK is wrong */
 			CcidSlots[reader_index].nATRLength = *AtrLength =
 				(nlength < MAX_ATR_SIZE) ? nlength : MAX_ATR_SIZE;
 			memcpy(Atr, pcbuffer, *AtrLength);
-			memcpy(CcidSlots[reader_index].pcATRBuffer,
-				pcbuffer, *AtrLength);
+			memcpy(CcidSlots[reader_index].pcATRBuffer, pcbuffer, *AtrLength);
 
 			/* initialise T=1 context */
 			t1_init(&(get_ccid_slot(reader_index) -> t1), reader_index);
