@@ -74,6 +74,11 @@ typedef struct
 	 */
 	char bCurrentSlotIndex;
 
+	/*
+	 * The array of data rates supported by the reader
+	 */
+	unsigned int *arrayOfSupportedDataRates;
+
 } _ccid_descriptor;
 
 /* Features from dwFeatures */
