@@ -78,6 +78,13 @@ typedef struct
 	 * The array of data rates supported by the reader
 	 */
 	unsigned int *arrayOfSupportedDataRates;
+	
+	/*
+	 * Read communication port timeout
+	 * value is seconds for serial, milliseconds for USB
+	 * this value can evolve dynamically if card request it (time processing).
+	 */
+	unsigned int readTimeout;
 
 } _ccid_descriptor;
 
