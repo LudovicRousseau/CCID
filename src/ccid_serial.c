@@ -135,6 +135,50 @@ typedef struct
 /* The _serialDevice structure must be defined before including ccid_serial.h */
 #include "ccid_serial.h"
 
+int SerialDataRates[] = {
+		10753,
+		14337,
+		15625,
+		17204,
+		20833,
+		21505,
+		23438,
+		25806,
+		28674,
+		31250,
+		32258,
+		34409,
+		39063,
+		41667,
+		43011,
+		46875,
+		52083,
+		53763,
+		57348,
+		62500,
+		64516,
+		68817,
+		71685,
+		78125,
+		83333,
+		86022,
+		93750,
+		104667,
+		107527,
+		114695,
+		125000,
+		129032,
+		143369,
+		156250,
+		166667,
+		172043,
+		215054,
+		229391,
+		250000,
+		344086,
+		0
+	};
+
 /* no need to initialize to 0 since it is static */
 static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];
 
@@ -563,6 +607,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	serialDevice[reader].ccid.dwMaxDataRate = 344086;
 	serialDevice[reader].ccid.bMaxSlotIndex = 0;
 	serialDevice[reader].ccid.bCurrentSlotIndex = 0;
+	serialDevice[reader].ccid.arrayOfSupportedDataRates = SerialDataRates;
 
 	serialDevice[reader].buffer_offset = 0;
 	serialDevice[reader].buffer_offset_last = 0;
