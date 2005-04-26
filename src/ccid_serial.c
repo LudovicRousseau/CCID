@@ -591,6 +591,22 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		DEBUG_INFO2("Firmware: %s", rx_buffer);
 	}
 
+	/* perform a command to configure GemPC Twin reader card movement
+	 * notification to synchronous mode: the card movement is notified _after_
+	 * the host command and _before_ the reader anwser */
+	{
+		unsigned char tx_buffer[] = { 0x01, 0x01, 0x01};
+		unsigned char rx_buffer[50];
+		unsigned int rx_length = sizeof(rx_buffer);
+
+		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
+			rx_buffer, &rx_length))
+		{
+			DEBUG_CRITICAL("Change card movement notification failed.");
+			return STATUS_UNSUCCESSFUL;
+		}
+	}
+
 	return STATUS_SUCCESS;
 } /* OpenSerialByName */
 
