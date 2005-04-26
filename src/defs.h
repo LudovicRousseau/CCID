@@ -77,6 +77,8 @@ typedef enum {
 /* ISO length size (1 in general) */
 #define ISO_LENGTH_SIZE 1
 
+/* Default communication read timeout in seconds */
+#define DEFAULT_COM_READ_TIMEOUT 2
 
 /*
  * communication ports abstraction
