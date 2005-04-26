@@ -537,7 +537,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			0x11,	/* Fi/Di		*/
 			0x10,	/* TCCKS		*/
 			0x00,	/* GuardTime	*/
-			0x4D,	/* BWI/BCI		*/
+			0x4D,	/* BWI/CWI		*/
 			0x00,	/* ClockStop	*/
 			0x20,	/* IFSC			*/
 			0x00	/* NADValue		*/
@@ -562,11 +562,11 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		if (atr.ib[0][ATR_INTERFACE_BYTE_TC].present)
 			param[2] = atr.ib[0][ATR_INTERFACE_BYTE_TC].value;
 
-		/* TBi (i>2) present? BWI/BCI */
+		/* TBi (i>2) present? BWI/CWI */
 		for (i=2; i<ATR_MAX_PROTOCOLS; i++)
 			if (atr.ib[i][ATR_INTERFACE_BYTE_TB].present)
 			{
-				DEBUG_COMM3("BWI/BCI (TB%d) present: %d", i+1,
+				DEBUG_COMM3("BWI/CWI (TB%d) present: 0x%02X", i+1,
 					atr.ib[i][ATR_INTERFACE_BYTE_TB].value);
 				param[3] = atr.ib[i][ATR_INTERFACE_BYTE_TB].value;
 
@@ -1062,7 +1062,7 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 
 		if (SCARD_PROTOCOL_T1 == Protocol)
 		{
-			/* TBi (i>2) present? BWI/BCI */
+			/* TBi (i>2) present? BWI/CWI */
 			for (i=2; i<ATR_MAX_PROTOCOLS; i++)
 			{
 				if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present)
