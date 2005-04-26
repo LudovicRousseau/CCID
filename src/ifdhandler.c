@@ -1050,14 +1050,14 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 	/* Current EGT = 0 or FF? */
 	if (atr->ib[0][ATR_INTERFACE_BYTE_TC].present &&
 		((0x00 == atr->ib[0][ATR_INTERFACE_BYTE_TC].value) ||
-			(0xFF == atr->ib[0][ATR_INTERFACE_BYTE_TC].value)))
+		(0xFF == atr->ib[0][ATR_INTERFACE_BYTE_TC].value)))
 	{
 		if (SCARD_PROTOCOL_T0 == Protocol)
 		{
 			/* Init TC1 */
 			atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
 			atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
-			DEBUG_INFO("Extra EGT patch applied for T=0");
+			DEBUG_INFO("Extra EGT patch applied");
 		}
 
 		if (SCARD_PROTOCOL_T1 == Protocol)
@@ -1065,16 +1065,14 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 			/* TBi (i>2) present? BWI/CWI */
 			for (i=2; i<ATR_MAX_PROTOCOLS; i++)
 			{
-				if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present)
+				/* CWI >= 2 ? */
+				if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present && 
+					((atr->ib[i][ATR_INTERFACE_BYTE_TB].value & 0x0F) >= 2))
 				{
-					/* CWI >= 2 ? */
-					if ((atr->ib[i][ATR_INTERFACE_BYTE_TB].value & 0x0F) >= 2)
-					{
-						/* Init TC1 */
-						atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
-						atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
-						DEBUG_INFO("Extra EGT patch applied for T=1");
-					}
+					/* Init TC1 */
+					atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
+					atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
+					DEBUG_INFO("Extra EGT patch applied");
 
 					/* only the first TBi (i>2) must be used */
 					break;
