@@ -56,6 +56,9 @@ static int DebugInitialized = FALSE;
 static void init_driver(void);
 static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 static char find_baud_rate(unsigned int baudrate, unsigned int *list);
+static unsigned int T0_card_timeout(double f, int TC2, int clock_frequency);
+static unsigned int T1_card_timeout(double f, double d, int BWI,
+	int clock_frequency);
 
 
 RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
@@ -1118,4 +1121,53 @@ static char find_baud_rate(unsigned int baudrate, unsigned int *list)
 
 	return FALSE;
 } /* find_baud_rate */
+
+
+static unsigned int T0_card_timeout(double f, int TC2, int clock_frequency)
+{
+	unsigned int timeout = DEFAULT_COM_READ_TIMEOUT;
+	unsigned int t;
+
+	/* card WWT */
+	/* see ch. 8.2 Character level, page 15 of ISO 7816-3 */
+	t = 960 * TC2 * f / (clock_frequency * 1000);
+
+	/* use the bigest one */
+	if (t > timeout)
+		timeout = t;
+
+	/* default WWT (TC2=0x0A) */
+	t = 960 * 0x0A * f / (clock_frequency * 1000);
+
+	/* use the bigest one */
+	if (t > timeout)
+		timeout = t;
+
+	return timeout;
+} /* T0_card_timeout  */
+
+
+static unsigned int T1_card_timeout(double f, double d, int BWI,
+	int clock_frequency)
+{
+	unsigned int timeout = DEFAULT_COM_READ_TIMEOUT;
+	unsigned int t;
+
+	/* card BWT */
+	/* see ch. 9.5.3.2 Block waiting time, page 20 of ISO 7816-3 */
+	t = 11 * f / d / (clock_frequency * 1000) + (1<<BWI) * 960 * 372 / (clock_frequency * 1000);	/* seconds  */
+
+	/* use the bigest one */
+	if (t > timeout)
+		timeout = t;
+
+	/* default BWT (BWI=0x04) */
+	t = 11 * f / d / (clock_frequency * 1000) + (1<<4) * 960 * 372 / (clock_frequency * 1000);	/* seconds  */
+
+	/* use the bigest one */
+	if (t > timeout)
+		timeout = t;
+
+	return timeout;
+} /* T1_card_timeout  */
 
