@@ -201,6 +201,10 @@ RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
+	/* Restore the default timeout
+	 * No need to wait too long if the reader disapeared */
+	get_ccid_descriptor(reader_index)->readTimeout = DEFAULT_COM_READ_TIMEOUT;
+
 	(void)CmdPowerOff(reader_index);
 	/* No reader status check, if it failed, what can you do ? :) */
 
@@ -556,6 +560,9 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		int i;
 		t1_state_t *t1 = &(ccid_slot -> t1);
 		RESPONSECODE ret;
+		double f;
+		double d;
+		int BWI;
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
@@ -585,6 +592,15 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				break;
 			}
 
+		/* compute communication timeout */
+		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+		ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+		BWI = (param[3] & 0xF0) >> 4;
+		ccid_desc->readTimeout = T1_card_timeout(f, d, BWI /* BWI */,
+			ccid_desc->dwDefaultClock);
+
+		DEBUG_COMM2("Timeout: %d seconds", ccid_desc->readTimeout);
+
 		ret = SetParameters(reader_index, 1, sizeof(param), param);
 		if (IFD_SUCCESS != ret)
 			return ret;
@@ -600,6 +616,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			0x00	/* ClockStop		*/
 		};
 		RESPONSECODE ret;
+		double f;
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
@@ -615,6 +632,14 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		/* TC2 WWT */
 		if (atr.ib[1][ATR_INTERFACE_BYTE_TC].present)
 			param[3] = atr.ib[1][ATR_INTERFACE_BYTE_TC].value;
+
+		/* compute communication timeout */
+		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+		ccid_desc->readTimeout = T0_card_timeout(f, param[3] /* TC2 */,
+			ccid_desc->dwDefaultClock);
+
+		DEBUG_COMM2("Communication timeout %d seconds",
+			ccid_desc->readTimeout);
 
 		ret = SetParameters(reader_index, 0, sizeof(param), param);
 		if (IFD_SUCCESS != ret)
@@ -897,6 +922,7 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	int oldLogLevel;
 	int reader_index;
 	_ccid_descriptor *ccid_descriptor;
+	unsigned int oldReadTimeout;
 
 	DEBUG_PERIODIC2("lun: %X", Lun);
 
@@ -905,12 +931,21 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
+	/* save the current read timeout computed from card capabilities */
+	oldReadTimeout = ccid_descriptor->readTimeout;
+
+	/* use default timeout since the reader may not be present anymore */
+	ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT;
+
 	/* if DEBUG_LEVEL_PERIODIC is not set we remove DEBUG_LEVEL_COMM */
 	oldLogLevel = LogLevel;
 	if (! (LogLevel & DEBUG_LEVEL_PERIODIC))
 		LogLevel &= ~DEBUG_LEVEL_COMM;
 
 	return_value = CmdGetSlotStatus(reader_index, pcbuffer);
+
+	/* set back the old timeout */
+	ccid_descriptor->readTimeout = oldReadTimeout;
 
 	/* set back the old LogLevel */
 	LogLevel = oldLogLevel;
