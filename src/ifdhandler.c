@@ -55,6 +55,7 @@ static int DebugInitialized = FALSE;
 /* local functions */
 static void init_driver(void);
 static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
+static char find_baud_rate(unsigned int baudrate, unsigned int *list);
 
 
 RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
@@ -476,10 +477,17 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				/* and the card does not try to lower the default speed */
 				&& (card_baudrate > default_baudrate ))
 			{
-				pps[1] |= 0x10; /* PTS1 presence */
-				pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+				if (find_baud_rate(card_baudrate,
+					ccid_desc->arrayOfSupportedDataRates))
+				{
+					pps[1] |= 0x10; /* PTS1 presence */
+					pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
 
-				DEBUG_COMM2("Set speed to %d bauds", card_baudrate);
+					DEBUG_COMM2("Set speed to %d bauds", card_baudrate);
+				}
+				else
+					DEBUG_COMM2("Reader does not support %d bauds",
+						card_baudrate);
 			}
 		}
 	}
@@ -1084,4 +1092,30 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 		}
 	}
 } /* extra_egt */
+
+
+static char find_baud_rate(unsigned int baudrate, unsigned int *list)
+{
+	int i;
+
+	DEBUG_COMM2("Card baud rate: %d", baudrate);
+
+	/* Does the reader support the annonced smart card data speed? */
+	for (i=0;; i++)
+	{
+		/* end of array marker */
+		if (0 == list[i])
+			break;
+
+		DEBUG_COMM2("Reader can do: %d", list[i]);
+
+		/* We must take into account that the card_baudrate integral value
+		 * is an approximative result, computed from the d/f float result.
+		 */
+		if ((baudrate < list[i] + 2) && (baudrate > list[i] - 2))
+			return TRUE;
+	}
+
+	return FALSE;
+} /* find_baud_rate */
 
