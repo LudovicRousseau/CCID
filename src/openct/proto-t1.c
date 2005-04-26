@@ -15,6 +15,8 @@
 #include "proto-t1.h"
 #include "checksum.h"
 
+#include "ccid.h"
+
 #include <sys/poll.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -653,8 +655,21 @@ static int
 t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 {
 	int		n, m;
+	_ccid_descriptor *ccid_desc ;
+	int oldReadTimeout;
 
 	DEBUG_XXD("sending: ", block, slen);
+	
+	ccid_desc = get_ccid_descriptor(t1->lun);	
+	oldReadTimeout = ccid_desc->readTimeout;
+
+	if (t1->wtx > 1)
+	{	
+		/* set the new temporary timeout at WTX card request */
+		ccid_desc->readTimeout *=  t1->wtx;
+		DEBUG_INFO2("New timeout at WTX request: %d sec",
+			ccid_desc->readTimeout);
+	}
 
 	if (isCharLevel(t1->lun))
 	{
@@ -710,6 +725,9 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 
 	if (n >= 0)
 		DEBUG_XXD("received: ", block, n);
+
+	/* Restore initial timeout */
+	ccid_desc->readTimeout = oldReadTimeout;
 
 	return n;
 }
