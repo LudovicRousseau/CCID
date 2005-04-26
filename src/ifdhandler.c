@@ -1016,13 +1016,16 @@ void init_driver(void)
 
 void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 {
-	/*
-	 * This function apply an extra EGT value for card who comply
-	 * with followings criterias.
-	 * If the extra EGT are not apply to the reader, the communication
-	 * with the smart card will be impossible.
-	 * It is a smart card bug wich are not compatible with ISO 7816-3 
-	 * standard.
+	/* This function use an EGT value for cards who comply with followings
+	 * criterias:
+	 * - TA1 > 11
+	 * - current EGT = 0x00 or 0xFF
+	 * - T=0 or (T=1 and CWI >= 2)
+	 *
+	 * Without this larger EGT some non ISO 7816-3 smart cards may not
+	 * communicate with the reader.
+	 *
+	 * This modification is harmless, the reader will just be less restrictive
 	 */
 
 	unsigned int card_baudrate;
