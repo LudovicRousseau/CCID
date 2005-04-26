@@ -1025,10 +1025,10 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 	 * standard.
 	 */
 
-	int card_baudrate;
-	int default_baudrate;
-	int i;
+	unsigned int card_baudrate;
+	unsigned int default_baudrate;
 	double f, d;
+	int i;
 
 	/* if TA1 not present */
 	if (! atr->ib[0][ATR_INTERFACE_BYTE_TA].present)
@@ -1038,10 +1038,10 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 	ATR_GetParameter(atr, ATR_PARAMETER_F, &f);
 
 	/* Baudrate = f x D/F */
-	card_baudrate = 1000 * ccid_desc->dwDefaultClock * d / f;
+	card_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock * d / f);
 
-	default_baudrate = 1000 * ccid_desc->dwDefaultClock
-		* ATR_DEFAULT_D / ATR_DEFAULT_F;
+	default_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock
+		* ATR_DEFAULT_D / ATR_DEFAULT_F);
 
 	/* TA1 > 11? */
 	if (card_baudrate <= default_baudrate)
