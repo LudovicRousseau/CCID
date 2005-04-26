@@ -42,10 +42,6 @@
 #include "utils.h"
 #include "commands.h"
 
-/* communication timeout in seconds
- * the value is set at the end of OpenSerialByName() */
-int SerialTimeout;
-
 #define SYNC 0x03
 #define CTRL_ACK 0x06
 #define CTRL_NAK 0x15
@@ -447,7 +443,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		/* use select() to, eventually, timeout */
 		FD_ZERO(&fdset);
 		FD_SET(fd, &fdset);
-		t.tv_sec = SerialTimeout;
+		t.tv_sec = serialDevice[reader_index].ccid.readTimeout;
 		t.tv_usec = 0;
 
 		i = select(fd+1, &fdset, NULL, NULL, &t);
@@ -459,7 +455,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		else
 			if (i == 0)
 			{
-				DEBUG_COMM2("Timeout! (%d sec)", SerialTimeout);
+				DEBUG_COMM2("Timeout! (%d sec)", serialDevice[reader_index].ccid.readTimeout);
 				return -1;
 			}
 
@@ -620,7 +616,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned int rx_length = sizeof(rx_buffer);
 
 		/* 2 seconds timeout to not wait too long if no reader is connected */
-		SerialTimeout = 2;
+		serialDevice[reader].ccid.readTimeout = 2;
 
 		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length))
@@ -629,8 +625,8 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			return STATUS_UNSUCCESSFUL;
 		}
 
-		/* normal timeout: 1 minute to allow long time APDU */
-		SerialTimeout = 60;
+		/* normal timeout: 2 seconds */
+		serialDevice[reader].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT ;
 
 		rx_buffer[rx_length] = '\0';
 		DEBUG_INFO2("Firmware: %s", rx_buffer);

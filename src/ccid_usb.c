@@ -40,12 +40,6 @@
 #include "ccid_ifdhandler.h"
 
 
-/* read timeout
- * we must wait enough so that the card can finish its calculation
- * the card, and then the reader should send TIME REQUEST bytes
- * so this timeout should never occur */
-#define USB_READ_TIMEOUT (60 * 1000)	/* 1 minute timeout */
-
 /* write timeout
  * we don't have to wait a long time since the card was doing nothing */
 #define USB_WRITE_TIMEOUT (5 * 1000)  /* 5 seconds timeout */
@@ -404,6 +398,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
 					usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
 					usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
+					usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
 					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index);
 					goto end;
 				}
@@ -474,7 +469,7 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 
 	rv = usb_bulk_read(usbDevice[reader_index].handle,
 		usbDevice[reader_index].bulk_in, (char *)buffer, *length,
-		USB_READ_TIMEOUT);
+		usbDevice[reader_index].ccid.readTimeout * 1000);
 
 	if (rv < 0)
 	{
@@ -710,7 +705,7 @@ static int *get_data_rates(unsigned int reader_index)
 		0x00, /* interface */
 		buffer,
 		sizeof(buffer),
-		USB_READ_TIMEOUT);
+		usbDevice[reader_index].ccid.readTimeout * 1000);
 
 	/* we got an error? */
 	if (n <= 0)
