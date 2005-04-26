@@ -91,6 +91,7 @@ typedef struct
 
 static int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
 int ccid_check_firmware(struct usb_device *dev);
+static int *get_data_rates(unsigned int reader_index);
 
 /* ne need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
@@ -403,6 +404,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
 					usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
 					usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
+					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index);
 					goto end;
 				}
 			}
@@ -507,6 +509,9 @@ status_t CloseUSB(unsigned int reader_index)
 	DEBUG_COMM3("Closing USB device: %s/%s",
 		usbDevice[reader_index].dev->bus->dirname,
 		usbDevice[reader_index].dev->filename);
+
+	if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates)
+		free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
 
 	/* reset so that bSeq starts at 0 again */
 	usb_reset(usbDevice[reader_index].handle);
@@ -685,4 +690,54 @@ int ccid_check_firmware(struct usb_device *dev)
 	/* by default the firmware is not bogus */
 	return FALSE;
 } /* ccid_check_firmware */
+
+/*****************************************************************************
+ *
+ *                                      get_data_rates
+ *
+ ****************************************************************************/
+static int *get_data_rates(unsigned int reader_index)
+{
+	int n, i;
+	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
+	unsigned int *int_array;
+
+	/* See CCID 3.7.3 page 25 */
+	n = usb_control_msg(usbDevice[reader_index].handle,
+		0xA1, /* request type */
+		0x03, /* GET_DATA_RATES */
+		0x00, /* value */
+		0x00, /* interface */
+		buffer,
+		sizeof(buffer),
+		USB_READ_TIMEOUT);
+
+	/* we got an error? */
+	if (n <= 0)
+	{
+		DEBUG_CRITICAL2("IFD does not support GET_DATA_RATES request but should: %s", strerror(errno));
+		return NULL;
+	}
+
+	/* allocate the buffer (including the end marker) */
+	n /= sizeof(int);
+	int_array = calloc(n+1, sizeof(int));
+	if (NULL == buffer)
+	{
+		DEBUG_CRITICAL("Memory allocation failed");
+		return NULL;
+	}
+
+	/* convert in correct endianess */
+	for (i=0; i<n; i++)
+	{
+		int_array[i] = dw2i(buffer, i*4);
+		DEBUG_INFO2("declared: %d bps", int_array[i]);
+	}
+
+	/* end of array marker */
+	int_array[i] = 0;
+
+	return int_array;
+}
 
