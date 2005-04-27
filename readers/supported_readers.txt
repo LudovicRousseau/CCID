@@ -5,6 +5,9 @@
 0x08E6:0x3437:GemPC Twin
 0x08E6:0x3438:GemPC Key
 0x08E6:0x4433:GemPC433 SL
+# Verisign branded
+0x08E6:0xACE0:Verisign Secure Token
+0x08E6:0x1359:VeriSign Secure Storage Token
 
 # SCM Microsystems
 0x04E6:0x5111:SCR 331-DI
