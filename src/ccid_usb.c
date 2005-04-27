@@ -710,8 +710,31 @@ static unsigned int *get_data_rates(unsigned int reader_index)
 	/* we got an error? */
 	if (n <= 0)
 	{
-		DEBUG_CRITICAL2("IFD does not support GET_DATA_RATES request but should: %s", strerror(errno));
-		return NULL;
+		struct usb_interface *usb_interface;
+
+		DEBUG_INFO2("IFD does not support GET_DATA_RATES request: %s",
+			strerror(errno));
+
+		/* we create a minimal array */
+		int_array = calloc(3, sizeof(int));
+		if (NULL == int_array)
+		{
+			DEBUG_CRITICAL("Memory allocation failed");
+			return NULL;
+		}
+
+		usb_interface = get_ccid_usb_interface(usbDevice[reader_index].dev);
+
+		/* dwDataRate (default data rate) */
+		int_array[0] = dw2i(usb_interface->altsetting->extra, 19);
+
+		/* dwMaxDataRate */
+		int_array[1] = dw2i(usb_interface->altsetting->extra, 23);
+
+		/* end of array marker */
+		int_array[2] = 0;
+
+		return int_array;
 	}
 
 	/* allocate the buffer (including the end marker) */
