@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
 #include <PCSC/ifdhandler.h>
 
 #include "defs.h"
@@ -546,6 +547,30 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	{
 		DEBUG_CRITICAL3("open %s: %s", dev_name, strerror(errno));
 		return STATUS_UNSUCCESSFUL;
+	}
+
+	/* Set RTS signal to low to prevent the smart card reader
+	 * from sending its plug and play string. */
+	{
+		int flags;
+
+		if (ioctl(serialDevice[reader].fd, TIOCMGET, &flags) < 0)
+		{
+			DEBUG_CRITICAL2("Get RS232 signals state failed: %s",
+				strerror(errno));
+		}
+		else
+		{
+			flags &= ~TIOCM_RTS;
+			if (ioctl(serialDevice[reader].fd, TIOCMSET, &flags) < 0)
+			{
+				DEBUG_CRITICAL2("Set RTS to low failed: %s", strerror(errno));
+			}
+			else
+			{
+				DEBUG_COMM("Plug-n-Play inhibition successful");
+			}
+		}
 	}
 
 	/* set channel used */
