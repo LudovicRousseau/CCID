@@ -395,7 +395,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
 					usbDevice[reader_index].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
 					usbDevice[reader_index].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);
-					usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
 					usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
 					usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
 					usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;

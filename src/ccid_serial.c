@@ -625,7 +625,6 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	serialDevice[reader].ccid.dwFeatures = 0x00010230;
 	serialDevice[reader].ccid.bPINSupport = 0x0;
 	serialDevice[reader].ccid.dwDefaultClock = 4000;
-	serialDevice[reader].ccid.dwMaxDataRate = 344086;
 	serialDevice[reader].ccid.bMaxSlotIndex = 0;
 	serialDevice[reader].ccid.bCurrentSlotIndex = 0;
 	serialDevice[reader].ccid.arrayOfSupportedDataRates = SerialDataRates;
