@@ -702,7 +702,7 @@ static unsigned int *get_data_rates(unsigned int reader_index)
 		0xA1, /* request type */
 		0x03, /* GET_DATA_RATES */
 		0x00, /* value */
-		0x00, /* interface */
+		usbDevice[reader_index].interface, /* interface */
 		(char *)buffer,
 		sizeof(buffer),
 		usbDevice[reader_index].ccid.readTimeout * 1000);
