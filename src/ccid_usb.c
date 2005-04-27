@@ -85,7 +85,7 @@ typedef struct
 
 static int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
 int ccid_check_firmware(struct usb_device *dev);
-static int *get_data_rates(unsigned int reader_index);
+static unsigned int *get_data_rates(unsigned int reader_index);
 
 /* ne need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
@@ -691,7 +691,7 @@ int ccid_check_firmware(struct usb_device *dev)
  *                                      get_data_rates
  *
  ****************************************************************************/
-static int *get_data_rates(unsigned int reader_index)
+static unsigned int *get_data_rates(unsigned int reader_index)
 {
 	int n, i;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
