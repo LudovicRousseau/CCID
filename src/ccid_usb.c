@@ -717,7 +717,7 @@ static unsigned int *get_data_rates(unsigned int reader_index)
 	/* allocate the buffer (including the end marker) */
 	n /= sizeof(int);
 	int_array = calloc(n+1, sizeof(int));
-	if (NULL == buffer)
+	if (NULL == int_array)
 	{
 		DEBUG_CRITICAL("Memory allocation failed");
 		return NULL;
