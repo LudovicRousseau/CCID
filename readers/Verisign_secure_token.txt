@@ -1,0 +1,53 @@
+Parsing Interface Descriptor for device: 001/095
+ idVendor: 0x08E6
+  iManufacturer: Gemplus
+ idProduct: 0xACE0
+  iProduct: Token GEM USB COMBI
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 2
+ bInterfaceClass: 0xFF
+  NOT A CCID DEVICE
+  Class is 0xFF (proprietary)
+ bInterfaceSubClass: 92
+  UNSUPPORTED SubClass
+ bInterfaceProtocol: 0
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0xFF
+   PROPRIETARY bDescriptorType
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 1.500 MHz
+  dwMaximumClock: 1.500 MHz
+  bNumClockSupported: 0x00
+   Support 4032 bps
+   Support 23437 bps
+   Support 46875 bps
+  dwDataRate: 4032 bps
+  dwMaxDataRate: 46875 bps
+  bNumDataRatesSupported: 0
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00010230
+   Automatic ICC clock frequency change according to parameters
+   Automatic baud rate change according to frequency and Fi, Di parameters
+   NAD value other than 00 accepted (T=1)
+   TPDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0
+  bClassEnveloppe: 0
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
