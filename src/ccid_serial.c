@@ -131,7 +131,7 @@ typedef struct
 /* The _serialDevice structure must be defined before including ccid_serial.h */
 #include "ccid_serial.h"
 
-int SerialDataRates[] = {
+unsigned int SerialDataRates[] = {
 		10753,
 		14337,
 		15625,
