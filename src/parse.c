@@ -206,6 +206,34 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  dwDefaultClock: %.3f MHz\n", dw2i(extra, 10)/1000.0);
 	printf("  dwMaximumClock: %.3f MHz\n", dw2i(extra, 14)/1000.0);
 	printf("  bNumClockSupported: 0x%02X\n", extra[18]);
+	{
+		unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
+		int n;
+
+		/* See CCID 3.7.2 page 25 */
+		n = usb_control_msg(handle,
+			0xA1, /* request type */
+			0x02, /* GET CLOCK FREQUENCIES */
+			0x00, /* value */
+			usb_interface->bInterfaceNumber, /* interface */
+			(char *)buffer,
+			sizeof(buffer),
+			2 * 1000);
+
+		/* we got an error? */
+		if (n <= 0)
+			printf("   IFD does not support GET CLOCK FREQUENCIES request\n");
+		else
+			if (n % 4) 	/* not a multiple of 4 */
+				printf("   wrong size for GET CLOCK FREQUENCIES: %d\n", n);
+			else
+			{
+				int i;
+
+				for (i=0; i<n; i+=4)
+					printf("   Support %d kHz\n", dw2i(buffer, i));
+			}
+	}
 	printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
 	printf("  dwMaxDataRate: %d bps\n", dw2i(extra, 23));
 	printf("  bNumDataRatesSupported: %d\n", extra[27]);
