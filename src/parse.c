@@ -254,7 +254,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		printf("   Card lock/unlock mechanism\n");
 
 	printf("  dwFeatures: 0x%08X\n", dw2i(extra, 40));
-	if (extra[40] == 0)
+	if (dw2i(extra, 40) == 0)
 		printf("   No special characteristics\n");
 	if (extra[40] & 0x02)
 		printf("   Automatic parameter configuration based on ATR data\n");
