@@ -707,28 +707,19 @@ static unsigned int *get_data_rates(unsigned int reader_index)
 		sizeof(buffer),
 		usbDevice[reader_index].ccid.readTimeout * 1000);
 
-	if ((n <= 0) /* we got an error? */
-		|| (n%4)) /* or a strange value */
+	/* we got an error? */
+	if (n <= 0)
 	{
-		struct usb_interface *usb_interface;
+		DEBUG_INFO2("IFD does not support GET_DATA_RATES request: %s",
+			strerror(errno));
+		return NULL;
+	}
 
-		if (n <= 0)
-			DEBUG_INFO2("IFD does not support GET_DATA_RATES request: %s",
-				strerror(errno));
-
-		if (n%4)
-			DEBUG_INFO2("Wrong GET DATA RATES size: %d", n);
-
-		/* create a fake answer with only two values */
-		n = 2*4;
-
-		usb_interface = get_ccid_usb_interface(usbDevice[reader_index].dev);
-
-		/* dwDataRate (default data rate) */
-		memcpy(buffer, usb_interface->altsetting->extra +19, 4);
-
-		/* dwMaxDataRate */
-		memcpy(buffer+4, usb_interface->altsetting->extra +23, 4);
+	/* we got a strange value */
+	if (n % 4)
+	{
+		DEBUG_INFO2("Wrong GET DATA RATES size: %d", n);
+		return NULL;
 	}
 
 	/* allocate the buffer (including the end marker) */
