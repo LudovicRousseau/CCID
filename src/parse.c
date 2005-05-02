@@ -257,41 +257,41 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	if (dw2i(extra, 40) == 0)
 		printf("   No special characteristics\n");
 	if (extra[40] & 0x02)
-		printf("   Automatic parameter configuration based on ATR data\n");
+		printf("   ....02 Automatic parameter configuration based on ATR data\n");
 	if (extra[40] & 0x04)
-		printf("   Automatic activation of ICC on inserting\n");
+		printf("   ....04 Automatic activation of ICC on inserting\n");
 	if (extra[40] & 0x08)
-		printf("   Automatic ICC voltage selection\n");
+		printf("   ....08 Automatic ICC voltage selection\n");
 	if (extra[40] & 0x10)
-		printf("   Automatic ICC clock frequency change according to parameters\n");
+		printf("   ....10 Automatic ICC clock frequency change according to parameters\n");
 	if (extra[40] & 0x20)
-		printf("   Automatic baud rate change according to frequency and Fi, Di parameters\n");
+		printf("   ....20 Automatic baud rate change according to frequency and Fi, Di params\n");
 	if (extra[40] & 0x40)
-		printf("   Automatic parameters negotiation made by the CCID\n");
+		printf("   ....40 Automatic parameters negotiation made by the CCID\n");
 	if (extra[40] & 0x80)
-		printf("   Automatic PPS made by the CCID\n");
+		printf("   ....80 Automatic PPS made by the CCID\n");
 	if (extra[41] & 0x01)
-		printf("   CCID can set ICC in clock stop mode\n");
+		printf("   ..01.. CCID can set ICC in clock stop mode\n");
 	if (extra[41] & 0x02)
-		printf("   NAD value other than 00 accepted (T=1)\n");
+		printf("   ..02.. NAD value other than 00 accepted (T=1)\n");
 	if (extra[41] & 0x04)
-		printf("   Automatic IFSD exchange as first exchange (T=1)\n");
+		printf("   ..04.. Automatic IFSD exchange as first exchange (T=1)\n");
 	switch (extra[42] & 0x07)
 	{
 		case 0x00:
-			printf("   Character level exchange\n");
+			printf("   00.... Character level exchange\n");
 			break;
 
 		case 0x01:
-			printf("   TPDU level exchange\n");
+			printf("   01.... TPDU level exchange\n");
 			break;
 
 		case 0x02:
-			printf("   Short APDU level exchange\n");
+			printf("   02.... Short APDU level exchange\n");
 			break;
 
 		case 0x04:
-			printf("   Short and Extended APDU level exchange\n");
+			printf("   04.... Short and Extended APDU level exchange\n");
 			break;
 	}
 
