@@ -220,6 +220,7 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
+again:
 	/* allocate buffers */
 	length_in = 10 + TxLength;
 	if (NULL == (cmd_in = malloc(length_in)))
@@ -250,6 +251,17 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 	}
 
 	res = ReadPort(reader_index, &length_out, cmd_out);
+
+	/* replay the command if NAK
+	 * This (generally) happens only for the first command sent to the reader
+	 * with the serial protocol so it is not really needed for all the other
+	 * ReadPort() calls */
+	if (STATUS_COMM_NAK == res)
+	{
+		free(cmd_out);
+		goto again;
+	}
+
 	if (res != STATUS_SUCCESS)
 	{
 		free(cmd_out);
