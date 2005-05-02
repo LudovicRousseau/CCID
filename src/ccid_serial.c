@@ -322,7 +322,10 @@ nak:
 		return STATUS_COMM_ERROR;
 	}
 	else
-		goto start;
+	{
+		DEBUG_COMM("NAK requested");
+		return STATUS_COMM_NAK;
+	}
 
 ack:
 	DEBUG_COMM("ack");
