@@ -225,12 +225,15 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		if (n <= 0)
 			printf("   IFD does not support GET_DATA_RATES request\n");
 		else
-		{
-			int i;
+			if (n % 4) 	/* not a multiple of 4 */
+				printf("   wrong size for GET_DATA_RATES: %d\n", n);
+			else
+			{
+				int i;
 
-			for (i=0; i<n; i+=4)
-				printf("   Support %d bps\n", dw2i(buffer, i));
-		}
+				for (i=0; i<n; i+=4)
+					printf("   Support %d bps\n", dw2i(buffer, i));
+			}
 	}
 	printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
 	printf("  dwMaxDataRate: %d bps\n", dw2i(extra, 23));
