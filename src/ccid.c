@@ -112,7 +112,7 @@ int ccid_open_hack(unsigned int reader_index)
  *					ccid_error
  *
  ****************************************************************************/
-void ccid_error(int error, char *file, int line, char *function)
+void ccid_error(int error, char *file, int line, const char *function)
 {
 	char *text;
 	char var_text[20];
