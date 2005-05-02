@@ -48,7 +48,8 @@ typedef enum {
 	STATUS_SUCCESS               = 0xFA,
 	STATUS_UNSUCCESSFUL          = 0xFB,
 	STATUS_COMM_ERROR            = 0xFC,
-	STATUS_DEVICE_PROTOCOL_ERROR = 0xFD
+	STATUS_DEVICE_PROTOCOL_ERROR = 0xFD,
+	STATUS_COMM_NAK              = 0xFE
 } status_t;
 
 /* Powerflag (used to detect quick insertion removals unnoticed by the 
