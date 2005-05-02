@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include <PCSC/pcsclite.h>
 #include <PCSC/ifdhandler.h>
 
@@ -1168,14 +1169,14 @@ static unsigned int T0_card_timeout(double f, int TC2, int clock_frequency)
 
 	/* card WWT */
 	/* see ch. 8.2 Character level, page 15 of ISO 7816-3 */
-	t = 960 * TC2 * f / (clock_frequency * 1000);
+	t = ceil(960 * TC2 * f / (clock_frequency * 1000));
 
 	/* use the bigest one */
 	if (t > timeout)
 		timeout = t;
 
 	/* default WWT (TC2=0x0A) */
-	t = 960 * 0x0A * f / (clock_frequency * 1000);
+	t = ceil(960 * 0x0A * f / (clock_frequency * 1000));
 
 	/* use the bigest one */
 	if (t > timeout)
@@ -1193,14 +1194,14 @@ static unsigned int T1_card_timeout(double f, double d, int BWI,
 
 	/* card BWT */
 	/* see ch. 9.5.3.2 Block waiting time, page 20 of ISO 7816-3 */
-	t = 11 * f / d / (clock_frequency * 1000) + (1<<BWI) * 960 * 372 / (clock_frequency * 1000);	/* seconds  */
+	t = ceil(11 * f / d / (clock_frequency * 1000) + (1<<BWI) * 960 * 372 / (clock_frequency * 1000));	/* seconds  */
 
 	/* use the bigest one */
 	if (t > timeout)
 		timeout = t;
 
 	/* default BWT (BWI=0x04) */
-	t = 11 * f / d / (clock_frequency * 1000) + (1<<4) * 960 * 372 / (clock_frequency * 1000);	/* seconds  */
+	t = ceil(11 * f / d / (clock_frequency * 1000) + (1<<4) * 960 * 372 / (clock_frequency * 1000));	/* seconds  */
 
 	/* use the bigest one */
 	if (t > timeout)
