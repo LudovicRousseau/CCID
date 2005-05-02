@@ -205,8 +205,10 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 
 	printf("  dwDefaultClock: %.3f MHz\n", dw2i(extra, 10)/1000.0);
 	printf("  dwMaximumClock: %.3f MHz\n", dw2i(extra, 14)/1000.0);
-
 	printf("  bNumClockSupported: 0x%02X\n", extra[18]);
+	printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
+	printf("  dwMaxDataRate: %d bps\n", dw2i(extra, 23));
+	printf("  bNumDataRatesSupported: %d\n", extra[27]);
 	{
 		unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 		int n;
@@ -214,7 +216,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		/* See CCID 3.7.3 page 25 */
 		n = usb_control_msg(handle,
 			0xA1, /* request type */
-			0x03, /* GET_DATA_RATES */
+			0x03, /* GET DATA RATES */
 			0x00, /* value */
 			usb_interface->bInterfaceNumber, /* interface */
 			(char *)buffer,
@@ -235,9 +237,6 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 					printf("   Support %d bps\n", dw2i(buffer, i));
 			}
 	}
-	printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
-	printf("  dwMaxDataRate: %d bps\n", dw2i(extra, 23));
-	printf("  bNumDataRatesSupported: %d\n", extra[27]);
 	printf("  dwMaxIFSD: %d\n", dw2i(extra, 28));
 	printf("  dwSynchProtocols: 0x%08X\n", dw2i(extra, 32));
 
