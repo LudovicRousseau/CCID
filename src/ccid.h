@@ -60,6 +60,11 @@ typedef struct
 	int dwDefaultClock;
 
 	/*
+	 * Max Data Rate
+	 */
+	int dwMaxDataRate;
+
+	/*
 	 * Number of available slots
 	 */
 	char bMaxSlotIndex;
