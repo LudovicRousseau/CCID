@@ -480,10 +480,15 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				* ATR_DEFAULT_D / ATR_DEFAULT_F);
 
 			/* if the card does not try to lower the default speed */
-			if (card_baudrate > default_baudrate)
+			if ((card_baudrate > default_baudrate)
+				/* and the reader is fast enough */
+				&& (card_baudrate <= ccid_desc->dwMaxDataRate))
 			{
-				if (find_baud_rate(card_baudrate,
-					ccid_desc->arrayOfSupportedDataRates))
+				/* the reader has no baud rates table */
+				if ((NULL == ccid_desc->arrayOfSupportedDataRates)
+					/* or explicitely support it */
+					|| find_baud_rate(card_baudrate,
+						ccid_desc->arrayOfSupportedDataRates))
 				{
 					pps[1] |= 0x10; /* PTS1 presence */
 					pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
