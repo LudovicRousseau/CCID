@@ -979,7 +979,8 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 	}
 
 	/* SCR331-DI contactless reader */
-	if ((SCR331DI == ccid_descriptor->readerID)
+	if (((SCR331DI == ccid_descriptor->readerID)
+		|| (SCR331DINTTCOM == ccid_descriptor->readerID))
 		&& (ccid_descriptor->bCurrentSlotIndex > 0))
 	{
 		unsigned char cmd[] = { 0x11 };
