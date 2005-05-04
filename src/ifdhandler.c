@@ -57,9 +57,10 @@ static int DebugInitialized = FALSE;
 static void init_driver(void);
 static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 static char find_baud_rate(unsigned int baudrate, unsigned int *list);
-static unsigned int T0_card_timeout(double f, int TC2, int clock_frequency);
-static unsigned int T1_card_timeout(double f, double d, int BWI,
+static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2, 
 	int clock_frequency);
+static unsigned int T1_card_timeout(double f, double d, int TC1, int BWI,
+	int CWI, int clock_frequency);
 
 
 RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
@@ -564,9 +565,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		int i;
 		t1_state_t *t1 = &(ccid_slot -> t1);
 		RESPONSECODE ret;
-		double f;
-		double d;
-		int BWI;
+		double f, d;
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
@@ -599,8 +598,8 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		/* compute communication timeout */
 		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
 		ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
-		BWI = (param[3] & 0xF0) >> 4;
-		ccid_desc->readTimeout = T1_card_timeout(f, d, BWI /* BWI */,
+		ccid_desc->readTimeout = T1_card_timeout(f, d, param[2],
+			(param[3] & 0xF0) >> 4 /* BWI */, param[3] & 0x0F /* CWI */,
 			ccid_desc->dwDefaultClock);
 
 		DEBUG_COMM2("Timeout: %d seconds", ccid_desc->readTimeout);
@@ -620,7 +619,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			0x00	/* ClockStop		*/
 		};
 		RESPONSECODE ret;
-		double f;
+		double f, d;
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
@@ -639,10 +638,12 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 		/* compute communication timeout */
 		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
-		ccid_desc->readTimeout = T0_card_timeout(f, param[3] /* TC2 */,
-			ccid_desc->dwDefaultClock);
+		ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
 
-		DEBUG_COMM2("Communication timeout %d seconds",
+		ccid_desc->readTimeout = T0_card_timeout(f, d, param[2] /* TC1 */,
+			param[3] /* TC2 */, ccid_desc->dwDefaultClock);
+
+		DEBUG_COMM2("Communication timeout: %d seconds",
 			ccid_desc->readTimeout);
 
 		ret = SetParameters(reader_index, 0, sizeof(param), param);
@@ -1163,50 +1164,78 @@ static char find_baud_rate(unsigned int baudrate, unsigned int *list)
 } /* find_baud_rate */
 
 
-static unsigned int T0_card_timeout(double f, int TC2, int clock_frequency)
+static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
+	int clock_frequency)
 {
 	unsigned int timeout = DEFAULT_COM_READ_TIMEOUT;
-	unsigned int t;
+	unsigned int EGT, WWT, t;
+
+	/* Timeout applied on ISO_IN or ISO_OUT card exchange
+	 * we choose the maximum computed value.
+	 *
+	 * ISO_IN timeout is the sum of:
+	 * Terminal:					Smart card:
+	 * 5 bytes header cmd  ->
+	 *                    <-		Procedure byte
+	 * 256 data bytes	   ->
+	 * 					  <-		SW1-SW2
+	 * = 261 EGT       + 3 WWT     + 3 WWT
+	 *
+	 * ISO_OUT Timeout is the sum of:
+	 * Terminal:                    Smart card:
+	 * 5 bytes header cmd  ->
+	 * 					  <-        Procedure byte + 256 data bytes + SW1-SW2
+	 * = 5 EGT          + 1 WWT     + 259 WWT			
+	 */
+
+	/* EGT */
+	/* see ch. 6.5.3 Extra Guard Time, page 12 of ISO 7816-3 */
+	EGT = ceil(12 * f / d / (clock_frequency * 1000) + (f / d) * TC1 / (clock_frequency * 1000));	/* seconds  */
 
 	/* card WWT */
 	/* see ch. 8.2 Character level, page 15 of ISO 7816-3 */
-	t = ceil(960 * TC2 * f / (clock_frequency * 1000));
+	WWT= ceil(262 * (960 * TC2 * f / (clock_frequency * 1000)));
 
-	/* use the bigest one */
-	if (t > timeout)
+	/* ISO in */
+	t  = 261 * EGT + (3 + 3) * WWT;
+	if (timeout < t)
 		timeout = t;
 
-	/* default WWT (TC2=0x0A) */
-	t = ceil(960 * 0x0A * f / (clock_frequency * 1000));
-
-	/* use the bigest one */
-	if (t > timeout)
+	/* ISO out */
+	t = 5 * EGT + (1 + 259) * WWT;
+	if (timeout < t)
 		timeout = t;
 
 	return timeout;
 } /* T0_card_timeout  */
 
 
-static unsigned int T1_card_timeout(double f, double d, int BWI,
-	int clock_frequency)
+static unsigned int T1_card_timeout(double f, double d, int TC1,
+	int BWI, int CWI, int clock_frequency)
 {
-	unsigned int timeout = DEFAULT_COM_READ_TIMEOUT;
-	unsigned int t;
+	unsigned int timeout;
+
+	/* Timeout applied on ISO in + ISO out card exchange
+	 *
+     * Timeout is the sum of:
+	 * - ISO in delay between leading edge of the first character sent by the 
+	 *   interface device and the last one (NAD PCB LN APDU CKS) = 260 EGT,
+	 * - delay between ISO in and ISO out = BWT,
+	 * - ISO out delay between leading edge of the first character sent by the 
+	 *   card and the last one (NAD PCB LN DATAS CKS) = 260 CWT.   
+	 */
+
+	/* EGT */
+	/* see ch. 6.5.3 Extra Guard Time, page 12 of ISO 7816-3 */
+	timeout = 260 * ceil(12 * f / d / (clock_frequency * 1000) + (f / d) * TC1 / (clock_frequency * 1000));   /* seconds  */
 
 	/* card BWT */
 	/* see ch. 9.5.3.2 Block waiting time, page 20 of ISO 7816-3 */
-	t = ceil(11 * f / d / (clock_frequency * 1000) + (1<<BWI) * 960 * 372 / (clock_frequency * 1000));	/* seconds  */
+	timeout += ceil(11 * f / d / (clock_frequency * 1000) + (1<<BWI) * 960 * 372 / (clock_frequency * 1000));	/* seconds  */
 
-	/* use the bigest one */
-	if (t > timeout)
-		timeout = t;
-
-	/* default BWT (BWI=0x04) */
-	t = ceil(11 * f / d / (clock_frequency * 1000) + (1<<4) * 960 * 372 / (clock_frequency * 1000));	/* seconds  */
-
-	/* use the bigest one */
-	if (t > timeout)
-		timeout = t;
+	/* card CWT */
+	/* see ch. 9.5.3.2 Block waiting time, page 19 of ISO 7816-3 */
+	timeout += 260 * ceil((11 + (1<<CWI)) * f / d / (clock_frequency * 1000));   /* seconds  */
 
 	return timeout;
 } /* T1_card_timeout  */
