@@ -33,7 +33,7 @@ Supported CCID readers:
 - Kobil KAAN Base [19]
 - Kobil KAAN Advanced [20]
 - Kobil KAAN SIM III [21]
-- Kobil KAAN mIDentity [22]
+- Kobil mIDentity [22]
 - OmniKey CardMan 3121 [5]
 - SCM Micro SCR 331 [6]
   You shall upgrade the firmware [17] using version 5.18 or later.
