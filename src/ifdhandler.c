@@ -1222,6 +1222,7 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 static unsigned int T1_card_timeout(double f, double d, int TC1,
 	int BWI, int CWI, int clock_frequency)
 {
+	double EGT, BWT, CWT, etu;
 	unsigned int timeout;
 
 	/* Timeout applied on ISO in + ISO out card exchange
@@ -1234,17 +1235,30 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 	 *   card and the last one (NAD PCB LN DATAS CKS) = 260 CWT.   
 	 */
 
+	/* clock_frequency is in kHz so the times are in milliseconds and not
+	 * in seconds */
+
+	/* see ch. 6.5.2 Transmission factors F and D, page 12 of ISO 7816-3 */
+	etu = f / d / clock_frequency;
+
 	/* EGT */
 	/* see ch. 6.5.3 Extra Guard Time, page 12 of ISO 7816-3 */
-	timeout = 260 * ceil(12 * f / d / (clock_frequency * 1000) + (f / d) * TC1 / (clock_frequency * 1000));   /* seconds  */
+	EGT = 12 * etu + (f / d) * TC1 / clock_frequency;
 
 	/* card BWT */
-	/* see ch. 9.5.3.2 Block waiting time, page 20 of ISO 7816-3 */
-	timeout += ceil(11 * f / d / (clock_frequency * 1000) + (1<<BWI) * 960 * 372 / (clock_frequency * 1000));	/* seconds  */
+	/* see ch. 9.5.3.2 Block Waiting Time, page 20 of ISO 7816-3 */
+	BWT = 11 * etu + (1<<BWI) * 960 * 372 / clock_frequency;
 
 	/* card CWT */
-	/* see ch. 9.5.3.2 Block waiting time, page 19 of ISO 7816-3 */
-	timeout += 260 * ceil((11 + (1<<CWI)) * f / d / (clock_frequency * 1000));   /* seconds  */
+	/* see ch. 9.5.3.1 Caracter Waiting Time, page 20 of ISO 7816-3 */
+	CWT = (11 + (1<<CWI)) * etu;
+
+	timeout = 260*EGT + BWT + 260*CWT;
+
+	/* Convert from milliseonds to seconds rounded to the upper value
+	 * we use +1 instead of ceil() to round up to the nearest greater interger
+	 * so we can avoid a dependency on the math library */
+	timeout = timeout/1000 +1;
 
 	return timeout;
 } /* T1_card_timeout  */
