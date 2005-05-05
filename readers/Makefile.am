@@ -12,7 +12,7 @@ EXTRA_DIST = \
 	GemPCTwin.txt \
 	KAAN_Advanced.txt \
 	KAAN_Base.txt \
-	KAAN_mIDentity.txt \
+	mIDentity.txt \
 	KAAN_SIM_III.txt \
 	LTC31.txt \
 	Oz776S.txt \
