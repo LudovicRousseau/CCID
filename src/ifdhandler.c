@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
 #include <PCSC/pcsclite.h>
 #include <PCSC/ifdhandler.h>
 
