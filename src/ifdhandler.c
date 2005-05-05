@@ -1168,7 +1168,8 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	int clock_frequency)
 {
 	unsigned int timeout = DEFAULT_COM_READ_TIMEOUT;
-	unsigned int EGT, WWT, t;
+	double EGT, WWT;
+	unsigned int t;
 
 	/* Timeout applied on ISO_IN or ISO_OUT card exchange
 	 * we choose the maximum computed value.
@@ -1188,21 +1189,29 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	 * = 5 EGT          + 1 WWT     + 259 WWT			
 	 */
 
+	/* clock_frequency is in kHz so the times are in milliseconds and not
+	 * in seconds */
+
 	/* EGT */
 	/* see ch. 6.5.3 Extra Guard Time, page 12 of ISO 7816-3 */
-	EGT = ceil(12 * f / d / (clock_frequency * 1000) + (f / d) * TC1 / (clock_frequency * 1000));	/* seconds  */
+	EGT = 12 * f / d / clock_frequency + (f / d) * TC1 / clock_frequency;
 
 	/* card WWT */
 	/* see ch. 8.2 Character level, page 15 of ISO 7816-3 */
-	WWT= ceil(262 * (960 * TC2 * f / (clock_frequency * 1000)));
+	WWT = 960 * TC2 * f / clock_frequency;
 
 	/* ISO in */
 	t  = 261 * EGT + (3 + 3) * WWT;
+	/* Convert from milliseonds to seconds rouned to the upper value
+	 * use +1 instead of ceil() to round up to the nearest interger
+	 * so we can avoid a dependency on the math library */
+	t = t/1000 +1;
 	if (timeout < t)
 		timeout = t;
 
 	/* ISO out */
 	t = 5 * EGT + (1 + 259) * WWT;
+	t = t/1000 +1;
 	if (timeout < t)
 		timeout = t;
 
