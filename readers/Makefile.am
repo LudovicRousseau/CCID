@@ -18,6 +18,7 @@ EXTRA_DIST = \
 	Oz776S.txt \
 	SCR3310.txt \
 	SCR331-DI.txt \
+	SCR331-DI-NTTCom.txt \
 	SCR331.txt \
 	SCR335.txt \
 	sid800.txt \
