@@ -1,8 +1,8 @@
 Parsing Interface Descriptor for device: 002/007
  idVendor: 0x0B97
-  Can't get iManufacturer string
+  iManufacturer: O2
  idProduct: 0x7762
-  Can't get iProduct string
+  iProduct: O2Micro CCID SC Reader
  bcdDevice: 1.10 (firmware release?)
  bLength: 9
  bDescriptorType: 4
@@ -27,17 +27,19 @@ Parsing Interface Descriptor for device: 002/007
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0x00
+   Support 4000 kHz
   dwDataRate: 9600 bps
   dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0
+   Support 9600 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
   dwFeatures: 0x00000030
-   Automatic ICC clock frequency change according to parameters
-   Automatic baud rate change according to frequency and Fi, Di parameters
-   Character level exchange
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   00.... Character level exchange
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0
   bClassEnveloppe: 0

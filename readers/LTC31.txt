@@ -26,16 +26,18 @@ Parsing Interface Descriptor for device: 001/043
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0x00
+   IFD does not support GET CLOCK FREQUENCIES request
   dwDataRate: 10752 bps
   dwMaxDataRate: 10752 bps
   bNumDataRatesSupported: 0
+   IFD does not support GET_DATA_RATES request
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
   dwFeatures: 0x00010002
-   Automatic parameter configuration based on ATR data
-   TPDU level exchange
+   ....02 Automatic parameter configuration based on ATR data
+   01.... TPDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0
   bClassEnveloppe: 0
