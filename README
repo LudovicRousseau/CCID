@@ -70,6 +70,10 @@ Unsupported or partly supported CCID readers:
 - C3PO LTC31 [8]
     The reader works fine with Linux kernel 2.4 but does not with Linux
     kernel 2.6. The ioctl() syscall returns EINVAL (Invalid argument)
+- RSA SecureID SID800 [24]
+    The USB layer is completely broken. The reader is sometimes not even
+    seen on the USB bus (same problem under Windows). Maybe newer
+    devices will work?
 
 
 Supported operating systems:
