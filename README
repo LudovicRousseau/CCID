@@ -46,6 +46,7 @@ Supported CCID readers:
 - SCM Micro SPR 532 [9]
   You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
   firmware upgrade.
+- Verisign Secure Storage Token [24]
 
 
 Should work but untested by me:
@@ -342,6 +343,7 @@ Bibliography:
 [21] http://www.kobil.com/d/products/smartcard/kaansim3.php
 [22] http://www.kobil.com/e/products/index.php?s=midentity
 [23] http://www.ntt.com/jpki/SCR331DI.html
+[24] http://www.verisign.co.uk/products-services/security-services/unified-authentication/usb-tokens/
 
 $Id$
 
