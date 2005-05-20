@@ -47,6 +47,7 @@ Supported CCID readers:
   You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
   firmware upgrade.
 - Verisign Secure Storage Token [24]
+- Verisign Secure Token [?]
 
 
 Should work but untested by me:
