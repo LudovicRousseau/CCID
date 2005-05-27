@@ -52,4 +52,5 @@
 
 # Eutron
 0x073D:0x0C00:Eutron SIM Pocket Combo
+0x073D:0x0007:Eutron CryptoIdentity
 
