@@ -27,6 +27,8 @@ Supported CCID readers:
 - Cherry XX33 keyboard [?]
 - Dell keyboard SK-3106 [?]
 - Dell smart card reader keyboard [?]
+- Eutron SIM Pocket Combo [25]
+- Eutron CryptoIdentity [26]
 - Gemplus GemPC 433 SL [2]
 - Gemplus GemPC Key [3]
 - Gemplus GemPC Twin [4]
@@ -349,6 +351,8 @@ Bibliography:
 [22] http://www.kobil.com/e/products/index.php?s=midentity
 [23] http://www.ntt.com/jpki/SCR331DI.html
 [24] http://www.verisign.co.uk/products-services/security-services/unified-authentication/usb-tokens/
+[25] http://www.eutron.com/simpocket.asp
+[26] http://www.cryptoidentity.eutron.com/eng/home.asp
 
 $Id$
 
