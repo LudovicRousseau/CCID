@@ -442,9 +442,15 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
-			usbDevice[reader_index].dev->bus->dirname,
-			usbDevice[reader_index].dev->filename, strerror(errno));
+		if (usbDevice[reader_index].dev->bus)
+		{
+			DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
+				usbDevice[reader_index].dev->bus->dirname,
+				usbDevice[reader_index].dev->filename, strerror(errno));
+		}
+		else
+			DEBUG_CRITICAL2("usb_bulk_write(no device): %s", strerror(errno));
+
 		return STATUS_UNSUCCESSFUL;
 	}
 
