@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <PCSC/pcsclite.h>
 #include <PCSC/ifdhandler.h>
+#include <PCSC/reader.h>
 
 #include "ccid.h"
 #include "defs.h"
