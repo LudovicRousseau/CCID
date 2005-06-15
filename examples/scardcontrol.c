@@ -27,13 +27,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <PCSC/winscard.h>
+#include <PCSC/reader.h>
 
 #ifndef TRUE
 #define TRUE 1
 #define FALSE 0
 #endif
-
-#define SCARD_CTL_CODE(code) (0x42000000 + (code))
 
 #define IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE     SCARD_CTL_CODE(1)
 #define IOCTL_SMARTCARD_VENDOR_VERIFY_PIN       SCARD_CTL_CODE(2)
