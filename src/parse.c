@@ -332,7 +332,9 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  bClassGetResponse: 0x%02X\n", extra[48]);
 	if (0xFF == extra[48])
 		printf("   echoes the APDU class\n");
-	printf("  bClassEnveloppe: %d\n", extra[49]);
+	printf("  bClassEnveloppe: 0x%02X\n", extra[49]);
+	if (0xFF == extra[49])
+		printf("   echoes the APDU class\n");
 	printf("  wLcdLayout: 0x%04X\n", (extra[51] << 8)+extra[50]);
 	printf("  bPINSupport: 0x%02X\n", extra[52]);
 	if (extra[52] & 0x01)
