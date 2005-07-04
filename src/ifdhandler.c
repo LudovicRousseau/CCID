@@ -873,8 +873,7 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
 	DEBUG_INFO3("lun: %X, ControlCode: 0x%X", Lun, dwControlCode);
 
 	reader_index = LunToReaderIndex(Lun);
-	if ((-1 == reader_index) || (NULL == pdwBytesReturned)
-		|| (NULL == RxBuffer))
+	if ((-1 == reader_index) || (NULL == pdwBytesReturned))
 		return return_value;
 
 	/* Set the return length to 0 to avoid problems */
