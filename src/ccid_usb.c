@@ -135,7 +135,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	struct usb_bus *bus;
 	struct usb_dev_handle *dev_handle;
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
-	int vendorID, productID;
+	unsigned int vendorID, productID;
 	char infofile[FILENAME_MAX];
 	unsigned int device_vendor, device_product;
 	char *dirname = NULL, *filename = NULL;
