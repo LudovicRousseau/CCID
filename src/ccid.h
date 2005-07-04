@@ -37,7 +37,7 @@ typedef struct
 	/*
 	 * Maximum message length
 	 */
-	int dwMaxCCIDMessageLength;
+	unsigned int dwMaxCCIDMessageLength;
 
 	/*
 	 * Maximum IFSD
