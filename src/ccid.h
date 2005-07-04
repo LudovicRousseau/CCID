@@ -62,7 +62,7 @@ typedef struct
 	/*
 	 * Max Data Rate
 	 */
-	int dwMaxDataRate;
+	unsigned int dwMaxDataRate;
 
 	/*
 	 * Number of available slots
