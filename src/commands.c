@@ -73,7 +73,8 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 {
 	unsigned char cmd[10];
 	status_t res;
-	int atr_len, length, count = 1;
+	int length, count = 1;
+	unsigned int atr_len;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	char voltage;
