@@ -339,6 +339,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					/* now we found a free reader and we try to use it */
 					if (dev->config == NULL)
 					{
+						usb_close(dev_handle);
 						DEBUG_CRITICAL3("No dev->config found for %s/%s",
 							 bus->dirname, dev->filename);
 						return STATUS_UNSUCCESSFUL;
@@ -347,6 +348,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usb_interface = get_ccid_usb_interface(dev);
 					if (usb_interface == NULL)
 					{
+						usb_close(dev_handle);
 						DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
 							bus->dirname, dev->filename);
 						return STATUS_UNSUCCESSFUL;
@@ -354,6 +356,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 					if (usb_interface->altsetting->extralen != 54)
 					{
+						usb_close(dev_handle);
 						DEBUG_CRITICAL4("Extra field for %s/%s has a wrong length: %d", bus->dirname, dev->filename, usb_interface->altsetting->extralen);
 						return STATUS_UNSUCCESSFUL;
 					}
@@ -361,6 +364,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					interface = usb_interface->altsetting->bInterfaceNumber;
 					if (usb_claim_interface(dev_handle, interface) < 0)
 					{
+						usb_close(dev_handle);
 						DEBUG_CRITICAL4("Can't claim interface %s/%s: %s",
 							bus->dirname, dev->filename, strerror(errno));
 						return STATUS_UNSUCCESSFUL;
@@ -374,7 +378,10 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 					/* check for firmware bugs */
 					if (ccid_check_firmware(dev))
+					{
+						usb_close(dev_handle);
 						return STATUS_UNSUCCESSFUL;
+					}
 
 					/* Get Endpoints values*/
 					get_end_points(dev, &usbDevice[reader_index]);
