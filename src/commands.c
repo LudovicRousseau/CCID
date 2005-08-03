@@ -505,7 +505,7 @@ time_request:
 
 	if (cmd[STATUS_OFFSET] & CCID_TIME_EXTENSION)
 	{
-		DEBUG_CRITICAL2("Time extension requested: 0x%02X", cmd[ERROR_OFFSET]);
+		DEBUG_COMM2("Time extension requested: 0x%02X", cmd[ERROR_OFFSET]);
 		goto time_request;
 	}
 
