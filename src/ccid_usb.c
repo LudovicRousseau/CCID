@@ -706,7 +706,7 @@ int ccid_check_firmware(struct usb_device *dev)
  ****************************************************************************/
 static unsigned int *get_data_rates(unsigned int reader_index)
 {
-	int n, i;
+	int n, i, len;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
 	unsigned int *int_array;
 
@@ -737,6 +737,19 @@ static unsigned int *get_data_rates(unsigned int reader_index)
 
 	/* allocate the buffer (including the end marker) */
 	n /= sizeof(int);
+
+	/* we do not get the expected number of data rates */
+	len = get_ccid_usb_interface(usbDevice[reader_index].dev)
+		->altsetting->extra[27]; /* bNumDataRatesSupported */
+	if (n != len)
+	{
+		DEBUG_INFO3("Got %d data rates but was expecting %d", n, len);
+
+		/* we got more data than expected */
+		if (n > len)
+			n = len;
+	}
+
 	int_array = calloc(n+1, sizeof(int));
 	if (NULL == int_array)
 	{
