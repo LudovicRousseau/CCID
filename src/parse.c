@@ -230,6 +230,17 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			{
 				int i;
 
+				/* we do not get the expected number of data rates */
+				if (n != extra[18]*4)
+				{
+					printf("   Got %d clock frequencies but was expecting %d\n",
+						n/4, extra[18]);
+
+					/* we got more data than expected */
+					if (n > extra[18]*4)
+						n = extra[18]*4;
+				}
+
 				for (i=0; i<n; i+=4)
 					printf("   Support %d kHz\n", dw2i(buffer, i));
 			}
@@ -260,6 +271,17 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			else
 			{
 				int i;
+
+				/* we do not get the expected number of data rates */
+				if (n != extra[27]*4)
+				{
+					printf("   Got %d data rates but was expecting %d\n", n/4,
+						extra[27]);
+
+					/* we got more data than expected */
+					if (n > extra[27]*4)
+						n = extra[27]*4;
+				}
 
 				for (i=0; i<n; i+=4)
 					printf("   Support %d bps\n", dw2i(buffer, i));
