@@ -60,6 +60,12 @@
 		- activate this option but you will have problems depending on
 		  the bug
 
+	8: DRIVER_OPTION_RESET_ON_CLOSE
+		This option may be required on Linux 2.4 so that the
+		device reset if sequencial (bSeq) counter and can be
+		reused if pcscd restart. Otherwise the reader needs to
+		be unplugged/replugged.
+
 	Default value: 0
 	-->
 
