@@ -522,7 +522,8 @@ status_t CloseUSB(unsigned int reader_index)
 		free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
 
 	/* reset so that bSeq starts at 0 again */
-	usb_reset(usbDevice[reader_index].handle);
+	if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
+		usb_reset(usbDevice[reader_index].handle);
 
 	usb_release_interface(usbDevice[reader_index].handle,
 		usbDevice[reader_index].interface);
