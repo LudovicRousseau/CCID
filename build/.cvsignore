@@ -1,9 +1,0 @@
-aclocal.m4
-compile
-config.guess
-config.sub
-depcomp
-install-sh
-ltmain.sh
-missing
-mkinstalldirs
