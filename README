@@ -25,6 +25,7 @@ Supported CCID readers:
   special USB frame is sent from the reader. If the frame size if a
   multiple of wMaxPacketSize the communication is stopped.
 - Cherry XX33 keyboard [?]
+- Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
 - Dell keyboard SK-3106 [?]
 - Dell smart card reader keyboard [?]
 - Eutron SIM Pocket Combo [25]
@@ -59,7 +60,6 @@ I would like to get these readers to perform test and validation and
 move them in the supported list above. If you are one of the
 manufacturers, please, contact me.
 
-- Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
 - ActivCard USB reader 2.0 [10]
 - C3PO LTC32 [13]
 - SCM Micro SCR 331-DI NTTCom [23]
