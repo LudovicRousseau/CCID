@@ -26,6 +26,7 @@ Supported CCID readers:
   multiple of wMaxPacketSize the communication is stopped.
 - Cherry XX33 keyboard [?]
 - Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
+- Cherry ST-1044U [27]
 - Dell keyboard SK-3106 [?]
 - Dell smart card reader keyboard [?]
 - Eutron SIM Pocket Combo [25]
@@ -353,6 +354,7 @@ Bibliography:
 [24] http://www.verisign.co.uk/products-services/security-services/unified-authentication/usb-tokens/
 [25] http://www.eutron.com/simpocket.asp
 [26] http://www.cryptoidentity.eutron.com/eng/home.asp
+[27] http://www.cherry.de/english/advanced-line/advanced_smartterminal_st-1044u.htm
 
 $Id$
 
