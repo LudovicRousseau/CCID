@@ -35,9 +35,6 @@
 #endif
 
 #define IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE     SCARD_CTL_CODE(1)
-#define IOCTL_SMARTCARD_VENDOR_VERIFY_PIN       SCARD_CTL_CODE(2)
-#define IOCTL_SMARTCARD_VENDOR_MODIFY_PIN       SCARD_CTL_CODE(3)
-#define IOCTL_SMARTCARD_VENDOR_TRANSFER_PIN     SCARD_CTL_CODE(4)
 
 /* PCSC error message pretty print */
 #define PCSC_ERROR_EXIT(rv, text) \
@@ -72,9 +69,12 @@ int main(int argc, char *argv[])
 	unsigned char bSendBuffer[MAX_BUFFER_SIZE];
 	unsigned char bRecvBuffer[MAX_BUFFER_SIZE];
 	DWORD length;
-	unsigned char attribute[1];
-	DWORD attribute_length;
+	DWORD verify_ioctl = 0;
+	DWORD modify_ioctl = 0;
 	SCARD_IO_REQUEST pioRecvPci;
+	PCSC_TLV_STRUCTURE *pcsc_tlv;
+	PIN_VERIFY_STRUCTURE *pin_verify;
+	PIN_MODIFY_STRUCTURE *pin_modify;
 
 	printf("SCardControl sample code\n");
 	printf("V 1.0 2004, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
@@ -194,11 +194,35 @@ int main(int argc, char *argv[])
 	PCSC_ERROR_CONT(rv, "SCardStatus")
 
 	/* does the reader support PIN verification? */
-	attribute_length = sizeof(attribute);
-	rv = SCardGetAttrib(hCard, IOCTL_SMARTCARD_VENDOR_VERIFY_PIN, attribute,
-		&attribute_length);
-	PCSC_ERROR_CONT(rv, "SCardGetAttrib")
-	if (FALSE == attribute[0])
+	rv = SCardControl(hCard, CM_IOCTL_GET_FEATURE_REQUEST, NULL, 0,
+		bRecvBuffer, sizeof(bRecvBuffer), &length);
+
+	printf(" TLV (%ld): ", length);
+	for (i=0; i<length; i++)
+		printf("%02X ", bRecvBuffer[i]);
+	printf("\n");
+
+	PCSC_ERROR_CONT(rv, "SCardControl(CM_IOCTL_GET_FEATURE_REQUEST)")
+
+	if (length % sizeof(PCSC_TLV_STRUCTURE))
+	{
+		printf("Inconsistent result! Bad TLV values!\n");
+		goto end;
+	}
+
+	/* get the number of elements instead of the complete size */
+	length /= sizeof(PCSC_TLV_STRUCTURE);
+
+	pcsc_tlv = (PCSC_TLV_STRUCTURE *)bRecvBuffer;
+	for (i = 0; i < length; i++)
+	{
+		if (pcsc_tlv[i].tag == FEATURE_VERIFY_PIN_DIRECT)
+			verify_ioctl = pcsc_tlv[i].value;
+		if (pcsc_tlv[i].tag == FEATURE_MODIFY_PIN_DIRECT)
+			modify_ioctl = pcsc_tlv[i].value;
+	}
+
+	if (0 == verify_ioctl)
 	{
 		printf("Reader %s does not support PIN verification\n",
 			readers[reader_nb]);
@@ -236,47 +260,138 @@ int main(int argc, char *argv[])
 
 	/* verify PIN */
 	printf(" Secure verify PIN\n");
-	offset = 0;
+	pin_verify = (PIN_VERIFY_STRUCTURE *)bSendBuffer;
 
-	/* CCID PIN verification data structure */
-	bSendBuffer[offset++] = 0x00;	/* bTimeOut */
-	bSendBuffer[offset++] = 0x82;	/* bmFormatString */
-	bSendBuffer[offset++] = 0x04;	/* bmPINBlockString (PIN length) */
-	bSendBuffer[offset++] = 0x00;	/* bmPINLengthFormat */
-	bSendBuffer[offset++] = 0x08;	/* wPINMaxExtraDigit: max */
-	bSendBuffer[offset++] = 0x04;	/* wPINMaxExtraDigit: min */
-	bSendBuffer[offset++] = 0x02;	/* bEntryValidationCondition */
-	bSendBuffer[offset++] = 0x00;	/* bNumberMessage */
-	bSendBuffer[offset++] = 0x04;	/* wLangId: english */
-	bSendBuffer[offset++] = 0x09;	/* " */
-	bSendBuffer[offset++] = 0x00;	/* bMsgIndex */
-	bSendBuffer[offset++] = 0x00;	/* bTeoPrologue */
-	bSendBuffer[offset++] = 0x00;	/* " */
-	bSendBuffer[offset++] = 0x00;	/* " */
+	/* PC/SC v2.0.2 Part 10 PIN verification data structure */
+	pin_verify -> bTimerOut = 0x00;
+	pin_verify -> bTimerOut2 = 0x00;
+	pin_verify -> bmFormatString = 0x82;
+	pin_verify -> bmPINBlockString = 0x04;
+	pin_verify -> bmPINLengthFormat = 0x00;
+	pin_verify -> wPINMaxExtraDigit = HOST_TO_CCID(0x0408); /* Min Max */
+	pin_verify -> bEntryValidationCondition = 0x02;
+	pin_verify -> bNumberMessage = 0x00;
+	pin_verify -> wLangId = HOST_TO_CCID(0x0904);
+	pin_verify -> bMsgIndex = 0x00;
+	pin_verify -> bTeoPrologue[0] = 0x00;
+	pin_verify -> bTeoPrologue[1] = 0x00;
+	pin_verify -> bTeoPrologue[2] = 0x00;
+	/* pin_verify -> ulDataLength = 0x00; we don't know the size yet */
 
 	/* APDU: 00 20 00 00 08 30 30 30 30 00 00 00 00 */
-	bSendBuffer[offset++] = 0x00;	/* CLA */
-	bSendBuffer[offset++] = 0x20;	/* INS: VERIFY */
-	bSendBuffer[offset++] = 0x00;	/* P1 */
-	bSendBuffer[offset++] = 0x00;	/* P2 */
-	bSendBuffer[offset++] = 0x08;	/* Lc: 8 data bytes */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x30;	/* '0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
-	bSendBuffer[offset++] = 0x00;	/* '\0' */
+	offset = 0;
+	pin_verify -> abData[offset++] = 0x00;	/* CLA */
+	pin_verify -> abData[offset++] = 0x20;	/* INS: VERIFY */
+	pin_verify -> abData[offset++] = 0x00;	/* P1 */
+	pin_verify -> abData[offset++] = 0x00;	/* P2 */
+	pin_verify -> abData[offset++] = 0x08;	/* Lc: 8 data bytes */
+	pin_verify -> abData[offset++] = 0x30;	/* '0' */
+	pin_verify -> abData[offset++] = 0x30;	/* '0' */
+	pin_verify -> abData[offset++] = 0x30;	/* '0' */
+	pin_verify -> abData[offset++] = 0x30;	/* '0' */
+	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_verify -> ulDataLength = offset;	/* APDU size */
+
+	length = sizeof(PIN_VERIFY_STRUCTURE) + offset -1;	/* -1 because PIN_VERIFY_STRUCTURE contains the first byte of abData[] */
 
 	printf(" command:");
-	for (i=0; i<offset; i++)
+	for (i=0; i<length; i++)
 		printf(" %02X", bSendBuffer[i]);
 	printf("\n");
 	printf("Enter your PIN: ");
 	fflush(stdout);
-	rv = SCardControl(hCard, IOCTL_SMARTCARD_VENDOR_VERIFY_PIN, bSendBuffer,
-		offset, bRecvBuffer, sizeof(bRecvBuffer), &length);
+	rv = SCardControl(hCard, verify_ioctl, bSendBuffer,
+		length, bRecvBuffer, sizeof(bRecvBuffer), &length);
+
+	printf(" card response:");
+	for (i=0; i<length; i++)
+		printf(" %02X", bRecvBuffer[i]);
+	printf("\n");
+	PCSC_ERROR_CONT(rv, "SCardControl")
+
+	{
+#ifndef S_SPLINT_S
+		fd_set fd;
+#endif
+		struct timeval timeout;
+
+		FD_ZERO(&fd);
+		FD_SET(STDIN_FILENO, &fd);	/* stdin */
+		timeout.tv_sec = 0;			/* timeout = 0 */
+		timeout.tv_usec = 0;
+
+		/* we only try to read stdin if the pinpad is on a keyboard
+		 * we do not read stdin for a SPR 532 for example */
+		if (select(1, &fd, NULL, NULL, &timeout) > 0)
+		{
+			/* read the fake digits */
+			char in[10];	/* 4 digits + \n + \0 */
+			(void)fgets(in, sizeof(in), stdin);
+
+			printf("keyboard sent: %s", in);
+		}
+	}
+
+	if (0 == modify_ioctl)
+	{
+		printf("Reader %s does not support PIN modification\n",
+			readers[reader_nb]);
+		goto end;
+	}
+
+	/* Modify PIN */
+	printf(" Secure modify PIN\n");
+	pin_modify = (PIN_MODIFY_STRUCTURE *)bSendBuffer;
+
+	/* PC/SC v2.0.2 Part 10 PIN verification data structure */
+	pin_modify -> bTimerOut = 0x00;
+	pin_modify -> bTimerOut2 = 0x00;
+	pin_modify -> bmFormatString = 0x82;
+	pin_modify -> bmPINBlockString = 0x04;
+	pin_modify -> bmPINLengthFormat = 0x00;
+	pin_modify -> bInsertionOffsetOld = 0x00;
+	pin_modify -> bInsertionOffsetNew = 0x00;
+	pin_modify -> wPINMaxExtraDigit = HOST_TO_CCID(0x0408);	/* Min Max */
+	pin_modify -> bConfirmPIN = 0x00;
+	pin_modify -> bEntryValidationCondition = 0x02;
+	pin_modify -> bNumberMessage = 0x00;
+	pin_modify -> wLangId = HOST_TO_CCID(0x0904);
+	pin_modify -> bMsgIndex1 = 0x00;
+	pin_modify -> bMsgIndex2 = 0x00;
+	pin_modify -> bMsgIndex3 = 0x00;
+	pin_modify -> bTeoPrologue[0] = 0x00;
+	pin_modify -> bTeoPrologue[1] = 0x00;
+	pin_modify -> bTeoPrologue[2] = 0x00;
+	pin_modify -> ulDataLength = 0x0D;
+
+	/* APDU: 00 20 00 00 08 30 30 30 30 00 00 00 00 */
+	offset = 0;
+	pin_modify -> abData[offset++] = 0x00;	/* CLA */
+	pin_modify -> abData[offset++] = 0x20;	/* INS: VERIFY */
+	pin_modify -> abData[offset++] = 0x00;	/* P1 */
+	pin_modify -> abData[offset++] = 0x00;	/* P2 */
+	pin_modify -> abData[offset++] = 0x08;	/* Lc: 8 data bytes */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+
+	length = sizeof(PIN_VERIFY_STRUCTURE) + offset -1;
+	printf(" command:");
+	for (i=0; i<length; i++)
+		printf(" %02X", bSendBuffer[i]);
+	printf("\n");
+	printf("Enter your PIN: ");
+	fflush(stdout);
+	rv = SCardControl(hCard, verify_ioctl, bSendBuffer,
+		length, bRecvBuffer, sizeof(bRecvBuffer), &length);
 
 	printf(" card response:");
 	for (i=0; i<length; i++)
