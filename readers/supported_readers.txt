@@ -37,6 +37,7 @@
 # Cherry
 0x046a:0x0005:Cherry XX33
 0x046a:0x0010:Cherry XX44
+0x046a:0x002D:Cherry ST1044U
 0x046a:0x003E:Cherry SmartTerminal ST-2XXX
 
 # Advanced Card Systems
