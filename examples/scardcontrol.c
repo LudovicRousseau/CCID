@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
 	DWORD verify_ioctl = 0;
 	DWORD modify_ioctl = 0;
 	SCARD_IO_REQUEST pioRecvPci;
+ 	SCARD_IO_REQUEST pioSendPci;
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
 	PIN_VERIFY_STRUCTURE *pin_verify;
 	PIN_MODIFY_STRUCTURE *pin_modify;
@@ -232,14 +233,28 @@ int main(int argc, char *argv[])
 	/* connect to a reader (even without a card) */
 	dwActiveProtocol = -1;
 	rv = SCardReconnect(hCard, SCARD_SHARE_SHARED,
-		SCARD_PROTOCOL_T0, SCARD_UNPOWER_CARD, &dwActiveProtocol);
+		SCARD_PROTOCOL_T0|SCARD_PROTOCOL_T1, SCARD_UNPOWER_CARD,
+		&dwActiveProtocol);
 	printf(" Protocol: %ld\n", dwActiveProtocol);
 	PCSC_ERROR_EXIT(rv, "SCardReconnect")
+
+	switch(dwActiveProtocol)
+	{
+		case SCARD_PROTOCOL_T0:
+			pioSendPci = *SCARD_PCI_T0;
+			break;
+		case SCARD_PROTOCOL_T1:
+			pioSendPci = *SCARD_PCI_T1;
+			break;
+		default:
+			printf("Unknown protocol\n");
+			return -1;
+	}
 
 	/* APDU select DF */
 	memcpy(bSendBuffer, "\x00\xA4\x04\x00\x05\x47\x54\x4F\x4B\x31", 10);
 	length = sizeof(bRecvBuffer);
-	rv = SCardTransmit(hCard, SCARD_PCI_T0, bSendBuffer, 10,
+	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, 10,
 		&pioRecvPci, bRecvBuffer, &length);
 	printf(" card response:");
 	for (i=0; i<length; i++)
@@ -250,7 +265,7 @@ int main(int argc, char *argv[])
 	/* APDU select EF */
 	memcpy(bSendBuffer, "\x00\xA4\x02\x00\x02\x00\x04", 7);
 	length = sizeof(bRecvBuffer);
-	rv = SCardTransmit(hCard, SCARD_PCI_T0, bSendBuffer, 7,
+	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, 7,
 		&pioRecvPci, bRecvBuffer, &length);
 	printf(" card response:");
 	for (i=0; i<length; i++)
