@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
 	pin_verify -> bmPINBlockString = 0x04;
 	pin_verify -> bmPINLengthFormat = 0x00;
 	pin_verify -> wPINMaxExtraDigit = HOST_TO_CCID(0x0408); /* Min Max */
-	pin_verify -> bEntryValidationCondition = 0x02;
+	pin_verify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
 	pin_verify -> bNumberMessage = 0x00;
 	pin_verify -> wLangId = HOST_TO_CCID(0x0904);
 	pin_verify -> bMsgIndex = 0x00;
@@ -352,11 +352,12 @@ int main(int argc, char *argv[])
 	pin_modify -> bmFormatString = 0x82;
 	pin_modify -> bmPINBlockString = 0x04;
 	pin_modify -> bmPINLengthFormat = 0x00;
-	pin_modify -> bInsertionOffsetOld = 0x00;
-	pin_modify -> bInsertionOffsetNew = 0x00;
+	pin_modify -> bInsertionOffsetOld = 0x05; 	/* offset from APDU start */
+	pin_modify -> bInsertionOffsetNew = 0x0D;	/* offset from APDU start */
 	pin_modify -> wPINMaxExtraDigit = HOST_TO_CCID(0x0408);	/* Min Max */
-	pin_modify -> bConfirmPIN = 0x00;
-	pin_modify -> bEntryValidationCondition = 0x02;
+	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
+									/* b1 set = current PIN entry requested */
+	pin_modify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
 	pin_modify -> bNumberMessage = 0x00;
 	pin_modify -> wLangId = HOST_TO_CCID(0x0904);
 	pin_modify -> bMsgIndex1 = 0x00;
@@ -365,16 +366,16 @@ int main(int argc, char *argv[])
 	pin_modify -> bTeoPrologue[0] = 0x00;
 	pin_modify -> bTeoPrologue[1] = 0x00;
 	pin_modify -> bTeoPrologue[2] = 0x00;
-	pin_modify -> ulDataLength = 0x0D;
+	/* pin_modify -> ulDataLength = 0x00; we don't know the size yet */
 
 	/* APDU: 00 20 00 00 08 30 30 30 30 00 00 00 00 */
 	offset = 0;
 	pin_modify -> abData[offset++] = 0x00;	/* CLA */
-	pin_modify -> abData[offset++] = 0x20;	/* INS: VERIFY */
+	pin_modify -> abData[offset++] = 0x24;	/* INS: CHANGE/UNBLOCK */
 	pin_modify -> abData[offset++] = 0x00;	/* P1 */
 	pin_modify -> abData[offset++] = 0x00;	/* P2 */
-	pin_modify -> abData[offset++] = 0x08;	/* Lc: 8 data bytes */
-	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x10;	/* Lc: 2x8 data bytes */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' old PIN */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
@@ -382,15 +383,25 @@ int main(int argc, char *argv[])
 	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' new PIN */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x30;	/* '0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
+	pin_modify -> ulDataLength = offset;	/* APDU size */
 
-	length = sizeof(PIN_VERIFY_STRUCTURE) + offset -1;
+	length = sizeof(PIN_MODIFY_STRUCTURE) + offset -1;	/* -1 because PIN_MODIFY_STRUCTURE contains the first byte of abData[] */
+
 	printf(" command:");
 	for (i=0; i<length; i++)
 		printf(" %02X", bSendBuffer[i]);
 	printf("\n");
 	printf("Enter your PIN: ");
 	fflush(stdout);
-	rv = SCardControl(hCard, verify_ioctl, bSendBuffer,
+	rv = SCardControl(hCard, modify_ioctl, bSendBuffer,
 		length, bRecvBuffer, sizeof(bRecvBuffer), &length);
 
 	printf(" card response:");
