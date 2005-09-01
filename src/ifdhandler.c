@@ -301,14 +301,6 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			}
 			break;
 
-		case IOCTL_SMARTCARD_VENDOR_VERIFY_PIN:
-			if (*Length >= 1)
-			{
-				*Length = 1;
-				*Value = get_ccid_descriptor(reader_index) -> bPINSupport & CCID_CLASS_PIN_VERIFY;
-			}
-			break;
-
 		default:
 			return IFD_ERROR_TAG;
 	}
@@ -897,13 +889,63 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
 		}
 	}
 
-	if (IOCTL_SMARTCARD_VENDOR_VERIFY_PIN == dwControlCode)
+	/* Implement the PC/SC v2.1.2 Part 10 IOCTL mechanism */
+	
+	/* Query for features */
+	if (CM_IOCTL_GET_FEATURE_REQUEST == dwControlCode)
+	{
+		unsigned int iBytesReturned = 0;
+		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
+
+		/* we need room for two records */
+		if (RxLength < 2 * sizeof(PCSC_TLV_STRUCTURE))
+			return IFD_COMMUNICATION_ERROR;
+
+		/* We can only support direct verify and/or modify currently */
+		if (get_ccid_descriptor(reader_index) -> bPINSupport
+			& CCID_CLASS_PIN_VERIFY)
+		{
+			pcsc_tlv -> tag = FEATURE_VERIFY_PIN_DIRECT;
+			pcsc_tlv -> length = 0x04; /* always 0x04 */
+			pcsc_tlv -> value = IOCTL_FEATURE_VERIFY_PIN_DIRECT;
+
+			pcsc_tlv++;
+			iBytesReturned += 6;
+		}
+		
+		if (get_ccid_descriptor(reader_index) -> bPINSupport
+			& CCID_CLASS_PIN_MODIFY)
+		{
+			pcsc_tlv -> tag = FEATURE_MODIFY_PIN_DIRECT;
+			pcsc_tlv -> length = 0x04; /* always 0x04 */
+			pcsc_tlv -> value = IOCTL_FEATURE_MODIFY_PIN_DIRECT;
+
+			pcsc_tlv++;
+			iBytesReturned += 6;
+		}
+		*pdwBytesReturned = iBytesReturned;
+		return_value = IFD_SUCCESS;
+	}
+
+	/* Verify a PIN, plain CCID */
+	if (IOCTL_FEATURE_VERIFY_PIN_DIRECT == dwControlCode)
 	{
 		unsigned int iBytesReturned;
 
 		iBytesReturned = RxLength;
-		return_value = SecurePIN(reader_index, TxBuffer, TxLength, RxBuffer,
-			&iBytesReturned);
+		return_value = SecurePINVerify(reader_index, TxBuffer, TxLength,
+			RxBuffer, &iBytesReturned);
+		*pdwBytesReturned = iBytesReturned;
+	}
+
+	/* Modify a PIN, plain CCID */
+	if (IOCTL_FEATURE_MODIFY_PIN_DIRECT == dwControlCode)
+	{
+		unsigned int iBytesReturned;
+
+		iBytesReturned = RxLength;
+		return_value = SecurePINModify(reader_index, TxBuffer, TxLength,
+			RxBuffer, &iBytesReturned);
 		*pdwBytesReturned = iBytesReturned;
 	}
 

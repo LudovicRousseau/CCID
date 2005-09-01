@@ -155,18 +155,18 @@ again:
 
 /*****************************************************************************
  *
- *					SecurePIN
+ *					SecurePINVerify
  *
  ****************************************************************************/
-RESPONSECODE SecurePIN(unsigned int reader_index,
+RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength)
 {
 	unsigned char cmd[11+14+CMD_BUF_SIZE];
+	unsigned int a, b;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	cmd[0] = 0x69;	/* Secure */
-	i2dw(TxLength+1, cmd+1);	/* command length (includes bPINOperation) */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = 0;		/* bBWI */
@@ -174,18 +174,52 @@ RESPONSECODE SecurePIN(unsigned int reader_index,
 	cmd[9] = 0;
 	cmd[10] = 0;	/* bPINOperation: PIN Verification */
 
-	/* check that the command is not too large */
-	if (TxLength > 14+CMD_BUF_SIZE)
+	/* 16 is the size of the PCSC PIN verify structure
+	 * The equivalent CCID structure is only 14-bytes long */
+	if (TxLength > 16+CMD_BUF_SIZE) /* command too large? */
+	{
+		DEBUG_INFO3("Command too long: %d > %d", TxLength, 16+CMD_BUF_SIZE);
+		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
+	}
 
-	/* CCID data structure + APDU */
-	memcpy(cmd + 11, TxBuffer, TxLength);
+	if (TxLength < 16+4 /* 4 = APDU size */)	/* command too short? */
+	{
+		DEBUG_INFO3("Command too short: %d < %d", TxLength, 16+4);
+		*RxLength = 0;
+		return IFD_NOT_SUPPORTED;
+	}
+
+	if (TxBuffer[15] + 16 != TxLength)	/* ulDataLength field coherency */
+	{
+		DEBUG_INFO3("Wrong lengths: %d %d", TxBuffer[15] + 16, TxLength);
+		*RxLength = 0;
+		return IFD_NOT_SUPPORTED;
+	}
+
+	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
+	for (a = 11, b = 0; b < TxLength; b++)
+	{
+		if (1 == b) /* bTimeOut2 field */
+			/* Ignore the second timeout as there's nothing we can do with
+			 * it currently */
+			continue;
+
+		if (15 == b) /* ulDataLength field */
+			/* the ulDataLength field is not present in the CCID frame
+			 * so do not copy */
+			continue;
+
+		/* copy the CCID block 'verbatim' */
+		cmd[a] = TxBuffer[b];
+		a++;
+	}
 
 	/* SPR532 and Case 1 APDU */
-	if ((SPR532 == ccid_descriptor->readerID) && (TxLength - 14 == 4))
+	if ((SPR532 == ccid_descriptor->readerID) && (TxBuffer[15] == 4))
 	{
 		RESPONSECODE return_value;
-		unsigned char cmd[] = { 0x80,0x02, 0x00 };
+		unsigned char cmd[] = { 0x80, 0x02, 0x00 };
 		unsigned char res[1];
 		unsigned int res_length = sizeof(res);
 
@@ -199,11 +233,92 @@ RESPONSECODE SecurePIN(unsigned int reader_index,
 		}
 	}
 
-	if (WritePort(reader_index, TxLength+1+10, cmd) != STATUS_SUCCESS)
+	i2dw(a - 10, cmd + 1);  /* CCID message length */
+
+	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	return CCID_Receive(reader_index, RxLength, RxBuffer);
-} /* SecurePIN */
+} /* SecurePINVerify */
+
+
+/*****************************************************************************
+ *
+ *					SecurePINModify
+ *
+ ****************************************************************************/
+RESPONSECODE SecurePINModify(unsigned int reader_index,
+	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char RxBuffer[], unsigned int *RxLength)
+{
+	unsigned char cmd[11+19+CMD_BUF_SIZE];
+	unsigned int a, b;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+
+	cmd[0] = 0x69;	/* Secure */
+	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
+	cmd[7] = 0;		/* bBWI */
+	cmd[8] = 0;		/* wLevelParameter */
+	cmd[9] = 0;
+	cmd[10] = 1;	/* bPINOperation: PIN Modification */
+
+	/* 21 is the size of the PCSC PIN modify structure
+	 * The equivalent CCID structure is only 18 or 19-bytes long */
+	if ((TxLength > 19+CMD_BUF_SIZE) /* command too large? */
+		|| (TxLength < 18+4 /* 4 = APDU size */) /* command too short? */
+		|| (TxBuffer[20] + 21 != TxLength)) /* ulDataLength field coherency */
+		return IFD_NOT_SUPPORTED;
+
+	/* Make sure in the beginning if bNumberMessage is valid or not */
+	if (TxBuffer[11] > 3)
+		return IFD_NOT_SUPPORTED;
+
+	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
+
+	/* Do adjustments as needed - CCID spec is not exact with some
+	 * details in the format of the structure, per-reader adaptions
+	 * might be needed.
+	 */
+	for (a = 11, b = 0; b < TxLength; b++)
+	{
+		if (1 == b) /* bTimeOut2 */
+			/* Ignore the second timeout as there's nothing we can do with it
+			 * currently */
+			continue;
+
+		if (16 == b) /* bMsgIndex3 */
+		{
+			/*
+			 * SPR 532 has no display but requires _all_ bMsgIndex
+			 * fields with bNumberMessage set to 0.
+			 */
+			if (SPR532 == ccid_descriptor->readerID)
+			{
+				cmd[21] = 0x00; /* set bNumberMessages to 0 */
+				cmd[a] = cmd[a-1] = cmd[a-2] = 0;	/* bMsgIndex123 */
+				a++;
+				continue;
+			}
+
+			/* in CCID the bMsgIndex3 is present only if bNumberMessage == 3 */
+			if (TxBuffer[11] < 3)
+				continue;
+		}
+
+		/* copy to the CCID block 'verbatim' */
+		cmd[a] = TxBuffer[b];
+		a++;
+ 	}
+
+	/* We know the size of the CCID message now */
+	i2dw(a - 10, cmd + 1);	/* command length (includes bPINOperation) */
+
+	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
+ 		return IFD_COMMUNICATION_ERROR;
+
+ 	return CCID_Receive(reader_index, RxLength, RxBuffer);
+} /* SecurePINModify */
 
 
 /*****************************************************************************
@@ -496,11 +611,32 @@ time_request:
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
-		*rx_length = 0; /* nothing received */
-		if (0xFD == cmd[ERROR_OFFSET]) /* Parity error during exchange */
-			return IFD_PARITY_ERROR;
-		else
-			return IFD_COMMUNICATION_ERROR;
+		switch (cmd[ERROR_OFFSET])
+		{
+			case 0xEF:	/* cancel */
+				if (*rx_length < 2)
+					return IFD_COMMUNICATION_ERROR;
+				rx_buffer[0]= 0x64;
+				rx_buffer[1]= 0x01;
+				*rx_length = 2;
+				return IFD_SUCCESS;
+
+			case 0xF0:	/* timeout */
+				if (*rx_length < 2)
+					return IFD_COMMUNICATION_ERROR;
+				rx_buffer[0]= 0x64;
+				rx_buffer[1]= 0x00;
+				*rx_length = 2;
+				return IFD_SUCCESS;
+
+			case 0xFD:	/* Parity error during exchange */
+				*rx_length = 0; /* nothing received */
+				return IFD_PARITY_ERROR;
+
+			default:
+				*rx_length = 0; /* nothing received */
+				return IFD_COMMUNICATION_ERROR;
+		}
 	}
 
 	if (cmd[STATUS_OFFSET] & CCID_TIME_EXTENSION)
