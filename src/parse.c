@@ -206,6 +206,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  dwDefaultClock: %.3f MHz\n", dw2i(extra, 10)/1000.0);
 	printf("  dwMaximumClock: %.3f MHz\n", dw2i(extra, 14)/1000.0);
 	printf("  bNumClockSupported: %d\n", extra[18]);
+	if (extra[18])
 	{
 		unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 		int n;
@@ -248,6 +249,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
 	printf("  dwMaxDataRate: %d bps\n", dw2i(extra, 23));
 	printf("  bNumDataRatesSupported: %d\n", extra[27]);
+	if (extra[27])
 	{
 		unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 		int n;
