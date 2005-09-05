@@ -742,7 +742,7 @@ static unsigned int *get_data_rates(unsigned int reader_index)
 	/* we do not get the expected number of data rates */
 	len = get_ccid_usb_interface(usbDevice[reader_index].dev)
 		->altsetting->extra[27]; /* bNumDataRatesSupported */
-	if (n != len)
+	if ((n != len) && len)
 	{
 		DEBUG_INFO3("Got %d data rates but was expecting %d", n, len);
 
