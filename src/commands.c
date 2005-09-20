@@ -174,25 +174,25 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	cmd[9] = 0;
 	cmd[10] = 0;	/* bPINOperation: PIN Verification */
 
-	/* 16 is the size of the PCSC PIN verify structure
+	/* 19 is the size of the PCSCv2 PIN verify structure
 	 * The equivalent CCID structure is only 14-bytes long */
-	if (TxLength > 16+CMD_BUF_SIZE) /* command too large? */
+	if (TxLength > 19+CMD_BUF_SIZE) /* command too large? */
 	{
 		DEBUG_INFO3("Command too long: %d > %d", TxLength, 16+CMD_BUF_SIZE);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
-	if (TxLength < 16+4 /* 4 = APDU size */)	/* command too short? */
+	if (TxLength < 19+4 /* 4 = APDU size */)	/* command too short? */
 	{
-		DEBUG_INFO3("Command too short: %d < %d", TxLength, 16+4);
+		DEBUG_INFO3("Command too short: %d < %d", TxLength, 19+4);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
-	if (TxBuffer[15] + 16 != TxLength)	/* ulDataLength field coherency */
+	if (dw2i(TxBuffer, 15) + 19 != TxLength) /* ulDataLength field coherency */
 	{
-		DEBUG_INFO3("Wrong lengths: %d %d", TxBuffer[15] + 16, TxLength);
+		DEBUG_INFO3("Wrong lengths: %d %d", TxBuffer[15] + 19, TxLength);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
@@ -205,7 +205,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 			 * it currently */
 			continue;
 
-		if (15 == b) /* ulDataLength field */
+		if ((b >= 15) && (b <= 18)) /* ulDataLength field (4 bytes) */
 			/* the ulDataLength field is not present in the CCID frame
 			 * so do not copy */
 			continue;
@@ -263,11 +263,11 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	cmd[9] = 0;
 	cmd[10] = 1;	/* bPINOperation: PIN Modification */
 
-	/* 21 is the size of the PCSC PIN modify structure
+	/* 24 is the size of the PCSC PIN modify structure
 	 * The equivalent CCID structure is only 18 or 19-bytes long */
 	if ((TxLength > 19+CMD_BUF_SIZE) /* command too large? */
 		|| (TxLength < 18+4 /* 4 = APDU size */) /* command too short? */
-		|| (TxBuffer[20] + 21 != TxLength)) /* ulDataLength field coherency */
+		|| (TxBuffer[20] + 24 != TxLength)) /* ulDataLength field coherency */
 		return IFD_NOT_SUPPORTED;
 
 	/* Make sure in the beginning if bNumberMessage is valid or not */
