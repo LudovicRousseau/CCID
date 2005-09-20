@@ -283,10 +283,10 @@ int main(int argc, char *argv[])
 	pin_verify -> bmFormatString = 0x82;
 	pin_verify -> bmPINBlockString = 0x04;
 	pin_verify -> bmPINLengthFormat = 0x00;
-	pin_verify -> wPINMaxExtraDigit = HOST_TO_CCID(0x0408); /* Min Max */
+	pin_verify -> wPINMaxExtraDigit = HOST_TO_CCID_16(0x0408); /* Min Max */
 	pin_verify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
 	pin_verify -> bNumberMessage = 0x00;
-	pin_verify -> wLangId = HOST_TO_CCID(0x0904);
+	pin_verify -> wLangId = HOST_TO_CCID_16(0x0904);
 	pin_verify -> bMsgIndex = 0x00;
 	pin_verify -> bTeoPrologue[0] = 0x00;
 	pin_verify -> bTeoPrologue[1] = 0x00;
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
 	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_verify -> ulDataLength = offset;	/* APDU size */
+	pin_verify -> ulDataLength = HOST_TO_CCID_32(offset);	/* APDU size */
 
 	length = sizeof(PIN_VERIFY_STRUCTURE) + offset -1;	/* -1 because PIN_VERIFY_STRUCTURE contains the first byte of abData[] */
 
@@ -369,12 +369,12 @@ int main(int argc, char *argv[])
 	pin_modify -> bmPINLengthFormat = 0x00;
 	pin_modify -> bInsertionOffsetOld = 0x05; 	/* offset from APDU start */
 	pin_modify -> bInsertionOffsetNew = 0x0D;	/* offset from APDU start */
-	pin_modify -> wPINMaxExtraDigit = HOST_TO_CCID(0x0408);	/* Min Max */
+	pin_modify -> wPINMaxExtraDigit = HOST_TO_CCID_16(0x0408);	/* Min Max */
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
 									/* b1 set = current PIN entry requested */
 	pin_modify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
 	pin_modify -> bNumberMessage = 0x00;
-	pin_modify -> wLangId = HOST_TO_CCID(0x0904);
+	pin_modify -> wLangId = HOST_TO_CCID_16(0x0904);
 	pin_modify -> bMsgIndex1 = 0x00;
 	pin_modify -> bMsgIndex2 = 0x00;
 	pin_modify -> bMsgIndex3 = 0x00;
@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
 	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_modify -> ulDataLength = offset;	/* APDU size */
+	pin_modify -> ulDataLength = HOST_TO_CCID_32(offset);	/* APDU size */
 
 	length = sizeof(PIN_MODIFY_STRUCTURE) + offset -1;	/* -1 because PIN_MODIFY_STRUCTURE contains the first byte of abData[] */
 
