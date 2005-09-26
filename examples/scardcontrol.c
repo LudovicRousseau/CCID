@@ -29,6 +29,9 @@
 #include <PCSC/winscard.h>
 #include <PCSC/reader.h>
 
+#define VERIFY_PIN
+#undef MODIFY_PIN
+
 #ifndef TRUE
 #define TRUE 1
 #define FALSE 0
@@ -68,7 +71,7 @@ int main(int argc, char *argv[])
 	int i, offset;
 	unsigned char bSendBuffer[MAX_BUFFER_SIZE];
 	unsigned char bRecvBuffer[MAX_BUFFER_SIZE];
-	DWORD length;
+	DWORD send_length, length;
 	DWORD verify_ioctl = 0;
 	DWORD modify_ioctl = 0;
 	SCARD_IO_REQUEST pioRecvPci;
@@ -78,7 +81,7 @@ int main(int argc, char *argv[])
 	PIN_MODIFY_STRUCTURE *pin_modify;
 
 	printf("SCardControl sample code\n");
-	printf("V 1.0 2004, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
+	printf("V 1.1 2004-2005, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
 
 	printf("\nTHIS PROGRAM IS NOT DESIGNED AS A TESTING TOOL!\n");
 	printf("Do NOT use it unless you really know what you do.\n\n");
@@ -251,10 +254,16 @@ int main(int argc, char *argv[])
 			return -1;
 	}
 
-	/* APDU select DF */
-	memcpy(bSendBuffer, "\x00\xA4\x04\x00\x05\x47\x54\x4F\x4B\x31", 10);
+	/* APDU select applet */
+	printf("Select applet: ");
+	send_length = 11;
+	memcpy(bSendBuffer, "\x00\xA4\x04\x00\x06\xA0\x00\x00\x00\x18\xFF",
+		send_length);
+	for (i=0; i<send_length; i++)
+		printf(" %02X", bSendBuffer[i]);
+	printf("\n");
 	length = sizeof(bRecvBuffer);
-	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, 10,
+	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
 		&pioRecvPci, bRecvBuffer, &length);
 	printf(" card response:");
 	for (i=0; i<length; i++)
@@ -262,17 +271,7 @@ int main(int argc, char *argv[])
 	printf("\n");
 	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 
-	/* APDU select EF */
-	memcpy(bSendBuffer, "\x00\xA4\x02\x00\x02\x00\x04", 7);
-	length = sizeof(bRecvBuffer);
-	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, 7,
-		&pioRecvPci, bRecvBuffer, &length);
-	printf(" card response:");
-	for (i=0; i<length; i++)
-		printf(" %02X", bRecvBuffer[i]);
-	printf("\n");
-	PCSC_ERROR_EXIT(rv, "SCardTransmit")
-
+#ifdef VERIFY_PIN
 	/* verify PIN */
 	printf(" Secure verify PIN\n");
 	pin_verify = (PIN_VERIFY_STRUCTURE *)bSendBuffer;
@@ -284,7 +283,7 @@ int main(int argc, char *argv[])
 	pin_verify -> bmPINBlockString = 0x04;
 	pin_verify -> bmPINLengthFormat = 0x00;
 	pin_verify -> wPINMaxExtraDigit = HOST_TO_CCID_16(0x0408); /* Min Max */
-	pin_verify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
+	pin_verify -> bEntryValidationCondition = 0x03;	/* validation key pressed */
 	pin_verify -> bNumberMessage = 0x00;
 	pin_verify -> wLangId = HOST_TO_CCID_16(0x0904);
 	pin_verify -> bMsgIndex = 0x00;
@@ -321,12 +320,6 @@ int main(int argc, char *argv[])
 	rv = SCardControl(hCard, verify_ioctl, bSendBuffer,
 		length, bRecvBuffer, sizeof(bRecvBuffer), &length);
 
-	printf(" card response:");
-	for (i=0; i<length; i++)
-		printf(" %02X", bRecvBuffer[i]);
-	printf("\n");
-	PCSC_ERROR_CONT(rv, "SCardControl")
-
 	{
 #ifndef S_SPLINT_S
 		fd_set fd;
@@ -348,8 +341,56 @@ int main(int argc, char *argv[])
 
 			printf("keyboard sent: %s", in);
 		}
+		else
+			/* if it is not a keyboard */
+			printf("\n");
 	}
 
+	printf(" card response:");
+	for (i=0; i<length; i++)
+		printf(" %02X", bRecvBuffer[i]);
+	printf("\n");
+	PCSC_ERROR_CONT(rv, "SCardControl")
+
+	/* verify PIN dump */
+	printf("\nverify PIN dump: ");
+	send_length = 5;
+	memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
+		send_length);
+	for (i=0; i<send_length; i++)
+		printf(" %02X", bSendBuffer[i]);
+	printf("\n");
+	length = sizeof(bRecvBuffer);
+	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
+		&pioRecvPci, bRecvBuffer, &length);
+	printf(" card response:");
+	for (i=0; i<length; i++)
+		printf(" %02X", bRecvBuffer[i]);
+	printf("\n");
+	PCSC_ERROR_EXIT(rv, "SCardTransmit")
+
+	if ((2 == length) && (0x6C == bRecvBuffer[0]))
+	{
+		printf("\nverify PIN dump: ");
+		send_length = 5;
+		memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
+			send_length);
+		bSendBuffer[4] = bRecvBuffer[1];
+		for (i=0; i<send_length; i++)
+			printf(" %02X", bSendBuffer[i]);
+		printf("\n");
+		length = sizeof(bRecvBuffer);
+		rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
+			&pioRecvPci, bRecvBuffer, &length);
+		printf(" card response:");
+		for (i=0; i<length; i++)
+			printf(" %02X", bRecvBuffer[i]);
+		printf("\n");
+		PCSC_ERROR_EXIT(rv, "SCardTransmit")
+	}
+#endif
+
+	/* check if the reader supports Modify PIN */
 	if (0 == modify_ioctl)
 	{
 		printf("Reader %s does not support PIN modification\n",
@@ -357,6 +398,7 @@ int main(int argc, char *argv[])
 		goto end;
 	}
 
+#ifdef MODIFY_PIN
 	/* Modify PIN */
 	printf(" Secure modify PIN\n");
 	pin_modify = (PIN_MODIFY_STRUCTURE *)bSendBuffer;
@@ -447,6 +489,7 @@ int main(int argc, char *argv[])
 			printf("keyboard sent: %s", in);
 		}
 	}
+#endif
 
 	/* card disconnect */
 	rv = SCardDisconnect(hCard, SCARD_UNPOWER_CARD);
