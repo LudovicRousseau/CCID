@@ -47,6 +47,8 @@
  */
 #define DEFAULT_VOLTAGE 1 /* start with 5 volts */
 
+#define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
+
 /* internal functions */
 static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
@@ -165,6 +167,8 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	unsigned char cmd[11+14+CMD_BUF_SIZE];
 	unsigned int a, b;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	int old_read_timeout;
+	RESPONSECODE ret;
 
 	cmd[0] = 0x69;	/* Secure */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
@@ -235,10 +239,16 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 	i2dw(a - 10, cmd + 1);  /* CCID message length */
 
+	old_read_timeout = ccid_descriptor -> readTimeout;
+	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]);	/* at least 30 seconds */
+
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
-	return CCID_Receive(reader_index, RxLength, RxBuffer);
+	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
+
+	ccid_descriptor -> readTimeout = old_read_timeout;
+	return ret;
 } /* SecurePINVerify */
 
 
