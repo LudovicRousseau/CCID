@@ -81,7 +81,7 @@ typedef struct
 	
 	/*
 	 * Read communication port timeout
-	 * value is seconds for serial, milliseconds for USB
+	 * value is seconds
 	 * this value can evolve dynamically if card request it (time processing).
 	 */
 	unsigned int readTimeout;
