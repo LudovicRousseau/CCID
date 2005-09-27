@@ -583,7 +583,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = bBWI;	/* extend block waiting timeout */
-	cmd[8] = rx_length & 0xFF;	/* Expected length */
+	cmd[8] = rx_length & 0xFF;	/* Expected length, in character mode only */
 	cmd[9] = (rx_length >> 8) & 0xFF;
 
 	/* check that the command is not too large */
