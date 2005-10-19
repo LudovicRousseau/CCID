@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 	BYTE pbAtr[MAX_ATR_SIZE] = "";
 	char pbReader[MAX_READERNAME] = "";
 	int reader_nb;
-	int i, offset;
+	int i;
 	unsigned char bSendBuffer[MAX_BUFFER_SIZE];
 	unsigned char bRecvBuffer[MAX_BUFFER_SIZE];
 	DWORD send_length, length;
@@ -77,8 +77,15 @@ int main(int argc, char *argv[])
 	SCARD_IO_REQUEST pioRecvPci;
  	SCARD_IO_REQUEST pioSendPci;
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
+#if defined(VERIFY_PIN) | defined(MODIFY_PIN)
+	int offset;
+#endif
+#ifdef VERIFY_PIN
 	PIN_VERIFY_STRUCTURE *pin_verify;
+#endif
+#ifdef MODIFY_PIN
 	PIN_MODIFY_STRUCTURE *pin_modify;
+#endif
 
 	printf("SCardControl sample code\n");
 	printf("V 1.1 2004-2005, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
