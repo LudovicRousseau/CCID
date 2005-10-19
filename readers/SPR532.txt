@@ -3,7 +3,7 @@ Parsing Interface Descriptor for device: 001/057
   iManufacturer: SCM Microsystems Inc.
  idProduct: 0xE003
   iProduct: SPRx32 USB Smart Card Reader
- bcdDevice: 5.04 (firmware release?)
+ bcdDevice: 5.07 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -26,12 +26,12 @@ Parsing Interface Descriptor for device: 001/057
    T=0
    T=1
   dwDefaultClock: 4.000 MHz
-  dwMaximumClock: 12.000 MHz
-  bNumClockSupported: 0x00
+  dwMaximumClock: 8.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
    IFD does not support GET CLOCK FREQUENCIES request
-  dwDataRate: 9600 bps
-  dwMaxDataRate: 307200 bps
-  bNumDataRatesSupported: 0
+  dwDataRate: 10753 bps
+  dwMaxDataRate: 344105 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
    IFD does not support GET_DATA_RATES request
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
@@ -45,8 +45,10 @@ Parsing Interface Descriptor for device: 001/057
    ....80 Automatic PPS made by the CCID
    01.... TPDU level exchange
   dwMaxCCIDMessageLength: 263 bytes
-  bClassGetResponse: 255
-  bClassEnveloppe: 255
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
   wLcdLayout: 0x0000
   bPINSupport: 0x03
    PIN Verification supported
