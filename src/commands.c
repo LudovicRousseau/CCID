@@ -316,6 +316,11 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 				continue;
 		}
 
+		if ((b >= 20) && (b <= 23)) /* ulDataLength field (4 bytes) */
+			/* the ulDataLength field is not present in the CCID frame
+			 * so do not copy */
+			continue;
+
 		/* copy to the CCID block 'verbatim' */
 		cmd[a] = TxBuffer[b];
 		a++;
