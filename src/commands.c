@@ -297,17 +297,25 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 			 * currently */
 			continue;
 
+		if (15 == b) /* bMsgIndex2 */
+		{
+			/* in CCID the bMsgIndex2 is present only if bNumberMessage != 0 */
+			if (0 == TxBuffer[11])
+				continue;
+		}
+
 		if (16 == b) /* bMsgIndex3 */
 		{
 			/*
-			 * SPR 532 has no display but requires _all_ bMsgIndex
-			 * fields with bNumberMessage set to 0.
+			 * SPR 532 and Cherry ST 2000C has no display but requires _all_
+			 * bMsgIndex fields with bNumberMessage set to 0.
 			 */
-			if (SPR532 == ccid_descriptor->readerID)
+			if ((SPR532 == ccid_descriptor->readerID)
+				|| (CHERRYST2000 == ccid_descriptor->readerID))
 			{
 				cmd[21] = 0x00; /* set bNumberMessages to 0 */
-				cmd[a] = cmd[a-1] = cmd[a-2] = 0;	/* bMsgIndex123 */
-				a++;
+				cmd[a] = cmd[a-1] = cmd[a+1] = 0;	/* bMsgIndex123 */
+				a += 2;
 				continue;
 			}
 
