@@ -199,11 +199,9 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 	unsigned char lrc;
 	unsigned char low_level_buffer[GEMPCTWIN_MAXBUF];
 
-#ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "-> 123456 ";
 
 	sprintf(debug_header, "-> %06X ", reader_index);
-#endif
 
 	if (length > GEMPCTWIN_MAXBUF-3)
 	{
@@ -225,9 +223,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 		lrc ^= low_level_buffer[i];
 	low_level_buffer[length+2] = lrc;
 
-#ifdef DEBUG_LEVEL_COMM
 	DEBUG_XXD(debug_header, low_level_buffer, length+3);
-#endif
 
 	if (write(serialDevice[reader_index].fd, low_level_buffer,
 		length+3) != length+3)
@@ -340,9 +336,7 @@ ack:
 	if ((rv = get_bytes(reader_index, buffer+5, to_read-5)) != STATUS_SUCCESS)
 		return rv;
 
-#ifdef DEBUG_LEVEL_COMM
-		DEBUG_XXD("frame: ", buffer, to_read);
-#endif
+	DEBUG_XXD("frame: ", buffer, to_read);
 
 	/* lrc */
 	DEBUG_COMM("lrc");
@@ -435,11 +429,9 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 	struct timeval t;
 	int i, rv = 0;
 	int already_read;
-#ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "<- 123456 ";
 
 	sprintf(debug_header, "<- %06X ", reader_index);
-#endif
 
 	already_read = 0;
 	while (already_read < min_length)
@@ -470,9 +462,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 			return -1;
 		}
 
-#ifdef DEBUG_LEVEL_COMM
 		DEBUG_XXD(debug_header, buffer + already_read, rv);
-#endif
 
 		already_read += rv;
 		DEBUG_COMM3("read: %d, to read: %d", already_read,

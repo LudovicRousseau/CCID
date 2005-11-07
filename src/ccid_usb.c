@@ -433,15 +433,11 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	unsigned char *buffer)
 {
 	int rv;
-#ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "-> 121234 ";
 
 	sprintf(debug_header, "-> %06X ", (int)reader_index);
-#endif
 
-#ifdef DEBUG_LEVEL_COMM
 	DEBUG_XXD(debug_header, buffer, length);
-#endif
 
 	rv = usb_bulk_write(usbDevice[reader_index].handle,
 		usbDevice[reader_index].bulk_out, (char *)buffer, length,
@@ -474,11 +470,9 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 	unsigned char *buffer)
 {
 	int rv;
-#ifdef DEBUG_LEVEL_COMM
 	char debug_header[] = "<- 121234 ";
 
 	sprintf(debug_header, "<- %06X ", (int)reader_index);
-#endif
 
 	rv = usb_bulk_read(usbDevice[reader_index].handle,
 		usbDevice[reader_index].bulk_in, (char *)buffer, *length,
@@ -495,9 +489,7 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 
 	*length = rv;
 
-#ifdef DEBUG_LEVEL_COMM
 	DEBUG_XXD(debug_header, buffer, *length);
-#endif
 
 	return STATUS_SUCCESS;
 } /* ReadUSB */
