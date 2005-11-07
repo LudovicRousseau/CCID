@@ -48,8 +48,8 @@ extern int LogLevel;
 
 #define DEBUG_LEVEL_CRITICAL 1
 #define DEBUG_LEVEL_INFO     2
-#define DEBUG_LEVEL_PERIODIC 4
-#define DEBUG_LEVEL_COMM     8
+#define DEBUG_LEVEL_COMM     4
+#define DEBUG_LEVEL_PERIODIC 8
 
 #include <debuglog.h>	/* from pcsc-lite */
 

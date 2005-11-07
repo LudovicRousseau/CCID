@@ -25,10 +25,10 @@
 	<!-- Possible values for ifdLogLevel
 	1: CRITICAL  important error messages
 	2: INFO      informative messages like what reader was detected
-	4: PERIODIC  periodic info when pcscd test if a card is present
-	             (every 1/10 of a second)
-	8: COMM      a dump of all the bytes exchanged between the host and
+	4: COMM      a dump of all the bytes exchanged between the host and
 	             the reader
+	8: PERIODIC  periodic info when pcscd test if a card is present
+	             (every 1/10 of a second)
 
 	The final value is a OR of these values
 
