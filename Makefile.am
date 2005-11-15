@@ -24,6 +24,6 @@ libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
 ChangeLog:
-	rcs2log | perl -pe 's/rousseau /Ludovic Rousseau /; \
-	s+/cvsroot/pcsclite/PCSC/++g;' > $@
+	svn2cl.sh --group-by-day --stdout \
+	| perl -pe 's/rousseau /Ludovic Rousseau /; s+trunk/Drivers/ccid/++g;' > $@
 
