@@ -417,8 +417,8 @@ int main(int argc, char *argv[])
 	pin_modify -> bmPINBlockString = 0x04;
 	pin_modify -> bmPINLengthFormat = 0x00;
 	pin_modify -> bInsertionOffsetOld = 0x00; 	/* offset from APDU start */
-	pin_modify -> bInsertionOffsetNew = 0x08;	/* offset from APDU start */
-	pin_modify -> wPINMaxExtraDigit = HOST_TO_CCID_16(0x0408);	/* Min Max */
+	pin_modify -> bInsertionOffsetNew = 0x04;	/* offset from APDU start */
+	pin_modify -> wPINMaxExtraDigit = HOST_TO_CCID_16(0x0404);	/* Min Max */
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
 									/* b1 set = current PIN entry requested */
 	pin_modify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
@@ -438,23 +438,15 @@ int main(int argc, char *argv[])
 	pin_modify -> abData[offset++] = 0x24;	/* INS: CHANGE/UNBLOCK */
 	pin_modify -> abData[offset++] = 0x00;	/* P1 */
 	pin_modify -> abData[offset++] = 0x00;	/* P2 */
-	pin_modify -> abData[offset++] = 0x10;	/* Lc: 2x8 data bytes */
+	pin_modify -> abData[offset++] = 0x08;	/* Lc: 2x8 data bytes */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' old PIN */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' new PIN */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
-	pin_modify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_modify -> ulDataLength = HOST_TO_CCID_32(offset);	/* APDU size */
 
 	length = sizeof(PIN_MODIFY_STRUCTURE) + offset -1;	/* -1 because PIN_MODIFY_STRUCTURE contains the first byte of abData[] */
