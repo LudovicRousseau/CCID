@@ -416,8 +416,8 @@ int main(int argc, char *argv[])
 	pin_modify -> bmFormatString = 0x82;
 	pin_modify -> bmPINBlockString = 0x04;
 	pin_modify -> bmPINLengthFormat = 0x00;
-	pin_modify -> bInsertionOffsetOld = 0x05; 	/* offset from APDU start */
-	pin_modify -> bInsertionOffsetNew = 0x0D;	/* offset from APDU start */
+	pin_modify -> bInsertionOffsetOld = 0x00; 	/* offset from APDU start */
+	pin_modify -> bInsertionOffsetNew = 0x08;	/* offset from APDU start */
 	pin_modify -> wPINMaxExtraDigit = HOST_TO_CCID_16(0x0408);	/* Min Max */
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
 									/* b1 set = current PIN entry requested */
