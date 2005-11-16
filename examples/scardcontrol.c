@@ -422,7 +422,7 @@ int main(int argc, char *argv[])
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
 									/* b1 set = current PIN entry requested */
 	pin_modify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
-	pin_modify -> bNumberMessage = 0x00;
+	pin_modify -> bNumberMessage = 0x03;
 	pin_modify -> wLangId = HOST_TO_CCID_16(0x0904);
 	pin_modify -> bMsgIndex1 = 0x00;
 	pin_modify -> bMsgIndex2 = 0x00;
