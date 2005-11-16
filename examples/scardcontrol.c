@@ -496,6 +496,43 @@ int main(int argc, char *argv[])
 			printf("keyboard sent: %s", in);
 		}
 	}
+
+	/* modify PIN dump */
+	printf("\nmodify PIN dump: ");
+	send_length = 5;
+	memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
+		send_length);
+	for (i=0; i<send_length; i++)
+		printf(" %02X", bSendBuffer[i]);
+	printf("\n");
+	length = sizeof(bRecvBuffer);
+	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
+		&pioRecvPci, bRecvBuffer, &length);
+	printf(" card response:");
+	for (i=0; i<length; i++)
+		printf(" %02X", bRecvBuffer[i]);
+	printf("\n");
+	PCSC_ERROR_EXIT(rv, "SCardTransmit")
+
+	if ((2 == length) && (0x6C == bRecvBuffer[0]))
+	{
+		printf("\nverify PIN dump: ");
+		send_length = 5;
+		memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
+			send_length);
+		bSendBuffer[4] = bRecvBuffer[1];
+		for (i=0; i<send_length; i++)
+			printf(" %02X", bSendBuffer[i]);
+		printf("\n");
+		length = sizeof(bRecvBuffer);
+		rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
+			&pioRecvPci, bRecvBuffer, &length);
+		printf(" card response:");
+		for (i=0; i<length; i++)
+			printf(" %02X", bRecvBuffer[i]);
+		printf("\n");
+		PCSC_ERROR_EXIT(rv, "SCardTransmit")
+	}
 #endif
 
 	/* card disconnect */
