@@ -290,7 +290,7 @@ int main(int argc, char *argv[])
 	pin_verify -> bmPINBlockString = 0x04;
 	pin_verify -> bmPINLengthFormat = 0x00;
 	pin_verify -> wPINMaxExtraDigit = HOST_TO_CCID_16(0x0408); /* Min Max */
-	pin_verify -> bEntryValidationCondition = 0x03;	/* validation key pressed */
+	pin_verify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
 	pin_verify -> bNumberMessage = 0x00;
 	pin_verify -> wLangId = HOST_TO_CCID_16(0x0904);
 	pin_verify -> bMsgIndex = 0x00;
