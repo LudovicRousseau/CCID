@@ -41,15 +41,15 @@ PROVIDED_BY_PCSC = debug.c
 endif
 
 libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(PROVIDED_BY_PCSC) $(T1)
-libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB@
-libccid_la_CFLAGS = @PCSC_CFLAGS@
+libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB_LIBS@
+libccid_la_CFLAGS = @PCSC_CFLAGS@ @LIBUSB_CFLAGS@
 
 libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(T1)
 libccidtwin_la_CFLAGS = @PCSC_CFLAGS@ -DTWIN_SERIAL
 
 parse_SOURCES = tokenparser.l parse.c parser.h debug.c
 parse_LDADD = libccid.la
-parse_CFLAGS = @PCSC_CFLAGS@
+parse_CFLAGS = @PCSC_CFLAGS@ @LIBUSB_CFLAGS@
 
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE
