@@ -32,21 +32,21 @@ AC_PROG_LN_S
 AM_PROG_LEX
 
 # check pcsc-lite version
-PKG_CHECK_MODULES(PCSC, libpcsclite >= 1.2.9-beta8, [],
+PKG_CHECK_MODULES(PCSC, libpcsclite >= 1.2.9-beta9, [],
 	[ if test -f /usr/local/lib/pkgconfig/libpcsclite.pc ; then
 		AC_MSG_ERROR([use PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure])
 	  else
-		AC_MSG_WARN([install pcsc-lite 1.2.9-beta8 or later])
+		AC_MSG_WARN([install pcsc-lite 1.2.9-beta9 or later])
 	  fi
 	])
 
 OLD_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS $PCSC_CFLAGS"
 AC_CHECK_HEADER(ifdhandler.h,,
-	[AC_MSG_ERROR([ifdhandler.h not found, install pcsc-lite 1.2.9-beta8 or later, or use CFLAGS=... ./configure])],
+	[AC_MSG_ERROR([ifdhandler.h not found, install pcsc-lite 1.2.9-beta9 or later, or use CFLAGS=... ./configure])],
 	[ #include <ifdhandler.h> ])
 AC_CHECK_HEADER(reader.h,,
-	[AC_MSG_ERROR([reader.h not found, install pcsc-lite 1.2.9-beta8 or later, or use CFLAGS=... ./configure])],
+	[AC_MSG_ERROR([reader.h not found, install pcsc-lite 1.2.9-beta9 or later, or use CFLAGS=... ./configure])],
 	[ #include <reader.h> ])
 CFLAGS="$OLD_CFLAGS"
 
@@ -205,7 +205,7 @@ else
 	OLD_LIBS="$LIBS"
 	LDLIBS="$LDLIBS $PCSC_LIBS"
 	AC_CHECK_LIB(pcsclite, SCardEstablishContext, [],
-		[AC_MSG_ERROR([SCardEstablishContext() not found, install pcsc-lite 1.2.9-beta8 or later, or use LDLIBS=... ./configure])])
+		[AC_MSG_ERROR([SCardEstablishContext() not found, install pcsc-lite 1.2.9-beta9 or later, or use LDLIBS=... ./configure])])
 	LDLIBS="$OLD_LDLIBS"
 	LIBS="$OLD_LIBS"
 
