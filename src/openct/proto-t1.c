@@ -681,7 +681,7 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 			return n;
 
 		/* the second argument of CCID_Receive() is (unsigned int *)
-		 * so we can't use &rmax since rmax is a (size_t *) and may not
+		 * so we can't use &rmax since &rmax is a (size_t *) and may not
 		 * be the same on 64-bits architectures for example (iMac G5) */
 		rmax_int = rmax;
 		n = CCID_Receive(t1 -> lun, &rmax_int, block);
