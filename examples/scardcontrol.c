@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
 		if (select(1, &fd, NULL, NULL, &timeout) > 0)
 		{
 			/* read the fake digits */
-			char in[10];	/* 4 digits + \n + \0 */
+			char in[40];	/* 4 digits + \n + \0 */
 			(void)fgets(in, sizeof(in), stdin);
 
 			printf("keyboard sent: %s", in);
@@ -487,7 +487,7 @@ int main(int argc, char *argv[])
 		if (select(1, &fd, NULL, NULL, &timeout) > 0)
 		{
 			/* read the fake digits */
-			char in[10];	/* 4 digits + \n + \0 */
+			char in[40];	/* 4 digits + \n + \0 */
 			(void)fgets(in, sizeof(in), stdin);
 
 			printf("keyboard sent: %s", in);
