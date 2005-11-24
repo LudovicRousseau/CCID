@@ -657,6 +657,7 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 	int		n, m;
 	_ccid_descriptor *ccid_desc ;
 	int oldReadTimeout;
+	unsigned int rmax_int;
 
 	DEBUG_XXD("sending: ", block, slen);
 	
@@ -679,7 +680,13 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 		if (n != IFD_SUCCESS)
 			return n;
 
-		n = CCID_Receive(t1 -> lun, &rmax, block);
+		/* the second argument of CCID_Receive() is (unsigned int *)
+		 * so we can't use &rmax since rmax is a (size_t *) and may not
+		 * be the same on 64-bits architectures for example (iMac G5) */
+		rmax_int = rmax;
+		n = CCID_Receive(t1 -> lun, &rmax_int, block);
+		rmax = rmax_int;
+
 		if (n == IFD_PARITY_ERROR)
 			return -2;
 		if (n != IFD_SUCCESS)
@@ -691,7 +698,9 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 		if (n != IFD_SUCCESS)
 			return n;
 
-		n = CCID_Receive(t1 -> lun, &rmax, &block[3]);
+		rmax_int = rmax;
+		n = CCID_Receive(t1 -> lun, &rmax_int, &block[3]);
+		rmax = rmax_int;
 		if (n == IFD_PARITY_ERROR)
 			return -2;
 		if (n != IFD_SUCCESS)
@@ -707,7 +716,9 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 			return n;
 
 		/* Get the response en bloc */
-		n = CCID_Receive(t1 -> lun, &rmax, block);
+		rmax_int = rmax;
+		n = CCID_Receive(t1 -> lun, &rmax_int, block);
+		rmax = rmax_int;
 		if (n == IFD_PARITY_ERROR)
 			return -2;
 		if (n != IFD_SUCCESS)
