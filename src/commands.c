@@ -280,11 +280,17 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	if ((TxLength > 19+CMD_BUF_SIZE) /* command too large? */
 		|| (TxLength < 18+4 /* 4 = APDU size */) /* command too short? */
 		|| (TxBuffer[20] + 24 != TxLength)) /* ulDataLength field coherency */
+	{
+		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
+	}
 
 	/* Make sure in the beginning if bNumberMessage is valid or not */
 	if (TxBuffer[11] > 3)
+	{
+		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
+	}
 
 	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
 
