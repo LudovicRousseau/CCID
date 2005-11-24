@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
 		printf(" %02X", bRecvBuffer[i]);
 	printf("\n");
 	PCSC_ERROR_EXIT(rv, "SCardTransmit")
-	if ((bRecvBuffer[0] != 0x90) || (bRecvBuffer[0] != 0x00))
+	if ((bRecvBuffer[0] != 0x90) || (bRecvBuffer[1] != 0x00))
 	{
 		printf("Error: test applet not found!\n");
 		goto end;
