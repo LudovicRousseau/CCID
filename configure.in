@@ -190,7 +190,6 @@ if test "${ccidtwindir}" = false ; then
 	ccidtwindir=`pkg-config libpcsclite --variable=usbdropdir`/serial
 fi
 AC_MSG_RESULT([serial twin install dir : $ccidtwindir])
-AC_DEFINE_UNQUOTED(PCSCLITE_HP_DROPDIR, "$ccidtwindir", [directory containing USB drivers])
 
 # --enable-pcsclite
 AC_ARG_ENABLE(pcsclite,
