@@ -910,7 +910,7 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
 			pcsc_tlv -> value = IOCTL_FEATURE_VERIFY_PIN_DIRECT;
 
 			pcsc_tlv++;
-			iBytesReturned += 6;
+			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
 		
 		if (get_ccid_descriptor(reader_index) -> bPINSupport
@@ -921,7 +921,7 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
 			pcsc_tlv -> value = IOCTL_FEATURE_MODIFY_PIN_DIRECT;
 
 			pcsc_tlv++;
-			iBytesReturned += 6;
+			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
 		*pdwBytesReturned = iBytesReturned;
 		return_value = IFD_SUCCESS;
