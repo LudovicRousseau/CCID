@@ -243,7 +243,10 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]);	/* at least 30 seconds */
 
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
+	{
+		*RxLength = 0;
 		return IFD_COMMUNICATION_ERROR;
+	}
 
 	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
 
@@ -349,7 +352,10 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]);	/* at least 30 seconds */
 
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
+	{
+		*RxLength = 0;
  		return IFD_COMMUNICATION_ERROR;
+	}
 
  	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
 
