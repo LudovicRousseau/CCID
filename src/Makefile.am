@@ -31,7 +31,7 @@ T1 = towitoko/atr.c \
 	openct/proto-t1.c \
 	openct/proto-t1.h
 
-# needed for MacOS X or when used without pcsc-lite (Solaris)
+# needed when used without pcsc-lite (Solaris)
 if NEED_PARSER
 TOKEN_PARSER = tokenparser_fake.l
 endif

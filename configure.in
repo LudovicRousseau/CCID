@@ -76,7 +76,6 @@ case "$host" in
 *-*-darwin*)
 	BUNDLE_HOST="MacOS"
 	DYN_LIB_EXT="dylib"
-	AM_CONDITIONAL(NEED_PARSER, true)
 
 	AC_SUBST(COREFOUNDATION)
 	COREFOUNDATION="-Wl,-framework,CoreFoundation"
@@ -90,7 +89,6 @@ case "$host" in
 *)
 	BUNDLE_HOST="Linux"
 	DYN_LIB_EXT="so"
-	AM_CONDITIONAL(NEED_PARSER, false)
 esac
 
 CFLAGS="$CFLAGS -Wall"
@@ -213,6 +211,7 @@ else
 	LIBS="$OLD_LIBS"
 
 	AM_CONDITIONAL(WITHOUT_PCSC, false)
+	AM_CONDITIONAL(NEED_PARSER, false)
 fi
 AC_MSG_RESULT([compiled for pcsc-lite  : $pcsclite])
 
