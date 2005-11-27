@@ -26,6 +26,7 @@ Supported CCID readers:
   multiple of wMaxPacketSize the communication is stopped.
 - Cherry XX33 keyboard [?]
 - Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
+- Cherry SmartTerminal ST2XXX
 - Cherry ST-1044U [27]
 - Dell keyboard SK-3106 [?]
 - Dell smart card reader keyboard [?]
