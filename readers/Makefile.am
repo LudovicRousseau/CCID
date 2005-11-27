@@ -3,8 +3,11 @@
 EXTRA_DIST = \
 	ACR38.txt \
 	CardMan3121.txt \
+	CherrySmartTerminalST2XXX.txt \
+	CherryST1044U.txt \
 	CherryXX33.txt \
 	CherryXX44.txt \
+	CryptoIdentity.txt \
 	DellSCRK.txt \
 	DellSK-3106.txt \
 	GemPC433_SL.txt \
@@ -12,13 +15,13 @@ EXTRA_DIST = \
 	GemPCTwin.txt \
 	KAAN_Advanced.txt \
 	KAAN_Base.txt \
-	mIDentity.txt \
 	KAAN_SIM_III.txt \
 	LTC31.txt \
+	mIDentity.txt \
 	Oz776S.txt \
 	SCR3310.txt \
-	SCR331-DI.txt \
 	SCR331-DI-NTTCom.txt \
+	SCR331-DI.txt \
 	SCR331.txt \
 	SCR335.txt \
 	sid800.txt \
