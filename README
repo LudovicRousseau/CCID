@@ -153,6 +153,33 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+0.9.4 - 27 November 2005, Ludovic Rousseau
+    - add support for Eutron SIM Pocket Combo, Eutron CryptoIdentity,
+      Verisign Secure Token and VeriSign Secure Storage Token, GemPC
+      Card (PCMCIA), SCM SCR331-DI NTTCom, SCM Micro SCR 3310-NTTCom,
+      Cherry ST-1044U, Cherry SmartTerminal ST-2XXX
+    - add support of PC/SC v2 part 10 CM_IOCTL_GET_FEATURE_REQUEST add
+      support of FEATURE_VERIFY_PIN_DIRECT and FEATURE_MODIFY_PIN_DIRECT
+      remove support of IOCTL_SMARTCARD_VENDOR_VERIFY_PIN (now
+      obsoleted). A sample code is available in examples/scardcontrol.c
+    - we need pcsc-lite 1.2.9-beta9 since some structures used for PIN
+      pad readers are defined by pcsc-lite
+    - some (bogus) cards require an extra EGT but the ATR does not say
+      so. We try to detect the bogus cards and set TC1=2
+    - IFDHSetProtocolParameters(): only use a data rate supported by the
+      reader in the PPS negociation, otherwise we stay at the default
+      speed.
+    - calculate and store the read timeout according to the card ATR
+      instead of using a fixed value of 60 seconds
+    - increase the read timeout if the card sends and WTX request
+    - improve support of GemPC Twin and GemPC Card (serial protocol)
+    - reset the device on close only if DRIVER_OPTION_RESET_ON_CLOSE is
+      set. The problem was that a device reset also disconnects the
+      keyboard on a keyboard + reader device.
+    - use color logs
+    - some minor bugs removed
+
+
 0.9.3 - 14 March 2005, Ludovic Rousseau
     - change the licence from GNU GPL to GNU Lesser GPL (LGPL)
     - add support for ACS ACR 38, Kobil KAAN Base, Kobil KAAN Advanced,
