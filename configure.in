@@ -40,15 +40,15 @@ PKG_CHECK_MODULES(PCSC, libpcsclite >= 1.2.9-beta9, [],
 	  fi
 	])
 
-OLD_CFLAGS="$CFLAGS"
-CFLAGS="$CFLAGS $PCSC_CFLAGS"
+saved_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $PCSC_CFLAGS"
 AC_CHECK_HEADER(ifdhandler.h,,
 	[AC_MSG_ERROR([ifdhandler.h not found, install pcsc-lite 1.2.9-beta9 or later, or use CFLAGS=... ./configure])],
 	[ #include <ifdhandler.h> ])
 AC_CHECK_HEADER(reader.h,,
 	[AC_MSG_ERROR([reader.h not found, install pcsc-lite 1.2.9-beta9 or later, or use CFLAGS=... ./configure])],
 	[ #include <reader.h> ])
-CFLAGS="$OLD_CFLAGS"
+CPPFLAGS="$saved_CPPFLAGS"
 
 # Add libtool support.
 AM_PROG_LIBTOOL
