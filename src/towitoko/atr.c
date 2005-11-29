@@ -48,7 +48,7 @@ atr_f_table[16] =
 static unsigned 
 atr_d_table[16] = 
 { 
-  0, 1, 2, 4, 8, 16, 32, 0, 12, 20, 0, 0, 0, 0, 0, 0 
+  0, 1, 2, 4, 8, 16, 32, 64, 12, 20, 0, 0, 0, 0, 0, 0 
 };
 
 static unsigned 
