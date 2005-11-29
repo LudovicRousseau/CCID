@@ -466,6 +466,14 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
 			ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
 
+			/* may happen with non ISO cards */
+			if ((0 == f) || (0 == d))
+			{
+				/* values for TA1=11 */
+				f = 372;
+				d = 1;
+			}
+
 			/* Baudrate = f x D/F */
 			card_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock
 				* d / f);
@@ -1133,6 +1141,10 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 	ATR_GetParameter(atr, ATR_PARAMETER_D, &d);
 	ATR_GetParameter(atr, ATR_PARAMETER_F, &f);
 
+	/* may happen with non ISO cards */
+	if ((0 == f) || (0 == d))
+		return;
+
 	/* Baudrate = f x D/F */
 	card_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock * d / f);
 
@@ -1233,6 +1245,10 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	/* clock_frequency is in kHz so the times are in milliseconds and not
 	 * in seconds */
 
+	/* may happen with non ISO cards */
+	if ((0 == f) || (0 == d) || (0 == clock_frequency))
+		return 60;	/* 60 seconds */
+
 	/* EGT */
 	/* see ch. 6.5.3 Extra Guard Time, page 12 of ISO 7816-3 */
 	EGT = 12 * f / d / clock_frequency + (f / d) * TC1 / clock_frequency;
@@ -1278,6 +1294,10 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 
 	/* clock_frequency is in kHz so the times are in milliseconds and not
 	 * in seconds */
+
+	/* may happen with non ISO cards */
+	if ((0 == f) || (0 == d) || (0 == clock_frequency))
+		return 60;	/* 60 seconds */
 
 	/* see ch. 6.5.2 Transmission factors F and D, page 12 of ISO 7816-3 */
 	etu = f / d / clock_frequency;
