@@ -23,8 +23,8 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <PCSC/pcsclite.h>
-#include <PCSC/ifdhandler.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
 
 #include "commands.h"
 #include "openct/proto-t1.h"

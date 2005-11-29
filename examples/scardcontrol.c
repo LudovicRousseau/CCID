@@ -26,8 +26,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <string.h>
-#include <PCSC/winscard.h>
-#include <PCSC/reader.h>
+#include <winscard.h>
+#include <reader.h>
 
 #define VERIFY_PIN
 #undef MODIFY_PIN

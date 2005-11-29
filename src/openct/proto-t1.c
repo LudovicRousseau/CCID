@@ -7,8 +7,8 @@
  * Copyright (C) 2004 Ludovic Rousseau <ludovic.rousseau@free.fr>
  */
 
-#include <PCSC/pcsclite.h>
-#include <PCSC/ifdhandler.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
 #include "commands.h"
 #include "buffer.h"
 #include "debug.h"

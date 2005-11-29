@@ -22,8 +22,8 @@
  */
 
 #include <stdio.h>
-#include <PCSC/pcsclite.h>
-#include <PCSC/ifdhandler.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
 
 #include "config.h"
 #include "debug.h"

@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <PCSC/ifdhandler.h>
+#include <ifdhandler.h>
 
 #include "commands.h"
 #include "defs.h"

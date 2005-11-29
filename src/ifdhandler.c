@@ -22,9 +22,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <PCSC/pcsclite.h>
-#include <PCSC/ifdhandler.h>
-#include <PCSC/reader.h>
+#include <pcsclite.h>
+#include <ifdhandler.h>
+#include <reader.h>
 
 #include "ccid.h"
 #include "defs.h"
