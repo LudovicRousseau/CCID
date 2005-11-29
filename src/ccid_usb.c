@@ -308,7 +308,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 							/* we reuse the same device
 							 * and the reader is multi-slot */
 							usbDevice[reader_index] = usbDevice[previous_reader_index];
-							usbDevice[reader_index].ccid.pbSeq = usbDevice[previous_reader_index].ccid.pbSeq;
 							usbDevice[reader_index].ccid.bCurrentSlotIndex++;
 							DEBUG_INFO2("Opening slot: %d",
 								usbDevice[reader_index].ccid.bCurrentSlotIndex);
