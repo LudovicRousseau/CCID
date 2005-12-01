@@ -24,6 +24,7 @@ Supported CCID readers:
   old versions of this reader have a bug: the reader do timeout when a
   special USB frame is sent from the reader. If the frame size if a
   multiple of wMaxPacketSize the communication is stopped.
+- Athena ASE IIIe USB V2 [29]
 - Cherry XX33 keyboard [?]
 - Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
 - Cherry SmartTerminal ST2XXX
@@ -385,6 +386,7 @@ Bibliography:
 [26] http://www.cryptoidentity.eutron.com/eng/home.asp
 [27] http://www.cherry.de/english/advanced-line/advanced_smartterminal_st-1044u.htm
 [28] http://www.ntt.com/jpki/scr3310.html
+[29] http://www.asedrive.com/product.asp?pid=1
 
 $Id$
 
