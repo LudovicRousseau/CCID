@@ -20,7 +20,7 @@ Supported CCID readers:
 =======================
 
 (in alphabetical order)
-- Advanced Card Systems ACR 38 [16]
+- Advanced Card Systems ACR 38U-CCID [16]
   old versions of this reader have a bug: the reader do timeout when a
   special USB frame is sent from the reader. If the frame size if a
   multiple of wMaxPacketSize the communication is stopped.
@@ -373,7 +373,7 @@ Bibliography:
 [13] http://www.c3po.es/ltc32.html
 [14] http://www.c3po.es/tltc2usb.html
 [15] http://www.scmmicro.com/security/SCR333.html
-[16] http://www.acs.com.hk/Product_Readers.asp?productID=59&PCate=Products_PC_Linked_SmartCard_Readers
+[16] http://www.acs.com.hk/Product_Readers.asp?productID=107&PCate=Products_PC_Linked_SmartCard_Readers
 [17] http://www.scmmicro.com/support/pcs_product_drivers.html
 [18] http://www.cherrycorp.com/english/advanced-line/advanced-line_smartboard_g83-6744.htm
 [19] http://www.kobil.com/e/products/smartcard/kaan-base.php

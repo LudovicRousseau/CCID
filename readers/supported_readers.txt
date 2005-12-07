@@ -42,7 +42,7 @@
 0x046a:0x003E:Cherry SmartTerminal ST-2XXX
 
 # Advanced Card Systems
-0x072f:0x90cc:ACS ACR 38
+0x072f:0x90cc:ACS ACR 38U-CCID
 
 # O2 Micro
 0x0b97:0x7762:O2 Micro Oz776
