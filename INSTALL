@@ -1,5 +1,5 @@
-INSTALATION PROCEDURE
-=====================
+INSTALLATION PROCEDURE
+======================
 
 Installation from source:
 """""""""""""""""""""""""
@@ -31,7 +31,7 @@ PATH/include/ to search for usb.h and PATH/lib/ to search for libusb.so
 serial reader
 ~~~~~~~~~~~~~
 
-The GemPCTwin reader can also be connected on a serial port. By default
+A serial CCID reader can also be connected on a serial port. By default
 the serial driver is built but not installed. You must explicitely do:
 
 $ ./configure
@@ -53,8 +53,8 @@ You should not have to use --enable-ccidtwindir=DIR to specify the
 target directory to use. 
 
 
-configuring the driver for the serial reader (GemPC Twin)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+configuring the driver for the serial reader
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You have to create or edit the file /etc/reader.conf. The file should
 contain something like:
