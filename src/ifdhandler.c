@@ -1197,7 +1197,7 @@ static char find_baud_rate(unsigned int baudrate, unsigned int *list)
 
 	DEBUG_COMM2("Card baud rate: %d", baudrate);
 
-	/* Does the reader support the annonced smart card data speed? */
+	/* Does the reader support the announced smart card data speed? */
 	for (i=0;; i++)
 	{
 		/* end of array marker */
