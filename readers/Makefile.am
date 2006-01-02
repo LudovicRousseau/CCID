@@ -1,7 +1,7 @@
 # $Id$
 
 EXTRA_DIST = \
-	ACR38.txt \
+	ACR38U-CCID.txt \
 	CardMan3121.txt \
 	CherrySmartTerminalST2XXX.txt \
 	CherryST1044U.txt \
