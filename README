@@ -49,7 +49,7 @@ Supported CCID readers:
   The firmware of this reader can't be upgraded so be sure to buy a
   recent model with firmware 5.14 or later
 - SCM Micro SCR 355
-- SCM Micro SCR 3310
+- SCM Micro SCR 3310 [30]
 - SCM Micro SPR 532 [9]
   You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
   firmware upgrade.
@@ -388,6 +388,7 @@ Bibliography:
 [27] http://www.cherry.de/english/advanced-line/advanced_smartterminal_st-1044u.htm
 [28] http://www.ntt.com/jpki/scr3310.html
 [29] http://www.asedrive.com/product.asp?pid=1
+[30] http://www.scmmicro.com/security/SCR3310.html
 
 $Id$
 
