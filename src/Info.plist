@@ -66,6 +66,12 @@
 		reused if pcscd restart. Otherwise the reader needs to
 		be unplugged/replugged.
 
+	bits 4 & 5: (values 0, 16, 32, 48)
+	  0: power on the card at 5V (default value)
+	 16: power on the card at 3V and then, it 3V fails use 5V
+	 32: power on the card at 1.8V, then 3V and then 5V
+	 48: let the reader decide
+
 	Default value: 0
 	-->
 

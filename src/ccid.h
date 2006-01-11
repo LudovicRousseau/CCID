@@ -131,6 +131,22 @@ typedef struct
 #define ESC_GEMPC_SET_ISO_MODE		1
 #define ESC_GEMPC_SET_APDU_MODE		2
 
+/*
+ * Possible values :
+ * 3 -> 1.8V, 3V, 5V
+ * 2 -> 3V, 5V
+ * 1 -> 5V only
+ * 0 -> automatic (selection made by the reader)
+ */
+/*
+ * To be safe we default to 5V
+ * otherwise we would have to parse the ATR and get the value of TAi (i>2) when
+ * in T=15
+ */
+#define VOLTAGE_AUTO 0
+#define VOLTAGE_5V 1
+#define VOLTAGE_3V 2
+#define VOLTAGE_1_8V 3
 
 int ccid_open_hack(unsigned int reader_index);
 void ccid_error(int error, char *file, int line, const char *function);

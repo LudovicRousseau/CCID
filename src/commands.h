@@ -26,7 +26,7 @@
 #define ERROR_OFFSET 8
 
 RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
-	unsigned char buffer[]);
+	unsigned char buffer[], int voltage);
 
 RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,

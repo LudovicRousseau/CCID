@@ -51,6 +51,7 @@ static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
 int DriverOptions = 0;
+int PowerOnVoltage = VOLTAGE_5V;
 static int DebugInitialized = FALSE;
 
 /* local functions */
@@ -763,7 +764,8 @@ RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 		case IFD_POWER_UP:
 		case IFD_RESET:
 			nlength = sizeof(pcbuffer);
-			if (CmdPowerOn(reader_index, &nlength, pcbuffer) != IFD_SUCCESS)
+			if (CmdPowerOn(reader_index, &nlength, pcbuffer, PowerOnVoltage)
+				!= IFD_SUCCESS)
 			{
 				DEBUG_CRITICAL("PowerUp failed");
 				return_value = IFD_ERROR_POWER_ACTION;
@@ -1106,6 +1108,26 @@ void init_driver(void)
 
 		/* print the log level used */
 		DEBUG_INFO2("DriverOptions: 0x%.4X", DriverOptions);
+	}
+
+	/* get the voltage parameter */
+	switch ((DriverOptions >> 4) & 0x03)
+	{
+		case 0:
+			PowerOnVoltage = VOLTAGE_5V;
+			break;
+
+		case 1:
+			PowerOnVoltage = VOLTAGE_3V;
+			break;
+
+		case 2:
+			PowerOnVoltage = VOLTAGE_1_8V;
+			break;
+
+		case 3:
+			PowerOnVoltage = VOLTAGE_AUTO;
+			break;
 	}
 
 	/* initialise the Lun to reader_index mapping */

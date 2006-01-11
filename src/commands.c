@@ -34,19 +34,6 @@
 #include "config.h"
 #include "debug.h"
 
-/*
- * Possible values :
- * 3 -> 1.8V, 3V, 5V
- * 2 -> 3V, 5V
- * 1 -> 5V only
- */
-/*
- * To be safe we only use 5V
- * otherwise we would have to parse the ATR and get the value of TAi (i>2) when
- * in T=15
- */
-#define DEFAULT_VOLTAGE 1 /* start with 5 volts */
-
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 
 /* internal functions */
@@ -71,7 +58,7 @@ static void i2dw(int value, unsigned char *buffer);
  *
  ****************************************************************************/
 RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
-	unsigned char buffer[])
+	unsigned char buffer[], int voltage)
 {
 	unsigned char cmd[10];
 	status_t res;
@@ -79,15 +66,12 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned int atr_len;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
-	char voltage;
 
 	/* store length of buffer[] */
 	length = *nlength;
 
 	if (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
 		voltage = 0;	/* automatic voltage selection */
-	else
-		voltage = DEFAULT_VOLTAGE;
 
 again:
 	cmd[0] = 0x62; /* IccPowerOn */
@@ -135,6 +119,10 @@ again:
 		/* continue with 3 volts and 5 volts */
 		if (voltage > 1)
 		{
+			char *voltage_code[] = { "auto", "5V", "3V", "1.8V" };
+
+			DEBUG_INFO3("Power up with %s failed. Try with %s.",
+				voltage_code[voltage], voltage_code[voltage-1]);
 			voltage--;
 			goto again;
 		}
