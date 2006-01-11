@@ -73,6 +73,10 @@ typedef struct
 	int bulk_in;
 	int bulk_out;
 
+	/* Number of slots using the same device */
+	int real_nb_opened_slots;
+	int *nb_opened_slots;
+
 	/*
 	 * CCID infos common to USB and serial
 	 */
@@ -308,6 +312,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 							/* we reuse the same device
 							 * and the reader is multi-slot */
 							usbDevice[reader_index] = usbDevice[previous_reader_index];
+							*usbDevice[reader_index].nb_opened_slots += 1;
 							usbDevice[reader_index].ccid.bCurrentSlotIndex++;
 							DEBUG_INFO2("Opening slot: %d",
 								usbDevice[reader_index].ccid.bCurrentSlotIndex);
@@ -389,6 +394,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].handle = dev_handle;
 					usbDevice[reader_index].dev = dev;
 					usbDevice[reader_index].interface = interface;
+					usbDevice[reader_index].real_nb_opened_slots = 1;
+					usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
 
 					/* CCID common informations */
 					usbDevice[reader_index].ccid.real_bSeq = 0;
@@ -509,16 +516,25 @@ status_t CloseUSB(unsigned int reader_index)
 		usbDevice[reader_index].dev->bus->dirname,
 		usbDevice[reader_index].dev->filename);
 
-	if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates)
-		free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
+	/* one slot closed */
+	(*usbDevice[reader_index].nb_opened_slots)--;
 
-	/* reset so that bSeq starts at 0 again */
-	if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
-		usb_reset(usbDevice[reader_index].handle);
+	/* release the allocated ressources for the last slot only */
+	if (0 == *usbDevice[reader_index].nb_opened_slots)
+	{
+		DEBUG_COMM("Last slot closed. Release resources");
 
-	usb_release_interface(usbDevice[reader_index].handle,
-		usbDevice[reader_index].interface);
-	usb_close(usbDevice[reader_index].handle);
+		if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates)
+			free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
+
+		/* reset so that bSeq starts at 0 again */
+		if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
+			usb_reset(usbDevice[reader_index].handle);
+
+		usb_release_interface(usbDevice[reader_index].handle,
+			usbDevice[reader_index].interface);
+		usb_close(usbDevice[reader_index].handle);
+	}
 
 	/* mark the resource unused */
 	usbDevice[reader_index].handle = NULL;
