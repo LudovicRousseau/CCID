@@ -5,6 +5,7 @@
 0x08E6:0x3437:Gemplus GemPC Twin
 0x08E6:0x3438:Gemplus GemPC Key
 0x08E6:0x4433:Gemplus GemPC433 SL
+0x08E6:0x3478:Gemplus GemPC Pinpad
 # Verisign branded
 0x08E6:0xACE0:Verisign Secure Token
 0x08E6:0x1359:VeriSign Secure Storage Token
