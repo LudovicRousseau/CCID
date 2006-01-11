@@ -33,7 +33,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	unsigned char RxBuffer[], unsigned int *RxLength);
 
 RESPONSECODE SecurePINModify(unsigned int reader_index,
-	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength);
 
 RESPONSECODE CmdEscape(unsigned int reader_index,

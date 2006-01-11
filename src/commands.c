@@ -34,6 +34,10 @@
 #include "config.h"
 #include "debug.h"
 
+/* All the pinpad readers I used are more or less bogus
+ * I use code to change the user command and make the firmware happy */
+#define BOGUS_PINPAD_FIRMWARE
+
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 
 /* internal functions */
@@ -249,7 +253,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
  *
  ****************************************************************************/
 RESPONSECODE SecurePINModify(unsigned int reader_index,
-	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength)
 {
 	unsigned char cmd[11+19+CMD_BUF_SIZE];
@@ -283,6 +287,21 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		return IFD_NOT_SUPPORTED;
 	}
 
+#ifdef BOGUS_PINPAD_FIRMWARE
+	/* some firmwares are buggy so we try to "correct" the frame */
+	/*
+	 * SPR 532 and Cherry ST 2000C has no display but requires _all_
+	 * bMsgIndex fields with bNumberMessage set to 0.
+	 */
+	if ((SPR532 == ccid_descriptor->readerID)
+		|| (CHERRYST2000 == ccid_descriptor->readerID))
+	{
+		TxBuffer[11] = 0x03; /* set bNumberMessages to 3 so that
+								all bMsgIndex123 are filled */
+		TxBuffer[14] = TxBuffer[15] = TxBuffer[16] = 0;	/* bMsgIndex123 */
+	}
+#endif
+
 	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
 
 	/* Do adjustments as needed - CCID spec is not exact with some
@@ -305,19 +324,6 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 
 		if (16 == b) /* bMsgIndex3 */
 		{
-			/*
-			 * SPR 532 and Cherry ST 2000C has no display but requires _all_
-			 * bMsgIndex fields with bNumberMessage set to 0.
-			 */
-			if ((SPR532 == ccid_descriptor->readerID)
-				|| (CHERRYST2000 == ccid_descriptor->readerID))
-			{
-				cmd[21] = 0x00; /* set bNumberMessages to 0 */
-				cmd[a] = cmd[a-1] = cmd[a+1] = 0;	/* bMsgIndex123 */
-				a += 2;
-				continue;
-			}
-
 			/* in CCID the bMsgIndex3 is present only if bNumberMessage == 3 */
 			if (TxBuffer[11] < 3)
 				continue;
@@ -332,6 +338,14 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		cmd[a] = TxBuffer[b];
 		a++;
  	}
+
+#ifdef BOGUS_PINPAD_FIRMWARE
+	if ((SPR532 == ccid_descriptor->readerID)
+		|| (CHERRYST2000 == ccid_descriptor->readerID))
+	{
+		cmd[21] = 0x00; /* set bNumberMessages to 0 */
+	}
+#endif
 
 	/* We know the size of the CCID message now */
 	i2dw(a - 10, cmd + 1);	/* command length (includes bPINOperation) */
