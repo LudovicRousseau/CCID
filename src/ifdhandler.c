@@ -499,8 +499,55 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 					DEBUG_COMM2("Set speed to %d bauds", card_baudrate);
 				}
 				else
+				{
 					DEBUG_COMM2("Reader does not support %d bauds",
 						card_baudrate);
+
+					/* TA2 present -> specific mode: the card is supporting
+					 * only the baud rate specified in TA1 but reader does not
+					 * support this value. Reject the card. */
+					if (atr.ib[1][ATR_INTERFACE_BYTE_TA].present)
+						return IFD_PROTOCOL_NOT_SUPPORTED;
+				}
+			}
+			else
+			{
+				/* the card is too fast for the reader */
+				if ((card_baudrate >= ccid_desc->dwMaxDataRate)
+					/* but TA1 <= 97 */
+					&& (atr.ib[0][ATR_INTERFACE_BYTE_TA].value <= 0x97)
+					/* and the reader has a baud rate table */
+					&& ccid_desc->arrayOfSupportedDataRates)
+				{
+					unsigned char old_TA1;
+
+					old_TA1 = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+					while (atr.ib[0][ATR_INTERFACE_BYTE_TA].value > 0x94)
+					{
+						/* use a lower TA1 */
+						atr.ib[0][ATR_INTERFACE_BYTE_TA].value--;
+
+						ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+						ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+
+						/* Baudrate = f x D/F */
+						card_baudrate = (unsigned int) (1000 *
+							ccid_desc->dwDefaultClock * d / f);
+
+						if (find_baud_rate(card_baudrate,
+							ccid_desc->arrayOfSupportedDataRates))
+						{
+							pps[1] |= 0x10; /* PTS1 presence */
+							pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
+
+							DEBUG_COMM2("Set adapted speed to %d bauds",
+								card_baudrate);
+						}
+					}
+
+					/* restore original TA1 value */
+					atr.ib[0][ATR_INTERFACE_BYTE_TA].value = old_TA1;
+				}
 			}
 		}
 	}
