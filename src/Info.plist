@@ -46,8 +46,10 @@
 	2: DRIVER_OPTION_GEMPC_TWIN_KEY_APDU
 		If set the GemPC Twin and GemPC Key readers with be configured
 		so that the T=1 TPDU protocol is done by the firmware instead of
-		the driver
-	
+		the driver.
+		This switches the reader in APDU mode and also in EMV mode so
+		may not work with non EMV cards.
+
 	4: DRIVER_OPTION_USE_BOGUS_FIRMWARE
 		Some reader firmwares have bugs. By default the driver refuses
 		to work with such firmware versions. If your reader is rejected
