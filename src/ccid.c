@@ -22,6 +22,8 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <pcsclite.h>
 #include <ifdhandler.h>
 
@@ -63,6 +65,119 @@ int ccid_open_hack(unsigned int reader_index)
 					ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
 					ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
 				}
+			}
+			break;
+
+		case GEMPCPINPAD:
+			/* load the l10n strings in the pinpad memory */
+			{
+#define L10N_HEADER_SIZE 5
+#define L10N_STRING_MAX_SIZE 16
+#define L10N_NB_STRING 9
+
+				unsigned char cmd[L10N_HEADER_SIZE + L10N_NB_STRING * L10N_STRING_MAX_SIZE];
+				unsigned char res[20];
+				unsigned int length_res = sizeof(res);
+				int offset, i, j;
+
+				char *fr[] = {
+					"Entrer PIN",
+					"Nouveau PIN",
+					"Confirmer PIN",
+					"PIN correct",
+					"PIN Incorrect !",
+					"Delai depasse",
+					"* essai restant",
+					"Inserer carte",
+					"Erreur carte" };
+
+				char *de[] = {
+					"PIN eingeben",
+					"Neue PIN",
+					"PIN bestatigen",
+					"PIN korrect",
+					"Falsche PIN !",
+					"Zeit abgelaufen",
+					"* Versuche ubrig",
+					"Karte einstecken",
+					"Fehler Karte" };
+
+				char *es[] = {
+					"Introducir PIN",
+					"Nuevo PIN",
+					"Confirmar PIN",
+					"PIN OK",
+					"PIN Incorrecto !",
+					"Tiempo Agotado",
+					"quedan * ensayos",
+					"Introducir Tarj.",
+					"Error en Tarjeta" };
+
+				char *it[] = {
+					"Inserire PIN",
+					"Nuovo PIN",
+					"Confermare PIN",
+					"PIN Corretto",
+					"PIN Errato !",
+					"Tempo scaduto",
+					"* prove rimaste",
+					"Inserire Carta",
+					"Errore Carta" };
+
+				char *en[] = {
+					"Enter PIN",
+					"New PIN",
+					"Confirm PIN",
+					"PIN OK",
+					"Incorrect PIN!",
+					"Time Out",
+					"* retries left",
+					"Insert Card",
+					"Card Error" };
+
+				char *lang;
+				char **l10n;
+
+				lang = getenv("LANG");
+				if (NULL == lang)
+					l10n = en;
+				else
+				{
+					if (0 == strncmp(lang, "fr", 2))
+						l10n = fr;
+					else if (0 == strncmp(lang, "de", 2))
+						l10n = de;
+					else if (0 == strncmp(lang, "es", 2))
+						l10n = es;
+					else if (0 == strncmp(lang, "it", 2))
+						l10n = it;
+					else
+						l10n = en;
+				}
+
+				offset = 0;
+				cmd[offset++] = 0xB2;	/* load strings */
+				cmd[offset++] = 0xA0;	/* address of the memory */
+				cmd[offset++] = 0x00;	/* address of the first byte */
+				cmd[offset++] = 0x4D;	/* magic value */
+				cmd[offset++] = 0x4C;	/* magic value */
+
+				/* for each string */
+				for (i=0; i<L10N_NB_STRING; i++)
+				{
+					/* copy the string */
+					for (j=0; l10n[i][j]; j++)
+						cmd[offset++] = l10n[i][j];
+
+					/* pad with " " */
+					for (; j<L10N_STRING_MAX_SIZE; j++)
+						cmd[offset++] = ' ';
+				}
+
+				if (IFD_SUCCESS == CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res))
+					DEBUG_COMM("l10n string loaded successfully");
+				else
+					DEBUG_COMM("Failed to load l10n strings");
 			}
 			break;
 
