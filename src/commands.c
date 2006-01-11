@@ -300,6 +300,28 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 								all bMsgIndex123 are filled */
 		TxBuffer[14] = TxBuffer[15] = TxBuffer[16] = 0;	/* bMsgIndex123 */
 	}
+
+	/* bug circumvention for the GemPC Pinpad */
+	if (GEMPCPINPAD == ccid_descriptor->readerID)
+	{
+		/* The reader does not support, and actively reject, "max size reached"
+		 * and "timeout occured" validation conditions */
+		if (0x02 != TxBuffer[10])
+		{
+			DEBUG_INFO2("Correct bEntryValidationCondition for GemPC Pinpad (was %d)",
+				TxBuffer[10]);
+			TxBuffer[10] = 0x02;	/* validation key pressed */
+		}
+
+		/* the reader does not support any other value than 3 for the number
+		 * of messages */
+		if (0x03 != TxBuffer[11])
+		{
+			DEBUG_INFO2("Correct bNumberMessages for GemPC Pinpad (was %d)",
+				TxBuffer[11]);
+			TxBuffer[11] = 0x03; /* 3 messages */
+		}
+	}
 #endif
 
 	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
