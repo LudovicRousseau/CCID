@@ -153,7 +153,7 @@ again:
  *
  ****************************************************************************/
 RESPONSECODE SecurePINVerify(unsigned int reader_index,
-	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength)
 {
 	unsigned char cmd[11+14+CMD_BUF_SIZE];
@@ -192,6 +192,21 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
+
+#ifdef BOGUS_PINPAD_FIRMWARE
+	/* bug circumvention for the GemPC Pinpad */
+	if (GEMPCPINPAD == ccid_descriptor->readerID)
+	{
+		/* the firmware reject the cases: 00h No string and FFh default
+		 * CCID message. The only value supported is 01h (display 1 message) */
+		if (0x01 != TxBuffer[8])
+		{
+			DEBUG_INFO2("Correct bNumberMessage for GemPC Pinpad (was %d)",
+				TxBuffer[8]);
+			TxBuffer[8] = 0x01;
+		}
+	}
+#endif
 
 	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
 	for (a = 11, b = 0; b < TxLength; b++)

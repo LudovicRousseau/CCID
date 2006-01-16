@@ -29,7 +29,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned char buffer[], int voltage);
 
 RESPONSECODE SecurePINVerify(unsigned int reader_index,
-	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength);
 
 RESPONSECODE SecurePINModify(unsigned int reader_index,
