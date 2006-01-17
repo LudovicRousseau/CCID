@@ -201,12 +201,10 @@ if test "${pcsclite}" = no ; then
 	AM_CONDITIONAL(NEED_PARSER, true)
 else
 	# check that pcsc-lite is installed
-	OLD_LDLIBS="$LDLIBS"
 	OLD_LIBS="$LIBS"
-	LDLIBS="$LDLIBS $PCSC_LIBS"
+	LIBS="$LIBS $PCSC_LIBS"
 	AC_CHECK_LIB(pcsclite, SCardEstablishContext, [],
-		[AC_MSG_ERROR([SCardEstablishContext() not found, install pcsc-lite 1.2.9-beta9 or later, or use LDLIBS=... ./configure])])
-	LDLIBS="$OLD_LDLIBS"
+		[AC_MSG_ERROR([SCardEstablishContext() not found, install pcsc-lite 1.2.9-beta9 or later, or use PCSC_LIBS=... ./configure])])
 	LIBS="$OLD_LIBS"
 
 	AM_CONDITIONAL(WITHOUT_PCSC, false)
