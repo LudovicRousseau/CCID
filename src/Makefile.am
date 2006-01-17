@@ -41,11 +41,12 @@ PROVIDED_BY_PCSC = debug.c
 endif
 
 libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(PROVIDED_BY_PCSC) $(T1)
-libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB_LIBS@
-libccid_la_CFLAGS = @PCSC_CFLAGS@ @LIBUSB_CFLAGS@
+libccid_la_LIBADD = @LIBDL@ @LEXLIB@ @COREFOUNDATION@ @IOKIT@ @LIBUSB_LIBS@ @PTHREAD_LIBS@
+libccid_la_CFLAGS = @PCSC_CFLAGS@ @LIBUSB_CFLAGS@ @PTHREAD_CFLAGS@
 
 libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(T1)
-libccidtwin_la_CFLAGS = @PCSC_CFLAGS@ -DTWIN_SERIAL
+libccidtwin_la_CFLAGS = @PCSC_CFLAGS@ @PTHREAD_CFLAGS@ -DTWIN_SERIAL
+libccidtwin_la_LIBADD = @PTHREAD_LIBS@
 
 parse_SOURCES = tokenparser.l parse.c parser.h debug.c
 parse_LDADD = libccid.la
