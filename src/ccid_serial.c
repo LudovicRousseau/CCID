@@ -640,6 +640,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			rx_buffer, &rx_length))
 		{
 			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not connected");
+			CloseSerial(reader_index);
 			return STATUS_UNSUCCESSFUL;
 		}
 
@@ -662,6 +663,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			rx_buffer, &rx_length))
 		{
 			DEBUG_CRITICAL("Change card movement notification failed.");
+			CloseSerial(reader_index);
 			return STATUS_UNSUCCESSFUL;
 		}
 	}
