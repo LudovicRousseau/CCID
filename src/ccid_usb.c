@@ -305,6 +305,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					if (already_used)
 					{
 						if ((previous_reader_index != -1)
+							&& usbDevice[previous_reader_index].dev
 							&& (strcmp(usbDevice[previous_reader_index].dev->bus->dirname, bus->dirname)  == 0)
 							&& (strcmp(usbDevice[previous_reader_index].dev->filename, dev->filename) == 0)
 							&& usbDevice[previous_reader_index].ccid.bCurrentSlotIndex < usbDevice[previous_reader_index].ccid.bMaxSlotIndex)
