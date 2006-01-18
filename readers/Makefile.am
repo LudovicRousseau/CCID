@@ -10,8 +10,10 @@ EXTRA_DIST = \
 	CryptoIdentity.txt \
 	DellSCRK.txt \
 	DellSK-3106.txt \
+	GemCoreSIMPro.txt \
 	GemPC433_SL.txt \
 	GemPCKey.txt \
+	GemPCPinpad.txt \
 	GemPCTwin.txt \
 	KAAN_Advanced.txt \
 	KAAN_Base.txt \
