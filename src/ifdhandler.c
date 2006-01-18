@@ -513,7 +513,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			else
 			{
 				/* the card is too fast for the reader */
-				if ((card_baudrate >= ccid_desc->dwMaxDataRate)
+				if ((card_baudrate > ccid_desc->dwMaxDataRate +2)
 					/* but TA1 <= 97 */
 					&& (atr.ib[0][ATR_INTERFACE_BYTE_TA].value <= 0x97)
 					/* and the reader has a baud rate table */
@@ -542,6 +542,8 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 							DEBUG_COMM2("Set adapted speed to %d bauds",
 								card_baudrate);
+
+							break;
 						}
 					}
 
