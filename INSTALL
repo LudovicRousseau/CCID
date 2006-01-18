@@ -67,6 +67,11 @@ CHANNELID         1
 You may have to adapt the library path to your configuration and library
 version.
 
+If you use a GemPC PinPad, a GemCore POS Pro or a GemCore SIM Pro you
+have to indicate it in the DEVICENAME field. You will then have
+something like:
+DEVICENAME        /dev/ttyS0:GemPCPinPad
+
 If you use a recent pcsc-lite (1.2.9 or more)
 
   /dev/ttyS0 (DEVICENAME field) is the first serial port under Linux
