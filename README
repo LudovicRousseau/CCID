@@ -35,7 +35,10 @@ Supported CCID readers:
 - Eutron CryptoIdentity [26]
 - Gemplus GemPC 433 SL [2]
 - Gemplus GemPC Key [3]
+- Gemplus GemPC PinPad
 - Gemplus GemPC Twin [4]
+- Gemplus GemCore POS Pro
+- Gemplus GemCore SIM Pro
 - Kobil KAAN Base [19]
 - Kobil KAAN Advanced [20]
 - Kobil KAAN SIM III [21]
