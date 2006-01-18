@@ -109,7 +109,7 @@ int ccid_open_hack(unsigned int reader_index)
 					"PIN OK",
 					"PIN Incorrecto !",
 					"Tiempo Agotado",
-					"quedan * ensayos",
+					"* ensayos quedan",
 					"Introducir Tarj.",
 					"Error en Tarjeta" };
 
