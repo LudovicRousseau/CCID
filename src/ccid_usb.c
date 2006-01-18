@@ -517,6 +517,13 @@ status_t CloseUSB(unsigned int reader_index)
 		usbDevice[reader_index].dev->bus->dirname,
 		usbDevice[reader_index].dev->filename);
 
+	if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates
+		&& (usbDevice[reader_index].ccid.bCurrentSlotIndex == 0))
+	{
+		free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
+		usbDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
+	}
+
 	/* one slot closed */
 	(*usbDevice[reader_index].nb_opened_slots)--;
 
@@ -524,9 +531,6 @@ status_t CloseUSB(unsigned int reader_index)
 	if (0 == *usbDevice[reader_index].nb_opened_slots)
 	{
 		DEBUG_COMM("Last slot closed. Release resources");
-
-		if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates)
-			free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
 
 		/* reset so that bSeq starts at 0 again */
 		if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
