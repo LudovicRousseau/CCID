@@ -119,6 +119,8 @@ typedef struct
 #define GEMPCKEY	0x08E63438
 #define GEMPCTWIN	0x08E63437
 #define GEMPCPINPAD 0x08E63478
+#define GEMCORESIMPRO 0x08E63480
+#define GEMCOREPOSPRO 0x08E63479
 #define CARDMAN3121	0x076B3021
 #define LTC31		0x07830003
 #define SCR331DI	0x04E65111
@@ -155,4 +157,18 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index);
 
 /* convert a 4 byte integer in USB format into an int */
 #define dw2i(a, x) ((((((a[x+3] << 8) + a[x+2]) << 8) + a[x+1]) << 8) + a[x])
+
+/* all the data rates specified by ISO 7816-3 Fi/Di tables */
+#define ISO_DATA_RATES 10753, 14337, 15625, 17204, \
+		20833, 21505, 23438, 25806, 28674, \
+		31250, 32258, 34409, 39063, 41667, \
+		43011, 46875, 52083, 53763, 57348, \
+		62500, 64516, 68817, 71685, 78125, \
+		83333, 86022, 93750, 104167, 107527, \
+		114695, 125000, 129032, 143369, 156250, \
+		166667, 172043, 215054, 229391, 250000, \
+		344086
+
+/* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
+#define GEMPLUS_CUSTOM_DATA_RATES 10753, 21505, 43011, 125000
 

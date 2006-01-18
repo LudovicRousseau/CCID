@@ -115,6 +115,9 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0D46, 0x3002, 0x0037 },	/* KAAN Advanced */
 };
 
+/* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
+unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
+
 
 /*****************************************************************************
  *
@@ -313,6 +316,14 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 							/* we reuse the same device
 							 * and the reader is multi-slot */
 							usbDevice[reader_index] = usbDevice[previous_reader_index];
+							/* the other slots do not have the same data rates */
+							if ((GEMCOREPOSPRO == usbDevice[reader_index].ccid.readerID)
+								|| (GEMCORESIMPRO == usbDevice[reader_index].ccid.readerID))
+							{
+								usbDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
+								usbDevice[reader_index].ccid.dwMaxDataRate = 125000;
+							}
+
 							*usbDevice[reader_index].nb_opened_slots += 1;
 							usbDevice[reader_index].ccid.bCurrentSlotIndex++;
 							DEBUG_INFO2("Opening slot: %d",

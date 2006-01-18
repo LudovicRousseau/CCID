@@ -42,6 +42,7 @@
 #include "ccid.h"
 #include "utils.h"
 #include "commands.h"
+#include "parser.h"
 
 #define SYNC 0x03
 #define CTRL_ACK 0x06
@@ -108,6 +109,17 @@ typedef struct
 	/*@null@*/ char *device;
 
 	/*
+	 * Number of slots using the same device
+	 */
+	int real_nb_opened_slots;
+	int *nb_opened_slots;
+
+	/*
+	 * does the reader echoes the serial communication bytes?
+	 */
+	int echo;
+
+	/*
 	 * serial communication buffer
 	 */
 	unsigned char buffer[GEMPCTWIN_MAXBUF];
@@ -132,49 +144,14 @@ typedef struct
 /* The _serialDevice structure must be defined before including ccid_serial.h */
 #include "ccid_serial.h"
 
-unsigned int SerialDataRates[] = {
-		10753,
-		14337,
-		15625,
-		17204,
-		20833,
-		21505,
-		23438,
-		25806,
-		28674,
-		31250,
-		32258,
-		34409,
-		39063,
-		41667,
-		43011,
-		46875,
-		52083,
-		53763,
-		57348,
-		62500,
-		64516,
-		68817,
-		71685,
-		78125,
-		83333,
-		86022,
-		93750,
-		104167,
-		107527,
-		114695,
-		125000,
-		129032,
-		143369,
-		156250,
-		166667,
-		172043,
-		215054,
-		229391,
-		250000,
-		344086,
-		0
-	};
+/* data rates supported by the GemPC Twin (serial and PCMCIA) */
+unsigned int SerialTwinDataRates[] = { ISO_DATA_RATES, 0 };
+
+/* data rates supported by the GemPC PinPad, GemCore Pos Pro & SIM Pro */
+unsigned int SerialExtendedDataRates[] = { ISO_DATA_RATES, 500000, 0 };
+
+/* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
+unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 
 /* no need to initialize to 0 since it is static */
 static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];
@@ -251,7 +228,7 @@ status_t ReadSerial(unsigned int reader_index,
 	int i;
 
 	/* we get the echo first */
-	echo = TRUE;
+	echo = serialDevice[reader_index].echo;
 
 start:
 	DEBUG_COMM("start");
@@ -512,27 +489,174 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 
 /*****************************************************************************
  * 
+ *				set_ccid_descriptor: init ccid descriptor 
+ *				depending on reader type specified in device.
+ *
+ *				return: STATUS_UNSUCCESSFUL,
+ *						STATUS_SUCCESS,
+ *						-1 (Reader already used)
+ *
+ *****************************************************************************/
+static status_t set_ccid_descriptor(unsigned int reader_index,
+	const char *reader_name, const char *dev_name)
+{
+	long readerID;
+	int i;
+	int already_used = FALSE;
+	static int previous_reader_index = -1;
+
+	readerID = GEMPCTWIN;
+	if (0 == strcasecmp(reader_name,"GemCorePOSPro")) 
+		readerID = GEMCOREPOSPRO;
+	else if (0 == strcasecmp(reader_name,"GemCoreSIMPro"))
+		readerID = GEMCORESIMPRO;
+	else if (0 == strcasecmp(reader_name,"GemPCPinPad"))
+		readerID = GEMPCPINPAD;
+
+	/* check if the same channel is not already used to manage multi-slots readers*/
+	for (i = 0; i < CCID_DRIVER_MAX_READERS; i++)
+	{
+		if (serialDevice[i].device
+			&& strcmp(serialDevice[i].device, dev_name) == 0)
+		{
+			already_used = TRUE;
+
+			DEBUG_COMM2("%s already used. Multi-slot reader?", dev_name);
+			break;
+		}
+	}
+
+	/* this reader is already managed by us */
+	if (already_used)
+	{
+		if ((previous_reader_index != -1)
+			&& serialDevice[previous_reader_index].device
+			&& (strcmp(serialDevice[previous_reader_index].device, dev_name) == 0)
+			&& serialDevice[previous_reader_index].ccid.bCurrentSlotIndex < serialDevice[previous_reader_index].ccid.bMaxSlotIndex)
+		{
+			/* we reuse the same device and the reader is multi-slot */
+			serialDevice[reader_index] = serialDevice[previous_reader_index];
+
+			*serialDevice[reader_index].nb_opened_slots += 1;
+			serialDevice[reader_index].ccid.bCurrentSlotIndex++;
+			DEBUG_INFO2("Opening slot: %d",
+					serialDevice[reader_index].ccid.bCurrentSlotIndex);
+			switch (readerID)
+			{
+				case GEMCOREPOSPRO:
+				case GEMCORESIMPRO:
+					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
+					serialDevice[reader_index].ccid.dwMaxDataRate = 125000;
+					break;
+
+				/* GemPC Twin or GemPC Card */
+				default:
+					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialTwinDataRates;
+					serialDevice[reader_index].ccid.dwMaxDataRate = 344086;
+					break;
+			}
+			goto end;
+		}
+		else
+		{
+			DEBUG_CRITICAL2("Trying to open too many slots on %s", dev_name);
+			return STATUS_UNSUCCESSFUL;
+		}
+
+	}
+
+	/* Common to all readers */
+	serialDevice[reader_index].ccid.real_bSeq = 0;
+	serialDevice[reader_index].ccid.pbSeq = &serialDevice[reader_index].ccid.real_bSeq;
+	serialDevice[reader_index].real_nb_opened_slots = 1;
+	serialDevice[reader_index].nb_opened_slots = &serialDevice[reader_index].real_nb_opened_slots;
+	serialDevice[reader_index].ccid.bCurrentSlotIndex = 0;
+
+	serialDevice[reader_index].ccid.dwMaxCCIDMessageLength = 271;
+	serialDevice[reader_index].ccid.dwMaxIFSD = 254;
+	serialDevice[reader_index].ccid.dwFeatures = 0x00010230;
+	serialDevice[reader_index].ccid.dwDefaultClock = 4000;
+
+	serialDevice[reader_index].buffer_offset = 0;
+	serialDevice[reader_index].buffer_offset_last = 0;
+
+	serialDevice[reader_index].ccid.readerID = readerID;
+	serialDevice[reader_index].ccid.bPINSupport = 0x0;
+	serialDevice[reader_index].ccid.dwMaxDataRate = 344086;
+	serialDevice[reader_index].ccid.bMaxSlotIndex = 0;
+	serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialTwinDataRates;
+	serialDevice[reader_index].echo = TRUE;
+
+	/* change some values depending on the reader */
+	switch (readerID)
+	{
+		case GEMCOREPOSPRO:
+			serialDevice[reader_index].ccid.bMaxSlotIndex = 4;	/* 5 slots */
+			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
+			serialDevice[reader_index].echo = FALSE;
+			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
+			break;
+
+		case GEMCORESIMPRO:
+			serialDevice[reader_index].ccid.bMaxSlotIndex = 1; /* 2 slots */
+			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
+			serialDevice[reader_index].echo = FALSE;
+			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
+			break;
+
+		case GEMPCPINPAD:
+			serialDevice[reader_index].ccid.bPINSupport = 0x03;
+			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
+			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
+			break;
+	}
+
+end:
+	/* memorise the current reader_index so we can detect
+	 * a new OpenSerialByName on a multi slot reader */
+	previous_reader_index = reader_index;
+
+	/* we just created a secondary slot on a multi-slot reader */
+	if (already_used)
+		return STATUS_SECONDARY_SLOT;
+
+	return STATUS_SUCCESS;
+} /* set_ccid_descriptor  */
+
+
+/*****************************************************************************
+ * 
  *				OpenSerialByName: open the port
  *
  *****************************************************************************/
 status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 {
 	struct termios current_termios;
-	int i;
 	unsigned int reader = reader_index;
+	char reader_name[TOKEN_MAX_VALUE_SIZE] = "GemPCTwin";
+	char *p;
+	status_t ret;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, dev_name);
 
-	/* check if the same channel is not already used */
-	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+	/* parse dev_name using the pattern "device:name" */
+	p = strchr(dev_name, ':');
+	if (p)
 	{
-		if (serialDevice[i].device &&
-			strcmp(serialDevice[i].device, dev_name) == 0)
-		{
-			DEBUG_CRITICAL2("Device %s already in use", dev_name);
-			return STATUS_UNSUCCESSFUL;
-		}
+		/* copy the second part of the string */
+		strncpy(reader_name, p+1, sizeof(reader_name));
+
+		/* replace ':' by '\0' so that dev_name only contains the device name */
+		*p = '\0';
 	}
+
+	ret = set_ccid_descriptor(reader_index, reader_name, dev_name);
+	if (STATUS_UNSUCCESSFUL == ret)
+		return STATUS_UNSUCCESSFUL;
+
+	/* secondary slot so do not physically open the device */
+	if (STATUS_SECONDARY_SLOT == ret)
+		return STATUS_SUCCESS;
 
 	serialDevice[reader].fd = open(dev_name, O_RDWR | O_NOCTTY);
 
@@ -610,23 +734,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	serialDevice[reader].ccid.real_bSeq = 0;
-	serialDevice[reader].ccid.pbSeq = &serialDevice[reader].ccid.real_bSeq;
-	serialDevice[reader].ccid.readerID = GEMPCTWIN;
-	serialDevice[reader].ccid.dwMaxCCIDMessageLength = 271;
-	serialDevice[reader].ccid.dwMaxIFSD = 254;
-	serialDevice[reader].ccid.dwFeatures = 0x00010230;
-	serialDevice[reader].ccid.bPINSupport = 0x0;
-	serialDevice[reader].ccid.dwDefaultClock = 4000;
-	serialDevice[reader].ccid.dwMaxDataRate = 344086;
-	serialDevice[reader].ccid.bMaxSlotIndex = 0;
-	serialDevice[reader].ccid.bCurrentSlotIndex = 0;
-	serialDevice[reader].ccid.arrayOfSupportedDataRates = SerialDataRates;
-
-	serialDevice[reader].buffer_offset = 0;
-	serialDevice[reader].buffer_offset_last = 0;
-
-	/* perform a command to be sure a GemPC Twin reader is connected
+	/* perform a command to be sure a Gemplus reader is connected
 	 * get the reader firmware */
 	{
 		unsigned char tx_buffer[] = { 0x02 };
@@ -681,11 +789,26 @@ status_t CloseSerial(unsigned int reader_index)
 {
 	unsigned int reader = reader_index;
 
-	close(serialDevice[reader].fd);
-	serialDevice[reader].fd = -1;
+	/* device not opened */
+	if (NULL == serialDevice[reader_index].device)
+		return STATUS_UNSUCCESSFUL;
 
-	free(serialDevice[reader].device);
-	serialDevice[reader].device = NULL;
+	DEBUG_COMM2("Closing serial device: %s", serialDevice[reader_index].device);
+
+	/* Decrement number of opened slot */
+	(*serialDevice[reader_index].nb_opened_slots)--;
+
+	/* release the allocated ressources for the last slot only */
+	if (0 == *serialDevice[reader_index].nb_opened_slots)
+	{
+		DEBUG_COMM("Last slot closed. Release resources");
+
+		close(serialDevice[reader].fd);
+		serialDevice[reader].fd = -1;
+
+		free(serialDevice[reader].device);
+		serialDevice[reader].device = NULL;
+	}
 
 	return STATUS_SUCCESS;
 } /* CloseSerial */
