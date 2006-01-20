@@ -632,28 +632,22 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 /*@null@*/ struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
 {
 	struct usb_interface *usb_interface = NULL; 
+	int i;
 
 	/* if multiple interfaces use the first one with CCID class type */
-	if (dev->config->bNumInterfaces > 1)
+	for (i=0; i<dev->config->bNumInterfaces; i++)
 	{
-		int ii;
-		for (ii=0; ii<dev->config->bNumInterfaces; ii++)
-		{
-			/* CCID Class? */
-			if (dev->config->interface[ii].altsetting->bInterfaceClass == 0xb
+		/* CCID Class? */
+		if (dev->config->interface[i].altsetting->bInterfaceClass == 0xb
 #ifdef ALLOW_PROPRIETARY_CLASS
-				|| dev->config->interface[ii].altsetting->bInterfaceClass == 0xff
+			|| dev->config->interface[i].altsetting->bInterfaceClass == 0xff
 #endif
-				)
-			{
-				usb_interface = &dev->config->interface[ii];
-				break;
-			}
+			)
+		{
+			usb_interface = &dev->config->interface[i];
+			break;
 		}
 	}
-	else
-		/* only one interface found */
-		usb_interface = dev->config->interface;
 
 #ifdef O2MICRO_OZ776_PATCH
 	if (usb_interface != NULL
@@ -661,8 +655,6 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 		+ dev->descriptor.idProduct)
 		&& (0 == usb_interface->altsetting->extralen)) /* this is the bug */
 	{
-		int i;
-
 		for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)
 		{
 			/* find the extra[] array */
