@@ -27,10 +27,9 @@
 # include <sys/types.h>
 # endif
 #include <usb.h>
+#include <errno.h>
 
-#include <ifdhandler.h>
 #include "defs.h"
-#include "ccid_ifdhandler.h"
 #include "ccid.h"
 
 #ifndef TRUE
@@ -49,34 +48,69 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
  ****************************************************************************/
 int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 {
-	status_t res;
-	unsigned int channel;
+	static struct usb_bus *busses = NULL;
+	struct usb_bus *bus;
+	struct usb_dev_handle *dev_handle;
 
-	for (channel=0; channel<CCID_DRIVER_MAX_READERS; channel++)
+	usb_init();
+	usb_find_busses();
+	usb_find_devices();
+
+	busses = usb_get_busses();
+	if (busses == NULL)
 	{
-		res = IFDHCreateChannel(channel<<16, channel);
-		if (res != IFD_SUCCESS)
-		{
-			fprintf(stderr, "ccid_OpenUSB: %d\n", res);
-			break;
-		}
-		else
-		{
-			usb_dev_handle *handle;
-			struct usb_device *dev;
-
-			if (get_desc(channel<<16, &handle, &dev))
-				res = ccid_parse_interface_descriptor(handle, dev);
-			else
-				fprintf(stderr, "Reader %d not found\n", channel);
-		}
+		printf("No USB busses found");
+		return -1;
 	}
 
-	if (channel == 0)
-		printf("No known CCID reader found\n");
-	else
-		for (channel--; channel!=0; channel--)
-			(void)IFDHCloseChannel(channel<<16);
+	/* on any USB buses */
+	for (bus = busses; bus; bus = bus->next)
+	{
+		struct usb_device *dev;
+
+		/* any device on this bus */
+		for (dev = bus->devices; dev; dev = dev->next)
+		{
+			struct usb_interface *usb_interface = NULL;
+
+			/* check if the device has bInterfaceClass == 11 */
+			usb_interface = get_ccid_usb_interface(dev);
+			if (NULL == usb_interface)
+				continue;
+
+			fprintf(stderr, "Trying to open USB bus/device: %s/%s\n",
+				 bus->dirname, dev->filename);
+
+			dev_handle = usb_open(dev);
+			if (NULL == dev_handle)
+			{
+				fprintf(stderr, "Can't usb_open(%s/%s): %s\n",
+					bus->dirname, dev->filename, strerror(errno));
+				continue;
+			}
+
+			/* now we found a free reader and we try to use it */
+			if (NULL == dev->config)
+			{
+				usb_close(dev_handle);
+				fprintf(stderr, "No dev->config found for %s/%s\n",
+					 bus->dirname, dev->filename);
+				continue;
+			}
+
+			usb_interface = get_ccid_usb_interface(dev);
+			if (NULL == usb_interface)
+			{
+				usb_close(dev_handle);
+				fprintf(stderr, "Can't find a CCID interface on %s/%s\n",
+					bus->dirname, dev->filename);
+				continue;
+			}			
+
+			ccid_parse_interface_descriptor(dev_handle, dev);
+			usb_close(dev_handle);
+		}
+	}
 
 	return 0;
 } /* main */
@@ -93,12 +127,6 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	struct usb_interface_descriptor *usb_interface;
 	unsigned char *extra;
 	char buffer[255];
-
-	/*
-	 * Interface Descriptor
-	 */
-	printf("Parsing Interface Descriptor for device: %s/%s\n",
-		dev->bus->dirname, dev->filename);
 
 	/*
 	 * Vendor/model name
