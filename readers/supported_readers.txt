@@ -65,3 +65,6 @@
 
 # Athena
 0x0DC3:0x1004:Athena ASE IIIe
+
+# SmartEpad
+0x09BE:0x0002:SmartEpad
