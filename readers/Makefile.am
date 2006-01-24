@@ -20,6 +20,7 @@ EXTRA_DIST = \
 	KAAN_SIM_III.txt \
 	LTC31.txt \
 	mIDentity.txt \
+	MySmartPad.txt \
 	Oz776S.txt \
 	SCR3310.txt \
 	SCR331-DI-NTTCom.txt \
