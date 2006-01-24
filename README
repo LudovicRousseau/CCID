@@ -57,6 +57,9 @@ Supported CCID readers:
 - SCM Micro SPR 532 [9]
   You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
   firmware upgrade.
+- SmartEpad (v 2.0) [32]
+  The firmware gives a very strange description of the reader (like a
+  dwDefaultClock: 1024.000 MHz). So do not expect a perfect behavior.
 - Verisign Secure Storage Token [24]
 - Verisign Secure Token [?]
 
@@ -396,6 +399,7 @@ References:
 [30] http://www.scmmicro.com/security/SCR3310.html
 [31] http://scmmicro.com/security/SCR3311.html
 [31] http://scmmicro.com/security/SCR3320.html
+[32] http://www.smartepad.com.br/
 
 $Id$
 
