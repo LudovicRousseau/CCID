@@ -217,6 +217,10 @@ int ccid_open_hack(unsigned int reader_index)
 				ccid_descriptor->dwFeatures |= CCID_CLASS_AUTO_IFSD;
 			}
 			break;
+
+		case MYSMARTPAD:
+			ccid_descriptor->dwMaxIFSD = 254;
+			break;
 	}
 
 	return 0;

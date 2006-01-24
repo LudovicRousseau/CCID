@@ -129,6 +129,7 @@ typedef struct
 #define CHERRYST2000	0x046A003E
 #define OZ776		0x0B977762
 #define SPR532		0x04E6E003
+#define MYSMARTPAD	0x09BE0002
 
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
