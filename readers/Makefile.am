@@ -3,6 +3,7 @@
 EXTRA_DIST = \
 	ACR38U-CCID.txt \
 	CardMan3121.txt \
+	CardMan5125.txt \
 	CherrySmartTerminalST2XXX.txt \
 	CherryST1044U.txt \
 	CherryXX33.txt \
