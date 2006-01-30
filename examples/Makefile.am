@@ -2,6 +2,6 @@
 
 noinst_PROGRAMS = scardcontrol
 scardcontrol_SOURCES = scardcontrol.c
-scardcontrol_CFLAGS = @PCSC_CFLAGS@
-scardcontrol_LDADD = @PCSC_LIBS@
+scardcontrol_CFLAGS = $(PCSC_CFLAGS)
+scardcontrol_LDADD = $(PCSC_LIBS)
 
