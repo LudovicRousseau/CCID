@@ -28,6 +28,14 @@
 #endif
 #include <unistd.h>
 
+#include "buffer.h"
+
+/* T=1 protocol constants */
+#define T1_I_BLOCK		0x00
+#define T1_R_BLOCK		0x80
+#define T1_S_BLOCK		0xC0
+#define T1_MORE_BLOCKS		0x20
+
 enum {
 	IFD_PROTOCOL_RECV_TIMEOUT = 0x0000,
 	IFD_PROTOCOL_T1_BLOCKSIZE,
@@ -71,6 +79,8 @@ int t1_init(t1_state_t *t1, int lun);
 void t1_release(t1_state_t *t1);
 int t1_set_param(t1_state_t *t1, int type, long value);
 int t1_negociate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd);
+unsigned int t1_build(t1_state_t *, unsigned char *,
+	unsigned char, unsigned char, ct_buf_t *, size_t *);
 
 #endif
 

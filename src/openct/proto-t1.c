@@ -22,12 +22,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* T=1 protocol constants */
-#define T1_I_BLOCK		0x00
-#define T1_R_BLOCK		0x80
-#define T1_S_BLOCK		0xC0
-#define T1_MORE_BLOCKS		0x20
-
 /* I block */
 #define T1_I_SEQ_SHIFT		6
 
@@ -67,9 +61,6 @@ enum {
 static void		t1_set_checksum(t1_state_t *, int);
 static unsigned	int	t1_block_type(unsigned char);
 static unsigned int	t1_seq(unsigned char);
-static unsigned	int	t1_build(t1_state_t *, unsigned char *,
-				unsigned char, unsigned char,
-				ct_buf_t *, size_t *);
 static unsigned int	t1_rebuild(t1_state_t *t1, unsigned char *block);
 static unsigned int	t1_compute_checksum(t1_state_t *,
 				unsigned char *, size_t);
@@ -558,7 +549,7 @@ t1_seq(unsigned char pcb)
 	}
 }
 
-static unsigned int
+unsigned int
 t1_build(t1_state_t *t1, unsigned char *block,
 		unsigned char dad, unsigned char pcb,
 		ct_buf_t *bp, size_t *lenp)
