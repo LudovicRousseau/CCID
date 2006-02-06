@@ -86,6 +86,10 @@ typedef struct
 	 */
 	unsigned int readTimeout;
 
+	/*
+	 * Card protocol
+	 */
+	int cardProtocol;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */
