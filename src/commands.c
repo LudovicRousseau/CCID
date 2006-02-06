@@ -286,13 +286,24 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
 
 	/* T=1 Protocol Management for a TPDU reader */
-	if ((SCARD_PROTOCOL_T1 == ccid_descriptor->cardProtocol)
+	if ((IFD_SUCCESS == ret)
+		&& (SCARD_PROTOCOL_T1 == ccid_descriptor->cardProtocol)
 		&& (CCID_CLASS_TPDU == (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK)))
 	{
-		/* get only the T=1 data */
-		/* FIXME: manage T=1 error blocks */
-		memmove(RxBuffer, RxBuffer+3, *RxLength -4);
-		*RxLength -= 4;	/* remove NAD, PCB, LEN and CRC */
+		/* timeout and cancel cases are faked by CCID_Receive() */
+		if (2 == *RxLength)
+		{
+			/* Decrement the sequence numbers since no TPDU was sent */
+			get_ccid_slot(reader_index)->t1.ns ^= 1;
+			get_ccid_slot(reader_index)->t1.nr ^= 1;
+		}
+		else
+		{
+			/* get only the T=1 data */
+			/* FIXME: manage T=1 error blocks */
+			memmove(RxBuffer, RxBuffer+3, *RxLength -4);
+			*RxLength -= 4;	/* remove NAD, PCB, LEN and CRC */
+		}
 	}
 
 	ccid_descriptor -> readTimeout = old_read_timeout;
@@ -463,13 +474,24 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
  	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
 
 	/* T=1 Protocol Management for a TPDU reader */
-	if ((SCARD_PROTOCOL_T1 == ccid_descriptor->cardProtocol)
+	if ((IFD_SUCCESS == ret)
+		&& (SCARD_PROTOCOL_T1 == ccid_descriptor->cardProtocol)
 		&& (CCID_CLASS_TPDU == (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK)))
 	{
-		/* get only the T=1 data */
-		/* FIXME: manage T=1 error blocks */
-		memmove(RxBuffer, RxBuffer+3, *RxLength -4);
-		*RxLength -= 4;	/* remove NAD, PCB, LEN and CRC */
+		/* timeout and cancel cases are faked by CCID_Receive() */
+		if (2 == *RxLength)
+		{
+			/* Decrement the sequence numbers since no TPDU was sent */
+			get_ccid_slot(reader_index)->t1.ns ^= 1;
+			get_ccid_slot(reader_index)->t1.nr ^= 1;
+		}
+		else
+		{
+			/* get only the T=1 data */
+			/* FIXME: manage T=1 error blocks */
+			memmove(RxBuffer, RxBuffer+3, *RxLength -4);
+			*RxLength -= 4;	/* remove NAD, PCB, LEN and CRC */
+		}
 	}
 
 	ccid_descriptor -> readTimeout = old_read_timeout;
