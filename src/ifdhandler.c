@@ -732,6 +732,9 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
 	}
 
+	/* store used protocol for use by the secure commands (verify/change PIN) */
+	ccid_desc->cardProtocol = Protocol;
+
 	return IFD_SUCCESS;
 } /* IFDHSetProtocolParameters */
 
