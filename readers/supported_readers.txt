@@ -6,8 +6,8 @@
 0x08E6:0x3438:Gemplus GemPC Key
 0x08E6:0x4433:Gemplus GemPC433 SL
 0x08E6:0x3478:Gemplus GemPC Pinpad
-0x08E6:0x3479:GemCore POS Pro
-0x08E6:0x3480:Gemplus SIM Pro
+0x08E6:0x3479:Gemplus GemCore POS Pro
+0x08E6:0x3480:Gemplus GemCore SIM Pro
 # Verisign branded
 0x08E6:0xACE0:Verisign Secure Token
 0x08E6:0x1359:VeriSign Secure Storage Token
