@@ -376,6 +376,32 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	}
 #endif
 
+	/* T=1 Protocol Management for a TPDU reader */
+	if ((SCARD_PROTOCOL_T1 == ccid_descriptor->cardProtocol)
+		&& (CCID_CLASS_TPDU == (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK)))
+	{
+		ct_buf_t sbuf;
+		unsigned char sdata[T1_BUFFER_SIZE];
+
+		/* Initialize send buffer with the APDU */
+		ct_buf_set(&sbuf,
+			(void *)(TxBuffer + offsetof(PIN_MODIFY_STRUCTURE, abData)),
+			TxLength - offsetof(PIN_MODIFY_STRUCTURE, abData));
+
+		/* Create T=1 block */  
+		ret = t1_build(&((get_ccid_slot(reader_index))->t1),
+			sdata, 0, T1_I_BLOCK, &sbuf, NULL); 
+
+		/* Increment the sequence numbers  */
+		get_ccid_slot(reader_index)->t1.ns ^= 1;
+		get_ccid_slot(reader_index)->t1.nr ^= 1;
+
+		/* Copy the generated T=1 block prologue into the teoprologue
+		 * of the CCID command */
+		memcpy(TxBuffer + offsetof(PIN_MODIFY_STRUCTURE, bTeoPrologue),
+			sdata, 3);
+	}
+
 	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
 
 	/* Do adjustments as needed - CCID spec is not exact with some
@@ -434,6 +460,16 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	}
 
  	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
+
+	/* T=1 Protocol Management for a TPDU reader */
+	if ((SCARD_PROTOCOL_T1 == ccid_descriptor->cardProtocol)
+		&& (CCID_CLASS_TPDU == (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK)))
+	{
+		/* get only the T=1 data */
+		/* FIXME: manage T=1 error blocks */
+		memmove(RxBuffer, RxBuffer+3, *RxLength -4);
+		*RxLength -= 4;	/* remove NAD, PCB, LEN and CRC */
+	}
 
 	ccid_descriptor -> readTimeout = old_read_timeout;
 	return ret;
