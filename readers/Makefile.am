@@ -13,6 +13,7 @@ EXTRA_DIST = \
 	DellSK-3106.txt \
 	GemCoreSIMPro.txt \
 	GemPC433_SL.txt \
+	GemPC_Express.txt \
 	GemPCKey.txt \
 	GemPCPinpad.txt \
 	GemPCTwin.txt \

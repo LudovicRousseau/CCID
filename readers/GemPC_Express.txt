@@ -1,0 +1,89 @@
+Parsing Interface Descriptor for device: 004/002
+ idVendor: 0x08E6
+  iManufacturer: Gemplus
+ idProduct: 0x34EC
+  iProduct: USB GemPC Express
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   Support 4000 kHz
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 344086 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   Support 10753 bps
+   Support 14337 bps
+   Support 15625 bps
+   Support 17204 bps
+   Support 20833 bps
+   Support 21505 bps
+   Support 23438 bps
+   Support 25806 bps
+   Support 28674 bps
+   Support 31250 bps
+   Support 32258 bps
+   Support 34409 bps
+   Support 39063 bps
+   Support 41667 bps
+   Support 43011 bps
+   Support 46875 bps
+   Support 52083 bps
+   Support 53763 bps
+   Support 57348 bps
+   Support 62500 bps
+   Support 64516 bps
+   Support 68817 bps
+   Support 71685 bps
+   Support 78125 bps
+   Support 83333 bps
+   Support 86022 bps
+   Support 93750 bps
+   Support 104167 bps
+   Support 107527 bps
+   Support 114695 bps
+   Support 125000 bps
+   Support 129032 bps
+   Support 143369 bps
+   Support 156250 bps
+   Support 166667 bps
+   Support 172043 bps
+   Support 215054 bps
+   Support 229391 bps
+   Support 250000 bps
+   Support 344086 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00010230
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ..02.. NAD value other than 00 accepted (T=1)
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0x00
+  bClassEnveloppe: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
