@@ -28,6 +28,8 @@ EXTRA_DIST = \
 	SCR331-DI-NTTCom.txt \
 	SCR331-DI.txt \
 	SCR331.txt \
+	SCR3320.txt \
+	SCR3340.txt \
 	SCR335.txt \
 	sid800.txt \
 	SIM_Pocket_Combo.txt \
