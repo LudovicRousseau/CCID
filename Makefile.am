@@ -25,5 +25,6 @@ libtool: $(LIBTOOL_DEPS)
 
 ChangeLog:
 	svn2cl.sh --group-by-day --stdout --include-rev \
-	| perl -pe 's/rousseau /Ludovic Rousseau /; s+trunk/Drivers/ccid/++g;' > $@
+	| perl -pe 's/  rousseau/  Ludovic Rousseau/; \
+	s+trunk/Drivers/ccid/++g;' > $@
 
