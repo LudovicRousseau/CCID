@@ -113,6 +113,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x04e6, 0xe003, 0x0504 },	/* SPR 532 */
 	{ 0x0D46, 0x3001, 0x0037 },	/* KAAN Base */
 	{ 0x0D46, 0x3002, 0x0037 },	/* KAAN Advanced */
+	{ 0x09C3, 0x0008, 0x0203 },	/* ActivCard V2 */
 };
 
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
