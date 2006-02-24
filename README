@@ -28,7 +28,7 @@ Supported CCID readers:
 - Athena ASE IIIe USB V2 [29]
 - Cherry XX33 keyboard [?]
 - Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
-- Cherry SmartTerminal ST2XXX
+- Cherry SmartTerminal ST2000U [35]
 - Cherry ST-1044U [27]
 - Dell keyboard SK-3106 [?]
 - Dell smart card reader keyboard [?]
@@ -409,6 +409,7 @@ References:
 [32] http://www.smartepad.com.br/
 [33] http://www.omnikey.com/index.php?id=121
 [34] http://www.scmmicro.com/security/SCR3340.html
+[35] http://www.cherry.de/deutsch/advanced-line/advanced_smart_terminal_st-2000u.htm
 
 $Id$
 
