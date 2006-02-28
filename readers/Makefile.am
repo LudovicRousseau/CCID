@@ -31,6 +31,7 @@ EXTRA_DIST = \
 	SCR331-DI.txt \
 	SCR331.txt \
 	SCR3320.txt \
+	SCR333.txt \
 	SCR3340.txt \
 	SCR335.txt \
 	sid800.txt \
