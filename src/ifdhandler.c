@@ -507,7 +507,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 					 * only the baud rate specified in TA1 but reader does not
 					 * support this value. Reject the card. */
 					if (atr.ib[1][ATR_INTERFACE_BYTE_TA].present)
-						return IFD_PROTOCOL_NOT_SUPPORTED;
+						return IFD_COMMUNICATION_ERROR;
 				}
 			}
 			else
