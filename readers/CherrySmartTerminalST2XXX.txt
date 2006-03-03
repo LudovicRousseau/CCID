@@ -1,9 +1,8 @@
-Parsing Interface Descriptor for device: 001/015
  idVendor: 0x046A
   iManufacturer: Cherry GmbH
  idProduct: 0x003E
-  iProduct: Cherry SmartTerminal ST-2XXX
- bcdDevice: 5.07 (firmware release?)
+  iProduct: SmartTerminal ST-2xxx
+ bcdDevice: 5.08 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -26,12 +25,12 @@ Parsing Interface Descriptor for device: 001/015
    T=0
    T=1
   dwDefaultClock: 4.000 MHz
-  dwMaximumClock: 12.000 MHz
-  bNumClockSupported: 0x00
+  dwMaximumClock: 8.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
    IFD does not support GET CLOCK FREQUENCIES request
   dwDataRate: 10753 bps
   dwMaxDataRate: 344105 bps
-  bNumDataRatesSupported: 0
+  bNumDataRatesSupported: 0 (will use whatever is returned)
    IFD does not support GET_DATA_RATES request
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
