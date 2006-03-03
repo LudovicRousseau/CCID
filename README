@@ -172,6 +172,29 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.0.0 - 3 March 2006, Ludovic Rousseau
+    - add support for ActivCard USB Reader 3.0, Athena ASE IIIe USB V2,
+      SCM Micro SCR 355, SCR 3311, SCR 3320, SCR 3340 ExpressCard54,
+      Gemplus GemCore SIM Pro, GemCore POS Pro (serial and USB), GemPC
+      Express (ExpressCard/54 interface), SmartEpad (v 2.0), OmniKey
+      CardMan 5125 
+    - greatly improve support of PIN PAD readers. We now support TPDU
+      readers with T=1 cards
+    - use l10n strings for the Gemplus GemPC PIN PAD (it has a screen).
+      Supported languages are: de, en, es, fr, it
+    - rename ACS ACR 38 in ACR 38U-CCID since the ACR 38 is a different
+      reader and is not CCID compatible
+    - allow to select the Power On voltage using Info.plist instead of
+      recompiling the source code
+    - correct bugs in the support of multi-slots readers
+    - if the card is faster than the reader (TA1=97 for example) we try
+      to use a not-so-bad speed (corresponding to TA1=96, 95 or 94)
+      instead of the default speed of TA1=11
+    - the src/parse tool do not use the driver anymore. No need to
+      update the Info.plist file first.
+    - some minor bugs removed
+
+
 0.9.4 - 27 November 2005, Ludovic Rousseau
     - add support for Eutron SIM Pocket Combo, Eutron CryptoIdentity,
       Verisign Secure Token and VeriSign Secure Storage Token, GemPC
