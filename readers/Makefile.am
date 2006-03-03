@@ -5,7 +5,9 @@ EXTRA_DIST = \
 	ActivCardV2.txt \
 	ActivCardV3.txt \
 	CardMan3121.txt \
+	CardMan3821.txt \
 	CardMan5125.txt \
+	CardMan6121.txt \
 	CherrySmartTerminalST2XXX.txt \
 	CherryST1044U.txt \
 	CherryXX33.txt \

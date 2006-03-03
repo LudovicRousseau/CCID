@@ -1,0 +1,166 @@
+Parsing Interface Descriptor for device: 003/012
+ idVendor: 0x076B
+  iManufacturer: OMNIKEY AG
+ idProduct: 0x6622
+  iProduct: Smart Card Reader USB
+ bcdDevice: 2.03 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.800 MHz
+  dwMaximumClock: 8.000 MHz
+  bNumClockSupported: 4 
+   Got 256 clock frequencies but was expecting 4
+   Support 4000 kHz
+   Support 4800 kHz
+   Support 6000 kHz
+   Support 8000 kHz
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 412903 bps
+  bNumDataRatesSupported: 106 
+   Got 256 data rates but was expecting 106
+   Support 10752 bps
+   Support 21505 bps
+   Support 43010 bps
+   Support 86021 bps
+   Support 172043 bps
+   Support 344086 bps
+   Support 129032 bps
+   Support 215053 bps
+   Support 12903 bps
+   Support 25806 bps
+   Support 51612 bps
+   Support 103225 bps
+   Support 206451 bps
+   Support 412903 bps
+   Support 154838 bps
+   Support 258064 bps
+   Support 7168 bps
+   Support 14336 bps
+   Support 28673 bps
+   Support 57347 bps
+   Support 114695 bps
+   Support 229390 bps
+   Support 143369 bps
+   Support 8602 bps
+   Support 17204 bps
+   Support 34408 bps
+   Support 68817 bps
+   Support 137634 bps
+   Support 275268 bps
+   Support 5376 bps
+   Support 64516 bps
+   Support 107526 bps
+   Support 6451 bps
+   Support 77419 bps
+   Support 8064 bps
+   Support 16129 bps
+   Support 32258 bps
+   Support 96774 bps
+   Support 161290 bps
+   Support 3584 bps
+   Support 71684 bps
+   Support 4301 bps
+   Support 2688 bps
+   Support 53763 bps
+   Support 3225 bps
+   Support 38709 bps
+   Support 4032 bps
+   Support 48387 bps
+   Support 80645 bps
+   Support 2150 bps
+   Support 2580 bps
+   Support 5161 bps
+   Support 10322 bps
+   Support 20645 bps
+   Support 41290 bps
+   Support 82580 bps
+   Support 30967 bps
+   Support 7812 bps
+   Support 15625 bps
+   Support 31250 bps
+   Support 62500 bps
+   Support 125000 bps
+   Support 250000 bps
+   Support 93750 bps
+   Support 156250 bps
+   Support 9375 bps
+   Support 18750 bps
+   Support 37500 bps
+   Support 75000 bps
+   Support 150000 bps
+   Support 300000 bps
+   Support 112500 bps
+   Support 187500 bps
+   Support 5208 bps
+   Support 10416 bps
+   Support 20833 bps
+   Support 41666 bps
+   Support 83333 bps
+   Support 166666 bps
+   Support 104166 bps
+   Support 6250 bps
+   Support 12500 bps
+   Support 25000 bps
+   Support 50000 bps
+   Support 100000 bps
+   Support 200000 bps
+   Support 3906 bps
+   Support 46875 bps
+   Support 78125 bps
+   Support 4687 bps
+   Support 56250 bps
+   Support 5859 bps
+   Support 11718 bps
+   Support 23437 bps
+   Support 70312 bps
+   Support 117187 bps
+   Support 2604 bps
+   Support 52083 bps
+   Support 3125 bps
+   Support 1953 bps
+   Support 39062 bps
+   Support 2343 bps
+   Support 28125 bps
+   Support 2929 bps
+   Support 35156 bps
+   Support 58593 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000007
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000207B2
+   ....02 Automatic parameter configuration based on ATR data
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..01.. CCID can set ICC in clock stop mode
+   ..02.. NAD value other than 00 accepted (T=1)
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
