@@ -91,6 +91,10 @@ case "$host" in
 	BUNDLE_HOST="OpenBSD"
 	DYN_LIB_EXT="so.0.0"
 	;;
+*-*-solaris*)
+	BUNDLE_HOST="Solaris"
+	DYN_LIB_EXT="so"
+	;;
 *)
 	BUNDLE_HOST="Linux"
 	DYN_LIB_EXT="so"
