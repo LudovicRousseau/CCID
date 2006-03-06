@@ -33,7 +33,7 @@ status_t ReadUSB(unsigned int reader_index, unsigned int *length,
 
 status_t CloseUSB(unsigned int reader_index);
 
-#ifdef __USB_H__
+#if defined (__USB_H__) || defined (_SYS_USB_LIBUSB_USB_H)
 int get_desc(int lun, usb_dev_handle **handle, struct usb_device **dev);
 
 /*@null@*/ struct usb_interface *get_ccid_usb_interface(struct usb_device *dev);
