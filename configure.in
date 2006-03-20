@@ -202,10 +202,10 @@ if test "${ccidtwindir}" = false ; then
 fi
 AC_MSG_RESULT([serial twin install dir : $ccidtwindir])
 
-# --enable-pcsclite
+# --disable-pcsclite
 AC_ARG_ENABLE(pcsclite,
-	AC_HELP_STRING([--enable-pcsclite],[compile for pcsc-lite (default=yes)]),
-	[ pcsclite=no ], [ pcsclite=yes ] )
+	AC_HELP_STRING([--disable-pcsclite],[do not use pcsc-lite debug support]),
+	[ pcsclite="${enableval}" ], [ pcsclite=yes ] )
 
 if test "${pcsclite}" = no ; then
 	AM_CONDITIONAL(WITHOUT_PCSC, true)
@@ -220,6 +220,8 @@ else
 
 	AM_CONDITIONAL(WITHOUT_PCSC, false)
 	AM_CONDITIONAL(NEED_PARSER, false)
+
+	pcsclite=yes
 fi
 AC_MSG_RESULT([compiled for pcsc-lite  : $pcsclite])
 
