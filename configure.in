@@ -153,10 +153,9 @@ AC_MSG_RESULT([use libusb              : $use_libusb])
 AC_SUBST(LIBDL)
 AC_CHECK_LIB(dl, dlopen, [LIBDL="$LIBDL -ldl" ac_cv_func_dlopen_ldl=yes], ac_cv_func_dlopen_ldl=no)
 
-# --enable-multi-thread
+# --disable-multi-thread
 AC_ARG_ENABLE(multi-thread,
-	AC_HELP_STRING([--enable-multi-thread],[enable multi threading
-	(default=yes)]),
+	AC_HELP_STRING([--disable-multi-thread],[disable multi threading]),
 	[ multithread="${enableval}" ], [ multithread=yes ] )
 
 if test "${multithread}" != no ; then
@@ -164,6 +163,8 @@ if test "${multithread}" != no ; then
 		[ AC_DEFINE(HAVE_PTHREAD, 1,
 			[Define if you have POSIX threads libraries and header files.])
 	   	], [ AC_MSG_ERROR([POSIX thread support required]) ])
+
+	multithread=yes
 fi
 AC_MSG_RESULT([multi threading         : $multithread])
 
