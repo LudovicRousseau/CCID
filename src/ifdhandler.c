@@ -1084,6 +1084,7 @@ RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	/* SCR331-DI contactless reader */
 	if (((SCR331DI == ccid_descriptor->readerID)
+		|| (SDI010 == ccid_descriptor->readerID)
 		|| (SCR331DINTTCOM == ccid_descriptor->readerID))
 		&& (ccid_descriptor->bCurrentSlotIndex > 0))
 	{
