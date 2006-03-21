@@ -35,6 +35,7 @@ Supported CCID readers:
 - Eutron SIM Pocket Combo [25]
 - Eutron CryptoIdentity [26]
 - Gemplus GemPC 433 SL [2]
+- Gemplus GemPC Card [41]
 - Gemplus GemPC Key [3]
 - Gemplus GemPC PinPad
 - Gemplus GemPC Twin [4]
@@ -443,6 +444,7 @@ References:
 [38] http://www.reflexreaders.com/Products/reflex_usbnew.html
 [39] http://www.scmmicro.com/security/SDI_010.html
 [40] http://www.winbond.com.tw/E-WINBONDHTM/partner/b_2_e_4.htm
+[41] http://www.gemplus.com/products/gempc_card/
 
 $Id$
 
