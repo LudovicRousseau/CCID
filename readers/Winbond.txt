@@ -1,0 +1,55 @@
+Trying to open USB bus/device: 003/009
+ idVendor: 0x0416
+  iManufacturer: Winbond
+ idProduct: 0x3815
+  iProduct: CCID SmartCard Controller
+ bcdDevice: 0.06 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 3.000 MHz
+  dwMaximumClock: 3.000 MHz
+  bNumClockSupported: 1
+   Got 3 clock frequencies but was expecting 1
+   Support 3000 kHz
+  dwDataRate: 8065 bps
+  dwMaxDataRate: 32258 bps
+  bNumDataRatesSupported: 3
+   Support 8065 bps
+   Support 16129 bps
+   Support 32258 bps
+  dwMaxIFSD: 123
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000004B2
+   ....02 Automatic parameter configuration based on ATR data
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   00.... Character level exchange
+  dwMaxCCIDMessageLength: 138 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1

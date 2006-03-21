@@ -43,5 +43,6 @@ EXTRA_DIST = \
 	SPR532.txt \
 	supported_readers.txt \
 	Verisign_secure_storage_token.txt \
-	Verisign_secure_token.txt
+	Verisign_secure_token.txt \
+	Winbond.txt
 

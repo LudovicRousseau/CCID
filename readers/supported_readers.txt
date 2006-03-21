@@ -76,3 +76,7 @@
 
 # SmartEpad
 0x09BE:0x0002:SmartEpad
+
+# Winbond Electronics (for OEM only so the name may be different)
+0x0416:0x3815:Winbond
+

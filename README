@@ -85,6 +85,7 @@ manufacturers, please, contact me.
 - SCM Micro SDI 010 [39]
 - SCM SCR 3340 ExpressCard54 [34]
 - Silitek SK-3105 keyboard [12] or C3PO TLTC2USB [14]
+- Winbond Electronics (for OEM only) [40]
 
 
 Unsupported or partly supported CCID readers:
@@ -441,6 +442,7 @@ References:
 [37] http://www.omnikey.com/index.php?id=114
 [38] http://www.reflexreaders.com/Products/reflex_usbnew.html
 [39] http://www.scmmicro.com/security/SDI_010.html
+[40] http://www.winbond.com.tw/E-WINBONDHTM/partner/b_2_e_4.htm
 
 $Id$
 
