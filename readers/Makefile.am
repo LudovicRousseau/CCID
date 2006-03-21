@@ -4,6 +4,7 @@ EXTRA_DIST = \
 	ACR38U-CCID.txt \
 	ActivCardV2.txt \
 	ActivCardV3.txt \
+	AxaltoV3.txt \
 	CardMan3121.txt \
 	CardMan3821.txt \
 	CardMan5125.txt \
