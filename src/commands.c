@@ -336,10 +336,23 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 
 	/* 24 is the size of the PCSC PIN modify structure
 	 * The equivalent CCID structure is only 18 or 19-bytes long */
-	if ((TxLength > 19+CMD_BUF_SIZE) /* command too large? */
-		|| (TxLength < 18+4 /* 4 = APDU size */) /* command too short? */
-		|| (TxBuffer[20] + 24 != TxLength)) /* ulDataLength field coherency */
+	if (TxLength > 24+CMD_BUF_SIZE) /* command too large? */
 	{
+		DEBUG_INFO3("Command too long: %d > %d", TxLength, 24+CMD_BUF_SIZE);
+		*RxLength = 0;
+		return IFD_NOT_SUPPORTED;
+	}
+
+	if (TxLength < 24+4 /* 4 = APDU size */) /* command too short? */
+	{
+		DEBUG_INFO3("Command too short: %d < %d", TxLength, 24+4);
+		*RxLength = 0;
+		return IFD_NOT_SUPPORTED;
+	}
+
+	if (dw2i(TxBuffer, 20) + 24 != TxLength) /* ulDataLength field coherency */
+	{
+		DEBUG_INFO3("Wrong lengths: %d %d", dw2i(TxBuffer, 20) + 24, TxLength);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
@@ -347,6 +360,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	/* Make sure in the beginning if bNumberMessage is valid or not */
 	if (TxBuffer[11] > 3)
 	{
+		DEBUG_INFO2("Wrong bNumberMessage: %d", TxBuffer[11]);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
