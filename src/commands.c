@@ -176,7 +176,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	 * The equivalent CCID structure is only 14-bytes long */
 	if (TxLength > 19+CMD_BUF_SIZE) /* command too large? */
 	{
-		DEBUG_INFO3("Command too long: %d > %d", TxLength, 16+CMD_BUF_SIZE);
+		DEBUG_INFO3("Command too long: %d > %d", TxLength, 19+CMD_BUF_SIZE);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
