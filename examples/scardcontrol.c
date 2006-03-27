@@ -476,30 +476,27 @@ int main(int argc, char *argv[])
 		fd_set fd;
 #endif
 		struct timeval timeout;
+		int i;
 
-		FD_ZERO(&fd);
-		FD_SET(STDIN_FILENO, &fd);	/* stdin */
-		timeout.tv_sec = 0;			/* timeout = 0 */
-		timeout.tv_usec = 0;
-
-		/* we only try to read stdin if the pinpad is on a keyboard
-		 * we do not read stdin for a SPR 532 for example */
-		if (select(1, &fd, NULL, NULL, &timeout) > 0)
+		/* old PIN, new PIN, confirmation PIN */
+		/* if the command is aborted we will not read every "PIN" */
+		for (i=0; i<3; i++)
 		{
-			/* read the fake digits */
-			char in[40];	/* 4 digits + \n + \0 */
+			FD_ZERO(&fd);
+			FD_SET(STDIN_FILENO, &fd);	/* stdin */
+			timeout.tv_sec = 0;			/* timeout = 0 */
+			timeout.tv_usec = 0;
 
-			/* old PIN */
-			(void)fgets(in, sizeof(in), stdin);
-			printf("keyboard sent: %s", in);
+			/* we only try to read stdin if the pinpad is on a keyboard
+			 * we do not read stdin for a SPR 532 for example */
+			if (select(1, &fd, NULL, NULL, &timeout) > 0)
+			{
+				/* read the fake digits */
+				char in[40];	/* 4 digits + \n + \0 */
 
-			/* new PIN */
-			(void)fgets(in, sizeof(in), stdin);
-			printf("keyboard sent: %s", in);
-
-			/* confirmation PIN */
-			(void)fgets(in, sizeof(in), stdin);
-			printf("keyboard sent: %s", in);
+				(void)fgets(in, sizeof(in), stdin);
+				printf("keyboard sent: %s", in);
+			}
 		}
 	}
 
