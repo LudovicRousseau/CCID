@@ -365,6 +365,15 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		TxBuffer[14] = TxBuffer[15] = TxBuffer[16] = 0;	/* bMsgIndex123 */
 	}
 
+	/* the bug is a bit different than for the Cherry ST 2000C
+	 * with bNumberMessages < 3 the command seems to be accepted
+	 * and the card sends 6B 80 */
+	if (CHERRYXX44 == ccid_descriptor->readerID)
+	{
+		TxBuffer[11] = 0x03; /* set bNumberMessages to 3 so that
+								all bMsgIndex123 are filled */
+	}
+
 	/* bug circumvention for the GemPC Pinpad */
 	if (GEMPCPINPAD == ccid_descriptor->readerID)
 	{
