@@ -190,7 +190,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 	if (dw2i(TxBuffer, 15) + 19 != TxLength) /* ulDataLength field coherency */
 	{
-		DEBUG_INFO3("Wrong lengths: %d %d", TxBuffer[15] + 19, TxLength);
+		DEBUG_INFO3("Wrong lengths: %d %d", dw2i(TxBuffer, 15) + 19, TxLength);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
