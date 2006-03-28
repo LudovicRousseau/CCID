@@ -195,6 +195,15 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		return IFD_NOT_SUPPORTED;
 	}
 
+	/* make sure bEntryValidationCondition is valid
+	 * The Cherry XX44 reader crashes with a wrong value */
+	if ((0x00 == TxBuffer[7]) || (TxBuffer[7] > 0x07))
+	{
+		DEBUG_INFO2("Correct bEntryValidationCondition (was 0x%02X)",
+			TxBuffer[7]);
+		TxBuffer[7] = 0x02;
+	}
+
 #ifdef BOGUS_PINPAD_FIRMWARE
 	/* bug circumvention for the GemPC Pinpad */
 	if (GEMPCPINPAD == ccid_descriptor->readerID)
@@ -363,6 +372,15 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		DEBUG_INFO2("Wrong bNumberMessage: %d", TxBuffer[11]);
 		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
+	}
+
+	/* Make sure bEntryValidationCondition is valid
+	 * The Cherry XX44 reader crashes with a wrong value */
+	if ((0x00 == TxBuffer[10]) || (TxBuffer[10] > 0x07))
+	{
+		DEBUG_INFO2("Correct bEntryValidationCondition (was 0x%02X)",
+			TxBuffer[10]);
+		TxBuffer[10] = 0x02;
 	}
 
 #ifdef BOGUS_PINPAD_FIRMWARE
