@@ -1,9 +1,8 @@
-Parsing Interface Descriptor for device: 002/002
  idVendor: 0x0DC3
   iManufacturer: Athena 
  idProduct: 0x1004
   iProduct: ASEDrive CCID
- bcdDevice: 5.00 (firmware release?)
+ bcdDevice: 5.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
