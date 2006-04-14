@@ -2,10 +2,10 @@
 
 EXTRA_DIST = \
 	ACR38U-CCID.txt \
-	ASE_IIIe.txt \
-	ASEDrive_IIIe_KB.txt \
 	ActivCardV2.txt \
 	ActivCardV3.txt \
+	ASEDrive_IIIe_KB.txt \
+	ASE_IIIe.txt \
 	AxaltoV3.txt \
 	CardMan3121.txt \
 	CardMan3821.txt \
@@ -32,6 +32,7 @@ EXTRA_DIST = \
 	MySmartPad.txt \
 	Oz776S.txt \
 	SCR3310.txt \
+	SCR3311.txt \
 	SCR331-DI-NTTCom.txt \
 	SCR331-DI.txt \
 	SCR331.txt \
@@ -39,6 +40,8 @@ EXTRA_DIST = \
 	SCR333.txt \
 	SCR3340.txt \
 	SCR335.txt \
+	SCR355.txt \
+	SDI010.txt \
 	sid800.txt \
 	SIM_Pocket_Combo.txt \
 	SK-3106.txt \
