@@ -26,6 +26,7 @@ Supported CCID readers:
   special USB frame is sent from the reader. If the frame size if a
   multiple of wMaxPacketSize the communication is stopped.
 - Athena ASE IIIe USB V2 [29]
+- Athena ASE IIIe KB USB [42]
 - Cherry XX33 keyboard [?]
 - Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
 - Cherry SmartTerminal ST2000U [35]
@@ -445,6 +446,7 @@ References:
 [39] http://www.scmmicro.com/security/SDI_010.html
 [40] http://www.winbond.com.tw/E-WINBONDHTM/partner/b_2_e_4.htm
 [41] http://www.gemplus.com/products/gempc_card/
+[42] http://www.asedrive.com/product.asp?pid=2
 
 $Id$
 
