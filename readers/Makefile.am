@@ -2,6 +2,8 @@
 
 EXTRA_DIST = \
 	ACR38U-CCID.txt \
+	ASE_IIIe.txt \
+	ASEDrive_IIIe_KB.txt \
 	ActivCardV2.txt \
 	ActivCardV3.txt \
 	AxaltoV3.txt \
