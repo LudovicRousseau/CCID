@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "misc.h"
 #include <pcsclite.h>
 #include <ifdhandler.h>
 #include <reader.h>
