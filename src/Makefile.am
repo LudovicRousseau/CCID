@@ -30,11 +30,7 @@ T1 = towitoko/atr.c \
 	openct/checksum.h \
 	openct/proto-t1.c \
 	openct/proto-t1.h
-
-# needed when used without pcsc-lite (Solaris)
-if NEED_PARSER
-TOKEN_PARSER = tokenparser_fake.l
-endif
+TOKEN_PARSER = tokenparser.l parser.h
 
 if WITHOUT_PCSC
 PROVIDED_BY_PCSC = debug.c
@@ -49,15 +45,12 @@ libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(T1)
 libccidtwin_la_CFLAGS = $(PCSC_CFLAGS) $(PTHREAD_CFLAGS) -DTWIN_SERIAL
 libccidtwin_la_LIBADD = $(PTHREAD_LIBS)
 
-parse_SOURCES = tokenparser.l parse.c parser.h debug.c
+parse_SOURCES = parse.c debug.c
 parse_LDADD = libccid.la
 parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS)
 
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE
-
-tokenparser_fake.l: tokenparser.l
-	cp -f $^ $@
 
 # do not install the serial driver by default
 # use explicitely 'make install_ccidtwin'
