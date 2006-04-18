@@ -30,7 +30,10 @@ T1 = towitoko/atr.c \
 	openct/checksum.h \
 	openct/proto-t1.c \
 	openct/proto-t1.h
-TOKEN_PARSER = tokenparser.l parser.h
+TOKEN_PARSER = tokenparser.l parser.h \
+	strlcpy.c \
+	misc.h \
+	strlcpycat.h
 
 if WITHOUT_PCSC
 PROVIDED_BY_PCSC = debug.c
