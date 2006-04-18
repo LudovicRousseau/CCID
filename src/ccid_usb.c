@@ -31,6 +31,7 @@
 # endif
 #include <usb.h>
 
+#include "misc.h"
 #include "ccid.h"
 #include "config.h"
 #include "debug.h"
@@ -632,7 +633,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
  *					get_ccid_usb_interface
  *
  ****************************************************************************/
-/*@null@*/ struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
+/*@null@*/ EXTERNAL struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
 {
 	struct usb_interface *usb_interface = NULL; 
 	int i;
