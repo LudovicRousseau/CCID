@@ -65,7 +65,7 @@ static unsigned int T1_card_timeout(double f, double d, int TC1, int BWI,
 	int CWI, int clock_frequency);
 
 
-RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
+EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	int reader_index;
@@ -109,7 +109,7 @@ RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
 } /* IFDHCreateChannelByName */
 
 
-RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
+EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 {
 	/*
 	 * Lun - Logical Unit Number, use this for multiple card slots or
@@ -186,7 +186,7 @@ RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 } /* IFDHCreateChannel */
 
 
-RESPONSECODE IFDHCloseChannel(DWORD Lun)
+EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 {
 	/*
 	 * This function should close the reader communication channel for the
@@ -227,7 +227,7 @@ RESPONSECODE IFDHCloseChannel(DWORD Lun)
 } /* IFDHCloseChannel */
 
 
-RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
+EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	PDWORD Length, PUCHAR Value)
 {
 	/*
@@ -311,7 +311,7 @@ RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 } /* IFDHGetCapabilities */
 
 
-RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
+EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	/*@unused@*/ DWORD Length, /*@unused@*/ PUCHAR Value)
 {
 	/*
@@ -342,7 +342,7 @@ RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 } /* IFDHSetCapabilities */
 
 
-RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
+EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	UCHAR Flags, UCHAR PTS1, UCHAR PTS2, UCHAR PTS3)
 {
 	/*
@@ -740,7 +740,7 @@ RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 } /* IFDHSetProtocolParameters */
 
 
-RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
+EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	PUCHAR Atr, PDWORD AtrLength)
 {
 	/*
@@ -849,7 +849,7 @@ end:
 } /* IFDHPowerICC */
 
 
-RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
+EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	PUCHAR TxBuffer, DWORD TxLength,
 	PUCHAR RxBuffer, PDWORD RxLength, /*@unused@*/ PSCARD_IO_HEADER RecvPci)
 {
@@ -905,8 +905,9 @@ RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 } /* IFDHTransmitToICC */
 
 
-RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
-	DWORD TxLength, PUCHAR RxBuffer, DWORD RxLength, PDWORD pdwBytesReturned)
+EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
+	PUCHAR TxBuffer, DWORD TxLength, PUCHAR RxBuffer, DWORD RxLength,
+	PDWORD pdwBytesReturned) 
 {
 	/*
 	 * This function performs a data exchange with the reader (not the
@@ -1016,7 +1017,7 @@ RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode, PUCHAR TxBuffer,
 } /* IFDHControl */
 
 
-RESPONSECODE IFDHICCPresence(DWORD Lun)
+EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 {
 	/*
 	 * This function returns the status of the card inserted in the
