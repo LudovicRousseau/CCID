@@ -8,6 +8,7 @@ EXTRA_DIST = \
 	ASE_IIIe.txt \
 	AxaltoV3.txt \
 	CardMan3121.txt \
+	CardMan3621.txt \
 	CardMan3821.txt \
 	CardMan5125.txt \
 	CardMan6121.txt \
