@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 001/041
  idVendor: 0x08E6
   iManufacturer: Gemplus
  idProduct: 0x3438
@@ -27,11 +26,11 @@ Parsing Interface Descriptor for device: 001/041
    T=1
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
-  bNumClockSupported: 0x00
+  bNumClockSupported: 0 (will use whatever is returned)
    Support 4000 kHz
   dwDataRate: 10752 bps
   dwMaxDataRate: 344086 bps
-  bNumDataRatesSupported: 0
+  bNumDataRatesSupported: 0 (will use whatever is returned)
    Support 10753 bps
    Support 14337 bps
    Support 15625 bps
@@ -82,8 +81,8 @@ Parsing Interface Descriptor for device: 001/041
    ..02.. NAD value other than 00 accepted (T=1)
    01.... TPDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
-  bClassGetResponse: 0
-  bClassEnveloppe: 0
+  bClassGetResponse: 0x00
+  bClassEnveloppe: 0x00
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1

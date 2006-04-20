@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 002/003
  idVendor: 0x04E6
   iManufacturer: SCM Microsystems Inc.
  idProduct: 0x5116
@@ -25,11 +24,11 @@ Parsing Interface Descriptor for device: 002/003
    T=1
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 12.000 MHz
-  bNumClockSupported: 0x00
+  bNumClockSupported: 0 (will use whatever is returned)
    IFD does not support GET CLOCK FREQUENCIES request
   dwDataRate: 9600 bps
   dwMaxDataRate: 307200 bps
-  bNumDataRatesSupported: 0
+  bNumDataRatesSupported: 0 (will use whatever is returned)
    IFD does not support GET_DATA_RATES request
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
@@ -43,8 +42,10 @@ Parsing Interface Descriptor for device: 002/003
    ....80 Automatic PPS made by the CCID
    01.... TPDU level exchange
   dwMaxCCIDMessageLength: 263 bytes
-  bClassGetResponse: 255
-  bClassEnveloppe: 255
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1

@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 002/007
  idVendor: 0x0B97
   iManufacturer: O2
  idProduct: 0x7762
@@ -26,11 +25,11 @@ Parsing Interface Descriptor for device: 002/007
    T=1
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
-  bNumClockSupported: 0x00
+  bNumClockSupported: 0 (will use whatever is returned)
    Support 4000 kHz
   dwDataRate: 9600 bps
   dwMaxDataRate: 307200 bps
-  bNumDataRatesSupported: 0
+  bNumDataRatesSupported: 0 (will use whatever is returned)
    Support 9600 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
@@ -41,8 +40,8 @@ Parsing Interface Descriptor for device: 002/007
    ....20 Automatic baud rate change according to frequency and Fi, Di params
    00.... Character level exchange
   dwMaxCCIDMessageLength: 271 bytes
-  bClassGetResponse: 0
-  bClassEnveloppe: 0
+  bClassGetResponse: 0x00
+  bClassEnveloppe: 0x00
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1

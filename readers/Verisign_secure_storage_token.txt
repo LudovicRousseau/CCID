@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 001/108
  idVendor: 0x08E6
   iManufacturer: Gemplus
  idProduct: 0x1359
