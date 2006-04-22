@@ -178,6 +178,20 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.0.1 - 22 April 2006, Ludovic Rousseau
+    - add support for Axalto Reflex USB v3, SCM Micro SDI 010, Winbond
+      Electronics W81E381 chipset, Gemplus GemPC Card, Athena ASE IIIe
+      KB USB, OmniKey CardMan 3621
+    - support Solaris (Solaris uses a different libusb)
+    - better documentation for ./configure arguments
+    - improve support of Cherry XX44 keyboard for PIN verify and change
+      (circumvent firmware bugs)
+    - do not use LTPBundleFindValueWithKey() from pcscd since this
+      function has been removed from pcscd API
+    - use -fvisibility=hidden is available to limit the number of
+      exported symbols
+
+
 1.0.0 - 3 March 2006, Ludovic Rousseau
     - add support for ActivCard USB Reader 3.0, Athena ASE IIIe USB V2,
       SCM Micro SCR 355, SCR 3311, SCR 3320, SCR 3340 ExpressCard54,
