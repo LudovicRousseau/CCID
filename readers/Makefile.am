@@ -29,6 +29,7 @@ EXTRA_DIST = \
 	KAAN_Base.txt \
 	KAAN_SIM_III.txt \
 	LTC31.txt \
+	LTC31v2.txt \
 	mIDentity.txt \
 	MySmartPad.txt \
 	Oz776S.txt \
