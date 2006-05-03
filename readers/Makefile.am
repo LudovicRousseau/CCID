@@ -7,6 +7,7 @@ EXTRA_DIST = \
 	ASEDrive_IIIe_KB.txt \
 	ASE_IIIe.txt \
 	AxaltoV3.txt \
+	CardMan3021.txt \
 	CardMan3121.txt \
 	CardMan3621.txt \
 	CardMan3821.txt \
