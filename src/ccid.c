@@ -187,6 +187,8 @@ int ccid_open_hack(unsigned int reader_index)
 
 		/* SCM SCR331-DI contactless */
 		case SCR331DI:
+		/* SCM SCR331-DI-NTTCOM contactless */
+		case SCR331DINTTCOM:
 		/* SCM SDI010 contactless */
 		case SDI010:
 			/* the contactless reader is in the second slot */
