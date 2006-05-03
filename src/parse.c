@@ -319,11 +319,11 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	}
 	printf("  dwMaxIFSD: %d\n", dw2i(extra, 28));
 	printf("  dwSynchProtocols: 0x%08X\n", dw2i(extra, 32));
-	if (extra[35] & 0x01)
+	if (extra[32] & 0x01)
 			printf("   2-wire protocol\n");
-	if (extra[35] & 0x02)
+	if (extra[32] & 0x02)
 			printf("   3-wire protocol\n");
-	if (extra[35] & 0x04)
+	if (extra[32] & 0x04)
 			printf("   I2C protocol\n");
 
 	printf("  dwMechanical: 0x%08X\n", dw2i(extra, 36));
