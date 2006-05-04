@@ -340,8 +340,8 @@ int main(int argc, char *argv[])
 
 		FD_ZERO(&fd);
 		FD_SET(STDIN_FILENO, &fd);	/* stdin */
-		timeout.tv_sec = 0;			/* timeout = 0 */
-		timeout.tv_usec = 0;
+		timeout.tv_sec = 0;			/* timeout = 0.1s */
+		timeout.tv_usec = 100000;
 
 		/* we only try to read stdin if the pinpad is on a keyboard
 		 * we do not read stdin for a SPR 532 for example */
@@ -484,8 +484,8 @@ int main(int argc, char *argv[])
 		{
 			FD_ZERO(&fd);
 			FD_SET(STDIN_FILENO, &fd);	/* stdin */
-			timeout.tv_sec = 0;			/* timeout = 0 */
-			timeout.tv_usec = 0;
+			timeout.tv_sec = 0;			/* timeout = 0.1s */
+			timeout.tv_usec = 100000;
 
 			/* we only try to read stdin if the pinpad is on a keyboard
 			 * we do not read stdin for a SPR 532 for example */
