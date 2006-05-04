@@ -82,3 +82,5 @@
 # Winbond Electronics (for OEM only so the name may be different)
 0x0416:0x3815:Winbond
 
+# HP
+0x03F0:0x1024:HP USB Smart Card Keyboard
