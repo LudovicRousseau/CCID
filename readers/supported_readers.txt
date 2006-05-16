@@ -43,6 +43,7 @@
 # ActivCard
 0x09C3:0x0008:ActivCard USB Reader 2.0
 0x09C3:0x0013:ActivCard USB Reader 3.0
+0x09C3:0x0014:Activkey Sim
 
 # Silitek
 0x047B:0x020B:Silitek SK-3105
