@@ -173,7 +173,10 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 
 	/* we can't talk to a dead card / reader. Reset it! */
 	if (t1->state == DEAD)
+	{
+		DEBUG_CRITICAL("T=1 state machine is DEAD. Reset the card first.");
 		return -1;
+	}
 
 	t1->state = SENDING;
 	retries = t1->retries;
