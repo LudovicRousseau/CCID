@@ -2,7 +2,7 @@
   iManufacturer: SCM Microsystems Inc.
  idProduct: 0xE003
   iProduct: SPRx32 USB Smart Card Reader
- bcdDevice: 5.07 (firmware release?)
+ bcdDevice: 5.10 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -32,7 +32,7 @@
   dwMaxDataRate: 344105 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
    IFD does not support GET_DATA_RATES request
-  dwMaxIFSD: 252
+  dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
@@ -43,7 +43,7 @@
    ....20 Automatic baud rate change according to frequency and Fi, Di params
    ....80 Automatic PPS made by the CCID
    01.... TPDU level exchange
-  dwMaxCCIDMessageLength: 263 bytes
+  dwMaxCCIDMessageLength: 270 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnveloppe: 0xFF
