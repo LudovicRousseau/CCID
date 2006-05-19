@@ -377,7 +377,10 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 			t1->nr ^= 1;
 
 			if (ct_buf_put(&rbuf, sdata + 3, sdata[LEN]) < 0)
+			{
+				DEBUG_CRITICAL2("buffer overrun by %d bytes", sdata[LEN] - (rbuf.size - rbuf.tail));
 				goto error;
+			}
 
 			if ((pcb & T1_MORE_BLOCKS) == 0)
 				goto done;
