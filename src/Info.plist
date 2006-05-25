@@ -102,7 +102,7 @@
 	</array>
 
 	<key>Copyright</key>
-	<string>This driver is protected by terms of the GNU General Public License version 2, or (at your option) any later version.</string>
+	<string>This driver is protected by terms of the GNU Lesser General Public License version 2.1, or (at your option) any later version.</string>
 
 </dict>
 </plist>
