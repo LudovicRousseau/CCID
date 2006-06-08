@@ -87,6 +87,10 @@ case "$host" in
 		CFLAGS="$CFLAGS -no-cpp-precomp"
 	fi
 	;;
+*-*-freebsd*)
+	BUNDLE_HOST="FreeBSD"
+	DYN_LIB_EXT="so"
+	;;
 *-*-openbsd*)
 	BUNDLE_HOST="OpenBSD"
 	DYN_LIB_EXT="so.0.0"
