@@ -349,7 +349,8 @@ void ccid_error(int error, char *file, int line, const char *function)
 				text = var_text;
 			}
 			else
-				text = "Unknown CCID error";
+				sprintf(var_text, "Unknown CCID error: 0x%02X", error);
+				text = var_text;
 			break;
 	}
 	log_msg(PCSC_LOG_ERROR, "%s:%d:%s %s", file, line, function, text);
