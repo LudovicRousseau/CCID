@@ -24,6 +24,7 @@
 #define SIZE_GET_SLOT_STATUS 10
 #define STATUS_OFFSET 7
 #define ERROR_OFFSET 8
+#define CHAIN_PARAMETER_OFFSET 9
 
 RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned char buffer[], int voltage);
