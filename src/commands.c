@@ -43,6 +43,10 @@
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 
 /* internal functions */
+static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
+	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
+	unsigned char rx_buffer[]);
+
 static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[]);
@@ -866,6 +870,126 @@ time_request:
 
 	return IFD_SUCCESS;
 } /* CCID_Receive */
+
+
+/*****************************************************************************
+ *
+ *					CmdXfrBlockAPDU_extended
+ *
+ ****************************************************************************/
+static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
+	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
+	unsigned char rx_buffer[])
+{
+	RESPONSECODE return_value;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	unsigned char chain_parameter;
+	unsigned int local_tx_length, sent_length;
+	unsigned int local_rx_length, received_length;
+
+	DEBUG_COMM2("T=0 (extended): %d bytes", tx_length);
+
+	/* send the APDU */
+	sent_length = 0;
+
+	/* we suppose one command is enough */
+	chain_parameter = 0x00;
+
+	local_tx_length = tx_length - sent_length;
+	if (local_tx_length > CMD_BUF_SIZE)
+	{
+		local_tx_length = CMD_BUF_SIZE;
+		/* the command APDU begins with this command, and continue in the next
+		 * PC_to_RDR_XfrBlock */
+		chain_parameter = 0x01;
+	}
+	if (local_tx_length > ccid_descriptor->dwMaxCCIDMessageLength-10)
+	{
+		local_tx_length = ccid_descriptor->dwMaxCCIDMessageLength-10;
+		chain_parameter = 0x01;
+	}
+
+send_next_block:
+	return_value = CCID_Transmit(reader_index, local_tx_length, tx_buffer,
+		chain_parameter, 0);
+	if (return_value != IFD_SUCCESS)
+		return return_value;
+
+	sent_length += local_tx_length;
+	tx_buffer += local_tx_length;
+
+	/* we just sent the last block (0x02) or only one block was needded (0x00) */
+	if ((0x02 == chain_parameter) || (0x00 == chain_parameter))
+		goto receive_block;
+
+	/* read a nul block */
+	return_value = CCID_Receive(reader_index, &local_rx_length, NULL, NULL);
+	if (return_value != IFD_SUCCESS)
+		return return_value;
+
+	/* size of the next block */
+	if (tx_length - sent_length > local_tx_length)
+	{
+		/* the abData field continues a command APDU and
+		 * another block is to follow */
+		chain_parameter = 0x03;
+	}
+	else
+	{
+		/* this abData field continues a command APDU and ends
+		 * the APDU command */
+		chain_parameter = 0x02;
+
+		/* last (smaller) block */
+		local_tx_length = tx_length - sent_length;
+	}
+
+	goto send_next_block;
+
+receive_block:
+	/* receive the APDU */
+	received_length = 0;
+
+receive_next_block:
+	local_rx_length = *rx_length - received_length;
+	return_value = CCID_Receive(reader_index, &local_rx_length, rx_buffer,
+		&chain_parameter);
+	if (return_value != IFD_SUCCESS)
+		return return_value;
+
+	/* advance in the reiceiving buffer */
+	rx_buffer += local_rx_length;
+	received_length += local_rx_length;
+
+	switch (chain_parameter)
+	{
+		/* the response APDU begins and ends in this command */
+		case 0x00:
+		/* this abData field continues the response APDU and ends the response
+		 * APDU */
+		case 0x02:
+			break;
+
+		/* the response APDU begins with this command and is to continue */
+		case 0x01:
+		/* this abData field continues the response APDU and another block is
+		 * to follow */
+		case 0x03:
+		/* empty abData field, continuation of the command APDU is expected in
+		 * next PC_to_RDR_XfrBlock command */
+		case 0x10:
+			/* send a nul block */
+			return_value = CCID_Transmit(reader_index, 0, NULL, 0, 0);
+			if (return_value != IFD_SUCCESS)
+				return return_value;
+
+			goto receive_next_block;
+	}
+
+	*rx_length = received_length;
+
+	return IFD_SUCCESS;
+} /* CmdXfrBlockTPDU_T0_extended */
 
 
 /*****************************************************************************
