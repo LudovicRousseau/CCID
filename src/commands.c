@@ -797,7 +797,10 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 
 	/* check that the command is not too large */
 	if (tx_length > CMD_BUF_SIZE)
+	{
+		DEBUG_CRITICAL2("TX Length too big: %d", tx_length);
 		return IFD_NOT_SUPPORTED;
+	}
 
 	memcpy(cmd+10, tx_buffer, tx_length);
 
