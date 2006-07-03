@@ -136,6 +136,7 @@ typedef struct
 #define SPR532		0x04E6E003
 #define MYSMARTPAD	0x09BE0002
 #define CHERRYXX44	0x046a0010
+#define CL1356D		0x0B810200
 
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
