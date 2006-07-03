@@ -713,24 +713,6 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	/* command length too big for CCID reader? */
-	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength)
-	{
-		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
-			tx_length, ccid_descriptor->dwMaxCCIDMessageLength);
-		return_value = IFD_COMMUNICATION_ERROR;
-		goto clean_up_and_return;
-	}
-
-	/* command length too big for CCID driver? */
-	if (tx_length > CMD_BUF_SIZE)
-	{
-		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
-			tx_length, CMD_BUF_SIZE);
-		return_value = IFD_COMMUNICATION_ERROR;
-		goto clean_up_and_return;
-	}
-
 	/* APDU or TPDU? */
 	switch (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK)
 	{
@@ -891,8 +873,25 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	DEBUG_COMM2("T=0: %d bytes", tx_length);
+
+	/* command length too big for CCID reader? */
+	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength-10)
+	{
+		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
+				tx_length, ccid_descriptor->dwMaxCCIDMessageLength-10);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* command length too big for CCID driver? */
+	if (tx_length > CMD_BUF_SIZE)
+	{
+		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
+				tx_length, CMD_BUF_SIZE);
+		return IFD_COMMUNICATION_ERROR;
+	}
 
 	return_value = CCID_Transmit(reader_index, tx_length, tx_buffer, 0, 0);
 	if (return_value != IFD_SUCCESS)
