@@ -54,7 +54,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI);
 
 RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
-	unsigned char rx_buffer[]);
+	unsigned char rx_buffer[], unsigned char *chain_parameter);
 
 RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	unsigned int length, unsigned char buffer[]);

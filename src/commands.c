@@ -799,7 +799,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
  *
  ****************************************************************************/
 RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
-	unsigned char rx_buffer[])
+	unsigned char rx_buffer[], unsigned char *chain_parameter)
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	unsigned int length;
