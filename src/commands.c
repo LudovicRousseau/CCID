@@ -865,10 +865,13 @@ time_request:
 	}
 
 	length = dw2i(cmd, 1);
-	if (length < *rx_length)
+	if (length <= *rx_length)
 		*rx_length = length;
 	else
+	{
+		DEBUG_CRITICAL2("overrun by %d bytes", length - *rx_length);
 		length = *rx_length;
+	}
 	memcpy(rx_buffer, cmd+10, length);
 
 	return IFD_SUCCESS;
