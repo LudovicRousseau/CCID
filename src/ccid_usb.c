@@ -249,7 +249,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	else
 		return STATUS_UNSUCCESSFUL;
 	vendorID = strlen(keyValue);
-	alias = 0x1D;
+	alias = 0x1C;
 	for (; vendorID--;)
 		alias ^= keyValue[vendorID];
 
@@ -493,7 +493,9 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 {
 	int rv;
 	char debug_header[] = "<- 121234 ";
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
+read_again:
 	sprintf(debug_header, "<- %06X ", (int)reader_index);
 
 	rv = usb_bulk_read(usbDevice[reader_index].handle,
@@ -512,6 +514,13 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 	*length = rv;
 
 	DEBUG_XXD(debug_header, buffer, *length);
+
+#define BSEQ_OFFSET 6
+	if (buffer[BSEQ_OFFSET] < *ccid_descriptor->pbSeq -1)
+	{
+		DEBUG_INFO("Duplicate frame detected");
+		goto read_again;
+	}
 
 	return STATUS_SUCCESS;
 } /* ReadUSB */
