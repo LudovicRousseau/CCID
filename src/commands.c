@@ -761,7 +761,6 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 			return_value = IFD_COMMUNICATION_ERROR;
 	}
 
-clean_up_and_return:
 	return return_value;
 } /* CmdXfrBlock */
 
