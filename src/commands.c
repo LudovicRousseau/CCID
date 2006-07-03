@@ -733,11 +733,15 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 			break;
 
 		case CCID_CLASS_SHORT_APDU:
-		case CCID_CLASS_EXTENDED_APDU:
-			/* We only support extended APDU if the reader can support the
-			 * command length. See test above */
 			return_value = CmdXfrBlockTPDU_T0(reader_index,
 				tx_length, tx_buffer, rx_length, rx_buffer);
+			break;
+
+		case CCID_CLASS_EXTENDED_APDU:
+			return_value = CmdXfrBlockAPDU_extended(reader_index,
+				tx_length, tx_buffer, rx_length, rx_buffer);
+			if (return_value != IFD_SUCCESS)
+				*rx_length = 0;
 			break;
 
 		case CCID_CLASS_CHARACTER:
@@ -989,7 +993,7 @@ receive_next_block:
 	*rx_length = received_length;
 
 	return IFD_SUCCESS;
-} /* CmdXfrBlockTPDU_T0_extended */
+} /* CmdXfrBlockAPDU_extended */
 
 
 /*****************************************************************************
