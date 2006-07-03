@@ -859,6 +859,11 @@ time_request:
 	}
 	memcpy(rx_buffer, cmd+10, length);
 
+	/* Extended case?
+	 * Only valid for RDR_to_PC_DataBlock frames */
+	if (chain_parameter)
+		*chain_parameter = cmd[CHAIN_PARAMETER_OFFSET];
+
 	return IFD_SUCCESS;
 } /* CCID_Receive */
 
