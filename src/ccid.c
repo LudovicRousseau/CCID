@@ -225,6 +225,12 @@ int ccid_open_hack(unsigned int reader_index)
 		case MYSMARTPAD:
 			ccid_descriptor->dwMaxIFSD = 254;
 			break;
+
+		case CL1356D:
+			/* the firmware needs some time to initialize */
+			sleep(1);
+			ccid_descriptor->readTimeout = 60; /* 60 seconds */
+			break;
 	}
 
 	return 0;
