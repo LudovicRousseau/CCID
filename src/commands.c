@@ -292,7 +292,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		return IFD_COMMUNICATION_ERROR;
 	}
 
-	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
+	ret = CCID_Receive(reader_index, RxLength, RxBuffer, NULL);
 
 	/* T=1 Protocol Management for a TPDU reader */
 	if ((IFD_SUCCESS == ret)
@@ -512,7 +512,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
  		return IFD_COMMUNICATION_ERROR;
 	}
 
- 	ret = CCID_Receive(reader_index, RxLength, RxBuffer);
+ 	ret = CCID_Receive(reader_index, RxLength, RxBuffer, NULL);
 
 	/* T=1 Protocol Management for a TPDU reader */
 	if ((IFD_SUCCESS == ret)
@@ -897,7 +897,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	if (return_value != IFD_SUCCESS)
 		return return_value;
 
-	return CCID_Receive(reader_index, rx_length, rx_buffer);
+	return CCID_Receive(reader_index, rx_length, rx_buffer, NULL);
 } /* CmdXfrBlockTPDU_T0 */
 
 
@@ -1000,7 +1000,7 @@ static RESPONSECODE T0ProcACK(unsigned int reader_index,
 		if (return_value != IFD_SUCCESS)
 			return return_value;
 
-		return_value = CCID_Receive(reader_index, &ret_len, tmp_buf);
+		return_value = CCID_Receive(reader_index, &ret_len, tmp_buf, NULL);
 		if (return_value != IFD_SUCCESS)
 			return return_value;
 
@@ -1062,7 +1062,7 @@ static RESPONSECODE T0ProcSW1(unsigned int reader_index,
 
 		in_len = 1;
 
-		return_value = CCID_Receive(reader_index, &in_len, tmp_buf);
+		return_value = CCID_Receive(reader_index, &in_len, tmp_buf, NULL);
 		if (return_value != IFD_SUCCESS)
 			return return_value;
 
@@ -1153,7 +1153,7 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 		if (in_len == 0)
 		{
 			in_len = 1;
-			return_value = CCID_Receive(reader_index, &in_len, tmp_buf);
+			return_value = CCID_Receive(reader_index, &in_len, tmp_buf, NULL);
 			if (return_value != IFD_SUCCESS)
 			{
 				DEBUG_CRITICAL("CCID_Receive failed");

@@ -60,7 +60,7 @@ PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
 
   /* Get PPS confirm */
   len_confirm = sizeof(confirm);
-  if (CCID_Receive (lun, &len_confirm, confirm) != IFD_SUCCESS)
+  if (CCID_Receive (lun, &len_confirm, confirm, NULL) != IFD_SUCCESS)
     return PPS_ICC_ERROR;
 
   DEBUG_XXD ("PPS: Receiving confirm: ", confirm, len_confirm);
