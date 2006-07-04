@@ -41,6 +41,7 @@
 
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#define IFD_ERROR_INSUFFICIENT_BUFFER 700
 
 /* internal functions */
 static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
@@ -810,6 +811,7 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	unsigned int length;
+	RESPONSECODE return_value = IFD_SUCCESS;
 
 time_request:
 	length = sizeof(cmd);
@@ -863,6 +865,7 @@ time_request:
 	{
 		DEBUG_CRITICAL2("overrun by %d bytes", length - *rx_length);
 		length = *rx_length;
+		return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 	}
 	memcpy(rx_buffer, cmd+10, length);
 
@@ -871,7 +874,7 @@ time_request:
 	if (chain_parameter)
 		*chain_parameter = cmd[CHAIN_PARAMETER_OFFSET];
 
-	return IFD_SUCCESS;
+	return return_value;
 } /* CCID_Receive */
 
 
@@ -889,6 +892,7 @@ static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
 	unsigned char chain_parameter;
 	unsigned int local_tx_length, sent_length;
 	unsigned int local_rx_length, received_length;
+	int buffer_overflow = 0;
 
 	DEBUG_COMM2("T=0 (extended): %d bytes", tx_length);
 
@@ -957,6 +961,14 @@ receive_next_block:
 	local_rx_length = *rx_length - received_length;
 	return_value = CCID_Receive(reader_index, &local_rx_length, rx_buffer,
 		&chain_parameter);
+	if (IFD_ERROR_INSUFFICIENT_BUFFER == return_value)
+	{
+		buffer_overflow = 1;
+
+		/* we continue to read all the response APDU */
+		return_value = IFD_SUCCESS;
+	}
+
 	if (return_value != IFD_SUCCESS)
 		return return_value;
 
@@ -990,6 +1002,10 @@ receive_next_block:
 	}
 
 	*rx_length = received_length;
+
+	/* generate an overflow detected by pcscd */
+	if (buffer_overflow)
+		(*rx_length)++;
 
 	return IFD_SUCCESS;
 } /* CmdXfrBlockAPDU_extended */
