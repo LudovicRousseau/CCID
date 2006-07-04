@@ -516,7 +516,8 @@ read_again:
 	DEBUG_XXD(debug_header, buffer, *length);
 
 #define BSEQ_OFFSET 6
-	if (buffer[BSEQ_OFFSET] < *ccid_descriptor->pbSeq -1)
+	if ((*length >= BSEQ_OFFSET)
+		&& (buffer[BSEQ_OFFSET] < *ccid_descriptor->pbSeq -1))
 	{
 		DEBUG_INFO("Duplicate frame detected");
 		goto read_again;
