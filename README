@@ -25,6 +25,7 @@ Supported CCID readers:
   old versions of this reader have a bug: the reader do timeout when a
   special USB frame is sent from the reader. If the frame size if a
   multiple of wMaxPacketSize the communication is stopped.
+- Alcor Micro AU9520 [46]
 - Athena ASE IIIe USB V2 [29]
 - Athena ASE IIIe KB USB [42]
 - C3PO LTC31 (new model, USB product id 0x0006) [8]
@@ -470,6 +471,7 @@ References:
 [43] http://www.omnikey.com/index.php?id=50
 [44] http://h18000.www1.hp.com/products/quickspecs/12346_na/12346_na.HTML
 [45] http://www.id3semiconductors.com/produits/cl1356D.htm
+[46] http://www.alcormicro.com/products_detail.php?main_id=8&p_id=21
 
 $Id$
 
