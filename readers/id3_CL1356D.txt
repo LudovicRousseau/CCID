@@ -1,0 +1,50 @@
+ idVendor: 0x0B81
+  iManufacturer: id3 Semiconductors
+ idProduct: 0x0200
+  iProduct: Contactless Reader
+ bcdDevice: 0.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0002
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   Support 4000 kHz
+  dwDataRate: 106000 bps
+  dwMaxDataRate: 847000 bps
+  bNumDataRatesSupported: 4 
+   Support 106000 bps
+   Support 212000 bps
+   Support 424000 bps
+   Support 847000 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00040042
+   ....02 Automatic parameter configuration based on ATR data
+   ....40 Automatic parameters negotiation made by the CCID
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1

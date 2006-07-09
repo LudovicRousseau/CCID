@@ -79,6 +79,8 @@ manufacturers, please, contact me.
 - C3PO LTC32 [13]
 - Gemplus GemPC Express
 - HP USB Smart Card Keyboard [44]
+- id3 Semiconductors CL1356D [45] (tested by me but I don't have the
+  reader anymore)
 - OmniKey CardMan 3021
 - OmniKey CardMan 3621 [43]
 - OmniKey CardMan 3821 [37]
@@ -467,6 +469,7 @@ References:
 [42] http://www.asedrive.com/product.asp?pid=2
 [43] http://www.omnikey.com/index.php?id=50
 [44] http://h18000.www1.hp.com/products/quickspecs/12346_na/12346_na.HTML
+[45] http://www.id3semiconductors.com/produits/cl1356D.htm
 
 $Id$
 
