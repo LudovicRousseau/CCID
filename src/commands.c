@@ -821,6 +821,13 @@ time_request:
 		return IFD_COMMUNICATION_ERROR;
 	}
 
+	if (length < STATUS_OFFSET)
+	{
+		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
+		*rx_length = 0;
+		return IFD_COMMUNICATION_ERROR;
+	}
+
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
