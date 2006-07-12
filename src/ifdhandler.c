@@ -65,7 +65,7 @@ static unsigned int T1_card_timeout(double f, double d, int TC1, int BWI,
 	int CWI, int clock_frequency);
 
 
-EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPTSTR lpcDevice)
+EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	int reader_index;
