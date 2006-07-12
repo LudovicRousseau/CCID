@@ -1437,7 +1437,11 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 		if (0x00 == cmd[ERROR_OFFSET])	/* command not supported */
 			return IFD_NOT_SUPPORTED;
 		else
-			return IFD_COMMUNICATION_ERROR;
+			if ((cmd[ERROR_OFFSET] >= 1) && (cmd[ERROR_OFFSET] <= 127))
+				/* a parameter is not changeable */
+				return IFD_SUCCESS;
+			else
+				return IFD_COMMUNICATION_ERROR;
 	}
 
 	return IFD_SUCCESS;
