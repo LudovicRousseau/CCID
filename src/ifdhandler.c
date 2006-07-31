@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <arpa/inet.h>
 #include "misc.h"
 #include <pcsclite.h>
 #include <ifdhandler.h>
@@ -971,7 +972,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		{
 			pcsc_tlv -> tag = FEATURE_VERIFY_PIN_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
-			pcsc_tlv -> value = IOCTL_FEATURE_VERIFY_PIN_DIRECT;
+			pcsc_tlv -> value = htonl(IOCTL_FEATURE_VERIFY_PIN_DIRECT);
 
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
@@ -982,7 +983,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		{
 			pcsc_tlv -> tag = FEATURE_MODIFY_PIN_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
-			pcsc_tlv -> value = IOCTL_FEATURE_MODIFY_PIN_DIRECT;
+			pcsc_tlv -> value = htonl(IOCTL_FEATURE_MODIFY_PIN_DIRECT);
 
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);

@@ -26,6 +26,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <string.h>
+#include <arpa/inet.h>
 #include <winscard.h>
 #include <reader.h>
 
@@ -228,9 +229,9 @@ int main(int argc, char *argv[])
 	for (i = 0; i < length; i++)
 	{
 		if (pcsc_tlv[i].tag == FEATURE_VERIFY_PIN_DIRECT)
-			verify_ioctl = pcsc_tlv[i].value;
+			verify_ioctl = ntohl(pcsc_tlv[i].value);
 		if (pcsc_tlv[i].tag == FEATURE_MODIFY_PIN_DIRECT)
-			modify_ioctl = pcsc_tlv[i].value;
+			modify_ioctl = ntohl(pcsc_tlv[i].value);
 	}
 
 	if (0 == verify_ioctl)
