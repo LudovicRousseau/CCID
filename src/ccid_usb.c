@@ -505,9 +505,15 @@ read_again:
 	if (rv < 0)
 	{
 		*length = 0;
-		DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
-			usbDevice[reader_index].dev->bus->dirname,
-			usbDevice[reader_index].dev->filename, strerror(errno));
+		if (usbDevice[reader_index].dev->bus)
+		{
+			DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
+					usbDevice[reader_index].dev->bus->dirname,
+					usbDevice[reader_index].dev->filename, strerror(errno));
+		}
+		else
+			DEBUG_CRITICAL2("usb_bulk_read(no device): %s", strerror(errno));
+
 		return STATUS_UNSUCCESSFUL;
 	}
 
