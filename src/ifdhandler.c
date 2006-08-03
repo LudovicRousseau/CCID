@@ -1098,17 +1098,25 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 		unsigned char res[10];
 		unsigned int length_res = sizeof(res);
+		RESPONSECODE ret;
 
 		/* if DEBUG_LEVEL_PERIODIC is not set we remove DEBUG_LEVEL_COMM */
 		oldLogLevel = LogLevel;
 		if (! (LogLevel & DEBUG_LEVEL_PERIODIC))
 			LogLevel &= ~DEBUG_LEVEL_COMM;
 
-		CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res);
+		ret = CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res);
 
 		/* set back the old LogLevel */
 		LogLevel = oldLogLevel;
 
+		if (ret != IFD_SUCCESS)
+		{
+			DEBUG_INFO("CmdEscape failed");
+			/* simulate a card absent */
+			res[0] = 0;
+		}
+		
 		if (0x01 == res[0])
 			return_value = IFD_ICC_PRESENT;
 		else
