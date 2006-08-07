@@ -61,8 +61,8 @@ typedef enum {
 /* Flag set when a power down is requested */
 #define MASK_POWERFLAGS_PDWN 0x02
 
-/* Communication buffer size (max=cmd+adpu+Lc+data+Le) */
-#define CMD_BUF_SIZE (1+4+1+256+1)
+/* Communication buffer size (max=adpu+Lc+data+Le) */
+#define CMD_BUF_SIZE (4+1+256+1)
 /* Larger communication buffer size (max=reader status+data+sw) */
 #define RESP_BUF_SIZE (1+256+2)
 
