@@ -27,6 +27,7 @@ EXTRA_DIST = \
 	GemPCPinpad.txt \
 	GemPCTwin.txt \
 	HPUSBSmartCardKeyboard.txt \
+	iDream.txt \
 	KAAN_Advanced.txt \
 	KAAN_Base.txt \
 	KAAN_SIM_III.txt \

@@ -107,6 +107,11 @@ Unsupported or partly supported CCID readers:
 - C3PO LTC31 (old model, USB product id 0x0003) [8]
     The reader works fine with Linux kernel 2.4 but does not with Linux
     kernel 2.6. The ioctl() syscall returns EINVAL (Invalid argument)
+- iDream (THRC2002-2) [47]
+    PPS fails with a Cryptoflex card
+    powerup fails with a Setcos card
+    does work with the belgium eID (the reader is sold for this
+    application)
 - RSA SecureID SID800 [24]
     The USB layer is completely broken. The reader is sometimes not even
     seen on the USB bus (same problem under Windows). Maybe newer
@@ -271,7 +276,7 @@ History:
     - T=1 TPDU code:
       . the work on T=1 TPDU code was possible thanks to Gemplus
         validation team who helped me test, debug and bring the code to
-        an EMV validation level. Thanks to JÈrÙme, Jean-Yves, Xavier and
+        an EMV validation level. Thanks to J√©r√¥me, Jean-Yves, Xavier and
         the Gemplus readers department
       . error code was not checked correctly
       . avoid a (nearly) infinite loop when resynch are needed.
@@ -381,7 +386,7 @@ History:
     - move LTC31 reader from unsupported to supported reader list. It
       was my f ault since in used odd INS byte in my test applet and odd
       INS bytes are forbidden by ISO 7816-4 ch. 5.4.2 Instruction byte.
-      Thanks to Josep MonÈ s Teixidor for pointing the problem.
+      Thanks to Josep Mon√© s Teixidor for pointing the problem.
     - src/commands.c: comment out the automatic GET RESPONSE part. I
       don't think it should be in the driver. Maybe in pcscd instead?
 
@@ -392,7 +397,7 @@ History:
     - add --enable-libusb=PATH option is your libusb is not installed in
       /usr or /usr/local
     - honor DESTDIR in install rules (closes [ #300110 ]). Thanks to
-      Ville Skytt‰ for the patch.
+      Ville Skytt√§ for the patch.
     - src/ccid.c: do not switch the GemPC Key and GemPC Twin in APDU
       mode since it also swicth in EMV mode and may not work with non
       EMV cards
@@ -472,6 +477,7 @@ References:
 [44] http://h18000.www1.hp.com/products/quickspecs/12346_na/12346_na.HTML
 [45] http://www.id3semiconductors.com/produits/cl1356D.htm
 [46] http://www.alcormicro.com/products_detail.php?main_id=8&p_id=21
+[47] http://www.tai-hao.com/english/products_detail.php?main_id=4&second_id=13&p_id=53&now_rows=1
 
 $Id$
 
