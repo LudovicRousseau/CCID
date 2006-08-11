@@ -17,6 +17,7 @@ EXTRA_DIST = \
 	CherryST1044U.txt \
 	CherryXX33.txt \
 	CherryXX44.txt \
+	CL1356T.txt \
 	CryptoIdentity.txt \
 	DellSCRK.txt \
 	DellSK-3106.txt \

@@ -82,6 +82,8 @@ manufacturers, please, contact me.
 - HP USB Smart Card Keyboard [44]
 - id3 Semiconductors CL1356D [45] (tested by me but I don't have the
   reader anymore)
+- id3 Semiconductors CL1356T [48] (it should be the same firmware as the
+  CL1356D)
 - OmniKey CardMan 3021
 - OmniKey CardMan 3621 [43]
 - OmniKey CardMan 3821 [37]
@@ -478,6 +480,7 @@ References:
 [45] http://www.id3semiconductors.com/produits/cl1356D.htm
 [46] http://www.alcormicro.com/products_detail.php?main_id=8&p_id=21
 [47] http://www.tai-hao.com/english/products_detail.php?main_id=4&second_id=13&p_id=53&now_rows=1
+[48] http://www.id3semiconductors.com/produits/cl1356T.htm
 
 $Id$
 
