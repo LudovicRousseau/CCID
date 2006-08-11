@@ -208,6 +208,17 @@ if test "${usbdropdir}" = "" ; then
 	AC_MSG_ERROR([use --enable-usbdropdir=DIR])
 fi
 
+# --enable-twinserial
+AC_ARG_ENABLE(twinserial,
+	AC_HELP_STRING([--enable-twinserial],[also compile and install the serial Twin driver]),
+	[twinserial="${enableval}"], [twinserial=false])
+AC_MSG_RESULT([build and install serial Twin driver : $twinserial])
+if test "${twinserial}" = false ; then
+	AM_CONDITIONAL(WITH_TWIN_SERIAL, false)
+else
+	AM_CONDITIONAL(WITH_TWIN_SERIAL, true)
+fi
+
 # --enable-ccidtwindir=DIR
 AC_ARG_ENABLE(ccidtwindir,
 	AC_HELP_STRING([--enable-ccidtwindir=DIR],[directory to install the

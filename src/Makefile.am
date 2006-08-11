@@ -4,7 +4,12 @@ CCID_BUNDLE = ifd-ccid.bundle
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
 
-lib_LTLIBRARIES = libccid.la libccidtwin.la
+lib_LTLIBRARIES = libccid.la
+LIBS_TO_INSTALL = install_ccid
+if WITH_TWIN_SERIAL
+lib_LTLIBRARIES += libccidtwin.la
+LIBS_TO_INSTALL += install_ccidtwin
+endif
 bin_PROGRAMS = parse
 
 COMMON = ccid.c \
@@ -58,9 +63,7 @@ parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS)
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE
 
-# do not install the serial driver by default
-# use explicitely 'make install_ccidtwin'
-install: install_ccid
+install: $(LIBS_TO_INSTALL)
 
 install_ccid: libccid.la
 	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
