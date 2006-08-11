@@ -191,6 +191,26 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.1.0 - 11 August 2006, Ludovic Rousseau
+    - support Extended APDU (up to 64KB) for readers in TPDU mode (many
+      readers) or Extended APDU mode (very rare). This only works for
+      T=1 cards.
+    - add support for C3PO LTC31 (new version), OmniKey CardMan 3021, HP
+      USB Smart Card Keyboard, Actividentity (ActiveCard) Activkey Sim,
+      id3 Semiconductors CL1356D and CL1356T, Alcor Micro AU9520
+    - support the contactless interface of the SCR331-DI-NTTCOM
+    - add support of FreeBSD
+    - increase the USB timeout used for PIN verify/modify to not timeout
+      before the reader
+    - the 4-bytes value returned by CM_IOCTL_GET_FEATURE_REQUEST shall
+      be encoded in big endian as documented in PCSC v2 part 10 ch 2.2
+      page 2. The applications using this feature shall be updated (to
+      respect the PCSC specification).
+    - use ./configure --enable-twinserial to compile and install the the
+      driver for the GemPC Twin serial
+    - some minor bugs removed
+
+
 1.0.1 - 22 April 2006, Ludovic Rousseau
     - add support for Axalto Reflex USB v3, SCM Micro SDI 010, Winbond
       Electronics W81E381 chipset, Gemplus GemPC Card, Athena ASE IIIe
