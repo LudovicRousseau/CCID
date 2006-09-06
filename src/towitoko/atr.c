@@ -25,14 +25,14 @@
 #include <string.h>
 #include "debug.h"
 
-/* 
+/*
  * Not exported variables definition
  */
 
 static unsigned
-atr_num_ib_table[16] = 
-{ 
-  0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 
+atr_num_ib_table[16] =
+{
+  0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4
 };
 
 /*
@@ -40,24 +40,24 @@ atr_num_ib_table[16] =
  */
 
 static unsigned
-atr_f_table[16] = 
-{ 
-  372, 372, 558, 744, 1116, 1488, 1860, 0, 0, 512, 768, 1024, 1536, 2048, 0, 0 
+atr_f_table[16] =
+{
+  372, 372, 558, 744, 1116, 1488, 1860, 0, 0, 512, 768, 1024, 1536, 2048, 0, 0
 };
 
-static unsigned 
-atr_d_table[16] = 
-{ 
-  0, 1, 2, 4, 8, 16, 32, 64, 12, 20, 0, 0, 0, 0, 0, 0 
+static unsigned
+atr_d_table[16] =
+{
+  0, 1, 2, 4, 8, 16, 32, 64, 12, 20, 0, 0, 0, 0, 0, 0
 };
 
-static unsigned 
-atr_i_table[4] = 
-{ 
-  25, 50, 100, 0 
+static unsigned
+atr_i_table[4] =
+{
+  25, 50, 100, 0
 };
 
-/* 
+/*
  * Exported funcions definition
  */
 

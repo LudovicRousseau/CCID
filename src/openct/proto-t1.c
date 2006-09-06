@@ -456,7 +456,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				/* ISO 7816-3 Rule 9 */
 				DEBUG_CRITICAL("abort requested");
 				goto resync;
-				
+
 			case T1_S_IFS:
 				if (sdata[LEN] != 1)
 				{
@@ -468,7 +468,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				}
 
 				DEBUG_CRITICAL2("CT sent S-block with ifs=%u", sdata[DATA]);
-				if (sdata[DATA] == 0) 
+				if (sdata[DATA] == 0)
 					goto resync;
 				t1->ifsc = sdata[DATA];
 				ct_buf_putc(&tbuf, sdata[DATA]);
@@ -657,12 +657,12 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 	unsigned int rmax_int;
 
 	DEBUG_XXD("sending: ", block, slen);
-	
-	ccid_desc = get_ccid_descriptor(t1->lun);	
+
+	ccid_desc = get_ccid_descriptor(t1->lun);
 	oldReadTimeout = ccid_desc->readTimeout;
 
 	if (t1->wtx > 1)
-	{	
+	{
 		/* set the new temporary timeout at WTX card request */
 		ccid_desc->readTimeout *=  t1->wtx;
 		DEBUG_INFO2("New timeout at WTX request: %d sec",

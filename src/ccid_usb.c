@@ -24,7 +24,7 @@
 #define __CCID_USB__
 
 #include <stdio.h>
-#include <string.h> 
+#include <string.h>
 #include <errno.h>
 # ifdef S_SPLINT_S
 # include <sys/types.h>
@@ -372,7 +372,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 						DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
 							bus->dirname, dev->filename);
 						return STATUS_UNSUCCESSFUL;
-					}			
+					}
 
 					if (usb_interface->altsetting->extralen != 54)
 					{
@@ -622,7 +622,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 	int i;
 	int bEndpointAddress;
 	struct usb_interface *usb_interface = get_ccid_usb_interface(dev);
-	
+
 	/*
 	 * 3 Endpoints maximum: Interrupt In, Bulk In, Bulk Out
 	 */
@@ -651,7 +651,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
  ****************************************************************************/
 /*@null@*/ EXTERNAL struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
 {
-	struct usb_interface *usb_interface = NULL; 
+	struct usb_interface *usb_interface = NULL;
 	int i;
 
 	/* if multiple interfaces use the first one with CCID class type */

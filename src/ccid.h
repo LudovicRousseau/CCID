@@ -78,7 +78,7 @@ typedef struct
 	 * The array of data rates supported by the reader
 	 */
 	unsigned int *arrayOfSupportedDataRates;
-	
+
 	/*
 	 * Read communication port timeout
 	 * value is seconds

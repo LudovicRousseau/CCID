@@ -236,9 +236,9 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 			(void *)(TxBuffer + offsetof(PIN_VERIFY_STRUCTURE, abData)),
 			TxLength - offsetof(PIN_VERIFY_STRUCTURE, abData));
 
-		/* Create T=1 block */  
+		/* Create T=1 block */
 		ret = t1_build(&((get_ccid_slot(reader_index))->t1),
-			sdata, 0, T1_I_BLOCK, &sbuf, NULL); 
+			sdata, 0, T1_I_BLOCK, &sbuf, NULL);
 
 		/* Increment the sequence numbers  */
 		get_ccid_slot(reader_index)->t1.ns ^= 1;
@@ -446,9 +446,9 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 			(void *)(TxBuffer + offsetof(PIN_MODIFY_STRUCTURE, abData)),
 			TxLength - offsetof(PIN_MODIFY_STRUCTURE, abData));
 
-		/* Create T=1 block */  
+		/* Create T=1 block */
 		ret = t1_build(&((get_ccid_slot(reader_index))->t1),
-			sdata, 0, T1_I_BLOCK, &sbuf, NULL); 
+			sdata, 0, T1_I_BLOCK, &sbuf, NULL);
 
 		/* Increment the sequence numbers  */
 		get_ccid_slot(reader_index)->t1.ns ^= 1;

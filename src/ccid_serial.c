@@ -3,7 +3,7 @@
  * Copyright (C) 2001-2004 Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
  * Thanks to Niki W. Waibel <niki.waibel@gmx.net> for a prototype version
- * 
+ *
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
     License as published by the Free Software Foundation; either
@@ -165,7 +165,7 @@ static int get_bytes(unsigned int reader_index, unsigned char *buffer,
 
 
 /*****************************************************************************
- * 
+ *
  *				WriteSerial: Send bytes to the card reader
  *
  *****************************************************************************/
@@ -214,7 +214,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 
 
 /*****************************************************************************
- * 
+ *
  *				ReadSerial: Receive bytes from the card reader
  *
  *****************************************************************************/
@@ -242,7 +242,7 @@ start:
 		goto sync;
 
 	if (c >= 0x80)
-	{	
+	{
 		DEBUG_COMM2("time request: 0x%02X", c);
 		goto start;
 	}
@@ -338,7 +338,7 @@ ack:
 
 
 /*****************************************************************************
- * 
+ *
  *				get_bytes: get n bytes
  *
  *****************************************************************************/
@@ -392,7 +392,7 @@ int get_bytes(unsigned int reader_index, unsigned char *buffer, int length)
 
 
 /*****************************************************************************
- * 
+ *
  *				ReadChunk: read a minimum number of bytes
  *
  *****************************************************************************/
@@ -451,7 +451,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 
 
 /*****************************************************************************
- * 
+ *
  *				OpenSerial: open the port
  *
  *****************************************************************************/
@@ -462,7 +462,7 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 	DEBUG_COMM3("Reader index: %X, Channel: %d", reader_index, channel);
 
 	/*
-	 * Conversion of old-style ifd-hanler 1.0 CHANNELID 
+	 * Conversion of old-style ifd-hanler 1.0 CHANNELID
 	 */
 	if (channel == 0x0103F8)
 		channel = 1;
@@ -488,8 +488,8 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 } /* OpenSerial */
 
 /*****************************************************************************
- * 
- *				set_ccid_descriptor: init ccid descriptor 
+ *
+ *				set_ccid_descriptor: init ccid descriptor
  *				depending on reader type specified in device.
  *
  *				return: STATUS_UNSUCCESSFUL,
@@ -506,7 +506,7 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 	static int previous_reader_index = -1;
 
 	readerID = GEMPCTWIN;
-	if (0 == strcasecmp(reader_name,"GemCorePOSPro")) 
+	if (0 == strcasecmp(reader_name,"GemCorePOSPro"))
 		readerID = GEMCOREPOSPRO;
 	else if (0 == strcasecmp(reader_name,"GemCoreSIMPro"))
 		readerID = GEMCORESIMPRO;
@@ -625,7 +625,7 @@ end:
 
 
 /*****************************************************************************
- * 
+ *
  *				OpenSerialByName: open the port
  *
  *****************************************************************************/
@@ -781,7 +781,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 
 
 /*****************************************************************************
- * 
+ *
  *				CloseSerial: close the port
  *
  *****************************************************************************/

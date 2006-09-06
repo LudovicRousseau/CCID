@@ -28,14 +28,14 @@
  * DEBUG_CRITICAL2("text: %d", 1234);
  *  log "text: 1234" if (DEBUG_LEVEL_CRITICAL & DEBUG_LEVEL_CRITICAL) is TRUE
  * the format string can be anything printf() can understand
- * 
+ *
  * same thing for DEBUG_INFO, DEBUG_COMM and DEBUG_PERIODIC
  *
  * DEBUG_XXD(msg, buffer, size);
  *  log a dump of buffer if (LogLevel & DEBUG_LEVEL_COMM) is TRUE
  *
  */
- 
+
 #ifndef _GCDEBUG_H_
 #define  _GCDEBUG_H_
 

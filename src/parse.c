@@ -22,7 +22,7 @@
  */
 
 #include <stdio.h>
-#include <string.h> 
+#include <string.h>
 # ifdef S_SPLINT_S
 # include <sys/types.h>
 # endif
@@ -105,7 +105,7 @@ int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
 				fprintf(stderr, "Can't find a CCID interface on %s/%s\n",
 					bus->dirname, dev->filename);
 				continue;
-			}			
+			}
 
 			ccid_parse_interface_descriptor(dev_handle, dev);
 			usb_close(dev_handle);
@@ -149,15 +149,15 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		dev->descriptor.bcdDevice >> 8, dev->descriptor.bcdDevice & 0xFF);
 
 	usb_interface = get_ccid_usb_interface(dev)->altsetting;
-	
+
 	printf(" bLength: %d\n", usb_interface->bLength);
-	
+
 	printf(" bDescriptorType: %d\n", usb_interface->bDescriptorType);
-	
+
 	printf(" bInterfaceNumber: %d\n", usb_interface->bInterfaceNumber);
-	
+
 	printf(" bAlternateSetting: %d\n", usb_interface->bAlternateSetting);
-	
+
 	printf(" bNumEndpoints: %d\n", usb_interface->bNumEndpoints);
 
 	printf(" bInterfaceClass: 0x%02X", usb_interface->bInterfaceClass);
@@ -171,7 +171,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		else
 			printf("  Class is 0xFF (proprietary)\n");
 	}
-	
+
 	printf(" bInterfaceSubClass: %d\n", usb_interface->bInterfaceSubClass);
 	if (usb_interface->bInterfaceSubClass)
 		printf("  UNSUPPORTED SubClass\n");

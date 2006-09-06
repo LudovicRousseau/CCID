@@ -331,7 +331,7 @@ void ccid_error(int error, char *file, int line, const char *function)
 		case 0xFB:
 			text = "Hardware error";
 			break;
-			
+
 		case 0xFC:
 			text = "Overrun error";
 			break;

@@ -1,7 +1,7 @@
 /*
     pps.c
     Protocol Parameters Selection
-  
+
     This file is part of the Unix driver for Towitoko smartcard readers
     Copyright (C) 2000 2001 Carlos Prados <cprados@yahoo.com>
 

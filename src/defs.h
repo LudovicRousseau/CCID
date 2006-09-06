@@ -53,7 +53,7 @@ typedef enum {
 	STATUS_SECONDARY_SLOT        = 0xFF
 } status_t;
 
-/* Powerflag (used to detect quick insertion removals unnoticed by the 
+/* Powerflag (used to detect quick insertion removals unnoticed by the
  * resource manager)Initial value */
 #define POWERFLAGS_RAZ 0x00
 /* Flag set when a power up has been requested */

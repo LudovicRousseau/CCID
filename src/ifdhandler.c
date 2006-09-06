@@ -60,7 +60,7 @@ static int DebugInitialized = FALSE;
 static void init_driver(void);
 static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 static char find_baud_rate(unsigned int baudrate, unsigned int *list);
-static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2, 
+static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	int clock_frequency);
 static unsigned int T1_card_timeout(double f, double d, int TC1, int BWI,
 	int CWI, int clock_frequency);
@@ -926,7 +926,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 
 EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	PUCHAR TxBuffer, DWORD TxLength, PUCHAR RxBuffer, DWORD RxLength,
-	PDWORD pdwBytesReturned) 
+	PDWORD pdwBytesReturned)
 {
 	/*
 	 * This function performs a data exchange with the reader (not the
@@ -973,7 +973,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	}
 
 	/* Implement the PC/SC v2.1.2 Part 10 IOCTL mechanism */
-	
+
 	/* Query for features */
 	if (CM_IOCTL_GET_FEATURE_REQUEST == dwControlCode)
 	{
@@ -995,7 +995,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
-		
+
 		if (get_ccid_descriptor(reader_index) -> bPINSupport
 			& CCID_CLASS_PIN_MODIFY)
 		{
@@ -1147,7 +1147,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 			/* simulate a card absent */
 			res[0] = 0;
 		}
-		
+
 		if (0x01 == res[0])
 			return_value = IFD_ICC_PRESENT;
 		else
@@ -1291,7 +1291,7 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 			for (i=2; i<ATR_MAX_PROTOCOLS; i++)
 			{
 				/* CWI >= 2 ? */
-				if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present && 
+				if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present &&
 					((atr->ib[i][ATR_INTERFACE_BYTE_TB].value & 0x0F) >= 2))
 				{
 					/* Init TC1 */
@@ -1356,7 +1356,7 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	 * Terminal:                    Smart card:
 	 * 5 bytes header cmd  ->
 	 * 					  <-        Procedure byte + 256 data bytes + SW1-SW2
-	 * = 5 EGT          + 1 WWT     + 259 WWT			
+	 * = 5 EGT          + 1 WWT     + 259 WWT
 	 */
 
 	/* clock_frequency is in kHz so the times are in milliseconds and not
@@ -1402,11 +1402,11 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 	/* Timeout applied on ISO in + ISO out card exchange
 	 *
      * Timeout is the sum of:
-	 * - ISO in delay between leading edge of the first character sent by the 
+	 * - ISO in delay between leading edge of the first character sent by the
 	 *   interface device and the last one (NAD PCB LN APDU CKS) = 260 EGT,
 	 * - delay between ISO in and ISO out = BWT,
-	 * - ISO out delay between leading edge of the first character sent by the 
-	 *   card and the last one (NAD PCB LN DATAS CKS) = 260 CWT.   
+	 * - ISO out delay between leading edge of the first character sent by the
+	 *   card and the last one (NAD PCB LN DATAS CKS) = 260 CWT.
 	 */
 
 	/* clock_frequency is in kHz so the times are in milliseconds and not
