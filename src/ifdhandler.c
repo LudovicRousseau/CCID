@@ -1086,9 +1086,22 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	switch (pcbuffer[7] & CCID_ICC_STATUS_MASK)	/* bStatus */
 	{
 		case CCID_ICC_PRESENT_ACTIVE:
-		case CCID_ICC_PRESENT_INACTIVE:
 			return_value = IFD_ICC_PRESENT;
 			/* use default slot */
+			break;
+
+		case CCID_ICC_PRESENT_INACTIVE:
+			if (CcidSlots[reader_index].bPowerFlags == POWERFLAGS_RAZ)
+				/* the card was previously absent */
+				return_value = IFD_ICC_PRESENT;
+			else
+			{
+				/* the card was previously present but has been
+				 * removed and inserted between two consecutive
+				 * IFDHICCPresence() calls */
+				CcidSlots[reader_index].bPowerFlags = POWERFLAGS_RAZ;
+				return_value = IFD_ICC_NOT_PRESENT;
+			}
 			break;
 
 		case CCID_ICC_ABSENT:
