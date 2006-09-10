@@ -117,6 +117,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x09C3, 0x0008, 0x0203 },	/* ActivCard V2 */
 	{ 0x0DC3, 0x1004, 0x0502 },	/* ASE IIIe USBv2 */
 	{ 0x0DC3, 0x1102, 0x0607 },	/* ASE IIIe KB USB */
+	{ 0x058F, 0x9520, 0x0102 },	/* Alcor AU9520-G */
 };
 
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
