@@ -26,6 +26,8 @@ Supported CCID readers:
   special USB frame is sent from the reader. If the frame size if a
   multiple of wMaxPacketSize the communication is stopped.
 - Alcor Micro AU9520 [46]
+  Firmware 1.01 is bogus. The time request sent by the card is not
+  forwarded by the reader to the host.
 - Athena ASE IIIe USB V2 [29]
 - Athena ASE IIIe KB USB [42]
 - C3PO LTC31 (new model, USB product id 0x0006) [8]
