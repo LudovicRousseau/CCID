@@ -1,8 +1,8 @@
  idVendor: 0x058F
   iManufacturer: Generic
  idProduct: 0x9520
-  iProduct: EMV Smartcard Reader
- bcdDevice: 1.01 (firmware release?)
+  iProduct: PCSC Smartcard Reader
+ bcdDevice: 1.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
