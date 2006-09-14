@@ -86,7 +86,7 @@ manufacturers, please, contact me.
   reader anymore)
 - id3 Semiconductors CL1356T [48] (it should be the same firmware as the
   CL1356D)
-- OmniKey CardMan 3021
+- OmniKey CardMan 3021 [49]
 - OmniKey CardMan 3621 [43]
 - OmniKey CardMan 3821 [37]
 - OmniKey CardMan 5121 [33]
@@ -487,22 +487,23 @@ References:
 [31] http://scmmicro.com/security/SCR3311.html
 [31] http://scmmicro.com/security/SCR3320.html
 [32] http://www.smartepad.com.br/
-[33] http://www.omnikey.com/index.php?id=121
+[33] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=37
 [34] http://www.scmmicro.com/security/SCR3340.html
 [35] http://www.cherry.de/deutsch/advanced-line/advanced_smart_terminal_st-2000u.htm
-[36] http://www.omnikey.com/index.php?id=21
-[37] http://www.omnikey.com/index.php?id=114
+[36] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=29
+[37] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=33
 [38] http://www.reflexreaders.com/Products/reflex_usbnew.html
 [39] http://www.scmmicro.com/security/SDI_010.html
 [40] http://www.winbond.com.tw/E-WINBONDHTM/partner/b_2_e_4.htm
 [41] http://www.gemplus.com/products/gempc_card/
 [42] http://www.asedrive.com/product.asp?pid=2
-[43] http://www.omnikey.com/index.php?id=50
+[43] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=31
 [44] http://h18000.www1.hp.com/products/quickspecs/12346_na/12346_na.HTML
 [45] http://www.id3semiconductors.com/produits/cl1356D.htm
 [46] http://www.alcormicro.com/products_detail.php?main_id=8&p_id=21
 [47] http://www.tai-hao.com/english/products_detail.php?main_id=4&second_id=13&p_id=53&now_rows=1
 [48] http://www.id3semiconductors.com/produits/cl1356T.htm
+[49] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=48
 
 $Id$
 
