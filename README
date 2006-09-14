@@ -89,7 +89,7 @@ manufacturers, please, contact me.
 - OmniKey CardMan 3021
 - OmniKey CardMan 3621 [43]
 - OmniKey CardMan 3821 [37]
-- OmniKey CardMan 5125 [33]
+- OmniKey CardMan 5121 [33]
 - OmniKey CardMan 6121 [36]
 - SCM Micro SCR 331-DI NTTCom [23]
 - SCM Micro SCR 3310-NTTCOM [28]
@@ -232,7 +232,7 @@ History:
       SCM Micro SCR 355, SCR 3311, SCR 3320, SCR 3340 ExpressCard54,
       Gemplus GemCore SIM Pro, GemCore POS Pro (serial and USB), GemPC
       Express (ExpressCard/54 interface), SmartEpad (v 2.0), OmniKey
-      CardMan 5125 
+      CardMan 5121 
     - greatly improve support of PIN PAD readers. We now support TPDU
       readers with T=1 cards
     - use l10n strings for the Gemplus GemPC PIN PAD (it has a screen).
