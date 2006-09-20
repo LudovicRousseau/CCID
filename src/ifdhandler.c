@@ -322,6 +322,15 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			}
 			break;
 
+		case SCARD_ATTR_VENDOR_IFD_VERSION:
+			/* Vendor-supplied interface device version (DWORD in the form
+			 * 0xMMmmbbbb where MM = major version, mm = minor version, and
+			 * bbbb = build number). */
+			*Length = sizeof(DWORD);
+			if (Value)
+				*(DWORD *)Value = CCID_VERSION;
+			break;
+
 		default:
 			return IFD_ERROR_TAG;
 	}
