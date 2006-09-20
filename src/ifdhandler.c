@@ -331,6 +331,13 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*(DWORD *)Value = CCID_VERSION;
 			break;
 
+		case SCARD_ATTR_VENDOR_NAME:
+#define VENDOR_NAME "Ludovic Rousseau"
+			*Length = sizeof(VENDOR_NAME);
+			if (Value)
+				memcpy(Value, VENDOR_NAME, sizeof(VENDOR_NAME));
+			break;
+
 		default:
 			return IFD_ERROR_TAG;
 	}
