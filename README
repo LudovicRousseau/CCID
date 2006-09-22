@@ -51,6 +51,7 @@ Supported CCID readers:
 - Kobil KAAN SIM III [21]
 - Kobil mIDentity [22]
 - OmniKey CardMan 3121 [5]
+- RSA SecureID SID800 [50]
 - SCM Micro SCR 331 [6]
   You shall upgrade the firmware [17] using version 5.18 or later.
 - SCM Micro SCR 331-DI [11]
@@ -127,10 +128,6 @@ Unsupported or partly supported CCID readers:
     firmware version so you may be lucky to have a mostly working
     reader. Until I get one working reader and can verify it does behave
     correctly I will list it in the unsupported reader list.
-- RSA SecureID SID800 [24]
-    The USB layer is completely broken. The reader is sometimes not even
-    seen on the USB bus (same problem under Windows). Maybe newer
-    devices will work?
 
 
 Supported operating systems:
@@ -515,6 +512,7 @@ References:
 [47] http://www.tai-hao.com/english/products_detail.php?main_id=4&second_id=13&p_id=53&now_rows=1
 [48] http://www.id3semiconductors.com/produits/cl1356T.htm
 [49] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=48
+[50] http://www.rsasecurity.com/products/securid/datasheets/SID800_DS_0205.pdf
 
 $Id$
 
