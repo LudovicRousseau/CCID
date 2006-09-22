@@ -34,6 +34,7 @@
 0x076B:0x3621:OmniKey CardMan 3621
 0x076B:0x3821:OmniKey CardMan 3821
 0x076B:0x5121:OmniKey CardMan 5121
+0x076B:0x5125:OmniKey CardMan 5125
 0x076B:0x6622:OmniKey CardMan 6121
 
 # C3PO

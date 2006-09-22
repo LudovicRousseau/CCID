@@ -91,6 +91,7 @@ manufacturers, please, contact me.
 - OmniKey CardMan 3621 [43]
 - OmniKey CardMan 3821 [37]
 - OmniKey CardMan 5121 [33]
+- OmniKey CardMan 5125 [51]
 - OmniKey CardMan 6121 [36]
 - SCM Micro SCR 331-DI NTTCom [23]
 - SCM Micro SCR 3310-NTTCOM [28]
@@ -513,6 +514,7 @@ References:
 [48] http://www.id3semiconductors.com/produits/cl1356T.htm
 [49] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=48
 [50] http://www.rsasecurity.com/products/securid/datasheets/SID800_DS_0205.pdf
+[51] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=39
 
 $Id$
 
