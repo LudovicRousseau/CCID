@@ -116,6 +116,17 @@ Unsupported or partly supported CCID readers:
     powerup fails with a Setcos card
     does work with the belgium eID (the reader is sold for this
     application)
+- O2Micro Oz7762
+    This reader is common as an internal reader in laptops like the Dell
+    D420. You will then have different problems :
+    * lots of "pcscd: commands.c:693:CmdGetSlotStatus Card absent or
+      mute" messages in you logs
+    * you can't use a command with 52 bytes of result, the reader will
+      time out and the command will fail
+    O2 Micro said the second problem would be corrected in a new
+    firmware version so you may be lucky to have a mostly working
+    reader. Until I get one working reader and can verify it does behave
+    correctly I will list it in the unsupported reader list.
 - RSA SecureID SID800 [24]
     The USB layer is completely broken. The reader is sometimes not even
     seen on the USB bus (same problem under Windows). Maybe newer
