@@ -1108,7 +1108,8 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 			break;
 
 		case CCID_ICC_PRESENT_INACTIVE:
-			if (CcidSlots[reader_index].bPowerFlags == POWERFLAGS_RAZ)
+			if ((CcidSlots[reader_index].bPowerFlags == POWERFLAGS_RAZ)
+				|| (CcidSlots[reader_index].bPowerFlags & MASK_POWERFLAGS_PDWN))
 				/* the card was previously absent */
 				return_value = IFD_ICC_PRESENT;
 			else
