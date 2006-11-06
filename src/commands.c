@@ -221,6 +221,16 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 				TxBuffer[8]);
 			TxBuffer[8] = 0x01;
 		}
+
+		/* The reader does not support, and actively reject, "max size reached"
+		 * and "timeout occured" validation conditions */
+		if (0x02 != TxBuffer[7])
+		{
+			DEBUG_INFO2("Correct bEntryValidationCondition for GemPC Pinpad (was %d)",
+				TxBuffer[7]);
+			TxBuffer[7] = 0x02;	/* validation key pressed */
+		}
+
 	}
 #endif
 
