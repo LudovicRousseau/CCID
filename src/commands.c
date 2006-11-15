@@ -696,7 +696,11 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
 	if (res != STATUS_SUCCESS)
+	{
+		if (STATUS_NO_SUCH_DEVICE == res)
+			return IFD_NO_SUCH_DEVICE;
 		return IFD_COMMUNICATION_ERROR;
+	}
 
 	length = SIZE_GET_SLOT_STATUS;
 	res = ReadPort(reader_index, &length, buffer);
@@ -786,6 +790,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 {
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	status_t ret;
 
 	cmd[0] = 0x6F; /* XfrBlock */
 	i2dw(tx_length, cmd+1);	/* APDU length */
@@ -804,7 +809,10 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 
 	memcpy(cmd+10, tx_buffer, tx_length);
 
-	if (WritePort(reader_index, 10+tx_length, cmd) != STATUS_SUCCESS)
+	ret = WritePort(reader_index, 10+tx_length, cmd);
+	if (STATUS_NO_SUCH_DEVICE == ret)
+		return IFD_NO_SUCH_DEVICE;
+	if (ret != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
 	return IFD_SUCCESS;
@@ -822,12 +830,16 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
+	status_t ret;
 
 time_request:
 	length = sizeof(cmd);
-	if (ReadPort(reader_index, &length, cmd) != STATUS_SUCCESS)
+	ret = ReadPort(reader_index, &length, cmd);
+	if (ret != STATUS_SUCCESS)
 	{
 		*rx_length = 0;
+		if (STATUS_NO_SUCH_DEVICE == ret)
+			return IFD_NO_SUCH_DEVICE;
 		return IFD_COMMUNICATION_ERROR;
 	}
 
