@@ -338,6 +338,12 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				memcpy(Value, VENDOR_NAME, sizeof(VENDOR_NAME));
 			break;
 
+		case SCARD_ATTR_MAXINPUT:
+			*Length = sizeof(uint32_t);
+			if (Value)
+				*(uint32_t *)Value = get_ccid_descriptor(reader_index) -> dwMaxCCIDMessageLength -10;
+			break;
+
 		default:
 			return IFD_ERROR_TAG;
 	}
