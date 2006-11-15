@@ -1103,7 +1103,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	LogLevel = oldLogLevel;
 
 	if (return_value != IFD_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+		return return_value;
 
 	return_value = IFD_COMMUNICATION_ERROR;
 	switch (pcbuffer[7] & CCID_ICC_STATUS_MASK)	/* bStatus */
