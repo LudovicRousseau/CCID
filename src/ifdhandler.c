@@ -694,6 +694,18 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			(param[3] & 0xF0) >> 4 /* BWI */, param[3] & 0x0F /* CWI */,
 			ccid_desc->dwDefaultClock);
 
+		/* TAi (i>2) present? IFSC */
+		for (i=2; i<ATR_MAX_PROTOCOLS; i++)
+			if (atr.ib[i][ATR_INTERFACE_BYTE_TA].present)
+			{
+				DEBUG_COMM3("IFSC (TA%d) present: %d", i+1,
+					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
+				 param[5] = atr.ib[i][ATR_INTERFACE_BYTE_TA].value;
+
+				/* only the first TAi (i>2) must be used */
+				break;
+			}
+
 		DEBUG_COMM2("Timeout: %d seconds", ccid_desc->readTimeout);
 
 		ret = SetParameters(reader_index, 1, sizeof(param), param);
