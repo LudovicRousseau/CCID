@@ -70,6 +70,7 @@ Supported CCID readers:
   dwDefaultClock: 1024.000 MHz). So do not expect a perfect behavior.
 - Verisign Secure Storage Token [24]
 - Verisign Secure Token [?]
+- Xiring Teo [52]
 
 
 Should work but untested by me:
@@ -515,6 +516,7 @@ References:
 [49] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=48
 [50] http://www.rsasecurity.com/products/securid/datasheets/SID800_DS_0205.pdf
 [51] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=39
+[52] http://www.teobyxiring.com/
 
 $Id$
 
