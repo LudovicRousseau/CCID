@@ -134,7 +134,14 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf(" idVendor: 0x%04X\n", dev->descriptor.idVendor);
 	if (usb_get_string_simple(handle, dev->descriptor.iManufacturer,
 		buffer, sizeof(buffer)) < 0)
+	{
 		printf("  Can't get iManufacturer string\n");
+		if (getuid())
+		{
+			printf("\33[01;31mPlease, restart the command as root\33[0m\n\n");
+			return TRUE;
+		}
+	}
 	else
 		printf("  iManufacturer: %s\n", buffer);
 
