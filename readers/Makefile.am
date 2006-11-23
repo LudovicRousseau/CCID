@@ -7,6 +7,10 @@ EXTRA_DIST = \
 	ASEDrive_IIIe_KB.txt \
 	ASE_IIIe.txt \
 	AxaltoV3.txt \
+	C3PO_KBR36.txt \
+	C3PO_LTC32_USBv2.txt \
+	C3PO_LTC32_USBv_old.txt \
+	C3PO_TLTC2USB.txt \
 	CardMan3021.txt \
 	CardMan3121.txt \
 	CardMan3621.txt \
