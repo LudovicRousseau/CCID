@@ -46,6 +46,7 @@ saved_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $PCSC_CFLAGS"
 AC_CHECK_HEADER(ifdhandler.h,,
 	[AC_MSG_ERROR([ifdhandler.h not found, install pcsc-lite $PCSC_NEEDED_VERSION or later, or use ./configure PCSC_CFLAGS=...])])
+AC_CHECK_DECL(IFD_NO_SUCH_DEVICE,, [AC_MSG_ERROR([install pcsc-lite $PCSC_NEEDED_VERSION or later])], [#include <ifdhandler.h>])
 AC_CHECK_HEADER(reader.h,,
 	[AC_MSG_ERROR([reader.h not found, install pcsc-lite $PCSC_NEEDED_VERSION or later, or use ./configure PCSC_CFLAGS=...])])
 CPPFLAGS="$saved_CPPFLAGS"
