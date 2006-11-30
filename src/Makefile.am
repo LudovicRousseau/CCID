@@ -4,7 +4,7 @@ CCID_BUNDLE = ifd-ccid.bundle
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
 
-CCID_VERSION=CCID_VERSION=`./convert_version.pl $(PACKAGE_VERSION)`
+CCID_VERSION=CCID_VERSION=`$(srcdir)/convert_version.pl $(PACKAGE_VERSION)`
 
 lib_LTLIBRARIES = libccid.la
 LIBS_TO_INSTALL = install_ccid
