@@ -46,7 +46,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
  *					main
  *
  ****************************************************************************/
-int main(/*@unused@*/ int argc, /*@unused@*/ char *argv[])
+int main(void)
 {
 	static struct usb_bus *busses = NULL;
 	struct usb_bus *bus;
