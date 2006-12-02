@@ -80,7 +80,7 @@ int ccid_open_hack(unsigned int reader_index)
 				unsigned int length_res = sizeof(res);
 				int offset, i, j;
 
-				char *fr[] = {
+				const char *fr[] = {
 					"Entrer PIN",
 					"Nouveau PIN",
 					"Confirmer PIN",
@@ -91,7 +91,7 @@ int ccid_open_hack(unsigned int reader_index)
 					"Inserer carte",
 					"Erreur carte" };
 
-				char *de[] = {
+				const char *de[] = {
 					"PIN eingeben",
 					"Neue PIN",
 					"PIN bestatigen",
@@ -102,7 +102,7 @@ int ccid_open_hack(unsigned int reader_index)
 					"Karte einstecken",
 					"Fehler Karte" };
 
-				char *es[] = {
+				const char *es[] = {
 					"Introducir PIN",
 					"Nuevo PIN",
 					"Confirmar PIN",
@@ -113,7 +113,7 @@ int ccid_open_hack(unsigned int reader_index)
 					"Introducir Tarj.",
 					"Error en Tarjeta" };
 
-				char *it[] = {
+				const char *it[] = {
 					"Inserire PIN",
 					"Nuovo PIN",
 					"Confermare PIN",
@@ -124,7 +124,7 @@ int ccid_open_hack(unsigned int reader_index)
 					"Inserire Carta",
 					"Errore Carta" };
 
-				char *en[] = {
+				const char *en[] = {
 					"Enter PIN",
 					"New PIN",
 					"Confirm PIN",
@@ -136,7 +136,7 @@ int ccid_open_hack(unsigned int reader_index)
 					"Card Error" };
 
 				char *lang;
-				char **l10n;
+				const char **l10n;
 
 				lang = getenv("LANG");
 				if (NULL == lang)
@@ -243,7 +243,7 @@ int ccid_open_hack(unsigned int reader_index)
  ****************************************************************************/
 void ccid_error(int error, char *file, int line, const char *function)
 {
-	char *text;
+	const char *text;
 	char var_text[20];
 
 	switch (error)
