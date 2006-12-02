@@ -836,7 +836,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	RESPONSECODE return_value = IFD_SUCCESS;
 	unsigned char pcbuffer[RESP_BUF_SIZE];
 	int reader_index;
-	char *actions[] = { "PowerUp", "PowerDown", "Reset" };
+	const char *actions[] = { "PowerUp", "PowerDown", "Reset" };
 
 	DEBUG_INFO3("lun: %X, action: %s", Lun, actions[Action-IFD_POWER_UP]);
 
