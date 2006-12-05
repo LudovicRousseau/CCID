@@ -2,7 +2,7 @@
   iManufacturer: KOBIL
  idProduct: 0x3001
   iProduct: KAAN Base
- bcdDevice: 0.37 (firmware release?)
+ bcdDevice: 1.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -27,13 +27,16 @@
   dwDefaultClock: 4.800 MHz
   dwMaximumClock: 4.800 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   wrong size for GET CLOCK FREQUENCIES: 1
+   IFD does not support GET CLOCK FREQUENCIES request
   dwDataRate: 12903 bps
   dwMaxDataRate: 412903 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   wrong size for GET_DATA_RATES: 1
+   IFD does not support GET_DATA_RATES request
   dwMaxIFSD: 254
-  dwSynchProtocols: 0x00000000
+  dwSynchProtocols: 0x00000007
+   2-wire protocol
+   3-wire protocol
+   I2C protocol
   dwMechanical: 0x00000000
    No special characteristics
   dwFeatures: 0x000206BA
