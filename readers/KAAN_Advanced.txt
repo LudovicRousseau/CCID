@@ -2,7 +2,7 @@
   iManufacturer: KOBIL
  idProduct: 0x3002
   iProduct: KAAN Advanced
- bcdDevice: 0.37 (firmware release?)
+ bcdDevice: 1.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -33,7 +33,10 @@
   bNumDataRatesSupported: 0 (will use whatever is returned)
    wrong size for GET_DATA_RATES: 1
   dwMaxIFSD: 254
-  dwSynchProtocols: 0x00000000
+  dwSynchProtocols: 0x00000007
+   2-wire protocol
+   3-wire protocol
+   I2C protocol
   dwMechanical: 0x00000000
    No special characteristics
   dwFeatures: 0x000206BA
