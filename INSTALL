@@ -34,7 +34,7 @@ serial reader
 A serial CCID reader can also be connected on a serial port. By default
 the serial driver is built but not installed. You must explicitely do:
 
-$ ./configure
+$ ./configure --enable-twinserial
 $ make -C src install_ccidtwin
 
 
