@@ -1,0 +1,76 @@
+List of SCardGetAttrib() commands supported by the CCID driver
+==============================================================
+
+PC/SC provides the SCardGetAttrib() function to request some attributes from
+the driver.
+
+
+PC/SC function prototype
+"""""""""""""""""""""""""
+
+LONG SCardGetAttrib(SCARDHANDLE hCard,
+    DWORD dwAttrId,
+    LPBYTE pbAttr,
+    LPDWORD pcbAttrLen);
+
+Parameters:
+
+hCard       IN      Connection made from SCardConnect
+dwAttrId    IN      Identifier for the attribute to get
+pbAttr      OUT     Pointer to a buffer that receives the attribute
+pcbAttrLen  IN/OUT  Length of the pbAttr buffer in bytes
+
+If the attribute is not supported the applications receive the error
+SCARD_E_UNSUPPORTED_FEATURE (or SCARD_E_NOT_TRANSACTED for pcsc-lite
+version < 1.3.3)
+
+
+supported attributes
+""""""""""""""""""""
+
+SCARD_ATTR_ATR_STRING
+    ATR of the card
+
+SCARD_ATTR_VENDOR_IFD_VERSION
+    Vendor-supplied interface device version
+    DWORD in the form 0xMMmmbbbb where
+    MM = major version,
+    mm = minor version,
+    and bbbb = build number
+
+SCARD_ATTR_VENDOR_NAME
+   name of the IFD (driver) vendor
+
+SCARD_ATTR_MAXINPUT
+   maximum size of an APDU supported by the reader.
+   Correct readers should support up to 261 bytes but some readers
+   support less (253 bytes only for example). It is a problem for T=1
+   cards
+
+
+Sample code
+===========
+
+#include <reader.h>
+
+{
+    [...]
+
+    unsigned char pbAtr[MAX_ATR_SIZE];
+    DWORD dwAtrLen;
+
+    /* use a NULL buffer to just get the needed length */
+    rv = SCardGetAttrib(hCard, SCARD_ATTR_ATR_STRING, NULL, &dwAtrLen);
+    if (rv == SCARD_S_SUCCESS)
+        printf("ATR length: %ld\n", dwAtrLen);
+
+    dwAtrLen = sizeof(pbAtr);
+    rv = SCardGetAttrib(hCard, SCARD_ATTR_ATR_STRING, pbAtr, &dwAtrLen);
+    if (rv == SCARD_S_SUCCESS)
+    {
+        for (i = 0; i < dwAtrLen; i++)
+            printf("%02X ", pbAtr[i]);
+        printf("\n");
+    }
+}
+
