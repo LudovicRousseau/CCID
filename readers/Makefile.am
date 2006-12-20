@@ -11,6 +11,7 @@ EXTRA_DIST = \
 	C3PO_LTC32_USBv2.txt \
 	C3PO_LTC32_USBv2_old.txt \
 	C3PO_TLTC2USB.txt \
+	CardMan1021.txt \
 	CardMan3021.txt \
 	CardMan3121.txt \
 	CardMan3621.txt \

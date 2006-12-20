@@ -30,6 +30,7 @@
 0x04E6:0xE003:SCM SPR 532
 
 # OmniKey
+0x076B:0x1021:OmniKey CardMan 1021
 0x076B:0x3021:OmniKey CardMan 3121
 0x076B:0x3621:OmniKey CardMan 3621
 0x076B:0x3821:OmniKey CardMan 3821
