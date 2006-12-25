@@ -43,6 +43,17 @@ int GetNewReaderIndex(const DWORD Lun)
 {
 	int i;
 
+	/* check that Lun is NOT already used */
+	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+		if (Lun == ReaderIndex[i])
+			break;
+
+	if (i < CCID_DRIVER_MAX_READERS)
+	{
+		DEBUG_CRITICAL2("Lun: %d is already used", Lun);
+		return -1;
+	}
+
 	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
 		if (-1 == ReaderIndex[i])
 		{
