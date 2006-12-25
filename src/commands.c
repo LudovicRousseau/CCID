@@ -104,6 +104,12 @@ again:
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
+	if (*nlength < STATUS_OFFSET+1)
+	{
+		DEBUG_CRITICAL2("Not enough data received: %d bytes", *nlength);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
 	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
@@ -618,6 +624,12 @@ again:
 		return IFD_COMMUNICATION_ERROR;
 	}
 
+	if (length_out < STATUS_OFFSET+1)
+	{
+		DEBUG_CRITICAL2("Not enough data received: %d bytes", length_out);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
 	if (cmd_out[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd_out[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
@@ -665,6 +677,12 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
 
+	if (length < STATUS_OFFSET+1)
+	{
+		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
 		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
@@ -706,6 +724,12 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 	res = ReadPort(reader_index, &length, buffer);
 	if (res != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
+
+	if (length < STATUS_OFFSET+1)
+	{
+		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
+		return IFD_COMMUNICATION_ERROR;
+	}
 
 	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
@@ -843,7 +867,7 @@ time_request:
 		return IFD_COMMUNICATION_ERROR;
 	}
 
-	if (length < STATUS_OFFSET)
+	if (length < STATUS_OFFSET+1)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
 		*rx_length = 0;
@@ -1459,6 +1483,12 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	length = sizeof(cmd);
 	if (ReadPort(reader_index, &length, cmd) != STATUS_SUCCESS)
 		return IFD_COMMUNICATION_ERROR;
+
+	if (length < STATUS_OFFSET+1)
+	{
+		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
+		return IFD_COMMUNICATION_ERROR;
+	}
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
