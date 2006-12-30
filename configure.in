@@ -208,13 +208,9 @@ fi
 # --enable-twinserial
 AC_ARG_ENABLE(twinserial,
 	AC_HELP_STRING([--enable-twinserial],[also compile and install the serial Twin driver]),
-	[twinserial="${enableval}"], [twinserial=false])
+	[twinserial="${enableval}"], [twinserial=no])
 AC_MSG_RESULT([build and install serial Twin driver : $twinserial])
-if test "${twinserial}" = false ; then
-	AM_CONDITIONAL(WITH_TWIN_SERIAL, false)
-else
-	AM_CONDITIONAL(WITH_TWIN_SERIAL, true)
-fi
+AM_CONDITIONAL(WITH_TWIN_SERIAL, test "${twinserial}" != "no")
 
 # --enable-ccidtwindir=DIR
 AC_ARG_ENABLE(ccidtwindir,
