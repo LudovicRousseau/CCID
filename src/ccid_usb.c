@@ -90,7 +90,8 @@ typedef struct
 
 static int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
 int ccid_check_firmware(struct usb_device *dev);
-static unsigned int *get_data_rates(unsigned int reader_index);
+static unsigned int *get_data_rates(unsigned int reader_index,
+	struct usb_device *dev);
 
 /* ne need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
@@ -429,7 +430,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
 					usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
 					usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
-					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index);
+					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, dev);
 					goto end;
 				}
 			}
@@ -727,7 +728,8 @@ int ccid_check_firmware(struct usb_device *dev)
  *                                      get_data_rates
  *
  ****************************************************************************/
-static unsigned int *get_data_rates(unsigned int reader_index)
+static unsigned int *get_data_rates(unsigned int reader_index,
+	struct usb_device *dev)
 {
 	int n, i, len;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
@@ -762,8 +764,7 @@ static unsigned int *get_data_rates(unsigned int reader_index)
 	n /= sizeof(int);
 
 	/* we do not get the expected number of data rates */
-	len = get_ccid_usb_interface(usbDevice[reader_index].dev)
-		->altsetting->extra[27]; /* bNumDataRatesSupported */
+	len = get_ccid_usb_interface(dev)->altsetting->extra[27]; /* bNumDataRatesSupported */
 	if ((n != len) && len)
 	{
 		DEBUG_INFO3("Got %d data rates but was expecting %d", n, len);
