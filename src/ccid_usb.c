@@ -601,26 +601,6 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
 
 /*****************************************************************************
  *
- *					get_desc
- *
- ****************************************************************************/
-int get_desc(int lun, usb_dev_handle **handle, struct
-	usb_device **dev)
-{
-	int reader_index;
-
-	if (-1 == (reader_index = LunToReaderIndex(lun)))
-		return FALSE;
-
-	*handle = usbDevice[reader_index].handle;
-	*dev = usbDevice[reader_index].dev;
-
-	return TRUE;
-} /* get_desc */
-
-
-/*****************************************************************************
- *
  *					get_end_points
  *
  ****************************************************************************/
