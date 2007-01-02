@@ -299,12 +299,12 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					/* is it already opened? */
 					already_used = FALSE;
 
+					DEBUG_COMM3("Checking device: %s/%s",
+						bus->dirname, dev->filename);
 					for (r=0; r<CCID_DRIVER_MAX_READERS; r++)
 					{
 						if (usbDevice[r].handle)
 						{
-							DEBUG_COMM3("Checking device: %s/%s",
-								bus->dirname, dev->filename);
 							/* same busname, same filename */
 							if (strcmp(usbDevice[r].dirname, bus->dirname) == 0 && strcmp(usbDevice[r].filename, dev->filename) == 0)
 								already_used = TRUE;
