@@ -458,9 +458,6 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	int rv;
 	char debug_header[] = "-> 121234 ";
 
-	if (usbDevice[reader_index].dev == NULL)
-		return STATUS_UNSUCCESSFUL;
-
 	sprintf(debug_header, "-> %06X ", (int)reader_index);
 
 	DEBUG_XXD(debug_header, buffer, length);
@@ -481,10 +478,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 			DEBUG_CRITICAL2("usb_bulk_write(no device): %s", strerror(errno));
 
 		if (ENODEV == errno)
-		{
-			CloseUSB(reader_index);
 			return STATUS_NO_SUCH_DEVICE;
-		}
 
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -504,9 +498,6 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 	int rv;
 	char debug_header[] = "<- 121234 ";
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
-
-	if (usbDevice[reader_index].dev == NULL)
-		return STATUS_UNSUCCESSFUL;
 
 read_again:
 	sprintf(debug_header, "<- %06X ", (int)reader_index);
@@ -528,10 +519,7 @@ read_again:
 			DEBUG_CRITICAL2("usb_bulk_read(no device): %s", strerror(errno));
 
 		if (ENODEV == errno)
-		{
-			CloseUSB(reader_index);
 			return STATUS_NO_SUCH_DEVICE;
-		}
 
 		return STATUS_UNSUCCESSFUL;
 	}
