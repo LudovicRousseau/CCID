@@ -570,13 +570,14 @@ status_t CloseUSB(unsigned int reader_index)
 		usb_release_interface(usbDevice[reader_index].handle,
 			usbDevice[reader_index].interface);
 		usb_close(usbDevice[reader_index].handle);
+
+		free(usbDevice[reader_index].dirname);
+		free(usbDevice[reader_index].filename);
 	}
 
 	/* mark the resource unused */
 	usbDevice[reader_index].handle = NULL;
-	free(usbDevice[reader_index].dirname);
 	usbDevice[reader_index].dirname = NULL;
-	free(usbDevice[reader_index].filename);
 	usbDevice[reader_index].filename = NULL;
 	usbDevice[reader_index].interface = 0;
 
