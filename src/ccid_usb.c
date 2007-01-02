@@ -65,7 +65,8 @@
 typedef struct
 {
 	usb_dev_handle *handle;
-	struct usb_device *dev;
+	char *dirname;
+	char *filename;
 	int interface;
 
 	/*
@@ -300,12 +301,12 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 					for (r=0; r<CCID_DRIVER_MAX_READERS; r++)
 					{
-						if (usbDevice[r].dev)
+						if (usbDevice[r].handle)
 						{
 							DEBUG_COMM3("Checking device: %s/%s",
 								bus->dirname, dev->filename);
 							/* same busname, same filename */
-							if (strcmp(usbDevice[r].dev->bus->dirname, bus->dirname) == 0 && strcmp(usbDevice[r].dev->filename, dev->filename) == 0)
+							if (strcmp(usbDevice[r].dirname, bus->dirname) == 0 && strcmp(usbDevice[r].filename, dev->filename) == 0)
 								already_used = TRUE;
 						}
 					}
@@ -314,9 +315,9 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					if (already_used)
 					{
 						if ((previous_reader_index != -1)
-							&& usbDevice[previous_reader_index].dev
-							&& (strcmp(usbDevice[previous_reader_index].dev->bus->dirname, bus->dirname)  == 0)
-							&& (strcmp(usbDevice[previous_reader_index].dev->filename, dev->filename) == 0)
+							&& usbDevice[previous_reader_index].handle
+							&& (strcmp(usbDevice[previous_reader_index].dirname, bus->dirname)  == 0)
+							&& (strcmp(usbDevice[previous_reader_index].filename, dev->filename) == 0)
 							&& usbDevice[previous_reader_index].ccid.bCurrentSlotIndex < usbDevice[previous_reader_index].ccid.bMaxSlotIndex)
 						{
 							/* we reuse the same device
@@ -410,7 +411,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 					/* store device information */
 					usbDevice[reader_index].handle = dev_handle;
-					usbDevice[reader_index].dev = dev;
+					usbDevice[reader_index].dirname = strdup(bus->dirname);
+					usbDevice[reader_index].filename = strdup(dev->filename);
 					usbDevice[reader_index].interface = interface;
 					usbDevice[reader_index].real_nb_opened_slots = 1;
 					usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
@@ -469,14 +471,9 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 
 	if (rv < 0)
 	{
-		if (usbDevice[reader_index].dev->bus)
-		{
-			DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
-				usbDevice[reader_index].dev->bus->dirname,
-				usbDevice[reader_index].dev->filename, strerror(errno));
-		}
-		else
-			DEBUG_CRITICAL2("usb_bulk_write(no device): %s", strerror(errno));
+		DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
+			usbDevice[reader_index].dirname, usbDevice[reader_index].filename,
+			strerror(errno));
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -510,14 +507,9 @@ read_again:
 	if (rv < 0)
 	{
 		*length = 0;
-		if (usbDevice[reader_index].dev->bus)
-		{
-			DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
-					usbDevice[reader_index].dev->bus->dirname,
-					usbDevice[reader_index].dev->filename, strerror(errno));
-		}
-		else
-			DEBUG_CRITICAL2("usb_bulk_read(no device): %s", strerror(errno));
+		DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
+			usbDevice[reader_index].dirname, usbDevice[reader_index].filename,
+			strerror(errno));
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -549,12 +541,12 @@ read_again:
 status_t CloseUSB(unsigned int reader_index)
 {
 	/* device not opened */
-	if (usbDevice[reader_index].dev == NULL)
+	if (usbDevice[reader_index].handle == NULL)
 		return STATUS_UNSUCCESSFUL;
 
 	DEBUG_COMM3("Closing USB device: %s/%s",
-		usbDevice[reader_index].dev->bus->dirname,
-		usbDevice[reader_index].dev->filename);
+		usbDevice[reader_index].dirname,
+		usbDevice[reader_index].filename);
 
 	if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates
 		&& (usbDevice[reader_index].ccid.bCurrentSlotIndex == 0))
@@ -582,7 +574,10 @@ status_t CloseUSB(unsigned int reader_index)
 
 	/* mark the resource unused */
 	usbDevice[reader_index].handle = NULL;
-	usbDevice[reader_index].dev = NULL;
+	free(usbDevice[reader_index].dirname);
+	usbDevice[reader_index].dirname = NULL;
+	free(usbDevice[reader_index].filename);
+	usbDevice[reader_index].filename = NULL;
 	usbDevice[reader_index].interface = 0;
 
 	return STATUS_SUCCESS;
