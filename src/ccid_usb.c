@@ -478,7 +478,10 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 			DEBUG_CRITICAL2("usb_bulk_write(no device): %s", strerror(errno));
 
 		if (ENODEV == errno)
+		{
+			CloseUSB(reader_index);
 			return STATUS_NO_SUCH_DEVICE;
+		}
 
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -519,7 +522,10 @@ read_again:
 			DEBUG_CRITICAL2("usb_bulk_read(no device): %s", strerror(errno));
 
 		if (ENODEV == errno)
+		{
+			CloseUSB(reader_index);
 			return STATUS_NO_SUCH_DEVICE;
+		}
 
 		return STATUS_UNSUCCESSFUL;
 	}
