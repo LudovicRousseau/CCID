@@ -1,0 +1,8 @@
+# udev rules for pcscd and CCID readers
+
+# Gemplus PCMCIA Card
+#SUBSYSTEMS=="pcmcia", DRIVER=="serial_cs", ACTION=="add", SYSFS{prod_id1}=="Gemplus", SYSFS{prod_id2}=="SerialPort", SYSFS{prod_id3}=="GemPC Card", RUN+="/usr/sbin/pcscd --hotplug"
+
+# generic CCID device
+BUS=="usb", SYSFS{bInterfaceClass}=="0b", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+
