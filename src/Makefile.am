@@ -68,10 +68,18 @@ EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
 
 install: $(LIBS_TO_INSTALL)
 
+if UDEV
+ifdCapabilities=0x00000001
+INSTALL_UDEV_RULE_FILE=$(mkinstalldirs) $(DESTDIR)/etc/udev/rules.d ; cp pcscd_ccid.rules $(DESTDIR)/etc/udev/ ; cd $(DESTDIR)/etc/udev/rules.d ; ln -s ../pcscd_ccid.rules 50-pcscd_ccid.rules
+else
+ifdCapabilities=0x00000000
+endif
+
 install_ccid: libccid.la
 	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
-	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist | sed s/VERSION/$(VERSION)/ | sed s/TARGET/$(CCID_LIB)/ > $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/Info.plist
+	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist $(ifdCapabilities) | sed s/VERSION/$(VERSION)/ | sed s/TARGET/$(CCID_LIB)/ > $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/Info.plist
 	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB).$(VERSION)
+	$(INSTALL_UDEV_RULE_FILE)
 
 install_ccidtwin: libccidtwin.la
 	$(mkinstalldirs) $(DESTDIR)$(ccidtwindir)
