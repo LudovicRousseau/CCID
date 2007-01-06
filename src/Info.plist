@@ -13,7 +13,15 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
 	<key>ifdCapabilities</key>
-	<string>0x00000000</string>
+	<string>MAGIC_IFDCAPABILITIES</string>
+
+	<!-- Possible values for ifdCapabilities bits
+	1: IFD_GENERATE_HOTPLUG
+	   plugging the reader calls pcscd \-\-hotplug
+
+	Default value is 0x00000001
+	-->
+
 	<key>ifdProtocolSupport</key>
 	<string>0x00000001</string>
 	<key>ifdVersionNumber</key>
