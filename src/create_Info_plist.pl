@@ -24,10 +24,11 @@ use strict;
 
 my (@manuf, @product, @name);
 my ($manuf, $product, $name);
+my $ifdCapabilities;
 
-if ($#ARGV ne 1)
+if ($#ARGV ne 2)
 {
-	print "usage: $0 supported_readers.txt Info.plist\n";
+	print "usage: $0 supported_readers.txt Info.plist ifdCapabilities\n";
 	exit;
 }
 
@@ -50,6 +51,8 @@ map { $_ = "\t\t<string>$_</string>\n" } @manuf;
 map { $_ = "\t\t<string>$_</string>\n" } @product;
 map { $_ = "\t\t<string>$_</string>\n" } @name;
 
+$ifdCapabilities=$ARGV[2];
+
 open IN, "< $ARGV[1]" or die "Can't open $ARGV[1]: $!";
 
 while (<IN>)
@@ -67,6 +70,12 @@ while (<IN>)
 	if (m/MAGIC_FRIENDLYNAME/)
 	{
 		print @name;
+		next;
+	}
+	if (m/MAGIC_IFDCAPABILITIES/)
+	{
+		s/MAGIC_IFDCAPABILITIES/$ifdCapabilities/;
+		print;
 		next;
 	}
 	print;
