@@ -64,7 +64,7 @@ parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS)
 
 EXTRA_DIST = Info.plist create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE \
-	convert_version.pl
+	convert_version.pl pcscd_ccid.rules
 
 install: $(LIBS_TO_INSTALL)
 
