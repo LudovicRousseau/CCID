@@ -70,7 +70,7 @@ install: $(LIBS_TO_INSTALL)
 
 if UDEV
 ifdCapabilities=0x00000001
-INSTALL_UDEV_RULE_FILE=$(mkinstalldirs) $(DESTDIR)/etc/udev/rules.d ; cp pcscd_ccid.rules $(DESTDIR)/etc/udev/ ; cd $(DESTDIR)/etc/udev/rules.d ; ln -s ../pcscd_ccid.rules 50-pcscd_ccid.rules
+INSTALL_UDEV_RULE_FILE=$(mkinstalldirs) $(DESTDIR)/etc/udev/rules.d ; cp pcscd_ccid.rules $(DESTDIR)/etc/udev/ ; cd $(DESTDIR)/etc/udev/rules.d ; ln -s ../pcscd_ccid.rules 60-pcscd_ccid.rules
 else
 ifdCapabilities=0x00000000
 endif
