@@ -59,7 +59,7 @@ int main(void)
 	busses = usb_get_busses();
 	if (busses == NULL)
 	{
-		printf("No USB busses found\n");
+		printf("No USB buses found\n");
 		return -1;
 	}
 
