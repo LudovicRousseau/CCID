@@ -18,6 +18,21 @@ directory used by pcscd using 'pkg-config libpcsclite --variable=usbdropdir'
 So you should not have to use the --enable-usbdropdir=DIR argument.
 
 
+udev use
+~~~~~~~~
+
+It is possible to configure the driver to use udev events so that pcscd
+will not poll the USB bus every second. Use:
+
+$ ./configure --enable-udev
+$ make
+
+You will then have to install the udev rules file in the correct
+directory. It could be something like:
+
+$ sudo cp src/pcscd_ccid.rules /etc/udev/rules.d/
+
+
 libusb not found
 ~~~~~~~~~~~~~~~~
 
