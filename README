@@ -207,6 +207,19 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.2.0 - 19 January 2006, Ludovic Rousseau
+    - add support for SCARD_ATTR_VENDOR_IFD_VERSION,
+      SCARD_ATTR_VENDOR_NAME and SCARD_ATTR_MAXINPUT tags used by
+      SCardGetAttrib(). Read SCARDGETATTRIB.txt for more documentation
+    - add support for OmniKey CardMan 5125, CardMan 1021, C3PO LTC32,
+      Teo by Xiring, HP USB Smartcard Reader
+    - use --enable-twinserial to build the serial reader driver
+    - use --enable-udev to configure for a use with Linux udev hotplug
+      mechanism. This will allow pcscd to avoid polling the USB bus
+      every 1 second
+    - some minor bugs removed
+
+
 1.1.0 - 11 August 2006, Ludovic Rousseau
     - support Extended APDU (up to 64KB) for readers in TPDU mode (many
       readers) or Extended APDU mode (very rare). This only works for
