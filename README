@@ -207,7 +207,7 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
-1.2.0 - 19 January 2006, Ludovic Rousseau
+1.2.0 - 19 January 2007, Ludovic Rousseau
     - add support for SCARD_ATTR_VENDOR_IFD_VERSION,
       SCARD_ATTR_VENDOR_NAME and SCARD_ATTR_MAXINPUT tags used by
       SCardGetAttrib(). Read SCARDGETATTRIB.txt for more documentation
