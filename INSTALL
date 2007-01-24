@@ -33,6 +33,20 @@ directory. It could be something like:
 $ sudo cp src/pcscd_ccid.rules /etc/udev/rules.d/
 
 
+On FreeBSD you can also use --enable-udev and add the following rules to
+devd.conf (thanks to Tilman Linneweh for the info)
+
+attach 100 {
+	device-name "ugen[0-9]+";
+	action "/usr/sbin/pcscd -H";
+};
+
+detach 100 {
+	device-name "ugen[0-9]+";
+	action "/usr/sbin/pcscd -H";
+};
+
+
 libusb not found
 ~~~~~~~~~~~~~~~~
 
