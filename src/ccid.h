@@ -138,6 +138,13 @@ typedef struct
 #define CHERRYXX44	0x046a0010
 #define CL1356D		0x0B810200
 
+/*
+ * The O2Micro OZ776S reader has a wrong USB descriptor
+ * The extra[] field is associated with the last endpoint instead of the
+ * main USB descriptor
+ */
+#define O2MICRO_OZ776_PATCH
+
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
 #define ESC_GEMPC_SET_APDU_MODE		2

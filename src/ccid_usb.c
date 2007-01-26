@@ -53,13 +53,6 @@
  * Manufacturer and Product ID are also used to identify the device */
 #define ALLOW_PROPRIETARY_CLASS
 
-/*
- * The O2Micro OZ776S reader has a wrong USB descriptor
- * The extra[] field is associated with the last endpoint instead of the
- * main USB descriptor
- */
-#define O2MICRO_OZ776_PATCH
-
 #define BUS_DEVICE_STRSIZE 32
 
 typedef struct
