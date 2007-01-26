@@ -733,6 +733,12 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 
 	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
+#ifdef O2MICRO_OZ776_PATCH
+		/* the O2MICRO OZ 776 reader sends card absent or mute errors
+		 * when no card is inserted */
+		if (! ((OZ776 == ccid_descriptor->readerID)
+			&& (buffer[ERROR_OFFSET] == 0xFE)))
+#endif
 		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 
 		/* card absent or mute is not an communication error */
