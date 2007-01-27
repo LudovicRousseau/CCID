@@ -102,7 +102,9 @@ struct _bogus_firmware
 };
 
 static struct _bogus_firmware Bogus_firmwares[] = {
+#ifndef O2MICRO_OZ776_PATCH
 	{ 0x0b97, 0x7762, 0x0111 },	/* Oz776S */ /* the firmware version is not correct since I do not have received a working reader yet */
+#endif
 	{ 0x04e6, 0xe001, 0x0516 },	/* SCR 331 */
 	{ 0x04e6, 0x5111, 0x0620 },	/* SCR 331-DI */
 	{ 0x04e6, 0x5115, 0x0514 },	/* SCR 335 */
