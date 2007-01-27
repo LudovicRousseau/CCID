@@ -55,7 +55,6 @@ EXTRA_DIST = \
 	SDI010.txt \
 	sid800.txt \
 	SIM_Pocket_Combo.txt \
-	SK-3106.txt \
 	SPR532.txt \
 	supported_readers.txt \
 	Verisign_secure_storage_token.txt \
