@@ -73,7 +73,7 @@ int ccid_open_hack(unsigned int reader_index)
 			{
 #define L10N_HEADER_SIZE 5
 #define L10N_STRING_MAX_SIZE 16
-#define L10N_NB_STRING 9
+#define L10N_NB_STRING 10
 
 				unsigned char cmd[L10N_HEADER_SIZE + L10N_NB_STRING * L10N_STRING_MAX_SIZE];
 				unsigned char res[20];
@@ -89,7 +89,8 @@ int ccid_open_hack(unsigned int reader_index)
 					"Delai depasse",
 					"* essai restant",
 					"Inserer carte",
-					"Erreur carte" };
+					"Erreur carte",
+					"PIN bloque" };
 
 				const char *de[] = {
 					"PIN eingeben",
@@ -100,7 +101,8 @@ int ccid_open_hack(unsigned int reader_index)
 					"Zeit abgelaufen",
 					"* Versuche ubrig",
 					"Karte einstecken",
-					"Fehler Karte" };
+					"Fehler Karte",
+					"PIN blockiert" };
 
 				const char *es[] = {
 					"Introducir PIN",
@@ -111,7 +113,8 @@ int ccid_open_hack(unsigned int reader_index)
 					"Tiempo Agotado",
 					"* ensayos quedan",
 					"Introducir Tarj.",
-					"Error en Tarjeta" };
+					"Error en Tarjeta",
+					"PIN bloqueado" };
 
 				const char *it[] = {
 					"Inserire PIN",
@@ -122,7 +125,8 @@ int ccid_open_hack(unsigned int reader_index)
 					"Tempo scaduto",
 					"* prove rimaste",
 					"Inserire Carta",
-					"Errore Carta" };
+					"Errore Carta",
+					"PIN ostruito"};
 
 				const char *pt[] = {
 					"Insira PIN",
@@ -133,7 +137,8 @@ int ccid_open_hack(unsigned int reader_index)
 					"Tempo expirou",
 					"* tentiv. restam",
 					"Introduza cartao",
-					"Erro cartao" };
+					"Erro cartao",
+					"PIN bloqueado" };
 
 				const char *en[] = {
 					"Enter PIN",
@@ -144,7 +149,8 @@ int ccid_open_hack(unsigned int reader_index)
 					"Time Out",
 					"* retries left",
 					"Insert Card",
-					"Card Error" };
+					"Card Error",
+					"PIN blocked" };
 
 				char *lang;
 				const char **l10n;
