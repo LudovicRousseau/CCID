@@ -124,6 +124,17 @@ int ccid_open_hack(unsigned int reader_index)
 					"Inserire Carta",
 					"Errore Carta" };
 
+				const char *pt[] = {
+					"Insira PIN",
+					"Novo PIN",
+					"Conf. novo PIN",
+					"PIN OK",
+					"PIN falhou!",
+					"Tempo expirou",
+					"* tentiv. restam",
+					"Introduza cartao",
+					"Erro cartao" };
+
 				const char *en[] = {
 					"Enter PIN",
 					"New PIN",
@@ -151,6 +162,8 @@ int ccid_open_hack(unsigned int reader_index)
 						l10n = es;
 					else if (0 == strncmp(lang, "it", 2))
 						l10n = it;
+					else if (0 == strncmp(lang, "pt", 2))
+						l10n = pt;
 					else
 						l10n = en;
 				}
