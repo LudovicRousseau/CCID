@@ -24,7 +24,7 @@ libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
 ChangeLog:
-	svn2cl.sh --group-by-day --stdout --include-rev \
+	svn2cl --group-by-day --stdout --include-rev \
 	| perl -pe 's/  rousseau/  Ludovic Rousseau/; \
 	s+trunk/Drivers/ccid/++g;' > $@
 
