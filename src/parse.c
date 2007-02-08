@@ -201,8 +201,20 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		printf("  UNSUPPORTED SubClass\n");
 
 	printf(" bInterfaceProtocol: %d\n", usb_interface->bInterfaceProtocol);
-	if (usb_interface->bInterfaceProtocol)
-		printf("  UNSUPPORTED InterfaceProtocol\n");
+	switch (usb_interface->bInterfaceProtocol)
+	{
+		case 0:
+			printf("  bulk transfer, optional interrupt-IN\n");
+			break;
+		case 1:
+			printf("  ICCD Version A, Control transfers, (no interrupt-IN)\n");
+			break;
+		case 2:
+			printf("  ICCD Version B, Control transfers, (optional interrupt-IN)\n");
+			break;
+		default:
+			printf("  UNSUPPORTED InterfaceProtocol\n");
+	}
 
 	printf(" iInterface: %d\n", usb_interface->iInterface);
 
