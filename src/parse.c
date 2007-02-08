@@ -166,6 +166,23 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf(" bAlternateSetting: %d\n", usb_interface->bAlternateSetting);
 
 	printf(" bNumEndpoints: %d\n", usb_interface->bNumEndpoints);
+	switch (usb_interface->bNumEndpoints)
+	{
+		case 0:
+			printf("  Control only\n");
+			break;
+		case 1:
+			printf("  Interrupt-IN\n");
+			break;
+		case 2:
+			printf("  bulk-IN and bulk-OUT\n");
+			break;
+		case 3:
+			printf("  bulk-IN, bulk-OUT and Interrupt-IN\n");
+			break;
+		default:
+			printf("  UNKNOWN value\n");
+	}
 
 	printf(" bInterfaceClass: 0x%02X", usb_interface->bInterfaceClass);
 	if (usb_interface->bInterfaceClass == 0x0b)
