@@ -605,7 +605,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 	/*
 	 * 3 Endpoints maximum: Interrupt In, Bulk In, Bulk Out
 	 */
-	for (i=0; i<dev->config->bNumEndpoints; i++)
+	for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)
 	{
 		if (usb_interface->altsetting->endpoint[i].bmAttributes != USB_ENDPOINT_TYPE_BULK)
 			continue;
