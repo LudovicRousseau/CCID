@@ -981,6 +981,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	int reader_index;
 
 	DEBUG_INFO3("lun: %X, ControlCode: 0x%X", Lun, dwControlCode);
+	DEBUG_INFO_XXD("Control TxBuffer: ", TxBuffer, TxLength);
 
 	reader_index = LunToReaderIndex(Lun);
 	if ((-1 == reader_index) || (NULL == pdwBytesReturned))
@@ -1067,6 +1068,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		*pdwBytesReturned = iBytesReturned;
 	}
 
+	DEBUG_INFO_XXD("Control RxBuffer: ", RxBuffer, *pdwBytesReturned);
 	return return_value;
 } /* IFDHControl */
 
