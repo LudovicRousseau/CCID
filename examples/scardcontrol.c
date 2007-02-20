@@ -30,8 +30,8 @@
 #include <winscard.h>
 #include <reader.h>
 
-#define VERIFY_PIN
-#undef MODIFY_PIN
+#undef VERIFY_PIN
+#define MODIFY_PIN
 
 #ifndef TRUE
 #define TRUE 1
@@ -416,6 +416,12 @@ int main(int argc, char *argv[])
 	printf(" Secure modify PIN\n");
 	pin_modify = (PIN_MODIFY_STRUCTURE *)bSendBuffer;
 
+	/* Table for bConfirmPIN and bNumberMessage
+	 * bConfirmPIN = 3, bNumberMessage = 3: "Enter Pin" "New Pin" "Confirm Pin"
+	 * bConfirmPIN = 2, bNumberMessage = 2: "Enter Pin" "New Pin"
+	 * bConfirmPIN = 1, bNumberMessage = 2: "New Pin" "Confirm Pin"
+	 * bConfirmPIN = 0, bNumberMessage = 1: "New Pin"
+	 */
 	/* PC/SC v2.0.2 Part 10 PIN verification data structure */
 	pin_modify -> bTimerOut = 0x00;
 	pin_modify -> bTimerOut2 = 0x00;
@@ -428,7 +434,7 @@ int main(int argc, char *argv[])
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
 									/* b1 set = current PIN entry requested */
 	pin_modify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
-	pin_modify -> bNumberMessage = 0x03; /* 3 for GemPC Pinpad, 0 for SPR532 */
+	pin_modify -> bNumberMessage = 0x03; /* see table above */
 	pin_modify -> wLangId = HOST_TO_CCID_16(0x0904);
 	pin_modify -> bMsgIndex1 = 0x00;
 	pin_modify -> bMsgIndex2 = 0x00;
