@@ -444,11 +444,11 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 
 		/* the reader does not support any other value than 3 for the number
 		 * of messages */
+		bNumberMessages = TxBuffer[11];
 		if (0x03 != TxBuffer[11])
 		{
 			DEBUG_INFO2("Correct bNumberMessages for GemPC Pinpad (was %d)",
 				TxBuffer[11]);
-			bNumberMessages = TxBuffer[11];
 			TxBuffer[11] = 0x03; /* 3 messages */
 		}
 	}
