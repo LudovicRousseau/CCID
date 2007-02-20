@@ -355,6 +355,9 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int old_read_timeout;
 	RESPONSECODE ret;
+#ifdef BOGUS_PINPAD_FIRMWARE
+	int bNumberMessages = 0; /* for GemPC Pinpad */
+#endif
 
 	cmd[0] = 0x69;	/* Secure */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
@@ -445,6 +448,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		{
 			DEBUG_INFO2("Correct bNumberMessages for GemPC Pinpad (was %d)",
 				TxBuffer[11]);
+			bNumberMessages = TxBuffer[11];
 			TxBuffer[11] = 0x03; /* 3 messages */
 		}
 	}
@@ -519,6 +523,9 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	{
 		cmd[21] = 0x00; /* set bNumberMessages to 0 */
 	}
+
+	if (GEMPCPINPAD == ccid_descriptor->readerID)
+		cmd[21] = bNumberMessages;	/* restore the real value */
 #endif
 
 	/* We know the size of the CCID message now */
