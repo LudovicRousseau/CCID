@@ -1109,7 +1109,10 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 
 	return_value = CCID_Transmit(reader_index, tx_length, tx_buffer, 0, 0);
 	if (return_value != IFD_SUCCESS)
+	{
+		*rx_length = 0;
 		return return_value;
+	}
 
 	return CCID_Receive(reader_index, rx_length, rx_buffer, NULL);
 } /* CmdXfrBlockTPDU_T0 */
