@@ -1096,6 +1096,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	{
 		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
 				tx_length, ccid_descriptor->dwMaxCCIDMessageLength-10);
+		*rx_length = 0;
 		return IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1104,6 +1105,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	{
 		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
 				tx_length, CMD_BUF_SIZE);
+		*rx_length = 0;
 		return IFD_COMMUNICATION_ERROR;
 	}
 
