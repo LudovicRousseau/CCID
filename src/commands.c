@@ -118,12 +118,12 @@ again:
 			((GEMPC433 == ccid_descriptor->readerID)
 			|| (CHERRYXX33 == ccid_descriptor->readerID)))
 		{
-			unsigned char cmd[] = {0x1F, 0x01};
-			unsigned char res[1];
-			unsigned int res_length = sizeof(res);
+			unsigned char cmd_tmp[] = {0x1F, 0x01};
+			unsigned char res_tmp[1];
+			unsigned int res_length = sizeof(res_tmp);
 
-			if ((return_value = CmdEscape(reader_index, cmd, sizeof(cmd), res,
-				&res_length)) != IFD_SUCCESS)
+			if ((return_value = CmdEscape(reader_index, cmd_tmp,
+				sizeof(cmd_tmp), res_tmp, &res_length)) != IFD_SUCCESS)
 				return return_value;
 
 			/* avoid looping if we can't switch mode */
@@ -288,16 +288,16 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	if ((SPR532 == ccid_descriptor->readerID) && (TxBuffer[15] == 4))
 	{
 		RESPONSECODE return_value;
-		unsigned char cmd[] = { 0x80, 0x02, 0x00 };
-		unsigned char res[1];
-		unsigned int res_length = sizeof(res);
+		unsigned char cmd_tmp[] = { 0x80, 0x02, 0x00 };
+		unsigned char res_tmp[1];
+		unsigned int res_length = sizeof(res_tmp);
 
 		/* the SPR532 will append the PIN code without any padding */
-		return_value = CmdEscape(reader_index, cmd, sizeof(cmd), res,
-			&res_length);
+		return_value = CmdEscape(reader_index, cmd_tmp, sizeof(cmd_tmp),
+			res_tmp, &res_length);
 		if (return_value != IFD_SUCCESS)
 		{
-			ccid_error(res[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);
+			ccid_error(res_tmp[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);
 			return return_value;
 		}
 	}
