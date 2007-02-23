@@ -727,14 +727,11 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	unsigned int *int_array;
 
 	/* See CCID 3.7.3 page 25 */
-	n = usb_control_msg(usbDevice[reader_index].handle,
+	n = ControlUSB(reader_index,
 		0xA1, /* request type */
 		0x03, /* GET_DATA_RATES */
 		0x00, /* value */
-		usbDevice[reader_index].interface, /* interface */
-		(char *)buffer,
-		sizeof(buffer),
-		usbDevice[reader_index].ccid.readTimeout * 1000);
+		buffer, sizeof(buffer));
 
 	/* we got an error? */
 	if (n <= 0)
