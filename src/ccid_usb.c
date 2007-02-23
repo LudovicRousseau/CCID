@@ -82,7 +82,7 @@ typedef struct
 /* The _usbDevice structure must be defined before including ccid_usb.h */
 #include "ccid_usb.h"
 
-static int get_end_points(struct usb_device *dev, _usbDevice *usb_device);
+static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice);
 int ccid_check_firmware(struct usb_device *dev);
 static unsigned int *get_data_rates(unsigned int reader_index,
 	struct usb_device *dev);
@@ -596,7 +596,7 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
  *					get_end_points
  *
  ****************************************************************************/
-static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
+static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 {
 	int i;
 	int bEndpointAddress;
@@ -613,10 +613,10 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usb_device)
 		bEndpointAddress = usb_interface->altsetting->endpoint[i].bEndpointAddress;
 
 		if ((bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_ENDPOINT_IN)
-			usb_device->bulk_in = bEndpointAddress;
+			usbdevice->bulk_in = bEndpointAddress;
 
 		if ((bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_ENDPOINT_OUT)
-			usb_device->bulk_out = bEndpointAddress;
+			usbdevice->bulk_out = bEndpointAddress;
 	}
 
 	return 0;
