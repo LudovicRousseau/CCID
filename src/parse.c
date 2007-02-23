@@ -126,7 +126,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 {
 	struct usb_interface_descriptor *usb_interface;
 	unsigned char *extra;
-	char buffer[255];
+	char buffer[256*sizeof(int)];  /* maximum is 256 records */
 
 	/*
 	 * Vendor/model name
@@ -272,7 +272,6 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  bNumClockSupported: %d %s\n", extra[18],
 		extra[18] ? "" : "(will use whatever is returned)");
 	{
-		unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 		int n;
 
 		/* See CCID 3.7.2 page 25 */
@@ -281,7 +280,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			0x02, /* GET CLOCK FREQUENCIES */
 			0x00, /* value */
 			usb_interface->bInterfaceNumber, /* interface */
-			(char *)buffer,
+			buffer,
 			sizeof(buffer),
 			2 * 1000);
 
@@ -315,7 +314,6 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	printf("  bNumDataRatesSupported: %d %s\n", extra[27],
 		extra[27] ? "" : "(will use whatever is returned)");
 	{
-		unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 		int n;
 
 		/* See CCID 3.7.3 page 25 */
@@ -324,7 +322,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			0x03, /* GET DATA RATES */
 			0x00, /* value */
 			usb_interface->bInterfaceNumber, /* interface */
-			(char *)buffer,
+			buffer,
 			sizeof(buffer),
 			2 * 1000);
 
