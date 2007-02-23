@@ -286,7 +286,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 
 		/* we got an error? */
 		if (n <= 0)
-			printf("   IFD does not support GET CLOCK FREQUENCIES request\n");
+			printf("   IFD does not support GET CLOCK FREQUENCIES request: %s\n", strerror(errno));
 		else
 			if (n % 4) 	/* not a multiple of 4 */
 				printf("   wrong size for GET CLOCK FREQUENCIES: %d\n", n);
@@ -328,7 +328,8 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 
 		/* we got an error? */
 		if (n <= 0)
-			printf("   IFD does not support GET_DATA_RATES request\n");
+			printf("   IFD does not support GET_DATA_RATES request: %s\n",
+				strerror(errno));
 		else
 			if (n % 4) 	/* not a multiple of 4 */
 				printf("   wrong size for GET_DATA_RATES: %d\n", n);
