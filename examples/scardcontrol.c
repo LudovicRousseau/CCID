@@ -483,7 +483,6 @@ int main(int argc, char *argv[])
 		fd_set fd;
 #endif
 		struct timeval timeout;
-		int i;
 
 		/* old PIN, new PIN, confirmation PIN */
 		/* if the command is aborted we will not read every "PIN" */
