@@ -21,6 +21,8 @@
  * $Id$
  */
 
+#ifndef __CCID_USB_H__
+#define __CCID_USB_H__
 status_t OpenUSB(unsigned int reader_index, int channel);
 
 status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device);
@@ -40,3 +42,4 @@ status_t CloseUSB(unsigned int reader_index);
 int ControlUSB(int reader_index, int requesttype, int request, int value,
 	unsigned char *bytes, unsigned int size);
 
+#endif
