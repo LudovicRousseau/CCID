@@ -37,3 +37,6 @@ status_t CloseUSB(unsigned int reader_index);
 /*@null@*/ struct usb_interface *get_ccid_usb_interface(struct usb_device *dev);
 #endif
 
+int ControlUSB(int reader_index, int requesttype, int request, int value,
+	unsigned char *bytes, unsigned int size);
+
