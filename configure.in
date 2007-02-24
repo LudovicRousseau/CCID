@@ -261,6 +261,8 @@ AC_CONFIG_FILES(Makefile
 	aclocal/Makefile
 	src/Makefile
 	readers/Makefile
+	contrib/Makefile
+	contrib/midswitch/Makefile
 	examples/Makefile)
 
 AC_OUTPUT
