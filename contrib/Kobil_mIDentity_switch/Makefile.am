@@ -1,3 +1,3 @@
-sbin_PROGRAMS = midswitch
-midswitch_SOURCES = midswitch.c
-midswitch_LDADD = -lusb
+sbin_PROGRAMS = Kobil_mIDentity_switch
+Kobil_mIDentity_switch_SOURCES = Kobil_mIDentity_switch.c
+Kobil_mIDentity_switch_LDADD = -lusb
