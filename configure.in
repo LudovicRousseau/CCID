@@ -262,7 +262,7 @@ AC_CONFIG_FILES(Makefile
 	src/Makefile
 	readers/Makefile
 	contrib/Makefile
-	contrib/midswitch/Makefile
+	contrib/Kobil_mIDentity_switch/Makefile
 	examples/Makefile)
 
 AC_OUTPUT

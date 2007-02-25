@@ -1,1 +1,1 @@
-SUBDIRS = midswitch
+SUBDIRS = Kobil_mIDentity_switch
