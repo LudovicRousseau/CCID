@@ -2,6 +2,10 @@
 
 # Gemplus PCMCIA Card
 #SUBSYSTEMS=="pcmcia", DRIVER=="serial_cs", ACTION=="add", ATTRS{prod_id1}=="Gemplus", ATTRS{prod_id2}=="SerialPort", ATTRS{prod_id3}=="GemPC Card", RUN+="/usr/sbin/pcscd --hotplug" 
+
+# Kobil mIDentity
+BUS=="usb", ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", ACTION=="add", RUN+="/usr/sbin/Kobil_mIDentity_switch"
+
 # generic CCID device
 BUS=="usb", ATTRS{bInterfaceClass}=="0b", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
 
