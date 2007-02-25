@@ -6,3 +6,5 @@ Kobil_mIDentity_switch_LDADD = $(LIBUSB_LIBS)
 doc_DATA = README_Kobil_mIDentity_switch.txt
 
 man_MANS = Kobil_mIDentity_switch.8
+
+EXTRA_DIST = $(doc_DATA) $(man_MANS)
