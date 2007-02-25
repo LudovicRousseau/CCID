@@ -49,7 +49,6 @@ Supported CCID readers:
 - Kobil KAAN Base [19]
 - Kobil KAAN Advanced [20]
 - Kobil KAAN SIM III [21]
-- Kobil mIDentity [22]
 - OmniKey CardMan 3121 [5]
 - RSA SecureID SID800 [50]
 - SCM Micro SCR 331 [6]
@@ -124,6 +123,11 @@ Unsupported or partly supported CCID readers:
     powerup fails with a Setcos card
     does work with the belgium eID (the reader is sold for this
     application)
+- Kobil mIDentity [22]
+    Time requests are not managed correctly and make the firmware fails.
+    This is not a problem unless you use a time-consuming APDU like RSA
+    key generation.
+    A new firmware will correct the bug.
 
 
 Supported operating systems:
