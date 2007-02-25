@@ -263,6 +263,7 @@ AC_CONFIG_FILES(Makefile
 	readers/Makefile
 	contrib/Makefile
 	contrib/Kobil_mIDentity_switch/Makefile
+	contrib/RSA_SecurID/Makefile
 	examples/Makefile)
 
 AC_OUTPUT
