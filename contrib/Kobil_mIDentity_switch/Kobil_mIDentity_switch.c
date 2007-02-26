@@ -74,7 +74,7 @@ findintfep() in order to understand why.
 #define bmRequestType           0x22
 #define bRequest                0x09
 #define wValue                  0x0200
-#define wIndex                  0x0002  // this was originally 0x0001
+#define wIndex                  0x0002  /* this was originally 0x0001 */
 
 
 static int kobil_midentity_control_msg(usb_dev_handle *usb)
