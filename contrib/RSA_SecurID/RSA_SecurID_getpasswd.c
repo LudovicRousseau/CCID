@@ -1,6 +1,6 @@
 /*
     RSA_SecurID_getpasswd.c: get the one-use password from a RSA sid-800 token
-    Copyright (C) 2006   Uplogix, Inc.
+    Copyright (C) 2006   Ludovic Rousseau <ludovic.rousseau@free.fr>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
