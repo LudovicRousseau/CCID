@@ -69,7 +69,7 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 
 # Checks for library functions.
-AC_CHECK_FUNCS(select strerror strncpy memcpy)
+AC_CHECK_FUNCS(select strerror strncpy memcpy strlcpy)
 
 # Select OS specific versions of source files.
 AC_SUBST(BUNDLE_HOST)
