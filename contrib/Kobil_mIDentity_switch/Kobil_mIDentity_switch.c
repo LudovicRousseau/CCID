@@ -113,6 +113,7 @@ static int kobil_midentity_claim_interface(usb_dev_handle *usb, int ifnum)
 		return(rv);
     }
 
+#ifndef __APPLE__
     printf("failed with error %d, trying to detach kernel driver ....\n", rv);
     rv = usb_detach_kernel_driver_np(usb, ifnum);
     if (rv == 0)
@@ -125,6 +126,7 @@ static int kobil_midentity_claim_interface(usb_dev_handle *usb, int ifnum)
 			return(rv);
 		}
     }
+#endif
     printf("failed with error %d, giving up.\n", rv);
     return(rv);
 }
