@@ -785,8 +785,20 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 int ControlUSB(int reader_index, int requesttype, int request, int value,
 	unsigned char *bytes, unsigned int size)
 {
-	return usb_control_msg(usbDevice[reader_index].handle, requesttype,
+	int ret;
+
+	DEBUG_COMM2("request: 0x%02X", request);
+
+	if (0 == (requesttype & 0x80))
+		DEBUG_XXD("send: ", bytes, size);
+
+	ret = usb_control_msg(usbDevice[reader_index].handle, requesttype,
 		request, value, usbDevice[reader_index].interface, (char *)bytes, size,
 		usbDevice[reader_index].ccid.readTimeout * 1000);
+
+	if (requesttype & 0x80)
+		DEBUG_XXD("receive: ", bytes, ret);
+
+	return ret;
 }
 
