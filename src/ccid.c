@@ -252,6 +252,38 @@ int ccid_open_hack(unsigned int reader_index)
 			break;
 	}
 
+	/* ICCD type A */
+	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	{
+		unsigned char tmp[MAX_ATR_SIZE];
+		unsigned int n = sizeof(tmp);
+
+		DEBUG_COMM("ICCD type A");
+		CmdPowerOff(reader_index);
+		CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
+		CmdPowerOff(reader_index);
+	}
+
+	/* ICCD type B */
+	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	{
+		unsigned char tmp[MAX_ATR_SIZE];
+		unsigned int n = sizeof(tmp);
+
+		DEBUG_COMM("ICCD type B");
+		if (CCID_CLASS_SHORT_APDU ==
+			(ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK))
+		{
+			/* use the extended APDU comm alogorithm */
+			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+			ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
+		}
+
+		CmdPowerOff(reader_index);
+		CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
+		CmdPowerOff(reader_index);
+	}
+
 	return 0;
 } /* ccid_open_hack */
 

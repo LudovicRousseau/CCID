@@ -90,6 +90,11 @@ typedef struct
 	 * Card protocol
 	 */
 	int cardProtocol;
+
+	/*
+	 * bInterfaceProtocol (CCID, ICCD-A, ICCD-B)
+	 */
+	int bInterfaceProtocol;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */
@@ -117,6 +122,10 @@ typedef struct
 
 #define CCID_COMMAND_FAILED			0x40	/* 01 0000 00 */
 #define CCID_TIME_EXTENSION			0x80	/* 10 0000 00 */
+
+/* bInterfaceProtocol for ICCD */
+#define ICCD_A	1	/* ICCD Version A */
+#define ICCD_B	2	/* ICCD Version B */
 
 /* Product identification for special treatments */
 #define GEMPC433	0x08E64433
