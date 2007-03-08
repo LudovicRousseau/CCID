@@ -953,7 +953,10 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	rx_length = *RxLength;
 	return_value = CmdXfrBlock(reader_index, TxLength, TxBuffer, &rx_length,
 		RxBuffer, SendPci.Protocol);
-	*RxLength = rx_length;
+	if (IFD_SUCCESS == return_value)
+		*RxLength = rx_length;
+	else
+		*RxLength = 0;
 
 	return return_value;
 } /* IFDHTransmitToICC */
@@ -1067,6 +1070,9 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer, &iBytesReturned);
 		*pdwBytesReturned = iBytesReturned;
 	}
+
+	if (IFD_SUCCESS != return_value)
+		*pdwBytesReturned = 0;
 
 	DEBUG_INFO_XXD("Control RxBuffer: ", RxBuffer, *pdwBytesReturned);
 	return return_value;

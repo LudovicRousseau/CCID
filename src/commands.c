@@ -267,21 +267,18 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	if (TxLength > 19+CMD_BUF_SIZE) /* command too large? */
 	{
 		DEBUG_INFO3("Command too long: %d > %d", TxLength, 19+CMD_BUF_SIZE);
-		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
 	if (TxLength < 19+4 /* 4 = APDU size */)	/* command too short? */
 	{
 		DEBUG_INFO3("Command too short: %d < %d", TxLength, 19+4);
-		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
 	if (dw2i(TxBuffer, 15) + 19 != TxLength) /* ulDataLength field coherency */
 	{
 		DEBUG_INFO3("Wrong lengths: %d %d", dw2i(TxBuffer, 15) + 19, TxLength);
-		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
@@ -387,10 +384,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]+10);	/* at least 30 seconds */
 
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
-	{
-		*RxLength = 0;
 		return IFD_COMMUNICATION_ERROR;
-	}
 
 	ret = CCID_Receive(reader_index, RxLength, RxBuffer, NULL);
 
@@ -451,21 +445,18 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	if (TxLength > 24+CMD_BUF_SIZE) /* command too large? */
 	{
 		DEBUG_INFO3("Command too long: %d > %d", TxLength, 24+CMD_BUF_SIZE);
-		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
 	if (TxLength < 24+4 /* 4 = APDU size */) /* command too short? */
 	{
 		DEBUG_INFO3("Command too short: %d < %d", TxLength, 24+4);
-		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
 	if (dw2i(TxBuffer, 20) + 24 != TxLength) /* ulDataLength field coherency */
 	{
 		DEBUG_INFO3("Wrong lengths: %d %d", dw2i(TxBuffer, 20) + 24, TxLength);
-		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
@@ -473,7 +464,6 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	if (TxBuffer[11] > 3)
 	{
 		DEBUG_INFO2("Wrong bNumberMessage: %d", TxBuffer[11]);
-		*RxLength = 0;
 		return IFD_NOT_SUPPORTED;
 	}
 
@@ -614,10 +604,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]+10);	/* at least 30 seconds */
 
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
-	{
-		*RxLength = 0;
  		return IFD_COMMUNICATION_ERROR;
-	}
 
  	ret = CCID_Receive(reader_index, RxLength, RxBuffer, NULL);
 
@@ -990,8 +977,6 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 		case CCID_CLASS_EXTENDED_APDU:
 			return_value = CmdXfrBlockAPDU_extended(reader_index,
 				tx_length, tx_buffer, rx_length, rx_buffer);
-			if (return_value != IFD_SUCCESS)
-				*rx_length = 0;
 			break;
 
 		case CCID_CLASS_CHARACTER:
@@ -1007,7 +992,6 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 			break;
 
 		default:
-			*rx_length = 0;
 			return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1202,7 +1186,6 @@ time_request:
 	ret = ReadPort(reader_index, &length, cmd);
 	if (ret != STATUS_SUCCESS)
 	{
-		*rx_length = 0;
 		if (STATUS_NO_SUCH_DEVICE == ret)
 			return IFD_NO_SUCH_DEVICE;
 		return IFD_COMMUNICATION_ERROR;
@@ -1211,7 +1194,6 @@ time_request:
 	if (length < STATUS_OFFSET+1)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
-		*rx_length = 0;
 		return IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1237,11 +1219,9 @@ time_request:
 				return IFD_SUCCESS;
 
 			case 0xFD:	/* Parity error during exchange */
-				*rx_length = 0; /* nothing received */
 				return IFD_PARITY_ERROR;
 
 			default:
-				*rx_length = 0; /* nothing received */
 				return IFD_COMMUNICATION_ERROR;
 		}
 	}
@@ -1433,7 +1413,6 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	{
 		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
 				tx_length, ccid_descriptor->dwMaxCCIDMessageLength-10);
-		*rx_length = 0;
 		return IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1442,16 +1421,12 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	{
 		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
 				tx_length, CMD_BUF_SIZE);
-		*rx_length = 0;
 		return IFD_COMMUNICATION_ERROR;
 	}
 
 	return_value = CCID_Transmit(reader_index, tx_length, tx_buffer, 0, 0);
 	if (return_value != IFD_SUCCESS)
-	{
-		*rx_length = 0;
 		return return_value;
-	}
 
 	return CCID_Receive(reader_index, rx_length, rx_buffer, NULL);
 } /* CmdXfrBlockTPDU_T0 */
@@ -1889,10 +1864,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int reader_index,
 		tx_buffer, tx_length, rx_buffer, *rx_length);
 
 	if (ret < 0)
-	{
-		*rx_length = 0;
 		return_value = IFD_COMMUNICATION_ERROR;
-	}
 	else
 		*rx_length = ret;
 
