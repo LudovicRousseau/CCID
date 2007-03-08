@@ -28,3 +28,5 @@ BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="e003", ACTION=="add", RU
 BUS=="usb", ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="1359", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
 # Verisign_secure_token.txt
 BUS=="usb", ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="ace0", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+# SchlumbergerSema Cyberflex Access e-gate
+BUS=="usb", ATTRS{idVendor}=="0973", ATTRS{idProduct}=="0003", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
