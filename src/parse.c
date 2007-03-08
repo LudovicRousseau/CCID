@@ -396,6 +396,8 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		printf("   ..02.. NAD value other than 00 accepted (T=1)\n");
 	if (extra[41] & 0x04)
 		printf("   ..04.. Automatic IFSD exchange as first exchange (T=1)\n");
+	if (extra[41] & 0x08)
+		printf("   ..08.. Unknown (ICCD?)\n");
 	switch (extra[42] & 0x07)
 	{
 		case 0x00:
