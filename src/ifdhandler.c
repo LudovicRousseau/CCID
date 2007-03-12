@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include "misc.h"
+#include "config.h"
 #include <pcsclite.h>
 #include <ifdhandler.h>
 #include <reader.h>
@@ -31,7 +32,6 @@
 #include "ccid.h"
 #include "defs.h"
 #include "ccid_ifdhandler.h"
-#include "config.h"
 #include "debug.h"
 #include "utils.h"
 #include "commands.h"
