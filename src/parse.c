@@ -126,7 +126,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 {
 	struct usb_interface_descriptor *usb_interface;
 	unsigned char *extra;
-	char buffer[256*sizeof(int)];  /* maximum is 256 records */
+	unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 
 	/*
 	 * Vendor/model name
