@@ -286,7 +286,14 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 
 		/* we got an error? */
 		if (n <= 0)
+		{
 			printf("   IFD does not support GET CLOCK FREQUENCIES request: %s\n", strerror(errno));
+			if (EBUSY == errno)
+			{
+				printf("   \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
+				return TRUE;
+			}
+		}
 		else
 			if (n % 4) 	/* not a multiple of 4 */
 				printf("   wrong size for GET CLOCK FREQUENCIES: %d\n", n);
