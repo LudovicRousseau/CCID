@@ -26,6 +26,8 @@ EXTRA_DIST = \
 	CryptoIdentity.txt \
 	DellSCRK.txt \
 	DellSK-3106.txt \
+	FujitsuSiemens_SmartCard_Keyboard_USB_2A.txt \
+	FujitsuSiemens_SmartCard_USB_2A.txt \
 	GemCoreSIMPro.txt \
 	GemPC433_SL.txt \
 	GemPC_Express.txt \

@@ -106,3 +106,6 @@
 # RSA
 0x15E1:0x2007:RSA SecurID
 
+# Fujitsu Siemens Computers
+0x0BF8:0x1005:Fujitsu Siemens SmartCard Keyboard USB 2A
+0x0BF8:0x1006:Fujitsu Siemens SmartCard USB 2A
