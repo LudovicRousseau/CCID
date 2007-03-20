@@ -2,15 +2,17 @@
   iManufacturer: SCM Microsystems Inc.
  idProduct: 0x511D
   iProduct: SCR3311 USB Smart Card Reader
- bcdDevice: 5.18 (firmware release?)
+ bcdDevice: 5.22 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN
  iInterface: 4
  CCID Class Descriptor
   bLength: 0x36
@@ -23,13 +25,13 @@
    T=0
    T=1
   dwDefaultClock: 4.000 MHz
-  dwMaximumClock: 12.000 MHz
+  dwMaximumClock: 8.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request
-  dwDataRate: 9600 bps
-  dwMaxDataRate: 307200 bps
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
+  dwDataRate: 10753 bps
+  dwMaxDataRate: 344105 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request
+   IFD does not support GET_DATA_RATES request: Broken pipe
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
