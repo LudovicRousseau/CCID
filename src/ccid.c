@@ -140,6 +140,30 @@ int ccid_open_hack(unsigned int reader_index)
 					"Erro cartao",
 					"PIN bloqueado" };
 
+				const char *nl[] = {
+					"Inbrengen code",
+					"Nieuwe code",
+					"Bevestig code",
+					"Code aanvaard",
+					"Foute code",
+					"Time out",
+					"* Nog Pogingen",
+					"Kaart inbrengen",
+					"Kaart fout",
+					"Kaart blok" };
+
+				const char *tr[] = {
+					"PIN Giriniz",
+					"Yeni PIN",
+					"PIN Onayala",
+					"PIN OK",
+					"Yanlis PIN",
+					"Zaman Asimi",
+					"* deneme kaldi",
+					"Karti Takiniz",
+					"Kart Hatasi",
+					"Kart Kilitli" };
+
 				const char *en[] = {
 					"Enter PIN",
 					"New PIN",
@@ -170,6 +194,10 @@ int ccid_open_hack(unsigned int reader_index)
 						l10n = it;
 					else if (0 == strncmp(lang, "pt", 2))
 						l10n = pt;
+					else if (0 == strncmp(lang, "nl", 2))
+						l10n = nl;
+					else if (0 == strncmp(lang, "tr", 2))
+						l10n = tr;
 					else
 						l10n = en;
 				}
