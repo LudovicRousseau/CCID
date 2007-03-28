@@ -40,6 +40,11 @@
  * I use code to change the user command and make the firmware happy */
 #define BOGUS_PINPAD_FIRMWARE
 
+/* The firmware of SCM readers reports dwMaxCCIDMessageLength = 263
+ * instead of 270 so this prevents from sending a full length APDU
+ * of 260 bytes since the driver check this value */
+#define BOGUS_SCM_FIRMWARE_FOR_dwMaxCCIDMessageLength
+
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 #define IFD_ERROR_INSUFFICIENT_BUFFER 700
@@ -1411,9 +1416,20 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	/* command length too big for CCID reader? */
 	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength-10)
 	{
-		DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
+#ifdef BOGUS_SCM_FIRMWARE_FOR_dwMaxCCIDMessageLength
+		if (263 == ccid_descriptor->dwMaxCCIDMessageLength)
+		{
+			DEBUG_INFO3("Command too long (%d bytes) for max: %d bytes."
+				" SCM reader with bogus firmware?",
 				tx_length, ccid_descriptor->dwMaxCCIDMessageLength-10);
-		return IFD_COMMUNICATION_ERROR;
+		}
+		else
+#endif
+		{
+			DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
+				tx_length, ccid_descriptor->dwMaxCCIDMessageLength-10);
+			return IFD_COMMUNICATION_ERROR;
+		}
 	}
 
 	/* command length too big for CCID driver? */
