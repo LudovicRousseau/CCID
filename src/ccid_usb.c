@@ -664,6 +664,9 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 				usb_interface->altsetting->extralen = 54;
 				usb_interface->altsetting->extra =
 					usb_interface->altsetting->endpoint[i].extra;
+				/* avoid double free on close */
+				usb_interface->altsetting->endpoint[i].extra = NULL;
+				usb_interface->altsetting->endpoint[i].extralen = 0;
 				break;
 			}
 		}
