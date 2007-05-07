@@ -35,6 +35,7 @@
 #include "ccid_ifdhandler.h"
 #include "config.h"
 #include "debug.h"
+#include "ccid_usb.h"
 
 /* All the pinpad readers I used are more or less bogus
  * I use code to change the user command and make the firmware happy */
