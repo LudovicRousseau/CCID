@@ -3,30 +3,36 @@
 # Gemplus PCMCIA Card
 #SUBSYSTEMS=="pcmcia", DRIVER=="serial_cs", ACTION=="add", ATTRS{prod_id1}=="Gemplus", ATTRS{prod_id2}=="SerialPort", ATTRS{prod_id3}=="GemPC Card", RUN+="/usr/sbin/pcscd --hotplug" 
 
+# If not adding the device, go away
+ACTION!="add", GOTO="pcscd_ccid_rules_end"
+
 # Kobil mIDentity
-BUS=="usb", ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", ACTION=="add", RUN+="/usr/sbin/Kobil_mIDentity_switch"
+BUS=="usb", ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
 # generic CCID device
-BUS=="usb", ATTRS{bInterfaceClass}=="0b", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{bInterfaceClass}=="0b", RUN+="/usr/sbin/pcscd --hotplug"
 
 # non CCID generic (InterfaceClass: 0xFF)
 # CherrySmartTerminalST2XXX.txt
-BUS=="usb", ATTRS{idVendor}=="046a", ATTRS{idProduct}=="003e", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="046a", ATTRS{idProduct}=="003e", RUN+="/usr/sbin/pcscd --hotplug"
 # DellSK-3106.txt
-BUS=="usb", ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2100", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2100", RUN+="/usr/sbin/pcscd --hotplug"
 # MySmartPad.txt
-BUS=="usb", ATTRS{idVendor}=="09be", ATTRS{idProduct}=="0002", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="09be", ATTRS{idProduct}=="0002", RUN+="/usr/sbin/pcscd --hotplug"
 # SCR331-DI-NTTCom.txt
-BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5120", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5120", RUN+="/usr/sbin/pcscd --hotplug"
 # SCR331-DI.txt
-BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5111", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5111", RUN+="/usr/sbin/pcscd --hotplug"
 # SDI010.txt
-BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5121", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5121", RUN+="/usr/sbin/pcscd --hotplug"
 # SPR532.txt
-BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="e003", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="e003", RUN+="/usr/sbin/pcscd --hotplug"
 # Verisign_secure_storage_token.txt
-BUS=="usb", ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="1359", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="1359", RUN+="/usr/sbin/pcscd --hotplug"
 # Verisign_secure_token.txt
-BUS=="usb", ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="ace0", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="ace0", RUN+="/usr/sbin/pcscd --hotplug"
 # SchlumbergerSema Cyberflex Access e-gate
-BUS=="usb", ATTRS{idVendor}=="0973", ATTRS{idProduct}=="0003", ACTION=="add", RUN+="/usr/sbin/pcscd --hotplug"
+BUS=="usb", ATTRS{idVendor}=="0973", ATTRS{idProduct}=="0003", RUN+="/usr/sbin/pcscd --hotplug"
+
+# All done
+LABEL="pcscd_ccid_rules_end"
