@@ -1,0 +1,51 @@
+ idVendor: 0x0973
+  iManufacturer: SchlumbergerSema
+ idProduct: 0x0003
+  iProduct: SchlumbergerSema Cyberflex Access
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 0
+  Control only
+ bInterfaceClass: 0xFF
+  NOT A CCID DEVICE
+  Class is 0xFF (proprietary)
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 1
+  ICCD Version A, Control transfers, (no interrupt-IN)
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0001
+   T=0
+  dwDefaultClock: 3.580 MHz
+  dwMaximumClock: 3.580 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: Device or resource busy
+  dwDataRate: 9600 bps
+  dwMaxDataRate: 9600 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: Device or resource busy
+  dwMaxIFSD: 0
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00000840
+   ....40 Automatic parameters negotiation made by the CCID
+   ..08.. Unknown (ICCD?)
+   00.... Character level exchange
+  dwMaxCCIDMessageLength: 256 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
