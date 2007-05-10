@@ -217,7 +217,7 @@ History:
       of the Kobil mIDentity. The tool should be started automatically
       by the udev rule on Linux
     - GemPC pinpad: localisation of the string "PIN blocked", add
-      Portugese(pt), Dutch(nl) and Tukish(tr) localisations
+      Portuguese(pt), Dutch(nl) and Turkish(tr) localisations
     - some minor bugs removed
 
 1.2.1 - 27 January 2007, Ludovic Rousseau
