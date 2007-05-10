@@ -1,5 +1,5 @@
-The midswitch program is used to activate the Kobil mIDenty smart card
-CCID reader.
+The Kobil_mIDentity_switch program is used to activate the Kobil mIDenty
+smart card CCID reader.
 
 The USB device is by default:
   ID 0d46:4081 Kobil Systems GmbH mIDentity Basic/Classic (installationless)
