@@ -206,6 +206,20 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.3.0 - 10 May 2007, Ludovic Rousseau
+    - add support of ICCD version A and B
+    - add support for (new) KOBIL mIDentity, SchlumbergerSema Cyberflex
+      Access e-gate ICCD, Fujitsu Siemens Computers SmartCard USB 2A and
+      SmartCard Keyboard USB 2A readers, OmniKey CardMan 4321
+    - contrib/RSA_SecurID/RSA_SecurID_getpasswd: tool to get the on time
+      password also displayed on the token screen
+    - contrib/Kobil_mIDentity_switch: tool to activate the CCID reader
+      of the Kobil mIDentity. The tool should be started automatically
+      by the udev rule on Linux
+    - GemPC pinpad: localisation of the string "PIN blocked", add
+      Portugese(pt), Dutch(nl) and Tukish(tr) localisations
+    - some minor bugs removed
+
 1.2.1 - 27 January 2007, Ludovic Rousseau
     - pcscd_ccid.rules: add non CCID generic (InterfaceClass: 0xFF)
       readers
