@@ -57,6 +57,7 @@ EXTRA_DIST = \
 	SCR355.txt \
 	SDI010.txt \
 	sid800.txt \
+	Sitecom_MD-010.txt \
 	SIM_Pocket_Combo.txt \
 	SPR532.txt \
 	supported_readers.txt \
