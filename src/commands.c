@@ -378,10 +378,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		return_value = CmdEscape(reader_index, cmd_tmp, sizeof(cmd_tmp),
 			res_tmp, &res_length);
 		if (return_value != IFD_SUCCESS)
-		{
-			ccid_error(res_tmp[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);
 			return return_value;
-		}
 	}
 
 	i2dw(a - 10, cmd + 1);  /* CCID message length */
