@@ -107,24 +107,3 @@
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1
- idVendor: 0x2770
-  iManufacturer: ?
- idProduct: 0x9120
-  iProduct: USB DIGITAL STILL CAMERA
- bcdDevice: 1.00 (firmware release?)
- bLength: 9
- bDescriptorType: 4
- bInterfaceNumber: 0
- bAlternateSetting: 0
- bNumEndpoints: 3
- bInterfaceClass: 0xFF
-  NOT A CCID DEVICE
-  Class is 0xFF (proprietary)
- bInterfaceSubClass: 255
-  UNSUPPORTED SubClass
- bInterfaceProtocol: 255
-  UNSUPPORTED InterfaceProtocol
- iInterface: 0
-USB extra length is too short: 0
-
-  NOT A CCID DEVICE
