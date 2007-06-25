@@ -117,3 +117,5 @@
 # Schlumberger/Axlalto/Gemalto
 0x0973:0x0003:SchlumbergerSema Cyberflex Access
 
+# Philips
+0x0471:0x040F:Philips JCOP41V221
