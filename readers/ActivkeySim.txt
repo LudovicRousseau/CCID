@@ -8,9 +8,11 @@
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN
  iInterface: 0
  CCID Class Descriptor
   bLength: 0x36
@@ -27,7 +29,7 @@
   dwDefaultClock: 4.800 MHz
   dwMaximumClock: 4.800 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
   dwDataRate: 12903 bps
   dwMaxDataRate: 412903 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
