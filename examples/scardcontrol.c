@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 	LONG rv;
 	SCARDCONTEXT hContext;
 	DWORD dwReaders;
-	LPSTR mszReaders;
+	LPSTR mszReaders = NULL;
 	char *ptr, **readers = NULL;
 	int nbReaders;
 	SCARDHANDLE hCard;
@@ -553,8 +553,10 @@ end:
 			rv);
 
 	/* free allocated memory */
-	free(mszReaders);
-	free(readers);
+	if (mszReaders)
+		free(mszReaders);
+	if (readers)
+		free(readers);
 
 	return 0;
 } /* main */
