@@ -1,6 +1,6 @@
 /*
     scardcontrol.c: sample code to use/test SCardControl() API
-    Copyright (C) 2004-2005   Ludovic Rousseau
+    Copyright (C) 2004-2007   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 #endif
 
 	printf("SCardControl sample code\n");
-	printf("V 1.1 2004-2005, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
+	printf("V 1.2 2004-2007, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
 
 	printf("\nTHIS PROGRAM IS NOT DESIGNED AS A TESTING TOOL!\n");
 	printf("Do NOT use it unless you really know what you do.\n\n");
