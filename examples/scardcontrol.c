@@ -103,10 +103,7 @@ int main(int argc, char *argv[])
 
 	/* Retrieve the available readers list */
 	rv = SCardListReaders(hContext, NULL, NULL, &dwReaders);
-	if (rv != SCARD_S_SUCCESS)
-	{
-		printf("SCardListReader: %lX\n", rv);
-	}
+	PCSC_ERROR_EXIT(rv, "SCardListReaders")
 
 	mszReaders = malloc(sizeof(char)*dwReaders);
 	if (mszReaders == NULL)
