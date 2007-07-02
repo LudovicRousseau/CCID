@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 	BYTE pbAtr[MAX_ATR_SIZE] = "";
 	char pbReader[MAX_READERNAME] = "";
 	int reader_nb;
-	int i;
+	unsigned int i;
 	unsigned char bSendBuffer[MAX_BUFFER_SIZE];
 	unsigned char bRecvBuffer[MAX_BUFFER_SIZE];
 	DWORD send_length, length;
