@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
 			pioSendPci = *SCARD_PCI_T1;
 			break;
 		default:
-			printf("Unknown protocol\n");
+			printf("Unknown protocol. No card present?\n");
 			return -1;
 	}
 
