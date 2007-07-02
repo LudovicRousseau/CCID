@@ -3,9 +3,9 @@
 # $Id$
 
 # I use
-# - autoconf (GNU Autoconf) 2.57
-# - automake (GNU automake) 1.7.3
-# - ltmain.sh (GNU libtool) 1.4.3 (1.922.2.111 2002/10/23 02:54:36)
+# - autoconf (GNU Autoconf) 2.61
+# - automake (GNU automake) 1.10
+# - ltmain.sh (GNU libtool) 1.5.22-4 (1.1220.2.365 2005/12/18 22:14:06)
 
 set -e
 set -x
