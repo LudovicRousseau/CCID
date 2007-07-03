@@ -323,7 +323,7 @@ int ccid_open_hack(unsigned int reader_index)
 void ccid_error(int error, const char *file, int line, const char *function)
 {
 	const char *text;
-	char var_text[20];
+	char var_text[30];
 
 	switch (error)
 	{
