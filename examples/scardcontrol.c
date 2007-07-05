@@ -27,7 +27,12 @@
 #include <unistd.h>
 #include <string.h>
 #include <arpa/inet.h>
+#ifdef __APPLE__
+#include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#else
 #include <winscard.h>
+#endif
 #include <reader.h>
 
 #undef VERIFY_PIN
