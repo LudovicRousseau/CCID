@@ -72,6 +72,7 @@
 
 # O2 Micro
 0x0b97:0x7762:O2 Micro Oz776
+0x0b97:0x7772:O2 Micro Oz776
 
 # Kobil
 0x0D46:0x3001:KOBIL KAAN Base
