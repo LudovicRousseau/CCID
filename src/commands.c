@@ -931,7 +931,8 @@ again_status:
 #ifdef O2MICRO_OZ776_PATCH
 		/* the O2MICRO OZ 776 reader sends card absent or mute errors
 		 * when no card is inserted */
-		if (! ((OZ776 == ccid_descriptor->readerID)
+		if (! (((OZ776 == ccid_descriptor->readerID)
+			|| (OZ776_7772 == ccid_descriptor->readerID))
 			&& (buffer[ERROR_OFFSET] == 0xFE)))
 #endif
 		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */

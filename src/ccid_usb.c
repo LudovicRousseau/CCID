@@ -633,6 +633,9 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 {
 	struct usb_interface *usb_interface = NULL;
 	int i;
+#ifdef O2MICRO_OZ776_PATCH
+	int readerID;
+#endif
 
 	/* if multiple interfaces use the first one with CCID class type */
 	for (i=0; i<dev->config->bNumInterfaces; i++)
@@ -650,9 +653,9 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 	}
 
 #ifdef O2MICRO_OZ776_PATCH
+	readerID = (dev->descriptor.idVendor << 16) + dev->descriptor.idProduct;
 	if (usb_interface != NULL
-		&& (OZ776 == (dev->descriptor.idVendor << 16)
-		+ dev->descriptor.idProduct)
+		&& ((OZ776 == readerID) || (OZ776_7772 == readerID))
 		&& (0 == usb_interface->altsetting->extralen)) /* this is the bug */
 	{
 		for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)
