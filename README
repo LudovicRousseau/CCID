@@ -86,6 +86,8 @@ manufacturers, please, contact me.
 - Gemplus GemPC Express
 - Fujitsu Siemens Computers SmartCard USB 2A [53]
 - Fujitsu Siemens Computers SmartCard Keyboard USB 2A [54]
+- Giesecke & Devrient StarSign Card Token 350 (ICCD) [57]
+- Giesecke & Devrient StarSign Card Token 550 (ICCD)
 - HP USB Smart Card Keyboard [44]
 - HP USB Smartcard Reader
 - id3 Semiconductors CL1356D [45] (tested by me but I don't have the
@@ -562,6 +564,7 @@ References:
 [54] http://www.fujitsu-siemens.com/solutions/business_solutions/security/security_products/smartcase_kbpc_cx.html
 [55] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=50
 [56] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=41
+[57] http://www.gi-de.com/portal/page?_pageid=42,126834&_dad=portal&_schema=PORTAL
 
 $Id$
 
