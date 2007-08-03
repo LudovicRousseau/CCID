@@ -99,6 +99,7 @@ manufacturers, please, contact me.
 - OmniKey CardMan 4321 [55]
 - OmniKey CardMan 5121 [33]
 - OmniKey CardMan 5125 [51]
+- OmniKey CardMan 5321 [56]
 - OmniKey CardMan 6121 [36]
 - O2Micro Oz776 (0x7762 and 0x7772 versions)
 - Philips JCOP41V221
@@ -560,6 +561,7 @@ References:
 [53] http://www.fujitsu-siemens.com/solutions/business_solutions/security/security_products/smartcase_scr_usbex.html
 [54] http://www.fujitsu-siemens.com/solutions/business_solutions/security/security_products/smartcase_kbpc_cx.html
 [55] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=50
+[56] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=41
 
 $Id$
 
