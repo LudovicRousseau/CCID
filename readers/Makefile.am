@@ -37,6 +37,8 @@ EXTRA_DIST = \
 	GemPCKey.txt \
 	GemPCPinpad.txt \
 	GemPCTwin.txt \
+	GnD_StarSignCardToken350.txt \
+	GnD_StarSignCardToken550.txt \
 	HPUSBSmartCardKeyboard.txt \
 	iDream.txt \
 	KAAN_Advanced.txt \

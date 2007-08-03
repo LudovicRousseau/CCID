@@ -1,0 +1,49 @@
+ idVendor: 0x1059
+  iManufacturer: Giesecke & Devrient GmbH
+ idProduct: 0x000D
+  iProduct: ICCD Smartcard
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 1
+  Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 2
+  ICCD Version B, Control transfers, (optional interrupt-IN)
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0002
+   T=1
+  dwDefaultClock: 3.580 MHz
+  dwMaximumClock: 3.580 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
+  dwDataRate: 9600 bps
+  dwMaxDataRate: 9600 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: Broken pipe
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00020840
+   ....40 Automatic parameters negotiation made by the CCID
+   ..08.. Unknown (ICCD?)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 261 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
