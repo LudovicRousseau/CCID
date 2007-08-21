@@ -121,3 +121,6 @@
 
 # Philips
 0x0471:0x040F:Philips JCOP41V221
+
+# Rainbow/SafeNet
+0x04B9:0x1400:SafeNet IKey4000
