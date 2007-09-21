@@ -124,3 +124,7 @@
 
 # Rainbow/SafeNet
 0x04B9:0x1400:SafeNet IKey4000
+
+# Giesecke & Devrient
+0x1059:0x000C:G&D CardToken 350
+0x1059:0x000D:G&D CardToken 550
