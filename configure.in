@@ -144,6 +144,9 @@ if test "x$use_libusb" != xno ; then
 	AC_TRY_LINK_FUNC(usb_get_string_simple, [ AC_MSG_RESULT([yes]) ],
 		[ AC_MSG_ERROR([your libusb is too old. install version 0.1.7 or above]) ])
 
+	AC_CHECK_FUNC(usb_detach_kernel_driver_np,
+		[ AC_DEFINE(HAVE_USB_DETACH_KERNEL_DRIVER_NP, 1, [Define if usb_detach_kernel_driver_np() is available]) ])
+
 	CPPFLAGS="$saved_CPPFLAGS"
 	LIBS="$saved_LIBS"
 
