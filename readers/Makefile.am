@@ -29,6 +29,7 @@ EXTRA_DIST = \
 	DellSCRK.txt \
 	DellSK-3106.txt \
 	e-gate.txt \
+	Eutron_CryptoIdentity.txt \
 	FujitsuSiemens_SmartCard_Keyboard_USB_2A.txt \
 	FujitsuSiemens_SmartCard_USB_2A.txt \
 	GemCoreSIMPro.txt \
