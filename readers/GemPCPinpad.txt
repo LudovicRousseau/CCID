@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 002/092
  idVendor: 0x08E6
   iManufacturer: Gemplus
  idProduct: 0x3478
@@ -9,9 +8,11 @@ Parsing Interface Descriptor for device: 002/092
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN
  iInterface: 0
  CCID Class Descriptor
   bLength: 0x36
