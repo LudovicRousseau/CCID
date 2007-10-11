@@ -310,7 +310,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			{
 				*Length = 1;
 				*Value = 1 + get_ccid_descriptor(reader_index) -> bMaxSlotIndex;
-				DEBUG_INFO2("Reader supports %d slots", *Value);
+				DEBUG_INFO2("Reader supports %d slot(s)", *Value);
 			}
 			break;
 
