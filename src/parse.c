@@ -51,6 +51,7 @@ int main(void)
 	static struct usb_bus *busses = NULL;
 	struct usb_bus *bus;
 	struct usb_dev_handle *dev_handle;
+	int nb = 0;
 
 	usb_init();
 	usb_find_busses();
@@ -109,9 +110,12 @@ int main(void)
 
 			ccid_parse_interface_descriptor(dev_handle, dev);
 			usb_close(dev_handle);
+			nb++;
 		}
 	}
 
+	if ((0 == nb) && (0 != geteuid()))
+		fprintf(stderr, "Can't find any CCID device.\nMaybe you must run parse as root?\n");
 	return 0;
 } /* main */
 
