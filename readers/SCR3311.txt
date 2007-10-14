@@ -2,7 +2,7 @@
   iManufacturer: SCM Microsystems Inc.
  idProduct: 0x511D
   iProduct: SCR3311 USB Smart Card Reader
- bcdDevice: 5.22 (firmware release?)
+ bcdDevice: 5.23 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -17,7 +17,7 @@
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
-  bcdCCID: 1.00
+  bcdCCID: 1.10
   bMaxSlotIndex: 0x00
   bVoltageSupport: 0x01
    5.0V
@@ -43,7 +43,7 @@
    ....20 Automatic baud rate change according to frequency and Fi, Di params
    ....80 Automatic PPS made by the CCID
    01.... TPDU level exchange
-  dwMaxCCIDMessageLength: 263 bytes
+  dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnveloppe: 0xFF
