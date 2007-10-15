@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
 	/* connect to a reader (even without a card) */
 	dwActiveProtocol = -1;
 	rv = SCardReconnect(hCard, SCARD_SHARE_SHARED,
-		SCARD_PROTOCOL_T0|SCARD_PROTOCOL_T1, SCARD_UNPOWER_CARD,
+		SCARD_PROTOCOL_T0|SCARD_PROTOCOL_T1, SCARD_LEAVE_CARD,
 		&dwActiveProtocol);
 	printf(" Protocol: %ld\n", dwActiveProtocol);
 	PCSC_ERROR_EXIT(rv, "SCardReconnect")
