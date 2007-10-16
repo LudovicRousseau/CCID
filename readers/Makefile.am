@@ -45,6 +45,7 @@ EXTRA_DIST = \
 	KAAN_Advanced.txt \
 	KAAN_Base.txt \
 	KAAN_SIM_III.txt \
+	Lenovo.txt \
 	LTC31.txt \
 	LTC31v2.txt \
 	mIDentity.txt \
