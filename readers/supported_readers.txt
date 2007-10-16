@@ -129,3 +129,6 @@
 # Giesecke & Devrient
 0x1059:0x000C:G&D CardToken 350
 0x1059:0x000D:G&D CardToken 550
+
+# Lenovo
+0x17EF:0x1003:Lenovo Integrated Smart Card Reader
