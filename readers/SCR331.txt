@@ -27,11 +27,11 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 8.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Unknown error: 0
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
   dwDataRate: 10753 bps
   dwMaxDataRate: 344105 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: Invalid argument
+   IFD does not support GET_DATA_RATES request: Broken pipe
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
