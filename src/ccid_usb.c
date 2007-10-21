@@ -638,7 +638,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 #endif
 
 	/* if multiple interfaces use the first one with CCID class type */
-	for (i=0; i<dev->config->bNumInterfaces; i++)
+	for (i=0; dev->config && i<dev->config->bNumInterfaces; i++)
 	{
 		/* CCID Class? */
 		if (dev->config->interface[i].altsetting->bInterfaceClass == 0xb
