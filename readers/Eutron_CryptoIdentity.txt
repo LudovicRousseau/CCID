@@ -2,17 +2,17 @@
   iManufacturer: Eutron
  idProduct: 0x0008
   iProduct: CryptoIdentity CCID
- bcdDevice: 1.00 (firmware release?)
+ bcdDevice: 1.10 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
- bulk-IN, bulk-OUT and Interrupt-IN
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
- bulk transfer, optional interrupt-IN
+  bulk transfer, optional interrupt-IN
  iInterface: 0
  CCID Class Descriptor
   bLength: 0x36
@@ -29,266 +29,11 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Input/output error
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
   dwDataRate: 10752 bps
   dwMaxDataRate: 344086 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   Support 9984 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 8750 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 7500 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 6250 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 5000 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 3750 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 2500 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 1250 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -994159232 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support -1 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 1 bps
-   Support -992823296 bps
-   Support -994475012 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
-   Support 0 bps
+   wrong size for GET_DATA_RATES: 1
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
