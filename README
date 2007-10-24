@@ -39,6 +39,7 @@ Supported CCID readers:
 - Dell smart card reader keyboard [?]
 - Eutron SIM Pocket Combo [25]
 - Eutron CryptoIdentity [26]
+- Eutron Smart Pocket [58]
 - Gemplus GemPC 433 SL [2]
 - Gemplus GemPC Card [41]
 - Gemplus GemPC Key [3]
@@ -568,6 +569,7 @@ References:
 [55] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=50
 [56] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=41
 [57] http://www.gi-de.com/portal/page?_pageid=42,126834&_dad=portal&_schema=PORTAL
+[58] http://www.eutronsec.com/infosecurity/Contents/ProductLine/Details.aspx?IDProd=26&IDFamiglia=3
 
 $Id$
 
