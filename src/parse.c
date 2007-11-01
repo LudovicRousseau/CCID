@@ -110,6 +110,7 @@ int main(void)
 			}
 
 			interface = usb_interface->altsetting->bInterfaceNumber;
+#ifndef __APPLE__
 			if (usb_claim_interface(dev_handle, interface) < 0)
 			{
 				usb_close(dev_handle);
@@ -122,10 +123,13 @@ int main(void)
 				}
 				continue;
 			}
+#endif
 
 			ccid_parse_interface_descriptor(dev_handle, dev);
 
+#ifndef __APPLE__
 			usb_release_interface(dev_handle, interface);
+#endif
 			usb_close(dev_handle);
 			nb++;
 		}
