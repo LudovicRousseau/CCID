@@ -115,6 +115,11 @@ int main(void)
 				usb_close(dev_handle);
 				fprintf(stderr, "Can't claim interface %s/%s: %s\n",
 						bus->dirname, dev->filename, strerror(errno));
+				if (EBUSY == errno)
+				{
+					printf(" \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
+					return TRUE;
+				}
 				continue;
 			}
 
