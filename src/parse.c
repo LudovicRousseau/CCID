@@ -73,6 +73,7 @@ int main(void)
 		for (dev = bus->devices; dev; dev = dev->next)
 		{
 			struct usb_interface *usb_interface = NULL;
+			int interface;
 
 			/* check if the device has bInterfaceClass == 11 */
 			usb_interface = get_ccid_usb_interface(dev);
@@ -108,7 +109,18 @@ int main(void)
 				continue;
 			}
 
+			interface = usb_interface->altsetting->bInterfaceNumber;
+			if (usb_claim_interface(dev_handle, interface) < 0)
+			{
+				usb_close(dev_handle);
+				fprintf(stderr, "Can't claim interface %s/%s: %s\n",
+						bus->dirname, dev->filename, strerror(errno));
+				continue;
+			}
+
 			ccid_parse_interface_descriptor(dev_handle, dev);
+
+			usb_release_interface(dev_handle, interface);
 			usb_close(dev_handle);
 			nb++;
 		}
