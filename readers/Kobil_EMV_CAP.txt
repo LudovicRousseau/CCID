@@ -1,8 +1,8 @@
  idVendor: 0x0D46
   iManufacturer: KOBIL Systems
  idProduct: 0x3010
-  iProduct: KOBIL EMV CAP - SecOVID Reader III
- bcdDevice: 0.01 (firmware release?)
+  iProduct: KOBIL Class 3 Reader
+ bcdDevice: 0.28 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
