@@ -655,7 +655,8 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 #ifdef O2MICRO_OZ776_PATCH
 	readerID = (dev->descriptor.idVendor << 16) + dev->descriptor.idProduct;
 	if (usb_interface != NULL
-		&& ((OZ776 == readerID) || (OZ776_7772 == readerID))
+		&& ((OZ776 == readerID) || (OZ776_7772 == readerID)
+		|| (REINER_SCT == readerID))
 		&& (0 == usb_interface->altsetting->extralen)) /* this is the bug */
 	{
 		for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)

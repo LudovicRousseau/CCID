@@ -147,6 +147,7 @@ typedef struct
 #define MYSMARTPAD	0x09BE0002
 #define CHERRYXX44	0x046a0010
 #define CL1356D		0x0B810200
+#define REINER_SCT	0x0C4B0300 
 
 /*
  * The O2Micro OZ776S reader has a wrong USB descriptor
