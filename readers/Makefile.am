@@ -20,6 +20,7 @@ EXTRA_DIST = \
 	CardMan5125.txt \
 	CardMan5321.txt \
 	CardMan6121.txt \
+	Charismathics.txt \
 	CherrySmartTerminalST2XXX.txt \
 	CherryST1044U.txt \
 	CherryXX33.txt \
