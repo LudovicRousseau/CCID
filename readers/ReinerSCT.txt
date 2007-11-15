@@ -1,0 +1,59 @@
+ idVendor: 0x0C4B
+  iManufacturer: Reiner-SCT
+ idProduct: 0x0300
+  iProduct: cyberJack pinpad(a)
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0xFF
+  NOT A CCID DEVICE
+  Class is 0xFF (proprietary)
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 10.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 8.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
+  dwDataRate: 10072 bps
+  dwMaxDataRate: 250000 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: Broken pipe
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000007
+   2-wire protocol
+   3-wire protocol
+   I2C protocol
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00010030
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 270 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x03
+   PIN Verification supported
+   PIN Modification supported
+  bMaxCCIDBusySlots: 1

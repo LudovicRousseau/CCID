@@ -56,6 +56,7 @@ EXTRA_DIST = \
 	MySmartPad.txt \
 	Oz776S.txt \
 	Oz776_7772.txt \
+	ReinerSCT.txt \
 	SafeNet_IKey4000.txt \
 	SCR3310.txt \
 	SCR3311.txt \
