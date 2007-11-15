@@ -135,3 +135,6 @@
 
 # Lenovo
 0x17EF:0x1003:Lenovo Integrated Smart Card Reader
+
+# Charismathics
+0x19E7:0x0002:Charismathics token
