@@ -102,9 +102,6 @@ struct _bogus_firmware
 };
 
 static struct _bogus_firmware Bogus_firmwares[] = {
-#ifndef O2MICRO_OZ776_PATCH
-	{ 0x0b97, 0x7762, 0x0111 },	/* Oz776S */ /* the firmware version is not correct since I do not have received a working reader yet */
-#endif
 	{ 0x04e6, 0xe001, 0x0516 },	/* SCR 331 */
 	{ 0x04e6, 0x5111, 0x0620 },	/* SCR 331-DI */
 	{ 0x04e6, 0x5115, 0x0514 },	/* SCR 335 */
@@ -115,7 +112,13 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0DC3, 0x1004, 0x0502 },	/* ASE IIIe USBv2 */
 	{ 0x0DC3, 0x1102, 0x0607 },	/* ASE IIIe KB USB */
 	{ 0x058F, 0x9520, 0x0102 },	/* Alcor AU9520-G */
+
+	/* the firmware version is not correct since I do not have received a
+	 * working reader yet */
 	{ 0x0C4B, 0x0300, 0x0101 },	/* Reiner-SCT cyberJack pinpad(a) */
+#ifndef O2MICRO_OZ776_PATCH
+	{ 0x0b97, 0x7762, 0x0111 },	/* Oz776S */
+#endif
 };
 
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
