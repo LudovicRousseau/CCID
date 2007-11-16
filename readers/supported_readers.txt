@@ -42,7 +42,6 @@
 0x076B:0xA022:Teo by Xiring
 
 # C3PO
-0x0783:0x0003:C3PO LTC31
 0x0783:0x0006:C3PO LTC31
 0x0783:0x0007:C3PO TLTC2USB
 0x0783:0x0008:C3PO LTC32 USBv2 with keyboard support
@@ -51,7 +50,6 @@
 0x0783:0x9002:C3PO TLTC2USB
 
 # ActivCard
-0x09C3:0x0008:ActivCard USB Reader 2.0
 0x09C3:0x0013:ActivCard USB Reader 3.0
 0x09C3:0x0014:Activkey Sim
 
@@ -138,3 +136,9 @@
 
 # Charismathics
 0x19E7:0x0002:Charismathics token
+
+
+# Bogus readers but partly supported
+# See the README file for a bug description
+0x09C3:0x0008:ActivCard USB Reader 2.0
+0x0783:0x0003:C3PO LTC31
