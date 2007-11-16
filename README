@@ -218,6 +218,17 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.3.1 - 16 November 2007, Ludovic Rousseau
+    - add support for "Philips Semiconductors JCOP41V221" ICCD card,
+      O2Micro oz776 (ProductID 0x7772), CardMan5321, Giesecke & Devrient
+      StarSign Card Token 350 and 550, SafeNet IKey4000, Eutron
+      CryptoIdentity, Eutron Smart Pocket, Eutron Digipass 860, Lenovo
+      Integrated Smart Card Reader, "Kobil EMV CAP - SecOVID Reader III,
+      Charismathics token, Reiner-SCT cyberJack pinpad(a)
+    - improve support of Mac OS X and *BSD
+    - some minor bugs removed
+
+
 1.3.0 - 10 May 2007, Ludovic Rousseau
     - add support of ICCD version A and B
     - add support for (new) KOBIL mIDentity, SchlumbergerSema Cyberflex
