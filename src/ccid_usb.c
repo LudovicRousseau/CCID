@@ -115,6 +115,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0DC3, 0x1004, 0x0502 },	/* ASE IIIe USBv2 */
 	{ 0x0DC3, 0x1102, 0x0607 },	/* ASE IIIe KB USB */
 	{ 0x058F, 0x9520, 0x0102 },	/* Alcor AU9520-G */
+	{ 0x0C4B, 0x0300, 0x0101 },	/* Reiner-SCT cyberJack pinpad(a) */
 };
 
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
