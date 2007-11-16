@@ -143,7 +143,7 @@ Unsupported or partly supported CCID readers:
     This is not a problem unless you use a time-consuming APDU like RSA
     key generation.
     A new firmware will correct the bug.
-- Reiner SCT
+- Reiner-SCT cyberJack pinpad(a)
     With a T=0 card: case 1 APDU, case 2 APDU with Le=0xF5 do not work
 
 
