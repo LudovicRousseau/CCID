@@ -144,7 +144,7 @@ Unsupported or partly supported CCID readers:
     key generation.
     A new firmware will correct the bug.
 - Reiner-SCT cyberJack pinpad(a)
-    With a T=0 card: case 1 APDU, case 2 APDU with Le=0xF5 do not work
+    case 1 APDU do not work
 
 
 Supported operating systems:
