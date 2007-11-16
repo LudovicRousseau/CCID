@@ -115,7 +115,6 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 
 	/* the firmware version is not correct since I do not have received a
 	 * working reader yet */
-	{ 0x0C4B, 0x0300, 0x0101 },	/* Reiner-SCT cyberJack pinpad(a) */
 #ifndef O2MICRO_OZ776_PATCH
 	{ 0x0b97, 0x7762, 0x0111 },	/* Oz776S */
 #endif
