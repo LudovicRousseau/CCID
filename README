@@ -144,9 +144,9 @@ Unsupported or partly supported CCID readers:
     key generation.
     A new firmware will correct the bug.
 - Reiner-SCT cyberJack pinpad(a)
-    Time requests are not managed correctly and make the firmware fails.
-    This is not a problem unless you use a time-consuming APDU like RSA
-    key generation.
+    Time requests are not managed and the driver may time out without
+    any response from the reader.  This is not a problem unless you use
+    a time-consuming APDU like RSA key generation.
 
 
 Supported operating systems:
