@@ -35,6 +35,7 @@ EXTRA_DIST = \
 	Eutron_Smart_Pocket.txt \
 	FujitsuSiemens_SmartCard_Keyboard_USB_2A.txt \
 	FujitsuSiemens_SmartCard_USB_2A.txt \
+	GemaltoSmartEnterpriseGuardian.txt \
 	GemCoreSIMPro.txt \
 	GemPC433_SL.txt \
 	GemPC_Express.txt \
