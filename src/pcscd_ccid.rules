@@ -10,7 +10,7 @@ ACTION!="add", GOTO="pcscd_ccid_rules_end"
 WAIT_FOR_SYSFS="bInterfaceProtocol"
 
 # sleep for 100ms - the wait_for_sysfs might not be enough
-PROGRAM="/bin/sleep 0.1"
+PROGRAM="/bin/sleep 1"
 
 # Kobil mIDentity
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
