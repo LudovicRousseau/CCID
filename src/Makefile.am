@@ -89,6 +89,7 @@ install_ccid: libccid.la Info.plist
 install_ccidtwin: libccidtwin.la
 	$(mkinstalldirs) $(DESTDIR)$(ccidtwindir)
 	cp .libs/$(CCIDTWIN_LIB) $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)
+	ln -s $(CCIDTWIN_LIB).$(VERSION) $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)
 	if [ -e $(DESTDIR)/etc/reader.conf ] ; \
 	then \
 		echo "Edit existing /etc/reader.conf" ; \
