@@ -95,7 +95,7 @@ install_ccidtwin: libccidtwin.la
 		echo "Edit existing /etc/reader.conf" ; \
 	else \
 		$(mkinstalldirs) $(DESTDIR)/etc ; \
-		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/etc/reader.conf ; \
+		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/etc/reader.conf ; \
 	fi
 
 # do not uninstall the serial driver by default
