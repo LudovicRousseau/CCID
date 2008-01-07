@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = aclocal src readers examples contrib
+SUBDIRS = aclocal readers examples contrib src
 
 AUX_DIST = \
 	$(ac_aux_dir)/aclocal.m4 \
