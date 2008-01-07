@@ -85,6 +85,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
+#ifndef TWIN_SERIAL
 	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
@@ -162,6 +163,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 
 		return IFD_SUCCESS;
 	}
+#endif
 
 	/* store length of buffer[] */
 	length = *nlength;
@@ -738,6 +740,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
+#ifndef TWIN_SERIAL
 	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
@@ -782,6 +785,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 
 		return IFD_SUCCESS;
 	}
+#endif
 
 	cmd[0] = 0x63; /* IccPowerOff */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
@@ -827,6 +831,7 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
+#ifndef TWIN_SERIAL
 	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
@@ -900,6 +905,7 @@ again_status:
 		}
 		return IFD_SUCCESS;
 	}
+#endif
 
 	cmd[0] = 0x65; /* GetSlotStatus */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
@@ -1015,6 +1021,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	status_t ret;
 
+#ifndef TWIN_SERIAL
 	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
@@ -1054,6 +1061,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 
 		return IFD_SUCCESS;
 	}
+#endif
 
 	cmd[0] = 0x6F; /* XfrBlock */
 	i2dw(tx_length, cmd+1);	/* APDU length */
@@ -1096,6 +1104,7 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	status_t ret;
 
+#ifndef TWIN_SERIAL
 	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
@@ -1184,6 +1193,7 @@ time_request_ICCD_B:
 
 		return IFD_SUCCESS;
 	}
+#endif
 
 time_request:
 	length = sizeof(cmd);
