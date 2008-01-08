@@ -1101,10 +1101,11 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	status_t ret;
 
 #ifndef TWIN_SERIAL
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+
 	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
