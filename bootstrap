@@ -1,0 +1,11 @@
+#! /bin/bash
+
+# $Id:$
+
+set -x
+
+aclocal
+libtoolize --copy --force --automake
+autoheader --force
+autoconf --force
+automake --add-missing --copy --force --foreign

@@ -12,7 +12,7 @@ AUX_DIST = \
 	$(ac_aux_dir)/missing \
 	$(ac_aux_dir)/ylwrap
 
-EXTRA_DIST = reconf ChangeLog SCARDGETATTRIB.txt \
+EXTRA_DIST = bootstrap ChangeLog SCARDGETATTRIB.txt \
 	$(AUX_DIST)
 
 MAINTAINERCLEANFILES = $(AUX_DIST)
