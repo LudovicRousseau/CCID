@@ -1,6 +1,6 @@
 /*
     ccid_usb.c: USB access routines using the libusb library
-    Copyright (C) 2003-2004   Ludovic Rousseau
+    Copyright (C) 2003-2008   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -155,6 +155,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
+#ifndef __APPLE__
 	/* device name specified */
 	if (device)
 	{
@@ -199,6 +200,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 			}
 		}
 	}
+#endif
 
 	if (busses == NULL)
 		usb_init();
@@ -269,10 +271,16 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		/* go to next supported reader for next round */
 		alias++;
 
+#ifndef __APPLE__
 		/* the device was specified but is not the one we are trying to find */
 		if (device
 			&& (vendorID != device_vendor || productID != device_product))
 			continue;
+#else
+		/* Leopard puts the friendlyname in the device argument */
+		if (device && strcmp(device, keyValue))
+			continue;
+#endif
 
 		/* on any USB buses */
 		for (bus = busses; bus; bus = bus->next)

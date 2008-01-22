@@ -1,6 +1,6 @@
 /*
     ifdhandler.c: IFDH API
-    Copyright (C) 2003-2005   Ludovic Rousseau
+    Copyright (C) 2003-2008   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -300,7 +300,11 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			if (*Length >= 1)
 			{
 				*Length = 1;
+#ifdef __APPLE__
+				*Value = 0; /* Apple pcscd is bogus (rdar://problem/5697388) */
+#else
 				*Value = 1; /* Can talk to multiple readers at the same time */
+#endif
 			}
 			break;
 #endif
