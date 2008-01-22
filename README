@@ -220,6 +220,16 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.3.2 - 22 January 2008, Ludovic Rousseau
+    - add support of Apple Mac OS X Leopard (10.5.1)
+    - solve a hotplug problem on Ubuntu 7.10 (reader was not detected)
+    - create a symlink from libccidtwin.so to libccidtwin.so.VERSION so
+      that the /etc/reader.conf configuration file do not need to edited
+      for each new driver version
+    - make driver for the GemPC Serial compile again
+    - some minor bugs removed
+
+
 1.3.1 - 16 November 2007, Ludovic Rousseau
     - add support for "Philips Semiconductors JCOP41V221" ICCD card,
       O2Micro oz776 (ProductID 0x7772), CardMan5321, Giesecke & Devrient
