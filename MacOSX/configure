@@ -1,0 +1,81 @@
+#! /bin/bash
+
+#    Copyright (C) 2007-2008  Ludovic Rousseau  <ludovic.rousseau@free.fr>
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+
+# to use
+# ./MacOSX/configure
+# make
+# make install
+# the driver is installed in /usr/libexec/SmartCardServices/drivers
+
+# Colors
+RED="\033[31m"
+NORMAL="\033[0m"
+
+# run this script as ./MacOSX/configure to configure for Mac OS X
+if [ ! -d MacOSX ]
+then
+	echo -e $RED
+	echo "ERROR!"
+	echo "run ./MacOSX/configure from the source top directory"
+	echo -e $NORMAL
+	exit;
+fi
+
+./MacOSX/convert_reader_h.pl MacOSX/reader.h.in > MacOSX/reader.h
+
+# we define PKG_CONFIG so that pkg-config is not used and PCSC_CFLAGS
+# and PCSC_LIBS are used instead
+PKG_CONFIG="foobar"
+
+# find pcsc-lite header files in MacOSX/
+PCSC_CFLAGS="-I$(pwd)/MacOSX"
+PCSC_LIBS="-framework PCSC"
+
+# use libusb from OpenSC (universal binary)
+LIBUSB_CFLAGS="-I/Library/OpenSC/include"
+LIBUSB_LIBS="-L/Library/OpenSC/lib -lusb"
+
+# RESPONSECODE is already defined by PCSC/wintypes.h
+# define needed here to compile examples/scardcontrol.c since config.h is
+# not included
+CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
+
+# Build a Universal Binary
+CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc"
+LDFLAGS="-arch i386 -arch ppc"
+CONFIGURE_ARGS="--disable-dependency-tracking"
+
+# do not use pcscd debug feature
+CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-pcsclite"
+
+set -x
+./configure \
+	PKG_CONFIG="$PKG_CONFIG" \
+	CFLAGS="$CFLAGS" \
+	PCSC_CFLAGS="$PCSC_CFLAGS" \
+	PCSC_LIBS="$PCSC_LIBS" \
+	LIBUSB_CFLAGS="$LIBUSB_CFLAGS" \
+	LIBUSB_LIBS="$LIBUSB_LIBS" \
+	LDFLAGS="$LDFLAGS" \
+	--enable-usbdropdir=/usr/libexec/SmartCardServices/drivers \
+	$CONFIGURE_ARGS \
+	"$@"
+
+# force a regeneration of Info.plist
+rm -f src/Info.plist
+

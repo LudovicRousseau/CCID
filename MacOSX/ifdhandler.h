@@ -1,0 +1,1 @@
+../../../PCSC/src/PCSC/ifdhandler.h
