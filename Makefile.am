@@ -13,7 +13,15 @@ AUX_DIST = \
 	$(ac_aux_dir)/ylwrap
 
 EXTRA_DIST = bootstrap ChangeLog SCARDGETATTRIB.txt \
-	$(AUX_DIST)
+	$(AUX_DIST) \
+	MacOSX/configure \
+	MacOSX/convert_reader_h.pl \
+	MacOSX/debuglog.h \
+	MacOSX/ifdhandler.h \
+	MacOSX/pcsclite.h \
+	MacOSX/reader.h.in \
+	MacOSX/winscard.h \
+	MacOSX/wintypes.h
 
 MAINTAINERCLEANFILES = $(AUX_DIST)
 DISTCLEANFILES = ChangeLog
