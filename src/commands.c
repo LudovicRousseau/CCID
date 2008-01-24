@@ -1247,6 +1247,14 @@ time_request:
 		goto time_request;
 	}
 
+	/* we have read less (or more) data than the CCID frame says to contain */
+	if (length-10 != dw2i(cmd, 1))
+	{
+		DEBUG_CRITICAL3("Can't read all data (%d out of %d expected)",
+			length-10, dw2i(cmd, 1));
+		return_value = IFD_COMMUNICATION_ERROR;
+	}
+
 	length = dw2i(cmd, 1);
 	if (length <= *rx_length)
 		*rx_length = length;
