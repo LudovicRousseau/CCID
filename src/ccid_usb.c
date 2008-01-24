@@ -503,6 +503,7 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 	int rv;
 	char debug_header[] = "<- 121234 ";
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	int duplicate_frame = 0;
 
 read_again:
 	sprintf(debug_header, "<- %06X ", (int)reader_index);
@@ -532,6 +533,12 @@ read_again:
 	if ((*length >= BSEQ_OFFSET)
 		&& (buffer[BSEQ_OFFSET] < *ccid_descriptor->pbSeq -1))
 	{
+		duplicate_frame++;
+		if (duplicate_frame > 10)
+		{
+			DEBUG_CRITICAL("Too many duplicate frame detected");
+			return STATUS_UNSUCCESSFUL;
+		}
 		DEBUG_INFO("Duplicate frame detected");
 		goto read_again;
 	}
