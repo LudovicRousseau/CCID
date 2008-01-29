@@ -67,6 +67,7 @@ typedef struct
 	 */
 	int bulk_in;
 	int bulk_out;
+	int interrupt;
 
 	/* Number of slots using the same device */
 	int real_nb_opened_slots;
@@ -627,6 +628,13 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 	 */
 	for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)
 	{
+		/* interrupt end point (if available) */
+		if (usb_interface->altsetting->endpoint[i].bmAttributes == USB_ENDPOINT_TYPE_INTERRUPT)
+		{
+			usbdevice->interrupt = usb_interface->altsetting->endpoint[i].bEndpointAddress;
+			continue;
+		}
+
 		if (usb_interface->altsetting->endpoint[i].bmAttributes != USB_ENDPOINT_TYPE_BULK)
 			continue;
 
