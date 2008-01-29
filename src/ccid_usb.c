@@ -749,6 +749,7 @@ int ccid_check_firmware(struct usb_device *dev)
 	return FALSE;
 } /* ccid_check_firmware */
 
+
 /*****************************************************************************
  *
  *                                      get_data_rates
@@ -815,8 +816,14 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	int_array[i] = 0;
 
 	return int_array;
-}
+} /* get_data_rates */
 
+
+/*****************************************************************************
+ *
+ *                                      ControlUSB
+ *
+ ****************************************************************************/
 int ControlUSB(int reader_index, int requesttype, int request, int value,
 	unsigned char *bytes, unsigned int size)
 {
@@ -835,5 +842,5 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 		DEBUG_XXD("receive: ", bytes, ret);
 
 	return ret;
-}
+} /* ControlUSB */
 
