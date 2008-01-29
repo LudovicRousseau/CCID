@@ -95,6 +95,11 @@ typedef struct
 	 * bInterfaceProtocol (CCID, ICCD-A, ICCD-B)
 	 */
 	int bInterfaceProtocol;
+
+	/*
+	 * bNumEndpoints
+	 */
+	int bNumEndpoints;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */

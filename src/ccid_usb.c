@@ -440,6 +440,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
 					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, dev);
 					usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
+					usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
 					goto end;
 				}
 			}
