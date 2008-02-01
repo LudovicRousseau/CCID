@@ -278,6 +278,10 @@ int ccid_open_hack(unsigned int reader_index)
 			sleep(1);
 			ccid_descriptor->readTimeout = 60; /* 60 seconds */
 			break;
+
+		case SEG:
+			InterruptRead(reader_index);
+			break;
 	}
 
 	/* ICCD type A */

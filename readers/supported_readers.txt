@@ -9,6 +9,7 @@
 0x08E6:0x3479:Gemplus GemCore POS Pro
 0x08E6:0x3480:Gemplus GemCore SIM Pro
 0x08E6:0x34EC:Gemplus GemPC Express
+0x08E6:0x8000:Smart Enterprise Guardian
 # Verisign branded
 0x08E6:0xACE0:Verisign Secure Token
 0x08E6:0x1359:VeriSign Secure Storage Token
