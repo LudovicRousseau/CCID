@@ -57,6 +57,7 @@ int PowerOnVoltage = VOLTAGE_5V;
 static int DebugInitialized = FALSE;
 
 /* local functions */
+static RESPONSECODE IFDHPolling(DWORD Lun);
 static void init_driver(void);
 static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 static char find_baud_rate(unsigned int baudrate, unsigned int *list);
@@ -247,7 +248,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 
 
 #ifndef TWIN_SERIAL
-EXTERNAL RESPONSECODE IFDHPolling(DWORD Lun)
+static RESPONSECODE IFDHPolling(DWORD Lun)
 {
 	int reader_index;
 	int ret;
