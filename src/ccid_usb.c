@@ -844,3 +844,44 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 	return ret;
 } /* ControlUSB */
 
+/*****************************************************************************
+ *
+ *					InterruptRead
+ *
+ *
+ ****************************************************************************/
+int InterruptRead(int reader_index)
+{
+	int ret;
+	char buffer[8];
+	int timeout = 60*60*1000; /* 60 minutes */
+	static int hasfailed = FALSE;
+
+	if (hasfailed)
+	{
+		DEBUG_COMM("driver has failed");
+		return 0;
+	}
+
+	DEBUG_COMM("before");
+	ret = usb_interrupt_read(usbDevice[reader_index].handle,
+		usbDevice[reader_index].interrupt, buffer, sizeof(buffer), timeout);
+	DEBUG_COMM2("after %d\n", ret);
+
+	if (0 == ret)
+		hasfailed = TRUE;
+
+	if (ret < 0)
+	{
+		/* if usb_interrupt_read() times out we get EILSEQ */
+		if (errno != EILSEQ)
+			DEBUG_CRITICAL4("usb_interrupt_read(%s/%s): %s",
+					usbDevice[reader_index].dirname,
+					usbDevice[reader_index].filename, strerror(errno));
+	}
+	else
+		DEBUG_XXD("NotifySlotChange: ", buffer, ret);
+
+	return ret;
+} /* InterruptRead */
+
