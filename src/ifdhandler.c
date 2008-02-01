@@ -246,6 +246,26 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 } /* IFDHCloseChannel */
 
 
+#ifndef TWIN_SERIAL
+EXTERNAL RESPONSECODE IFDHPolling(DWORD Lun)
+{
+	int reader_index;
+	int ret;
+
+	if (-1 == (reader_index = LunToReaderIndex(Lun)))
+		return IFD_COMMUNICATION_ERROR;
+
+	DEBUG_INFO2("lun: %X", Lun);
+	ret = InterruptRead(reader_index);
+	if (ret > 0)
+		return IFD_SUCCESS;
+	if (0 == ret)
+		return IFD_NO_SUCH_DEVICE;
+	return IFD_COMMUNICATION_ERROR;
+}
+#endif
+
+
 EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	PDWORD Length, PUCHAR Value)
 {
@@ -347,6 +367,25 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			if (Value)
 				*(uint32_t *)Value = get_ccid_descriptor(reader_index) -> dwMaxCCIDMessageLength -10;
 			break;
+
+#if defined(HAVE_DECL_TAG_IFD_POLLING_THREAD) && !defined(TWIN_SERIAL)
+		case TAG_IFD_POLLING_THREAD:
+			{
+				_ccid_descriptor *ccid_desc;
+
+				ccid_desc = get_ccid_descriptor(reader_index);
+				/* CCID and not ICCD */
+				if ((0 == ccid_desc -> bInterfaceProtocol)
+					/* 3 end points */
+					&& (3 == ccid_desc -> bNumEndpoints))
+				{
+					*Length = sizeof(void *);
+					if (Value)
+						*(void **)Value = IFDHPolling;
+				}
+			}
+			break;
+#endif
 
 		default:
 			return IFD_ERROR_TAG;
