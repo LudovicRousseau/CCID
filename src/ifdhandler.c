@@ -369,7 +369,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*(uint32_t *)Value = get_ccid_descriptor(reader_index) -> dwMaxCCIDMessageLength -10;
 			break;
 
-#if defined(HAVE_DECL_TAG_IFD_POLLING_THREAD) && !defined(TWIN_SERIAL)
+#if HAVE_DECL_TAG_IFD_POLLING_THREAD && !defined(TWIN_SERIAL)
 		case TAG_IFD_POLLING_THREAD:
 			{
 				_ccid_descriptor *ccid_desc;
