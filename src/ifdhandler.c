@@ -58,6 +58,7 @@ static int DebugInitialized = FALSE;
 
 /* local functions */
 static RESPONSECODE IFDHPolling(DWORD Lun);
+static RESPONSECODE IFDHSleep(DWORD Lun);
 static void init_driver(void);
 static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 static char find_baud_rate(unsigned int baudrate, unsigned int *list);
@@ -264,6 +265,14 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
 		return IFD_NO_SUCH_DEVICE;
 	return IFD_COMMUNICATION_ERROR;
 }
+
+/* on an ICCD device the card is always inserted
+ * so no card movement will ever happen: just do nothing */
+static RESPONSECODE IFDHSleep(DWORD Lun)
+{
+	sleep(60*60);	/* 1 hour */
+	return IFD_SUCCESS;
+}
 #endif
 
 
@@ -374,6 +383,9 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			{
 				_ccid_descriptor *ccid_desc;
 
+				/* default value: not supported */
+				*Length = 0;
+
 				ccid_desc = get_ccid_descriptor(reader_index);
 				/* CCID and not ICCD */
 				if ((0 == ccid_desc -> bInterfaceProtocol)
@@ -383,6 +395,14 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 					*Length = sizeof(void *);
 					if (Value)
 						*(void **)Value = IFDHPolling;
+				}
+
+				if ((ICCD_A == ccid_desc->bInterfaceProtocol)
+					|| (ICCD_B == ccid_desc->bInterfaceProtocol))
+				{
+					*Length = sizeof(void *);
+					if (Value)
+						*(void **)Value = IFDHSleep;
 				}
 			}
 			break;
