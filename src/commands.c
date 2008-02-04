@@ -28,6 +28,7 @@
 #include <ifdhandler.h>
 #include <reader.h>
 
+#include "misc.h"
 #include "commands.h"
 #include "openct/proto-t1.h"
 #include "ccid.h"
@@ -1127,10 +1128,21 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	{
 		int r;
 		unsigned char rx_tmp[4];
+		unsigned char *old_rx_buffer = NULL;
+		int old_rx_length = 0;
 
 		/* read a nul block. buffer need to be at least 4-bytes */
 		if (NULL == rx_buffer)
 		{
+			rx_buffer = rx_tmp;
+			*rx_length = sizeof(rx_tmp);
+		}
+
+		/* the buffer must be 4 bytes minimum for ICCD-B */
+		if (*rx_length < 4)
+		{
+			old_rx_buffer = rx_buffer;
+			old_rx_length = *rx_length;
 			rx_buffer = rx_tmp;
 			*rx_length = sizeof(rx_tmp);
 		}
@@ -1144,6 +1156,13 @@ time_request_ICCD_B:
 		{
 			DEBUG_INFO2("ICC Data Block failed: %s", strerror(errno));
 			return IFD_COMMUNICATION_ERROR;
+		}
+
+		/* copy from the 4 bytes buffer if used */
+		if (old_rx_buffer)
+		{
+			memcpy(old_rx_buffer, rx_buffer, min(r, old_rx_length));
+			rx_buffer = old_rx_buffer;
 		}
 
 		/* bResponseType */
