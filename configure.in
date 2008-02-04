@@ -157,8 +157,6 @@ fi
 AC_SUBST(LIBUSB_CFLAGS)
 AC_SUBST(LIBUSB_LIBS)
 
-AC_MSG_RESULT([use libusb              : $use_libusb])
-
 # check if the compiler support -fvisibility=hidden (GCC >= 4)
 saved_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -fvisibility=hidden"
@@ -183,7 +181,6 @@ if test "${multithread}" != no ; then
 
 	multithread=yes
 fi
-AC_MSG_RESULT([multi threading         : $multithread])
 
 # --enable-bundle=NAME
 AC_ARG_ENABLE(bundle,
@@ -193,7 +190,6 @@ AC_ARG_ENABLE(bundle,
 if test "${bundle}" = false ; then
 	bundle="ifd-ccid.bundle"
 fi
-AC_MSG_RESULT([bundle directory name   : $bundle])
 AC_DEFINE_UNQUOTED(BUNDLE, "$bundle", [bundle directory name])
 
 # --enable-usbdropdir=DIR
@@ -204,7 +200,6 @@ AC_ARG_ENABLE(usbdropdir,
 if test "${usbdropdir}" = false ; then
 	usbdropdir=`pkg-config libpcsclite --variable=usbdropdir`
 fi
-AC_MSG_RESULT([USB drop directory      : $usbdropdir])
 AC_DEFINE_UNQUOTED(PCSCLITE_HP_DROPDIR, "$usbdropdir", [directory containing USB drivers])
 if test "${usbdropdir}" = "" ; then
 	AC_MSG_ERROR([use --enable-usbdropdir=DIR])
@@ -214,7 +209,6 @@ fi
 AC_ARG_ENABLE(twinserial,
 	AC_HELP_STRING([--enable-twinserial],[also compile and install the serial Twin driver]),
 	[twinserial="${enableval}"], [twinserial=no])
-AC_MSG_RESULT([build and install serial Twin driver : $twinserial])
 AM_CONDITIONAL(WITH_TWIN_SERIAL, test "${twinserial}" != "no")
 
 # --enable-ccidtwindir=DIR
@@ -225,7 +219,6 @@ AC_ARG_ENABLE(ccidtwindir,
 if test "${ccidtwindir}" = false ; then
 	ccidtwindir=`pkg-config libpcsclite --variable=usbdropdir`/serial
 fi
-AC_MSG_RESULT([serial twin install dir : $ccidtwindir])
 
 # --disable-pcsclite
 AC_ARG_ENABLE(pcsclite,
@@ -244,14 +237,12 @@ if test "${pcsclite}" != no ; then
 
 	pcsclite=yes
 fi
-AC_MSG_RESULT([compiled for pcsc-lite  : $pcsclite])
 AM_CONDITIONAL(WITHOUT_PCSC, test "${pcsclite}" != "yes")
 
 # --enable-udev
 AC_ARG_ENABLE(udev,
 	AC_HELP_STRING([--enable-udev],[udev support for pcscd hotplug]),
 	[udev="${enableval}"], [udev=no])
-AC_MSG_RESULT([udev support            : $udev])
 AM_CONDITIONAL(UDEV, test "${udev}" != "no")
 
 
@@ -260,6 +251,42 @@ AC_SUBST(ac_aux_dir)
 AC_SUBST(bundle)
 AC_SUBST(usbdropdir)
 AC_SUBST(ccidtwindir)
+
+cat << EOF
+
+libccid has been configured with following options:
+
+Version:             ${PACKAGE_VERSION}
+User binaries:       $(eval eval eval echo "${bindir}")
+Configuration files: $(eval eval eval echo "${sysconfdir}")
+
+
+Host:                ${host}
+Compiler:            ${CC}
+Preprocessor flags:  ${CPPFLAGS}
+Compiler flags:      ${CFLAGS}
+Preprocessor flags:  ${CPPFLAGS}
+Linker flags:        ${LDFLAGS}
+Libraries:           ${LIBS}
+
+PTHREAD_CFLAGS:      ${PTHREAD_CFLAGS}
+PTHREAD_LIBS:        ${PTHREAD_LIBS}
+BUNDLE_HOST:         ${BUNDLE_HOST}
+DYN_LIB_EXT:         ${DYN_LIB_EXT}
+LIBUSB_CFLAGS:       ${LIBUSB_CFLAGS}
+LIBUSB_LIBS:         ${LIBUSB_LIBS}
+SYMBOL_VISIBILITY:   ${SYMBOL_VISIBILITY}
+
+libusb support:          ${use_libusb}
+multi threading:         ${multithread}
+bundle directory name:   ${bundle}
+USB drop directory:      ${usbdropdir}
+serial Twin support:     ${twinserial}
+serial twin install dir: ${ccidtwindir}
+compiled for pcsc-lite:  ${pcsclite}
+udev support:            ${udev}
+
+EOF
 
 # Write Makefiles.
 AC_CONFIG_FILES(Makefile
