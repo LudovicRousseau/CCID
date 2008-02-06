@@ -229,7 +229,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	switch (usb_interface->bInterfaceProtocol)
 	{
 		case 0:
-			printf("  bulk transfer, optional interrupt-IN\n");
+			printf("  bulk transfer, optional interrupt-IN (CCID)\n");
 			break;
 		case 1:
 			printf("  ICCD Version A, Control transfers, (no interrupt-IN)\n");
