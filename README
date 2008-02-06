@@ -222,6 +222,20 @@ Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 History:
 ========
 
+1.3.3 - 6 February 2008, Ludovic Rousseau
+    - add support for Lexar Smart Enterprise Guardian and Blutronics
+      Bludrive II CCID
+    - add support of TAG_IFD_POLLING_THREAD using IFDHPolling() to
+      detect asynchronous card movements. With this feature pcscd will
+      not poll the reader every 0.4 second for a card movement but will
+      wait until the reader sends a USB interrupt signal
+    - correct a bug with an ICCD-B device and a receive buffer smaller
+      than 4 bytes
+    - remove the sleep in the udev rule. It slows down the detection of
+      any USB device
+    - some minor bugs removed
+
+
 1.3.2 - 22 January 2008, Ludovic Rousseau
     - add support of Apple Mac OS X Leopard (10.5.1)
     - solve a hotplug problem on Ubuntu 7.10 (reader was not detected)
