@@ -9,9 +9,6 @@ ACTION!="add", GOTO="pcscd_ccid_rules_end"
 # last file created by the kernel, if this is present everything should be
 WAIT_FOR_SYSFS="bInterfaceProtocol"
 
-# sleep for 1s - the wait_for_sysfs might not be enough
-PROGRAM="/bin/sleep 1"
-
 # Kobil mIDentity
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
