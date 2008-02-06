@@ -154,6 +154,7 @@ typedef struct
 #define CL1356D		0x0B810200
 #define REINER_SCT	0x0C4B0300 
 #define SEG			0x08E68000
+#define BLUDRIVEII_CCID	0x1B0E1078
 
 /*
  * The O2Micro OZ776S reader has a wrong USB descriptor
