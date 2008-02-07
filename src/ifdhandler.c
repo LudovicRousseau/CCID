@@ -270,6 +270,7 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
  * so no card movement will ever happen: just do nothing */
 static RESPONSECODE IFDHSleep(DWORD Lun)
 {
+	DEBUG_INFO2("lun: %X", Lun);
 	sleep(60*60);	/* 1 hour */
 	return IFD_SUCCESS;
 }
