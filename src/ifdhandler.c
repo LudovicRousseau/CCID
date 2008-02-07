@@ -57,8 +57,10 @@ int PowerOnVoltage = VOLTAGE_5V;
 static int DebugInitialized = FALSE;
 
 /* local functions */
+#ifndef TWIN_SERIAL
 static RESPONSECODE IFDHPolling(DWORD Lun);
 static RESPONSECODE IFDHSleep(DWORD Lun);
+#endif
 static void init_driver(void);
 static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 static char find_baud_rate(unsigned int baudrate, unsigned int *list);
