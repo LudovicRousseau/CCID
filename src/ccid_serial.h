@@ -21,6 +21,9 @@
  * $Id$
  */
 
+#ifndef __CCID_SERAL_H__
+#define __CCID_SERAL_H__
+
 status_t OpenSerial(unsigned int reader_index, int channel);
 
 status_t OpenSerialByName(unsigned int reader_index, char *dev_name);
@@ -33,3 +36,4 @@ status_t ReadSerial(unsigned int reader_index, unsigned int *length,
 
 status_t CloseSerial(unsigned int reader_index);
 
+#endif
