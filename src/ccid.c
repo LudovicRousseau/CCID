@@ -33,6 +33,7 @@
 #include "defs.h"
 #include "ccid_ifdhandler.h"
 #include "commands.h"
+#include "ccid_usb.h"
 
 /*****************************************************************************
  *
