@@ -281,7 +281,9 @@ int ccid_open_hack(unsigned int reader_index)
 			break;
 
 		case SEG:
+#ifndef TWIN_SERIAL
 			InterruptRead(reader_index);
+#endif
 			break;
 	}
 
