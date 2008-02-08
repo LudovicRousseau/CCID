@@ -57,7 +57,7 @@ int PowerOnVoltage = VOLTAGE_5V;
 static int DebugInitialized = FALSE;
 
 /* local functions */
-#ifndef TWIN_SERIAL
+#if HAVE_DECL_TAG_IFD_POLLING_THREAD && !defined(TWIN_SERIAL)
 static RESPONSECODE IFDHPolling(DWORD Lun);
 static RESPONSECODE IFDHSleep(DWORD Lun);
 #endif
@@ -250,7 +250,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 } /* IFDHCloseChannel */
 
 
-#ifndef TWIN_SERIAL
+#if HAVE_DECL_TAG_IFD_POLLING_THREAD && !defined(TWIN_SERIAL)
 static RESPONSECODE IFDHPolling(DWORD Lun)
 {
 	int reader_index;
