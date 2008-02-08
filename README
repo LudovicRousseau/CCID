@@ -30,7 +30,7 @@ Supported CCID readers:
   forwarded by the reader to the host.
 - Athena ASE IIIe USB V2 [29]
 - Athena ASE IIIe KB USB [42]
-- Bluetronics Bluedrive II CCID
+- Blutronics Bludrive II CCID
 - C3PO LTC31 (new model, USB product id 0x0006) [8]
 - Cherry XX33 keyboard [?]
 - Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
