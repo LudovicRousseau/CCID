@@ -2,13 +2,14 @@
 # $Id$
 
 # Gemplus
+0x08E6:0x2202:Gemplus Gem e-Seal Pro
 0x08E6:0x3437:Gemplus GemPC Twin
 0x08E6:0x3438:Gemplus GemPC Key
-0x08E6:0x4433:Gemplus GemPC433 SL
 0x08E6:0x3478:Gemplus GemPC Pinpad
 0x08E6:0x3479:Gemplus GemCore POS Pro
 0x08E6:0x3480:Gemplus GemCore SIM Pro
 0x08E6:0x34EC:Gemplus GemPC Express
+0x08E6:0x4433:Gemplus GemPC433 SL
 0x08E6:0x8000:Smart Enterprise Guardian
 # Verisign branded
 0x08E6:0xACE0:Verisign Secure Token
