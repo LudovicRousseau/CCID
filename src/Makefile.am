@@ -42,6 +42,8 @@ TOKEN_PARSER = tokenparser.l parser.h \
 	misc.h \
 	strlcpycat.h
 
+MAINTAINERCLEANFILES = tokenparser.c
+
 if WITHOUT_PCSC
 PROVIDED_BY_PCSC = debug.c
 endif
