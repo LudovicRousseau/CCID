@@ -9,8 +9,8 @@ EXTRA_DIST = \
 	AxaltoV3.txt \
 	BludriveII.txt \
 	C3PO_KBR36.txt \
-	C3PO_LTC32_USBv2.txt \
 	C3PO_LTC32_USBv2_old.txt \
+	C3PO_LTC32_USBv2.txt \
 	C3PO_TLTC2USB.txt \
 	CardMan1021.txt \
 	CardMan3021.txt \
@@ -38,6 +38,7 @@ EXTRA_DIST = \
 	FujitsuSiemens_SmartCard_USB_2A.txt \
 	GemaltoSmartEnterpriseGuardian.txt \
 	GemCoreSIMPro.txt \
+	Gem_e-SealPro.txt \
 	GemPC433_SL.txt \
 	GemPC_Express.txt \
 	GemPCKey.txt \
@@ -56,8 +57,8 @@ EXTRA_DIST = \
 	LTC31v2.txt \
 	mIDentity.txt \
 	MySmartPad.txt \
-	Oz776S.txt \
 	Oz776_7772.txt \
+	Oz776S.txt \
 	ReinerSCT.txt \
 	SafeNet_IKey4000.txt \
 	SCR3310.txt \
@@ -72,8 +73,8 @@ EXTRA_DIST = \
 	SCR355.txt \
 	SDI010.txt \
 	sid800.txt \
-	Sitecom_MD-010.txt \
 	SIM_Pocket_Combo.txt \
+	Sitecom_MD-010.txt \
 	SPR532.txt \
 	supported_readers.txt \
 	Verisign_secure_storage_token.txt \
