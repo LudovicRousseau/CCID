@@ -301,7 +301,7 @@ LIBUSB_LIBS:         ${LIBUSB_LIBS}
 SYMBOL_VISIBILITY:   ${SYMBOL_VISIBILITY}
 
 libusb support:          ${use_libusb}
-use USB interrupt        ${use_usb_interrupt}
+use USB interrupt:       ${use_usb_interrupt}
 multi threading:         ${multithread}
 bundle directory name:   ${bundle}
 USB drop directory:      ${usbdropdir}
