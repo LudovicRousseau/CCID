@@ -117,7 +117,7 @@ manufacturers, please, contact me.
 - SafeNet IKey4000
 - SCM Micro SCR 331-DI NTTCom [23]
 - SCM Micro SCR 3310-NTTCOM [28]
-- SCM Micro SCR 3320 [32]
+- SCM Micro SCR 3320 [31b]
 - SCM Micro SCR 333 [15]
 - SCM Micro SDI 010 [39]
 - SCM SCR 3340 ExpressCard54 [34]
@@ -593,7 +593,7 @@ References:
 [29] http://www.asedrive.com/product.asp?pid=1
 [30] http://www.scmmicro.com/security/SCR3310.html
 [31] http://scmmicro.com/security/SCR3311.html
-[31] http://scmmicro.com/security/SCR3320.html
+[31b] http://scmmicro.com/security/SCR3320.html
 [32] http://www.smartepad.com.br/
 [33] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=37
 [34] http://www.scmmicro.com/security/SCR3340.html
