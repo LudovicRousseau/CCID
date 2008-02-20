@@ -61,6 +61,7 @@ findintfep() in order to understand why.
 #include <usb.h>
 #include <errno.h>
 
+#include "config.h"
 
 #define KOBIL_VENDOR_ID		0x0D46
 #define MID_DEVICE_ID 		0x4081
