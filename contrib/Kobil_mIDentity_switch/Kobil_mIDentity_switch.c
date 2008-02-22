@@ -163,6 +163,8 @@ int main(int argc, char *argv[])
     if (found_dev == NULL)
 	{
 		printf("device not found. aborting.\n");
+		if (0 != geteuid())
+			printf("Try to rerun this program as root.\n");
 		exit(1);
     }
 
