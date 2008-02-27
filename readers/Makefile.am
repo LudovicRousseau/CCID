@@ -5,6 +5,7 @@ EXTRA_DIST = \
 	ACR38U-CCID.txt \
 	ActivCardV2.txt \
 	ActivCardV3.txt \
+	Alya.txt \
 	ASEDrive_IIIe_KB.txt \
 	ASE_IIIe.txt \
 	AxaltoV3.txt \
@@ -79,6 +80,7 @@ EXTRA_DIST = \
 	Sitecom_MD-010.txt \
 	SPR532.txt \
 	supported_readers.txt \
+	Vega-Alpha.txt \
 	Verisign_secure_storage_token.txt \
 	Verisign_secure_token.txt \
 	Winbond.txt
