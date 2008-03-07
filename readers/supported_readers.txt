@@ -150,3 +150,5 @@
 # Blutronics
 0x1B0E:0x1078:Blutronics Bludrive II CCID
 
+# Covadis
+0x0982:0x0007:Covadis Alya
