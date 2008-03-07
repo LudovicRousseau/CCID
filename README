@@ -36,6 +36,7 @@ Supported CCID readers:
 - Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
 - Cherry SmartTerminal ST2000U [35]
 - Cherry ST-1044U [27]
+- Covadis Alya [63]
 - Dell keyboard SK-3106 [?]
 - Dell smart card reader keyboard [?]
 - Eutron Digipass 860 [59]
@@ -637,6 +638,7 @@ References:
 [60] http://www.lexar.com/enterprise/ent_ppsd.html
 [61] http://www.cherry.de/deutsch/produkte/chipkartentastaturen_g-6610.htm
 [62] http://acs.com.hk/acr122.php
+[63] http://covadis.ch/Alya.239.0.html
 
 $Id$
 
