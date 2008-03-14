@@ -693,12 +693,24 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		/* if the requested protocol is not the default one
 		 * or a TA1/PPS1 is present */
 		if (((pps[1] & 0x0F) != default_protocol) || (PPS_HAS_PPS1(pps)))
+		{
+#ifdef O2MICRO_OZ776_PATCH
+			if ((OZ776 == ccid_desc->readerID)
+				|| (OZ776_7772 == ccid_desc->readerID))
+			{
+				Protocol = default_protocol;
+				DEBUG_INFO2("PPS not supported on O2Micro readers. Using T=%d",
+					Protocol);
+			}
+			else
+#endif
 			if (PPS_Exchange(reader_index, pps, &len, &pps[2]) != PPS_OK)
 			{
 				DEBUG_INFO("PPS_Exchange Failed");
 
 				return IFD_ERROR_PTS_FAILURE;
 			}
+		}
 	}
 
 	/* Now we must set the reader parameters */
