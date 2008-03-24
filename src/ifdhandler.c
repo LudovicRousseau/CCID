@@ -498,7 +498,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	/* Do not send CCID command SetParameters or PPS to the CCID
 	 * The CCID will do this himself */
 	if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
-		return IFD_SUCCESS;
+		goto end;
 
 	/* Get ATR of the card */
 	ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer, ccid_slot->nATRLength);
@@ -865,6 +865,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
 	}
 
+end:
 	/* store used protocol for use by the secure commands (verify/change PIN) */
 	ccid_desc->cardProtocol = Protocol;
 
