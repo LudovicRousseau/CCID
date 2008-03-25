@@ -1,0 +1,52 @@
+ idVendor: 0x08C3
+  iManufacturer: Precise Biometrics
+ idProduct: 0x0401
+  iProduct: Precise 250 MC
+ bcdDevice: 34.61 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x03
+   5.0V
+   3.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 7.500 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
+  dwDataRate: 10753 bps
+  dwMaxDataRate: 241936 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: Broken pipe
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000400BA
+   ....02 Automatic parameter configuration based on ATR data
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 524288 bytes
+  bClassGetResponse: 0x00
+  bClassEnveloppe: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
