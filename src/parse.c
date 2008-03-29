@@ -118,7 +118,8 @@ int main(void)
 						bus->dirname, dev->filename, strerror(errno));
 				if (EBUSY == errno)
 				{
-					printf(" \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
+					fprintf(stderr,
+						" \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
 					return TRUE;
 				}
 				continue;
@@ -317,7 +318,8 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			printf("   IFD does not support GET CLOCK FREQUENCIES request: %s\n", strerror(errno));
 			if (EBUSY == errno)
 			{
-				printf("   \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
+				fprintf(stderr,
+					"   \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
 				return TRUE;
 			}
 		}
