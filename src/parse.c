@@ -151,7 +151,9 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 {
 	struct usb_interface_descriptor *usb_interface;
 	unsigned char *extra;
-	unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
+	char buffer[256*sizeof(int)];  /* maximum is 256 records */
+	/* unsigned version of buffer[] used for multi-bytes conversions */
+	unsigned char *ubuffer = (unsigned char *)buffer;
 
 	/*
 	 * Vendor/model name
@@ -338,7 +340,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 				}
 
 				for (i=0; i<n; i+=4)
-					printf("   Support %d kHz\n", dw2i(buffer, i));
+					printf("   Support %d kHz\n", dw2i(ubuffer, i));
 			}
 	}
 	printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
@@ -381,7 +383,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 				}
 
 				for (i=0; i<n; i+=4)
-					printf("   Support %d bps\n", dw2i(buffer, i));
+					printf("   Support %d bps\n", dw2i(ubuffer, i));
 			}
 	}
 	printf("  dwMaxIFSD: %d\n", dw2i(extra, 28));
