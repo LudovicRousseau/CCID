@@ -172,7 +172,7 @@ static int get_bytes(unsigned int reader_index, unsigned char *buffer,
 status_t WriteSerial(unsigned int reader_index, unsigned int length,
 	unsigned char *buffer)
 {
-	int i;
+	unsigned int i;
 	unsigned char lrc;
 	unsigned char low_level_buffer[GEMPCTWIN_MAXBUF];
 
