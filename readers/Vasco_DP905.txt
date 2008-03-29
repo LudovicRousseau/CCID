@@ -1,0 +1,111 @@
+ idVendor: 0x1A44
+  iManufacturer: VASCO
+ idProduct: 0x0001
+  iProduct: DP905
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x03
+   5.0V
+   3.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 3.700 MHz
+  dwMaximumClock: 3.700 MHz
+  bNumClockSupported: 1 
+   Support 3700 kHz
+  dwDataRate: 9946 bps
+  dwMaxDataRate: 318280 bps
+  bNumDataRatesSupported: 53 
+   Support 1807 bps
+   Support 1989 bps
+   Support 2409 bps
+   Support 2487 bps
+   Support 3315 bps
+   Support 3613 bps
+   Support 3978 bps
+   Support 4818 bps
+   Support 4973 bps
+   Support 6631 bps
+   Support 7227 bps
+   Support 7957 bps
+   Support 9635 bps
+   Support 9946 bps
+   Support 13262 bps
+   Support 14453 bps
+   Support 15914 bps
+   Support 19271 bps
+   Support 19892 bps
+   Support 21680 bps
+   Support 23871 bps
+   Support 26523 bps
+   Support 28906 bps
+   Support 29839 bps
+   Support 31828 bps
+   Support 36133 bps
+   Support 38542 bps
+   Support 39785 bps
+   Support 43359 bps
+   Support 48177 bps
+   Support 49731 bps
+   Support 53047 bps
+   Support 57813 bps
+   Support 59677 bps
+   Support 63656 bps
+   Support 66308 bps
+   Support 72266 bps
+   Support 77083 bps
+   Support 79570 bps
+   Support 86719 bps
+   Support 96354 bps
+   Support 99462 bps
+   Support 106093 bps
+   Support 115625 bps
+   Support 119355 bps
+   Support 132616 bps
+   Support 144531 bps
+   Support 154167 bps
+   Support 159140 bps
+   Support 198925 bps
+   Support 212186 bps
+   Support 231250 bps
+   Support 318280 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000007
+   2-wire protocol
+   3-wire protocol
+   I2C protocol
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000204BE
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1

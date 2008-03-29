@@ -81,6 +81,7 @@ EXTRA_DIST = \
 	Sitecom_MD-010.txt \
 	SPR532.txt \
 	supported_readers.txt \
+	Vasco_DP905.txt \
 	Vega-Alpha.txt \
 	Verisign_secure_storage_token.txt \
 	Verisign_secure_token.txt \
