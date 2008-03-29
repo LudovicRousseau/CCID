@@ -27,7 +27,7 @@
 #endif
 
 void InitReaderIndex(void);
-int GetNewReaderIndex(const DWORD Lun);
-int LunToReaderIndex(DWORD Lun);
+int GetNewReaderIndex(const int Lun);
+int LunToReaderIndex(int Lun);
 void ReleaseReaderIndex(const int index);
 

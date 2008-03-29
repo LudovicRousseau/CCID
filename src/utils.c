@@ -39,7 +39,7 @@ void InitReaderIndex(void)
 		ReaderIndex[i] = -1;
 } /* InitReaderIndex */
 
-int GetNewReaderIndex(const DWORD Lun)
+int GetNewReaderIndex(const int Lun)
 {
 	int i;
 
@@ -65,7 +65,7 @@ int GetNewReaderIndex(const DWORD Lun)
 	return -1;
 } /* GetReaderIndex */
 
-int LunToReaderIndex(const DWORD Lun)
+int LunToReaderIndex(const int Lun)
 {
 	int i;
 
