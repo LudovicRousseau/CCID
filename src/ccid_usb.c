@@ -715,7 +715,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
  ****************************************************************************/
 int ccid_check_firmware(struct usb_device *dev)
 {
-	int i;
+	unsigned int i;
 
 	for (i=0; i<sizeof(Bogus_firmwares)/sizeof(Bogus_firmwares[0]); i++)
 	{
