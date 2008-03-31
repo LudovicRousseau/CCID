@@ -1,6 +1,6 @@
 # $Id$
 
-CCID_BUNDLE = ifd-ccid.bundle
+CCID_BUNDLE = $(bundle)
 CCID_LIB = libccid.$(DYN_LIB_EXT)
 CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
 
