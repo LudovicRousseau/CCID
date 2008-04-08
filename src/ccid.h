@@ -100,6 +100,14 @@ typedef struct
 	 * bNumEndpoints
 	 */
 	int bNumEndpoints;
+
+	/*
+	 * GemCore SIM PRO slot status management
+	 * The reader always reports a card present even if no card is inserted.
+	 * If the Power Up fails the driver will report IFD_ICC_NOT_PRESENT instead
+	 * of IFD_ICC_PRESENT
+	 */
+	int dwSlotStatus;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */

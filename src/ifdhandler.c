@@ -954,6 +954,10 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			if (CmdPowerOn(reader_index, &nlength, pcbuffer, PowerOnVoltage)
 				!= IFD_SUCCESS)
 			{
+				/* used by GemCore SIM PRO: no card is present */
+				get_ccid_descriptor(reader_index)->dwSlotStatus
+					= IFD_ICC_NOT_PRESENT;;
+
 				DEBUG_CRITICAL("PowerUp failed");
 				return_value = IFD_ERROR_POWER_ACTION;
 				goto end;
@@ -1183,6 +1187,12 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
+	if (GEMCORESIMPRO == ccid_descriptor->readerID)
+	{
+		return_value = ccid_descriptor->dwSlotStatus;
+		goto end;
+	}
+
 	/* save the current read timeout computed from card capabilities */
 	oldReadTimeout = ccid_descriptor->readTimeout;
 
@@ -1287,6 +1297,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 		}
 	}
 
+end:
 	DEBUG_PERIODIC2("Card %s",
 		IFD_ICC_PRESENT == return_value ? "present" : "absent");
 

@@ -30,6 +30,7 @@
 # include <sys/types.h>
 # endif
 #include <usb.h>
+#include <ifdhandler.h>
 
 #include "misc.h"
 #include "ccid.h"
@@ -340,6 +341,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 							*usbDevice[reader_index].nb_opened_slots += 1;
 							usbDevice[reader_index].ccid.bCurrentSlotIndex++;
+							usbDevice[reader_index].ccid.dwSlotStatus =
+								IFD_ICC_PRESENT;
 							DEBUG_INFO2("Opening slot: %d",
 								usbDevice[reader_index].ccid.bCurrentSlotIndex);
 							goto end;
@@ -442,6 +445,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, dev);
 					usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
 					usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
+					usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
 					goto end;
 				}
 			}
