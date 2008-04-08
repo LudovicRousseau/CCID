@@ -37,6 +37,12 @@
 #define FALSE 0
 #endif
 
+#define BLUE "\33[34m"
+#define RED "\33[31m"
+#define BRIGHT_RED "\33[01;31m"
+#define GREEN "\33[32m"
+#define NORMAL "\33[0m"
+
 static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	struct usb_device *dev);
 
@@ -52,6 +58,7 @@ int main(void)
 	struct usb_bus *bus;
 	struct usb_dev_handle *dev_handle;
 	int nb = 0;
+	char buffer[256];
 
 	usb_init();
 	usb_find_busses();
@@ -75,14 +82,6 @@ int main(void)
 			struct usb_interface *usb_interface = NULL;
 			int interface;
 
-			/* check if the device has bInterfaceClass == 11 */
-			usb_interface = get_ccid_usb_interface(dev);
-			if (NULL == usb_interface)
-				continue;
-
-			fprintf(stderr, "Trying to open USB bus/device: %s/%s\n",
-				 bus->dirname, dev->filename);
-
 			dev_handle = usb_open(dev);
 			if (NULL == dev_handle)
 			{
@@ -90,6 +89,40 @@ int main(void)
 					bus->dirname, dev->filename, strerror(errno));
 				continue;
 			}
+
+			fprintf(stderr, "Parsing USB bus/device: %s/%s\n",
+				bus->dirname, dev->filename);
+
+			fprintf(stderr, " idVendor:  0x%04X", dev->descriptor.idVendor);
+			if (usb_get_string_simple(dev_handle, dev->descriptor.iManufacturer,
+				buffer, sizeof(buffer)) < 0)
+			{
+				fprintf(stderr, "  Can't get iManufacturer string\n");
+				if (getuid())
+				{
+					fprintf(stderr, BRIGHT_RED "Please, restart the command as root\n" NORMAL);
+					return 1;
+				}
+			}
+			else
+				fprintf(stderr, "  iManufacturer: " BLUE "%s\n" NORMAL, buffer);
+
+			fprintf(stderr, " idProduct: 0x%04X", dev->descriptor.idProduct);
+			if (usb_get_string_simple(dev_handle, dev->descriptor.iProduct,
+				buffer, sizeof(buffer)) < 0)
+				fprintf(stderr, "  Can't get iProduct string\n");
+			else
+				fprintf(stderr, "  iProduct: " BLUE "%s\n" NORMAL, buffer);
+
+			/* check if the device has bInterfaceClass == 11 */
+			usb_interface = get_ccid_usb_interface(dev);
+			if (NULL == usb_interface)
+			{
+				usb_close(dev_handle);
+				fprintf(stderr, RED "  NOT a CCID/ICCD device\n" NORMAL);
+				continue;
+			}
+			fprintf(stderr, GREEN "  Found a CCID/ICCD device\n" NORMAL);
 
 			/* now we found a free reader and we try to use it */
 			if (NULL == dev->config)
@@ -119,7 +152,7 @@ int main(void)
 				if (EBUSY == errno)
 				{
 					fprintf(stderr,
-						" \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
+						BRIGHT_RED " Please, stop pcscd and retry\n\n" NORMAL);
 					return TRUE;
 				}
 				continue;
@@ -166,7 +199,8 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		printf("  Can't get iManufacturer string\n");
 		if (getuid())
 		{
-			printf("\33[01;31mPlease, restart the command as root\33[0m\n\n");
+			fprintf(stderr,
+				BRIGHT_RED "Please, restart the command as root\n\n" NORMAL);
 			return TRUE;
 		}
 	}
@@ -319,7 +353,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			if (EBUSY == errno)
 			{
 				fprintf(stderr,
-					"   \33[01;31mPlease, stop pcscd and retry\33[0m\n\n");
+					BRIGHT_RED "   Please, stop pcscd and retry\n\n" NORMAL);
 				return TRUE;
 			}
 		}
