@@ -146,6 +146,8 @@
 # Covadis
 0x0982:0x0007:Covadis Alya
 
+# Vasco
+0x1A44:0x0001:Vasco DP905
 
 
 
