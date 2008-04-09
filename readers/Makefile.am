@@ -54,6 +54,7 @@ EXTRA_DIST = \
 	KAAN_Advanced.txt \
 	KAAN_Base.txt \
 	KAAN_SIM_III.txt \
+	KEBTechnology_KONA_USB_SmartCard.txt \
 	Kobil_EMV_CAP.txt \
 	Lenovo.txt \
 	LTC31.txt \
