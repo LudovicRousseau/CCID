@@ -149,6 +149,9 @@
 # Vasco
 0x1A44:0x0001:Vasco DP905
 
+# Validy
+0x1CF0:0x0001:Validy TokenA sl vt
+
 
 
 # Bogus readers but partly supported
