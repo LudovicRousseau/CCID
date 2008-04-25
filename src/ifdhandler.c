@@ -1315,6 +1315,7 @@ void init_driver(void)
 {
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	char infofile[FILENAME_MAX];
+	char *e;
 
 	/* Info.plist full patch filename */
 	snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
@@ -1330,6 +1331,16 @@ void init_driver(void)
 		DEBUG_INFO2("LogLevel: 0x%.4X", LogLevel);
 	}
 
+	e = getenv("LIBCCID_ifdLogLevel");
+	if (e)
+	{
+		/* convert from hex or dec or octal */
+		LogLevel = strtoul(e, NULL, 0);
+
+		/* print the log level used */
+		DEBUG_INFO2("LogLevel from LIBCCID_ifdLogLevel: 0x%.4X", LogLevel);
+	}
+	
 	/* Driver options */
 	if (0 == LTPBundleFindValueWithKey(infofile, "ifdDriverOptions", keyValue, 0))
 	{
