@@ -1,5 +1,7 @@
 # $Id$
 
+ACLOCAL_AMFLAGS = -I aclocal
+
 SUBDIRS = aclocal readers examples contrib src
 
 AUX_DIST = \
