@@ -455,7 +455,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 
 				/* ISO 7816-3 Rule 9 */
 				DEBUG_CRITICAL("abort requested");
-				goto resync;
+				break;
 
 			case T1_S_IFS:
 				if (sdata[LEN] != 1)
