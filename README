@@ -127,7 +127,7 @@ manufacturers, please, contact me.
 - SchlumbergerSema Cyberflex Access e-gate ICCD
 - Silitek SK-3105 keyboard [12] or C3PO TLTC2USB [14]
 - Sitecom USB simcard reader MD-010
-- Validy TokenA sl vt
+- Validy USB Token [65]
 - Vasco DP905
 - Winbond Electronics (for OEM only) [40]
 
@@ -666,6 +666,7 @@ References:
 [62] http://acs.com.hk/acr122.php
 [63] http://covadis.ch/Alya.239.0.html
 [64] http://covadis.ch/Vega.104.0.html
+[65] http://www.validy.com/en/products/token/
 
 $Id$
 
