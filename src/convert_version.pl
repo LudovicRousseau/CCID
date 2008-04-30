@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 #    convert_version.pl: generate a version integer from a version text
 #

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 #    create_Info_plist.pl: generate Infor.plist from a template and a
 #    list of suported readers
