@@ -1,6 +1,6 @@
 /*
     scardcontrol.c: sample code to use/test SCardControl() API
-    Copyright (C) 2004-2007   Ludovic Rousseau
+    Copyright (C) 2004-2008   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 #endif
 
 	printf("SCardControl sample code\n");
-	printf("V 1.2 2004-2007, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
+	printf("V 1.3 2004-2008, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
 
 	printf("\nTHIS PROGRAM IS NOT DESIGNED AS A TESTING TOOL!\n");
 	printf("Do NOT use it unless you really know what you do.\n\n");
@@ -199,13 +199,19 @@ int main(int argc, char *argv[])
 	rv = SCardStatus(hCard, pbReader, &dwReaderLen, &dwState, &dwProt,
 		pbAtr, &dwAtrLen);
 	printf(" Reader: %s (length %ld bytes)\n", pbReader, dwReaderLen);
-	printf(" State: 0x%lX\n", dwState);
+	printf(" State: 0x%04lX\n", dwState);
 	printf(" Prot: %ld\n", dwProt);
 	printf(" ATR (length %ld bytes):", dwAtrLen);
 	for (i=0; i<dwAtrLen; i++)
 		printf(" %02X", pbAtr[i]);
 	printf("\n");
 	PCSC_ERROR_CONT(rv, "SCardStatus")
+
+	if (dwState & SCARD_ABSENT)
+	{
+		printf("No card inserted\n");
+		goto end;
+	}
 
 	/* does the reader support PIN verification? */
 	rv = SCardControl(hCard, CM_IOCTL_GET_FEATURE_REQUEST, NULL, 0,
