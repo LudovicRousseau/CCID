@@ -54,6 +54,10 @@ Supported CCID readers:
 - Kobil KAAN Base [19]
 - Kobil KAAN Advanced [20]
 - Kobil KAAN SIM III [21]
+- Kobil EMV TriCAP Reader [68]
+- Kobil KAAN TriB@nk [69]
+- Kobil SecOVID Reader III [70]
+- Lexar Smart Enterprise Guardian [71]
 - OmniKey CardMan 3121 [5]
 - RSA SecureID SID800 [50]
 - SCM Micro SCR 331 [6]
@@ -63,9 +67,9 @@ Supported CCID readers:
 - SCM Micro SCR 335 [7]
   The firmware of this reader can't be upgraded so be sure to buy a
   recent model with firmware 5.14 or later
-- SCM Micro SCR 355
 - SCM Micro SCR 3310 [30]
 - SCM Micro SCR 3311 [31]
+- SCM Micro SCR 355
 - SCM Micro SPR 532 [9]
   You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
   firmware upgrade.
@@ -92,8 +96,8 @@ manufacturers, please, contact me.
 - Charismathics token
 - Cherry SmartBoard, G83-6610 [61]
 - Covadis Véga [64]
-- Gemplus GemPC Express
-- Gemplus Gem e-Seal Pro
+- Gemalto GemPC Express
+- Gemalto Gem e-Seal Pro
 - Fujitsu Siemens Computers SmartCard USB 2A [53]
 - Fujitsu Siemens Computers SmartCard Keyboard USB 2A [54]
 - Giesecke & Devrient StarSign Card Token 350 (ICCD) [57]
@@ -104,9 +108,9 @@ manufacturers, please, contact me.
   reader anymore)
 - id3 Semiconductors CL1356T [48] (it should be the same firmware as the
   CL1356D)
-- Kobil EMV CAP - SecOVID Reader III
 - Lenovo Integrated Smart Card Reader
 - Lexar/Gemalto Smart Enterprise Guardian [60]
+- O2Micro Oz776 (0x7762 and 0x7772 versions)
 - OmniKey CardMan 1021
 - OmniKey CardMan 3021 [49]
 - OmniKey CardMan 3621 [43]
@@ -116,15 +120,14 @@ manufacturers, please, contact me.
 - OmniKey CardMan 5125 [51]
 - OmniKey CardMan 5321 [56]
 - OmniKey CardMan 6121 [36]
-- O2Micro Oz776 (0x7762 and 0x7772 versions)
 - Philips JCOP41V221
 - SafeNet IKey4000
 - SCM Micro SCR 331-DI NTTCom [23]
 - SCM Micro SCR 3310-NTTCOM [28]
 - SCM Micro SCR 3320 [31b]
 - SCM Micro SCR 333 [15]
+- SCM Micro SCR 3340 ExpressCard54 [34]
 - SCM Micro SDI 010 [39]
-- SCM SCR 3340 ExpressCard54 [34]
 - SchlumbergerSema Cyberflex Access e-gate ICCD
 - Silitek SK-3105 keyboard [12] or C3PO TLTC2USB [14]
 - Sitecom USB simcard reader MD-010
@@ -680,6 +683,10 @@ References:
 [65] http://www.validy.com/en/products/token/
 [66] http://www.actividentity.com/products/activkey_usb_tokens__home.php
 [67] http://www.gemalto.com/products/pc_pinpad/
+[68] http://www.kobil.com/index.php?id=71&type=7&L
+[69] http://www.kobil.com/index.php?id=555&type=7&L=0
+[70] http://www.kobil.com/index.php?id=128&type=7&L=1%22
+[71] http://www.lexar.com/enterprise/ent_ppsd.html
 
 $Id$
 
