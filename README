@@ -21,6 +21,7 @@ Supported CCID readers:
 
 (in alphabetical order)
 - ActivCard USB reader 3.0
+- ActivCard Activkey Sim [66]
 - Advanced Card Systems ACR 38U-CCID [16]
   old versions of this reader have a bug: the reader do timeout when a
   special USB frame is sent from the reader. If the frame size if a
@@ -677,6 +678,7 @@ References:
 [63] http://covadis.ch/Alya.239.0.html
 [64] http://covadis.ch/Vega.104.0.html
 [65] http://www.validy.com/en/products/token/
+[66] http://www.actividentity.com/products/activkey_usb_tokens__home.php
 
 $Id$
 
