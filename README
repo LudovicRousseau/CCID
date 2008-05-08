@@ -44,13 +44,13 @@ Supported CCID readers:
 - Eutron Digipass 860 [59]
 - Eutron SIM Pocket Combo [25]
 - Eutron Smart Pocket [58]
-- Gemplus GemPC 433 SL [2]
-- Gemplus GemPC Card [41]
-- Gemplus GemPC Key [3]
-- Gemplus GemPC PinPad
-- Gemplus GemPC Twin [4]
-- Gemplus GemCore POS Pro
-- Gemplus GemCore SIM Pro
+- Gemalto GemPC 433 SL [2] (old name: GemPC 433 SL)
+- Gemalto GemPC Card [41]
+- Gemalto GemPC PinPad [67]
+- Gemalto GemPC Twin [4]
+- Gemalto GemCore POS Pro
+- Gemalto GemCore SIM Pro
+- Gemalto USB Shell Token V2 [3] (old name GemPC Key)
 - Kobil KAAN Base [19]
 - Kobil KAAN Advanced [20]
 - Kobil KAAN SIM III [21]
@@ -613,9 +613,9 @@ References:
 ===========
 
 [1] http://www.usb.org/developers/devclass_docs/ccid_classspec_1_00a.pdf
-[2] http://www.gemplus.com/products/gempc433/
-[3] http://www.gemplus.com/products/gempckey/
-[4] http://www.gemplus.com/products/gempctwin/
+[2] http://www.gemalto.com/products/pc_usb_sl/
+[3] http://www.gemalto.com/products/usb_shell_token_v2/
+[4] http://www.gemalto.com/products/pctwin/
 [5] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=21
 [6] http://scmmicro.com/security/view_product_en.php?PID=3
 [7] http://scmmicro.com/security/view_product_en.php?PID=11
@@ -679,6 +679,7 @@ References:
 [64] http://covadis.ch/Vega.104.0.html
 [65] http://www.validy.com/en/products/token/
 [66] http://www.actividentity.com/products/activkey_usb_tokens__home.php
+[67] http://www.gemalto.com/products/pc_pinpad/
 
 $Id$
 
