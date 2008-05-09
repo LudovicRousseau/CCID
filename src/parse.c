@@ -41,6 +41,7 @@
 #define RED "\33[31m"
 #define BRIGHT_RED "\33[01;31m"
 #define GREEN "\33[32m"
+#define MAGENTA "\33[35m"
 #define NORMAL "\33[0m"
 
 static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
@@ -52,13 +53,17 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
  *					main
  *
  ****************************************************************************/
-int main(void)
+int main(int argc, char *argv[])
 {
 	static struct usb_bus *busses = NULL;
 	struct usb_bus *bus;
 	struct usb_dev_handle *dev_handle;
 	int nb = 0;
 	char buffer[256];
+	char class_ff = FALSE;
+
+	if ((argc > 1) && (0 == strcmp(argv[1], "-p")))
+		class_ff = TRUE;
 
 	usb_init();
 	usb_find_busses();
@@ -120,6 +125,11 @@ int main(void)
 			{
 				usb_close(dev_handle);
 				fprintf(stderr, RED "  NOT a CCID/ICCD device\n" NORMAL);
+				continue;
+			}
+			if (!class_ff && (0xFF == usb_interface->altsetting->bInterfaceClass))
+			{
+				fprintf(stderr, MAGENTA "  Found a possibly CCID/ICCD device (bInterfaceClass = 0xFF). Use -p\n" NORMAL);
 				continue;
 			}
 			fprintf(stderr, GREEN "  Found a CCID/ICCD device\n" NORMAL);
