@@ -133,15 +133,6 @@ int main(void)
 				continue;
 			}
 
-			usb_interface = get_ccid_usb_interface(dev);
-			if (NULL == usb_interface)
-			{
-				usb_close(dev_handle);
-				fprintf(stderr, "Can't find a CCID interface on %s/%s\n",
-					bus->dirname, dev->filename);
-				continue;
-			}
-
 			interface = usb_interface->altsetting->bInterfaceNumber;
 #ifndef __APPLE__
 			if (usb_claim_interface(dev_handle, interface) < 0)
