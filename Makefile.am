@@ -1,4 +1,4 @@
-# $Id$
+AUTOMAKE_OPTIONS = dist-bzip2
 
 ACLOCAL_AMFLAGS = -I aclocal
 
