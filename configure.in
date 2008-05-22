@@ -158,9 +158,9 @@ if test "x$use_libusb" != xno ; then
 
 	use_libusb=yes
 
-	LIBUSB_POLL_VERSION="0.1.12"
-	AC_MSG_CHECKING([for libusb > $LIBUSB_POLL_VERSION])
-	if $PKG_CONFIG --exists "libusb > $LIBUSB_POLL_VERSION" ;
+	AC_MSG_CHECKING([if libusb is emulated by libusb-compat])
+	a=`$PKG_CONFIG --variable=emulated libusb`
+	if test "x$a" = "x1";
 	then
 		AC_MSG_RESULT([yes])
 		use_usb_interrupt=yes
