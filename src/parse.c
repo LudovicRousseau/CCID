@@ -92,6 +92,11 @@ int main(int argc, char *argv[])
 			{
 				fprintf(stderr, "Can't usb_open(%s/%s): %s\n",
 					bus->dirname, dev->filename, strerror(errno));
+				if (getuid())
+				{
+					fprintf(stderr, BRIGHT_RED "Please, restart the command as root\n" NORMAL);
+					return 1;
+				}
 				continue;
 			}
 
