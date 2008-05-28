@@ -51,6 +51,7 @@ EXTRA_DIST = \
 	GnD_StarSignCardToken550.txt \
 	HPUSBSmartCardKeyboard.txt \
 	id3_CL1356A_HID.txt \
+	id3_CL1356D.txt \
 	iDream.txt \
 	KAAN_Advanced.txt \
 	KAAN_Base.txt \
