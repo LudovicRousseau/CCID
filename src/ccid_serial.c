@@ -219,7 +219,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
  *
  *****************************************************************************/
 status_t ReadSerial(unsigned int reader_index,
-	/*@unused@*/ unsigned int *length, unsigned char *buffer)
+	unsigned int *length, unsigned char *buffer)
 {
 	unsigned char c;
 	int rv;
@@ -332,6 +332,9 @@ ack:
 		echo = FALSE;
 		goto start;
 	}
+
+	/* length of data read */
+	*length = to_read;
 
 	return STATUS_SUCCESS;
 } /* ReadSerial */
