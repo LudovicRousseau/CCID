@@ -154,6 +154,8 @@
 # Validy
 0x1CF0:0x0001:Validy TokenA sl vt
 
+# Pro Active
+0x1C34:0x7124:Pro-Active CSB6 Ultimate
 
 
 # Bogus readers but partly supported
