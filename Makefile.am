@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = dist-bzip2
 
 ACLOCAL_AMFLAGS = -I aclocal
 
-SUBDIRS = aclocal readers examples contrib src
+SUBDIRS = m4 readers examples contrib src
 
 AUX_DIST = \
 	$(ac_aux_dir)/aclocal.m4 \

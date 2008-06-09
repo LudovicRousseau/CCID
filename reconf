@@ -13,7 +13,7 @@ if test -f Makefile; then
   make distclean
 fi
 rm -rf *.cache *.m4 build/{config.guess,config.sub,depcomp,ltmain.sh} config.log config.status
-(cat aclocal/*.m4 > acinclude.m4)
+(cat m4/*.m4 > acinclude.m4)
 autoreconf --verbose --install
-cp aclocal.m4 build/
+cp m4.m4 build/
 
