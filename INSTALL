@@ -57,24 +57,26 @@ the usb.h and libusb.so files. The ./configure script will use
 PATH/include/ to search for usb.h and PATH/lib/ to search for libusb.so
 
 
-serial reader
-~~~~~~~~~~~~~
+building serial reader driver
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A serial CCID reader can also be connected on a serial port. By default
-the serial driver is built but not installed. You must explicitely do:
+the serial driver is not built. You must explicitely do:
 
 $ ./configure --enable-twinserial
-$ make -C src install_ccidtwin
+$ make
+# make install
 
 
-builing serial reader only
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+builing serial reader driver only
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is possible to generate the driver for the GemPC Twin using serial
 communication only (for example on an embedded system without USB).
 Just do:
-$ ./configure --disable-libusb
-$ cd src ; make libccidtwin.la ; sudo make install_ccidtwin
+$ ./configure --enable-twinserial --disable-libusb
+$ make
+# make install
 
 By default ./configure try to get the directory used by pcscd using
 'pkg-config libpcsclite --variable=usbdropdir' and add '/serial'.
