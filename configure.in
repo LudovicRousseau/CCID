@@ -140,7 +140,7 @@ if test "x$use_libusb" != xno ; then
 	LIBS="$LDFLAGS $LIBUSB_LIBS"
 
 	AC_CHECK_HEADERS(usb.h, [],
-		[ AC_MSG_ERROR([usb.h not found, use ./configure LIBUSB_CFLAGS=...]) ])
+		[ AC_MSG_ERROR([usb.h not found, install libusb or use ./configure LIBUSB_CFLAGS=...]) ])
 
 	LIBS="$LIBS $COREFOUNDATION $IOKIT"
 
