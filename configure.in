@@ -173,6 +173,7 @@ if test "x$use_libusb" != xno ; then
 fi
 AC_SUBST(LIBUSB_CFLAGS)
 AC_SUBST(LIBUSB_LIBS)
+AM_CONDITIONAL(WITH_LIBUSB, test "${use_libusb}" != "no")
 
 # --enable-usb-interrupt
 AC_ARG_ENABLE(usb-interrupt,
