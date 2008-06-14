@@ -6,13 +6,17 @@ CCIDTWIN_LIB = libccidtwin.$(DYN_LIB_EXT)
 
 CCID_VERSION=CCID_VERSION=`$(srcdir)/convert_version.pl $(PACKAGE_VERSION)`
 
-lib_LTLIBRARIES = libccid.la
-LIBS_TO_INSTALL = install_ccid
+lib_LTLIBRARIES =
+LIBS_TO_INSTALL =
+if WITH_LIBUSB
+lib_LTLIBRARIES += libccid.la
+LIBS_TO_INSTALL += install_ccid
+bin_PROGRAMS = parse
+endif
 if WITH_TWIN_SERIAL
 lib_LTLIBRARIES += libccidtwin.la
 LIBS_TO_INSTALL += install_ccidtwin
 endif
-bin_PROGRAMS = parse
 
 COMMON = ccid.c \
 	ccid.h \
