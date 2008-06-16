@@ -1283,7 +1283,15 @@ time_request:
 		length = *rx_length;
 		return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 	}
-	memcpy(rx_buffer, cmd+10, length);
+
+	/* Kobil firmware bug. No support for chaining */
+	if (length && (NULL == rx_buffer))
+	{
+		DEBUG_CRITICAL2("Nul block expected but got %d bytes", length);
+		return_value = IFD_COMMUNICATION_ERROR;
+	}
+	else
+		memcpy(rx_buffer, cmd+10, length);
 
 	/* Extended case?
 	 * Only valid for RDR_to_PC_DataBlock frames */
