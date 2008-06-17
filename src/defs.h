@@ -55,7 +55,8 @@ typedef enum {
 } status_t;
 
 /* Powerflag (used to detect quick insertion removals unnoticed by the
- * resource manager)Initial value */
+ * resource manager) */
+/* Initial value */
 #define POWERFLAGS_RAZ 0x00
 /* Flag set when a power up has been requested */
 #define MASK_POWERFLAGS_PUP 0x01
@@ -66,9 +67,9 @@ typedef enum {
  * extended APDU. The readers supports a command of up to 512 or 420 bytes.
  * For a Kobil KAAN Base/advanced reader you should use
  *  #define CMD_BUF_SIZE 420
- * For the other models you should us
+ * For the other models you should use
  *  #define CMD_BUF_SIZE 512
- * Kobil is aware of the problem and do not plan to solve it
+ * Kobil is aware of the problem and do not plan to solve it.
  */
 /* Communication buffer size (max=adpu+Lc+data+Le) */
 #define CMD_BUF_SIZE (4+1+256+1)
