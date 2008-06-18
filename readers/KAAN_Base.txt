@@ -2,15 +2,17 @@
   iManufacturer: KOBIL
  idProduct: 0x3001
   iProduct: KAAN Base
- bcdDevice: 1.02 (firmware release?)
+ bcdDevice: 1.19 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
  iInterface: 0
  CCID Class Descriptor
   bLength: 0x36
@@ -27,11 +29,11 @@
   dwDefaultClock: 4.800 MHz
   dwMaximumClock: 4.800 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request
+   wrong size for GET CLOCK FREQUENCIES: 1
   dwDataRate: 12903 bps
   dwMaxDataRate: 412903 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request
+   wrong size for GET_DATA_RATES: 1
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000007
    2-wire protocol
@@ -39,7 +41,7 @@
    I2C protocol
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x000206BA
+  dwFeatures: 0x000406BA
    ....02 Automatic parameter configuration based on ATR data
    ....08 Automatic ICC voltage selection
    ....10 Automatic ICC clock frequency change according to parameters
@@ -47,8 +49,8 @@
    ....80 Automatic PPS made by the CCID
    ..02.. NAD value other than 00 accepted (T=1)
    ..04.. Automatic IFSD exchange as first exchange (T=1)
-   02.... Short APDU level exchange
-  dwMaxCCIDMessageLength: 271 bytes
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 432 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnveloppe: 0xFF
