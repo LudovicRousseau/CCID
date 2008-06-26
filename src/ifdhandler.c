@@ -259,7 +259,10 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO2("lun: %X", Lun);
+	/* log only if DEBUG_LEVEL_PERIODIC is set */
+	if (LogLevel & DEBUG_LEVEL_PERIODIC)
+		DEBUG_INFO2("lun: %X", Lun);
+
 	ret = InterruptRead(reader_index);
 	if (ret > 0)
 		return IFD_SUCCESS;
