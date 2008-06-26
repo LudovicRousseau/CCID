@@ -82,7 +82,7 @@ ifdCapabilities=0x00000000
 endif
 
 Info.plist: Info.plist.src $(srcdir)/../readers/supported_readers.txt
-	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist.src $(ifdCapabilities) | sed s/VERSION/$(VERSION)/ | sed s/TARGET/$(CCID_LIB)/ > Info.plist
+	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist.src $(ifdCapabilities) | sed s/TARGET/$(CCID_LIB)/ > Info.plist
 	
 DISTCLEANFILES = Info.plist
 
@@ -90,6 +90,7 @@ install_ccid: libccid.la Info.plist
 	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
 	cp Info.plist $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/
 	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB).$(VERSION)
+	ln -fs $(CCID_LIB).$(VERSION) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB)
 	$(INSTALL_UDEV_RULE_FILE)
 
 install_ccidtwin: libccidtwin.la

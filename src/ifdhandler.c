@@ -1317,6 +1317,8 @@ void init_driver(void)
 	char infofile[FILENAME_MAX];
 	char *e;
 
+	DEBUG_INFO("Driver version: " VERSION);
+
 	/* Info.plist full patch filename */
 	snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
