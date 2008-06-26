@@ -858,7 +858,7 @@ int InterruptRead(int reader_index)
 {
 	int ret;
 	char buffer[8];
-	int timeout = 60*60*1000; /* 60 minutes */
+	int timeout = 2*1000; /* 2 seconds */
 	static int hasfailed = FALSE;
 
 	if (hasfailed)
@@ -878,8 +878,8 @@ int InterruptRead(int reader_index)
 	if (ret < 0)
 	{
 		/* if usb_interrupt_read() times out we get EILSEQ or EAGAIN */
-		if ((errno != EILSEQ) && (errno != EAGAIN))
-			DEBUG_CRITICAL4("usb_interrupt_read(%s/%s): %s",
+		if ((errno != EILSEQ) && (errno != EAGAIN) && (errno != 0))
+			DEBUG_COMM4("usb_interrupt_read(%s/%s): %s",
 					usbDevice[reader_index].dirname,
 					usbDevice[reader_index].filename, strerror(errno));
 	}
