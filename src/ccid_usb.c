@@ -870,7 +870,7 @@ int InterruptRead(int reader_index)
 	DEBUG_COMM("before");
 	ret = usb_interrupt_read(usbDevice[reader_index].handle,
 		usbDevice[reader_index].interrupt, buffer, sizeof(buffer), timeout);
-	DEBUG_COMM2("after %d\n", ret);
+	DEBUG_COMM2("after %d", ret);
 
 	if (0 == ret)
 		hasfailed = TRUE;
