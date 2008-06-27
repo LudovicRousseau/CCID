@@ -259,6 +259,16 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.3.8 - 27 June 2008, Ludovic Rousseau
+    - add support for Oberthur ID-One Cosmo Card
+    - do not include the release number in the Info.plist to avoid a
+      diff of a configuration file when upgrading the package.
+    - do not fail compilation if libusb is not available
+    - do not crash if the reader firmware is bogus and does not support
+      chaining for extended APDU.  This is the case for Kobil readers
+    - some minor bugs removed
+
+
 1.3.7 - 8 June 2008, Ludovic Rousseau
     - add support for ActivCard Activkey Sim, Pro-Active CSB6 Ultimate,
       id3 Semiconductors CL1356A HID
@@ -270,6 +280,7 @@ History:
       reader)
     - correct a pthread problem under Solaris
     - some minor bugs removed
+
 
 1.3.6 - 30 April 2008, Ludovic Rousseau
     - add support for Covadis Alya, Covadis Véga, Precise Biometrics 250
