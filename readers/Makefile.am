@@ -5,6 +5,7 @@ EXTRA_DIST = \
 	ACR38U-CCID.txt \
 	ActivCardV2.txt \
 	ActivCardV3.txt \
+	Aladdin_eToken_PRO_USB_72K_Java.txt \
 	Alya.txt \
 	ASEDrive_IIIe_KB.txt \
 	ASE_IIIe.txt \
