@@ -62,6 +62,10 @@ CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc"
 LDFLAGS="-arch i386 -arch ppc"
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
+# do not build a static driver
+# (building fails when linking statically with libusb)
+CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-static"
+
 # do not use pcscd debug feature
 CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-pcsclite"
 
