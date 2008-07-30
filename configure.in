@@ -80,15 +80,6 @@ case "$host" in
 *-*-darwin*)
 	BUNDLE_HOST="MacOS"
 	DYN_LIB_EXT="dylib"
-
-	AC_SUBST(COREFOUNDATION)
-	COREFOUNDATION="-Wl,-framework,CoreFoundation"
-
-	AC_SUBST(IOKIT)
-	IOKIT="-Wl,-framework,IOKit"
-	if test "$GCC" = "yes"; then
-		CFLAGS="$CFLAGS -no-cpp-precomp"
-	fi
 	;;
 *-*-freebsd*)
 	BUNDLE_HOST="FreeBSD"
@@ -141,8 +132,6 @@ if test "x$use_libusb" != xno ; then
 
 	AC_CHECK_HEADERS(usb.h, [],
 		[ AC_MSG_ERROR([usb.h not found, install libusb or use ./configure LIBUSB_CFLAGS=...]) ])
-
-	LIBS="$LIBS $COREFOUNDATION $IOKIT"
 
 	AC_MSG_CHECKING([for usb_init])
 	AC_TRY_LINK_FUNC(usb_init, [ AC_MSG_RESULT([yes]) ],
