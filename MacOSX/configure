@@ -44,12 +44,13 @@ fi
 PKG_CONFIG="foobar"
 
 # find pcsc-lite header files in MacOSX/
-PCSC_CFLAGS="-I$(pwd)/MacOSX"
-PCSC_LIBS="-framework PCSC"
+# use ${varname:-word} to return word only if varname is not already defined
+PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
+PCSC_LIBS=${PCSC_LIBS:--framework PCSC}
 
 # use libusb from OpenSC (universal binary)
-LIBUSB_CFLAGS="-I/Library/OpenSC/include"
-LIBUSB_LIBS="-L/Library/OpenSC/lib -lusb"
+LIBUSB_CFLAGS=${LIBUSB_CFLAGS:--I/Library/OpenSC/include}
+LIBUSB_LIBS=${LIBUSB_LIBS:--L/Library/OpenSC/lib -lusb}
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
 # define needed here to compile examples/scardcontrol.c since config.h is
