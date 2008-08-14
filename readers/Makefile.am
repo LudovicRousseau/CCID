@@ -9,6 +9,7 @@ EXTRA_DIST = \
 	Alya.txt \
 	ASEDrive_IIIe_KB.txt \
 	ASE_IIIe.txt \
+	ATMEL_AT91SO.txt \
 	AxaltoV3.txt \
 	BludriveII.txt \
 	C3PO_KBR36.txt \
