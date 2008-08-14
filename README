@@ -91,6 +91,7 @@ manufacturers, please, contact me.
 - Advanced Card Systems ACR122 [62]
 - Aladdin eToken PRO USB 72K Java [73]
 - Axalto Reflex USB v3 [38]
+- Atmel AT91SO [74]
 - C3PO LTC32 [13]
 - C3PO TLTC2USB
 - C3PO KBR36
@@ -717,6 +718,7 @@ References:
 [71] http://www.lexar.com/enterprise/ent_ppsd.html
 [72] http://www.pro-active.fr/en/products/csb6.html
 [73] http://www.aladdin.com/etoken/devices/pro-usb.aspx
+[74] http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3981
 
 $Id$
 

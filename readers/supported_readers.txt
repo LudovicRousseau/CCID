@@ -164,6 +164,10 @@
 # Aladdin
 0x0529:0x0620:Aladdin eToken PRO USB 72K Java
 
+# Atmel
+0x03EB:0x6004:Atmel AT91SO
+
+
 # Bogus readers but partly supported
 # See the README file for a bug description
 0x09C3:0x0008:ActivCard USB Reader 2.0
