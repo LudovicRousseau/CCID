@@ -276,7 +276,14 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
 static RESPONSECODE IFDHSleep(DWORD Lun)
 {
 	DEBUG_INFO2("lun: %X", Lun);
-	sleep(60*60);	/* 1 hour */
+	/* just sleep for 5 seconds since the polling thread is NOT killable
+	 * so pcscd event thread must loop to exit cleanly
+	 *
+	 * Once the driver (libusb in fact) will support
+	 * TAG_IFD_POLLING_THREAD_KILLABLE then we could use a much longer delay
+	 * and be killed before pcscd exits
+	 */
+	sleep(5);	/* 5 seconds */
 	return IFD_SUCCESS;
 }
 #endif
