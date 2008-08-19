@@ -859,21 +859,11 @@ int InterruptRead(int reader_index)
 	int ret;
 	char buffer[8];
 	int timeout = 2*1000; /* 2 seconds */
-	static int hasfailed = FALSE;
-
-	if (hasfailed)
-	{
-		DEBUG_COMM("driver has failed");
-		return 0;
-	}
 
 	DEBUG_COMM("before");
 	ret = usb_interrupt_read(usbDevice[reader_index].handle,
 		usbDevice[reader_index].interrupt, buffer, sizeof(buffer), timeout);
 	DEBUG_COMM2("after %d", ret);
-
-	if (0 == ret)
-		hasfailed = TRUE;
 
 	if (ret < 0)
 	{
