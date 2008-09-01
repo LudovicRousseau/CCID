@@ -222,6 +222,7 @@ int ccid_open_hack(unsigned int reader_index)
 						cmd[offset++] = ' ';
 				}
 
+				sleep(1);
 				if (IFD_SUCCESS == CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res))
 				{
 					DEBUG_COMM("l10n string loaded successfully");
