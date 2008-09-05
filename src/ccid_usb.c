@@ -868,7 +868,7 @@ int InterruptRead(int reader_index)
 	if (ret < 0)
 	{
 		/* if usb_interrupt_read() times out we get EILSEQ or EAGAIN */
-		if ((errno != EILSEQ) && (errno != EAGAIN) && (errno != 0))
+		if ((errno != EILSEQ) && (errno != EAGAIN) && (errno != ENODEV) && (errno != 0))
 			DEBUG_COMM4("usb_interrupt_read(%s/%s): %s",
 					usbDevice[reader_index].dirname,
 					usbDevice[reader_index].filename, strerror(errno));
