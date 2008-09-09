@@ -64,6 +64,7 @@ EXTRA_DIST = \
 	LTC31.txt \
 	LTC31v2.txt \
 	mIDentity.txt \
+	mIDentityXL.txt \
 	MySmartPad.txt \
 	Oberthur-CosmoCard.txt \
 	Oz776_7772.txt \
