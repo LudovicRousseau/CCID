@@ -88,6 +88,13 @@ EXTRA_DIST = \
 	SIM_Pocket_Combo.txt \
 	Sitecom_MD-010.txt \
 	SPR532.txt \
+	SpringCard_CSB6_Basic.txt \
+	SpringCard_EasyFinger_Ultimate.txt \
+	SpringCard_CSB6_Ultimate.txt \
+	SpringCard_Prox_N_Roll.txt \
+	SpringCard_EasyFinger_Standard.txt \
+	SpringCard_CrazyWriter.txt \
+	SpringCard_CSB6_Secure.txt \
 	supported_readers.txt \
 	Validy_TokenA.txt \
 	Vasco_DP905.txt \
