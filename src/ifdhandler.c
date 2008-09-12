@@ -927,6 +927,8 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	unsigned char pcbuffer[RESP_BUF_SIZE];
 	int reader_index;
 	const char *actions[] = { "PowerUp", "PowerDown", "Reset" };
+	unsigned int oldReadTimeout;
+	_ccid_descriptor *ccid_descriptor;
 
 	DEBUG_INFO3("lun: %X, action: %s", Lun, actions[Action-IFD_POWER_UP]);
 
@@ -960,9 +962,28 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 
 		case IFD_POWER_UP:
 		case IFD_RESET:
+			/* save the current read timeout computed from card capabilities */
+			ccid_descriptor = get_ccid_descriptor(reader_index);
+			oldReadTimeout = ccid_descriptor->readTimeout;
+
+			/* use a very long timeout since the card can use up to
+			 * (9600+12)*33 ETU in total
+			 * 12 ETU per byte
+			 * 9600 ETU max between each byte
+			 * 33 bytes max for ATR
+			 * 1 ETU = 372 cycles during ATR
+			 * with a 4 MHz clock => 29 seconds
+			 */
+			ccid_descriptor->readTimeout = 60;
+
 			nlength = sizeof(pcbuffer);
-			if (CmdPowerOn(reader_index, &nlength, pcbuffer, PowerOnVoltage)
-				!= IFD_SUCCESS)
+			return_value = CmdPowerOn(reader_index, &nlength, pcbuffer,
+				PowerOnVoltage);
+
+			/* set back the old timeout */
+			ccid_descriptor->readTimeout = oldReadTimeout;
+
+			if (return_value != IFD_SUCCESS)
 			{
 				/* used by GemCore SIM PRO: no card is present */
 				get_ccid_descriptor(reader_index)->dwSlotStatus
