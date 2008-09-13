@@ -70,7 +70,6 @@ EXTRA_DIST = \
 	Oz776_7772.txt \
 	Oz776S.txt \
 	Precise_250_MC.txt \
-	Pro-Active_CSB6_Ultimate.txt \
 	ReinerSCT.txt \
 	SafeNet_IKey4000.txt \
 	SCR3310.txt \
