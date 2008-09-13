@@ -155,8 +155,14 @@
 # Validy
 0x1CF0:0x0001:Validy TokenA sl vt
 
-# Springcard
-0x1C34:0x7124:Springcard CSB6
+# SpringCard
+0x1C34:0x7113:SpringCard CrazyWriter
+0x1C34:0x7121:SpringCard CSB6 Basic
+0x1C34:0x7123:SpringCard CSB6 Secure
+0x1C34:0x7124:SpringCard CSB6 Ultimate
+0x1C34:0x7136:SpringCard EasyFinger Standard
+0x1C34:0x7138:SpringCard EasyFinger Ultimate
+0x1C34:0x7141:SpringCard Prox'N'Roll
 
 # Oberthur
 0x1A74:0x6354:OCS ID-One Cosmo Card
