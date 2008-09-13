@@ -155,8 +155,8 @@
 # Validy
 0x1CF0:0x0001:Validy TokenA sl vt
 
-# Pro Active
-0x1C34:0x7124:Pro-Active CSB6 Ultimate
+# Springcard
+0x1C34:0x7124:Springcard CSB6
 
 # Oberthur
 0x1A74:0x6354:OCS ID-One Cosmo Card
