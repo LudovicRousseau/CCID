@@ -119,7 +119,8 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 			DEBUG_CRITICAL("failed");
 			return_value = IFD_COMMUNICATION_ERROR;
 
-			/* release the allocated reader_index */
+			/* release the allocated resources */
+			(void)ClosePort(reader_index);
 			ReleaseReaderIndex(reader_index);
 		}
 	}
