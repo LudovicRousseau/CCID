@@ -173,6 +173,9 @@
 # Atmel
 0x03EB:0x6004:Atmel AT91SO
 
+# Broadcom Corp
+0x0A5C:0x5800:Broadcom 5880
+
 
 # Bogus readers but partly supported
 # See the README file for a bug description
