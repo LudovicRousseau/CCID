@@ -12,6 +12,7 @@ EXTRA_DIST = \
 	ATMEL_AT91SO.txt \
 	AxaltoV3.txt \
 	BludriveII.txt \
+	Broadcom_5880.txt \
 	C3PO_KBR36.txt \
 	C3PO_LTC32_USBv2_old.txt \
 	C3PO_LTC32_USBv2.txt \
