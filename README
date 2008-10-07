@@ -64,11 +64,11 @@ Supported CCID readers:
   You shall upgrade the firmware [17] using version 5.18 or later.
 - SCM Micro SCR 331-DI [11]
   You shall upgrade the firmware [17] using version 6.22 or later.
+- SCM Micro SCR 3310 [30]
+- SCM Micro SCR 3311 [31]
 - SCM Micro SCR 335 [7]
   The firmware of this reader can't be upgraded so be sure to buy a
   recent model with firmware 5.14 or later
-- SCM Micro SCR 3310 [30]
-- SCM Micro SCR 3311 [31]
 - SCM Micro SCR 355
 - SCM Micro SPR 532 [9]
   You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
@@ -128,6 +128,7 @@ manufacturers, please, contact me.
 - OmniKey CardMan 5321 [56]
 - OmniKey CardMan 6121 [36]
 - Philips JCOP41V221
+- SafeNet IKey4000
 - SpringCard CrazyWriter
 - SpringCard CSB6 Basic
 - SpringCard CSB6 Secure
@@ -135,7 +136,6 @@ manufacturers, please, contact me.
 - SpringCard EasyFinger Standard
 - SpringCard EasyFinger Ultimate
 - SpringCard Prox'N'Roll
-- SafeNet IKey4000
 - SCM Micro SCR 331-DI NTTCom [23]
 - SCM Micro SCR 3310-NTTCOM [28]
 - SCM Micro SCR 3320 [31b]
