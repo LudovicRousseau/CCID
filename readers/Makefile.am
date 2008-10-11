@@ -52,6 +52,7 @@ EXTRA_DIST = \
 	GemPCTwin.txt \
 	GnD_StarSignCardToken350.txt \
 	GnD_StarSignCardToken550.txt \
+	HP_MFP_SmartCardReader.txt \
 	HPUSBSmartCardKeyboard.txt \
 	id3_CL1356A_HID.txt \
 	id3_CL1356D.txt \
