@@ -58,7 +58,7 @@ atr_i_table[4] =
 };
 
 /*
- * Exported funcions definition
+ * Exported functions definition
  */
 
 int
