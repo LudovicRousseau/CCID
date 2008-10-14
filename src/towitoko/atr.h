@@ -96,7 +96,7 @@ ATR_t;
  */
 
 /* Initialization */
-extern int ATR_InitFromArray(ATR_t * atr, BYTE buffer[ATR_MAX_SIZE],
+extern int ATR_InitFromArray(ATR_t * atr, const BYTE buffer[ATR_MAX_SIZE],
 	unsigned length);
 
 /* General smartcard characteristics */

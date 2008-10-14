@@ -62,7 +62,7 @@ atr_i_table[4] =
  */
 
 int
-ATR_InitFromArray (ATR_t * atr, BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
+ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
 {
   BYTE TDi;
   BYTE buffer[ATR_MAX_SIZE];
