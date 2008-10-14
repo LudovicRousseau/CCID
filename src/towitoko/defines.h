@@ -52,21 +52,5 @@
 typedef int                bool;
 #endif
 
-/*
- * Utility macros
- */
-
-/* Invert order of bits in a byte: b7->b0, b0->b7 */
-#ifndef INVERT_BYTE
-#define INVERT_BYTE(a)		((((a) << 7) & 0x80) | \
-				(((a) << 5) & 0x40) | \
-				(((a) << 3) & 0x20) | \
-				(((a) << 1) & 0x10) | \
-				(((a) >> 1) & 0x08) | \
-				(((a) >> 3) & 0x04) | \
-				(((a) >> 5) & 0x02) | \
-				(((a) >> 7) & 0x01))
-#endif
-
 #endif /* DEFINES_H */
 
