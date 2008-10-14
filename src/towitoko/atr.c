@@ -72,13 +72,6 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
   if (length < 2)
     return (ATR_MALFORMED);
 
-  /* Check if ATR is from a inverse convention card */
-  if (atr_buffer[0] == 0x03)
-    {
-      for (pointer = 0; pointer < length; pointer++)
-	buffer[pointer] = ~(INVERT_BYTE (atr_buffer[pointer]));
-    }
-  else
     memcpy (buffer, atr_buffer, length);
 
   /* Store T0 and TS */
