@@ -65,19 +65,16 @@ int
 ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned length)
 {
   BYTE TDi;
-  BYTE buffer[ATR_MAX_SIZE];
   unsigned pointer = 0, pn = 0;
 
   /* Check size of buffer */
   if (length < 2)
     return (ATR_MALFORMED);
 
-    memcpy (buffer, atr_buffer, length);
-
   /* Store T0 and TS */
-  atr->TS = buffer[0];
+  atr->TS = atr_buffer[0];
 
-  atr->T0 = TDi = buffer[1];
+  atr->T0 = TDi = atr_buffer[1];
   pointer = 1;
 
   /* Store number of historical bytes */
@@ -98,7 +95,7 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
       if ((TDi | 0xEF) == 0xFF)
 	{
 	  pointer++;
-	  atr->ib[pn][ATR_INTERFACE_BYTE_TA].value = buffer[pointer];
+	  atr->ib[pn][ATR_INTERFACE_BYTE_TA].value = atr_buffer[pointer];
 	  atr->ib[pn][ATR_INTERFACE_BYTE_TA].present = TRUE;
 	}
       else
@@ -107,7 +104,7 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
       if ((TDi | 0xDF) == 0xFF)
 	{
 	  pointer++;
-	  atr->ib[pn][ATR_INTERFACE_BYTE_TB].value = buffer[pointer];
+	  atr->ib[pn][ATR_INTERFACE_BYTE_TB].value = atr_buffer[pointer];
 	  atr->ib[pn][ATR_INTERFACE_BYTE_TB].present = TRUE;
 	}
       else
@@ -117,7 +114,7 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
       if ((TDi | 0xBF) == 0xFF)
 	{
 	  pointer++;
-	  atr->ib[pn][ATR_INTERFACE_BYTE_TC].value = buffer[pointer];
+	  atr->ib[pn][ATR_INTERFACE_BYTE_TC].value = atr_buffer[pointer];
 	  atr->ib[pn][ATR_INTERFACE_BYTE_TC].present = TRUE;
 	}
       else
@@ -127,7 +124,7 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
       if ((TDi | 0x7F) == 0xFF)
 	{
 	  pointer++;
-	  TDi = atr->ib[pn][ATR_INTERFACE_BYTE_TD].value = buffer[pointer];
+	  TDi = atr->ib[pn][ATR_INTERFACE_BYTE_TD].value = atr_buffer[pointer];
 	  atr->ib[pn][ATR_INTERFACE_BYTE_TD].present = TRUE;
 	  (atr->TCK).present = ((TDi & 0x0F) != ATR_PROTOCOL_TYPE_T0);
 	  if (pn >= ATR_MAX_PROTOCOLS)
@@ -148,7 +145,7 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
   if (pointer + atr->hbn >= length)
     return (ATR_MALFORMED);
 
-  memcpy (atr->hb, buffer + pointer + 1, atr->hbn);
+  memcpy (atr->hb, atr_buffer + pointer + 1, atr->hbn);
   pointer += (atr->hbn);
 
   /* Store TCK  */
@@ -160,7 +157,7 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
 
       pointer++;
 
-      (atr->TCK).value = buffer[pointer];
+      (atr->TCK).value = atr_buffer[pointer];
     }
 
   atr->length = pointer + 1;
