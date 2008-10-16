@@ -2,6 +2,7 @@
 
 EXTRA_DIST = \
 	ACR122U.txt \
+	ACR122U_PICC.txt \
 	ACR38U-CCID.txt \
 	ActivCardV2.txt \
 	ActivCardV3.txt \
