@@ -72,6 +72,7 @@
 
 # Advanced Card Systems
 0x072f:0x90cc:ACS ACR 38U-CCID
+0x072F:0x2200:ACS ACR122U PICC Interface
 
 # O2 Micro
 0x0b97:0x7762:O2 Micro Oz776
