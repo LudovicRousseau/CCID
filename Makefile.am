@@ -4,16 +4,6 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = m4 readers examples contrib src
 
-AUX_DIST = \
-	$(ac_aux_dir)/aclocal.m4 \
-	$(ac_aux_dir)/config.guess \
-	$(ac_aux_dir)/config.sub \
-	$(ac_aux_dir)/depcomp \
-	$(ac_aux_dir)/install-sh \
-	$(ac_aux_dir)/ltmain.sh \
-	$(ac_aux_dir)/missing \
-	$(ac_aux_dir)/ylwrap
-
 EXTRA_DIST = bootstrap ChangeLog SCARDGETATTRIB.txt \
 	$(AUX_DIST) \
 	MacOSX/configure \
