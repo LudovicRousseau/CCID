@@ -14,6 +14,8 @@
 # Verisign branded
 0x08E6:0xACE0:Verisign Secure Token
 0x08E6:0x1359:VeriSign Secure Storage Token
+# Gemalto
+0x0973:0x1227:Gemalto PDT
 
 # SCM Microsystems
 0x04E6:0x5111:SCM SCR 331-DI
