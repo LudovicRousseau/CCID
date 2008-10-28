@@ -382,6 +382,11 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 			res_tmp, &res_length);
 		if (return_value != IFD_SUCCESS)
 			return return_value;
+
+		/* we need to set bSeq again to avoid a "Duplicate frame detected"
+		 * error since the bSeq of CmdEscape is now greater than bSeq set at
+		 * the beginning of this function */
+		cmd[6] = (*ccid_descriptor->pbSeq)++;
 	}
 
 	i2dw(a - 10, cmd + 1);  /* CCID message length */
