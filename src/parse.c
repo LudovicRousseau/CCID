@@ -329,7 +329,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		printf("   1.8V\n");
 
 	printf("  dwProtocols: 0x%02X%02X 0x%02X%02X\n", extra[9], extra[8],
-		extra[7],extra[6]);
+		extra[7], extra[6]);
 	if (extra[6] & 0x01)
 		printf("   T=0\n");
 	if (extra[6] & 0x02)
