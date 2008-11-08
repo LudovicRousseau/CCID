@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
 	 * bConfirmPIN = 1, bNumberMessage = 2: "New Pin" "Confirm Pin"
 	 * bConfirmPIN = 0, bNumberMessage = 1: "New Pin"
 	 */
-	/* PC/SC v2.0.2 Part 10 PIN verification data structure */
+	/* PC/SC v2.0.2 Part 10 PIN modification data structure */
 	pin_modify -> bTimerOut = 0x00;
 	pin_modify -> bTimerOut2 = 0x00;
 	pin_modify -> bmFormatString = 0x82;
