@@ -37,6 +37,7 @@
 
 #undef VERIFY_PIN
 #define MODIFY_PIN
+#undef GET_GEMPC_FIRMWARE
 
 #ifndef TRUE
 #define TRUE 1
@@ -175,6 +176,7 @@ int main(int argc, char *argv[])
 	printf(" Protocol: %ld\n", dwActiveProtocol);
 	PCSC_ERROR_EXIT(rv, "SCardConnect")
 
+#ifdef GET_GEMPC_FIRMWARE
 	/* get GemPC firmware */
 	printf(" Get GemPC Firmware\n");
 
@@ -192,6 +194,7 @@ int main(int argc, char *argv[])
 	printf(" Firmware: %s (length %ld bytes)\n", bRecvBuffer, length);
 
 	PCSC_ERROR_CONT(rv, "SCardControl")
+#endif
 
 	/* get card status */
 	dwAtrLen = sizeof(pbAtr);
