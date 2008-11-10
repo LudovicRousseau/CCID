@@ -14,7 +14,7 @@
   Class is 0xFF (proprietary)
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
-  bulk transfer, optional interrupt-IN
+  bulk transfer, optional interrupt-IN (CCID)
  iInterface: 4
  CCID Class Descriptor
   bLength: 0x36
