@@ -78,6 +78,8 @@ extern int LogLevel;
 
 #define DEBUG_PERIODIC2(fmt, data) if (LogLevel & DEBUG_LEVEL_PERIODIC) Log2(PCSC_LOG_DEBUG, fmt, data)
 
+#define DEBUG_PERIODIC3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_PERIODIC) Log3(PCSC_LOG_DEBUG, fmt, data1, data2)
+
 /* DEBUG_COMM */
 #define DEBUG_COMM(fmt) if (LogLevel & DEBUG_LEVEL_COMM) Log1(PCSC_LOG_DEBUG, fmt)
 
