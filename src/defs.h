@@ -42,6 +42,9 @@ typedef struct CCID_DESC
 	 * T=1 Protocol context
 	 */
 	t1_state_t t1;
+
+	/* reader name passed to IFDHCreateChannelByName() */
+	char *readerName;
 } CcidDesc;
 
 typedef enum {
