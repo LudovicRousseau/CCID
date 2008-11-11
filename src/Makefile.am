@@ -64,7 +64,7 @@ libccidtwin_la_CFLAGS = $(PCSC_CFLAGS) $(PTHREAD_CFLAGS) $(SYMBOL_VISIBILITY) \
 libccidtwin_la_LIBADD = $(PTHREAD_LIBS)
 
 parse_SOURCES = parse.c debug.c
-parse_LDADD = libccid.la
+parse_LDADD = libccid.la $(LIBUSB_LIBS)
 parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS)
 
 EXTRA_DIST = Info.plist.src create_Info_plist.pl reader.conf.in \
