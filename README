@@ -93,7 +93,6 @@ manufacturers, please, contact me.
 - Aladdin eToken PRO USB 72K Java [73]
 - Axalto Reflex USB v3 [38]
 - Atmel AT91SO [74]
-- Broadcom Corp 5880 (found in Dell E6500 laptop)
 - C3PO LTC32 [13]
 - C3PO TLTC2USB
 - C3PO KBR36
@@ -160,6 +159,9 @@ Unsupported or partly supported CCID readers:
     The reader do timeout when a special USB frame is sent from the
     reader. If the frame size if a multiple of wMaxPacketSize the
     communication is stopped.
+- Broadcom Corp 5880 (found in Dell E6500 laptop)
+    No communication to the device ("Resource temporarily unavailable"
+    error)
 - C3PO LTC31 (old model, USB product id 0x0003) [8]
     The reader works fine with Linux kernel 2.4 but does not with Linux
     kernel 2.6. The ioctl() syscall returns EINVAL (Invalid argument)
