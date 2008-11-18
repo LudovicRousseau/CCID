@@ -197,7 +197,7 @@ void ccid_error(int error, const char *file, int line, const char *function);
 _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index);
 
 /* convert a 4 byte integer in USB format into an int */
-#define dw2i(a, x) ((((((a[x+3] << 8) + a[x+2]) << 8) + a[x+1]) << 8) + a[x])
+#define dw2i(a, x) (unsigned int)((((((a[x+3] << 8) + a[x+2]) << 8) + a[x+1]) << 8) + a[x])
 
 /* all the data rates specified by ISO 7816-3 Fi/Di tables */
 #define ISO_DATA_RATES 10753, 14337, 15625, 17204, \
