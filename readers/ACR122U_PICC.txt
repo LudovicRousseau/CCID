@@ -2,7 +2,7 @@
   iManufacturer: ACS
  idProduct: 0x2200
   iProduct: ACR122U PICC Interface
- bcdDevice: 1.00 (firmware release?)
+ bcdDevice: 2.03 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
