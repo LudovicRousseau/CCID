@@ -118,6 +118,7 @@ manufacturers, please, contact me.
 - KONA USB SmartCard
 - Lenovo Integrated Smart Card Reader
 - Lexar/Gemalto Smart Enterprise Guardian [60]
+- MSI StarReader SMART [75]
 - O2Micro Oz776 (0x7762 and 0x7772 versions)
 - Oberthur ID-One Cosmo Card
 - OmniKey CardMan 1021
@@ -753,6 +754,7 @@ References:
 [72] http://www.springcard.com/products/csb6.html
 [73] http://www.aladdin.com/etoken/devices/pro-usb.aspx
 [74] http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3981
+[75] http://global.msi.com.tw/index.php?func=proddesc&maincat_no=132&prod_no=1411
 
 $Id$
 
