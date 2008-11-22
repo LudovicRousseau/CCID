@@ -1,0 +1,360 @@
+ idVendor: 0x076B
+  iManufacturer: USB
+ idProduct: 0xA021
+  iProduct: Smart Card Reader
+ bcdDevice: 2.03 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: 0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 3.692 MHz
+  dwMaximumClock: 3.692 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   Support 4000 kHz
+   Support 4800 kHz
+   Support 6000 kHz
+   Support 8000 kHz
+   Support 10752 kHz
+   Support 21505 kHz
+   Support 43010 kHz
+   Support 86021 kHz
+   Support 172043 kHz
+   Support 344086 kHz
+   Support 129032 kHz
+   Support 215053 kHz
+   Support 12903 kHz
+   Support 25806 kHz
+   Support 51612 kHz
+   Support 103225 kHz
+   Support 206451 kHz
+   Support 412903 kHz
+   Support 154838 kHz
+   Support 258064 kHz
+   Support 7168 kHz
+   Support 14336 kHz
+   Support 28673 kHz
+   Support 57347 kHz
+   Support 114695 kHz
+   Support 229390 kHz
+   Support 143369 kHz
+   Support 8602 kHz
+   Support 17204 kHz
+   Support 34408 kHz
+   Support 68817 kHz
+   Support 137634 kHz
+   Support 275268 kHz
+   Support 5376 kHz
+   Support 64516 kHz
+   Support 107526 kHz
+   Support 6451 kHz
+   Support 77419 kHz
+   Support 8064 kHz
+   Support 16129 kHz
+   Support 32258 kHz
+   Support 96774 kHz
+   Support 161290 kHz
+   Support 3584 kHz
+   Support 71684 kHz
+   Support 4301 kHz
+   Support 2688 kHz
+   Support 53763 kHz
+   Support 3225 kHz
+   Support 38709 kHz
+   Support 4032 kHz
+   Support 48387 kHz
+   Support 80645 kHz
+   Support 2150 kHz
+   Support 2580 kHz
+   Support 5161 kHz
+   Support 10322 kHz
+   Support 20645 kHz
+   Support 41290 kHz
+   Support 82580 kHz
+   Support 30967 kHz
+   Support 7812 kHz
+   Support 15625 kHz
+   Support 31250 kHz
+   Support 62500 kHz
+   Support 125000 kHz
+   Support 250000 kHz
+   Support 93750 kHz
+   Support 156250 kHz
+   Support 9375 kHz
+   Support 18750 kHz
+   Support 37500 kHz
+   Support 75000 kHz
+   Support 150000 kHz
+   Support 300000 kHz
+   Support 112500 kHz
+   Support 187500 kHz
+   Support 5208 kHz
+   Support 10416 kHz
+   Support 20833 kHz
+   Support 41666 kHz
+   Support 83333 kHz
+   Support 166666 kHz
+   Support 104166 kHz
+   Support 6250 kHz
+   Support 12500 kHz
+   Support 25000 kHz
+   Support 50000 kHz
+   Support 100000 kHz
+   Support 200000 kHz
+   Support 3906 kHz
+   Support 46875 kHz
+   Support 78125 kHz
+   Support 4687 kHz
+   Support 56250 kHz
+   Support 5859 kHz
+   Support 11718 kHz
+   Support 23437 kHz
+   Support 70312 kHz
+   Support 117187 kHz
+   Support 2604 kHz
+   Support 52083 kHz
+   Support 3125 kHz
+   Support 1953 kHz
+   Support 39062 kHz
+   Support 2343 kHz
+   Support 28125 kHz
+   Support 2929 kHz
+   Support 35156 kHz
+   Support 58593 kHz
+   Support 9924 kHz
+   Support 19849 kHz
+   Support 39698 kHz
+   Support 79397 kHz
+   Support 119096 kHz
+   Support 6616 kHz
+   Support 13232 kHz
+   Support 26465 kHz
+   Support 52931 kHz
+   Support 105863 kHz
+   Support 4962 kHz
+   Support 59548 kHz
+   Support 99247 kHz
+   Support 3308 kHz
+   Support 66164 kHz
+   Support 2481 kHz
+   Support 29774 kHz
+   Support 49623 kHz
+   Support 1984 kHz
+   Support 3969 kHz
+   Support 7939 kHz
+   Support 15879 kHz
+   Support 31759 kHz
+   Support 63518 kHz
+   Support 23819 kHz
+   Support 7210 kHz
+   Support 14421 kHz
+   Support 28843 kHz
+   Support 57687 kHz
+   Support 115375 kHz
+   Support 86531 kHz
+   Support 4807 kHz
+   Support 9614 kHz
+   Support 19229 kHz
+   Support 38458 kHz
+   Support 76916 kHz
+   Support 96145 kHz
+   Support 3605 kHz
+   Support 43265 kHz
+   Support 72109 kHz
+   Support 2403 kHz
+   Support 48072 kHz
+   Support 1802 kHz
+   Support 21632 kHz
+   Support 36054 kHz
+   Support 1392618307 kHz
+   Support -1420560458 kHz
+   Support 564954622 kHz
+   Support 805655856 kHz
+   Support -996079788 kHz
+   Support -1593682912 kHz
+   Support -768348220 kHz
+   Support -2062839286 kHz
+   Support 180530209 kHz
+   Support 866918789 kHz
+   Support 194120402 kHz
+   Support -1028906619 kHz
+   Support -1407089398 kHz
+   Support -1844784589 kHz
+   Support -1407089397 kHz
+   Support 562367170 kHz
+   Support 181547948 kHz
+   Support 562367378 kHz
+   Support -2062892372 kHz
+   Support -768365535 kHz
+   Support -2062839286 kHz
+   Support 180530209 kHz
+   Support 866918789 kHz
+   Support 194120402 kHz
+   Support -1028906619 kHz
+   Support -1407089398 kHz
+   Support -1844784589 kHz
+   Support -1407089397 kHz
+   Support 562367170 kHz
+   Support 181547948 kHz
+   Support 562367378 kHz
+   Support -2062892372 kHz
+   Support 1429253153 kHz
+   Support -2062888443 kHz
+   Support 198356001 kHz
+   Support 1135354245 kHz
+   Support -1237122645 kHz
+   Support -22326520 kHz
+   Support -1036783838 kHz
+   Support -2062839286 kHz
+   Support 181578785 kHz
+   Support 866918789 kHz
+   Support 194120386 kHz
+   Support -760471163 kHz
+   Support -1407089398 kHz
+   Support -1844788685 kHz
+   Support -1407089397 kHz
+   Support 562367186 kHz
+   Support 180499372 kHz
+   Support 562367378 kHz
+   Support -2062888276 kHz
+   Support -1036800991 kHz
+   Support -2062839286 kHz
+   Support 181578785 kHz
+   Support 866918789 kHz
+   Support 194120386 kHz
+   Support -760471163 kHz
+   Support -1407089398 kHz
+   Support -1844788685 kHz
+   Support -1407089397 kHz
+   Support 562367186 kHz
+   Support 180499372 kHz
+   Support 562367378 kHz
+   Support -2062888276 kHz
+   Support 1428204577 kHz
+   Support -2062892539 kHz
+   Support 198356001 kHz
+   Support 1135354245 kHz
+   Support -1237122645 kHz
+   Support -22326520 kHz
+   Support 89468962 kHz
+   Support -1056484320 kHz
+   Support 39071931 kHz
+   Support -1403798591 kHz
+   Support 212616187 kHz
+   Support 1403839744 kHz
+   Support -475858004 kHz
+   Support -1844663229 kHz
+   Support 1403839759 kHz
+   Support -475858004 kHz
+   Support -1844663229 kHz
+   Support 1403839758 kHz
+   Support -475858004 kHz
+   Support -1844663229 kHz
+   Support 1403839757 kHz
+   Support -475858004 kHz
+   Support -1844663229 kHz
+   Support 1403839756 kHz
+   Support -475858004 kHz
+   Support -1844663229 kHz
+   Support 1403839755 kHz
+   Support -475858004 kHz
+   Support -1844663229 kHz
+   Support 1403839754 kHz
+   Support -475858004 kHz
+   Support -1844663229 kHz
+   Support -1565727479 kHz
+   Support 537432803 kHz
+   Support -1403845803 kHz
+   Support 572633083 kHz
+   Support 1392815171 kHz
+  dwDataRate: 9924 bps
+  dwMaxDataRate: 119096 bps
+  bNumDataRatesSupported: 45 
+   Got 256 data rates but was expecting 45
+   Support 9924 bps
+   Support 19849 bps
+   Support 39698 bps
+   Support 79397 bps
+   Support 119096 bps
+   Support 6616 bps
+   Support 13232 bps
+   Support 26465 bps
+   Support 52931 bps
+   Support 105863 bps
+   Support 4962 bps
+   Support 59548 bps
+   Support 99247 bps
+   Support 3308 bps
+   Support 66164 bps
+   Support 2481 bps
+   Support 29774 bps
+   Support 49623 bps
+   Support 1984 bps
+   Support 3969 bps
+   Support 7939 bps
+   Support 15879 bps
+   Support 31759 bps
+   Support 63518 bps
+   Support 23819 bps
+   Support 7210 bps
+   Support 14421 bps
+   Support 28843 bps
+   Support 57687 bps
+   Support 115375 bps
+   Support 86531 bps
+   Support 4807 bps
+   Support 9614 bps
+   Support 19229 bps
+   Support 38458 bps
+   Support 76916 bps
+   Support 96145 bps
+   Support 3605 bps
+   Support 43265 bps
+   Support 72109 bps
+   Support 2403 bps
+   Support 48072 bps
+   Support 1802 bps
+   Support 21632 bps
+   Support 36054 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000007
+   2-wire protocol
+   3-wire protocol
+   I2C protocol
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000207B2
+   ....02 Automatic parameter configuration based on ATR data
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..01.. CCID can set ICC in clock stop mode
+   ..02.. NAD value other than 00 accepted (T=1)
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
