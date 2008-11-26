@@ -732,9 +732,11 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			if ((OZ776 == ccid_desc->readerID)
 				|| (OZ776_7772 == ccid_desc->readerID))
 			{
-				Protocol = default_protocol;
+				/* convert from ATR_PROTOCOL_TYPE_T? to SCARD_PROTOCOL_T? */
+				Protocol = default_protocol +
+				   	(SCARD_PROTOCOL_T0 - ATR_PROTOCOL_TYPE_T0);
 				DEBUG_INFO2("PPS not supported on O2Micro readers. Using T=%d",
-					Protocol);
+					Protocol - SCARD_PROTOCOL_T0);
 			}
 			else
 #endif
