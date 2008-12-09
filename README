@@ -79,6 +79,7 @@ Supported CCID readers:
 - Verisign Secure Storage Token [24]
 - Verisign Secure Token [?]
 - Xiring Teo [52]
+- Xiring Xi Sign PKI [76]
 
 
 Should work but untested by me:
@@ -755,6 +756,7 @@ References:
 [73] http://www.aladdin.com/etoken/devices/pro-usb.aspx
 [74] http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3981
 [75] http://global.msi.com.tw/index.php?func=proddesc&maincat_no=132&prod_no=1411
+[76] http://www.xiring.com/pageLibre00012c0e.php
 
 $Id$
 

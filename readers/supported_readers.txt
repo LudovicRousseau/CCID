@@ -181,6 +181,9 @@
 # KEBTechnology
 0x04CC:0x5072:KONA USB SmartCard
 
+# Xiring
+0x0F14:0x0011:Xiring XI-SIGN USB V2
+
 # VMware
 0x0E0F:0x0004:VMware Virtual USB CCID
 
