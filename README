@@ -94,6 +94,7 @@ manufacturers, please, contact me.
 - Aladdin eToken PRO USB 72K Java [73]
 - Axalto Reflex USB v3 [38]
 - Atmel AT91SO [74]
+- Atmel AT98SC032CT [77]
 - C3PO LTC32 [13]
 - C3PO TLTC2USB
 - C3PO KBR36
@@ -758,6 +759,7 @@ References:
 [74] http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3981
 [75] http://global.msi.com.tw/index.php?func=proddesc&maincat_no=132&prod_no=1411
 [76] http://www.xiring.com/pageLibre00012c0e.php
+[77] http://www.atmel.com/dyn/products/product_card.asp?part_id=4063
 
 $Id$
 

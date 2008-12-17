@@ -177,6 +177,7 @@
 
 # Atmel
 0x03EB:0x6004:Atmel AT91SO
+0x03EB:0x6009:Atmel AT98SC032CT
 
 # KEBTechnology
 0x04CC:0x5072:KONA USB SmartCard
