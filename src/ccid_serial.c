@@ -178,7 +178,8 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 
 	char debug_header[] = "-> 123456 ";
 
-	(void)sprintf(debug_header, "-> %06X ", reader_index);
+	(void)snprintf(debug_header, sizeof(debug_header), "-> %06X ",
+		reader_index);
 
 	if (length > GEMPCTWIN_MAXBUF-3)
 	{
@@ -411,7 +412,8 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 	int already_read;
 	char debug_header[] = "<- 123456 ";
 
-	(void)sprintf(debug_header, "<- %06X ", reader_index);
+	(void)snprintf(debug_header, sizeof(debug_header), "<- %06X ",
+		reader_index);
 
 	already_read = 0;
 	while (already_read < min_length)
@@ -485,7 +487,7 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	(void)sprintf(dev_name, "/dev/pcsc/%d", (int) channel);
+	(void)snprintf(dev_name, sizeof(dev_name), "/dev/pcsc/%d", (int) channel);
 
 	return OpenSerialByName(reader_index, dev_name);
 } /* OpenSerial */
