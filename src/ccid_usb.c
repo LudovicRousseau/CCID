@@ -207,8 +207,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	if (busses == NULL)
 		usb_init();
 
-	usb_find_busses();
-	usb_find_devices();
+	(void)usb_find_busses();
+	(void)usb_find_devices();
 
 	busses = usb_get_busses();
 
@@ -227,7 +227,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	}
 
 	/* Info.plist full patch filename */
-	snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
+	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
 
 	/* general driver info */
@@ -372,7 +372,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					/* now we found a free reader and we try to use it */
 					if (dev->config == NULL)
 					{
-						usb_close(dev_handle);
+						(void)usb_close(dev_handle);
 						DEBUG_CRITICAL3("No dev->config found for %s/%s",
 							 bus->dirname, dev->filename);
 						return STATUS_UNSUCCESSFUL;
@@ -381,7 +381,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usb_interface = get_ccid_usb_interface(dev);
 					if (usb_interface == NULL)
 					{
-						usb_close(dev_handle);
+						(void)usb_close(dev_handle);
 						DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
 							bus->dirname, dev->filename);
 						return STATUS_UNSUCCESSFUL;
@@ -389,7 +389,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 					if (usb_interface->altsetting->extralen != 54)
 					{
-						usb_close(dev_handle);
+						(void)usb_close(dev_handle);
 						DEBUG_CRITICAL4("Extra field for %s/%s has a wrong length: %d", bus->dirname, dev->filename, usb_interface->altsetting->extralen);
 						return STATUS_UNSUCCESSFUL;
 					}
@@ -397,7 +397,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					interface = usb_interface->altsetting->bInterfaceNumber;
 					if (usb_claim_interface(dev_handle, interface) < 0)
 					{
-						usb_close(dev_handle);
+						(void)usb_close(dev_handle);
 						DEBUG_CRITICAL4("Can't claim interface %s/%s: %s",
 							bus->dirname, dev->filename, strerror(errno));
 						return STATUS_UNSUCCESSFUL;
@@ -412,12 +412,12 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					/* check for firmware bugs */
 					if (ccid_check_firmware(dev))
 					{
-						usb_close(dev_handle);
+						(void)usb_close(dev_handle);
 						return STATUS_UNSUCCESSFUL;
 					}
 
 					/* Get Endpoints values*/
-					get_end_points(dev, &usbDevice[reader_index]);
+					(void)get_end_points(dev, &usbDevice[reader_index]);
 
 					/* store device information */
 					usbDevice[reader_index].handle = dev_handle;
@@ -474,7 +474,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	int rv;
 	char debug_header[] = "-> 121234 ";
 
-	sprintf(debug_header, "-> %06X ", (int)reader_index);
+	(void)sprintf(debug_header, "-> %06X ", (int)reader_index);
 
 	DEBUG_XXD(debug_header, buffer, length);
 
@@ -512,7 +512,7 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 	int duplicate_frame = 0;
 
 read_again:
-	sprintf(debug_header, "<- %06X ", (int)reader_index);
+	(void)sprintf(debug_header, "<- %06X ", (int)reader_index);
 
 	rv = usb_bulk_read(usbDevice[reader_index].handle,
 		usbDevice[reader_index].bulk_in, (char *)buffer, *length,
@@ -585,11 +585,11 @@ status_t CloseUSB(unsigned int reader_index)
 
 		/* reset so that bSeq starts at 0 again */
 		if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
-			usb_reset(usbDevice[reader_index].handle);
+			(void)usb_reset(usbDevice[reader_index].handle);
 
-		usb_release_interface(usbDevice[reader_index].handle,
+		(void)usb_release_interface(usbDevice[reader_index].handle,
 			usbDevice[reader_index].interface);
-		usb_close(usbDevice[reader_index].handle);
+		(void)usb_close(usbDevice[reader_index].handle);
 
 		free(usbDevice[reader_index].dirname);
 		free(usbDevice[reader_index].filename);

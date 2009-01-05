@@ -40,11 +40,11 @@ void log_msg(const int priority, const char *fmt, ...)
 	va_list argptr;
 
 	va_start(argptr, fmt);
-	vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
+	(void)vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
 	va_end(argptr);
 
 #ifdef LOG_TO_STDERR
-	fprintf(stderr, "%s\n", DebugBuffer);
+	(void)fprintf(stderr, "%s\n", DebugBuffer);
 #endif
 } /* log_msg */
 
@@ -61,15 +61,15 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 
 	for (i = 0; (i < len) && (c < debug_buf_end); ++i)
 	{
-		sprintf(c, "%02X ", (unsigned char)buffer[i]);
+		(void)sprintf(c, "%02X ", (unsigned char)buffer[i]);
 		c += strlen(c);
 	}
 
 #ifdef LOG_TO_STDERR
 	if (c >= debug_buf_end)
-		fprintf(stderr, "Debug buffer too short\n");
+		(void)fprintf(stderr, "Debug buffer too short\n");
 
-	fprintf(stderr, "%s\n", DebugBuffer);
+	(void)fprintf(stderr, "%s\n", DebugBuffer);
 #endif
 } /* log_xxd */
 

@@ -860,7 +860,7 @@ again_status:
 		if (status[0] & 0x40)
 		{
 			DEBUG_INFO2("Busy: 0x%02X", status[0]);
-			usleep(1000 * 10);
+			(void)usleep(1000 * 10);
 			goto again_status;
 		}
 
@@ -1194,7 +1194,7 @@ time_request_ICCD_B:
 				if (0 == delay)
 					/* host select the delay */
 					delay = 1;
-				usleep(delay * 1000 * 10);
+				(void)usleep(delay * 1000 * 10);
 				goto time_request_ICCD_B;
 			}
 

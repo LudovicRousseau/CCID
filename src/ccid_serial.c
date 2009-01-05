@@ -178,7 +178,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 
 	char debug_header[] = "-> 123456 ";
 
-	sprintf(debug_header, "-> %06X ", reader_index);
+	(void)sprintf(debug_header, "-> %06X ", reader_index);
 
 	if (length > GEMPCTWIN_MAXBUF-3)
 	{
@@ -411,7 +411,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 	int already_read;
 	char debug_header[] = "<- 123456 ";
 
-	sprintf(debug_header, "<- %06X ", reader_index);
+	(void)sprintf(debug_header, "<- %06X ", reader_index);
 
 	already_read = 0;
 	while (already_read < min_length)
@@ -485,7 +485,7 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	sprintf(dev_name, "/dev/pcsc/%d", (int) channel);
+	(void)sprintf(dev_name, "/dev/pcsc/%d", (int) channel);
 
 	return OpenSerialByName(reader_index, dev_name);
 } /* OpenSerial */
@@ -705,7 +705,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	if (tcgetattr(serialDevice[reader].fd, &current_termios) == -1)
 	{
 		DEBUG_INFO2("tcgetattr() function error: %s", strerror(errno));
-		close(serialDevice[reader].fd);
+		(void)close(serialDevice[reader].fd);
 		serialDevice[reader].fd = -1;
 
 		return STATUS_UNSUCCESSFUL;
@@ -726,12 +726,12 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	current_termios.c_lflag = 0;
 
 	/* set serial port speed to 115200 bauds */
-	cfsetspeed(&current_termios, B115200);
+	(void)cfsetspeed(&current_termios, B115200);
 
 	DEBUG_INFO("Set serial port baudrate to 115200 and correct configuration");
 	if (tcsetattr(serialDevice[reader].fd, TCSANOW, &current_termios) == -1)
 	{
-		close(serialDevice[reader].fd);
+		(void)close(serialDevice[reader].fd);
 		serialDevice[reader].fd = -1;
 		DEBUG_INFO2("tcsetattr error: %s", strerror(errno));
 
@@ -752,7 +752,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			rx_buffer, &rx_length))
 		{
 			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not connected");
-			CloseSerial(reader_index);
+			(void)CloseSerial(reader_index);
 			return STATUS_UNSUCCESSFUL;
 		}
 
@@ -775,7 +775,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			rx_buffer, &rx_length))
 		{
 			DEBUG_CRITICAL("Change card movement notification failed.");
-			CloseSerial(reader_index);
+			(void)CloseSerial(reader_index);
 			return STATUS_UNSUCCESSFUL;
 		}
 	}
@@ -807,7 +807,7 @@ status_t CloseSerial(unsigned int reader_index)
 	{
 		DEBUG_COMM("Last slot closed. Release resources");
 
-		close(serialDevice[reader].fd);
+		(void)close(serialDevice[reader].fd);
 		serialDevice[reader].fd = -1;
 
 		free(serialDevice[reader].device);

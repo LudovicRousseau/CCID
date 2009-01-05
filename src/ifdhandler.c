@@ -94,7 +94,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	CcidSlots[reader_index].readerName = strdup(lpcDevice);
 
 #ifdef HAVE_PTHREAD
-	pthread_mutex_lock(&ifdh_context_mutex);
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
 	if (OpenPortByName(reader_index, lpcDevice) != STATUS_SUCCESS)
@@ -108,7 +108,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	else
 	{
 		/* Maybe we have a special treatment for this reader */
-		ccid_open_hack(reader_index);
+		(void)ccid_open_hack(reader_index);
 
 		/* Try to access the reader */
 		/* This "warm up" sequence is sometimes needed when pcscd is
@@ -129,7 +129,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	}
 
 #ifdef HAVE_PTHREAD
-	pthread_mutex_unlock(&ifdh_context_mutex);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
 
 	return return_value;
@@ -193,7 +193,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	CcidSlots[reader_index].readerName = strdup("no name");
 
 #ifdef HAVE_PTHREAD
-	pthread_mutex_lock(&ifdh_context_mutex);
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
 	if (OpenPort(reader_index, Channel) != STATUS_SUCCESS)
@@ -206,10 +206,10 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	}
 	else
 		/* Maybe we have a special treatment for this reader */
-		ccid_open_hack(reader_index);
+		(void)ccid_open_hack(reader_index);
 
 #ifdef HAVE_PTHREAD
-	pthread_mutex_unlock(&ifdh_context_mutex);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
 
 	return return_value;
@@ -243,7 +243,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	/* No reader status check, if it failed, what can you do ? :) */
 
 #ifdef HAVE_PTHREAD
-	pthread_mutex_lock(&ifdh_context_mutex);
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
 	(void)ClosePort(reader_index);
@@ -253,7 +253,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	memset(&CcidSlots[reader_index], 0, sizeof(CcidSlots[reader_index]));
 
 #ifdef HAVE_PTHREAD
-	pthread_mutex_unlock(&ifdh_context_mutex);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
 
 	return IFD_SUCCESS;
@@ -299,7 +299,7 @@ static RESPONSECODE IFDHSleep(DWORD Lun)
 	 * TAG_IFD_POLLING_THREAD_KILLABLE then we could use a much longer delay
 	 * and be killed before pcscd exits
 	 */
-	sleep(5);	/* 5 seconds */
+	(void)sleep(5);	/* 5 seconds */
 	return IFD_SUCCESS;
 }
 #endif
@@ -535,7 +535,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		goto end;
 
 	/* Get ATR of the card */
-	ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer, ccid_slot->nATRLength);
+	(void)ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer,
+		ccid_slot->nATRLength);
 
 	/* Apply Extra EGT patch for bogus cards */
 	extra_egt(&atr, ccid_desc, Protocol);
@@ -574,13 +575,13 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				if (0 == atr.ib[i][ATR_INTERFACE_BYTE_TC].value)
 				{
 					DEBUG_COMM("Use LRC");
-					t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
+					(void)t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
 				}
 				else
 					if (1 == atr.ib[i][ATR_INTERFACE_BYTE_TC].value)
 					{
 						DEBUG_COMM("Use CRC");
-						t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_CRC, 0);
+						(void)t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_CRC, 0);
 					}
 					else
 						DEBUG_COMM2("Wrong value for TCi: %d",
@@ -607,8 +608,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			unsigned int default_baudrate;
 			double f, d;
 
-			ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
-			ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+			(void)ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+			(void)ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
 
 			/* may happen with non ISO cards */
 			if ((0 == f) || (0 == d))
@@ -670,8 +671,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 						/* use a lower TA1 */
 						atr.ib[0][ATR_INTERFACE_BYTE_TA].value--;
 
-						ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
-						ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+						(void)ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+						(void)ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
 
 						/* Baudrate = f x D/F */
 						card_baudrate = (unsigned int) (1000 *
@@ -750,7 +751,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	}
 
 	/* Now we must set the reader parameters */
-	ATR_GetConvention(&atr, &convention);
+	(void)ATR_GetConvention(&atr, &convention);
 
 	/* specific mode and implicit parameters? (b5 of TA2) */
 	if (atr.ib[1][ATR_INTERFACE_BYTE_TA].present
@@ -803,8 +804,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			}
 
 		/* compute communication timeout */
-		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
-		ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+		(void)ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+		(void)ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
 		ccid_desc->readTimeout = T1_card_timeout(f, d, param[2],
 			(param[3] & 0xF0) >> 4 /* BWI */, param[3] & 0x0F /* CWI */,
 			ccid_desc->dwDefaultClock);
@@ -856,8 +857,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			param[3] = atr.ib[1][ATR_INTERFACE_BYTE_TC].value;
 
 		/* compute communication timeout */
-		ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
-		ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
+		(void)ATR_GetParameter(&atr, ATR_PARAMETER_F, &f);
+		(void)ATR_GetParameter(&atr, ATR_PARAMETER_D, &d);
 
 		ccid_desc->readTimeout = T0_card_timeout(f, d, param[2] /* TC1 */,
 			param[3] /* TC2 */, ccid_desc->dwDefaultClock);
@@ -882,7 +883,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			{
 				DEBUG_COMM3("IFSC (TA%d) present: %d", i+1,
 					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
-				t1_set_param(t1, IFD_PROTOCOL_T1_IFSC,
+				(void)t1_set_param(t1, IFD_PROTOCOL_T1_IFSC,
 					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
 
 				/* only the first TAi (i>2) must be used */
@@ -896,7 +897,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			if (t1_negociate_ifsd(t1, 0, ccid_desc -> dwMaxIFSD) < 0)
 				return IFD_COMMUNICATION_ERROR;
 		}
-		t1_set_param(t1, IFD_PROTOCOL_T1_IFSD, ccid_desc -> dwMaxIFSD);
+		(void)t1_set_param(t1, IFD_PROTOCOL_T1_IFSD, ccid_desc -> dwMaxIFSD);
 
 		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
 	}
@@ -1032,7 +1033,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			memcpy(CcidSlots[reader_index].pcATRBuffer, pcbuffer, *AtrLength);
 
 			/* initialise T=1 context */
-			t1_init(&(get_ccid_slot(reader_index) -> t1), reader_index);
+			(void)t1_init(&(get_ccid_slot(reader_index) -> t1), reader_index);
 			break;
 
 		default:
@@ -1379,7 +1380,7 @@ void init_driver(void)
 	DEBUG_INFO("Driver version: " VERSION);
 
 	/* Info.plist full patch filename */
-	snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
+	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
 
 	/* Log level */
@@ -1462,8 +1463,8 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 	if (! atr->ib[0][ATR_INTERFACE_BYTE_TA].present)
 		return;
 
-	ATR_GetParameter(atr, ATR_PARAMETER_D, &d);
-	ATR_GetParameter(atr, ATR_PARAMETER_F, &f);
+	(void)ATR_GetParameter(atr, ATR_PARAMETER_D, &d);
+	(void)ATR_GetParameter(atr, ATR_PARAMETER_F, &f);
 
 	/* may happen with non ISO cards */
 	if ((0 == f) || (0 == d))

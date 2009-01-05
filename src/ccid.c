@@ -222,7 +222,7 @@ int ccid_open_hack(unsigned int reader_index)
 						cmd[offset++] = ' ';
 				}
 
-				sleep(1);
+				(void)sleep(1);
 				if (IFD_SUCCESS == CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res))
 				{
 					DEBUG_COMM("l10n string loaded successfully");
@@ -277,13 +277,13 @@ int ccid_open_hack(unsigned int reader_index)
 
 		case CL1356D:
 			/* the firmware needs some time to initialize */
-			sleep(1);
+			(void)sleep(1);
 			ccid_descriptor->readTimeout = 60; /* 60 seconds */
 			break;
 
 		case SEG:
 #ifndef TWIN_SERIAL
-			InterruptRead(reader_index);
+			(void)InterruptRead(reader_index);
 #endif
 			break;
 	}
@@ -295,9 +295,9 @@ int ccid_open_hack(unsigned int reader_index)
 		unsigned int n = sizeof(tmp);
 
 		DEBUG_COMM("ICCD type A");
-		CmdPowerOff(reader_index);
-		CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
-		CmdPowerOff(reader_index);
+		(void)CmdPowerOff(reader_index);
+		(void)CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
+		(void)CmdPowerOff(reader_index);
 	}
 
 	/* ICCD type B */
@@ -315,9 +315,9 @@ int ccid_open_hack(unsigned int reader_index)
 			ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
 		}
 
-		CmdPowerOff(reader_index);
-		CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
-		CmdPowerOff(reader_index);
+		(void)CmdPowerOff(reader_index);
+		(void)CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
+		(void)CmdPowerOff(reader_index);
 	}
 
 	return 0;
@@ -438,11 +438,11 @@ void ccid_error(int error, const char *file, int line, const char *function)
 		default:
 			if ((error >= 1) && (error <= 127))
 			{
-				sprintf(var_text, "error on byte %d", error);
+				(void)sprintf(var_text, "error on byte %d", error);
 				text = var_text;
 			}
 			else
-				sprintf(var_text, "Unknown CCID error: 0x%02X", error);
+				(void)sprintf(var_text, "Unknown CCID error: 0x%02X", error);
 				text = var_text;
 			break;
 	}
