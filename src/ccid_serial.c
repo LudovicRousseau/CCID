@@ -505,7 +505,7 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 static status_t set_ccid_descriptor(unsigned int reader_index,
 	const char *reader_name, const char *dev_name)
 {
-	long readerID;
+	int readerID;
 	int i;
 	int already_used = FALSE;
 	static int previous_reader_index = -1;
