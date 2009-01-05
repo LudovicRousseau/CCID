@@ -160,7 +160,7 @@ static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];
 static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 	int buffer_length, int min_length);
 
-static int get_bytes(unsigned int reader_index, unsigned char *buffer,
+static int get_bytes(unsigned int reader_index, /*@out@*/ unsigned char *buffer,
 	int length);
 
 

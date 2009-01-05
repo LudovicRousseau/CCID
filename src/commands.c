@@ -1504,7 +1504,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
  *
  ****************************************************************************/
 static RESPONSECODE T0CmdParsing(unsigned char *cmd, unsigned int cmd_len,
-	unsigned int *exp_len)
+	/*@out@*/ unsigned int *exp_len)
 {
 	*exp_len = 0;
 

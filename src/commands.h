@@ -27,7 +27,7 @@
 #define CHAIN_PARAMETER_OFFSET 9
 
 RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
-	unsigned char buffer[], int voltage);
+	/*@out@*/ unsigned char buffer[], int voltage);
 
 RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	unsigned char TxBuffer[], unsigned int TxLength,
@@ -44,7 +44,7 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 RESPONSECODE CmdPowerOff(unsigned int reader_index);
 
 RESPONSECODE CmdGetSlotStatus(unsigned int reader_index,
-	unsigned char buffer[]);
+	/*@out@*/ unsigned char buffer[]);
 
 RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
@@ -53,8 +53,9 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI);
 
-RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
-	unsigned char rx_buffer[], unsigned char *chain_parameter);
+RESPONSECODE CCID_Receive(unsigned int reader_index,
+	/*@out@*/ unsigned int *rx_length,
+	/*@out@*/ unsigned char rx_buffer[], unsigned char *chain_parameter);
 
 RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	unsigned int length, unsigned char buffer[]);
