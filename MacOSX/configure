@@ -48,10 +48,17 @@ PKG_CONFIG="foobar"
 PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
 PCSC_LIBS=${PCSC_LIBS:--framework PCSC}
 
-# use libusb from OpenSC (universal binary)
-LIBUSB_CFLAGS=${LIBUSB_CFLAGS:--I/Library/OpenSC/include}
-#LIBUSB_LIBS=${LIBUSB_LIBS:--L/Library/OpenSC/lib -lusb}
-LIBUSB_LIBS=${LIBUSB_LIBS:-/Library/OpenSC/lib/libusb.a -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation}
+libusb-config --version &> /dev/null
+if [ $? -eq 0 ]
+then
+    echo "found libusb-config, using it"
+else
+    echo "no libusb-config found"
+    # use libusb from OpenSC (universal binary)
+    LIBUSB_CFLAGS=${LIBUSB_CFLAGS:--I/Library/OpenSC/include}
+    #LIBUSB_LIBS=${LIBUSB_LIBS:--L/Library/OpenSC/lib -lusb}
+    LIBUSB_LIBS=${LIBUSB_LIBS:-/Library/OpenSC/lib/libusb.a -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation}
+fi
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
 # define needed here to compile examples/scardcontrol.c since config.h is
