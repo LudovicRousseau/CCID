@@ -234,6 +234,7 @@ int ccid_open_hack(unsigned int reader_index)
 			}
 			break;
 
+#if 0
 		/* SCM SCR331-DI contactless */
 		case SCR331DI:
 		/* SCM SCR331-DI-NTTCOM contactless */
@@ -270,6 +271,7 @@ int ccid_open_hack(unsigned int reader_index)
 				ccid_descriptor->dwFeatures |= CCID_CLASS_AUTO_IFSD;
 			}
 			break;
+#endif
 
 		case MYSMARTPAD:
 			ccid_descriptor->dwMaxIFSD = 254;

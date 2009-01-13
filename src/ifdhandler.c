@@ -1310,6 +1310,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 			break;
 	}
 
+#if 0
 	/* SCR331-DI contactless reader */
 	if (((SCR331DI == ccid_descriptor->readerID)
 		|| (SDI010 == ccid_descriptor->readerID)
@@ -1356,6 +1357,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 			return_value = IFD_ICC_NOT_PRESENT;
 		}
 	}
+#endif
 
 end:
 	DEBUG_PERIODIC2("Card %s",
