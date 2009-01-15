@@ -113,7 +113,6 @@ use_usb_interrupt=no
 if test "x$use_libusb" != xno ; then
 	PKG_CHECK_MODULES(LIBUSB, libusb, [],
 		[
-			AC_MSG_RESULT([no])
 			AC_CHECK_PROG([LIBUSBCONFIG], [libusb-config], [yes])
 
 			if test "$LIBUSBCONFIG" = "yes" ; then
