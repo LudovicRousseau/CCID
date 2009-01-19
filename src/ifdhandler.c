@@ -299,7 +299,7 @@ static RESPONSECODE IFDHSleep(DWORD Lun)
 	 * TAG_IFD_POLLING_THREAD_KILLABLE then we could use a much longer delay
 	 * and be killed before pcscd exits
 	 */
-	(void)sleep(5);	/* 5 seconds */
+	(void)sleep(600);	/* 10 minutes */
 	return IFD_SUCCESS;
 }
 #endif
@@ -433,6 +433,24 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 					*Length = sizeof(void *);
 					if (Value)
 						*(void **)Value = IFDHSleep;
+				}
+			}
+			break;
+
+		case TAG_IFD_POLLING_THREAD_KILLABLE:
+			{
+				_ccid_descriptor *ccid_desc;
+
+				/* default value: not supported */
+				*Length = 0;
+
+				ccid_desc = get_ccid_descriptor(reader_index);
+				if ((ICCD_A == ccid_desc->bInterfaceProtocol)
+					|| (ICCD_B == ccid_desc->bInterfaceProtocol))
+				{
+					*Length = 1;	/* 1 char */
+					if (Value)
+						*Value = 1;	/* TRUE */
 				}
 			}
 			break;
