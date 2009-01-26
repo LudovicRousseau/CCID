@@ -78,7 +78,7 @@ int t1_transceive(t1_state_t *t1, unsigned int dad,
 int t1_init(t1_state_t *t1, int lun);
 void t1_release(t1_state_t *t1);
 int t1_set_param(t1_state_t *t1, int type, long value);
-int t1_negociate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd);
+int t1_negotiate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd);
 unsigned int t1_build(t1_state_t *, unsigned char *,
 	unsigned char, unsigned char, ct_buf_t *, size_t *);
 
