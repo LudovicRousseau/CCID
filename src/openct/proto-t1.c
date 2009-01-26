@@ -58,34 +58,30 @@ enum {
 	SENDING, RECEIVING, RESYNCH, DEAD
 };
 
-static void		t1_set_checksum(t1_state_t *, int);
-static unsigned	int	t1_block_type(unsigned char);
-static unsigned int	t1_seq(unsigned char);
-static unsigned int	t1_rebuild(t1_state_t *t1, unsigned char *block);
-static unsigned int	t1_compute_checksum(t1_state_t *,
-				unsigned char *, size_t);
-static int		t1_verify_checksum(t1_state_t *, unsigned char *,
-				size_t);
-static int		t1_xcv(t1_state_t *, unsigned char *, size_t, size_t);
+static void t1_set_checksum(t1_state_t *, int);
+static unsigned int t1_block_type(unsigned char);
+static unsigned int t1_seq(unsigned char);
+static unsigned int t1_rebuild(t1_state_t *t1, unsigned char *block);
+static unsigned int t1_compute_checksum(t1_state_t *, unsigned char *, size_t);
+static int t1_verify_checksum(t1_state_t *, unsigned char *, size_t);
+static int t1_xcv(t1_state_t *, unsigned char *, size_t, size_t);
 
 /*
  * Set default T=1 protocol parameters
  */
-static void
-t1_set_defaults(t1_state_t *t1)
+static void t1_set_defaults(t1_state_t * t1)
 {
-	t1->retries  = 3;
+	t1->retries = 3;
 	/* This timeout is rather insane, but we need this right now
 	 * to support cryptoflex keygen */
-	t1->ifsc     = 32;
-	t1->ifsd     = 32;
-	t1->nr	     = 0;
-	t1->ns	     = 0;
-	t1->wtx	     = 0;
+	t1->ifsc = 32;
+	t1->ifsd = 32;
+	t1->nr = 0;
+	t1->ns = 0;
+	t1->wtx = 0;
 }
 
-static void
-t1_set_checksum(t1_state_t *t1, int csum)
+static void t1_set_checksum(t1_state_t * t1, int csum)
 {
 	switch (csum) {
 	case IFD_PROTOCOL_T1_CHECKSUM_LRC:
@@ -102,8 +98,7 @@ t1_set_checksum(t1_state_t *t1, int csum)
 /*
  * Attach t1 protocol
  */
-int
-t1_init(t1_state_t *t1, int lun)
+int t1_init(t1_state_t * t1, int lun)
 {
 	t1_set_defaults(t1);
 	t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
@@ -118,8 +113,7 @@ t1_init(t1_state_t *t1, int lun)
 /*
  * Detach t1 protocol
  */
-void
-t1_release(/*@unused@*/ t1_state_t *t1)
+void t1_release(/*@unused@*/ t1_state_t * t1)
 {
 	/* NOP */
 }
@@ -127,8 +121,7 @@ t1_release(/*@unused@*/ t1_state_t *t1)
 /*
  * Get/set parmaters for T1 protocol
  */
-int
-t1_set_param(t1_state_t *t1, int type, long value)
+int t1_set_param(t1_state_t * t1, int type, long value)
 {
 	switch (type) {
 	case IFD_PROTOCOL_T1_CHECKSUM_LRC:
@@ -158,15 +151,14 @@ t1_set_param(t1_state_t *t1, int type, long value)
 /*
  * Send an APDU through T=1
  */
-int
-t1_transceive(t1_state_t *t1, unsigned int dad,
+int t1_transceive(t1_state_t * t1, unsigned int dad,
 		const void *snd_buf, size_t snd_len,
 		void *rcv_buf, size_t rcv_len)
 {
-	ct_buf_t	sbuf, rbuf, tbuf;
-	unsigned char	sdata[T1_BUFFER_SIZE], sblk[5];
-	unsigned int	slen, retries, resyncs, sent_length = 0;
-	size_t		last_send = 0;
+	ct_buf_t sbuf, rbuf, tbuf;
+	unsigned char sdata[T1_BUFFER_SIZE], sblk[5];
+	unsigned int slen, retries, resyncs, sent_length = 0;
+	size_t last_send = 0;
 
 	if (snd_len == 0)
 		return -1;
@@ -183,15 +175,15 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 	resyncs = 3;
 
 	/* Initialize send/recv buffer */
-	ct_buf_set(&sbuf, (void *) snd_buf, snd_len);
+	ct_buf_set(&sbuf, (void *)snd_buf, snd_len);
 	ct_buf_init(&rbuf, rcv_buf, rcv_len);
 
 	/* Send the first block */
 	slen = t1_build(t1, sdata, dad, T1_I_BLOCK, &sbuf, &last_send);
 
 	while (1) {
-		unsigned char	pcb;
-		int		n;
+		unsigned char pcb;
+		int n;
 
 		retries--;
 
@@ -394,7 +386,7 @@ t1_transceive(t1_state_t *t1, unsigned int dad,
 				DEBUG_COMM("S-Block answer received");
 				/* ISO 7816-3 Rule 6.3 */
 				t1->state = SENDING;
-				sent_length =0;
+				sent_length = 0;
 				last_send = 0;
 				resyncs = 3;
 				retries = t1->retries;
@@ -513,7 +505,7 @@ resync:
 		resyncs--;
 		t1->ns = 0;
 		t1->nr = 0;
-		slen = t1_build(t1, sdata, dad, T1_S_BLOCK|T1_S_RESYNC, NULL,
+		slen = t1_build(t1, sdata, dad, T1_S_BLOCK | T1_S_RESYNC, NULL,
 				NULL);
 		t1->state = RESYNCH;
 		t1->more = FALSE;
@@ -529,8 +521,7 @@ error:
 	return -1;
 }
 
-static unsigned
-t1_block_type(unsigned char pcb)
+static unsigned t1_block_type(unsigned char pcb)
 {
 	switch (pcb & 0xC0) {
 	case T1_R_BLOCK:
@@ -542,8 +533,7 @@ t1_block_type(unsigned char pcb)
 	}
 }
 
-static unsigned int
-t1_seq(unsigned char pcb)
+static unsigned int t1_seq(unsigned char pcb)
 {
 	switch (pcb & 0xC0) {
 	case T1_R_BLOCK:
@@ -555,15 +545,14 @@ t1_seq(unsigned char pcb)
 	}
 }
 
-unsigned int
-t1_build(t1_state_t *t1, unsigned char *block,
-		unsigned char dad, unsigned char pcb,
-		ct_buf_t *bp, size_t *lenp)
+unsigned int t1_build(t1_state_t * t1, unsigned char *block,
+	unsigned char dad, unsigned char pcb,
+	ct_buf_t *bp, size_t *lenp)
 {
-	unsigned int	len;
+	unsigned int len;
 	char more = FALSE;
 
-	len = bp? ct_buf_avail(bp) : 0;
+	len = bp ? ct_buf_avail(bp) : 0;
 	if (len > t1->ifsc) {
 		pcb |= T1_MORE_BLOCKS;
 		len = t1->ifsc;
@@ -620,17 +609,17 @@ t1_rebuild(t1_state_t *t1, unsigned char *block)
 /*
  * Build/verify checksum
  */
-static unsigned int
-t1_compute_checksum(t1_state_t *t1, unsigned char *data, size_t len)
+static unsigned int t1_compute_checksum(t1_state_t * t1,
+	unsigned char *data, size_t len)
 {
 	return len + t1->checksum(data, len, data + len);
 }
 
-static int
-t1_verify_checksum(t1_state_t *t1, unsigned char *rbuf, size_t len)
+static int t1_verify_checksum(t1_state_t * t1, unsigned char *rbuf,
+	size_t len)
 {
-	unsigned char	csum[2];
-	int		m, n;
+	unsigned char csum[2];
+	int m, n;
 
 	m = len - t1->rc_bytes;
 	n = t1->rc_bytes;
@@ -648,10 +637,10 @@ t1_verify_checksum(t1_state_t *t1, unsigned char *rbuf, size_t len)
 /*
  * Send/receive block
  */
-static int
-t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
+static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
+	size_t rmax)
 {
-	int		n, m;
+	int n, m;
 	_ccid_descriptor *ccid_desc ;
 	int oldReadTimeout;
 	unsigned int rmax_int;
@@ -740,10 +729,9 @@ t1_xcv(t1_state_t *t1, unsigned char *block, size_t slen, size_t rmax)
 	return n;
 }
 
-int
-t1_negotiate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd)
+int t1_negotiate_ifsd(t1_state_t * t1, unsigned int dad, int ifsd)
 {
-	ct_buf_t	sbuf;
+	ct_buf_t sbuf;
 	unsigned char sdata[T1_BUFFER_SIZE];
 	unsigned int slen;
 	unsigned int retries;
@@ -758,7 +746,7 @@ t1_negotiate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd)
 	snd_len = 1;
 
 	/* Initialize send/recv buffer */
-	ct_buf_set(&sbuf, (void *) snd_buf, snd_len);
+	ct_buf_set(&sbuf, (void *)snd_buf, snd_len);
 
 	while (TRUE)
 	{
@@ -799,4 +787,3 @@ error:
 	t1->state = DEAD;
 	return -1;
 }
-
