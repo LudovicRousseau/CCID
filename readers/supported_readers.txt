@@ -190,7 +190,7 @@
 
 # Realtek?
 0x0BDA:0x0161:MSI StarReader SMART
-0x0BDA:0x0169:iMONO
+0x0BDA:0x0169:Realtek
 
 # Aktiv Co., ProgramPark
 0x0A89:0x0060:Aktiv Rutoken Magistra
