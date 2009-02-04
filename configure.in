@@ -35,14 +35,17 @@ PKG_PROG_PKG_CONFIG
 
 # check pcsc-lite version
 PCSC_NEEDED_VERSION="1.3.3"
-PKG_CHECK_MODULES(PCSC, libpcsclite >= $PCSC_NEEDED_VERSION, [],
+PKG_CHECK_EXISTS([libpcsclite],
+	PKG_CHECK_MODULES(PCSC, libpcsclite >= $PCSC_NEEDED_VERSION, [],
 	[
 	if test -f /usr/local/lib/pkgconfig/libpcsclite.pc -a "x$PKG_CONFIG" != x ; then
 		AC_MSG_ERROR([use PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure])
 	  else
 		AC_MSG_WARN([install pcsc-lite $PCSC_NEEDED_VERSION or later])
 	  fi
-	])
+	]),
+	AC_MSG_WARN([libpcsclite not found by pkg-config])
+)
 
 saved_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $PCSC_CFLAGS"
@@ -111,6 +114,7 @@ use_usb_interrupt=no
 
 # check if libusb is used
 if test "x$use_libusb" != xno ; then
+	PKG_CHECK_EXISTS([libusb], [
 	PKG_CHECK_MODULES(LIBUSB, libusb, [],
 		[
 			AC_CHECK_PROG([LIBUSBCONFIG], [libusb-config], [yes])
@@ -122,6 +126,7 @@ if test "x$use_libusb" != xno ; then
 				AC_MSG_WARN([libusb-config not found.])
 			fi
 		])
+	])
 
 	saved_CPPFLAGS="$CPPFLAGS"
 	saved_LIBS="$LIBS"

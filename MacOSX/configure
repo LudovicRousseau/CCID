@@ -39,10 +39,6 @@ fi
 
 ./MacOSX/convert_reader_h.pl MacOSX/reader.h.in > MacOSX/reader.h
 
-# we define PKG_CONFIG so that pkg-config is not used and PCSC_CFLAGS
-# and PCSC_LIBS are used instead
-PKG_CONFIG="foobar"
-
 # find pcsc-lite header files in MacOSX/
 # use ${varname:-word} to return word only if varname is not already defined
 PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
@@ -79,7 +75,6 @@ CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-pcsclite"
 
 set -x
 ./configure \
-	PKG_CONFIG="$PKG_CONFIG" \
 	CFLAGS="$CFLAGS" \
 	PCSC_CFLAGS="$PCSC_CFLAGS" \
 	PCSC_LIBS="$PCSC_LIBS" \
