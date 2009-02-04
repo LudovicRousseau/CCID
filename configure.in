@@ -294,6 +294,8 @@ Preprocessor flags:  ${CPPFLAGS}
 Linker flags:        ${LDFLAGS}
 Libraries:           ${LIBS}
 
+PCSC_CFLAGS:         ${PCSC_CFLAGS}
+PCSC_LIBS:           ${PCSC_LIBS}
 PTHREAD_CFLAGS:      ${PTHREAD_CFLAGS}
 PTHREAD_LIBS:        ${PTHREAD_LIBS}
 BUNDLE_HOST:         ${BUNDLE_HOST}
