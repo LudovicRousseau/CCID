@@ -151,7 +151,9 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	unsigned int vendorID, productID;
 	char infofile[FILENAME_MAX];
+#ifndef __APPLE__
 	unsigned int device_vendor, device_product;
+#endif
 	char *dirname = NULL, *filename = NULL;
 	static int previous_reader_index = -1;
 
