@@ -75,7 +75,7 @@ EXTRA_DIST = \
 	Oz776S.txt \
 	Precise_250_MC.txt \
 	ReinerSCT.txt \
-	SafeNet_IKey4000.txt \
+	Philips_SmartMX.txt \
 	SCR3310.txt \
 	SCR3311.txt \
 	SCR331-DI-NTTCom.txt \

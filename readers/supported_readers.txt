@@ -134,8 +134,8 @@
 # Philips
 0x0471:0x040F:Philips JCOP41V221
 
-# Rainbow/SafeNet
-0x04B9:0x1400:SafeNet IKey4000
+# Philips SmartMX (Rainbow/SafeNet Key 4000?)
+0x04B9:0x1400:Philips SmartMX
 
 # Giesecke & Devrient
 0x1059:0x000C:GnD CardToken 350
