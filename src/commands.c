@@ -370,7 +370,11 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	}
 
 	/* SPR532 and Case 1 APDU */
-	if ((SPR532 == ccid_descriptor->readerID) && (TxBuffer[15] == 4))
+	if ((SPR532 == ccid_descriptor->readerID)
+		/* bmPINBlockString = 0 => PIN length not inserted in APDU */
+		&& (0 == TxBuffer[3])
+		/* case 1 APDU */
+		&& (4 == TxBuffer[15]))
 	{
 		RESPONSECODE return_value;
 		unsigned char cmd_tmp[] = { 0x80, 0x02, 0x00 };
