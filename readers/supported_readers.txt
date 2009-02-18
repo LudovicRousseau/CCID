@@ -198,6 +198,10 @@
 # TianYu CCID Key
 0xA625:0x0801:TianYu CCID SmartKey
 
+# Precise Biometrics
+0x08C3:0x0401:Precise 250 MC
+0x08C3:0x0402:Precise 200 MC
+
 # Bogus readers but partly supported
 # See the README file for a bug description
 0x09C3:0x0008:ActivCard USB Reader 2.0
