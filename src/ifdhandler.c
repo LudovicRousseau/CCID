@@ -508,7 +508,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	 * This function should set the PTS of a particular card/slot using
 	 * the three PTS parameters sent
 	 *
-	 * Protocol - 0 .... 14 T=0 .... T=14
+	 * Protocol - SCARD_PROTOCOL_T0 or SCARD_PROTOCOL_T1
 	 * Flags - Logical OR of possible values:
 	 *  IFD_NEGOTIATE_PTS1
 	 *  IFD_NEGOTIATE_PTS2
