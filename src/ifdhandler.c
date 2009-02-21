@@ -1605,7 +1605,7 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	/* ISO in */
 	t  = 261 * EGT + (3 + 3) * WWT;
 	/* Convert from milliseonds to seconds rouned to the upper value
-	 * use +1 instead of ceil() to round up to the nearest interger
+	 * use +1 instead of ceil() to round up to the nearest integer
 	 * so we can avoid a dependency on the math library */
 	t = t/1000 +1;
 	if (timeout < t)
@@ -1662,7 +1662,7 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 	timeout = 260*EGT + BWT + 260*CWT;
 
 	/* Convert from milliseonds to seconds rounded to the upper value
-	 * we use +1 instead of ceil() to round up to the nearest greater interger
+	 * we use +1 instead of ceil() to round up to the nearest greater integer
 	 * so we can avoid a dependency on the math library */
 	timeout = timeout/1000 +1;
 
