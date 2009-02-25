@@ -2,7 +2,7 @@
   iManufacturer: ACS
  idProduct: 0x2200
   iProduct: ACR122U PICC Interface
- bcdDevice: 2.03 (firmware release?)
+ bcdDevice: 2.04 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -28,11 +28,11 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Inappropriate ioctl for device
+   IFD does not support GET CLOCK FREQUENCIES request: No such file or directory
   dwDataRate: 10752 bps
   dwMaxDataRate: 250000 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: Inappropriate ioctl for device
+   IFD does not support GET_DATA_RATES request: No such file or directory
   dwMaxIFSD: 256
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
