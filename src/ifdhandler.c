@@ -817,6 +817,23 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 					atr.ib[i][ATR_INTERFACE_BYTE_TB].value);
 				param[3] = atr.ib[i][ATR_INTERFACE_BYTE_TB].value;
 
+				{
+					/* Hack for OpenGPG card */
+					char atr[] = { 0x3B, 0xFA, 0x13, 0x00, 0xFF, 0x81,
+						0x31, 0x80, 0x45, 0x00, 0x31, 0xC1, 0x73, 0xC0,
+						0x01, 0x00, 0x00, 0x90, 0x00, 0xB1 };
+
+					if (0 == memcmp(ccid_slot->pcATRBuffer, atr,
+						ccid_slot->nATRLength))
+						/* change BWI from 4 to 7 to increase BWT from
+						 * 1.4s to 11s and avoid a timeout during on
+						 * board key generation (bogus card) */
+					{
+						param[3] = 0x75;
+						DEBUG_COMM2("OpenPGP hack, using 0x%02X", param[3]);
+					}
+				}
+
 				/* only the first TBi (i>2) must be used */
 				break;
 			}
