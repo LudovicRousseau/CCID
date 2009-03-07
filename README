@@ -286,6 +286,18 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.3.10 - 7 March 2009, Ludovic Rousseau
+	- add support for MSI StarReader SMART, Noname reader (from
+	  Omnikey), Xiring Xi Sign PKI, Realtek 43 in 1 + Sim + Smart Card
+	  Reader, Atmel AT98SC032CT, Aktiv Rutoken Magistra, TianYu CCID
+	  SmartKey, Precise Biometrics 200 MC and 250 MC
+	- add a patch to support the bogus OpenPGP card (on board key
+	  generation sometimes timed out)
+	- disable support of the contactless part of SDI010 and SCR331DI
+	  (this code was reverse engineered and hard to maintain)
+    - some minor bugs removed
+
+
 1.3.9 - 18 November 2008, Ludovic Rousseau
     - add support for Aladdin eToken PRO USB 72K Java, Cherry
       SmartTerminal ST-1200USB, Atmel AT91SO, SpringCard Prox'N'Roll,
