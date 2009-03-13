@@ -88,25 +88,3 @@
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1
- idVendor: 0x05BA
-  iManufacturer: Digital Persona, Inc.
- idProduct: 0x000A
-  iProduct: U.are.U® 4000B Fingerprint Reader
- bcdDevice: 1.01 (firmware release?)
- bLength: 9
- bDescriptorType: 4
- bInterfaceNumber: 0
- bAlternateSetting: 0
- bNumEndpoints: 2
-  bulk-IN and bulk-OUT
- bInterfaceClass: 0xFF
-  NOT A CCID DEVICE
-  Class is 0xFF (proprietary)
- bInterfaceSubClass: 255
-  UNSUPPORTED SubClass
- bInterfaceProtocol: 255
-  UNSUPPORTED InterfaceProtocol
- iInterface: 0
-USB extra length is too short: 0
-
-  NOT A CCID DEVICE
