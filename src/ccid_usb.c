@@ -84,10 +84,10 @@ typedef struct
 /* The _usbDevice structure must be defined before including ccid_usb.h */
 #include "ccid_usb.h"
 
-static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice);
+static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice, int num);
 int ccid_check_firmware(struct usb_device *dev);
 static unsigned int *get_data_rates(unsigned int reader_index,
-	struct usb_device *dev);
+	struct usb_device *dev, int num);
 
 /* ne need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
@@ -305,6 +305,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					int r, already_used;
 					struct usb_interface *usb_interface = NULL;
 					int interface;
+					int num = 0;
 
 					/* is it already opened? */
 					already_used = FALSE;
@@ -380,7 +381,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 						return STATUS_UNSUCCESSFUL;
 					}
 
-					usb_interface = get_ccid_usb_interface(dev);
+					usb_interface = get_ccid_usb_interface(dev, &num);
 					if (usb_interface == NULL)
 					{
 						(void)usb_close(dev_handle);
@@ -419,7 +420,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					}
 
 					/* Get Endpoints values*/
-					(void)get_end_points(dev, &usbDevice[reader_index]);
+					(void)get_end_points(dev, &usbDevice[reader_index], num);
 
 					/* store device information */
 					usbDevice[reader_index].handle = dev_handle;
@@ -444,7 +445,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
 					usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
 					usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
-					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, dev);
+					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, dev, num);
 					usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
 					usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
 					usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
@@ -625,11 +626,12 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
  *					get_end_points
  *
  ****************************************************************************/
-static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
+static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice,
+	int num)
 {
 	int i;
 	int bEndpointAddress;
-	struct usb_interface *usb_interface = get_ccid_usb_interface(dev);
+	struct usb_interface *usb_interface = get_ccid_usb_interface(dev, &num);
 
 	/*
 	 * 3 Endpoints maximum: Interrupt In, Bulk In, Bulk Out
@@ -664,7 +666,8 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
  *					get_ccid_usb_interface
  *
  ****************************************************************************/
-/*@null@*/ EXTERNAL struct usb_interface * get_ccid_usb_interface(struct usb_device *dev)
+/*@null@*/ EXTERNAL struct usb_interface * get_ccid_usb_interface(
+	struct usb_device *dev, int *num)
 {
 	struct usb_interface *usb_interface = NULL;
 	int i;
@@ -673,7 +676,7 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 #endif
 
 	/* if multiple interfaces use the first one with CCID class type */
-	for (i=0; dev->config && i<dev->config->bNumInterfaces; i++)
+	for (i = *num; dev->config && i<dev->config->bNumInterfaces; i++)
 	{
 		/* CCID Class? */
 		if (dev->config->interface[i].altsetting->bInterfaceClass == 0xb
@@ -683,6 +686,8 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 			)
 		{
 			usb_interface = &dev->config->interface[i];
+			/* store the interface number for further reference */
+			*num = i;
 			break;
 		}
 	}
@@ -694,18 +699,19 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice)
 		|| (REINER_SCT == readerID) || (BLUDRIVEII_CCID == readerID))
 		&& (0 == usb_interface->altsetting->extralen)) /* this is the bug */
 	{
-		for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)
+		int j;
+		for (j=0; j<usb_interface->altsetting->bNumEndpoints; j++)
 		{
 			/* find the extra[] array */
-			if (54 == usb_interface->altsetting->endpoint[i].extralen)
+			if (54 == usb_interface->altsetting->endpoint[j].extralen)
 			{
 				/* get the extra[] from the endpoint */
 				usb_interface->altsetting->extralen = 54;
 				usb_interface->altsetting->extra =
-					usb_interface->altsetting->endpoint[i].extra;
+					usb_interface->altsetting->endpoint[j].extra;
 				/* avoid double free on close */
-				usb_interface->altsetting->endpoint[i].extra = NULL;
-				usb_interface->altsetting->endpoint[i].extralen = 0;
+				usb_interface->altsetting->endpoint[j].extra = NULL;
+				usb_interface->altsetting->endpoint[j].extralen = 0;
 				break;
 			}
 		}
@@ -764,7 +770,7 @@ int ccid_check_firmware(struct usb_device *dev)
  *
  ****************************************************************************/
 static unsigned int *get_data_rates(unsigned int reader_index,
-	struct usb_device *dev)
+	struct usb_device *dev, int num)
 {
 	int n, i, len;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
@@ -796,7 +802,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	n /= sizeof(int);
 
 	/* we do not get the expected number of data rates */
-	len = get_ccid_usb_interface(dev)->altsetting->extra[27]; /* bNumDataRatesSupported */
+	len = get_ccid_usb_interface(dev, &num)->altsetting->extra[27]; /* bNumDataRatesSupported */
 	if ((n != len) && len)
 	{
 		DEBUG_INFO3("Got %d data rates but was expecting %d", n, len);

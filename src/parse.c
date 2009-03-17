@@ -45,7 +45,7 @@
 #define NORMAL "\33[0m"
 
 static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
-	struct usb_device *dev);
+	struct usb_device *dev, int num);
 
 
 /*****************************************************************************
@@ -86,6 +86,7 @@ int main(int argc, char *argv[])
 		{
 			struct usb_interface *usb_interface = NULL;
 			int interface;
+			int num = 0;
 
 			dev_handle = usb_open(dev);
 			if (NULL == dev_handle)
@@ -124,12 +125,15 @@ int main(int argc, char *argv[])
 			else
 				(void)fprintf(stderr, "  iProduct: " BLUE "%s\n" NORMAL, buffer);
 
+again:
 			/* check if the device has bInterfaceClass == 11 */
-			usb_interface = get_ccid_usb_interface(dev);
+			usb_interface = get_ccid_usb_interface(dev, &num);
 			if (NULL == usb_interface)
 			{
 				(void)usb_close(dev_handle);
-				(void)fprintf(stderr, RED "  NOT a CCID/ICCD device\n" NORMAL);
+				/* only if we found no CCID interface */
+				if (0 == num)
+					(void)fprintf(stderr, RED "  NOT a CCID/ICCD device\n" NORMAL);
 				continue;
 			}
 			if (!class_ff && (0xFF == usb_interface->altsetting->bInterfaceClass))
@@ -137,7 +141,7 @@ int main(int argc, char *argv[])
 				(void)fprintf(stderr, MAGENTA "  Found a possibly CCID/ICCD device (bInterfaceClass = 0xFF). Use -p\n" NORMAL);
 				continue;
 			}
-			(void)fprintf(stderr, GREEN "  Found a CCID/ICCD device\n" NORMAL);
+			(void)fprintf(stderr, GREEN "  Found a CCID/ICCD device at interface %d\n" NORMAL, num);
 
 			/* now we found a free reader and we try to use it */
 			if (NULL == dev->config)
@@ -165,11 +169,15 @@ int main(int argc, char *argv[])
 			}
 #endif
 
-			(void)ccid_parse_interface_descriptor(dev_handle, dev);
+			(void)ccid_parse_interface_descriptor(dev_handle, dev, num);
 
 #ifndef __APPLE__
 			(void)usb_release_interface(dev_handle, interface);
 #endif
+			/* check for another CCID interface on the same device */
+			num++;
+			goto again;
+
 			(void)usb_close(dev_handle);
 			nb++;
 		}
@@ -187,7 +195,7 @@ int main(int argc, char *argv[])
  *
  ****************************************************************************/
 static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
-	struct usb_device *dev)
+	struct usb_device *dev, int num)
 {
 	struct usb_interface_descriptor *usb_interface;
 	unsigned char *extra;
@@ -223,7 +231,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	(void)printf(" bcdDevice: %X.%02X (firmware release?)\n",
 		dev->descriptor.bcdDevice >> 8, dev->descriptor.bcdDevice & 0xFF);
 
-	usb_interface = get_ccid_usb_interface(dev)->altsetting;
+	usb_interface = get_ccid_usb_interface(dev, &num)->altsetting;
 
 	(void)printf(" bLength: %d\n", usb_interface->bLength);
 
