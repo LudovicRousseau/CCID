@@ -48,6 +48,8 @@ libusb-config --version &> /dev/null
 if [ $? -eq 0 ]
 then
     echo "found libusb-config, using it"
+    LIBUSB_CFLAGS=$(libusb-config --cflags)
+    LIBUSB_LIBS=$(libusb-config --libs)
 else
     echo "no libusb-config found"
     # use libusb from OpenSC (universal binary)
