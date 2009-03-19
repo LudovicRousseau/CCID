@@ -475,8 +475,9 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		return IFD_NOT_SUPPORTED;
 	}
 
-	/* Make sure in the beginning if bNumberMessage is valid or not */
-	if (TxBuffer[11] > 3)
+	/* Make sure in the beginning if bNumberMessage is valid or not.
+	 * 0xFF is the default value. */
+	if ((TxBuffer[11] > 3) && (TxBuffer[11] != 0xFF))
 	{
 		DEBUG_INFO2("Wrong bNumberMessage: %d", TxBuffer[11]);
 		return IFD_NOT_SUPPORTED;
