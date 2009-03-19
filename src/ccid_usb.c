@@ -155,6 +155,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	unsigned int device_vendor, device_product;
 #endif
 	char *dirname = NULL, *filename = NULL;
+	char *serial = NULL;
+	int interface_number = -1;
 	static int previous_reader_index = -1;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
@@ -202,6 +204,55 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 				DEBUG_CRITICAL2("can't parse using libusb scheme: %s", device);
 			}
+		}
+
+		/* format usb:%04x/%04x:libhal:%s
+		 * with %s set to
+		 * /org/freedesktop/Hal/devices/usb_device_VID_PID_SERIAL_ifX
+		 * VID is VendorID
+		 * PID is ProductID
+		 * SERIAL is device serial number
+		 * X is the interface number
+		 */
+		if ((dirname = strstr(device, "libhal:")) != NULL)
+		{
+			char *p;
+
+#define HAL_HEADER "usb_device_"
+
+			/* parse the hal string */
+			if (
+				/* search the last '/' char */
+				(p = strrchr(dirname, '/'))
+
+				/* if the string starts with "usb_device_" we continue */
+				&& (0 == strncmp(++p, HAL_HEADER, sizeof(HAL_HEADER)-1))
+				/* skip the HAL header */
+				&& (p += sizeof(HAL_HEADER)-1)
+
+				/* search the '_' before PID */
+				&& (p = strchr(++p, '_'))
+
+				/* search the '_' before SERIAL */
+				&& (p = strchr(++p, '_'))
+				&& (serial = p+1)
+
+				/* search the '_' before ifX */
+				&& (p = strchr(++p, '_'))
+				&& (0 == strncmp(++p, "if", 2))
+			   )
+			{
+				/* terminate the serial number C-string */
+				*(p-1) = '\0';
+
+				/* convert the interface number */
+				interface_number = atoi(p+2);
+			}
+			else
+				DEBUG_CRITICAL2("can't parse using libhal scheme: %s", device);
+
+			/* dirname was just a temporary variable */
+			dirname = NULL;
 		}
 	}
 #endif
@@ -352,12 +403,16 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 						}
 						else
 						{
-							DEBUG_INFO3("USB device %s/%s already in use."
-								" Checking next one.",
-								bus->dirname, dev->filename);
+							/* if an interface number is given by HAL we
+							 * continue with this device. */
+							if (-1 == interface_number)
+							{
+								DEBUG_INFO3("USB device %s/%s already in use."
+									" Checking next one.",
+									bus->dirname, dev->filename);
+								continue;
+							}
 						}
-
-						continue;
 					}
 
 					DEBUG_COMM3("Trying to open USB bus/device: %s/%s",
@@ -381,12 +436,14 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 						return STATUS_UNSUCCESSFUL;
 					}
 
+again:
 					usb_interface = get_ccid_usb_interface(dev, &num);
 					if (usb_interface == NULL)
 					{
 						(void)usb_close(dev_handle);
-						DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
-							bus->dirname, dev->filename);
+						if (0 == num)
+							DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
+								bus->dirname, dev->filename);
 						return STATUS_UNSUCCESSFUL;
 					}
 
@@ -398,6 +455,19 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					}
 
 					interface = usb_interface->altsetting->bInterfaceNumber;
+					if (interface_number >= 0 && interface != interface_number)
+					{
+						/* an interface was specified and it is not the
+						 * current one */
+						DEBUG_INFO3("Wrong interface for USB device %s/%s."
+							" Checking next one.", bus->dirname, dev->filename);
+
+						/* check for another CCID interface on the same device */
+						num++;
+
+						goto again;
+					}
+
 					if (usb_claim_interface(dev_handle, interface) < 0)
 					{
 						(void)usb_close(dev_handle);
