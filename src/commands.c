@@ -671,19 +671,27 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 	status_t res;
 	unsigned int length_in, length_out;
 	RESPONSECODE return_value = IFD_SUCCESS;
+	int old_read_timeout;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+
+	old_read_timeout = ccid_descriptor -> readTimeout;
+	ccid_descriptor -> readTimeout = 30;	/* 30 seconds */
 
 again:
 	/* allocate buffers */
 	length_in = 10 + TxLength;
 	if (NULL == (cmd_in = malloc(length_in)))
-		return IFD_COMMUNICATION_ERROR;
+	{
+		return_value = IFD_COMMUNICATION_ERROR;
+		goto end;
+	}
 
 	length_out = 10 + *RxLength;
 	if (NULL == (cmd_out = malloc(length_out)))
 	{
 		free(cmd_in);
-		return IFD_COMMUNICATION_ERROR;
+		return_value = IFD_COMMUNICATION_ERROR;
+		goto end;
 	}
 
 	cmd_in[0] = 0x6B; /* PC_to_RDR_Escape */
@@ -700,7 +708,8 @@ again:
 	if (res != STATUS_SUCCESS)
 	{
 		free(cmd_out);
-		return IFD_COMMUNICATION_ERROR;
+		return_value = IFD_COMMUNICATION_ERROR;
+		goto end;
 	}
 
 	res = ReadPort(reader_index, &length_out, cmd_out);
@@ -718,13 +727,15 @@ again:
 	if (res != STATUS_SUCCESS)
 	{
 		free(cmd_out);
-		return IFD_COMMUNICATION_ERROR;
+		return_value = IFD_COMMUNICATION_ERROR;
+		goto end;
 	}
 
 	if (length_out < STATUS_OFFSET+1)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length_out);
-		return IFD_COMMUNICATION_ERROR;
+		return_value = IFD_COMMUNICATION_ERROR;
+		goto end;
 	}
 
 	if (cmd_out[STATUS_OFFSET] & CCID_COMMAND_FAILED)
@@ -742,6 +753,8 @@ again:
 
 	free(cmd_out);
 
+end:
+	ccid_descriptor -> readTimeout = old_read_timeout;
 	return return_value;
 } /* Escape */
 
