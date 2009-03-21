@@ -1,6 +1,6 @@
 /*
     scardcontrol.c: sample code to use/test SCardControl() API
-    Copyright (C) 2004-2008   Ludovic Rousseau
+    Copyright (C) 2004-2009   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -300,7 +300,7 @@ int main(int argc, char *argv[])
 	printf(" Secure verify PIN\n");
 	pin_verify = (PIN_VERIFY_STRUCTURE *)bSendBuffer;
 
-	/* PC/SC v2.0.2 Part 10 PIN verification data structure */
+	/* PC/SC v2.02.05 Part 10 PIN verification data structure */
 	pin_verify -> bTimerOut = 0x00;
 	pin_verify -> bTimerOut2 = 0x00;
 	pin_verify -> bmFormatString = 0x82;
@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
 	 * bConfirmPIN = 1, bNumberMessage = 2: "New Pin" "Confirm Pin"
 	 * bConfirmPIN = 0, bNumberMessage = 1: "New Pin"
 	 */
-	/* PC/SC v2.0.2 Part 10 PIN modification data structure */
+	/* PC/SC v2.02.05 Part 10 PIN modification data structure */
 	pin_modify -> bTimerOut = 0x00;
 	pin_modify -> bTimerOut2 = 0x00;
 	pin_modify -> bmFormatString = 0x82;

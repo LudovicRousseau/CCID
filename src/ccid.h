@@ -1,6 +1,6 @@
 /*
     ccid.h: CCID structures
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2009   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -53,6 +53,11 @@ typedef struct
 	 * PIN support of the reader (directly from Class Descriptor)
 	 */
 	char bPINSupport;
+	
+	/*
+	 * Display dimensions of the reader (directly from Class Descriptor)
+	 */
+	unsigned int wLcdLayout;
 
 	/*
 	 * Default Clock

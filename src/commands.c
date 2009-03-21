@@ -351,7 +351,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 			sdata, 3);
 	}
 
-	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
+	/* Build a CCID block from a PC/SC V2.02.05 Part 10 block */
 	for (a = 11, b = 0; b < TxLength; b++)
 	{
 		if (1 == b) /* bTimeOut2 field */
@@ -569,7 +569,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 			sdata, 3);
 	}
 
-	/* Build a CCID block from a PC/SC V2.1.2 Part 10 block */
+	/* Build a CCID block from a PC/SC V2.02.05 Part 10 block */
 
 	/* Do adjustments as needed - CCID spec is not exact with some
 	 * details in the format of the structure, per-reader adaptions

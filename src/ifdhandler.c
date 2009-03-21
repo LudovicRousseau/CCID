@@ -1,6 +1,6 @@
 /*
     ifdhandler.c: IFDH API
-    Copyright (C) 2003-2008   Ludovic Rousseau
+    Copyright (C) 2003-2009   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -1190,7 +1190,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		}
 	}
 
-	/* Implement the PC/SC v2.1.2 Part 10 IOCTL mechanism */
+	/* Implement the PC/SC v2.02.05 Part 10 IOCTL mechanism */
 
 	/* Query for features */
 	if (CM_IOCTL_GET_FEATURE_REQUEST == dwControlCode)
@@ -1198,8 +1198,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		unsigned int iBytesReturned = 0;
 		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
 
-		/* we need room for two records */
-		if (RxLength < 2 * sizeof(PCSC_TLV_STRUCTURE))
+		/* we need room for three records */
+		if (RxLength < 3 * sizeof(PCSC_TLV_STRUCTURE))
 			return IFD_COMMUNICATION_ERROR;
 
 		/* We can only support direct verify and/or modify currently */
@@ -1224,9 +1224,41 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
+
+#ifdef FEATURE_IFD_PIN_PROPERTIES
+		/* We can always forward wLcdLayout */
+		pcsc_tlv -> tag = FEATURE_IFD_PIN_PROPERTIES;
+		pcsc_tlv -> length = 0x04; /* always 0x04 */
+		pcsc_tlv -> value = htonl(IOCTL_FEATURE_IFD_PIN_PROPERTIES);
+
+		pcsc_tlv++;
+		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
+#endif
+
 		*pdwBytesReturned = iBytesReturned;
 		return_value = IFD_SUCCESS;
 	}
+
+#ifdef FEATURE_IFD_PIN_PROPERTIES
+	/* Get PIN handling capabilities */
+	if (IOCTL_FEATURE_IFD_PIN_PROPERTIES == dwControlCode)
+	{
+		PIN_PROPERTIES_STRUCTURE *caps = (PIN_PROPERTIES_STRUCTURE *)RxBuffer;
+
+		if (RxLength < sizeof(PIN_PROPERTIES_STRUCTURE))
+			return IFD_COMMUNICATION_ERROR;
+
+		/* Only give the LCD size for now */
+		caps -> wLcdLayout = get_ccid_descriptor(reader_index) -> wLcdLayout;
+		caps -> wLcdMaxCharacters = 0x0000;
+		caps -> wLcdMaxLines = 0x0000; 
+		caps -> bEntryValidationCondition = 0x07; /* Default */
+		caps -> bTimeOut2 = 0x00; /* We do not distinguish bTimeOut from TimeOut2 */
+
+		*pdwBytesReturned = sizeof(PCSC_TLV_STRUCTURE);
+		return_value = IFD_SUCCESS;
+	}
+#endif
 
 	/* Verify a PIN, plain CCID */
 	if (IOCTL_FEATURE_VERIFY_PIN_DIRECT == dwControlCode)

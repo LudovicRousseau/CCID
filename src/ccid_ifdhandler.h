@@ -1,6 +1,6 @@
 /*
     ccid_ifdhandler.h: non-generic ifdhandler functions
-    Copyright (C) 2004   Ludovic Rousseau
+    Copyright (C) 2004-2009   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,8 @@
 	SCARD_CTL_CODE(FEATURE_VERIFY_PIN_DIRECT + CLASS2_IOCTL_MAGIC)
 #define IOCTL_FEATURE_MODIFY_PIN_DIRECT \
 	SCARD_CTL_CODE(FEATURE_MODIFY_PIN_DIRECT + CLASS2_IOCTL_MAGIC)
+#define IOCTL_FEATURE_IFD_PIN_PROPERTIES \
+        SCARD_CTL_CODE(FEATURE_IFD_PIN_PROPERTIES + CLASS2_IOCTL_MAGIC)
 
 #define DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED 1
 #define DRIVER_OPTION_GEMPC_TWIN_KEY_APDU 2
