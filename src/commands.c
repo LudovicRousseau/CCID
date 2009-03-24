@@ -323,6 +323,18 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		}
 
 	}
+
+	if (DELLSCRK == ccid_descriptor->readerID)
+	{
+		/* the firmware rejects the cases: 01h-FEh and FFh default
+		 * CCID message. The only value supported is 00h (no message) */
+		if (0x00 != TxBuffer[8])
+		{
+			DEBUG_INFO2("Correct bNumberMessage for Dell keyboard (was %d)",
+				TxBuffer[8]);
+			TxBuffer[8] = 0x00;
+		}
+	}
 #endif
 
 	/* T=1 Protocol Management for a TPDU reader */
