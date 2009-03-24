@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 001/017
  idVendor: 0x413C
   iManufacturer: Dell
  idProduct: 0x2101
@@ -9,9 +8,11 @@ Parsing Interface Descriptor for device: 001/017
  bInterfaceNumber: 1
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
  iInterface: 0
  CCID Class Descriptor
   bLength: 0x36
@@ -27,11 +28,11 @@ Parsing Interface Descriptor for device: 001/017
    T=1
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
-  bNumClockSupported: 0x00
+  bNumClockSupported: 0 (will use whatever is returned)
    Support 4000 kHz
   dwDataRate: 10752 bps
   dwMaxDataRate: 344086 bps
-  bNumDataRatesSupported: 0
+  bNumDataRatesSupported: 0 (will use whatever is returned)
    Support 10753 bps
    Support 14337 bps
    Support 15625 bps
@@ -82,8 +83,8 @@ Parsing Interface Descriptor for device: 001/017
    ..02.. NAD value other than 00 accepted (T=1)
    01.... TPDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
-  bClassGetResponse: 0
-  bClassEnveloppe: 0
+  bClassGetResponse: 0x00
+  bClassEnveloppe: 0x00
   wLcdLayout: 0x0000
   bPINSupport: 0x01
    PIN Verification supported
