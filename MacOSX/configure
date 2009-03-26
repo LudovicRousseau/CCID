@@ -75,6 +75,9 @@ CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-static"
 # do not use pcscd debug feature
 CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-pcsclite"
 
+# simulate a composite device as multi slots
+CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-composite-as-multislot"
+
 set -x
 ./configure \
 	CFLAGS="$CFLAGS" \
