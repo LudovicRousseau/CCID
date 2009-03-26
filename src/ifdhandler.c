@@ -374,6 +374,17 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			{
 				*Length = 1;
 				*Value = 1 + get_ccid_descriptor(reader_index) -> bMaxSlotIndex;
+#ifdef USE_COMPOSITE_AS_MULTISLOT
+				{
+					/* On MacOS X or Linux+libusb we can simulate a
+					 * composite device with 2 CCID interfaces by a
+					 * multi-slot reader */
+					int readerID =  get_ccid_descriptor(reader_index) -> readerID;
+
+					if ((GEMALTOPROXDU == readerID) || (GEMALTOPROXSU == readerID))
+						*Value = 2;
+				}
+#endif
 				DEBUG_INFO2("Reader supports %d slot(s)", *Value);
 			}
 			break;

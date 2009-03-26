@@ -288,6 +288,29 @@ int ccid_open_hack(unsigned int reader_index)
 			(void)InterruptRead(reader_index);
 #endif
 			break;
+
+#ifndef USE_USB_INTERRUPT
+		/* only if we do not use USB interrupts */
+		case GEMALTOPROXDU:
+		case GEMALTOPROXSU:
+			{
+				/* disable card movements notification
+				 * with RDR_to_PC_NotifySlotChange */
+				unsigned char cmd[] = { 0x42, 0x00 /* disable */};
+				unsigned char res[10];
+				unsigned int length_res = sizeof(res);
+
+				if (CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res) == IFD_SUCCESS)
+				{
+					DEBUG_COMM("NotifySlotChange disabled");
+				}
+				else
+				{
+					DEBUG_CRITICAL("NotifySlotChange disabling failed");
+				}
+			}
+			break;
+#endif
 	}
 
 	/* ICCD type A */

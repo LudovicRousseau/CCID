@@ -358,6 +358,27 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					int interface;
 					int num = 0;
 
+#ifdef USE_COMPOSITE_AS_MULTISLOT
+					{
+						/* simulate a composite device as when libhal is
+						 * used */
+						int readerID = (vendorID << 16) + productID;
+
+						if ((GEMALTOPROXDU == readerID)
+							|| (GEMALTOPROXSU == readerID))
+						{
+							if(interface_number >= 0)
+							{
+								DEBUG_CRITICAL("USE_COMPOSITE_AS_MULTISLOT can't be used with libhal");
+								continue;
+							}
+
+							/* the CCID interfaces are 1 and 2 */
+							static int static_interface = 1;
+							interface_number = static_interface++;
+						}
+					}
+#endif
 					/* is it already opened? */
 					already_used = FALSE;
 
