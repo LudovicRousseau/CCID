@@ -205,8 +205,27 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 		ReleaseReaderIndex(reader_index);
 	}
 	else
+	{
+		/* Try to access the reader */
+		/* This "warm up" sequence is sometimes needed when pcscd is
+		 * restarted with the reader already connected. We get some
+		 * "usb_bulk_read: Resource temporarily unavailable" on the first
+		 * few tries. It is an empirical hack */
+		if ((IFD_COMMUNICATION_ERROR == IFDHICCPresence(Lun))
+			&& (IFD_COMMUNICATION_ERROR == IFDHICCPresence(Lun))
+			&& (IFD_COMMUNICATION_ERROR == IFDHICCPresence(Lun)))
+		{
+			DEBUG_CRITICAL("failed");
+			return_value = IFD_COMMUNICATION_ERROR;
+
+			/* release the allocated resources */
+			(void)ClosePort(reader_index);
+			ReleaseReaderIndex(reader_index);
+		}
+
 		/* Maybe we have a special treatment for this reader */
 		(void)ccid_open_hack(reader_index);
+	}
 
 #ifdef HAVE_PTHREAD
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
