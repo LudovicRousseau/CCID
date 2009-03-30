@@ -52,6 +52,69 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			ccid_descriptor->dwFeatures |= CCID_CLASS_TPDU;
 			break;
 
+		case MYSMARTPAD:
+			ccid_descriptor->dwMaxIFSD = 254;
+			break;
+
+		case CL1356D:
+			/* the firmware needs some time to initialize */
+			(void)sleep(1);
+			ccid_descriptor->readTimeout = 60; /* 60 seconds */
+			break;
+
+		case SEG:
+#ifndef TWIN_SERIAL
+			(void)InterruptRead(reader_index);
+#endif
+			break;
+	}
+
+	/* ICCD type A */
+	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	{
+		unsigned char tmp[MAX_ATR_SIZE];
+		unsigned int n = sizeof(tmp);
+
+		DEBUG_COMM("ICCD type A");
+		(void)CmdPowerOff(reader_index);
+		(void)CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
+		(void)CmdPowerOff(reader_index);
+	}
+
+	/* ICCD type B */
+	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	{
+		unsigned char tmp[MAX_ATR_SIZE];
+		unsigned int n = sizeof(tmp);
+
+		DEBUG_COMM("ICCD type B");
+		if (CCID_CLASS_SHORT_APDU ==
+			(ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK))
+		{
+			/* use the extended APDU comm alogorithm */
+			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+			ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
+		}
+
+		(void)CmdPowerOff(reader_index);
+		(void)CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
+		(void)CmdPowerOff(reader_index);
+	}
+
+	return 0;
+} /* ccid_open_hack_pre */
+
+/*****************************************************************************
+ *
+ *					ccid_open_hack_post
+ *
+ ****************************************************************************/
+int ccid_open_hack_post(unsigned int reader_index)
+{
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+
+	switch (ccid_descriptor->readerID)
+	{
 		case GEMPCKEY:
 		case GEMPCTWIN:
 			/* Reader announces TPDU but can do APDU */
@@ -273,22 +336,6 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			break;
 #endif
 
-		case MYSMARTPAD:
-			ccid_descriptor->dwMaxIFSD = 254;
-			break;
-
-		case CL1356D:
-			/* the firmware needs some time to initialize */
-			(void)sleep(1);
-			ccid_descriptor->readTimeout = 60; /* 60 seconds */
-			break;
-
-		case SEG:
-#ifndef TWIN_SERIAL
-			(void)InterruptRead(reader_index);
-#endif
-			break;
-
 #ifndef USE_USB_INTERRUPT
 		/* only if we do not use USB interrupts */
 		case GEMALTOPROXDU:
@@ -311,54 +358,6 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			}
 			break;
 #endif
-	}
-
-	/* ICCD type A */
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
-	{
-		unsigned char tmp[MAX_ATR_SIZE];
-		unsigned int n = sizeof(tmp);
-
-		DEBUG_COMM("ICCD type A");
-		(void)CmdPowerOff(reader_index);
-		(void)CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
-		(void)CmdPowerOff(reader_index);
-	}
-
-	/* ICCD type B */
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
-	{
-		unsigned char tmp[MAX_ATR_SIZE];
-		unsigned int n = sizeof(tmp);
-
-		DEBUG_COMM("ICCD type B");
-		if (CCID_CLASS_SHORT_APDU ==
-			(ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK))
-		{
-			/* use the extended APDU comm alogorithm */
-			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
-			ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
-		}
-
-		(void)CmdPowerOff(reader_index);
-		(void)CmdPowerOn(reader_index, &n, tmp, CCID_CLASS_AUTO_VOLTAGE);
-		(void)CmdPowerOff(reader_index);
-	}
-
-	return 0;
-} /* ccid_open_hack_pre */
-
-/*****************************************************************************
- *
- *					ccid_open_hack_post
- *
- ****************************************************************************/
-int ccid_open_hack_post(unsigned int reader_index)
-{
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
-
-	switch (ccid_descriptor->readerID)
-	{
 	}
 
 	return 0;
