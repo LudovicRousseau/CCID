@@ -37,10 +37,10 @@
 
 /*****************************************************************************
  *
- *					ccid_open_hack
+ *					ccid_open_hack_pre
  *
  ****************************************************************************/
-int ccid_open_hack(unsigned int reader_index)
+int ccid_open_hack_pre(unsigned int reader_index)
 {
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
@@ -346,7 +346,23 @@ int ccid_open_hack(unsigned int reader_index)
 	}
 
 	return 0;
-} /* ccid_open_hack */
+} /* ccid_open_hack_pre */
+
+/*****************************************************************************
+ *
+ *					ccid_open_hack_post
+ *
+ ****************************************************************************/
+int ccid_open_hack_post(unsigned int reader_index)
+{
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+
+	switch (ccid_descriptor->readerID)
+	{
+	}
+
+	return 0;
+} /* ccid_open_hack_post */
 
 /*****************************************************************************
  *

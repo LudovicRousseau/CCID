@@ -108,7 +108,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	else
 	{
 		/* Maybe we have a special treatment for this reader */
-		(void)ccid_open_hack(reader_index);
+		(void)ccid_open_hack_pre(reader_index);
 
 		/* Try to access the reader */
 		/* This "warm up" sequence is sometimes needed when pcscd is
@@ -126,6 +126,9 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 			(void)ClosePort(reader_index);
 			ReleaseReaderIndex(reader_index);
 		}
+
+		/* Maybe we have a special treatment for this reader */
+		(void)ccid_open_hack_post(reader_index);
 	}
 
 #ifdef HAVE_PTHREAD
@@ -206,6 +209,9 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	}
 	else
 	{
+		/* Maybe we have a special treatment for this reader */
+		(void)ccid_open_hack_pre(reader_index);
+
 		/* Try to access the reader */
 		/* This "warm up" sequence is sometimes needed when pcscd is
 		 * restarted with the reader already connected. We get some
@@ -224,7 +230,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 		}
 
 		/* Maybe we have a special treatment for this reader */
-		(void)ccid_open_hack(reader_index);
+		(void)ccid_open_hack_post(reader_index);
 	}
 
 #ifdef HAVE_PTHREAD
