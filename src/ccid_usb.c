@@ -376,6 +376,10 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 							/* the CCID interfaces are 1 and 2 */
 							static int static_interface = 1;
 							interface_number = static_interface++;
+
+							/* reset for a next reader */
+							if (static_interface > 2)
+								static_interface = 1;
 						}
 					}
 #endif
@@ -465,7 +469,8 @@ again:
 						if (0 == num)
 							DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
 								bus->dirname, dev->filename);
-						return STATUS_UNSUCCESSFUL;
+						interface_number = -1;
+						continue;
 					}
 
 					if (usb_interface->altsetting->extralen != 54)
