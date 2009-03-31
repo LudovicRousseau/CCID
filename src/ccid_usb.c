@@ -357,6 +357,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					struct usb_interface *usb_interface = NULL;
 					int interface;
 					int num = 0;
+					static int static_interface = 1;
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 					{
@@ -374,12 +375,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 							}
 
 							/* the CCID interfaces are 1 and 2 */
-							static int static_interface = 1;
-							interface_number = static_interface++;
-
-							/* reset for a next reader */
-							if (static_interface > 2)
-								static_interface = 1;
+							interface_number = static_interface;
 						}
 					}
 #endif
@@ -499,7 +495,8 @@ again:
 						(void)usb_close(dev_handle);
 						DEBUG_CRITICAL4("Can't claim interface %s/%s: %s",
 							bus->dirname, dev->filename, strerror(errno));
-						return STATUS_UNSUCCESSFUL;
+						interface_number = -1;
+						continue;
 					}
 
 					DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
@@ -514,6 +511,15 @@ again:
 						(void)usb_close(dev_handle);
 						return STATUS_UNSUCCESSFUL;
 					}
+
+#ifdef USE_COMPOSITE_AS_MULTISLOT
+					/* use the next interface for the next "slot" */
+					static_interface++;
+
+					/* reset for a next reader */
+					if (static_interface > 2)
+						static_interface = 1;
+#endif
 
 					/* Get Endpoints values*/
 					(void)get_end_points(dev, &usbDevice[reader_index], num);
