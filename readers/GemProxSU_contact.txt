@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: 5
+ iInterface: Prox-SU Contact interface
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
