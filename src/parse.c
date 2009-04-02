@@ -292,7 +292,11 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			(void)printf("  UNSUPPORTED InterfaceProtocol\n");
 	}
 
-	(void)printf(" iInterface: %d\n", usb_interface->iInterface);
+	if (usb_get_string_simple(handle, usb_interface->iInterface,
+		buffer, sizeof(buffer)) < 0)
+		(void)printf(" Can't get iInterface string\n");
+	else
+		(void)printf(" iInterface: %s\n", buffer);
 
 	if (usb_interface->extralen < 54)
 	{
