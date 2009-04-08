@@ -211,4 +211,5 @@
 #0x0C4B:0x0300:Reiner-SCT cyberJack pinpad(a)
 #0x0483:0x2010:jNet Technology jToken s1
 #0x0A5C:0x5800:Broadcom 5880
+#0x04E6:0x5291:SCM SCL010 Contactless Reader
 
