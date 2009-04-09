@@ -126,9 +126,9 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 			(void)ClosePort(reader_index);
 			ReleaseReaderIndex(reader_index);
 		}
-
-		/* Maybe we have a special treatment for this reader */
-		(void)ccid_open_hack_post(reader_index);
+		else 
+			/* Maybe we have a special treatment for this reader */
+			(void)ccid_open_hack_post(reader_index);
 	}
 
 #ifdef HAVE_PTHREAD
@@ -228,9 +228,9 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 			(void)ClosePort(reader_index);
 			ReleaseReaderIndex(reader_index);
 		}
-
-		/* Maybe we have a special treatment for this reader */
-		(void)ccid_open_hack_post(reader_index);
+		else
+			/* Maybe we have a special treatment for this reader */
+			(void)ccid_open_hack_post(reader_index);
 	}
 
 #ifdef HAVE_PTHREAD
