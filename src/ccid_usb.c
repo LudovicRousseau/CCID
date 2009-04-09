@@ -357,9 +357,10 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					struct usb_interface *usb_interface = NULL;
 					int interface;
 					int num = 0;
-					static int static_interface = 1;
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
+					static int static_interface = 1;
+
 					{
 						/* simulate a composite device as when libhal is
 						 * used */
