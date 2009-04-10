@@ -476,7 +476,7 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 					continue;
 				}
 
-				DEBUG_CRITICAL2("CT sent S-block with wtx=%u", sdata[DATA]);
+				DEBUG_COMM2("CT sent S-block with wtx=%u", sdata[DATA]);
 				t1->wtx = sdata[DATA];
 				ct_buf_putc(&tbuf, sdata[DATA]);
 				break;
