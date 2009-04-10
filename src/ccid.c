@@ -63,6 +63,8 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			break;
 
 		case SEG:
+		case GEMALTOPROXDU:
+		case GEMALTOPROXSU:
 #ifndef TWIN_SERIAL
 			(void)InterruptRead(reader_index);
 #endif
