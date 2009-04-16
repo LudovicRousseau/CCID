@@ -215,4 +215,5 @@
 #0x0483:0x2010:jNet Technology jToken s1
 #0x0A5C:0x5800:Broadcom 5880
 #0x04E6:0x5291:SCM SCL010 Contactless Reader
+#0x062D:0x0001:iDream or ID-SMID01
 
