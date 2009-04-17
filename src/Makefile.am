@@ -79,7 +79,7 @@ ifdCapabilities=0x00000000
 endif
 
 Info.plist: Info.plist.src $(srcdir)/../readers/supported_readers.txt
-	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist.src $(ifdCapabilities) | sed s/TARGET/$(CCID_LIB)/ > Info.plist
+	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist.src $(ifdCapabilities) | sed s/TARGET/$(CCID_LIB)/ | sed s/VERSION/$(VERSION)/ | sed s/CCID_BUNDLE/$(CCID_BUNDLE)/ > Info.plist
 	
 DISTCLEANFILES = tokenparser.c Info.plist
 
