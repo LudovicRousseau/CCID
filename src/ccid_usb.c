@@ -555,6 +555,7 @@ again:
 					usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
 					usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
 					usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
+					usbDevice[reader_index].ccid.bVoltageSupport = usb_interface->altsetting->extra[5];
 					goto end;
 				}
 			}

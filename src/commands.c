@@ -171,6 +171,28 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 
 	if (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
 		voltage = 0;	/* automatic voltage selection */
+	else
+	{
+		int bVoltageSupport = ccid_descriptor->bVoltageSupport;
+
+		if ((1 == voltage) && !(bVoltageSupport & 1))
+		{
+			DEBUG_INFO("5V requested but not support by reader");
+			voltage = 2;	/* 3V */
+		}
+
+		if ((2 == voltage) && !(bVoltageSupport & 2))
+		{
+			DEBUG_INFO("3V requested but not support by reader");
+			voltage = 3;	/* 1.8V */
+		}
+
+		if ((3 == voltage) && !(bVoltageSupport & 4))
+		{
+			DEBUG_INFO("1.8V requested but not support by reader");
+			voltage = 0;	/* auto */
+		}
+	}
 
 again:
 	cmd[0] = 0x62; /* IccPowerOn */

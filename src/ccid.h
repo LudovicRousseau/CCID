@@ -113,6 +113,14 @@ typedef struct
 	 * of IFD_ICC_PRESENT
 	 */
 	int dwSlotStatus;
+
+	/*
+	 * bVoltageSupport (bit field)
+	 * 1 = 5.0V
+	 * 2 = 3.0V
+	 * 4 = 1.8V
+	 */
+	int bVoltageSupport;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */
