@@ -15,7 +15,6 @@ EXTRA_DIST = \
 	BludriveII.txt \
 	Broadcom_5880.txt \
 	C3PO_KBR36.txt \
-	C3PO_LTC32_USBv2_old.txt \
 	C3PO_LTC32_USBv2.txt \
 	C3PO_TLTC2USB.txt \
 	CardMan1021.txt \
