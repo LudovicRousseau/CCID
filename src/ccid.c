@@ -61,14 +61,14 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			(void)sleep(1);
 			ccid_descriptor->readTimeout = 60; /* 60 seconds */
 			break;
+	}
 
-		case SEG:
-		case GEMALTOPROXDU:
-		case GEMALTOPROXSU:
+	/* CCID */
+	if (0 == ccid_descriptor->bInterfaceProtocol)
+	{
 #ifndef TWIN_SERIAL
-			(void)InterruptRead(reader_index);
+		(void)InterruptRead(reader_index);
 #endif
-			break;
 	}
 
 	/* ICCD type A */
