@@ -1,5 +1,3 @@
-AUTOMAKE_OPTIONS = dist-bzip2
-
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = m4 readers examples contrib src
