@@ -840,7 +840,7 @@ int ccid_check_firmware(struct usb_device *dev)
 	for (i=0; i<sizeof(Bogus_firmwares)/sizeof(Bogus_firmwares[0]); i++)
 	{
 		if (dev->descriptor.idVendor != Bogus_firmwares[i].vendor)
-				continue;
+			continue;
 
 		if (dev->descriptor.idProduct != Bogus_firmwares[i].product)
 			continue;
