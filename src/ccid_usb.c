@@ -114,6 +114,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0DC3, 0x1004, 0x0502 },	/* ASE IIIe USBv2 */
 	{ 0x0DC3, 0x1102, 0x0607 },	/* ASE IIIe KB USB */
 	{ 0x058F, 0x9520, 0x0102 },	/* Alcor AU9520-G */
+	{ 0x072F, 0x2200, 0x0206 }, /* ACS ACR122U-WB-R */
 
 	/* the firmware version is not correct since I do not have received a
 	 * working reader yet */
