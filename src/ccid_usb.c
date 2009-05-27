@@ -156,7 +156,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	unsigned int device_vendor, device_product;
 #endif
 	char *dirname = NULL, *filename = NULL;
-	char *serial = NULL;
 	int interface_number = -1;
 	static int previous_reader_index = -1;
 
@@ -236,7 +235,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 				/* search the '_' before SERIAL */
 				&& (p = strchr(++p, '_'))
-				&& (serial = p+1)
 
 				/* search the '_' before ifX */
 				&& (p = strchr(++p, '_'))
