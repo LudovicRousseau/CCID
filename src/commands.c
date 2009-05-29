@@ -1492,7 +1492,10 @@ receive_next_block:
 		 * next PC_to_RDR_XfrBlock command */
 		case 0x10:
 			/* send a nul block */
-			return_value = CCID_Transmit(reader_index, 0, NULL, 0, 0);
+			/* set wLevelParameter to 0010h: empty abData field,
+			 * continuation of response APDU is
+			 * expected in the next RDR_to_PC_DataBlock. */
+			return_value = CCID_Transmit(reader_index, 0, NULL, 0x10, 0);
 			if (return_value != IFD_SUCCESS)
 				return return_value;
 
