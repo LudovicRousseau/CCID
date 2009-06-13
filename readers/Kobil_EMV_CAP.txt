@@ -2,7 +2,7 @@
   iManufacturer: KOBIL Systems
  idProduct: 0x3010
   iProduct: KOBIL Class 3 Reader
- bcdDevice: 0.30 (firmware release?)
+ bcdDevice: 0.39 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: 0
+ iInterface: ?
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -27,11 +27,11 @@
   dwDefaultClock: 2.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Connection timed out
+   IFD does not support GET CLOCK FREQUENCIES request: No such file or directory
   dwDataRate: 10573 bps
   dwMaxDataRate: 344086 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: Connection timed out
+   IFD does not support GET_DATA_RATES request: No such file or directory
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
@@ -45,7 +45,7 @@
    ..02.. NAD value other than 00 accepted (T=1)
    ..04.. Automatic IFSD exchange as first exchange (T=1)
    04.... Short and Extended APDU level exchange
-  dwMaxCCIDMessageLength: 534 bytes
+  dwMaxCCIDMessageLength: 536 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnveloppe: 0xFF
