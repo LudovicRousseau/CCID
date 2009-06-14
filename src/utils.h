@@ -29,5 +29,5 @@
 void InitReaderIndex(void);
 int GetNewReaderIndex(const int Lun);
 int LunToReaderIndex(int Lun);
-void ReleaseReaderIndex(const int index);
+void ReleaseReaderIndex(const int idx);
 
