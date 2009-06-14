@@ -1291,7 +1291,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		caps -> bEntryValidationCondition = 0x07; /* Default */
 		caps -> bTimeOut2 = 0x00; /* We do not distinguish bTimeOut from TimeOut2 */
 
-		*pdwBytesReturned = sizeof(PCSC_TLV_STRUCTURE);
+		*pdwBytesReturned = sizeof(*caps);
 		return_value = IFD_SUCCESS;
 	}
 #endif
