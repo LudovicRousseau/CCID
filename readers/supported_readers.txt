@@ -213,6 +213,10 @@
 # Softforum
 0x04E8:0x0007 Softforum XecureHSM
 
+# Neowave
+0x1E0D:0x0013 Neowave Weneo
+0x1E0D:0x8033 Neowave Weneo
+
 # Bogus readers but partly supported
 # See the README file for a bug description
 0x09C3:0x0008:ActivCard USB Reader 2.0
