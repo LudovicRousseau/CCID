@@ -179,6 +179,7 @@ typedef struct
 #define SEG			0x08E68000
 #define BLUDRIVEII_CCID	0x1B0E1078
 #define DELLSCRK    0x413C2101
+#define KOBIL_TRIBANK	0x0D463010
 
 /*
  * The O2Micro OZ776S reader has a wrong USB descriptor
