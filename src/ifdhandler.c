@@ -1234,8 +1234,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		unsigned int iBytesReturned = 0;
 		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
 
-		/* we need room for three records */
-		if (RxLength < 3 * sizeof(PCSC_TLV_STRUCTURE))
+		/* we need room for up to for records */
+		if (RxLength < 4 * sizeof(PCSC_TLV_STRUCTURE))
 			return IFD_COMMUNICATION_ERROR;
 
 		/* We can only support direct verify and/or modify currently */
@@ -1270,6 +1270,16 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		pcsc_tlv++;
 		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 #endif
+
+		if (KOBIL_TRIBANK == get_ccid_descriptor(reader_index) -> readerID)
+		{
+			pcsc_tlv -> tag = FEATURE_MCT_READERDIRECT;
+			pcsc_tlv -> length = 0x04; /* always 0x04 */
+			pcsc_tlv -> value = htonl(IOCTL_FEATURE_MCT_READERDIRECT);
+
+			pcsc_tlv++;
+			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
+		}
 
 		*pdwBytesReturned = iBytesReturned;
 		return_value = IFD_SUCCESS;
@@ -1316,6 +1326,38 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		return_value = SecurePINModify(reader_index, TxBuffer, TxLength,
 			RxBuffer, &iBytesReturned);
 		*pdwBytesReturned = iBytesReturned;
+	}
+
+	/* MCT: Multifunctional Card Terminal */
+	if (IOCTL_FEATURE_MCT_READERDIRECT == dwControlCode)
+	{
+		if ( (TxBuffer[0] != 0x20)	/* CLA */
+			|| ((TxBuffer[1] & 0xF0) != 0x70)	/* INS */
+			/* valid INS are
+			 * 0x70: SECODER INFO
+			 * 0x71: SECODER SELECT APPLICATION
+			 * 0x72: SECODER APPLICATION ACTIVE
+			 * 0x73: SECODER DATA CONFIRMATION
+			 * 0x74: SECODER PROCESS AUTHENTICATION TOKEN */
+			|| ((TxBuffer[1] & 0x0F) > 4)
+			|| (TxBuffer[2] != 0x00)	/* P1 */
+			|| (TxBuffer[3] != 0x00)	/* P2 */
+			|| (TxBuffer[4] != 0x00)	/* Lind */
+		   )
+		{
+			DEBUG_INFO("MCT Command refused by driver");
+			return_value = IFD_COMMUNICATION_ERROR;
+		}
+		else
+		{
+			unsigned int iBytesReturned;
+
+			/* we just transmit the buffer as a CCID Escape command */
+			iBytesReturned = RxLength;
+			return_value = CmdEscape(reader_index, TxBuffer, TxLength, RxBuffer,
+				&iBytesReturned);
+			*pdwBytesReturned = iBytesReturned;
+		}
 	}
 
 	if (IFD_SUCCESS != return_value)
