@@ -43,6 +43,7 @@
 int ccid_open_hack_pre(unsigned int reader_index)
 {
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	int doInterruptRead = 1;
 
 	switch (ccid_descriptor->readerID)
 	{
@@ -61,10 +62,15 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			(void)sleep(1);
 			ccid_descriptor->readTimeout = 60; /* 60 seconds */
 			break;
+
+		case KOBIL_TRIBANK:
+			/* the InterruptRead does not timeout (on Mac OS X) */
+			doInterruptRead = 0;
+			break;
 	}
 
 	/* CCID */
-	if (0 == ccid_descriptor->bInterfaceProtocol)
+	if (doInterruptRead && (0 == ccid_descriptor->bInterfaceProtocol))
 	{
 #ifndef TWIN_SERIAL
 		(void)InterruptRead(reader_index);
