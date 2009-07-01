@@ -30,7 +30,7 @@ typedef struct CCID_DESC
 	/*
 	 * ATR
 	 */
-	DWORD nATRLength;
+	int nATRLength;
 	UCHAR pcATRBuffer[MAX_ATR_SIZE];
 
 	/*
