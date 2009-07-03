@@ -74,6 +74,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	int reader_index;
+	status_t ret;
 
 	if (! DebugInitialized)
 		init_driver();
@@ -97,10 +98,14 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	(void)pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
-	if (OpenPortByName(reader_index, lpcDevice) != STATUS_SUCCESS)
+	ret = OpenPortByName(reader_index, lpcDevice);
+	if (ret != STATUS_SUCCESS)
 	{
 		DEBUG_CRITICAL("failed");
-		return_value = IFD_COMMUNICATION_ERROR;
+		if (STATUS_NO_SUCH_DEVICE == ret)
+			return_value = IFD_NO_SUCH_DEVICE;
+		else
+			return_value = IFD_COMMUNICATION_ERROR;
 
 		/* release the allocated reader_index */
 		ReleaseReaderIndex(reader_index);

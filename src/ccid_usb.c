@@ -562,7 +562,7 @@ again:
 	}
 end:
 	if (usbDevice[reader_index].handle == NULL)
-		return STATUS_UNSUCCESSFUL;
+		return STATUS_NO_SUCH_DEVICE;
 
 	/* memorise the current reader_index so we can detect
 	 * a new OpenUSBByName on a multi slot reader */
