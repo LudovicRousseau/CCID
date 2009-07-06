@@ -281,6 +281,15 @@ AC_ARG_ENABLE(udev,
 	[udev="${enableval}"], [udev=no])
 AM_CONDITIONAL(UDEV, test "${udev}" != "no")
 
+# --disable-class
+AC_ARG_ENABLE(class,
+	AC_HELP_STRING([--disable-class],[remove the CCIDCLASSDRIVER from Info.plist]),
+	[class="${enableval}"], [class=yes])
+if test "${class}" != yes ; then
+	NOCLASS="--no-class"
+fi
+AC_SUBST(NOCLASS)
+
 
 # Setup dist stuff
 AC_SUBST(ac_aux_dir)
@@ -314,6 +323,7 @@ DYN_LIB_EXT:         ${DYN_LIB_EXT}
 LIBUSB_CFLAGS:       ${LIBUSB_CFLAGS}
 LIBUSB_LIBS:         ${LIBUSB_LIBS}
 SYMBOL_VISIBILITY:   ${SYMBOL_VISIBILITY}
+NOCLASS:             ${NOCLASS}
 
 libusb support:          ${use_libusb}
 use USB interrupt:       ${use_usb_interrupt}
@@ -325,6 +335,7 @@ serial Twin support:     ${twinserial}
 serial twin install dir: ${ccidtwindir}
 compiled for pcsc-lite:  ${pcsclite}
 udev support:            ${udev}
+class driver:            ${class}
 
 EOF
 
