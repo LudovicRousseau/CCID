@@ -119,6 +119,7 @@
 
 # Alcor Micro Corp.
 0x058F:0x9520:Alcor Micro AU9520
+0x058F:0x9520:Alcor Micro SCR001
 
 # RSA
 0x15E1:0x2007:RSA SecurID
