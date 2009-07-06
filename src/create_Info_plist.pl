@@ -40,8 +40,6 @@ GetOptions("ifdCapabilities=s" => \$ifdCapabilities,
 	"bundle=s" => \$bundle,
 	"no-class" => \$noclass);
 
-print "$class";
-
 if ($#ARGV < 1)
 {
 	print "usage: $0 supported_readers.txt Info.plist
