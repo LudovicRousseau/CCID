@@ -25,7 +25,7 @@
 	1: IFD_GENERATE_HOTPLUG
 	   plugging the reader calls pcscd \-\-hotplug
 
-	Default value is 0x00000001
+	Default value is 0x00000000
 	-->
 
 	<key>ifdProtocolSupport</key>
