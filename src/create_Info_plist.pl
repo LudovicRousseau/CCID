@@ -22,16 +22,31 @@
 
 use warnings;
 use strict;
+use Getopt::Long;
 
 my (@manuf, @product, @name);
 my ($manuf, $product, $name);
-my $ifdCapabilities;
+my $ifdCapabilities = "0x00000000";
+my $target = "libccid.so";
+my $version = "1.0.0";
+my $bundle = "ifd-ccid.bundle";
 
-if ($#ARGV ne 2)
+GetOptions("ifdCapabilities=s" => \$ifdCapabilities,
+	"target=s" => \$target,
+	"version=s" => \$version,
+	"bundle=s" => \$bundle);
+
+if ($#ARGV < 1)
 {
-	print "usage: $0 supported_readers.txt Info.plist ifdCapabilities\n";
+	print "usage: $0 supported_readers.txt Info.plist
+	--ifdCapabilities=$ifdCapabilities
+	--target=$target
+	--version=$version
+	--bundle=$bundle\n";
 	exit;
 }
+
+print "$ifdCapabilities";
 
 open IN, "< $ARGV[0]" or die "Can't open $ARGV[0]: $!";
 while (<IN>)
@@ -51,8 +66,6 @@ close IN;
 map { $_ = "\t\t<string>$_</string>\n" } @manuf;
 map { $_ = "\t\t<string>$_</string>\n" } @product;
 map { $_ = "\t\t<string>$_</string>\n" } @name;
-
-$ifdCapabilities=$ARGV[2];
 
 open IN, "< $ARGV[1]" or die "Can't open $ARGV[1]: $!";
 
@@ -76,6 +89,24 @@ while (<IN>)
 	if (m/MAGIC_IFDCAPABILITIES/)
 	{
 		s/MAGIC_IFDCAPABILITIES/$ifdCapabilities/;
+		print;
+		next;
+	}
+	if (m/MAGIC_TARGET/)
+	{
+		s/MAGIC_TARGET/$target/;
+		print;
+		next;
+	}
+	if (m/MAGIC_VERSION/)
+	{
+		s/MAGIC_VERSION/$version/;
+		print;
+		next;
+	}
+	if (m/MAGIC_BUNDLE/)
+	{
+		s/MAGIC_BUNDLE/$bundle/;
 		print;
 		next;
 	}
