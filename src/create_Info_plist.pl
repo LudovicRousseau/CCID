@@ -30,11 +30,17 @@ my $ifdCapabilities = "0x00000000";
 my $target = "libccid.so";
 my $version = "1.0.0";
 my $bundle = "ifd-ccid.bundle";
+my $class = "<key>CFBundleName</key>
+	<string>CCIDCLASSDRIVER</string>";
+my $noclass = 0;
 
 GetOptions("ifdCapabilities=s" => \$ifdCapabilities,
 	"target=s" => \$target,
 	"version=s" => \$version,
-	"bundle=s" => \$bundle);
+	"bundle=s" => \$bundle,
+	"no-class" => \$noclass);
+
+print "$class";
 
 if ($#ARGV < 1)
 {
@@ -45,8 +51,6 @@ if ($#ARGV < 1)
 	--bundle=$bundle\n";
 	exit;
 }
-
-print "$ifdCapabilities";
 
 open IN, "< $ARGV[0]" or die "Can't open $ARGV[0]: $!";
 while (<IN>)
@@ -107,6 +111,14 @@ while (<IN>)
 	if (m/MAGIC_BUNDLE/)
 	{
 		s/MAGIC_BUNDLE/$bundle/;
+		print;
+		next;
+	}
+	if (m/MAGIC_CLASS/)
+	{
+		next if ($noclass);
+
+		s/MAGIC_CLASS/$class/;
 		print;
 		next;
 	}

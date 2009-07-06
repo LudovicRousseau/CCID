@@ -10,6 +10,7 @@
 	<string>org.debian.alioth.pcsclite.smartcardccid</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	MAGIC_CLASS
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
