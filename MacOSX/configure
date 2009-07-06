@@ -78,6 +78,9 @@ CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-pcsclite"
 # simulate a composite device as multi slots
 CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-composite-as-multislot"
 
+# use a specific bundle name to NOT overwrite the official CCID driver
+#CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-bundle=ifd-ccid-foobar"
+
 set -x
 ./configure \
 	CFLAGS="$CFLAGS" \
