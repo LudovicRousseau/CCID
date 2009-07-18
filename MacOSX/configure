@@ -50,6 +50,10 @@ then
     echo "found libusb-config, using it"
     LIBUSB_CFLAGS=$(libusb-config --cflags)
     LIBUSB_LIBS=$(libusb-config --libs)
+	# if possible replace "-L/usr/local/lib -lusb"
+	# by "/usr/local/lib/libusb.a" to use a static link
+	LIBUSB_LIBS=${LIBUSB_LIBS/-L\/usr\/local\/lib -lusb//usr/local/lib/libusb.a}
+	echo $LIBUSB_LIBS
 else
     echo "no libusb-config found"
     # use libusb from OpenSC (universal binary)
