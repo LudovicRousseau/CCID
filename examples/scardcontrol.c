@@ -149,6 +149,7 @@ int main(int argc, char *argv[])
 	/* fill the readers table */
 	nbReaders = 0;
 	ptr = mszReaders;
+	printf("Available readers (use command line argument to select)\n");
 	while (*ptr != '\0')
 	{
 		printf("%d: %s\n", nbReaders, ptr);
@@ -156,6 +157,7 @@ int main(int argc, char *argv[])
 		ptr += strlen(ptr)+1;
 		nbReaders++;
 	}
+	printf("\n");
 
 	if (argc > 1)
 	{
@@ -171,6 +173,7 @@ int main(int argc, char *argv[])
 
 	/* connect to a reader (even without a card) */
 	dwActiveProtocol = -1;
+	printf("Using reader: %s\n", readers[reader_nb]);
 	rv = SCardConnect(hContext, readers[reader_nb], SCARD_SHARE_DIRECT,
 		SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &hCard, &dwActiveProtocol);
 	printf(" Protocol: %ld\n", dwActiveProtocol);
