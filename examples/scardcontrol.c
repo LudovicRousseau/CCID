@@ -223,10 +223,15 @@ int main(int argc, char *argv[])
 	pcsc_tlv = (PCSC_TLV_STRUCTURE *)bRecvBuffer;
 	for (i = 0; i < length; i++)
 	{
-		if (pcsc_tlv[i].tag == FEATURE_VERIFY_PIN_DIRECT)
-			verify_ioctl = ntohl(pcsc_tlv[i].value);
-		if (pcsc_tlv[i].tag == FEATURE_MODIFY_PIN_DIRECT)
-			modify_ioctl = ntohl(pcsc_tlv[i].value);
+		switch (pcsc_tlv[i].tag)
+		{
+			case FEATURE_VERIFY_PIN_DIRECT:
+				verify_ioctl = ntohl(pcsc_tlv[i].value);
+				break;
+			case FEATURE_MODIFY_PIN_DIRECT:
+				modify_ioctl = ntohl(pcsc_tlv[i].value);
+				break;
+		}
 	}
 
 	if (0 == verify_ioctl)
