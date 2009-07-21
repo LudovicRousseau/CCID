@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
 	DWORD send_length, length;
 	DWORD verify_ioctl = 0;
 	DWORD modify_ioctl = 0;
-	DWORD pin_properties = 0;
-	DWORD mct_readerdirect = 0;
+	DWORD pin_properties_ioctl = 0;
+	DWORD mct_readerdirect_ioctl = 0;
 	SCARD_IO_REQUEST pioRecvPci;
  	SCARD_IO_REQUEST pioSendPci;
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
 #ifdef MODIFY_PIN
 	PIN_MODIFY_STRUCTURE *pin_modify;
 #endif
+	char secoder_info[] = { 0x20, 0x70, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 
 	printf("SCardControl sample code\n");
 	printf("V 1.3 © 2004-2009, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
@@ -237,15 +238,29 @@ int main(int argc, char *argv[])
 				break;
 			case FEATURE_IFD_PIN_PROPERTIES:
 				printf("Reader supports FEATURE_IFD_PIN_PROPERTIES\n");
-				pin_properties = ntohl(pcsc_tlv[i].value);
+				pin_properties_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
 			case FEATURE_MCT_READERDIRECT:
 				printf("Reader supports FEATURE_MCT_READERDIRECT\n");
-				mct_readerdirect = ntohl(pcsc_tlv[i].value);
+				mct_readerdirect_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
 			default:
 				printf("Can't parse tag: 0x%02X\n", pcsc_tlv[i].tag);
 		}
+	}
+	printf("\n");
+
+	if (mct_readerdirect_ioctl)
+	{
+		rv = SCardControl(hCard, mct_readerdirect_ioctl, secoder_info,
+			sizeof(secoder_info), bRecvBuffer, sizeof(bRecvBuffer), &length);
+		PCSC_ERROR_CONT(rv, "SCardControl(MCT_READERDIRECT)")
+
+		printf("MCT_READERDIRECT (%ld): ", length);
+		for (i=0; i<length; i++)
+			printf("%02X ", bRecvBuffer[i]);
+		printf("\n");
+
 	}
 
 	if (0 == verify_ioctl)
