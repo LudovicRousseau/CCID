@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 #endif
 
 	printf("SCardControl sample code\n");
-	printf("V 1.3 2004-2008, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
+	printf("V 1.3 © 2004-2009, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
 
 	printf("\nTHIS PROGRAM IS NOT DESIGNED AS A TESTING TOOL!\n");
 	printf("Do NOT use it unless you really know what you do.\n\n");
