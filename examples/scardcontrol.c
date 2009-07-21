@@ -81,6 +81,8 @@ int main(int argc, char *argv[])
 	DWORD send_length, length;
 	DWORD verify_ioctl = 0;
 	DWORD modify_ioctl = 0;
+	DWORD pin_properties = 0;
+	DWORD mct_readerdirect = 0;
 	SCARD_IO_REQUEST pioRecvPci;
  	SCARD_IO_REQUEST pioSendPci;
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
@@ -226,11 +228,23 @@ int main(int argc, char *argv[])
 		switch (pcsc_tlv[i].tag)
 		{
 			case FEATURE_VERIFY_PIN_DIRECT:
+				printf("Reader supports FEATURE_VERIFY_PIN_DIRECT\n");
 				verify_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
 			case FEATURE_MODIFY_PIN_DIRECT:
+				printf("Reader supports FEATURE_MODIFY_PIN_DIRECT\n");
 				modify_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
+			case FEATURE_IFD_PIN_PROPERTIES:
+				printf("Reader supports FEATURE_IFD_PIN_PROPERTIES\n");
+				pin_properties = ntohl(pcsc_tlv[i].value);
+				break;
+			case FEATURE_MCT_READERDIRECT:
+				printf("Reader supports FEATURE_MCT_READERDIRECT\n");
+				mct_readerdirect = ntohl(pcsc_tlv[i].value);
+				break;
+			default:
+				printf("Can't parse tag: 0x%02X\n", pcsc_tlv[i].tag);
 		}
 	}
 
