@@ -199,26 +199,6 @@ int main(int argc, char *argv[])
 	PCSC_ERROR_CONT(rv, "SCardControl")
 #endif
 
-	/* get card status */
-	dwAtrLen = sizeof(pbAtr);
-	dwReaderLen = sizeof(pbReader);
-	rv = SCardStatus(hCard, pbReader, &dwReaderLen, &dwState, &dwProt,
-		pbAtr, &dwAtrLen);
-	printf(" Reader: %s (length %ld bytes)\n", pbReader, dwReaderLen);
-	printf(" State: 0x%04lX\n", dwState);
-	printf(" Prot: %ld\n", dwProt);
-	printf(" ATR (length %ld bytes):", dwAtrLen);
-	for (i=0; i<dwAtrLen; i++)
-		printf(" %02X", pbAtr[i]);
-	printf("\n");
-	PCSC_ERROR_CONT(rv, "SCardStatus")
-
-	if (dwState & SCARD_ABSENT)
-	{
-		printf("No card inserted\n");
-		goto end;
-	}
-
 	/* does the reader support PIN verification? */
 	rv = SCardControl(hCard, CM_IOCTL_GET_FEATURE_REQUEST, NULL, 0,
 		bRecvBuffer, sizeof(bRecvBuffer), &length);
@@ -253,6 +233,26 @@ int main(int argc, char *argv[])
 	{
 		printf("Reader %s does not support PIN verification\n",
 			readers[reader_nb]);
+		goto end;
+	}
+
+	/* get card status */
+	dwAtrLen = sizeof(pbAtr);
+	dwReaderLen = sizeof(pbReader);
+	rv = SCardStatus(hCard, pbReader, &dwReaderLen, &dwState, &dwProt,
+		pbAtr, &dwAtrLen);
+	printf(" Reader: %s (length %ld bytes)\n", pbReader, dwReaderLen);
+	printf(" State: 0x%04lX\n", dwState);
+	printf(" Prot: %ld\n", dwProt);
+	printf(" ATR (length %ld bytes):", dwAtrLen);
+	for (i=0; i<dwAtrLen; i++)
+		printf(" %02X", pbAtr[i]);
+	printf("\n");
+	PCSC_ERROR_CONT(rv, "SCardStatus")
+
+	if (dwState & SCARD_ABSENT)
+	{
+		printf("No card inserted\n");
 		goto end;
 	}
 
