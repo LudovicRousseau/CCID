@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
 	/* does the reader support PIN verification? */
 	rv = SCardControl(hCard, CM_IOCTL_GET_FEATURE_REQUEST, NULL, 0,
 		bRecvBuffer, sizeof(bRecvBuffer), &length);
+	PCSC_ERROR_EXIT(rv, "SCardControl")
 
 	printf(" TLV (%ld): ", length);
 	for (i=0; i<length; i++)
