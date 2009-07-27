@@ -216,7 +216,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		 */
 		if ((dirname = strstr(device, "libhal:")) != NULL)
 		{
-			char *p;
+			const char *p;
 
 #define HAL_HEADER "usb_device_"
 
@@ -241,9 +241,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 				&& (0 == strncmp(++p, "if", 2))
 			   )
 			{
-				/* terminate the serial number C-string */
-				*(p-1) = '\0';
-
 				/* convert the interface number */
 				interface_number = atoi(p+2);
 			}
