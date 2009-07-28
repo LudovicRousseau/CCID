@@ -287,6 +287,29 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.3.11 - 28 July 2009, Ludovic Rousseau
+    - add support of Raritan D2CIM-DVUSB VM/CCID, Feitian SCR301,
+      Softforum XecureHSM, 2 Neowave Weneo tokens, Synnix STD200, Aktiv
+      Rutoken ECP, Alcor Micro SCR001, ATMEL AT91SC192192CT-USB,
+      Panasonic USB Smart Card Reader 7A-Smart, Gemalto GemProx DU and SU
+    - remove support of Reiner-SCT cyberJack pinpad(a) on request of
+      Reiner-SCT.  You should user the Reiner-SCT driver instead
+    - define CFBundleName to CCIDCLASSDRIVER so that non class drivers
+      have a higher priority. Used by pcsc-lite 1.5.5 and up.
+      Add a --disable-class configure option so that the Info.plist does
+      not define a Class driver. Default is class driver.
+    - do not power up a card with a voltage not supported by the reader
+    - add support of PIN_PROPERTIES_STRUCTURE structure and
+      FEATURE_IFD_PIN_PROPERTIES
+    - adds support of FEATURE_MCT_READERDIRECT. Only the Kobil TriB@nk
+      reader supports this feature for now. This is used for the Secoder
+      functionality in connected mode.
+    - add support of a composite device. No change needed with libhal.
+      use --enable-composite-as-multislot on Mac OS X since libhal is
+      not available on Mac OS X or with libusb on Linux
+    - some minor bugs removed
+
+
 1.3.10 - 7 March 2009, Ludovic Rousseau
     - add support for MSI StarReader SMART, Noname reader (from
       Omnikey), Xiring Xi Sign PKI, Realtek 43 in 1 + Sim + Smart Card
