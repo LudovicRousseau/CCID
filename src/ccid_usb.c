@@ -973,10 +973,10 @@ int InterruptRead(int reader_index)
 	char buffer[8];
 	int timeout = 2*1000; /* 2 seconds */
 
-	DEBUG_PERIODIC("before");
+	DEBUG_PERIODIC2("before (%d)", reader_index);
 	ret = usb_interrupt_read(usbDevice[reader_index].handle,
 		usbDevice[reader_index].interrupt, buffer, sizeof(buffer), timeout);
-	DEBUG_PERIODIC2("after (%s)", usb_strerror());
+	DEBUG_PERIODIC3("after (%d) (%s)", reader_index, usb_strerror());
 
 	if (ret < 0)
 	{
