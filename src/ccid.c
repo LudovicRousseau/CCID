@@ -73,7 +73,8 @@ int ccid_open_hack_pre(unsigned int reader_index)
 	if (doInterruptRead && (0 == ccid_descriptor->bInterfaceProtocol))
 	{
 #ifndef TWIN_SERIAL
-		(void)InterruptRead(reader_index);
+		/* just wait for 10ms in case a notification is in the pipe */
+		(void)InterruptRead(reader_index, 10);
 #endif
 	}
 

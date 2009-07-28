@@ -303,7 +303,7 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
 	if (LogLevel & DEBUG_LEVEL_PERIODIC)
 		DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
 
-	ret = InterruptRead(reader_index);
+	ret = InterruptRead(reader_index, 2*1000);	/* 2 seconds */
 	if (ret > 0)
 		return IFD_SUCCESS;
 	if (0 == ret)

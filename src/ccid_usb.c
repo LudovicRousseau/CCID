@@ -965,13 +965,11 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
  *
  *					InterruptRead
  *
- *
  ****************************************************************************/
-int InterruptRead(int reader_index)
+int InterruptRead(int reader_index, int timeout /* in ms */)
 {
 	int ret;
 	char buffer[8];
-	int timeout = 2*1000; /* 2 seconds */
 
 	DEBUG_PERIODIC2("before (%d)", reader_index);
 	ret = usb_interrupt_read(usbDevice[reader_index].handle,
