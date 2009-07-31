@@ -1219,9 +1219,23 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		int readerID = get_ccid_descriptor(reader_index) -> readerID;
 
 		if (VENDOR_GEMALTO == GET_VENDOR(readerID))
+		{
+			char switch_interface[] = { 0x52, 0xF8, 0x04, 0x01, 0x00 };
+
 			/* get firmware version escape command */
 			if ((1 == TxLength) && (0x02 == TxBuffer[0]))
 				allowed = TRUE;
+
+			/* switch interface escape command on the GemProx DU
+			 * the next byte in the command is the interface:
+			 * 0x01 switch to contactless interface
+			 * 0x02 switch to contact interface
+			 */
+			if ((GEMALTOPROXDU == readerID)
+				&& (6 == TxLength)
+				&& (0 == memcmp(TxBuffer, switch_interface, sizeof(switch_interface))))
+				allowed = TRUE;
+		}
 
 		if (!allowed)
 		{
