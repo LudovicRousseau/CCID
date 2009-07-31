@@ -1215,7 +1215,15 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 	if (IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE == dwControlCode)
 	{
-		if (FALSE == (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED))
+		int allowed = (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED);
+		int readerID = get_ccid_descriptor(reader_index) -> readerID;
+
+		if (VENDOR_GEMALTO == GET_VENDOR(readerID))
+			/* get firmware version escape command */
+			if ((1 == TxLength) && (0x02 == TxBuffer[0]))
+				allowed = TRUE;
+
+		if (!allowed)
 		{
 			DEBUG_INFO("ifd exchange (Escape command) not allowed");
 			return_value = IFD_COMMUNICATION_ERROR;
