@@ -1199,12 +1199,12 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	 *
 	 * Notes: RxLength should be zero on error.
 	 */
-	RESPONSECODE return_value = IFD_COMMUNICATION_ERROR;
+	RESPONSECODE return_value = IFD_ERROR_NOT_SUPPORTED;
 	int reader_index;
 
 	reader_index = LunToReaderIndex(Lun);
 	if ((-1 == reader_index) || (NULL == pdwBytesReturned))
-		return return_value;
+		return IFD_COMMUNICATION_ERROR;
 
 	DEBUG_INFO4("ControlCode: 0x%X, %s (lun: %X)", dwControlCode,
 		CcidSlots[reader_index].readerName, Lun);
