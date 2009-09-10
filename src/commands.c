@@ -346,7 +346,8 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 	}
 
-	if (DELLSCRK == ccid_descriptor->readerID)
+	if ((DELLSCRK == ccid_descriptor->readerID)
+		|| (DELLSK == ccid_descriptor->readerID))
 	{
 		/* the firmware rejects the cases: 01h-FEh and FFh default
 		 * CCID message. The only value supported is 00h (no message) */
@@ -356,6 +357,17 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 				TxBuffer[8]);
 			TxBuffer[8] = 0x00;
 		}
+	}
+
+	if (DELLSK == ccid_descriptor->readerID)
+	{
+		/* the 2 bytes of wPINMaxExtraDigit are reversed */
+		int tmp;
+
+		tmp = TxBuffer[6];
+		TxBuffer[6] = TxBuffer[5];
+		TxBuffer[5] = tmp;
+		DEBUG_INFO("Correcting wPINMaxExtraDigit for Dell keyboard");
 	}
 #endif
 
