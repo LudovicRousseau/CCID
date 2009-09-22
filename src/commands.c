@@ -357,6 +357,10 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 				TxBuffer[8]);
 			TxBuffer[8] = 0x00;
 		}
+
+		/* avoid the command rejection because the Enter key is still
+		 * pressed. Wait a bit for the key to be released */
+		(void)usleep(250*1000);
 	}
 
 	if (DELLSK == ccid_descriptor->readerID)
