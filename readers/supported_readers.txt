@@ -74,6 +74,7 @@
 0x046a:0x003E:Cherry SmartTerminal ST-2XXX
 0x046A:0x005B:Cherry SmartBoard XX1X
 0x046A:0x0070:Cherry SmartTerminal XX1X
+0x046A:0x0072:Cherry SmartTerminal XX7X
 
 # Advanced Card Systems
 0x072f:0x90cc:ACS ACR 38U-CCID
