@@ -230,14 +230,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 				/* skip the HAL header */
 				&& (p += sizeof(HAL_HEADER)-1)
 
-				/* search the '_' before PID */
-				&& (p = strchr(++p, '_'))
-
-				/* search the '_' before SERIAL */
-				&& (p = strchr(++p, '_'))
-
-				/* search the '_' before ifX */
-				&& (p = strchr(++p, '_'))
+				/* search the last '_' */
+				&& (p = strrchr(++p, '_'))
 				&& (0 == strncmp(++p, "if", 2))
 			   )
 			{
