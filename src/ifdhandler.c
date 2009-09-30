@@ -1323,8 +1323,6 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 		/* Only give the LCD size for now */
 		caps -> wLcdLayout = get_ccid_descriptor(reader_index) -> wLcdLayout;
-		caps -> wLcdMaxCharacters = 0x0000;
-		caps -> wLcdMaxLines = 0x0000; 
 		caps -> bEntryValidationCondition = 0x07; /* Default */
 		caps -> bTimeOut2 = 0x00; /* We do not distinguish bTimeOut from TimeOut2 */
 
