@@ -1261,7 +1261,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		unsigned int iBytesReturned = 0;
 		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
 
-		/* we need room for up to for records */
+		/* we need room for up to four records */
 		if (RxLength < 4 * sizeof(PCSC_TLV_STRUCTURE))
 			return IFD_COMMUNICATION_ERROR;
 
