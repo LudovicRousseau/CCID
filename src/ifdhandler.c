@@ -967,7 +967,10 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			}
 
 		/* IFSD not negociated by the reader? */
-		if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD))
+		if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD)
+			/* and reader is in Character or TPDU mode? */
+			&& (((ccid_desc->dwFeatures & CCID_CLASS_EXCHANGE_MASK) == CCID_CLASS_CHARACTER)
+			|| ((ccid_desc->dwFeatures & CCID_CLASS_EXCHANGE_MASK) == CCID_CLASS_TPDU)))
 		{
 			DEBUG_COMM2("Negociate IFSD at %d", ccid_desc -> dwMaxIFSD);
 			if (t1_negotiate_ifsd(t1, 0, ccid_desc -> dwMaxIFSD) < 0)
