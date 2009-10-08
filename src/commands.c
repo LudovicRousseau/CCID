@@ -49,7 +49,6 @@
 
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-#define IFD_ERROR_INSUFFICIENT_BUFFER 700
 
 /* internal functions */
 static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
