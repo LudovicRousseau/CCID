@@ -5,6 +5,7 @@ USB CCID IFD Handler
 (Chip/Smart Card Interface Devices) driver. See [1] for the USB CCID
 specifications from the USB working group.
 
+[1] http://www.usb.org/developers/devclass_docs/ccid_classspec_1_00a.pdf
 
 Authors:
 ========
@@ -19,67 +20,7 @@ Authors:
 Supported CCID readers:
 =======================
 
-(in alphabetical order)
-- ActivCard USB reader 3.0
-- ActivCard Activkey Sim [66]
-- Advanced Card Systems ACR 38U-CCID [16]
-  old versions of this reader have a bug: the reader do timeout when a
-  special USB frame is sent from the reader. If the frame size if a
-  multiple of wMaxPacketSize the communication is stopped.
-- Alcor Micro AU9520 [46]
-  Firmware 1.01 is bogus. The time request sent by the card is not
-  forwarded by the reader to the host.
-- Athena ASE IIIe USB V2 [29]
-- Athena ASE IIIe KB USB [42]
-- Blutronics Bludrive II CCID
-- C3PO LTC31 (new model, USB product id 0x0006) [8]
-- Cherry XX33 keyboard [?]
-- Cherry XX44 keyboard (SmartBoard G83-6744) [18] 
-- Cherry SmartTerminal ST2000U [35]
-- Cherry ST-1044U [27]
-- Covadis Alya [63]
-- Dell keyboard SK-3106 [?]
-- Dell smart card reader keyboard [?]
-- Eutron CryptoIdentity [26]
-- Eutron Digipass 860 [59]
-- Eutron SIM Pocket Combo [25]
-- Eutron Smart Pocket [58]
-- Gemalto GemPC 433 SL [2] (old name: GemPC 433 SL)
-- Gemalto GemPC Card [41]
-- Gemalto GemPC PinPad [67]
-- Gemalto GemPC Twin [4]
-- Gemalto GemCore POS Pro
-- Gemalto GemCore SIM Pro
-- Gemalto USB Shell Token V2 [3] (old name GemPC Key)
-- Kobil KAAN Base [19]
-- Kobil KAAN Advanced [20]
-- Kobil KAAN SIM III [21]
-- Kobil EMV TriCAP Reader [68]
-- Kobil KAAN TriB@nk [69]
-- Kobil SecOVID Reader III [70]
-- Lexar Smart Enterprise Guardian [71]
-- OmniKey CardMan 3121 [5]
-- RSA SecureID SID800 [50]
-- SCM Micro SCR 331 [6]
-  You shall upgrade the firmware [17] using version 5.18 or later.
-- SCM Micro SCR 331-DI [11]
-  You shall upgrade the firmware [17] using version 6.22 or later.
-- SCM Micro SCR 3310 [30]
-- SCM Micro SCR 3311 [31]
-- SCM Micro SCR 335 [7]
-  The firmware of this reader can't be upgraded so be sure to buy a
-  recent model with firmware 5.14 or later
-- SCM Micro SCR 355
-- SCM Micro SPR 532 [9]
-  You shall contact Torsten Maykranz <tmaykranz@scmmicro.de> to get a
-  firmware upgrade.
-- SmartEpad (v 2.0) [32]
-  The firmware gives a very strange description of the reader (like a
-  dwDefaultClock: 1024.000 MHz). So do not expect a perfect behavior.
-- Verisign Secure Storage Token [24]
-- Verisign Secure Token [?]
-- Xiring Teo [52]
-- Xiring Xi Sign PKI [76]
+The list is available at http://pcsclite.alioth.debian.org/supported.html
 
 
 Should work but untested by me:
@@ -89,108 +30,13 @@ I would like to get these readers to perform test and validation and
 move them in the supported list above. If you are one of the
 manufacturers, please, contact me.
 
-- Advanced Card Systems ACR122 [62]
-- Advanced Card Systems ACR122U PICC Interface
-- Aktiv Rutoken Magistra
-- Aladdin eToken PRO USB 72K Java [73]
-- Axalto Reflex USB v3 [38]
-- Atmel AT91SO [74]
-- Atmel AT98SC032CT [77]
-- C3PO LTC32 [13]
-- C3PO TLTC2USB
-- C3PO KBR36
-- Charismathics token
-- Cherry SmartBoard, G83-6610 [61]
-- Cherry SmartTerminal ST-1200USB
-- Covadis Véga [64]
-- Gemalto GemPC Express
-- Gemalto Gem e-Seal Pro
-- Fujitsu Siemens Computers SmartCard USB 2A [53]
-- Fujitsu Siemens Computers SmartCard Keyboard USB 2A [54]
-- Gemalto PDT
-- Giesecke & Devrient StarSign Card Token 350 (ICCD) [57]
-- Giesecke & Devrient StarSign Card Token 550 (ICCD)
-- HP USB Smart Card Keyboard [44]
-- HP USB Smartcard Reader
-- HP MFP Smart Card Reader
-- id3 Semiconductors CL1356D [45] (tested by me but I don't have the
-  reader anymore)
-- id3 Semiconductors CL1356T [48] (it should be the same firmware as the
-  CL1356D)
-- id3 Semiconductors CL1356A HID
-- iMONO 43 in 1 + Sim + Smart Card Reader 
-- KONA USB SmartCard
-- Lenovo Integrated Smart Card Reader
-- Lexar/Gemalto Smart Enterprise Guardian [60]
-- MSI StarReader SMART [75]
-- O2Micro Oz776 (0x7762 and 0x7772 versions)
-- Oberthur ID-One Cosmo Card
-- OmniKey CardMan 1021
-- OmniKey CardMan 3021 [49]
-- OmniKey CardMan 3621 [43]
-- OmniKey CardMan 3821 [37]
-- OmniKey CardMan 4321 [55]
-- OmniKey CardMan 5121 [33]
-- OmniKey CardMan 5125 [51]
-- OmniKey CardMan 5321 [56]
-- OmniKey CardMan 6121 [36]
-- Philips JCOP41V221
-- Philips SmartMX (Rainbow/SafeNet Key 4000?)
-- Precise Biometrics 200 MC
-- Precise Biometrics 250 MC
-- Raritan D2CIM-DVUSB VM/CCID
-- SchlumbergerSema Cyberflex Access e-gate ICCD
-- SCM Micro SCR 331-DI NTTCom [23]
-- SCM Micro SCR 3310-NTTCOM [28]
-- SCM Micro SCR 3320 [31b]
-- SCM Micro SCR 333 [15]
-- SCM Micro SCR 3340 ExpressCard54 [34]
-- SCM Micro SDI 010 [39]
-- Silitek SK-3105 keyboard [12] or C3PO TLTC2USB [14]
-- Sitecom USB simcard reader MD-010
-- SpringCard CrazyWriter
-- SpringCard CSB6 Basic
-- SpringCard CSB6 Secure
-- SpringCard CSB6 Ultimate [72]
-- SpringCard EasyFinger Standard
-- SpringCard EasyFinger Ultimate
-- SpringCard Prox'N'Roll
-- TianYu CCID SmartKey
-- Validy USB Token [65]
-- Vasco DP905
-- VMware Virtual USB CCID
-- Winbond Electronics (for OEM only) [40]
+The list is available at http://pcsclite.alioth.debian.org/shouldwork.html
 
 
 Unsupported or partly supported CCID readers:
 =============================================
 
-- ActivCard USB reader 2.0 [10]
-    The reader do timeout when a special USB frame is sent from the
-    reader. If the frame size if a multiple of wMaxPacketSize the
-    communication is stopped.
-- Broadcom Corp 5880 (found in Dell E6500 laptop)
-    No communication to the device ("Resource temporarily unavailable"
-    error)
-- C3PO LTC31 (old model, USB product id 0x0003) [8]
-    The reader works fine with Linux kernel 2.4 but does not with Linux
-    kernel 2.6. The ioctl() syscall returns EINVAL (Invalid argument)
-- iDream (THRC2002-2) [47]
-    PPS fails with a Cryptoflex card
-    powerup fails with a Setcos card
-    does work with the belgium eID (the reader is sold for this
-    application)
-- jNet Technology jToken s1
-    Reader does not respond at all
-- Kobil mIDentity [22]
-    Time requests are not managed correctly and make the firmware fails.
-    This is not a problem unless you use a time-consuming APDU like RSA
-    key generation.
-    A new firmware will correct the bug.
-- Reiner-SCT cyberJack pinpad(a)
-    Time requests are not managed and the driver may time out without
-    any response from the reader.  This is not a problem unless you use
-    a time-consuming APDU like RSA key generation.
+The list is available at http://pcsclite.alioth.debian.org/unsupported.html
 
 
 Supported operating systems:
@@ -718,88 +564,6 @@ History:
 0.1.0 - 13 August 2003, Ludovic Rousseau
     - First public release
 
-
-References:
-===========
-
-[1] http://www.usb.org/developers/devclass_docs/ccid_classspec_1_00a.pdf
-[2] http://www.gemalto.com/products/pc_usb_sl/
-[3] http://www.gemalto.com/products/usb_shell_token_v2/
-[4] http://www.gemalto.com/products/pctwin/
-[5] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=21
-[6] http://scmmicro.com/security/view_product_en.php?PID=3
-[7] http://scmmicro.com/security/view_product_en.php?PID=11
-[8] http://www.c3po.es/ltc31.html
-[9] http://scmmicro.com/security/view_product_en.php?PID=13
-[10] http://www.activcard.com/products/usb_reader.html
-[11] http://www.scmmicro.com/security/SCR331-DI.html
-[12] http://www.silitek.com/prod/getProduct.do?xml_id=4_2&menu_id=4_2_8&cid=1_8_5
-[13] http://www.c3po.es/ltc32.html
-[14] http://www.c3po.es/tltc2usb.html
-[15] http://scmmicro.com/security/view_product_en.php?PID=10
-[16] http://www.acs.com.hk/Product_Readers.asp?productID=107&PCate=Products_PC_Linked_SmartCard_Readers
-[17] http://www.scmmicro.com/support/pcs_downloads.php
-[18] http://www.cherrycorp.com/english/advanced-line/advanced-line_smartboard_g83-6744.htm
-[19] http://www.kobil.com/e/products/smartcard/kaan-base.php
-[20] http://www.kobil.com/e/products/smartcard/kaan-advanced.php
-[21] http://www.kobil.com/d/products/smartcard/kaansim3.php
-[22] http://www.kobil.com/e/products/index.php?s=midentity
-[23] http://www.ntt.com/jpki/SCR331DI.html
-[24] http://www.verisign.co.uk/products-services/security-services/unified-authentication/usb-tokens/
-[25] http://www.eutron.com/simpocket.asp
-[26] http://www.cryptoidentity.eutron.com/eng/home.asp
-[27] http://www.cherry.de/english/advanced-line/advanced_smartterminal_st-1044u.htm
-[28] http://www.ntt.com/jpki/scr3310.html
-[29] http://www.asedrive.com/product.asp?pid=1
-[30] http://scmmicro.com/security/view_product_en.php?PID=4
-[31] http://scmmicro.com/security/view_product_en.php?PID=5
-[31b] http://scmmicro.com/security/view_product_en.php?PID=6
-[32] http://www.smartepad.com.br/
-[33] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=37
-[34] http://scmmicro.com/security/view_product_en.php?PID=7
-[35] http://www.cherry.de/deutsch/advanced-line/advanced_smart_terminal_st-2000u.htm
-[36] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=29
-[37] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=33
-[38] http://www.reflexreaders.com/Products/reflex_usbnew.html
-[39] http://scmmicro.com/security/view_product_en.php?PID=19
-[40] http://www.winbond.com.tw/E-WINBONDHTM/partner/b_2_e_4.htm
-[41] http://www.gemplus.com/products/gempc_card/
-[42] http://www.asedrive.com/product.asp?pid=2
-[43] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=31
-[44] http://h18000.www1.hp.com/products/quickspecs/12346_na/12346_na.HTML
-[45] http://www.id3semiconductors.com/produits/cl1356D.htm
-[46] http://www.alcormicro.com/products_detail.php?main_id=8&p_id=21
-[47] http://www.tai-hao.com/english/products_detail.php?main_id=4&second_id=13&p_id=53&now_rows=1
-[48] http://www.id3semiconductors.com/produits/cl1356T.htm
-[49] http://www.omnikey.com/index.php?id=products&tx_okprod_pi1[product]=48
-[50] http://www.rsa.com/products/securid/datasheets/SID800_DS_0507.pdf
-[51] http://www.omnikey.com/?id=products&tx_okprod_pi1[product]=39
-[52] http://www.teobyxiring.com/
-[53] http://www.fujitsu-siemens.com/solutions/business_solutions/security/security_products/smartcase_scr_usbex.html
-[54] http://www.fujitsu-siemens.com/solutions/business_solutions/security/security_products/smartcase_kbpc_cx.html
-[55] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=50
-[56] http://omnikey.aaitg.com/?id=products&tx_okprod_pi1[product]=41
-[57] http://www.gi-de.com/portal/page?_pageid=42,126834&_dad=portal&_schema=PORTAL
-[58] http://www.eutronsec.com/infosecurity/Contents/ProductLine/Details.aspx?IDProd=26&IDFamiglia=3
-[59] http://www.eutronsec.com/infosecurity/Contents/ProductLine/Details.aspx?IDProd=62&IDFamiglia=39
-[60] http://www.lexar.com/enterprise/ent_ppsd.html
-[61] http://www.cherry.de/deutsch/produkte/chipkartentastaturen_g-6610.htm
-[62] http://acs.com.hk/acr122.php
-[63] http://covadis.ch/Alya.239.0.html
-[64] http://covadis.ch/Vega.104.0.html
-[65] http://www.validy.com/en/products/token/
-[66] http://www.actividentity.com/products/activkey_usb_tokens__home.php
-[67] http://www.gemalto.com/products/pc_pinpad/
-[68] http://www.kobil.com/index.php?id=71&type=7&L
-[69] http://www.kobil.com/index.php?id=555&type=7&L=0
-[70] http://www.kobil.com/index.php?id=128&type=7&L=1%22
-[71] http://www.lexar.com/enterprise/ent_ppsd.html
-[72] http://www.springcard.com/products/csb6.html
-[73] http://www.aladdin.com/etoken/devices/pro-usb.aspx
-[74] http://www.atmel.com/dyn/products/tools_card.asp?tool_id=3981
-[75] http://global.msi.com.tw/index.php?func=proddesc&maincat_no=132&prod_no=1411
-[76] http://www.xiring.com/pageLibre00012c0e.php
-[77] http://www.atmel.com/dyn/products/product_card.asp?part_id=4063
 
 $Id$
 
