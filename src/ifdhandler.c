@@ -356,6 +356,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	 * IFD_SUCCESS IFD_ERROR_TAG
 	 */
 	int reader_index;
+	RESPONSECODE return_value = IFD_SUCCESS;
 
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
@@ -370,11 +371,14 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			/* If Length is not zero, powerICC has been performed.
 			 * Otherwise, return NULL pointer
 			 * Buffer size is stored in *Length */
-			*Length = (*Length < CcidSlots[reader_index].nATRLength) ?
-				*Length : CcidSlots[reader_index].nATRLength;
+			if (*Length >= CcidSlots[reader_index].nATRLength)
+			{
+				*Length = CcidSlots[reader_index].nATRLength;
 
-			if (*Length)
 				memcpy(Value, CcidSlots[reader_index].pcATRBuffer, *Length);
+			}
+			else
+				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 
 #ifdef HAVE_PTHREAD
@@ -384,6 +388,8 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Length = 1;
 				*Value = CCID_DRIVER_MAX_READERS;
 			}
+			else
+				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 
 		case TAG_IFD_THREAD_SAFE:
@@ -396,6 +402,8 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Value = 1; /* Can talk to multiple readers at the same time */
 #endif
 			}
+			else
+				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 #endif
 
@@ -417,6 +425,8 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 #endif
 				DEBUG_INFO2("Reader supports %d slot(s)", *Value);
 			}
+			else
+				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 
 		case TAG_IFD_SLOT_THREAD_SAFE:
@@ -425,6 +435,8 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Length = 1;
 				*Value = 0; /* Can NOT talk to multiple slots at the same time */
 			}
+			else
+				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 
 		case SCARD_ATTR_VENDOR_IFD_VERSION:
@@ -438,9 +450,14 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 
 		case SCARD_ATTR_VENDOR_NAME:
 #define VENDOR_NAME "Ludovic Rousseau"
-			*Length = sizeof(VENDOR_NAME);
-			if (Value)
-				memcpy(Value, VENDOR_NAME, sizeof(VENDOR_NAME));
+			if (*Length >= sizeof(VENDOR_NAME))
+			{
+				*Length = sizeof(VENDOR_NAME);
+				if (Value)
+					memcpy(Value, VENDOR_NAME, sizeof(VENDOR_NAME));
+			}
+			else
+				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 
 		case SCARD_ATTR_MAXINPUT:
@@ -498,10 +515,10 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 #endif
 
 		default:
-			return IFD_ERROR_TAG;
+			return_value = IFD_ERROR_TAG;
 	}
 
-	return IFD_SUCCESS;
+	return return_value;
 } /* IFDHGetCapabilities */
 
 
@@ -1263,7 +1280,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 		/* we need room for up to four records */
 		if (RxLength < 4 * sizeof(PCSC_TLV_STRUCTURE))
-			return IFD_COMMUNICATION_ERROR;
+			return IFD_ERROR_INSUFFICIENT_BUFFER;
 
 		/* We can only support direct verify and/or modify currently */
 		if (get_ccid_descriptor(reader_index) -> bPINSupport
@@ -1319,7 +1336,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		PIN_PROPERTIES_STRUCTURE *caps = (PIN_PROPERTIES_STRUCTURE *)RxBuffer;
 
 		if (RxLength < sizeof(PIN_PROPERTIES_STRUCTURE))
-			return IFD_COMMUNICATION_ERROR;
+			return IFD_ERROR_INSUFFICIENT_BUFFER;
 
 		/* Only give the LCD size for now */
 		caps -> wLcdLayout = get_ccid_descriptor(reader_index) -> wLcdLayout;
