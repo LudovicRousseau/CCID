@@ -1305,7 +1305,6 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
 
-#ifdef FEATURE_IFD_PIN_PROPERTIES
 		/* We can always forward wLcdLayout */
 		pcsc_tlv -> tag = FEATURE_IFD_PIN_PROPERTIES;
 		pcsc_tlv -> length = 0x04; /* always 0x04 */
@@ -1313,7 +1312,6 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 		pcsc_tlv++;
 		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
-#endif
 
 		if (KOBIL_TRIBANK == get_ccid_descriptor(reader_index) -> readerID)
 		{
@@ -1329,7 +1327,6 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		return_value = IFD_SUCCESS;
 	}
 
-#ifdef FEATURE_IFD_PIN_PROPERTIES
 	/* Get PIN handling capabilities */
 	if (IOCTL_FEATURE_IFD_PIN_PROPERTIES == dwControlCode)
 	{
@@ -1346,7 +1343,6 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		*pdwBytesReturned = sizeof(*caps);
 		return_value = IFD_SUCCESS;
 	}
-#endif
 
 	/* Verify a PIN, plain CCID */
 	if (IOCTL_FEATURE_VERIFY_PIN_DIRECT == dwControlCode)
