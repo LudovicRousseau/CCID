@@ -434,7 +434,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 					if (dev_handle == NULL)
 					{
 						DEBUG_CRITICAL4("Can't usb_open(%s/%s): %s",
-							bus->dirname, dev->filename, strerror(errno));
+							bus->dirname, dev->filename, usb_strerror());
 
 						continue;
 					}
@@ -485,7 +485,7 @@ again:
 					{
 						(void)usb_close(dev_handle);
 						DEBUG_CRITICAL4("Can't claim interface %s/%s: %s",
-							bus->dirname, dev->filename, strerror(errno));
+							bus->dirname, dev->filename, usb_strerror());
 						interface_number = -1;
 						continue;
 					}
@@ -587,7 +587,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	{
 		DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
 			usbDevice[reader_index].dirname, usbDevice[reader_index].filename,
-			strerror(errno));
+			usb_strerror());
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -625,7 +625,7 @@ read_again:
 		*length = 0;
 		DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
 			usbDevice[reader_index].dirname, usbDevice[reader_index].filename,
-			strerror(errno));
+			usb_strerror());
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -884,7 +884,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	if (n <= 0)
 	{
 		DEBUG_INFO2("IFD does not support GET_DATA_RATES request: %s",
-			strerror(errno));
+			usb_strerror());
 		return NULL;
 	}
 
@@ -976,7 +976,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 		if ((errno != EILSEQ) && (errno != EAGAIN) && (errno != ENODEV) && (errno != 0))
 			DEBUG_COMM4("usb_interrupt_read(%s/%s): %s",
 					usbDevice[reader_index].dirname,
-					usbDevice[reader_index].filename, strerror(errno));
+					usbDevice[reader_index].filename, usb_strerror());
 	}
 	else
 		DEBUG_XXD("NotifySlotChange: ", buffer, ret);
