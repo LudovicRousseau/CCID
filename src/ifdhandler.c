@@ -381,6 +381,16 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 
+		case SCARD_ATTR_ICC_INTERFACE_STATUS:
+			*Length = 1;
+			if (IFD_ICC_PRESENT == IFDHICCPresence(Lun))
+				/* nonzero if contact is active */
+				*Value = 1;
+			else
+				/* smart card electrical contact is not active */
+				*Value = 0;
+			break;
+
 #ifdef HAVE_PTHREAD
 		case TAG_IFD_SIMULTANEOUS_ACCESS:
 			if (*Length >= 1)
