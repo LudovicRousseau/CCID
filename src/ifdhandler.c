@@ -391,6 +391,23 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Value = 0;
 			break;
 
+		case SCARD_ATTR_ICC_PRESENCE:
+			*Length = 1;
+			/* Single byte indicating smart card presence:
+			 * 0 = not present
+			 * 1 = card present but not swallowed (applies only if
+			 *     reader supports smart card swallowing)
+			 * 2 = card present (and swallowed if reader supports smart
+			 *     card swallowing)
+			 * 4 = card confiscated. */
+			if (IFD_ICC_PRESENT == IFDHICCPresence(Lun))
+				/* Card present */
+				*Value = 2;
+			else
+				/* Not present */
+				*Value = 0;
+			break;
+			
 #ifdef HAVE_PTHREAD
 		case TAG_IFD_SIMULTANEOUS_ACCESS:
 			if (*Length >= 1)
