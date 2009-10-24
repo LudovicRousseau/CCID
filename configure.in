@@ -49,12 +49,11 @@ PKG_CHECK_EXISTS([libpcsclite],
 
 saved_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $PCSC_CFLAGS"
-AC_CHECK_HEADER(ifdhandler.h,,
-	[AC_MSG_ERROR([ifdhandler.h not found, install pcsc-lite $PCSC_NEEDED_VERSION or later, or use ./configure PCSC_CFLAGS=...])])
-AC_CHECK_DECL(IFD_NO_SUCH_DEVICE,, [AC_MSG_ERROR([install pcsc-lite $PCSC_NEEDED_VERSION or later])], [#include <ifdhandler.h>])
-AC_CHECK_DECLS(TAG_IFD_POLLING_THREAD,,, [#include <ifdhandler.h>])
-AC_CHECK_HEADER(reader.h,,
-	[AC_MSG_ERROR([reader.h not found, install pcsc-lite $PCSC_NEEDED_VERSION or later, or use ./configure PCSC_CFLAGS=...])])
+PCSC_ERROR_MSG="install pcsc-lite $PCSC_NEEDED_VERSION or later, or use ./configure PCSC_CFLAGS=..."
+AC_CHECK_HEADER(ifdhandler.h,, [AC_MSG_ERROR([$PCSC_ERROR_MSG])])
+AC_CHECK_DECLS([IFD_NO_SUCH_DEVICE, TAG_IFD_POLLING_THREAD, IFD_ERROR_INSUFFICIENT_BUFFER],,
+	[AC_MSG_ERROR([$PCSC_ERROR_MSG])], [#include <ifdhandler.h>])
+AC_CHECK_HEADER(reader.h,, [AC_MSG_ERROR([$PCSC_ERROR_MSG])])
 CPPFLAGS="$saved_CPPFLAGS"
 
 # Add libtool support.
