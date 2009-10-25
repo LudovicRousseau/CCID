@@ -66,16 +66,9 @@ typedef enum {
 /* Flag set when a power down is requested */
 #define MASK_POWERFLAGS_PDWN 0x02
 
-/* Kobil readers does not support APDU chaining for T=1 so you can't send an
- * extended APDU. The readers supports a command of up to 512 or 420 bytes.
- * For a Kobil KAAN Base/advanced reader you should use
- *  #define CMD_BUF_SIZE 420
- * For the other models you should use
- *  #define CMD_BUF_SIZE 512
- * Kobil is aware of the problem and do not plan to solve it.
- */
-/* Communication buffer size (max=adpu+Lc+data+Le) */
-#define CMD_BUF_SIZE (4+1+256+1)
+/* Communication buffer size (max=adpu+Lc+data+Le)
+ * we use a 64kB for extended APDU on APDU mode readers */
+#define CMD_BUF_SIZE (4 +3 +64*1024 +3)
 
 /* Protocols */
 #define T_0 0
