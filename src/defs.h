@@ -83,15 +83,6 @@ typedef enum {
 #define T_0 0
 #define T_1 1
 
-/* Size of an ISO command (CLA+INS+P1+P2) */
-#define ISO_CMD_SIZE 4
-/* Offset of the length byte in an TPDU */
-#define ISO_OFFSET_LENGTH 4
-/* Offset of the data in a TPDU */
-#define ISO_OFFSET_TPDU_DATA 5
-/* ISO length size (1 in general) */
-#define ISO_LENGTH_SIZE 1
-
 /* Default communication read timeout in seconds */
 #define DEFAULT_COM_READ_TIMEOUT 2
 
