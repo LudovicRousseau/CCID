@@ -76,8 +76,6 @@ typedef enum {
  */
 /* Communication buffer size (max=adpu+Lc+data+Le) */
 #define CMD_BUF_SIZE (4+1+256+1)
-/* Larger communication buffer size (max=reader status+data+sw) */
-#define RESP_BUF_SIZE (1+256+2)
 
 /* Protocols */
 #define T_0 0
