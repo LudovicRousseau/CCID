@@ -1013,20 +1013,12 @@ again_status:
 		return IFD_COMMUNICATION_ERROR;
 	}
 
-	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
-	{
-#ifdef O2MICRO_OZ776_PATCH
-		/* the O2MICRO OZ 776 reader sends card absent or mute errors
-		 * when no card is inserted */
-		if (! (((OZ776 == ccid_descriptor->readerID)
-			|| (OZ776_7772 == ccid_descriptor->readerID))
-			&& (buffer[ERROR_OFFSET] == 0xFE)))
-#endif
-		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
-
+	if ((buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 		/* card absent or mute is not an communication error */
-		if (buffer[ERROR_OFFSET] != 0xFE)
-			return_value = IFD_COMMUNICATION_ERROR;
+		&& (buffer[ERROR_OFFSET] != 0xFE))
+	{
+		return_value = IFD_COMMUNICATION_ERROR;
+		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 	}
 
 	return return_value;
