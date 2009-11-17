@@ -323,7 +323,8 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 #ifdef BOGUS_PINPAD_FIRMWARE
 	/* bug circumvention for the GemPC Pinpad */
-	if (GEMPCPINPAD == ccid_descriptor->readerID)
+	if ((GEMPCPINPAD == ccid_descriptor->readerID)
+		|| (VEGAALPHA == ccid_descriptor->readerID))
 	{
 		/* the firmware reject the cases: 00h No string and FFh default
 		 * CCID message. The only value supported is 01h (display 1 message) */
@@ -569,7 +570,8 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	}
 
 	/* bug circumvention for the GemPC Pinpad */
-	if (GEMPCPINPAD == ccid_descriptor->readerID)
+	if ((GEMPCPINPAD == ccid_descriptor->readerID)
+		|| (VEGAALPHA == ccid_descriptor->readerID))
 	{
 		/* The reader does not support, and actively reject, "max size reached"
 		 * and "timeout occured" validation conditions */
@@ -662,7 +664,8 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		cmd[21] = 0x00; /* set bNumberMessages to 0 */
 	}
 
-	if (GEMPCPINPAD == ccid_descriptor->readerID)
+	if ((GEMPCPINPAD == ccid_descriptor->readerID)
+		|| (VEGAALPHA == ccid_descriptor->readerID))
 		cmd[21] = bNumberMessages;	/* restore the real value */
 #endif
 

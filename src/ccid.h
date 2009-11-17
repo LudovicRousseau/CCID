@@ -181,6 +181,7 @@ typedef struct
 #define DELLSCRK    0x413C2101
 #define DELLSK      0x413C2100
 #define KOBIL_TRIBANK	0x0D463010
+#define VEGAALPHA   0x09820008
 
 #define VENDOR_GEMALTO 0x08E6
 #define GET_VENDOR(readerID) ((readerID >> 16) & 0xFFFF)

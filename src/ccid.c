@@ -139,6 +139,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 			}
 			break;
 
+		case VEGAALPHA:
 		case GEMPCPINPAD:
 			/* load the l10n strings in the pinpad memory */
 			{
