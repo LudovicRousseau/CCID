@@ -234,7 +234,8 @@
 0x0B8C:0x000E:Smart SBV280
 
 # Bogus readers but partly supported
-# See the README file for a bug description
+# See the http://pcsclite.alioth.debian.org/unsupported.html for a
+# description of the problem(s)
 0x09C3:0x0008:ActivCard USB Reader 2.0
 0x0783:0x0003:C3PO LTC31
 #0x0C4B:0x0300:Reiner-SCT cyberJack pinpad(a)
