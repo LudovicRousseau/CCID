@@ -349,8 +349,8 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 
 	(void)printf("  dwDefaultClock: %.3f MHz\n", dw2i(extra, 10)/1000.0);
 	(void)printf("  dwMaximumClock: %.3f MHz\n", dw2i(extra, 14)/1000.0);
-	(void)printf("  bNumClockSupported: %d %s\n", extra[18],
-		extra[18] ? "" : "(will use whatever is returned)");
+	(void)printf("  bNumClockSupported: %d%s\n", extra[18],
+		extra[18] ? "" : " (will use whatever is returned)");
 	{
 		int n;
 
@@ -399,8 +399,8 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	}
 	(void)printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
 	(void)printf("  dwMaxDataRate: %d bps\n", dw2i(extra, 23));
-	(void)printf("  bNumDataRatesSupported: %d %s\n", extra[27],
-		extra[27] ? "" : "(will use whatever is returned)");
+	(void)printf("  bNumDataRatesSupported: %d%s\n", extra[27],
+		extra[27] ? "" : " (will use whatever is returned)");
 	{
 		int n;
 
