@@ -2,7 +2,7 @@
   iManufacturer: Precise Biometrics
  idProduct: 0x0401
   iProduct: Precise 250 MC
- bcdDevice: 4D.42 (firmware release?)
+ bcdDevice: 50.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -28,11 +28,11 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 7.500 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: No such file or directory
+   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
   dwDataRate: 10753 bps
   dwMaxDataRate: 241936 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: No such file or directory
+   IFD does not support GET_DATA_RATES request: Broken pipe
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
@@ -45,7 +45,7 @@
    ....80 Automatic PPS made by the CCID
    ..04.. Automatic IFSD exchange as first exchange (T=1)
    04.... Short and Extended APDU level exchange
-  dwMaxCCIDMessageLength: 524288 bytes
+  dwMaxCCIDMessageLength: 65550 bytes
   bClassGetResponse: 0x00
   bClassEnveloppe: 0x00
   wLcdLayout: 0x0000
