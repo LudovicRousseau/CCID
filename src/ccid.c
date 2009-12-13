@@ -35,6 +35,10 @@
 #include "commands.h"
 #include "ccid_usb.h"
 
+#ifdef __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 /*****************************************************************************
  *
  *					ccid_open_hack_pre
@@ -248,10 +252,28 @@ int ccid_open_hack_post(unsigned int reader_index)
 					"Card Error",
 					"PIN blocked" };
 
-				char *lang;
+				const char *lang;
 				const char **l10n;
 
+#ifdef __APPLE__
+				CFArrayRef cfa;
+				CFStringRef slang;
+
+				/* Get the complete ordered list */
+				cfa = CFLocaleCopyPreferredLanguages();
+
+				/* Use the first/preferred language
+				 * As the driver is run as root we get the language
+				 * selected during install */
+				slang = CFArrayGetValueAtIndex(cfa, 0);
+
+				/* CFString -> C string */
+				lang = CFStringGetCStringPtr(slang, kCFStringEncodingMacRoman);
+#else
+				/* The other Unixes just use the LANG env variable */
 				lang = getenv("LANG");
+#endif
+				DEBUG_COMM2("Using lang: %s", lang);
 				if (NULL == lang)
 					l10n = en;
 				else
@@ -274,6 +296,10 @@ int ccid_open_hack_post(unsigned int reader_index)
 						l10n = en;
 				}
 
+#ifdef __APPLE__
+				/* Release the allocated array */
+				CFRelease(cfa);
+#endif
 				offset = 0;
 				cmd[offset++] = 0xB2;	/* load strings */
 				cmd[offset++] = 0xA0;	/* address of the memory */
