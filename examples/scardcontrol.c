@@ -240,8 +240,8 @@ int main(int argc, char *argv[])
 				printf("Reader supports FEATURE_IFD_PIN_PROPERTIES\n");
 				pin_properties_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
-			case FEATURE_MCT_READERDIRECT:
-				printf("Reader supports FEATURE_MCT_READERDIRECT\n");
+			case FEATURE_MCT_READER_DIRECT:
+				printf("Reader supports FEATURE_MCT_READER_DIRECT\n");
 				mct_readerdirect_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
 			default:
@@ -254,9 +254,9 @@ int main(int argc, char *argv[])
 	{
 		rv = SCardControl(hCard, mct_readerdirect_ioctl, secoder_info,
 			sizeof(secoder_info), bRecvBuffer, sizeof(bRecvBuffer), &length);
-		PCSC_ERROR_CONT(rv, "SCardControl(MCT_READERDIRECT)")
+		PCSC_ERROR_CONT(rv, "SCardControl(MCT_READER_DIRECT)")
 
-		printf("MCT_READERDIRECT (%ld): ", length);
+		printf("MCT_READER_DIRECT (%ld): ", length);
 		for (i=0; i<length; i++)
 			printf("%02X ", bRecvBuffer[i]);
 		printf("\n");
