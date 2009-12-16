@@ -117,6 +117,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x072F, 0x2200, 0x0206 }, /* ACS ACR122U-WB-R */
 	{ 0x08C3, 0x0402, 0x5000 },	/* Precise Biometrics Precise 200 MC */
 	{ 0x08C3, 0x0401, 0x5000 },	/* Precise Biometrics Precise 250 MC */
+	{ 0x0B0C, 0x0050, 0x0101 },	/* Todos Argos Mini II */
 
 	/* the firmware version is not correct since I do not have received a
 	 * working reader yet */
