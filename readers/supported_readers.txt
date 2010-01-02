@@ -233,6 +233,9 @@
 # Smart
 0x0B8C:0x000E:Smart SBV280
 
+# Broadcom
+0x0A5C:0x5801:Broadcom 5880
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/unsupported.html for a
 # description of the problem(s)
