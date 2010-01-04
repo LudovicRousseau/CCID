@@ -569,6 +569,9 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	 * IFD_ERROR_VALUE_READ_ONLY
 	 */
 
+	(void)Length;
+	(void)Value;
+
 	/* By default, say it worked */
 
 	int reader_index;
@@ -1207,6 +1210,8 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	RESPONSECODE return_value;
 	unsigned int rx_length;
 	int reader_index;
+
+	(void)RecvPci;
 
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
