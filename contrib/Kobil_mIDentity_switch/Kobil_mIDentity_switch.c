@@ -141,6 +141,9 @@ int main(int argc, char *argv[])
     usb_dev_handle *usb = NULL;
     int rv;
 
+	(void)argc;
+	(void)argv;
+
     usb_init();
 
     usb_find_busses();
