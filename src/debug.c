@@ -39,6 +39,8 @@ void log_msg(const int priority, const char *fmt, ...)
 {
 	va_list argptr;
 
+	(void)priority;
+
 	va_start(argptr, fmt);
 	(void)vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
 	va_end(argptr);
@@ -53,6 +55,8 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 {
 	int i;
 	char *c, *debug_buf_end;
+
+	(void)priority;
 
 	debug_buf_end = DebugBuffer + DEBUG_BUF_SIZE - 5;
 
