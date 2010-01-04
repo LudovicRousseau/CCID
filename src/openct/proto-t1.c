@@ -115,6 +115,7 @@ int t1_init(t1_state_t * t1, int lun)
  */
 void t1_release(/*@unused@*/ t1_state_t * t1)
 {
+	(void)t1;
 	/* NOP */
 }
 
