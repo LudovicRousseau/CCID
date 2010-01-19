@@ -1,18 +1,19 @@
-Parsing Interface Descriptor for device: 004/002
  idVendor: 0x08E6
   iManufacturer: Gemplus
  idProduct: 0x34EC
-  iProduct: USB GemPC Express
+  iProduct: GemPC Express
  bcdDevice: 1.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
- iInterface: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: ?
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -30,7 +31,7 @@ Parsing Interface Descriptor for device: 004/002
   bNumClockSupported: 0 (will use whatever is returned)
    Support 4000 kHz
   dwDataRate: 10752 bps
-  dwMaxDataRate: 344086 bps
+  dwMaxDataRate: 500000 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
    Support 10753 bps
    Support 14337 bps
@@ -72,6 +73,7 @@ Parsing Interface Descriptor for device: 004/002
    Support 229391 bps
    Support 250000 bps
    Support 344086 bps
+   Support 500000 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
