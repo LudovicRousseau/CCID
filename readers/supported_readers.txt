@@ -239,6 +239,9 @@
 # Ask
 0x1FD3:0xCC1D:Ask CPL108
 
+# German Privacy Foundation
+0x20A0:0x4107:German Privacy Foundation Crypto Stick v1.2
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/unsupported.html for a
 # description of the problem(s)
