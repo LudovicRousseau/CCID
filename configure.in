@@ -344,6 +344,7 @@ EOF
 AC_CONFIG_FILES(Makefile
 	m4/Makefile
 	src/Makefile
+	readers/Makefile
 	contrib/Makefile
 	contrib/Kobil_mIDentity_switch/Makefile
 	contrib/RSA_SecurID/Makefile
