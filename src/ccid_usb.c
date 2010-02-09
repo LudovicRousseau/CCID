@@ -137,6 +137,8 @@ unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
  ****************************************************************************/
 status_t OpenUSB(unsigned int reader_index, /*@unused@*/ int Channel)
 {
+	(void)Channel;
+
 	return OpenUSBByName(reader_index, NULL);
 } /* OpenUSB */
 
