@@ -984,7 +984,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 					usbDevice[reader_index].filename, usb_strerror());
 	}
 	else
-		DEBUG_XXD("NotifySlotChange: ", buffer, ret);
+		DEBUG_XXD("NotifySlotChange: ", (const unsigned char *)buffer, ret);
 
 	return ret;
 } /* InterruptRead */
