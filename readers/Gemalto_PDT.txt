@@ -1,5 +1,5 @@
- idVendor: 0x0973
-  iManufacturer: GEMALTO
+ idVendor: 0x08E6
+  iManufacturer: Gemalto*
  idProduct: 0x1227
   iProduct: PDT
  bcdDevice: 1.00 (firmware release?)
@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 2
   ICCD Version B, Control transfers, (optional interrupt-IN)
- iInterface: 0
+ iInterface: ICCD
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
