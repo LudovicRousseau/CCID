@@ -117,6 +117,7 @@
 # id3 Semiconductors
 0x0B81:0x0200:id3 CL1356D
 0x0B81:0x0220:id3 CL1356A HID
+0x0B81:0x0200:id3 CL1356T5
 
 # Alcor Micro Corp.
 0x058F:0x9520:Alcor Micro AU9520
