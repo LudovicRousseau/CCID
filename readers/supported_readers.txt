@@ -115,9 +115,8 @@
 0x03F0:0x2924:HP MFP Smart Card Reader
 
 # id3 Semiconductors
-0x0B81:0x0200:id3 CL1356D
-0x0B81:0x0220:id3 CL1356A HID
 0x0B81:0x0200:id3 CL1356T5
+0x0B81:0x0220:id3 CL1356A HID
 
 # Alcor Micro Corp.
 0x058F:0x9520:Alcor Micro AU9520
