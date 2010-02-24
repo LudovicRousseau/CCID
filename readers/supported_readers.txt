@@ -232,7 +232,8 @@
 0x0B0C:0x0050:Todos AGM2 CCID
 
 # Smart
-0x0B8C:0x000E:Smart SBV280
+# removed on manufacturer request. They use libusb directly.
+#0x0B8C:0x000E:Smart SBV280
 
 # Broadcom
 0x0A5C:0x5801:Broadcom 5880
