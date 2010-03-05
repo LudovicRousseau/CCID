@@ -1198,6 +1198,9 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 			return IFD_COMMUNICATION_ERROR;
 		}
 
+		/* we need to store returned value */
+		*rx_length = r;
+
 		return IFD_SUCCESS;
 	}
 
