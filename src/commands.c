@@ -1811,6 +1811,12 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 	{
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 
+		/* length is on 16-bits only
+		 * if a size > 0x1000 is used then usb_control_msg() fails with
+		 * "Invalid argument" */
+		if (*rcv_len > 0x1000)
+			*rcv_len = 0x1000;
+
 		/* Command to send to the smart card (must be 5 bytes) */
 		memset(cmd, 0, sizeof(cmd));
 		if (snd_len == 4)
