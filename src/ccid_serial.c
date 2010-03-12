@@ -742,7 +742,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	/* perform a command to be sure a Gemplus reader is connected
+	/* perform a command to be sure a Gemalto reader is connected
 	 * get the reader firmware */
 	{
 		unsigned char tx_buffer[] = { 0x02 };

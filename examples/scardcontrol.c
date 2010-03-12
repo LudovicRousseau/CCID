@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 	/* get GemPC firmware */
 	printf(" Get GemPC Firmware\n");
 
-	/* this is specific to Gemplus readers */
+	/* this is specific to Gemalto readers */
 	bSendBuffer[0] = 0x02;
 	rv = SCardControl(hCard, IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE, bSendBuffer,
 		1, bRecvBuffer, sizeof(bRecvBuffer), &length);
