@@ -131,7 +131,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 			(void)ClosePort(reader_index);
 			ReleaseReaderIndex(reader_index);
 		}
-		else 
+		else
 			/* Maybe we have a special treatment for this reader */
 			(void)ccid_open_hack_post(reader_index);
 	}
@@ -407,7 +407,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				/* Not present */
 				*Value = 0;
 			break;
-			
+
 #ifdef HAVE_PTHREAD
 		case TAG_IFD_SIMULTANEOUS_ACCESS:
 			if (*Length >= 1)
@@ -1619,7 +1619,7 @@ void init_driver(void)
 		/* print the log level used */
 		DEBUG_INFO2("LogLevel from LIBCCID_ifdLogLevel: 0x%.4X", LogLevel);
 	}
-	
+
 	/* Driver options */
 	if (0 == LTPBundleFindValueWithKey(infofile, "ifdDriverOptions", keyValue, 0))
 	{

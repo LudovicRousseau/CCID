@@ -924,7 +924,7 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 
 again_status:
 		/* SlotStatus */
-		r = ControlUSB(reader_index, 0xA1, 0xA0, 0, status, sizeof(status)); 
+		r = ControlUSB(reader_index, 0xA1, 0xA0, 0, status, sizeof(status));
 
 		/* we got an error? */
 		if (r < 0)

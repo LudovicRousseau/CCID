@@ -56,7 +56,7 @@
 	<!-- Possible values for ifdDriverOptions
 	1: DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED
 		the CCID Exchange command is allowed. You can use it through
-		SCardControl(hCard, IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE, ...) 
+		SCardControl(hCard, IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE, ...)
 
 	2: DRIVER_OPTION_GEMPC_TWIN_KEY_APDU
 		If set the GemPC Twin and GemPC Key readers with be configured
