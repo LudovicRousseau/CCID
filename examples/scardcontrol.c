@@ -46,21 +46,148 @@
 
 #define IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE     SCARD_CTL_CODE(1)
 
+#define BLUE "\33[34m"
+#define RED "\33[31m"
+#define BRIGHT_RED "\33[01;31m"
+#define GREEN "\33[32m"
+#define NORMAL "\33[0m"
+#define MAGENTA "\33[35m"
+
 /* PCSC error message pretty print */
 #define PCSC_ERROR_EXIT(rv, text) \
 if (rv != SCARD_S_SUCCESS) \
 { \
-	printf(text ": %s (0x%lX)\n", pcsc_stringify_error(rv), rv); \
+	printf(text ": " RED "%s (0x%lX)\n" NORMAL, pcsc_stringify_error(rv), rv); \
 	goto end; \
 } \
 else \
-	printf(text ": OK\n\n");
+	printf(text ": " BLUE "OK\n\n" NORMAL);
 
 #define PCSC_ERROR_CONT(rv, text) \
 if (rv != SCARD_S_SUCCESS) \
-	printf(text ": %s (0x%lX)\n", pcsc_stringify_error(rv), rv); \
+	printf(text ": " BLUE "%s (0x%lX)\n" NORMAL, pcsc_stringify_error(rv), rv); \
 else \
-	printf(text ": OK\n\n");
+	printf(text ": " BLUE "OK\n\n" NORMAL);
+
+#define PRINT_GREEN(text, value) \
+	printf("%s: " GREEN "%s\n" NORMAL, text, value)
+
+#define PRINT_GREEN_DEC(text, value) \
+	printf("%s: " GREEN "%d\n" NORMAL, text, value)
+
+#define PRINT_GREEN_HEX2(text, value) \
+	printf("%s: " GREEN "0x%02X\n" NORMAL, text, value)
+
+#define PRINT_GREEN_HEX4(text, value) \
+	printf("%s: " GREEN "0x%04X\n" NORMAL, text, value)
+
+static void parse_properties(unsigned char *bRecvBuffer, int length)
+{
+	unsigned char *p;
+	int i;
+
+	p = bRecvBuffer;
+	while (p-bRecvBuffer < length)
+	{
+		int tag, len, value;
+
+		tag = *p++;
+		len = *p++;
+
+		switch(len)
+		{
+			case 1:
+				value = *p;
+				break;
+			case 2:
+				value = *p + (*(p+1)<<8);
+				break;
+			case 4:
+				value = *p + (*(p+1)<<8) + (*(p+2)<<16) + (*(p+3)<<24);
+				break;
+			default:
+				value = -1;
+		}
+
+		switch(tag)
+		{
+			case PCSCv2_PART10_PROPERTY_wLcdLayout:
+				PRINT_GREEN_HEX4("wLcdLayout", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_bEntryValidationCondition:
+				PRINT_GREEN_HEX2("bEntryValidationCondition", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_bTimeOut2:
+				PRINT_GREEN_HEX2("bTimeOut2", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_wLcdMaxCharacters:
+				PRINT_GREEN_HEX4("wLcdMaxCharacters", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_wLcdMaxLines:
+				PRINT_GREEN_HEX4("wLcdMaxLines", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_bMinPINSize:
+				PRINT_GREEN_HEX2("bMinPINSize", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_bMaxPINSize:
+				PRINT_GREEN_HEX2("bMaxPINSize", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_sFirmwareID:
+				printf("PCSCv2_PART10_PROPERTY_sFirmwareID: " GREEN);
+				for (i=0; i<len; i++)
+					putchar(p[i]);
+				printf(NORMAL "\n");
+				break;
+			default:
+				printf("Unknown tag: 0x%02X (length = %d)\n", tag, len);
+		}
+
+		p += len;
+	}
+} /* parse_properties */
+
+static int find_property_by_tag(unsigned char *bRecvBuffer, int length,
+	int tag_searched)
+{
+	unsigned char *p;
+	int found = 0, len, value = -1;
+
+	p = bRecvBuffer;
+	while (p-bRecvBuffer < length)
+	{
+		if (*p++ == tag_searched)
+		{
+			found = 1;
+			break;
+		}
+
+		/* go to next tag */
+		len = *p++;
+		p += len;
+	}
+
+	if (found)
+	{
+		len = *p++;
+
+		switch(len)
+		{
+			case 1:
+				value = *p;
+				break;
+			case 2:
+				value = *p + (*(p+1)<<8);
+				break;
+			case 4:
+				value = *p + (*(p+1)<<8) + (*(p+2)<<16) + (*(p+3)<<24);
+				break;
+			default:
+				value = -1;
+		}
+	}
+
+	return value;
+} /* find_property_by_tag */
 
 int main(int argc, char *argv[])
 {
@@ -83,6 +210,7 @@ int main(int argc, char *argv[])
 	DWORD modify_ioctl = 0;
 	DWORD pin_properties_ioctl = 0;
 	DWORD mct_readerdirect_ioctl = 0;
+	DWORD properties_in_tlv_ioctl = 0;
 	SCARD_IO_REQUEST pioRecvPci;
  	SCARD_IO_REQUEST pioSendPci;
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
@@ -98,10 +226,10 @@ int main(int argc, char *argv[])
 	char secoder_info[] = { 0x20, 0x70, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 
 	printf("SCardControl sample code\n");
-	printf("V 1.3 © 2004-2009, Ludovic Rousseau <ludovic.rousseau@free.fr>\n");
+	printf("V 1.4 © 2004-2010, Ludovic Rousseau <ludovic.rousseau@free.fr>\n\n");
 
-	printf("\nTHIS PROGRAM IS NOT DESIGNED AS A TESTING TOOL!\n");
-	printf("Do NOT use it unless you really know what you do.\n\n");
+	printf(MAGENTA "THIS PROGRAM IS NOT DESIGNED AS A TESTING TOOL!\n");
+	printf("Do NOT use it unless you really know what you do.\n\n" NORMAL);
 
 	rv = SCardEstablishContext(SCARD_SCOPE_SYSTEM, NULL, NULL, &hContext);
 	if (rv != SCARD_S_SUCCESS)
@@ -176,10 +304,10 @@ int main(int argc, char *argv[])
 
 	/* connect to a reader (even without a card) */
 	dwActiveProtocol = -1;
-	printf("Using reader: %s\n", readers[reader_nb]);
+	printf("Using reader: " GREEN "%s\n" NORMAL, readers[reader_nb]);
 	rv = SCardConnect(hContext, readers[reader_nb], SCARD_SHARE_DIRECT,
 		SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &hCard, &dwActiveProtocol);
-	printf(" Protocol: %ld\n", dwActiveProtocol);
+	printf(" Protocol: " GREEN "%ld\n" NORMAL, dwActiveProtocol);
 	PCSC_ERROR_EXIT(rv, "SCardConnect")
 
 #ifdef GET_GEMPC_FIRMWARE
@@ -191,13 +319,13 @@ int main(int argc, char *argv[])
 	rv = SCardControl(hCard, IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE, bSendBuffer,
 		1, bRecvBuffer, sizeof(bRecvBuffer), &length);
 
-	printf(" Firmware: ");
+	printf(" Firmware: " GREEN);
 	for (i=0; i<length; i++)
 		printf("%02X ", bRecvBuffer[i]);
-	printf("\n");
+	printf(NORMAL "\n");
 
 	bRecvBuffer[length] = '\0';
-	printf(" Firmware: %s (length %ld bytes)\n", bRecvBuffer, length);
+	printf(" Firmware: " GREEN "%s" NORMAL" (length " GREEN "%ld" NORMAL " bytes)\n", bRecvBuffer, length);
 
 	PCSC_ERROR_CONT(rv, "SCardControl")
 #endif
@@ -207,10 +335,10 @@ int main(int argc, char *argv[])
 		bRecvBuffer, sizeof(bRecvBuffer), &length);
 	PCSC_ERROR_EXIT(rv, "SCardControl")
 
-	printf(" TLV (%ld): ", length);
+	printf(" TLV (%ld): " GREEN, length);
 	for (i=0; i<length; i++)
 		printf("%02X ", bRecvBuffer[i]);
-	printf("\n");
+	printf(NORMAL "\n");
 
 	PCSC_ERROR_CONT(rv, "SCardControl(CM_IOCTL_GET_FEATURE_REQUEST)")
 
@@ -229,26 +357,54 @@ int main(int argc, char *argv[])
 		switch (pcsc_tlv[i].tag)
 		{
 			case FEATURE_VERIFY_PIN_DIRECT:
-				printf("Reader supports FEATURE_VERIFY_PIN_DIRECT\n");
+				PRINT_GREEN("Reader supports", "FEATURE_VERIFY_PIN_DIRECT");
 				verify_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
 			case FEATURE_MODIFY_PIN_DIRECT:
-				printf("Reader supports FEATURE_MODIFY_PIN_DIRECT\n");
+				PRINT_GREEN("Reader supports", "FEATURE_MODIFY_PIN_DIRECT");
 				modify_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
 			case FEATURE_IFD_PIN_PROPERTIES:
-				printf("Reader supports FEATURE_IFD_PIN_PROPERTIES\n");
+				PRINT_GREEN("Reader supports", "FEATURE_IFD_PIN_PROPERTIES");
 				pin_properties_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
 			case FEATURE_MCT_READER_DIRECT:
-				printf("Reader supports FEATURE_MCT_READER_DIRECT\n");
+				PRINT_GREEN("Reader supports", "FEATURE_MCT_READER_DIRECT");
 				mct_readerdirect_ioctl = ntohl(pcsc_tlv[i].value);
 				break;
+			case FEATURE_GET_TLV_PROPERTIES:
+				PRINT_GREEN("Reader supports", "FEATURE_GET_TLV_PROPERTIES");
+				properties_in_tlv_ioctl = ntohl(pcsc_tlv[i].value);
+				break;
 			default:
-				printf("Can't parse tag: 0x%02X\n", pcsc_tlv[i].tag);
+				printf("Can't parse tag: " RED "0x%02X" NORMAL, pcsc_tlv[i].tag);
 		}
 	}
 	printf("\n");
+
+	if (properties_in_tlv_ioctl)
+	{
+		int value;
+
+		rv = SCardControl(hCard, properties_in_tlv_ioctl, secoder_info,
+			sizeof(secoder_info), bRecvBuffer, sizeof(bRecvBuffer), &length);
+		PCSC_ERROR_CONT(rv, "SCardControl(GET_TLV_PROPERTIES)")
+
+		printf("GET_TLV_PROPERTIES (" GREEN "%ld" NORMAL "): " GREEN, length);
+		for (i=0; i<length; i++)
+			printf("%02X ", bRecvBuffer[i]);
+		printf(NORMAL "\n");
+
+		printf("\nDisplay all the properties:\n");
+		parse_properties(bRecvBuffer, length);
+
+		printf("\nFind a specific property:\n");
+		value = find_property_by_tag(bRecvBuffer, length, PCSCv2_PART10_PROPERTY_bEntryValidationCondition);
+		PRINT_GREEN_DEC("bEntryValidationCondition", value);
+
+		value = find_property_by_tag(bRecvBuffer, length, PCSCv2_PART10_PROPERTY_bMaxPINSize);
+		PRINT_GREEN_DEC("bMaxPINSize", value);
+	}
 
 	if (mct_readerdirect_ioctl)
 	{
@@ -260,7 +416,6 @@ int main(int argc, char *argv[])
 		for (i=0; i<length; i++)
 			printf("%02X ", bRecvBuffer[i]);
 		printf("\n");
-
 	}
 
 	if (0 == verify_ioctl)
