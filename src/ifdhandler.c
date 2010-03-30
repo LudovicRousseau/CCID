@@ -1250,10 +1250,13 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	 */
 	RESPONSECODE return_value = IFD_ERROR_NOT_SUPPORTED;
 	int reader_index;
+	_ccid_descriptor *ccid_descriptor;
 
 	reader_index = LunToReaderIndex(Lun);
 	if ((-1 == reader_index) || (NULL == pdwBytesReturned))
 		return IFD_COMMUNICATION_ERROR;
+
+	ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	DEBUG_INFO4("ControlCode: 0x%X, %s (lun: %X)", dwControlCode,
 		CcidSlots[reader_index].readerName, Lun);
@@ -1302,7 +1305,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		}
 	}
 
-	/* Implement the PC/SC v2.02.05 Part 10 IOCTL mechanism */
+	/* Implement the PC/SC v2.02.07 Part 10 IOCTL mechanism */
 
 	/* Query for features */
 	if (CM_IOCTL_GET_FEATURE_REQUEST == dwControlCode)
@@ -1310,8 +1313,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		unsigned int iBytesReturned = 0;
 		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
 
-		/* we need room for up to four records */
-		if (RxLength < 4 * sizeof(PCSC_TLV_STRUCTURE))
+		/* we need room for up to five records */
+		if (RxLength < 5 * sizeof(PCSC_TLV_STRUCTURE))
 			return IFD_ERROR_INSUFFICIENT_BUFFER;
 
 		/* We can only support direct verify and/or modify currently */
@@ -1355,6 +1358,12 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
 
+		pcsc_tlv -> tag = FEATURE_GET_TLV_PROPERTIES;
+		pcsc_tlv -> length = 0x04; /* always 0x04 */
+		pcsc_tlv -> value = htonl(IOCTL_FEATURE_GET_TLV_PROPERTIES);
+		pcsc_tlv++;
+		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
+
 		*pdwBytesReturned = iBytesReturned;
 		return_value = IFD_SUCCESS;
 	}
@@ -1373,6 +1382,53 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		caps -> bTimeOut2 = 0x00; /* We do not distinguish bTimeOut from TimeOut2 */
 
 		*pdwBytesReturned = sizeof(*caps);
+		return_value = IFD_SUCCESS;
+	}
+
+	/* Reader features */
+	if (IOCTL_FEATURE_GET_TLV_PROPERTIES == dwControlCode)
+	{
+		int p = 0;
+		int tmp;
+
+		/* wLcdLayout */
+		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_wLcdLayout;	/* tag */
+		RxBuffer[p++] = 2;	/* length */
+		tmp = ccid_descriptor -> wLcdLayout;
+		RxBuffer[p++] = tmp & 0xFF;	/* value in little endian order */
+		RxBuffer[p++] = (tmp >> 8) & 0xFF;
+
+		/* bEntryValidationCondition */
+		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bEntryValidationCondition;
+		RxBuffer[p++] = 1;
+		RxBuffer[p++] = 0x07;
+
+		/* bTimeOut2 */
+		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bTimeOut2;
+		RxBuffer[p++] = 1;
+		RxBuffer[p++] = 0x00;
+
+		/* sFirmwareID */
+		if (VENDOR_GEMALTO == GET_VENDOR(ccid_descriptor -> readerID))
+		{
+			unsigned char firmware[256];
+			const unsigned char cmd[] = { 0x02 };
+			RESPONSECODE ret;
+			unsigned int len;
+
+			len = sizeof(firmware);
+			ret = CmdEscape(reader_index, cmd, sizeof(cmd), firmware, &len);
+
+			if (IFD_SUCCESS == ret)
+			{
+				RxBuffer[p++] = PCSCv2_PART10_PROPERTY_sFirmwareID;
+				RxBuffer[p++] = len;
+				memcpy(&RxBuffer[p], firmware, len);
+				p += len;
+			}
+		}
+
+		*pdwBytesReturned = p;
 		return_value = IFD_SUCCESS;
 	}
 
