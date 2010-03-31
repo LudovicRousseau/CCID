@@ -245,6 +245,9 @@
 # German Privacy Foundation
 0x20A0:0x4107:German Privacy Foundation Crypto Stick v1.2
 
+# GoldKey Security
+0x19C8:0x0012:GoldKey PIV Token
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/unsupported.html for a
 # description of the problem(s)
