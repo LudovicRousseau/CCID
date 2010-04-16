@@ -1272,7 +1272,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 		if (VENDOR_GEMALTO == GET_VENDOR(readerID))
 		{
-			char switch_interface[] = { 0x52, 0xF8, 0x04, 0x01, 0x00 };
+			unsigned char switch_interface[] = { 0x52, 0xF8, 0x04, 0x01, 0x00 };
 
 			/* get firmware version escape command */
 			if ((1 == TxLength) && (0x02 == TxBuffer[0]))
