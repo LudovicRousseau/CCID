@@ -1312,6 +1312,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	{
 		unsigned int iBytesReturned = 0;
 		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
+		int readerID = get_ccid_descriptor(reader_index) -> readerID;
 
 		/* we need room for up to five records */
 		if (RxLength < 5 * sizeof(PCSC_TLV_STRUCTURE))
@@ -1348,7 +1349,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		pcsc_tlv++;
 		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 
-		if (KOBIL_TRIBANK == get_ccid_descriptor(reader_index) -> readerID)
+		if ((KOBIL_TRIBANK == readerID)
+			|| (KOBIL_MIDENTITY_VISUAL == readerID))
 		{
 			pcsc_tlv -> tag = FEATURE_MCT_READER_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
