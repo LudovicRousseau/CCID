@@ -1268,7 +1268,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	if (IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE == dwControlCode)
 	{
 		int allowed = (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED);
-		int readerID = get_ccid_descriptor(reader_index) -> readerID;
+		int readerID = ccid_descriptor -> readerID;
 
 		if (VENDOR_GEMALTO == GET_VENDOR(readerID))
 		{
@@ -1312,15 +1312,14 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	{
 		unsigned int iBytesReturned = 0;
 		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
-		int readerID = get_ccid_descriptor(reader_index) -> readerID;
+		int readerID = ccid_descriptor -> readerID;
 
 		/* we need room for up to five records */
 		if (RxLength < 5 * sizeof(PCSC_TLV_STRUCTURE))
 			return IFD_ERROR_INSUFFICIENT_BUFFER;
 
 		/* We can only support direct verify and/or modify currently */
-		if (get_ccid_descriptor(reader_index) -> bPINSupport
-			& CCID_CLASS_PIN_VERIFY)
+		if (ccid_descriptor -> bPINSupport & CCID_CLASS_PIN_VERIFY)
 		{
 			pcsc_tlv -> tag = FEATURE_VERIFY_PIN_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
@@ -1330,8 +1329,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
 
-		if (get_ccid_descriptor(reader_index) -> bPINSupport
-			& CCID_CLASS_PIN_MODIFY)
+		if (ccid_descriptor -> bPINSupport & CCID_CLASS_PIN_MODIFY)
 		{
 			pcsc_tlv -> tag = FEATURE_MODIFY_PIN_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
@@ -1379,7 +1377,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			return IFD_ERROR_INSUFFICIENT_BUFFER;
 
 		/* Only give the LCD size for now */
-		caps -> wLcdLayout = get_ccid_descriptor(reader_index) -> wLcdLayout;
+		caps -> wLcdLayout = ccid_descriptor -> wLcdLayout;
 		caps -> bEntryValidationCondition = 0x07; /* Default */
 		caps -> bTimeOut2 = 0x00; /* We do not distinguish bTimeOut from TimeOut2 */
 
