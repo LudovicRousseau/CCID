@@ -35,10 +35,9 @@ status_t ReadUSB(unsigned int reader_index, unsigned int *length,
 
 status_t CloseUSB(unsigned int reader_index);
 
-#if defined (__USB_H__) || defined (_SYS_USB_LIBUSB_USB_H)
+#include <usb.h>
 /*@null@*/ struct usb_interface *get_ccid_usb_interface(
 	struct usb_device *dev, int *num);
-#endif
 
 int ControlUSB(int reader_index, int requesttype, int request, int value,
 	unsigned char *bytes, unsigned int size);
