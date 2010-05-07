@@ -1430,7 +1430,9 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		}
 
 		/* Gemalto PC Pinpad V1 */
-		if (GEMPCPINPAD == ccid_descriptor -> readerID)
+		if ((GEMPCPINPAD == ccid_descriptor -> readerID)
+			/* Covadis Véga-Alpha */
+			|| (VEGAALPHA == ccid_descriptor->readerID))
 		{
 			/* bMinPINSize */
 			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
