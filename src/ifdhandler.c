@@ -1428,6 +1428,20 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			}
 		}
 
+		/* Gemalto PC Pinpad V1 */
+		if (GEMPCPINPAD == ccid_descriptor -> readerID)
+		{
+			/* bMinPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
+			RxBuffer[p++] = 1;
+			RxBuffer[p++] = 4;
+
+			/* bMaxPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMaxPINSize;
+			RxBuffer[p++] = 1;
+			RxBuffer[p++] = 8;
+		}
+
 		*pdwBytesReturned = p;
 		return_value = IFD_SUCCESS;
 	}
