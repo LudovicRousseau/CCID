@@ -112,34 +112,34 @@ static void parse_properties(unsigned char *bRecvBuffer, int length)
 		switch(tag)
 		{
 			case PCSCv2_PART10_PROPERTY_wLcdLayout:
-				PRINT_GREEN_HEX4("wLcdLayout", value);
+				PRINT_GREEN_HEX4(" wLcdLayout", value);
 				break;
 			case PCSCv2_PART10_PROPERTY_bEntryValidationCondition:
-				PRINT_GREEN_HEX2("bEntryValidationCondition", value);
+				PRINT_GREEN_HEX2(" bEntryValidationCondition", value);
 				break;
 			case PCSCv2_PART10_PROPERTY_bTimeOut2:
-				PRINT_GREEN_HEX2("bTimeOut2", value);
+				PRINT_GREEN_HEX2(" bTimeOut2", value);
 				break;
 			case PCSCv2_PART10_PROPERTY_wLcdMaxCharacters:
-				PRINT_GREEN_HEX4("wLcdMaxCharacters", value);
+				PRINT_GREEN_HEX4(" wLcdMaxCharacters", value);
 				break;
 			case PCSCv2_PART10_PROPERTY_wLcdMaxLines:
-				PRINT_GREEN_HEX4("wLcdMaxLines", value);
+				PRINT_GREEN_HEX4(" wLcdMaxLines", value);
 				break;
 			case PCSCv2_PART10_PROPERTY_bMinPINSize:
-				PRINT_GREEN_HEX2("bMinPINSize", value);
+				PRINT_GREEN_HEX2(" bMinPINSize", value);
 				break;
 			case PCSCv2_PART10_PROPERTY_bMaxPINSize:
-				PRINT_GREEN_HEX2("bMaxPINSize", value);
+				PRINT_GREEN_HEX2(" bMaxPINSize", value);
 				break;
 			case PCSCv2_PART10_PROPERTY_sFirmwareID:
-				printf("PCSCv2_PART10_PROPERTY_sFirmwareID: " GREEN);
+				printf(" sFirmwareID: " GREEN);
 				for (i=0; i<len; i++)
 					putchar(p[i]);
 				printf(NORMAL "\n");
 				break;
 			default:
-				printf("Unknown tag: 0x%02X (length = %d)\n", tag, len);
+				printf(" Unknown tag: 0x%02X (length = %d)\n", tag, len);
 		}
 
 		p += len;
@@ -400,10 +400,12 @@ int main(int argc, char *argv[])
 
 		printf("\nFind a specific property:\n");
 		value = find_property_by_tag(bRecvBuffer, length, PCSCv2_PART10_PROPERTY_bEntryValidationCondition);
-		PRINT_GREEN_DEC("bEntryValidationCondition", value);
+		PRINT_GREEN_DEC(" bEntryValidationCondition", value);
 
 		value = find_property_by_tag(bRecvBuffer, length, PCSCv2_PART10_PROPERTY_bMaxPINSize);
-		PRINT_GREEN_DEC("bMaxPINSize", value);
+		PRINT_GREEN_DEC(" bMaxPINSize", value);
+
+		printf("\n");
 	}
 
 	if (mct_readerdirect_ioctl)
