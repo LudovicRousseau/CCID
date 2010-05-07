@@ -1400,12 +1400,13 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 		/* bEntryValidationCondition */
 		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bEntryValidationCondition;
-		RxBuffer[p++] = 1;
+		RxBuffer[p++] = 1;	/* length */
 		RxBuffer[p++] = 0x07;
 
 		/* bTimeOut2 */
 		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bTimeOut2;
-		RxBuffer[p++] = 1;
+		RxBuffer[p++] = 1;	/* length */
+		/* IFD does not distinguish bTimeOut from bTimeOut2 */
 		RxBuffer[p++] = 0x00;
 
 		/* sFirmwareID */
@@ -1433,13 +1434,13 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		{
 			/* bMinPINSize */
 			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
-			RxBuffer[p++] = 1;
-			RxBuffer[p++] = 4;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 4;	/* min PIN size */
 
 			/* bMaxPINSize */
 			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMaxPINSize;
-			RxBuffer[p++] = 1;
-			RxBuffer[p++] = 8;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 8;	/* max PIN size */
 		}
 
 		*pdwBytesReturned = p;
