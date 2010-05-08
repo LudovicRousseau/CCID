@@ -34,7 +34,7 @@ AM_PROG_LEX
 PKG_PROG_PKG_CONFIG
 
 # check pcsc-lite version
-PCSC_NEEDED_VERSION="1.5.6"
+PCSC_NEEDED_VERSION="1.6.0"
 PKG_CHECK_EXISTS([libpcsclite],
 	[PKG_CHECK_MODULES(PCSC, libpcsclite >= $PCSC_NEEDED_VERSION, [],
 	[
