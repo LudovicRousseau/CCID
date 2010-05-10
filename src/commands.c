@@ -48,6 +48,7 @@
  * of 260 bytes since the driver check this value */
 #define BOGUS_SCM_FIRMWARE_FOR_dwMaxCCIDMessageLength
 
+#define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 
 /* internal functions */
@@ -446,7 +447,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	i2dw(a - 10, cmd + 1);  /* CCID message length */
 
 	old_read_timeout = ccid_descriptor -> readTimeout;
-	ccid_descriptor -> readTimeout = min(30, TxBuffer[0]+10)*1000;	/* at least 30 seconds */
+	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]+10)*1000;	/* at least 30 seconds */
 
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
 	{
@@ -674,7 +675,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	i2dw(a - 10, cmd + 1);	/* command length (includes bPINOperation) */
 
 	old_read_timeout = ccid_descriptor -> readTimeout;
-	ccid_descriptor -> readTimeout = min(30, TxBuffer[0]+10)*1000;	/* at least 30 seconds */
+	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]+10)*1000;	/* at least 30 seconds */
 
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
 	{
