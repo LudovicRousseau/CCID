@@ -63,7 +63,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 		case CL1356D:
 			/* the firmware needs some time to initialize */
 			(void)sleep(1);
-			ccid_descriptor->readTimeout = 60; /* 60 seconds */
+			ccid_descriptor->readTimeout = 60*1000; /* 60 seconds */
 			break;
 	}
 

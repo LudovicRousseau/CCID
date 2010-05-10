@@ -623,7 +623,7 @@ read_again:
 
 	rv = usb_bulk_read(usbDevice[reader_index].handle,
 		usbDevice[reader_index].bulk_in, (char *)buffer, *length,
-		usbDevice[reader_index].ccid.readTimeout * 1000);
+		usbDevice[reader_index].ccid.readTimeout);
 
 	if (rv < 0)
 	{
@@ -952,7 +952,7 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 
 	ret = usb_control_msg(usbDevice[reader_index].handle, requesttype,
 		request, value, usbDevice[reader_index].interface, (char *)bytes, size,
-		usbDevice[reader_index].ccid.readTimeout * 1000);
+		usbDevice[reader_index].ccid.readTimeout);
 
 	if (requesttype & 0x80)
 		DEBUG_XXD("receive: ", bytes, ret);

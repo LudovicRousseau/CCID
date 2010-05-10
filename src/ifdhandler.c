@@ -945,7 +945,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				break;
 			}
 
-		DEBUG_COMM2("Timeout: %d seconds", ccid_desc->readTimeout);
+		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
 
 		ret = SetParameters(reader_index, 1, sizeof(param), param);
 		if (IFD_SUCCESS != ret)
@@ -986,8 +986,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		ccid_desc->readTimeout = T0_card_timeout(f, d, param[2] /* TC1 */,
 			param[3] /* TC2 */, ccid_desc->dwDefaultClock);
 
-		DEBUG_COMM2("Communication timeout: %d seconds",
-			ccid_desc->readTimeout);
+		DEBUG_COMM2("Communication timeout: %d ms", ccid_desc->readTimeout);
 
 		ret = SetParameters(reader_index, 0, sizeof(param), param);
 		if (IFD_SUCCESS != ret)
@@ -1125,7 +1124,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			 * 1 ETU = 372 cycles during ATR
 			 * with a 4 MHz clock => 29 seconds
 			 */
-			ccid_descriptor->readTimeout = 60;
+			ccid_descriptor->readTimeout = 60*1000;
 
 			nlength = sizeof(pcbuffer);
 			return_value = CmdPowerOn(reader_index, &nlength, pcbuffer,
@@ -1874,16 +1873,11 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 
 	/* ISO in */
 	t  = 261 * EGT + (3 + 3) * WWT;
-	/* Convert from milliseonds to seconds rouned to the upper value
-	 * use +1 instead of ceil() to round up to the nearest integer
-	 * so we can avoid a dependency on the math library */
-	t = t/1000 +1;
 	if (timeout < t)
 		timeout = t;
 
 	/* ISO out */
 	t = 5 * EGT + (1 + 259) * WWT;
-	t = t/1000 +1;
 	if (timeout < t)
 		timeout = t;
 
@@ -1930,11 +1924,6 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 	CWT = (11 + (1<<CWI)) * etu;
 
 	timeout = 260*EGT + BWT + 260*CWT;
-
-	/* Convert from milliseonds to seconds rounded to the upper value
-	 * we use +1 instead of ceil() to round up to the nearest greater integer
-	 * so we can avoid a dependency on the math library */
-	timeout = timeout/1000 +1;
 
 	return timeout;
 } /* T1_card_timeout  */

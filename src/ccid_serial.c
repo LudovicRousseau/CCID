@@ -421,8 +421,8 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		/* use select() to, eventually, timeout */
 		FD_ZERO(&fdset);
 		FD_SET(fd, &fdset);
-		t.tv_sec = serialDevice[reader_index].ccid.readTimeout;
-		t.tv_usec = 0;
+		t.tv_sec = serialDevice[reader_index].ccid.readTimeout / 1000;
+		t.tv_usec = (serialDevice[reader_index].ccid.readTimeout - t.tv_sec*1000)*1000;
 
 		i = select(fd+1, &fdset, NULL, NULL, &t);
 		if (i == -1)
@@ -433,7 +433,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		else
 			if (i == 0)
 			{
-				DEBUG_COMM2("Timeout! (%d sec)", serialDevice[reader_index].ccid.readTimeout);
+				DEBUG_COMM2("Timeout! (%d ms)", serialDevice[reader_index].ccid.readTimeout);
 				return -1;
 			}
 
@@ -750,7 +750,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned int rx_length = sizeof(rx_buffer);
 
 		/* 2 seconds timeout to not wait too long if no reader is connected */
-		serialDevice[reader].ccid.readTimeout = 2;
+		serialDevice[reader].ccid.readTimeout = 2*1000;
 
 		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length))

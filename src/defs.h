@@ -74,8 +74,8 @@ typedef enum {
 #define T_0 0
 #define T_1 1
 
-/* Default communication read timeout in seconds */
-#define DEFAULT_COM_READ_TIMEOUT 2
+/* Default communication read timeout in milliseconds */
+#define DEFAULT_COM_READ_TIMEOUT (2*1000)
 
 /*
  * communication ports abstraction
