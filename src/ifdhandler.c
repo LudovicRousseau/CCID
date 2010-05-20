@@ -571,6 +571,22 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			break;
 #endif
 
+		case SCARD_ATTR_VENDOR_IFD_SERIAL_NO:
+			{
+				_ccid_descriptor *ccid_desc;
+
+				/* default value: not supported */
+				*Length = 0;
+
+				ccid_desc = get_ccid_descriptor(reader_index);
+				if (ccid_desc->sIFD_serial_number)
+				{
+					strcpy((char *)Value, ccid_desc->sIFD_serial_number);
+					*Length = strlen((char *)Value);
+				}
+			}
+			break;
+
 		default:
 			return_value = IFD_ERROR_TAG;
 	}

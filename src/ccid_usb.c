@@ -551,6 +551,19 @@ again:
 					usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
 					usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
 					usbDevice[reader_index].ccid.bVoltageSupport = usb_interface->altsetting->extra[5];
+					usbDevice[reader_index].ccid.sIFD_serial_number = NULL;
+					if (dev->descriptor.iSerialNumber)
+					{
+						char serial[128];
+						int ret;
+
+						ret = usb_get_string_simple(dev_handle,
+							dev->descriptor.iSerialNumber, serial,
+							sizeof(serial));
+						if (ret > 0)
+							usbDevice[reader_index].ccid.sIFD_serial_number
+								= strdup(serial);
+					}
 					goto end;
 				}
 			}
@@ -707,6 +720,9 @@ status_t CloseUSB(unsigned int reader_index)
 	usbDevice[reader_index].dirname = NULL;
 	usbDevice[reader_index].filename = NULL;
 	usbDevice[reader_index].interface = 0;
+
+	if (usbDevice[reader_index].ccid.sIFD_serial_number)
+		free(usbDevice[reader_index].ccid.sIFD_serial_number);
 
 	return STATUS_SUCCESS;
 } /* CloseUSB */

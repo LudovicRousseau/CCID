@@ -121,6 +121,11 @@ typedef struct
 	 * 4 = 1.8V
 	 */
 	int bVoltageSupport;
+
+	/*
+	 * USB serial number of the device (if any)
+	 */
+	char *sIFD_serial_number;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */

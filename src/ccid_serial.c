@@ -784,6 +784,8 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		}
 	}
 
+	serialDevice[reader_index].ccid.sIFD_serial_number = NULL;
+
 	return STATUS_SUCCESS;
 } /* OpenSerialByName */
 
