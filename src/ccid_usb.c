@@ -364,11 +364,25 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 						if ((GEMALTOPROXDU == readerID)
 							|| (GEMALTOPROXSU == readerID))
 						{
-							if(interface_number >= 0)
-							{
-								DEBUG_CRITICAL("USE_COMPOSITE_AS_MULTISLOT can't be used with libhal");
-								continue;
-							}
+							/*
+							 * We can't talk to the two CCID interfaces
+							 * at the same time (the reader enters a
+							 * dead lock). So we simulate a multi slot
+							 * reader. By default multi slot readers
+							 * can't use the slots at the same time. See
+							 * TAG_IFD_SLOT_THREAD_SAFE
+							 *
+							 * One side effect is that the two readers
+							 * are seen by pcscd as one reader so the
+							 * interface name is the same for the two.
+							 *
+		* So we have:
+		* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
+		* 1: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 01
+		* instead of
+		* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
+		* 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
+							 */
 
 							/* the CCID interfaces are 1 and 2 */
 							interface_number = static_interface;
