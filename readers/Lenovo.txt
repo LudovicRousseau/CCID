@@ -12,8 +12,8 @@
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
-  bulk transfer, optional interrupt-IN
- iInterface: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: ?
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
