@@ -26,7 +26,6 @@
 # ifdef S_SPLINT_S
 # include <sys/types.h>
 # endif
-#include <usb.h>
 #include <errno.h>
 
 #include "defs.h"
