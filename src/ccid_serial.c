@@ -1,6 +1,6 @@
 /*
  * ccid_serial.c: communicate with a GemPC Twin smart card reader
- * Copyright (C) 2001-2004 Ludovic Rousseau <ludovic.rousseau@free.fr>
+ * Copyright (C) 2001-2010 Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
  * Thanks to Niki W. Waibel <niki.waibel@gmx.net> for a prototype version
  *

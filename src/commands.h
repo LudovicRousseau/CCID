@@ -1,6 +1,6 @@
 /*
     commands.h: Commands sent to the card
-    Copyright (C) 2003   Ludovic Rousseau
+    Copyright (C) 2003-2009   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
