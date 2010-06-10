@@ -43,8 +43,10 @@
 #define MAGENTA "\33[35m"
 #define NORMAL "\33[0m"
 
-static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
-	struct usb_device *dev, int num);
+static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
+	struct libusb_device_descriptor desc,
+	struct libusb_config_descriptor *config_desc,
+	int num);
 
 
 /*****************************************************************************
@@ -54,136 +56,163 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
  ****************************************************************************/
 int main(int argc, char *argv[])
 {
-	static struct usb_bus *busses = NULL;
-	struct usb_bus *bus;
-	struct usb_dev_handle *dev_handle;
-	int nb = 0;
-	char buffer[256];
+	libusb_device **devs, *dev;
+	int nb = 0, r, i;
+	unsigned char buffer[256];
 	char class_ff = FALSE;
+	ssize_t cnt;
 
 	if ((argc > 1) && (0 == strcmp(argv[1], "-p")))
 		class_ff = TRUE;
 
-	usb_init();
-	(void)usb_find_busses();
-	(void)usb_find_devices();
-
-	busses = usb_get_busses();
-	if (busses == NULL)
+	r = libusb_init(NULL);
+	if (r < 0)
 	{
-		(void)printf("No USB buses found\n");
-		return -1;
+		(void)printf("libusb_init() failed\n");
+        return r;
 	}
 
-	/* on any USB buses */
-	for (bus = busses; bus; bus = bus->next)
+	cnt = libusb_get_device_list(NULL, &devs);
+    if (cnt < 0)
 	{
-		struct usb_device *dev;
+		(void)printf("libusb_get_device_list() failed\n");
+        return (int)cnt;
+	}
 
-		/* any device on this bus */
-		for (dev = bus->devices; dev; dev = dev->next)
+	/* for every device */
+	i = 0;
+	while ((dev = devs[i++]) != NULL)
+	{
+		struct libusb_device_descriptor desc;
+		struct libusb_config_descriptor *config_desc;
+		struct libusb_device_handle *handle;
+		const struct libusb_interface *usb_interface = NULL;
+		int interface;
+		int num = 0;
+
+		r = libusb_open(dev, &handle);
+		if (r < 0)
 		{
-			struct usb_interface *usb_interface = NULL;
-			int interface;
-			int num = 0;
-
-			dev_handle = usb_open(dev);
-			if (NULL == dev_handle)
+			(void)fprintf(stderr, "Can't libusb_open(): %s\n", strerror(errno));
+			if (getuid())
 			{
-				(void)fprintf(stderr, "Can't usb_open(%s/%s): %s\n",
-					bus->dirname, dev->filename, strerror(errno));
-				if (getuid())
-				{
-					(void)fprintf(stderr, BRIGHT_RED "Please, restart the command as root\n" NORMAL);
-					return 1;
-				}
-				continue;
+				(void)fprintf(stderr,
+					BRIGHT_RED "Please, restart the command as root\n" NORMAL);
+				return 1;
 			}
+			continue;
+		}
 
-			(void)fprintf(stderr, "Parsing USB bus/device: %s/%s\n",
-				bus->dirname, dev->filename);
+		r = libusb_get_device_descriptor(dev, &desc);
+        if (r < 0)
+		{
+            (void)fprintf(stderr,
+				BRIGHT_RED "failed to get device descriptor" NORMAL);
+            return 1;
+        }
 
-			(void)fprintf(stderr, " idVendor:  0x%04X", dev->descriptor.idVendor);
-			if (usb_get_string_simple(dev_handle, dev->descriptor.iManufacturer,
-				buffer, sizeof(buffer)) < 0)
+		(void)fprintf(stderr,
+			"Parsing USB bus/device: %04X:%04X (bus %d, device %d)\n",
+			desc.idVendor, desc.idProduct,
+            libusb_get_bus_number(dev), libusb_get_device_address(dev));
+
+		(void)fprintf(stderr, " idVendor:  0x%04X", desc.idVendor);
+		r = libusb_get_string_descriptor_ascii(handle, desc.iManufacturer,
+			buffer, sizeof(buffer));
+		if (r < 0)
+		{
+			(void)fprintf(stderr, "  Can't get iManufacturer string\n");
+			if (getuid())
 			{
-				(void)fprintf(stderr, "  Can't get iManufacturer string\n");
-				if (getuid())
-				{
-					(void)fprintf(stderr, BRIGHT_RED "Please, restart the command as root\n" NORMAL);
-					return 1;
-				}
+				(void)fprintf(stderr,
+					BRIGHT_RED "Please, restart the command as root\n" NORMAL);
+				return 1;
 			}
-			else
-				(void)fprintf(stderr, "  iManufacturer: " BLUE "%s\n" NORMAL, buffer);
+		}
+		else
+			(void)fprintf(stderr,
+				"  iManufacturer: " BLUE "%s\n" NORMAL, buffer);
 
-			(void)fprintf(stderr, " idProduct: 0x%04X", dev->descriptor.idProduct);
-			if (usb_get_string_simple(dev_handle, dev->descriptor.iProduct,
-				buffer, sizeof(buffer)) < 0)
-				(void)fprintf(stderr, "  Can't get iProduct string\n");
-			else
-				(void)fprintf(stderr, "  iProduct: " BLUE "%s\n" NORMAL, buffer);
+		(void)fprintf(stderr, " idProduct: 0x%04X", desc.idProduct);
+		r = libusb_get_string_descriptor_ascii(handle, desc.iProduct,
+			buffer, sizeof(buffer));
+		if (r < 0)
+			(void)fprintf(stderr, "  Can't get iProduct string\n");
+		else
+			(void)fprintf(stderr, "  iProduct: " BLUE "%s\n" NORMAL, buffer);
 
 again:
-			/* check if the device has bInterfaceClass == 11 */
-			usb_interface = get_ccid_usb_interface(dev, &num);
-			if (NULL == usb_interface)
-			{
-				(void)usb_close(dev_handle);
-				/* only if we found no CCID interface */
-				if (0 == num)
-					(void)fprintf(stderr, RED "  NOT a CCID/ICCD device\n" NORMAL);
-				continue;
-			}
-			if (!class_ff && (0xFF == usb_interface->altsetting->bInterfaceClass))
-			{
-				(void)fprintf(stderr, MAGENTA "  Found a possibly CCID/ICCD device (bInterfaceClass = 0xFF). Use -p\n" NORMAL);
-				continue;
-			}
-			(void)fprintf(stderr, GREEN "  Found a CCID/ICCD device at interface %d\n" NORMAL, num);
+		/* check if the device has bInterfaceClass == 11 */
+		r = libusb_get_active_config_descriptor(dev, &config_desc);
 
-			/* now we found a free reader and we try to use it */
-			if (NULL == dev->config)
-			{
-				(void)usb_close(dev_handle);
-				(void)fprintf(stderr, "No dev->config found for %s/%s\n",
-					 bus->dirname, dev->filename);
-				continue;
-			}
-
-			interface = usb_interface->altsetting->bInterfaceNumber;
-#ifndef __APPLE__
-			if (usb_claim_interface(dev_handle, interface) < 0)
-			{
-				(void)usb_close(dev_handle);
-				(void)fprintf(stderr, "Can't claim interface %s/%s: %s\n",
-						bus->dirname, dev->filename, strerror(errno));
-				if (EBUSY == errno)
-				{
-					(void)fprintf(stderr,
-						BRIGHT_RED " Please, stop pcscd and retry\n\n" NORMAL);
-					return TRUE;
-				}
-				continue;
-			}
-#endif
-
-			(void)ccid_parse_interface_descriptor(dev_handle, dev, num);
-
-#ifndef __APPLE__
-			(void)usb_release_interface(dev_handle, interface);
-#endif
-			/* check for another CCID interface on the same device */
-			num++;
-			goto again;
-
-			(void)usb_close(dev_handle);
-			nb++;
+		usb_interface = get_ccid_usb_interface(config_desc, &num);
+		if (NULL == usb_interface)
+		{
+			(void)libusb_close(handle);
+			/* only if we found no CCID interface */
+			if (0 == num)
+				(void)fprintf(stderr, RED "  NOT a CCID/ICCD device\n" NORMAL);
+			continue;
 		}
+		if (!class_ff && (0xFF == usb_interface->altsetting->bInterfaceClass))
+		{
+			(void)fprintf(stderr, MAGENTA "  Found a possibly CCID/ICCD device (bInterfaceClass = 0xFF). Use -p\n" NORMAL);
+			continue;
+		}
+		(void)fprintf(stderr,
+			GREEN "  Found a CCID/ICCD device at interface %d\n" NORMAL, num);
+
+		/* now we found a free reader and we try to use it */
+#if 0
+		if (NULL == dev->config)
+		{
+			(void)libusb_close(handle);
+			(void)fprintf(stderr, "No dev->config found for %s/%s\n",
+					bus->dirname, dev->filename);
+			continue;
+		}
+#endif
+
+		interface = usb_interface->altsetting->bInterfaceNumber;
+#ifndef __APPLE__
+		r = libusb_claim_interface(handle, interface);
+		if (r < 0)
+		{
+			(void)fprintf(stderr,
+				"Can't claim interface (bus %d, device %d): %s\n",
+				libusb_get_bus_number(dev), libusb_get_device_address(dev),
+				strerror(errno));
+			(void)libusb_close(handle);
+
+			if (EBUSY == errno)
+			{
+				(void)fprintf(stderr,
+					BRIGHT_RED " Please, stop pcscd and retry\n\n" NORMAL);
+				return TRUE;
+			}
+			continue;
+		}
+#endif
+
+		(void)ccid_parse_interface_descriptor(handle, desc, config_desc, num);
+
+#ifndef __APPLE__
+		(void)libusb_release_interface(handle, interface);
+#endif
+		/* check for another CCID interface on the same device */
+		num++;
+		goto again;
+
+		(void)libusb_close(handle);
+		nb++;
 	}
 
 	if ((0 == nb) && (0 != geteuid()))
-		(void)fprintf(stderr, "Can't find any CCID device.\nMaybe you must run parse as root?\n");
+		(void)fprintf(stderr,
+			"Can't find any CCID device.\nMaybe you must run parse as root?\n");
+
+	libusb_exit(NULL);
+
 	return 0;
 } /* main */
 
@@ -193,21 +222,23 @@ again:
  *					Parse a CCID USB Descriptor
  *
  ****************************************************************************/
-static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
-	struct usb_device *dev, int num)
+static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
+	struct libusb_device_descriptor desc, 
+	struct libusb_config_descriptor *config_desc,
+	int num)
 {
-	struct usb_interface_descriptor *usb_interface;
-	unsigned char *extra;
-	char buffer[256*sizeof(int)];  /* maximum is 256 records */
-	/* unsigned version of buffer[] used for multi-bytes conversions */
-	unsigned char *ubuffer = (unsigned char *)buffer;
+	const struct libusb_interface_descriptor *usb_interface;
+	const unsigned char *extra;
+	unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
+	int r;
 
 	/*
 	 * Vendor/model name
 	 */
-	(void)printf(" idVendor: 0x%04X\n", dev->descriptor.idVendor);
-	if (usb_get_string_simple(handle, dev->descriptor.iManufacturer,
-		buffer, sizeof(buffer)) < 0)
+	(void)printf(" idVendor: 0x%04X\n", desc.idVendor);
+	r = libusb_get_string_descriptor_ascii(handle, desc.iManufacturer,
+		buffer, sizeof(buffer));
+	if (r < 0)
 	{
 		(void)printf("  Can't get iManufacturer string\n");
 		if (getuid())
@@ -220,17 +251,18 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 	else
 		(void)printf("  iManufacturer: %s\n", buffer);
 
-	(void)printf(" idProduct: 0x%04X\n", dev->descriptor.idProduct);
-	if (usb_get_string_simple(handle, dev->descriptor.iProduct,
-		buffer, sizeof(buffer)) < 0)
+	(void)printf(" idProduct: 0x%04X\n", desc.idProduct);
+	r =  libusb_get_string_descriptor_ascii(handle, desc.iProduct,
+		buffer, sizeof(buffer));
+	if (r < 0)
 		(void)printf("  Can't get iProduct string\n");
 	else
 		(void)printf("  iProduct: %s\n", buffer);
 
 	(void)printf(" bcdDevice: %X.%02X (firmware release?)\n",
-		dev->descriptor.bcdDevice >> 8, dev->descriptor.bcdDevice & 0xFF);
+		desc.bcdDevice >> 8, desc.bcdDevice & 0xFF);
 
-	usb_interface = get_ccid_usb_interface(dev, &num)->altsetting;
+	usb_interface = get_ccid_usb_interface(config_desc, &num)->altsetting;
 
 	(void)printf(" bLength: %d\n", usb_interface->bLength);
 
@@ -271,11 +303,13 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			(void)printf("  Class is 0xFF (proprietary)\n");
 	}
 
-	(void)printf(" bInterfaceSubClass: %d\n", usb_interface->bInterfaceSubClass);
+	(void)printf(" bInterfaceSubClass: %d\n",
+		usb_interface->bInterfaceSubClass);
 	if (usb_interface->bInterfaceSubClass)
 		(void)printf("  UNSUPPORTED SubClass\n");
 
-	(void)printf(" bInterfaceProtocol: %d\n", usb_interface->bInterfaceProtocol);
+	(void)printf(" bInterfaceProtocol: %d\n",
+		usb_interface->bInterfaceProtocol);
 	switch (usb_interface->bInterfaceProtocol)
 	{
 		case 0:
@@ -291,15 +325,17 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 			(void)printf("  UNSUPPORTED InterfaceProtocol\n");
 	}
 
-	if (usb_get_string_simple(handle, usb_interface->iInterface,
-		buffer, sizeof(buffer)) < 0)
+	r = libusb_get_string_descriptor_ascii(handle, usb_interface->iInterface,
+		buffer, sizeof(buffer));
+	if (r < 0)
 		(void)printf(" Can't get iInterface string\n");
 	else
 		(void)printf(" iInterface: %s\n", buffer);
 
-	if (usb_interface->extralen < 54)
+	if (usb_interface->extra_length < 54)
 	{
-		(void)printf("USB extra length is too short: %d\n", usb_interface->extralen);
+		(void)printf("USB extra length is too short: %d\n",
+			usb_interface->extra_length);
 		(void)printf("\n  NOT A CCID DEVICE\n");
 		return TRUE;
 	}
@@ -354,7 +390,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		int n;
 
 		/* See CCID 3.7.2 page 25 */
-		n = usb_control_msg(handle,
+		n = libusb_control_transfer(handle,
 			0xA1, /* request type */
 			0x02, /* GET CLOCK FREQUENCIES */
 			0x00, /* value */
@@ -393,7 +429,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 				}
 
 				for (i=0; i<n; i+=4)
-					(void)printf("   Support %d kHz\n", dw2i(ubuffer, i));
+					(void)printf("   Support %d kHz\n", dw2i(buffer, i));
 			}
 	}
 	(void)printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
@@ -404,7 +440,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 		int n;
 
 		/* See CCID 3.7.3 page 25 */
-		n = usb_control_msg(handle,
+		n = libusb_control_transfer(handle,
 			0xA1, /* request type */
 			0x03, /* GET DATA RATES */
 			0x00, /* value */
@@ -436,7 +472,7 @@ static int ccid_parse_interface_descriptor(usb_dev_handle *handle,
 				}
 
 				for (i=0; i<n; i+=4)
-					(void)printf("   Support %d bps\n", dw2i(ubuffer, i));
+					(void)printf("   Support %d bps\n", dw2i(buffer, i));
 			}
 	}
 	(void)printf("  dwMaxIFSD: %d\n", dw2i(extra, 28));

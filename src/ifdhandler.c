@@ -57,7 +57,7 @@ int PowerOnVoltage = VOLTAGE_5V;
 static int DebugInitialized = FALSE;
 
 /* local functions */
-#if HAVE_DECL_TAG_IFD_POLLING_THREAD && !defined(TWIN_SERIAL) && defined(USE_USB_INTERRUPT)
+#if !defined(TWIN_SERIAL)
 static RESPONSECODE IFDHPolling(DWORD Lun);
 static RESPONSECODE IFDHSleep(DWORD Lun);
 #endif
@@ -320,7 +320,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 } /* IFDHCloseChannel */
 
 
-#if HAVE_DECL_TAG_IFD_POLLING_THREAD && !defined(TWIN_SERIAL) && defined(USE_USB_INTERRUPT)
+#if !defined(TWIN_SERIAL)
 static RESPONSECODE IFDHPolling(DWORD Lun)
 {
 	int reader_index;
@@ -523,7 +523,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*(uint32_t *)Value = get_ccid_descriptor(reader_index) -> dwMaxCCIDMessageLength -10;
 			break;
 
-#if HAVE_DECL_TAG_IFD_POLLING_THREAD && !defined(TWIN_SERIAL) && defined(USE_USB_INTERRUPT)
+#if !defined(TWIN_SERIAL)
 		case TAG_IFD_POLLING_THREAD:
 			{
 				_ccid_descriptor *ccid_desc;

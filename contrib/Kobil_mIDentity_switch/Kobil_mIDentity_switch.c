@@ -26,7 +26,7 @@ This tool is needed to activate the smartcard interface on the kobil midentity
 usb device (vendor 0x04D6 id 0x4081)
 
 Kobil's own implementation was a kernel usb driver which did just send a
-usb_control_msg in the probe routine.
+libusb_control_transfer in the probe routine.
 
 We do the same via libusb and call this program from our /sbin/hotblug script
 if the mIDentity gets added.
@@ -39,7 +39,7 @@ Here the interesting part of the kernel driver inside the probe function:
 
         if (dev->descriptor.idVendor == KOBIL_VENDOR_ID){
                 printk("!!!!! DEVICE FOUND !!! !\n");
-		ret = usb_control_msg(dev,
+		ret = libusb_control_transfer(dev,
 		send_pipe,
 		0x09,
 		0x22,
@@ -58,7 +58,9 @@ findintfep() in order to understand why.
 
 #include <stdio.h>
 #include <string.h>
-#include <usb.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <libusb-1.0/libusb.h>
 #include <errno.h>
 
 #include "config.h"
@@ -78,102 +80,114 @@ findintfep() in order to understand why.
 #define wIndex                  0x0002  /* this was originally 0x0001 */
 
 
-static int kobil_midentity_control_msg(usb_dev_handle *usb)
+static int kobil_midentity_control_msg(libusb_device_handle *usb)
 {
-    int ret;
+	int ret;
 
-    char switchCmd[10];
+	unsigned char switchCmd[10];
 
-    unsigned char Sleep = 1;
-    unsigned char hardDisk = 1;
+	unsigned char Sleep = 1;
+	unsigned char hardDisk = 1;
 
-    unsigned char param = ((hardDisk)<<4) | (Sleep);
+	unsigned char param = ((hardDisk) << 4) | (Sleep);
 
-    memset(switchCmd, 0x0, sizeof(switchCmd));
-    switchCmd[0] = HIDCMD_SWITCH_DEVICE>>8;
-    switchCmd[1] = HIDCMD_SWITCH_DEVICE;
-    switchCmd[5] = VAL_STARTUP_4000;
-    switchCmd[9] = param;
+	memset(switchCmd, 0x0, sizeof(switchCmd));
+	switchCmd[0] = HIDCMD_SWITCH_DEVICE >> 8;
+	switchCmd[1] = HIDCMD_SWITCH_DEVICE;
+	switchCmd[5] = VAL_STARTUP_4000;
+	switchCmd[9] = param;
 
-	ret = usb_control_msg(usb, bmRequestType, bRequest, wValue, wIndex,
-		switchCmd, sizeof(switchCmd), KOBIL_TIMEOUT);
+	ret = libusb_control_transfer(usb, bmRequestType, bRequest, wValue, wIndex,
+			switchCmd, sizeof(switchCmd), KOBIL_TIMEOUT);
 
-    return(!(ret==sizeof(switchCmd)));
+	return(!(ret==sizeof(switchCmd)));
 }
 
 
-static int kobil_midentity_claim_interface(usb_dev_handle *usb, int ifnum)
+static int kobil_midentity_claim_interface(libusb_device_handle *usb, int ifnum)
 {
-    int rv;
+	int rv;
 
-    printf("claiming interface #%d ...\n", ifnum);
-    rv = usb_claim_interface(usb, ifnum);
-    if (rv == 0)
+	printf("claiming interface #%d ...\n", ifnum);
+	rv = libusb_claim_interface(usb, ifnum);
+	if (rv == 0)
 	{
 		printf("success\n");
-		return(rv);
-    }
+		return rv;
+	}
 
 #ifdef HAVE_USB_DETACH_KERNEL_DRIVER_NP
-    printf("failed with error %d, trying to detach kernel driver ....\n", rv);
-    rv = usb_detach_kernel_driver_np(usb, ifnum);
-    if (rv == 0)
-    {
+	printf("failed with error %d, trying to detach kernel driver ....\n", rv);
+	rv = libusb_detach_kernel_driver_np(usb, ifnum);
+	if (rv == 0)
+	{
 		printf("success, claiming interface again ...");
-		rv = usb_claim_interface(usb, ifnum);
+		rv = libusb_claim_interface(usb, ifnum);
 		if (rv == 0)
 		{
 			printf("success\n");
-			return(rv);
+			return rv;
 		}
-    }
+	}
 #endif
-    printf("failed with error %d, giving up.\n", rv);
-    return(rv);
+	printf("failed with error %d, giving up.\n", rv);
+	return rv;
 }
 
 
 int main(int argc, char *argv[])
 {
-    struct usb_bus *bus;
-    struct usb_device *dev = NULL;
-    struct usb_device *found_dev = NULL;
-    usb_dev_handle *usb = NULL;
-    int rv;
+	libusb_device **devs, *dev;
+	libusb_device *found_dev = NULL;
+	struct libusb_device_handle *usb = NULL;
+	int rv, i;
+	ssize_t cnt;
 
 	(void)argc;
 	(void)argv;
 
-    usb_init();
-
-    usb_find_busses();
-    usb_find_devices();
-
-	for (bus = usb_busses; bus; bus = bus->next)
+	rv = libusb_init(NULL);
+	if (rv < 0)
 	{
-		for (dev = bus->devices; dev; dev = dev->next)
-		{
-			printf("vendor/product: %04X %04X\n",
-				dev->descriptor.idVendor, dev->descriptor.idProduct);
-			if (dev->descriptor.idVendor == KOBIL_VENDOR_ID
-				&& dev->descriptor.idProduct ==MID_DEVICE_ID)
-			{
-				found_dev = dev;
-			}
-		}
+		(void)printf("libusb_init() failed\n");
+		return rv;
 	}
 
-    if (found_dev == NULL)
+	cnt = libusb_get_device_list(NULL, &devs);
+	if (cnt < 0)
+	{
+		(void)printf("libusb_get_device_list() failed\n");
+		return (int)cnt;
+	}
+
+	/* for every device */
+	i = 0;
+	while ((dev = devs[i++]) != NULL)
+	{
+		struct libusb_device_descriptor desc;
+
+		rv = libusb_get_device_descriptor(dev, &desc);
+		if (rv < 0) {
+			(void)printf("failed to get device descriptor\n");
+			continue;
+		}
+
+		printf("vendor/product: %04X %04X\n", desc.idVendor, desc.idProduct);
+		if (desc.idVendor == KOBIL_VENDOR_ID && desc.idProduct ==MID_DEVICE_ID)
+			found_dev = dev;
+	}
+
+	if (found_dev == NULL)
 	{
 		printf("device not found. aborting.\n");
 		if (0 != geteuid())
 			printf("Try to rerun this program as root.\n");
 		exit(1);
-    }
+	}
 
 	printf("Device found, opening ... ");
-	usb = usb_open(found_dev);
-	if (!usb)
+	rv = libusb_open(found_dev, &usb);
+	if (rv < 0)
 	{
 		printf("failed, aborting.\n");
 		exit(2);
@@ -183,13 +197,13 @@ int main(int argc, char *argv[])
 	rv = kobil_midentity_claim_interface(usb, 0);
 	if (rv < 0)
 	{
-		usb_close(usb);
+		libusb_close(usb);
 		exit(3);
 	}
 	rv = kobil_midentity_claim_interface(usb, 1);
 	if (rv < 0)
 	{
-		usb_close(usb);
+		libusb_close(usb);
 		exit(3);
 	}
 
@@ -200,8 +214,8 @@ int main(int argc, char *argv[])
 	else
 		printf("failed with error %d, giving up.\n", rv);
 
-    usb_close(usb);
+	libusb_close(usb);
 
-    return 0;
+	return 0;
 }
 

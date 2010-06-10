@@ -58,9 +58,9 @@
 
 typedef struct
 {
-	usb_dev_handle *handle;
-	char *dirname;
-	char *filename;
+	libusb_device_handle *dev_handle;
+	uint8_t bus_number;
+	uint8_t device_address;
 	int interface;
 
 	/*
@@ -84,10 +84,11 @@ typedef struct
 /* The _usbDevice structure must be defined before including ccid_usb.h */
 #include "ccid_usb.h"
 
-static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice, int num);
-int ccid_check_firmware(struct usb_device *dev);
+static int get_end_points(struct libusb_config_descriptor *desc,
+	_usbDevice *usbdevice, int num);
+int ccid_check_firmware(struct libusb_device_descriptor *desc);
 static unsigned int *get_data_rates(unsigned int reader_index,
-	struct usb_device *dev, int num);
+	struct libusb_config_descriptor *desc, int num);
 
 /* ne need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
@@ -150,19 +151,19 @@ status_t OpenUSB(unsigned int reader_index, /*@unused@*/ int Channel)
  ****************************************************************************/
 status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 {
-	static struct usb_bus *busses = NULL;
 	int alias = 0;
-	struct usb_bus *bus;
-	struct usb_dev_handle *dev_handle;
+	struct libusb_device_handle *dev_handle;
 	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	unsigned int vendorID, productID;
 	char infofile[FILENAME_MAX];
 #ifndef __APPLE__
 	unsigned int device_vendor, device_product;
 #endif
-	char *dirname = NULL, *filename = NULL;
 	int interface_number = -1;
+	int i;
 	static int previous_reader_index = -1;
+	libusb_device **devs, *dev;
+	ssize_t cnt;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
@@ -170,6 +171,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	/* device name specified */
 	if (device)
 	{
+		char *dirname;
+
 		/* format: usb:%04x/%04x, vendor, product */
 		if (strncmp("usb:", device, 4) != 0)
 		{
@@ -182,33 +185,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		{
 			DEBUG_CRITICAL2("device name can't be parsed: %s", device);
 			return STATUS_UNSUCCESSFUL;
-		}
-
-		/* format usb:%04x/%04x:libusb:%s
-		 * with %s set to %s:%s, dirname, filename */
-		if ((dirname = strstr(device, "libusb:")) != NULL)
-		{
-			/* dirname points to the first char after libusb: */
-			dirname += strlen("libusb:");
-
-			/* search the : (separation) char */
-			filename = strchr(dirname, ':');
-
-			if (filename)
-			{
-				/* end the dirname string */
-				*filename = '\0';
-
-				/* filename points to the first char after : */
-				filename++;
-			}
-			else
-			{
-				/* parse failed */
-				dirname = NULL;
-
-				DEBUG_CRITICAL2("can't parse using libusb scheme: %s", device);
-			}
 		}
 
 		/* format usb:%04x/%04x:libhal:%s
@@ -245,29 +221,14 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 			}
 			else
 				DEBUG_CRITICAL2("can't parse using libhal scheme: %s", device);
-
-			/* dirname was just a temporary variable */
-			dirname = NULL;
 		}
 	}
 #endif
 
-	if (busses == NULL)
-		usb_init();
-
-	(void)usb_find_busses();
-	(void)usb_find_devices();
-
-	busses = usb_get_busses();
-
-	if (busses == NULL)
-	{
-		DEBUG_CRITICAL("No USB busses found");
-		return STATUS_UNSUCCESSFUL;
-	}
+	libusb_init(NULL);
 
 	/* is the reader_index already used? */
-	if (usbDevice[reader_index].handle != NULL)
+	if (usbDevice[reader_index].dev_handle != NULL)
 	{
 		DEBUG_CRITICAL2("USB driver with index %X already in use",
 			reader_index);
@@ -306,6 +267,13 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	for (; vendorID--;)
 		alias ^= keyValue[vendorID];
 
+	cnt = libusb_get_device_list(NULL, &devs);
+	if (cnt < 0)
+	{
+		(void)printf("libusb_get_device_list() failed\n");
+		return STATUS_UNSUCCESSFUL;
+	}
+
 	/* for any supported reader */
 	while (LTPBundleFindValueWithKey(infofile, PCSCLITE_MANUKEY_NAME, keyValue, alias) == 0)
 	{
@@ -332,38 +300,41 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 			continue;
 #endif
 
-		/* on any USB buses */
-		for (bus = busses; bus; bus = bus->next)
+		/* for every device */
+		i = 0;
+		while ((dev = devs[i++]) != NULL)
 		{
-			struct usb_device *dev;
+			struct libusb_device_descriptor desc;
+			struct libusb_config_descriptor *config_desc;
+			uint8_t bus_number = libusb_get_bus_number(dev);
+			uint8_t device_address = libusb_get_device_address(dev);
 
-			/* any device on this bus */
-			for (dev = bus->devices; dev; dev = dev->next)
+			int r = libusb_get_device_descriptor(dev, &desc);
+			if (r < 0)
 			{
-				/* device defined by name? */
-				if (dirname && (strcmp(dirname, bus->dirname)
-					|| strcmp(filename, dev->filename)))
-					continue;
+				DEBUG_INFO3("failed to get device descriptor for %d/%d",
+					bus_number, device_address);
+				continue;
+			}
 
-				if (dev->descriptor.idVendor == vendorID
-					&& dev->descriptor.idProduct == productID)
-				{
-					int r, already_used;
-					struct usb_interface *usb_interface = NULL;
-					int interface;
-					int num = 0;
+			if (desc.idVendor == vendorID && desc.idProduct == productID)
+			{
+				int already_used;
+				const struct libusb_interface *usb_interface = NULL;
+				int interface;
+				int num = 0;
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
-					static int static_interface = 1;
+				static int static_interface = 1;
 
+				{
+					/* simulate a composite device as when libhal is
+					 * used */
+					int readerID = (vendorID << 16) + productID;
+
+					if ((GEMALTOPROXDU == readerID)
+						|| (GEMALTOPROXSU == readerID))
 					{
-						/* simulate a composite device as when libhal is
-						 * used */
-						int readerID = (vendorID << 16) + productID;
-
-						if ((GEMALTOPROXDU == readerID)
-							|| (GEMALTOPROXSU == readerID))
-						{
 							/*
 							 * We can't talk to the two CCID interfaces
 							 * at the same time (the reader enters a
@@ -384,207 +355,208 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		* 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
 							 */
 
-							/* the CCID interfaces are 1 and 2 */
-							interface_number = static_interface;
-						}
+						/* the CCID interfaces are 1 and 2 */
+						interface_number = static_interface;
 					}
+				}
 #endif
-					/* is it already opened? */
-					already_used = FALSE;
+				/* is it already opened? */
+				already_used = FALSE;
 
-					DEBUG_COMM3("Checking device: %s/%s",
-						bus->dirname, dev->filename);
-					for (r=0; r<CCID_DRIVER_MAX_READERS; r++)
+				DEBUG_COMM3("Checking device: %d/%d",
+					bus_number, device_address);
+				for (r=0; r<CCID_DRIVER_MAX_READERS; r++)
+				{
+					if (usbDevice[r].dev_handle)
 					{
-						if (usbDevice[r].handle)
+						/* same bus, same address */
+						if (usbDevice[r].bus_number == bus_number
+							&& usbDevice[r].device_address == device_address)
+							already_used = TRUE;
+					}
+				}
+
+				/* this reader is already managed by us */
+				if (already_used)
+				{
+					if ((previous_reader_index != -1)
+						&& usbDevice[previous_reader_index].dev_handle
+						&& (usbDevice[previous_reader_index].bus_number == bus_number)
+						&& (usbDevice[previous_reader_index].device_address == device_address)
+						&& usbDevice[previous_reader_index].ccid.bCurrentSlotIndex < usbDevice[previous_reader_index].ccid.bMaxSlotIndex)
+					{
+						/* we reuse the same device
+						 * and the reader is multi-slot */
+						usbDevice[reader_index] = usbDevice[previous_reader_index];
+						/* the other slots do not have the same data rates */
+						if ((GEMCOREPOSPRO == usbDevice[reader_index].ccid.readerID)
+							|| (GEMCORESIMPRO == usbDevice[reader_index].ccid.readerID))
 						{
-							/* same busname, same filename */
-							if (strcmp(usbDevice[r].dirname, bus->dirname) == 0 && strcmp(usbDevice[r].filename, dev->filename) == 0)
-								already_used = TRUE;
+							usbDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
+							usbDevice[reader_index].ccid.dwMaxDataRate = 125000;
+						}
+
+						*usbDevice[reader_index].nb_opened_slots += 1;
+						usbDevice[reader_index].ccid.bCurrentSlotIndex++;
+						usbDevice[reader_index].ccid.dwSlotStatus =
+							IFD_ICC_PRESENT;
+						DEBUG_INFO2("Opening slot: %d",
+							usbDevice[reader_index].ccid.bCurrentSlotIndex);
+						goto end;
+					}
+					else
+					{
+						/* if an interface number is given by HAL we
+						 * continue with this device. */
+						if (-1 == interface_number)
+						{
+							DEBUG_INFO3("USB device %d/%d already in use."
+								" Checking next one.",
+								bus_number, device_address);
+							continue;
 						}
 					}
+				}
 
-					/* this reader is already managed by us */
-					if (already_used)
-					{
-						if ((previous_reader_index != -1)
-							&& usbDevice[previous_reader_index].handle
-							&& (strcmp(usbDevice[previous_reader_index].dirname, bus->dirname)  == 0)
-							&& (strcmp(usbDevice[previous_reader_index].filename, dev->filename) == 0)
-							&& usbDevice[previous_reader_index].ccid.bCurrentSlotIndex < usbDevice[previous_reader_index].ccid.bMaxSlotIndex)
-						{
-							/* we reuse the same device
-							 * and the reader is multi-slot */
-							usbDevice[reader_index] = usbDevice[previous_reader_index];
-							/* the other slots do not have the same data rates */
-							if ((GEMCOREPOSPRO == usbDevice[reader_index].ccid.readerID)
-								|| (GEMCORESIMPRO == usbDevice[reader_index].ccid.readerID))
-							{
-								usbDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
-								usbDevice[reader_index].ccid.dwMaxDataRate = 125000;
-							}
+				DEBUG_COMM3("Trying to open USB bus/device: %d/%d",
+					bus_number, device_address);
 
-							*usbDevice[reader_index].nb_opened_slots += 1;
-							usbDevice[reader_index].ccid.bCurrentSlotIndex++;
-							usbDevice[reader_index].ccid.dwSlotStatus =
-								IFD_ICC_PRESENT;
-							DEBUG_INFO2("Opening slot: %d",
-								usbDevice[reader_index].ccid.bCurrentSlotIndex);
-							goto end;
-						}
-						else
-						{
-							/* if an interface number is given by HAL we
-							 * continue with this device. */
-							if (-1 == interface_number)
-							{
-								DEBUG_INFO3("USB device %s/%s already in use."
-									" Checking next one.",
-									bus->dirname, dev->filename);
-								continue;
-							}
-						}
-					}
+				r = libusb_open(dev, &dev_handle);
+				if (r < 0)
+				{
+					DEBUG_CRITICAL4("Can't libusb_open(%d/%d): %d",
+						bus_number, device_address, r);
 
-					DEBUG_COMM3("Trying to open USB bus/device: %s/%s",
-						 bus->dirname, dev->filename);
-
-					dev_handle = usb_open(dev);
-					if (dev_handle == NULL)
-					{
-						DEBUG_CRITICAL4("Can't usb_open(%s/%s): %s",
-							bus->dirname, dev->filename, usb_strerror());
-
-						continue;
-					}
-
-					/* now we found a free reader and we try to use it */
-					if (dev->config == NULL)
-					{
-						(void)usb_close(dev_handle);
-						DEBUG_CRITICAL3("No dev->config found for %s/%s",
-							 bus->dirname, dev->filename);
-						return STATUS_UNSUCCESSFUL;
-					}
+					continue;
+				}
 
 again:
-					usb_interface = get_ccid_usb_interface(dev, &num);
-					if (usb_interface == NULL)
-					{
-						(void)usb_close(dev_handle);
-						if (0 == num)
-							DEBUG_CRITICAL3("Can't find a CCID interface on %s/%s",
-								bus->dirname, dev->filename);
-						interface_number = -1;
-						continue;
-					}
+				r = libusb_get_active_config_descriptor(dev, &config_desc);
+				if (r < 0)
+				{
+					(void)libusb_close(dev_handle);
+					DEBUG_CRITICAL3("Can't get config descriptor on %d/%d",
+						bus_number, device_address);
+					continue;
+				}
 
-					if (usb_interface->altsetting->extralen != 54)
-					{
-						(void)usb_close(dev_handle);
-						DEBUG_CRITICAL4("Extra field for %s/%s has a wrong length: %d", bus->dirname, dev->filename, usb_interface->altsetting->extralen);
-						return STATUS_UNSUCCESSFUL;
-					}
+				usb_interface = get_ccid_usb_interface(config_desc, &num);
+				if (usb_interface == NULL)
+				{
+					(void)libusb_close(dev_handle);
+					if (0 == num)
+						DEBUG_CRITICAL3("Can't find a CCID interface on %d/%d",
+							bus_number, device_address);
+					interface_number = -1;
+					continue;
+				}
 
-					interface = usb_interface->altsetting->bInterfaceNumber;
-					if (interface_number >= 0 && interface != interface_number)
-					{
-						/* an interface was specified and it is not the
-						 * current one */
-						DEBUG_INFO3("Wrong interface for USB device %s/%s."
-							" Checking next one.", bus->dirname, dev->filename);
+				if (usb_interface->altsetting->extra_length != 54)
+				{
+					(void)libusb_close(dev_handle);
+					DEBUG_CRITICAL4("Extra field for %d/%d has a wrong length: %d",
+						bus_number, device_address,
+						usb_interface->altsetting->extra_length);
+					return STATUS_UNSUCCESSFUL;
+				}
 
-						/* check for another CCID interface on the same device */
-						num++;
+				interface = usb_interface->altsetting->bInterfaceNumber;
+				if (interface_number >= 0 && interface != interface_number)
+				{
+					/* an interface was specified and it is not the
+					 * current one */
+					DEBUG_INFO3("Wrong interface for USB device %d/%d."
+						" Checking next one.", bus_number, device_address);
 
-						goto again;
-					}
+					/* check for another CCID interface on the same device */
+					num++;
 
-					if (usb_claim_interface(dev_handle, interface) < 0)
-					{
-						(void)usb_close(dev_handle);
-						DEBUG_CRITICAL4("Can't claim interface %s/%s: %s",
-							bus->dirname, dev->filename, usb_strerror());
-						interface_number = -1;
-						continue;
-					}
+					goto again;
+				}
 
-					DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
-						dev->descriptor.idVendor,
-						dev->descriptor.idProduct, keyValue);
-					DEBUG_INFO3("Using USB bus/device: %s/%s",
-						 bus->dirname, dev->filename);
+				r = libusb_claim_interface(dev_handle, interface);
+				if (r < 0)
+				{
+					(void)libusb_close(dev_handle);
+					DEBUG_CRITICAL4("Can't claim interface %d/%d: %d",
+						bus_number, device_address, r);
+					interface_number = -1;
+					continue;
+				}
 
-					/* check for firmware bugs */
-					if (ccid_check_firmware(dev))
-					{
-						(void)usb_close(dev_handle);
-						return STATUS_UNSUCCESSFUL;
-					}
+				DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
+					desc.idVendor, desc.idProduct, keyValue);
+				DEBUG_INFO3("Using USB bus/device: %d/%d",
+					bus_number, device_address);
+
+				/* check for firmware bugs */
+				if (ccid_check_firmware(&desc))
+				{
+					(void)libusb_close(dev_handle);
+					return STATUS_UNSUCCESSFUL;
+				}
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
-					/* use the next interface for the next "slot" */
-					static_interface++;
+				/* use the next interface for the next "slot" */
+				static_interface++;
 
-					/* reset for a next reader */
-					if (static_interface > 2)
-						static_interface = 1;
+				/* reset for a next reader */
+				if (static_interface > 2)
+					static_interface = 1;
 #endif
 
-					/* Get Endpoints values*/
-					(void)get_end_points(dev, &usbDevice[reader_index], num);
+				/* Get Endpoints values*/
+				(void)get_end_points(config_desc, &usbDevice[reader_index], num);
 
-					/* store device information */
-					usbDevice[reader_index].handle = dev_handle;
-					usbDevice[reader_index].dirname = strdup(bus->dirname);
-					usbDevice[reader_index].filename = strdup(dev->filename);
-					usbDevice[reader_index].interface = interface;
-					usbDevice[reader_index].real_nb_opened_slots = 1;
-					usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
+				/* store device information */
+				usbDevice[reader_index].dev_handle = dev_handle;
+				usbDevice[reader_index].bus_number = bus_number;
+				usbDevice[reader_index].device_address = device_address;
+				usbDevice[reader_index].interface = interface;
+				usbDevice[reader_index].real_nb_opened_slots = 1;
+				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
 
-					/* CCID common informations */
-					usbDevice[reader_index].ccid.real_bSeq = 0;
-					usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
-					usbDevice[reader_index].ccid.readerID =
-						(dev->descriptor.idVendor << 16) +
-						dev->descriptor.idProduct;
-					usbDevice[reader_index].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
-					usbDevice[reader_index].ccid.wLcdLayout =
-						(usb_interface->altsetting->extra[51] << 8) +
-						usb_interface->altsetting->extra[50];
-					usbDevice[reader_index].ccid.bPINSupport = usb_interface->altsetting->extra[52];
-					usbDevice[reader_index].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
-					usbDevice[reader_index].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
-					usbDevice[reader_index].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);
-					usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
-					usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
-					usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
-					usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
-					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, dev, num);
-					usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
-					usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
-					usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
-					usbDevice[reader_index].ccid.bVoltageSupport = usb_interface->altsetting->extra[5];
-					usbDevice[reader_index].ccid.sIFD_serial_number = NULL;
-					if (dev->descriptor.iSerialNumber)
-					{
-						char serial[128];
-						int ret;
+				/* CCID common informations */
+				usbDevice[reader_index].ccid.real_bSeq = 0;
+				usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
+				usbDevice[reader_index].ccid.readerID =
+					(desc.idVendor << 16) + desc.idProduct;
+				usbDevice[reader_index].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
+				usbDevice[reader_index].ccid.wLcdLayout =
+					(usb_interface->altsetting->extra[51] << 8) +
+					usb_interface->altsetting->extra[50];
+				usbDevice[reader_index].ccid.bPINSupport = usb_interface->altsetting->extra[52];
+				usbDevice[reader_index].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
+				usbDevice[reader_index].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
+				usbDevice[reader_index].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);
+				usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
+				usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
+				usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
+				usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
+				usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, config_desc, num);
+				usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
+				usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
+				usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
+				usbDevice[reader_index].ccid.bVoltageSupport = usb_interface->altsetting->extra[5];
+				usbDevice[reader_index].ccid.sIFD_serial_number = NULL;
+				if (desc.iSerialNumber)
+				{
+					unsigned char serial[128];
+					int ret;
 
-						ret = usb_get_string_simple(dev_handle,
-							dev->descriptor.iSerialNumber, serial,
+					ret = libusb_get_string_descriptor_ascii(dev_handle,
+							desc.iSerialNumber, serial,
 							sizeof(serial));
-						if (ret > 0)
-							usbDevice[reader_index].ccid.sIFD_serial_number
-								= strdup(serial);
-					}
-					goto end;
+					if (ret > 0)
+						usbDevice[reader_index].ccid.sIFD_serial_number
+							= strdup((char *)serial);
 				}
+				goto end;
 			}
 		}
 	}
 end:
-	if (usbDevice[reader_index].handle == NULL)
+	if (usbDevice[reader_index].dev_handle == NULL)
 		return STATUS_NO_SUCH_DEVICE;
 
 	/* memorise the current reader_index so we can detect
@@ -604,6 +576,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	unsigned char *buffer)
 {
 	int rv;
+	int actual_length;
 	char debug_header[] = "-> 121234 ";
 
 	(void)snprintf(debug_header, sizeof(debug_header), "-> %06X ",
@@ -611,15 +584,15 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 
 	DEBUG_XXD(debug_header, buffer, length);
 
-	rv = usb_bulk_write(usbDevice[reader_index].handle,
-		usbDevice[reader_index].bulk_out, (char *)buffer, length,
-		USB_WRITE_TIMEOUT);
+	rv = libusb_bulk_transfer(usbDevice[reader_index].dev_handle,
+		usbDevice[reader_index].bulk_out, buffer, length,
+		&actual_length, USB_WRITE_TIMEOUT);
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL4("usb_bulk_write(%s/%s): %s",
-			usbDevice[reader_index].dirname, usbDevice[reader_index].filename,
-			usb_strerror());
+		DEBUG_CRITICAL4("libusb_bulk_write(%d/%d): %d",
+			usbDevice[reader_index].bus_number,
+			usbDevice[reader_index].device_address, rv);
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -640,6 +613,7 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 	unsigned char *buffer)
 {
 	int rv;
+	int actual_length;
 	char debug_header[] = "<- 121234 ";
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int duplicate_frame = 0;
@@ -648,16 +622,16 @@ read_again:
 	(void)snprintf(debug_header, sizeof(debug_header), "<- %06X ",
 		(int)reader_index);
 
-	rv = usb_bulk_read(usbDevice[reader_index].handle,
-		usbDevice[reader_index].bulk_in, (char *)buffer, *length,
-		usbDevice[reader_index].ccid.readTimeout);
+	rv = libusb_bulk_transfer(usbDevice[reader_index].dev_handle,
+		usbDevice[reader_index].bulk_in, buffer, *length,
+		&actual_length, usbDevice[reader_index].ccid.readTimeout);
 
 	if (rv < 0)
 	{
 		*length = 0;
-		DEBUG_CRITICAL4("usb_bulk_read(%s/%s): %s",
-			usbDevice[reader_index].dirname, usbDevice[reader_index].filename,
-			usb_strerror());
+		DEBUG_CRITICAL4("libusb_bulk_read(%d/%d): %d",
+			usbDevice[reader_index].bus_number,
+			usbDevice[reader_index].device_address, rv);
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -665,7 +639,7 @@ read_again:
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	*length = rv;
+	*length = actual_length;
 
 	DEBUG_XXD(debug_header, buffer, *length);
 
@@ -695,12 +669,12 @@ read_again:
 status_t CloseUSB(unsigned int reader_index)
 {
 	/* device not opened */
-	if (usbDevice[reader_index].handle == NULL)
+	if (usbDevice[reader_index].dev_handle == NULL)
 		return STATUS_UNSUCCESSFUL;
 
-	DEBUG_COMM3("Closing USB device: %s/%s",
-		usbDevice[reader_index].dirname,
-		usbDevice[reader_index].filename);
+	DEBUG_COMM3("Closing USB device: %d/%d",
+		usbDevice[reader_index].bus_number,
+		usbDevice[reader_index].device_address);
 
 	if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates
 		&& (usbDevice[reader_index].ccid.bCurrentSlotIndex == 0))
@@ -719,20 +693,15 @@ status_t CloseUSB(unsigned int reader_index)
 
 		/* reset so that bSeq starts at 0 again */
 		if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
-			(void)usb_reset(usbDevice[reader_index].handle);
+			(void)libusb_reset_device(usbDevice[reader_index].dev_handle);
 
-		(void)usb_release_interface(usbDevice[reader_index].handle,
+		(void)libusb_release_interface(usbDevice[reader_index].dev_handle,
 			usbDevice[reader_index].interface);
-		(void)usb_close(usbDevice[reader_index].handle);
-
-		free(usbDevice[reader_index].dirname);
-		free(usbDevice[reader_index].filename);
+		(void)libusb_close(usbDevice[reader_index].dev_handle);
 	}
 
 	/* mark the resource unused */
-	usbDevice[reader_index].handle = NULL;
-	usbDevice[reader_index].dirname = NULL;
-	usbDevice[reader_index].filename = NULL;
+	usbDevice[reader_index].dev_handle = NULL;
 	usbDevice[reader_index].interface = 0;
 
 	if (usbDevice[reader_index].ccid.sIFD_serial_number)
@@ -758,12 +727,14 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
  *					get_end_points
  *
  ****************************************************************************/
-static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice,
-	int num)
+static int get_end_points(struct libusb_config_descriptor *desc,
+	_usbDevice *usbdevice, int num)
 {
 	int i;
 	int bEndpointAddress;
-	struct usb_interface *usb_interface = get_ccid_usb_interface(dev, &num);
+	const struct libusb_interface *usb_interface;
+
+	usb_interface = get_ccid_usb_interface(desc, &num);
 
 	/*
 	 * 3 Endpoints maximum: Interrupt In, Bulk In, Bulk Out
@@ -798,26 +769,26 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice,
  *					get_ccid_usb_interface
  *
  ****************************************************************************/
-/*@null@*/ EXTERNAL struct usb_interface * get_ccid_usb_interface(
-	struct usb_device *dev, int *num)
+/*@null@*/ EXTERNAL const struct libusb_interface * get_ccid_usb_interface(
+	struct libusb_config_descriptor *desc, int *num)
 {
-	struct usb_interface *usb_interface = NULL;
+	const struct libusb_interface *usb_interface = NULL;
 	int i;
 #ifdef O2MICRO_OZ776_PATCH
 	int readerID;
 #endif
 
 	/* if multiple interfaces use the first one with CCID class type */
-	for (i = *num; dev->config && i<dev->config->bNumInterfaces; i++)
+	for (i = *num; i < desc->bNumInterfaces; i++)
 	{
 		/* CCID Class? */
-		if (dev->config->interface[i].altsetting->bInterfaceClass == 0xb
+		if (desc->interface[i].altsetting->bInterfaceClass == 0xb
 #ifdef ALLOW_PROPRIETARY_CLASS
-			|| dev->config->interface[i].altsetting->bInterfaceClass == 0xff
+			|| desc->interface[i].altsetting->bInterfaceClass == 0xff
 #endif
 			)
 		{
-			usb_interface = &dev->config->interface[i];
+			usb_interface = &desc->interface[i];
 			/* store the interface number for further reference */
 			*num = i;
 			break;
@@ -829,21 +800,21 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice,
 	if (usb_interface != NULL
 		&& ((OZ776 == readerID) || (OZ776_7772 == readerID)
 		|| (REINER_SCT == readerID) || (BLUDRIVEII_CCID == readerID))
-		&& (0 == usb_interface->altsetting->extralen)) /* this is the bug */
+		&& (0 == usb_interface->altsetting->extra_length)) /* this is the bug */
 	{
 		int j;
 		for (j=0; j<usb_interface->altsetting->bNumEndpoints; j++)
 		{
 			/* find the extra[] array */
-			if (54 == usb_interface->altsetting->endpoint[j].extralen)
+			if (54 == usb_interface->altsetting->endpoint[j].extra_length)
 			{
 				/* get the extra[] from the endpoint */
-				usb_interface->altsetting->extralen = 54;
+				usb_interface->altsetting->extra_length = 54;
 				usb_interface->altsetting->extra =
 					usb_interface->altsetting->endpoint[j].extra;
 				/* avoid double free on close */
 				usb_interface->altsetting->endpoint[j].extra = NULL;
-				usb_interface->altsetting->endpoint[j].extralen = 0;
+				usb_interface->altsetting->endpoint[j].extra_length = 0;
 				break;
 			}
 		}
@@ -859,33 +830,31 @@ static int get_end_points(struct usb_device *dev, _usbDevice *usbdevice,
  *					ccid_check_firmware
  *
  ****************************************************************************/
-int ccid_check_firmware(struct usb_device *dev)
+int ccid_check_firmware(struct libusb_device_descriptor *desc)
 {
 	unsigned int i;
 
 	for (i=0; i<sizeof(Bogus_firmwares)/sizeof(Bogus_firmwares[0]); i++)
 	{
-		if (dev->descriptor.idVendor != Bogus_firmwares[i].vendor)
+		if (desc->idVendor != Bogus_firmwares[i].vendor)
 			continue;
 
-		if (dev->descriptor.idProduct != Bogus_firmwares[i].product)
+		if (desc->idProduct != Bogus_firmwares[i].product)
 			continue;
 
 		/* firmware too old and buggy */
-		if (dev->descriptor.bcdDevice < Bogus_firmwares[i].firmware)
+		if (desc->bcdDevice < Bogus_firmwares[i].firmware)
 		{
 			if (DriverOptions & DRIVER_OPTION_USE_BOGUS_FIRMWARE)
 			{
 				DEBUG_INFO3("Firmware (%X.%02X) is bogus! but you choosed to use it",
-					dev->descriptor.bcdDevice >> 8,
-					dev->descriptor.bcdDevice & 0xFF);
+					desc->bcdDevice >> 8, desc->bcdDevice & 0xFF);
 				return FALSE;
 			}
 			else
 			{
 				DEBUG_CRITICAL3("Firmware (%X.%02X) is bogus! Upgrade the reader firmware or get a new reader.",
-					dev->descriptor.bcdDevice >> 8,
-					dev->descriptor.bcdDevice & 0xFF);
+					desc->bcdDevice >> 8, desc->bcdDevice & 0xFF);
 				return TRUE;
 			}
 		}
@@ -902,7 +871,7 @@ int ccid_check_firmware(struct usb_device *dev)
  *
  ****************************************************************************/
 static unsigned int *get_data_rates(unsigned int reader_index,
-	struct usb_device *dev, int num)
+	struct libusb_config_descriptor *desc, int num)
 {
 	int n, i, len;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
@@ -918,8 +887,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	/* we got an error? */
 	if (n <= 0)
 	{
-		DEBUG_INFO2("IFD does not support GET_DATA_RATES request: %s",
-			usb_strerror());
+		DEBUG_INFO2("IFD does not support GET_DATA_RATES request: %d", n);
 		return NULL;
 	}
 
@@ -934,7 +902,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	n /= sizeof(int);
 
 	/* we do not get the expected number of data rates */
-	len = get_ccid_usb_interface(dev, &num)->altsetting->extra[27]; /* bNumDataRatesSupported */
+	len = get_ccid_usb_interface(desc, &num)->altsetting->extra[27]; /* bNumDataRatesSupported */
 	if ((n != len) && len)
 	{
 		DEBUG_INFO3("Got %d data rates but was expecting %d", n, len);
@@ -980,9 +948,9 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 	if (0 == (requesttype & 0x80))
 		DEBUG_XXD("send: ", bytes, size);
 
-	ret = usb_control_msg(usbDevice[reader_index].handle, requesttype,
-		request, value, usbDevice[reader_index].interface, (char *)bytes, size,
-		usbDevice[reader_index].ccid.readTimeout);
+	ret = libusb_control_transfer(usbDevice[reader_index].dev_handle,
+		requesttype, request, value, usbDevice[reader_index].interface,
+		bytes, size, usbDevice[reader_index].ccid.readTimeout);
 
 	if (requesttype & 0x80)
 		DEBUG_XXD("receive: ", bytes, ret);
@@ -997,24 +965,25 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
  ****************************************************************************/
 int InterruptRead(int reader_index, int timeout /* in ms */)
 {
-	int ret;
-	char buffer[8];
+	int ret, actual_length;
+	unsigned char buffer[8];
 
 	DEBUG_PERIODIC2("before (%d)", reader_index);
-	ret = usb_interrupt_read(usbDevice[reader_index].handle,
-		usbDevice[reader_index].interrupt, buffer, sizeof(buffer), timeout);
-	DEBUG_PERIODIC3("after (%d) (%s)", reader_index, usb_strerror());
+	ret = libusb_interrupt_transfer(usbDevice[reader_index].dev_handle,
+		usbDevice[reader_index].interrupt, buffer, sizeof(buffer),
+		&actual_length, timeout);
+	DEBUG_PERIODIC3("after (%d) (%d)", reader_index, ret);
 
 	if (ret < 0)
 	{
-		/* if usb_interrupt_read() times out we get EILSEQ or EAGAIN */
+		/* if libusb_interrupt_transfer() times out we get EILSEQ or EAGAIN */
 		if ((errno != EILSEQ) && (errno != EAGAIN) && (errno != ENODEV) && (errno != 0))
-			DEBUG_COMM4("usb_interrupt_read(%s/%s): %s",
-					usbDevice[reader_index].dirname,
-					usbDevice[reader_index].filename, usb_strerror());
+			DEBUG_COMM4("libusb_interrupt_transfer(%d/%d): %d",
+				usbDevice[reader_index].bus_number,
+				usbDevice[reader_index].device_address, ret);
 	}
 	else
-		DEBUG_XXD("NotifySlotChange: ", (const unsigned char *)buffer, ret);
+		DEBUG_XXD("NotifySlotChange: ", (const unsigned char *)buffer, actual_length);
 
 	return ret;
 } /* InterruptRead */
