@@ -29,7 +29,8 @@
 # ifdef S_SPLINT_S
 # include <sys/types.h>
 # endif
-#include <usb.h>
+#include <libusb-1.0/libusb.h>
+#include <stdlib.h>
 #include <ifdhandler.h>
 
 #include "misc.h"
@@ -742,21 +743,27 @@ static int get_end_points(struct libusb_config_descriptor *desc,
 	for (i=0; i<usb_interface->altsetting->bNumEndpoints; i++)
 	{
 		/* interrupt end point (if available) */
-		if (usb_interface->altsetting->endpoint[i].bmAttributes == USB_ENDPOINT_TYPE_INTERRUPT)
+		if (usb_interface->altsetting->endpoint[i].bmAttributes
+			== LIBUSB_TRANSFER_TYPE_INTERRUPT)
 		{
-			usbdevice->interrupt = usb_interface->altsetting->endpoint[i].bEndpointAddress;
+			usbdevice->interrupt =
+				usb_interface->altsetting->endpoint[i].bEndpointAddress;
 			continue;
 		}
 
-		if (usb_interface->altsetting->endpoint[i].bmAttributes != USB_ENDPOINT_TYPE_BULK)
+		if (usb_interface->altsetting->endpoint[i].bmAttributes
+			!= LIBUSB_TRANSFER_TYPE_BULK)
 			continue;
 
-		bEndpointAddress = usb_interface->altsetting->endpoint[i].bEndpointAddress;
+		bEndpointAddress =
+			usb_interface->altsetting->endpoint[i].bEndpointAddress;
 
-		if ((bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_ENDPOINT_IN)
+		if ((bEndpointAddress & LIBUSB_TRANSFER_TYPE_MASK)
+			== LIBUSB_ENDPOINT_IN)
 			usbdevice->bulk_in = bEndpointAddress;
 
-		if ((bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_ENDPOINT_OUT)
+		if ((bEndpointAddress & LIBUSB_TRANSFER_TYPE_MASK)
+			== LIBUSB_ENDPOINT_OUT)
 			usbdevice->bulk_out = bEndpointAddress;
 	}
 
