@@ -211,6 +211,7 @@
 
 # Realtek?
 0x0BDA:0x0161:MSI StarReader SMART
+0x0BDA:0x0165:Dectel CI692
 0x0BDA:0x0169:Realtek
 
 # Aktiv Co., ProgramPark
