@@ -32,17 +32,17 @@ SCARD_ATTR_ATR_STRING
     ATR of the card
 
 SCARD_ATTR_ICC_INTERFACE_STATUS
-	Single byte. Zero if smart card electrical contact is not active;
-	nonzero if contact is active.
+    Single byte. Zero if smart card electrical contact is not active;
+    nonzero if contact is active.
 
 SCARD_ATTR_ICC_PRESENCE
-	Single byte indicating smart card presence:
-	0 = not present
-	1 = card present but not swallowed (applies only if reader supports
-	smart card swallowing)
-	2 = card present (and swallowed if reader supports smart card swallowing)
-	4 = card confiscated.
-	
+    Single byte indicating smart card presence:
+    0 = not present
+    1 = card present but not swallowed (applies only if reader supports
+    smart card swallowing)
+    2 = card present (and swallowed if reader supports smart card swallowing)
+    4 = card confiscated.
+
 SCARD_ATTR_VENDOR_IFD_VERSION
     Vendor-supplied interface device version
     DWORD in the form 0xMMmmbbbb where
@@ -62,7 +62,7 @@ SCARD_ATTR_MAXINPUT
    APDU mode instead of TPDU and for T=0 cards.
 
 SCARD_ATTR_VENDOR_IFD_SERIAL_NO
-	reader serial number (if available).
+    reader serial number (if available).
 
 
 Sample code
