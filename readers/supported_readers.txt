@@ -246,6 +246,7 @@
 
 # Todos
 0x0B0C:0x0050:Todos AGM2 CCID
+0x0B0C:0x0052:Todos CX00
 
 # Smart
 # removed on manufacturer request. They use libusb directly.
