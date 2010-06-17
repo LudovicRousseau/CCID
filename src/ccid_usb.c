@@ -591,7 +591,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL4("libusb_bulk_write(%d/%d): %s",
+		DEBUG_CRITICAL4("write failed (%d/%d): %s",
 			usbDevice[reader_index].bus_number,
 			usbDevice[reader_index].device_address, strerror(errno));
 
@@ -630,7 +630,7 @@ read_again:
 	if (rv < 0)
 	{
 		*length = 0;
-		DEBUG_CRITICAL4("libusb_bulk_read(%d/%d): %s",
+		DEBUG_CRITICAL4("read failed (%d/%d): %s",
 			usbDevice[reader_index].bus_number,
 			usbDevice[reader_index].device_address, strerror(errno));
 
