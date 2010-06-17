@@ -758,11 +758,11 @@ static int get_end_points(struct libusb_config_descriptor *desc,
 		bEndpointAddress =
 			usb_interface->altsetting->endpoint[i].bEndpointAddress;
 
-		if ((bEndpointAddress & LIBUSB_TRANSFER_TYPE_MASK)
+		if ((bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK)
 			== LIBUSB_ENDPOINT_IN)
 			usbdevice->bulk_in = bEndpointAddress;
 
-		if ((bEndpointAddress & LIBUSB_TRANSFER_TYPE_MASK)
+		if ((bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK)
 			== LIBUSB_ENDPOINT_OUT)
 			usbdevice->bulk_out = bEndpointAddress;
 	}
