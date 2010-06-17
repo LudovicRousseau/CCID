@@ -591,9 +591,9 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL4("libusb_bulk_write(%d/%d): %d",
+		DEBUG_CRITICAL4("libusb_bulk_write(%d/%d): %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, rv);
+			usbDevice[reader_index].device_address, strerror(errno));
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -630,9 +630,9 @@ read_again:
 	if (rv < 0)
 	{
 		*length = 0;
-		DEBUG_CRITICAL4("libusb_bulk_read(%d/%d): %d",
+		DEBUG_CRITICAL4("libusb_bulk_read(%d/%d): %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, rv);
+			usbDevice[reader_index].device_address, strerror(errno));
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -985,9 +985,9 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 	{
 		/* if libusb_interrupt_transfer() times out we get EILSEQ or EAGAIN */
 		if ((errno != EILSEQ) && (errno != EAGAIN) && (errno != ENODEV) && (errno != 0))
-			DEBUG_COMM4("libusb_interrupt_transfer(%d/%d): %d",
+			DEBUG_COMM4("libusb_interrupt_transfer(%d/%d): %s",
 				usbDevice[reader_index].bus_number,
-				usbDevice[reader_index].device_address, ret);
+				usbDevice[reader_index].device_address, strerror(errno));
 	}
 	else
 		DEBUG_XXD("NotifySlotChange: ", (const unsigned char *)buffer, actual_length);
