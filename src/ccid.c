@@ -81,7 +81,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 	}
 
 	/* ICCD type A */
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		unsigned char tmp[MAX_ATR_SIZE];
 		unsigned int n = sizeof(tmp);
@@ -93,7 +93,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 	}
 
 	/* ICCD type B */
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		unsigned char tmp[MAX_ATR_SIZE];
 		unsigned int n = sizeof(tmp);

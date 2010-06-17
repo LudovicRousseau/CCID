@@ -542,8 +542,8 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 						*(void **)Value = IFDHPolling;
 				}
 
-				if ((ICCD_A == ccid_desc->bInterfaceProtocol)
-					|| (ICCD_B == ccid_desc->bInterfaceProtocol))
+				if ((PROTOCOL_ICCD_A == ccid_desc->bInterfaceProtocol)
+					|| (PROTOCOL_ICCD_B == ccid_desc->bInterfaceProtocol))
 				{
 					*Length = sizeof(void *);
 					if (Value)
@@ -560,8 +560,8 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Length = 0;
 
 				ccid_desc = get_ccid_descriptor(reader_index);
-				if ((ICCD_A == ccid_desc->bInterfaceProtocol)
-					|| (ICCD_B == ccid_desc->bInterfaceProtocol))
+				if ((PROTOCOL_ICCD_A == ccid_desc->bInterfaceProtocol)
+					|| (PROTOCOL_ICCD_B == ccid_desc->bInterfaceProtocol))
 				{
 					*Length = 1;	/* 1 char */
 					if (Value)

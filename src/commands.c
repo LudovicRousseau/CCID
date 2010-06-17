@@ -87,7 +87,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 #ifndef TWIN_SERIAL
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
@@ -117,7 +117,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 		return IFD_SUCCESS;
 	}
 
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 		unsigned char tmp[MAX_ATR_SIZE+1];
@@ -828,7 +828,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 #ifndef TWIN_SERIAL
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 
@@ -845,7 +845,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 		return IFD_SUCCESS;
 	}
 
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 		unsigned char buffer[3];
@@ -919,7 +919,7 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 #ifndef TWIN_SERIAL
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 		unsigned char status[1];
@@ -959,7 +959,7 @@ again_status:
 		return IFD_SUCCESS;
 	}
 
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 		unsigned char buffer_tmp[3];
@@ -1101,7 +1101,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	status_t ret;
 
 #ifndef TWIN_SERIAL
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 
@@ -1119,7 +1119,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 		return IFD_SUCCESS;
 	}
 
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 
@@ -1186,7 +1186,7 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 #ifndef TWIN_SERIAL
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 
@@ -1206,7 +1206,7 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 		return IFD_SUCCESS;
 	}
 
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
 		unsigned char rx_tmp[4];
@@ -1400,7 +1400,7 @@ static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
 	unsigned int local_rx_length, received_length;
 	int buffer_overflow = 0;
 
-	if (ICCD_B == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		/* length is on 16-bits only
 		 * if a size > 0x1000 is used then usb_control_msg() fails with
@@ -1810,7 +1810,7 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 
 	DEBUG_COMM2("T=0: %d bytes", snd_len);
 
-	if (ICCD_A == ccid_descriptor->bInterfaceProtocol)
+	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 

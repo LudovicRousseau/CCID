@@ -155,8 +155,9 @@ typedef struct
 #define CCID_TIME_EXTENSION			0x80	/* 10 0000 00 */
 
 /* bInterfaceProtocol for ICCD */
-#define ICCD_A	1	/* ICCD Version A */
-#define ICCD_B	2	/* ICCD Version B */
+#define PROTOCOL_CCID	0	/* plain CCID */
+#define PROTOCOL_ICCD_A	1	/* ICCD Version A */
+#define PROTOCOL_ICCD_B	2	/* ICCD Version B */
 
 /* Product identification for special treatments */
 #define GEMPC433	0x08E64433
