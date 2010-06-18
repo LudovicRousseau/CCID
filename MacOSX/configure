@@ -46,7 +46,7 @@ PCSC_LIBS=${PCSC_LIBS:--framework PCSC}
 
 # use libusb-1.0 and libusb-compat-0.1
 LIBUSB_CFLAGS=-I/usr/local/include
-LIBUSB_LIBS="/usr/local/lib/libusb.a /usr/local/lib/libusb-1.0.a -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation"
+LIBUSB_LIBS="/usr/local/lib/libusb-1.0.a -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation"
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
 # define needed here to compile examples/scardcontrol.c since config.h is
