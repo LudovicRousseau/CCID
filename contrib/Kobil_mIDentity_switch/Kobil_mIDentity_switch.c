@@ -116,9 +116,8 @@ static int kobil_midentity_claim_interface(libusb_device_handle *usb, int ifnum)
 		return rv;
 	}
 
-#ifdef HAVE_USB_DETACH_KERNEL_DRIVER_NP
 	printf("failed with error %d, trying to detach kernel driver ....\n", rv);
-	rv = libusb_detach_kernel_driver_np(usb, ifnum);
+	rv = libusb_detach_kernel_driver(usb, ifnum);
 	if (rv == 0)
 	{
 		printf("success, claiming interface again ...");
@@ -129,7 +128,7 @@ static int kobil_midentity_claim_interface(libusb_device_handle *usb, int ifnum)
 			return rv;
 		}
 	}
-#endif
+
 	printf("failed with error %d, giving up.\n", rv);
 	return rv;
 }
