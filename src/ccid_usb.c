@@ -226,8 +226,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	}
 #endif
 
-	libusb_init(NULL);
-
 	/* is the reader_index already used? */
 	if (usbDevice[reader_index].dev_handle != NULL)
 	{
@@ -267,6 +265,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	alias = 0x1C;
 	for (; vendorID--;)
 		alias ^= keyValue[vendorID];
+
+	libusb_init(NULL);
 
 	cnt = libusb_get_device_list(NULL, &devs);
 	if (cnt < 0)
