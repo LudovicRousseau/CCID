@@ -560,6 +560,9 @@ end:
 	if (usbDevice[reader_index].dev_handle == NULL)
 		return STATUS_NO_SUCH_DEVICE;
 
+	/* free the libusb allocated list & devices */
+	libusb_free_device_list(devs, 1);
+
 	/* memorise the current reader_index so we can detect
 	 * a new OpenUSBByName on a multi slot reader */
 	previous_reader_index = reader_index;
