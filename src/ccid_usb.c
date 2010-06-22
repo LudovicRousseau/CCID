@@ -83,6 +83,9 @@ typedef struct
 	 */
 	_ccid_descriptor ccid;
 
+	/* libusb transfer for the polling (or NULL) */
+	struct libusb_transfer *polling_transfer;
+
 } _usbDevice;
 
 /* The _usbDevice structure must be defined before including ccid_usb.h */
@@ -519,6 +522,7 @@ again:
 				usbDevice[reader_index].interface = interface;
 				usbDevice[reader_index].real_nb_opened_slots = 1;
 				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
+				usbDevice[reader_index].polling_transfer = NULL;
 
 				/* CCID common informations */
 				usbDevice[reader_index].ccid.real_bSeq = 0;
@@ -978,6 +982,18 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 
 /*****************************************************************************
  *
+ *					Transfer is complete
+ *
+ ****************************************************************************/
+static void bulk_transfer_cb(struct libusb_transfer *transfer)
+{
+	int *completed = transfer->user_data;
+	*completed = 1;
+	/* caller interprets results and frees transfer */
+}
+
+/*****************************************************************************
+ *
  *					InterruptRead
  *
  ****************************************************************************/
@@ -985,24 +1001,90 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 {
 	int ret, actual_length;
 	unsigned char buffer[8];
+	struct libusb_transfer *transfer;
+	int completed = 0;
 
 	DEBUG_PERIODIC2("before (%d)", reader_index);
-	ret = libusb_interrupt_transfer(usbDevice[reader_index].dev_handle,
+
+	transfer = libusb_alloc_transfer(0);
+	if (NULL == transfer)
+		return LIBUSB_ERROR_NO_MEM;
+
+	libusb_fill_bulk_transfer(transfer,
+		usbDevice[reader_index].dev_handle,
 		usbDevice[reader_index].interrupt, buffer, sizeof(buffer),
-		&actual_length, timeout);
+		bulk_transfer_cb, &completed, timeout);
+	transfer->type = LIBUSB_TRANSFER_TYPE_INTERRUPT;
+
+	ret = libusb_submit_transfer(transfer);
+	if (ret < 0) {
+		libusb_free_transfer(transfer);
+		return ret;
+	}
+
+	usbDevice[reader_index].polling_transfer = transfer;
+
+	while (!completed)
+	{
+		ret = libusb_handle_events(ctx);
+		if (ret < 0)
+		{
+			if (ret == LIBUSB_ERROR_INTERRUPTED)
+				continue;
+			libusb_cancel_transfer(transfer);
+			while (!completed)
+				if (libusb_handle_events(ctx) < 0)
+					break;
+			libusb_free_transfer(transfer);
+			return ret;
+		}
+	}
+
+	actual_length = transfer->actual_length;
+	ret = transfer->status;
+
+	usbDevice[reader_index].polling_transfer = NULL;
+	libusb_free_transfer(transfer);
+
 	DEBUG_PERIODIC3("after (%d) (%d)", reader_index, ret);
 
-	if (ret < 0)
+	switch (ret)
 	{
-		/* if libusb_interrupt_transfer() times out we get EILSEQ or EAGAIN */
-		if ((errno != EILSEQ) && (errno != EAGAIN) && (errno != ENODEV) && (errno != 0))
-			DEBUG_COMM4("libusb_interrupt_transfer(%d/%d): %s",
+		case LIBUSB_TRANSFER_COMPLETED:
+			DEBUG_XXD("NotifySlotChange: ", buffer, actual_length);
+			break;
+
+		case LIBUSB_TRANSFER_TIMED_OUT:
+			break;
+
+		default:
+			/* if libusb_interrupt_transfer() times out we get EILSEQ or EAGAIN */
+			DEBUG_COMM4("InterruptRead (%d/%d): %s",
 				usbDevice[reader_index].bus_number,
 				usbDevice[reader_index].device_address, strerror(errno));
 	}
-	else
-		DEBUG_XXD("NotifySlotChange: ", (const unsigned char *)buffer, actual_length);
 
 	return ret;
 } /* InterruptRead */
+
+
+/*****************************************************************************
+ *
+ *					Stop the async loop
+ *
+ ****************************************************************************/
+void InterruptStop(int reader_index)
+{
+	struct libusb_transfer *transfer;
+
+	transfer = usbDevice[reader_index].polling_transfer;
+	if (transfer)
+	{
+		int ret;
+
+		ret = libusb_cancel_transfer(transfer);
+		if (ret < 0)
+			DEBUG_CRITICAL2("libusb_cancel_transfer failed: %d", ret);
+	}
+} /* InterruptStop */
 

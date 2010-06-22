@@ -333,7 +333,7 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
 	if (LogLevel & DEBUG_LEVEL_PERIODIC)
 		DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
 
-	ret = InterruptRead(reader_index, 2*1000);	/* 2 seconds */
+	ret = InterruptRead(reader_index, 60*60*1000);	/* 1 hour */
 	if (ret > 0)
 		return IFD_SUCCESS;
 	if (0 == ret)
@@ -360,6 +360,19 @@ static RESPONSECODE IFDHSleep(DWORD Lun)
 	 * and be killed before pcscd exits
 	 */
 	(void)sleep(600);	/* 10 minutes */
+	return IFD_SUCCESS;
+}
+
+static RESPONSECODE IFDHStopPolling(DWORD Lun)
+{
+	int reader_index;
+
+	if (-1 == (reader_index = LunToReaderIndex(Lun)))
+		return IFD_COMMUNICATION_ERROR;
+
+	DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
+
+	(void)InterruptStop(reader_index);
 	return IFD_SUCCESS;
 }
 #endif
@@ -566,6 +579,26 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 					*Length = 1;	/* 1 char */
 					if (Value)
 						*Value = 1;	/* TRUE */
+				}
+			}
+			break;
+
+		case TAG_IFD_STOP_POLLING_THREAD:
+			{
+				_ccid_descriptor *ccid_desc;
+
+				/* default value: not supported */
+				*Length = 0;
+
+				ccid_desc = get_ccid_descriptor(reader_index);
+				/* CCID and not ICCD */
+				if ((PROTOCOL_CCID == ccid_desc -> bInterfaceProtocol)
+					/* 3 end points */
+					&& (3 == ccid_desc -> bNumEndpoints))
+				{
+					*Length = sizeof(void *);
+					if (Value)
+						*(void **)Value = IFDHStopPolling;
 				}
 			}
 			break;

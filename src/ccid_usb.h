@@ -43,4 +43,5 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 	unsigned char *bytes, unsigned int size);
 
 int InterruptRead(int reader_index, int timeout);
+void InterruptStop(int reader_index);
 #endif
