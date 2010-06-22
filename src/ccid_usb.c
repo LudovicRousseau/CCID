@@ -604,9 +604,9 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL4("write failed (%d/%d): %s",
+		DEBUG_CRITICAL5("write failed (%d/%d): %d %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, strerror(errno));
+			usbDevice[reader_index].device_address, rv, strerror(errno));
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
@@ -643,9 +643,9 @@ read_again:
 	if (rv < 0)
 	{
 		*length = 0;
-		DEBUG_CRITICAL4("read failed (%d/%d): %s",
+		DEBUG_CRITICAL5("read failed (%d/%d): %d %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, strerror(errno));
+			usbDevice[reader_index].device_address, rv, strerror(errno));
 
 		if (ENODEV == errno)
 			return STATUS_NO_SUCH_DEVICE;
