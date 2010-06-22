@@ -558,7 +558,10 @@ again:
 	}
 end:
 	if (usbDevice[reader_index].dev_handle == NULL)
+	{
+		libusb_exit(NULL);
 		return STATUS_NO_SUCH_DEVICE;
+	}
 
 	/* free the libusb allocated list & devices */
 	libusb_free_device_list(devs, 1);
@@ -702,6 +705,8 @@ status_t CloseUSB(unsigned int reader_index)
 		(void)libusb_release_interface(usbDevice[reader_index].dev_handle,
 			usbDevice[reader_index].interface);
 		(void)libusb_close(usbDevice[reader_index].dev_handle);
+
+		libusb_exit(NULL);
 	}
 
 	/* mark the resource unused */
