@@ -277,7 +277,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	cnt = libusb_get_device_list(ctx, &devs);
 	if (cnt < 0)
 	{
-		(void)printf("libusb_get_device_list() failed\n");
+		DEBUG_CRITICAL("libusb_get_device_list() failed\n");
 		return STATUS_UNSUCCESSFUL;
 	}
 
