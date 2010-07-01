@@ -539,6 +539,8 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			(void)printf("   04.... Short and Extended APDU level exchange\n");
 			break;
 	}
+	if (extra[42] & 0x10)
+		(void)printf("   10.... USB Wake up signaling supported on card insertion and removal\n");
 
 	(void)printf("  dwMaxCCIDMessageLength: %d bytes\n", dw2i(extra, 44));
 	(void)printf("  bClassGetResponse: 0x%02X\n", extra[48]);
