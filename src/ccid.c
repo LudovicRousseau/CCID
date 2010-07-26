@@ -128,10 +128,10 @@ int ccid_open_hack_post(unsigned int reader_index)
 	{
 		case GEMPCKEY:
 		case GEMPCTWIN:
-			/* Reader announces TPDU but can do APDU */
+			/* Reader announces TPDU but can do APDU (EMV in fact) */
 			if (DriverOptions & DRIVER_OPTION_GEMPC_TWIN_KEY_APDU)
 			{
-				unsigned char cmd[] = { 0xA0, 0x02 };
+				unsigned char cmd[] = { 0x1F, 0x02 };
 				unsigned char res[10];
 				unsigned int length_res = sizeof(res);
 
