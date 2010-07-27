@@ -148,6 +148,11 @@ int main(int argc, char *argv[])
 again:
 		/* check if the device has bInterfaceClass == 11 */
 		r = libusb_get_active_config_descriptor(dev, &config_desc);
+		if (r < 0)
+		{
+			(void)fprintf(stderr, "  Can't get config descriptor: %d\n", r);
+			continue;
+		}
 
 		usb_interface = get_ccid_usb_interface(config_desc, &num);
 		if (NULL == usb_interface)
