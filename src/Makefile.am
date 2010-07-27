@@ -61,7 +61,7 @@ libccidtwin_la_CFLAGS = $(PCSC_CFLAGS) $(PTHREAD_CFLAGS) $(SYMBOL_VISIBILITY) \
 	-DTWIN_SERIAL -D$(CCID_VERSION)
 libccidtwin_la_LIBADD = $(PTHREAD_LIBS)
 
-parse_SOURCES = parse.c debug.c
+parse_SOURCES = parse.c debug.c ccid_usb.c $(TOKEN_PARSER)
 parse_LDADD = $(LIBUSB_LIBS)
 parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS)
 
