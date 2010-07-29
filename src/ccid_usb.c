@@ -57,8 +57,10 @@
 
 #define BUS_DEVICE_STRSIZE 32
 
-/* we use the default libusb context */
-#define ctx NULL
+/* Using the default libusb context */
+/* does not work for libusb <= 1.0.8 */
+/* #define ctx NULL */
+libusb_context *ctx = NULL;
 
 typedef struct
 {
@@ -272,7 +274,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	for (; vendorID--;)
 		alias ^= keyValue[vendorID];
 
-	libusb_init(ctx);
+	if (NULL == ctx)
+		libusb_init(&ctx);
 
 	cnt = libusb_get_device_list(ctx, &devs);
 	if (cnt < 0)
@@ -566,7 +569,8 @@ again:
 end:
 	if (usbDevice[reader_index].dev_handle == NULL)
 	{
-		libusb_exit(ctx);
+		/* does not work for libusb <= 1.0.8 */
+		/* libusb_exit(ctx); */
 		return STATUS_NO_SUCH_DEVICE;
 	}
 
@@ -713,7 +717,8 @@ status_t CloseUSB(unsigned int reader_index)
 			usbDevice[reader_index].interface);
 		(void)libusb_close(usbDevice[reader_index].dev_handle);
 
-		libusb_exit(ctx);
+		/* does not work for libusb <= 1.0.8 */
+		/* libusb_exit(ctx); */
 	}
 
 	/* mark the resource unused */
