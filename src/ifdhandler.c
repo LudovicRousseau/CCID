@@ -68,6 +68,7 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	int clock_frequency);
 static unsigned int T1_card_timeout(double f, double d, int TC1, int BWI,
 	int CWI, int clock_frequency);
+static int get_IFSC(ATR_t *atr, int *i);
 
 
 EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
@@ -959,6 +960,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		t1_state_t *t1 = &(ccid_slot -> t1);
 		RESPONSECODE ret;
 		double f, d;
+		int ifsc;
 
 		/* TA1 is not default */
 		if (PPS_HAS_PPS1(pps))
@@ -1012,17 +1014,12 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			(param[3] & 0xF0) >> 4 /* BWI */, param[3] & 0x0F /* CWI */,
 			ccid_desc->dwDefaultClock);
 
-		/* TAi (i>2) present? IFSC */
-		for (i=2; i<ATR_MAX_PROTOCOLS; i++)
-			if (atr.ib[i][ATR_INTERFACE_BYTE_TA].present)
-			{
-				DEBUG_COMM3("IFSC (TA%d) present: %d", i+1,
-					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
-				 param[5] = atr.ib[i][ATR_INTERFACE_BYTE_TA].value;
-
-				/* only the first TAi (i>2) must be used */
-				break;
-			}
+		ifsc = get_IFSC(&atr, &i);
+		if (ifsc > 0)
+		{
+			DEBUG_COMM3("IFSC (TA%d) present: %d", i, ifsc);
+			param[5] = ifsc;
+		}
 
 		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
 
@@ -1076,20 +1073,14 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	if (SCARD_PROTOCOL_T1 == Protocol)
 	{
 		t1_state_t *t1 = &(ccid_slot -> t1);
-		int i;
+		int i, ifsc;
 
-		/* TAi (i>2) present? */
-		for (i=2; i<ATR_MAX_PROTOCOLS; i++)
-			if (atr.ib[i][ATR_INTERFACE_BYTE_TA].present)
-			{
-				DEBUG_COMM3("IFSC (TA%d) present: %d", i+1,
-					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
-				(void)t1_set_param(t1, IFD_PROTOCOL_T1_IFSC,
-					atr.ib[i][ATR_INTERFACE_BYTE_TA].value);
-
-				/* only the first TAi (i>2) must be used */
-				break;
-			}
+		ifsc = get_IFSC(&atr, &i);
+		if (ifsc > 0)
+		{
+			DEBUG_COMM3("IFSC (TA%d) present: %d", i, ifsc);
+			(void)t1_set_param(t1, IFD_PROTOCOL_T1_IFSC, ifsc);
+		}
 
 		/* IFSD not negociated by the reader? */
 		if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD))
@@ -2006,4 +1997,33 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 
 	return timeout;
 } /* T1_card_timeout  */
+
+
+static int get_IFSC(ATR_t *atr, int *idx)
+{
+	int i, ifsc, protocol = -1;
+
+	/* default return values */
+	ifsc = -1;
+	*idx = -1;
+
+	for (i=0; i<ATR_MAX_PROTOCOLS; i++)
+	{
+		/* protocol T=? */
+		if (atr->ib[i][ATR_INTERFACE_BYTE_TD].present)
+			protocol = atr->ib[i][ATR_INTERFACE_BYTE_TD].value & 0x0F;
+
+		/* TAi (i>2) present and protocol=1 => IFSC */
+		if (i >= 2 && protocol == 1
+			&& atr->ib[i][ATR_INTERFACE_BYTE_TA].present)
+		{
+			ifsc = atr->ib[i][ATR_INTERFACE_BYTE_TA].value;
+			*idx = i+1;
+			/* only the first TAi (i>2) must be used */
+			break;
+		}
+	}
+
+	return ifsc;
+} /* get_IFSC */
 
