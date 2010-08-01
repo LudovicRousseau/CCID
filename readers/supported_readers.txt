@@ -12,6 +12,7 @@
 0x08E6:0x4433:Gemalto GemPC433 SL
 0x08E6:0x5503:Gemalto Prox-DU
 0x08E6:0x5504:Gemalto Prox-SU
+0x08E6:0x5743:Gemalto Hybrid Smartcard Reader
 0x08E6:0x8000:Smart Enterprise Guardian
 # Verisign branded
 0x08E6:0xACE0:Verisign Secure Token
