@@ -133,7 +133,7 @@ if test "x$use_libusb" != xno ; then
 	CPPFLAGS="$CPPFLAGS $LIBUSB_CFLAGS"
 	LIBS="$LDFLAGS $LIBUSB_LIBS"
 
-	AC_CHECK_HEADERS(libusb-1.0/libusb.h, [],
+	AC_CHECK_HEADERS(libusb.h, [],
 		[ AC_MSG_ERROR([libusb.h not found, install libusb or use ./configure LIBUSB_CFLAGS=...]) ])
 
 	AC_MSG_CHECKING([for libusb_init])
