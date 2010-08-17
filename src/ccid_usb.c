@@ -29,7 +29,7 @@
 # ifdef S_SPLINT_S
 # include <sys/types.h>
 # endif
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include <stdlib.h>
 #include <ifdhandler.h>
 

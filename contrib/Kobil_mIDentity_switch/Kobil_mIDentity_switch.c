@@ -60,7 +60,7 @@ findintfep() in order to understand why.
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 #include <errno.h>
 
 #include "config.h"

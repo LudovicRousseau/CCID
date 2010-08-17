@@ -35,7 +35,7 @@ status_t ReadUSB(unsigned int reader_index, unsigned int *length,
 
 status_t CloseUSB(unsigned int reader_index);
 
-#include <libusb-1.0/libusb.h>
+#include <libusb.h>
 /*@null@*/ const struct libusb_interface *get_ccid_usb_interface(
 	struct libusb_config_descriptor *desc, int *num);
 
