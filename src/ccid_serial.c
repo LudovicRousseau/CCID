@@ -641,7 +641,8 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 {
 	struct termios current_termios;
 	unsigned int reader = reader_index;
-	char reader_name[TOKEN_MAX_VALUE_SIZE] = "GemPCTwin";
+	/* 255 is MAX_DEVICENAME in pcscd.h */
+	char reader_name[255] = "GemPCTwin";
 	char *p;
 	status_t ret;
 
