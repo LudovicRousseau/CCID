@@ -162,8 +162,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 {
 	int alias = 0;
 	struct libusb_device_handle *dev_handle;
-	char keyValue[TOKEN_MAX_VALUE_SIZE];
-	unsigned int vendorID, productID;
 	char infofile[FILENAME_MAX];
 #ifndef __APPLE__
 	unsigned int device_vendor, device_product;
@@ -173,6 +171,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	static int previous_reader_index = -1;
 	libusb_device **devs, *dev;
 	ssize_t cnt;
+	list_t plist, *values, *ifdVendorID, *ifdProductID, *ifdFriendlyName;
+	int rv;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
@@ -246,33 +246,25 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
 
+	rv = bundleParse(infofile, &plist);
+	if (rv)
+		return STATUS_UNSUCCESSFUL;
+
+#define GET_KEY(key, values) \
+	rv = LTPBundleFindValueWithKey(&plist, key, &values); \
+	if (rv) \
+	{ \
+		DEBUG_CRITICAL2("Value/Key not defined for " key " in %s", infofile); \
+		bundleRelease(&plist); \
+		return STATUS_UNSUCCESSFUL; \
+	} \
+	else \
+		DEBUG_INFO2(key ": %s", list_get_at(values, 0));
+
 	/* general driver info */
-	if (!LTPBundleFindValueWithKey(infofile, "ifdManufacturerString", keyValue, 0))
-	{
-		DEBUG_INFO2("Manufacturer: %s", keyValue);
-	}
-	else
-	{
-		DEBUG_INFO2("LTPBundleFindValueWithKey error. Can't find %s?",
-			infofile);
-		return STATUS_UNSUCCESSFUL;
-	}
-	if (!LTPBundleFindValueWithKey(infofile, "ifdProductString", keyValue, 0))
-	{
-		DEBUG_INFO2("ProductString: %s", keyValue);
-	}
-	else
-		return STATUS_UNSUCCESSFUL;
-	if (!LTPBundleFindValueWithKey(infofile, "Copyright", keyValue, 0))
-	{
-		DEBUG_INFO2("Copyright: %s", keyValue);
-	}
-	else
-		return STATUS_UNSUCCESSFUL;
-	vendorID = strlen(keyValue);
-	alias = 0x1C;
-	for (; vendorID--;)
-		alias ^= keyValue[vendorID];
+	GET_KEY("ifdManufacturerString", values)
+	GET_KEY("ifdProductString", values)
+	GET_KEY("Copyright", values)
 
 	if (NULL == ctx)
 		libusb_init(&ctx);
@@ -284,20 +276,28 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		return STATUS_UNSUCCESSFUL;
 	}
 
+#define GET_KEYS(key, values) \
+	rv = LTPBundleFindValueWithKey(&plist, key, values); \
+	if (rv) \
+	{ \
+		DEBUG_CRITICAL2("Value/Key not defined for " key " in %s", infofile); \
+		bundleRelease(&plist); \
+		return STATUS_UNSUCCESSFUL; \
+	}
+
+	GET_KEYS("ifdVendorID", &ifdVendorID)
+	GET_KEYS("ifdProductID", &ifdProductID);
+	GET_KEYS("ifdFriendlyName", &ifdFriendlyName)
+
 	/* for any supported reader */
-	while (LTPBundleFindValueWithKey(infofile, PCSCLITE_MANUKEY_NAME, keyValue, alias) == 0)
+	for (alias=0; alias<list_size(ifdVendorID); alias++)
 	{
-		vendorID = strtoul(keyValue, NULL, 0);
+		unsigned int vendorID, productID;
+		char *friendlyName;
 
-		if (LTPBundleFindValueWithKey(infofile, PCSCLITE_PRODKEY_NAME, keyValue, alias))
-			goto end;
-		productID = strtoul(keyValue, NULL, 0);
-
-		if (LTPBundleFindValueWithKey(infofile, PCSCLITE_NAMEKEY_NAME, keyValue, alias))
-			goto end;
-
-		/* go to next supported reader for next round */
-		alias++;
+		vendorID = strtoul(list_get_at(ifdVendorID, alias), NULL, 0);
+		productID = strtoul(list_get_at(ifdProductID, alias), NULL, 0);
+		friendlyName = list_get_at(ifdFriendlyName, alias);
 
 #ifndef __APPLE__
 		/* the device was specified but is not the one we are trying to find */
@@ -306,7 +306,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 			continue;
 #else
 		/* Leopard puts the friendlyname in the device argument */
-		if (device && strcmp(device, keyValue))
+		if (device && strcmp(device, friendlyName))
 			continue;
 #endif
 
@@ -495,7 +495,7 @@ again:
 				}
 
 				DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
-					desc.idVendor, desc.idProduct, keyValue);
+					desc.idVendor, desc.idProduct, friendlyName);
 				DEBUG_INFO3("Using USB bus/device: %d/%d",
 					bus_number, device_address);
 

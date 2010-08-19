@@ -1732,9 +1732,10 @@ CcidDesc *get_ccid_slot(unsigned int reader_index)
 
 void init_driver(void)
 {
-	char keyValue[TOKEN_MAX_VALUE_SIZE];
 	char infofile[FILENAME_MAX];
 	char *e;
+	int rv;
+	list_t plist, *values;
 
 	DEBUG_INFO("Driver version: " VERSION);
 
@@ -1742,11 +1743,16 @@ void init_driver(void)
 	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
 
+	rv = bundleParse(infofile, &plist);
+	if (rv)
+		return;
+
 	/* Log level */
-	if (0 == LTPBundleFindValueWithKey(infofile, "ifdLogLevel", keyValue, 0))
+	rv = LTPBundleFindValueWithKey(&plist, "ifdLogLevel", &values);
+	if (0 == rv)
 	{
 		/* convert from hex or dec or octal */
-		LogLevel = strtoul(keyValue, NULL, 0);
+		LogLevel = strtoul(list_get_at(values, 0), NULL, 0);
 
 		/* print the log level used */
 		DEBUG_INFO2("LogLevel: 0x%.4X", LogLevel);
@@ -1763,14 +1769,17 @@ void init_driver(void)
 	}
 
 	/* Driver options */
-	if (0 == LTPBundleFindValueWithKey(infofile, "ifdDriverOptions", keyValue, 0))
+	rv = LTPBundleFindValueWithKey(&plist, "ifdDriverOptions", &values);
+	if (0 == rv)
 	{
 		/* convert from hex or dec or octal */
-		DriverOptions = strtoul(keyValue, NULL, 0);
+		DriverOptions = strtoul(list_get_at(values, 0), NULL, 0);
 
 		/* print the log level used */
 		DEBUG_INFO2("DriverOptions: 0x%.4X", DriverOptions);
 	}
+
+	bundleRelease(&plist);
 
 	/* get the voltage parameter */
 	switch ((DriverOptions >> 4) & 0x03)

@@ -44,7 +44,9 @@ T1 = towitoko/atr.c \
 TOKEN_PARSER = tokenparser.l parser.h \
 	strlcpy.c \
 	misc.h \
-	strlcpycat.h
+	strlcpycat.h \
+	simclist.c \
+	simclist.h
 
 if WITHOUT_PCSC
 PROVIDED_BY_PCSC = debug.c
