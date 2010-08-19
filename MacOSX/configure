@@ -45,7 +45,7 @@ PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
 PCSC_LIBS=${PCSC_LIBS:--framework PCSC}
 
 # use libusb-1.0
-LIBUSB_CFLAGS=-I/usr/local/include
+LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0
 LIBUSB_LIBS="/usr/local/lib/libusb-1.0.a -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation"
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
