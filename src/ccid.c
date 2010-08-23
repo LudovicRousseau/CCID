@@ -70,8 +70,8 @@ int ccid_open_hack_pre(unsigned int reader_index)
 	if (PROTOCOL_CCID == ccid_descriptor->bInterfaceProtocol)
 	{
 #ifndef TWIN_SERIAL
-		/* just wait for 10ms in case a notification is in the pipe */
-		(void)InterruptRead(reader_index, 10);
+		/* just wait for 100ms in case a notification is in the pipe */
+		(void)InterruptRead(reader_index, 100);
 #endif
 	}
 
