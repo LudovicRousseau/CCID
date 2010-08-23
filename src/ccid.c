@@ -71,11 +71,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 	{
 #ifndef TWIN_SERIAL
 		/* just wait for 10ms in case a notification is in the pipe */
-#ifndef __APPLE__
-		/* the InterruptRead does NOT timeout (on Mac OS X)
-		 * so we do not do that on Mac OS X */
 		(void)InterruptRead(reader_index, 10);
-#endif
 #endif
 	}
 
