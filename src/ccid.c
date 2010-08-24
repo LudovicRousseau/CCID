@@ -67,7 +67,8 @@ int ccid_open_hack_pre(unsigned int reader_index)
 	}
 
 	/* CCID */
-	if (PROTOCOL_CCID == ccid_descriptor->bInterfaceProtocol)
+	if ((PROTOCOL_CCID == ccid_descriptor->bInterfaceProtocol)
+		&& (3 == ccid_descriptor -> bNumEndpoints))
 	{
 #ifndef TWIN_SERIAL
 		/* just wait for 100ms in case a notification is in the pipe */
