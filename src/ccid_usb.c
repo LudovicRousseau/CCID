@@ -33,9 +33,9 @@
 #include <stdlib.h>
 #include <ifdhandler.h>
 
+#include "config.h"
 #include "misc.h"
 #include "ccid.h"
-#include "config.h"
 #include "debug.h"
 #include "defs.h"
 #include "utils.h"

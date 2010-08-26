@@ -23,6 +23,7 @@
 
 #include <pcsclite.h>
 
+#include "config.h"
 #include "ccid.h"
 #include "defs.h"
 #include "ccid_ifdhandler.h"

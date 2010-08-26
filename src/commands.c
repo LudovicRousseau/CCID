@@ -29,13 +29,13 @@
 #include <ifdhandler.h>
 #include <reader.h>
 
+#include "config.h"
 #include "misc.h"
 #include "commands.h"
 #include "openct/proto-t1.h"
 #include "ccid.h"
 #include "defs.h"
 #include "ccid_ifdhandler.h"
-#include "config.h"
 #include "debug.h"
 
 /* All the pinpad readers I used are more or less bogus

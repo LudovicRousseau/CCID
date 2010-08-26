@@ -23,8 +23,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
-#include "misc.h"
 #include "config.h"
+#include "misc.h"
 #include <pcsclite.h>
 #include <ifdhandler.h>
 #include <reader.h>

@@ -35,9 +35,9 @@
 #include <sys/ioctl.h>
 #include <ifdhandler.h>
 
+#include "config.h"
 #include "defs.h"
 #include "ccid_ifdhandler.h"
-#include "config.h"
 #include "debug.h"
 #include "ccid.h"
 #include "utils.h"
