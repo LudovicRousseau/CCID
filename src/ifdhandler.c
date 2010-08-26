@@ -652,8 +652,6 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	(void)Length;
 	(void)Value;
 
-	/* By default, say it worked */
-
 	int reader_index;
 
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
@@ -661,9 +659,6 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 
 	DEBUG_INFO4("tag: 0x%X, %s (lun: %X)", Tag,
 		CcidSlots[reader_index].readerName, Lun);
-
-	/* if (CheckLun(Lun))
-		return IFD_COMMUNICATION_ERROR; */
 
 	return IFD_NOT_SUPPORTED;
 } /* IFDHSetCapabilities */
