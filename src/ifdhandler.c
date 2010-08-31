@@ -334,12 +334,7 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
 	if (LogLevel & DEBUG_LEVEL_PERIODIC)
 		DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
 
-	ret = InterruptRead(reader_index, 60*60*1000);	/* 1 hour */
-	if (ret > 0)
-		return IFD_SUCCESS;
-	if (0 == ret)
-		return IFD_NO_SUCH_DEVICE;
-	return IFD_COMMUNICATION_ERROR;
+	return InterruptRead(reader_index, 60*60*1000);	/* 1 hour */
 }
 
 /* on an ICCD device the card is always inserted

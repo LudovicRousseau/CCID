@@ -1005,6 +1005,7 @@ static void bulk_transfer_cb(struct libusb_transfer *transfer)
 int InterruptRead(int reader_index, int timeout /* in ms */)
 {
 	int ret, actual_length;
+	int return_value = IFD_SUCCESS;
 	unsigned char buffer[8];
 	struct libusb_transfer *transfer;
 	int completed = 0;
@@ -1067,9 +1068,10 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 			DEBUG_COMM4("InterruptRead (%d/%d): %s",
 				usbDevice[reader_index].bus_number,
 				usbDevice[reader_index].device_address, strerror(errno));
+			return_value = IFD_COMMUNICATION_ERROR;
 	}
 
-	return ret;
+	return return_value;
 } /* InterruptRead */
 
 
