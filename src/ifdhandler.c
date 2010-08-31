@@ -325,7 +325,6 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 static RESPONSECODE IFDHPolling(DWORD Lun)
 {
 	int reader_index;
-	int ret;
 
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
