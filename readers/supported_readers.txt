@@ -266,6 +266,9 @@
 # Kingtrust
 0x0483:0x0007:Kingtrust Multi-Reader
 
+# Reiner
+0x0C4B:0x9102:REINER SCT cyberJack RFID basis
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/unsupported.html for a
 # description of the problem(s)
