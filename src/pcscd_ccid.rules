@@ -1,4 +1,6 @@
-# udev rules for pcscd and CCID readers
+# udev rules to set the access rights of CCID smart card readers
+# so they can be used by pcscd
+
 # $Id$
 
 # Gemplus PCMCIA Card
@@ -12,29 +14,29 @@ SUBSYSTEM!="usb", GOTO="pcscd_ccid_rules_end"
 ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
 # generic CCID device
-ATTRS{bInterfaceClass}=="0b", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{bInterfaceClass}=="0b", RUN+="/bin/chgrp pcscd $root/$parent"
 
 # non CCID generic (InterfaceClass: 0xFF)
 # CherrySmartTerminalST2XXX.txt
-ATTRS{idVendor}=="046a", ATTRS{idProduct}=="003e", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="046a", ATTRS{idProduct}=="003e", GROUP="pcscd"
 # DellSK-3106.txt
-ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2100", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2100", GROUP="pcscd"
 # MySmartPad.txt
-ATTRS{idVendor}=="09be", ATTRS{idProduct}=="0002", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="09be", ATTRS{idProduct}=="0002", GROUP="pcscd"
 # SCR331-DI-NTTCom.txt
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5120", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5120", GROUP="pcscd"
 # SCR331-DI.txt
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5111", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5111", GROUP="pcscd"
 # SDI010.txt
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5121", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5121", GROUP="pcscd"
 # SPR532.txt
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="e003", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="e003", GROUP="pcscd"
 # Verisign_secure_storage_token.txt
-ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="1359", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="1359", GROUP="pcscd"
 # Verisign_secure_token.txt
-ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="ace0", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="ace0", GROUP="pcscd"
 # SchlumbergerSema Cyberflex Access e-gate
-ATTRS{idVendor}=="0973", ATTRS{idProduct}=="0003", RUN+="/usr/sbin/pcscd --hotplug"
+ATTRS{idVendor}=="0973", ATTRS{idProduct}=="0003", GROUP="pcscd"
 
 # All done
 LABEL="pcscd_ccid_rules_end"
