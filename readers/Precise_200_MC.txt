@@ -2,7 +2,7 @@
   iManufacturer: Precise Biometrics
  idProduct: 0x0402
   iProduct: Precise 200 MC
- bcdDevice: 50.00 (firmware release?)
+ bcdDevice: 52.57 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
