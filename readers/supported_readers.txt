@@ -280,6 +280,7 @@
 #0x04E6:0x5292:SCM SCL01x Contactless Reader
 #0x062D:0x0001:iDream or ID-SMID01
 #0x1A74:0x6356:OCS ID-One Cosmo Card
+#0x03F0:0x0036:HP USB CCID Smartcard Keyboard
 
 # The USB descriptor is bogus and the patch in get_ccid_usb_interface()
 # does not work with libusb-1.0
