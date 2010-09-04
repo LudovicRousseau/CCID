@@ -9,6 +9,7 @@
 # If not adding the device, go away
 ACTION!="add", GOTO="pcscd_ccid_rules_end"
 SUBSYSTEM!="usb", GOTO="pcscd_ccid_rules_end"
+ENV{DEVTYPE}!="usb_device", GOTO="pcscd_ccid_rules_end"
 
 # Kobil mIDentity
 ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
