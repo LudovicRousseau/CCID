@@ -14,8 +14,8 @@ ENV{DEVTYPE}!="usb_device", GOTO="pcscd_ccid_rules_end"
 # Kobil mIDentity
 ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
-# generic CCID device
-ATTRS{bInterfaceClass}=="0b", RUN+="/bin/chgrp pcscd $root/$parent"
+# generic CCID device (bInterfaceClass = 0x0b)
+ENV{ID_USB_INTERFACES}=="*:0b0000:*", GROUP="pcscd"
 
 # non CCID generic (InterfaceClass: 0xFF)
 # CherrySmartTerminalST2XXX.txt
