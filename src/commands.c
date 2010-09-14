@@ -50,6 +50,12 @@
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 
+#ifndef BSWAP_16
+#define BSWAP_8(x)  ((x) & 0xff)
+#define BSWAP_16(x) ((BSWAP_8(x) << 8) | BSWAP_8((x) >> 8))
+#define BSWAP_32(x) ((BSWAP_16(x) << 16) | BSWAP_16((x) >> 16))
+#endif
+
 /* internal functions */
 static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
 	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
@@ -68,6 +74,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int reader_index,
 	unsigned char rx_buffer[]);
 
 static void i2dw(int value, unsigned char *buffer);
+static unsigned int bei2i(unsigned char *buffer);
 
 
 /*****************************************************************************
@@ -280,10 +287,12 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 {
 	unsigned char cmd[11+14+CMD_BUF_SIZE];
 	unsigned int a, b;
+	PIN_VERIFY_STRUCTURE *pvs;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int old_read_timeout;
 	RESPONSECODE ret;
 
+	pvs = (PIN_VERIFY_STRUCTURE *)TxBuffer;
 	cmd[0] = 0x69;	/* Secure */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
@@ -306,6 +315,20 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		return IFD_NOT_SUPPORTED;
 	}
 
+	/* On little endian machines we are all set. */
+	/* If on big endian machine and caller is using host byte order */ 
+	if ((pvs->ulDataLength + 19  == TxLength) && 
+		(bei2i((unsigned char*)(&pvs->ulDataLength)) == pvs->ulDataLength))
+	{
+		DEBUG_INFO("Reversing order from big to little endian");
+		/* If ulDataLength is big endian, assume others are too */
+		/* reverse the byte order for 3 fields */
+		pvs->wPINMaxExtraDigit = BSWAP_16(pvs->wPINMaxExtraDigit);
+		pvs->wLangId = BSWAP_16(pvs->wLangId);
+		pvs->ulDataLength = BSWAP_32(pvs->ulDataLength);
+	}
+	/* At this point we now have the above 3 variables in little endian */ 
+	
 	if (dw2i(TxBuffer, 15) + 19 != TxLength) /* ulDataLength field coherency */
 	{
 		DEBUG_INFO3("Wrong lengths: %d %d", dw2i(TxBuffer, 15) + 19, TxLength);
@@ -495,6 +518,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 {
 	unsigned char cmd[11+19+CMD_BUF_SIZE];
 	unsigned int a, b;
+	PIN_MODIFY_STRUCTURE *pms;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int old_read_timeout;
 	RESPONSECODE ret;
@@ -502,6 +526,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	int bNumberMessages = 0; /* for GemPC Pinpad */
 #endif
 
+	pms = (PIN_MODIFY_STRUCTURE *)TxBuffer;
 	cmd[0] = 0x69;	/* Secure */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
@@ -523,6 +548,21 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		DEBUG_INFO3("Command too short: %d < %d", TxLength, 24+4);
 		return IFD_NOT_SUPPORTED;
 	}
+
+	/* On little endian machines we are all set. */
+	/* If on big endian machine and caller is using host byte order */ 
+	if ((pms->ulDataLength + 24  == TxLength) && 
+		(bei2i((unsigned char*)(&pms->ulDataLength)) == pms->ulDataLength))
+	{
+		DEBUG_INFO("Reversing order from big to little endian");
+		/* If ulDataLength is big endian, assume others are too */
+		/* reverse the byte order for 3 fields */
+		pms->wPINMaxExtraDigit = BSWAP_16(pms->wPINMaxExtraDigit);
+		pms->wLangId = BSWAP_16(pms->wLangId);
+		pms->ulDataLength = BSWAP_32(pms->ulDataLength);
+	}
+	/* At this point we now have the above 3 variables in little endian */ 
+
 
 	if (dw2i(TxBuffer, 20) + 24 != TxLength) /* ulDataLength field coherency */
 	{
@@ -2112,3 +2152,13 @@ static void i2dw(int value, unsigned char buffer[])
 	buffer[3] = (value >> 24) & 0xFF;
 } /* i2dw */
 
+/*****************************************************************************
+*
+*                  bei2i (big endian integer to host order interger)
+*
+****************************************************************************/
+
+static unsigned int bei2i(unsigned char buffer[])
+{
+	return (buffer[0]<<24) + (buffer[1]<<16) + (buffer[2]<<8) + buffer[3];
+}
