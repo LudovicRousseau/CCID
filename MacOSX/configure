@@ -37,8 +37,6 @@ then
 	exit;
 fi
 
-./MacOSX/convert_reader_h.pl MacOSX/reader.h.in > MacOSX/reader.h
-
 # find pcsc-lite header files in MacOSX/
 # use ${varname:-word} to return word only if varname is not already defined
 PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
