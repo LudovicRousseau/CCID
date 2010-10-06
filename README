@@ -100,18 +100,6 @@ to unplug all your CCID readers so the the driver is unloaded and then
 replug your readers.  You can also restart pcscd.
 
 
-Known problems:
-===============
-
-MacOSX libusb
-"""""""""""""
-    There is a bug in libusb that crash the libusb library when you
-    unplug a reader and replug it in another USB socket.  So if you
-    unplug a reader replug it in the same USB socket.
-
-    see http://sourceforge.net/tracker/index.php?func=detail&aid=886778&group_id=1674&atid=101674
-
-
 Licence:
 ========
 
