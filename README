@@ -1,11 +1,13 @@
 USB CCID IFD Handler
 ====================
 
-  This package provides the source code for a generic USB CCID
-(Chip/Smart Card Interface Devices) driver. See [1] for the USB CCID
-specifications from the USB working group.
+This package provides the source code for a generic USB CCID (Chip/Smart
+Card Interface Devices) and ICCD (Integrated Circuit(s) Card Devices)
+driver. See the USB CCID [1] and ICCD [2] specifications from the USB
+working group.
 
-[1] http://www.usb.org/developers/devclass_docs/ccid_classspec_1_00a.pdf
+[1] http://www.usb.org/developers/devclass_docs/DWG_Smart-Card_CCID_Rev110.pdf
+[2] http://www.usb.org/developers/devclass_docs/DWG_Smart-Card_USB-ICC_ICCD_rev10.pdf
 
 Authors:
 ========
@@ -17,34 +19,28 @@ Authors:
   directory. I (Ludovic Rousseau) greatly improved this code.
 
 
-Supported CCID readers:
-=======================
+CCID and ICCD readers:
+======================
 
-The list is available at http://pcsclite.alioth.debian.org/supported.html
-
-
-Should work but untested by me:
-===============================
-
-I would like to get these readers to perform test and validation and
-move them in the supported list above. If you are one of the
-manufacturers, please, contact me.
-
-The list is available at http://pcsclite.alioth.debian.org/shouldwork.html
-
-
-Unsupported or partly supported CCID readers:
-=============================================
-
-The list is available at http://pcsclite.alioth.debian.org/unsupported.html
+A reader can be in one of these list:
+- supported
+    See http://pcsclite.alioth.debian.org/ccid/supported.html
+- should working
+    See http://pcsclite.alioth.debian.org/ccid/shouldwork.html
+- unsupported
+    See http://pcsclite.alioth.debian.org/ccid/unsupported.html
+- disabled
+    See http://pcsclite.alioth.debian.org/ccid/disabled.html
 
 
 Supported operating systems:
 ============================
 
-- GNU/Linux (libusb 0.1.7)
-- MacOS X/Darwin (libusb 0.1.8beta, CVS snapshot. See "Known problems")
-  to libusb)
+- GNU/Linux (libusb 1.0)
+- MacOS X/Darwin (libusb 1.0)
+
+See also http://pcsclite.alioth.debian.org/ccid.html for more
+information.
 
 
 Debug informations:
