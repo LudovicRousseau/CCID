@@ -243,12 +243,6 @@ if test "${pcsclite}" != no ; then
 fi
 AM_CONDITIONAL(WITHOUT_PCSC, test "${pcsclite}" != "yes")
 
-# --enable-udev
-AC_ARG_ENABLE(udev,
-	AC_HELP_STRING([--enable-udev],[udev support for pcscd hotplug]),
-	[udev="${enableval}"], [udev=no])
-AM_CONDITIONAL(UDEV, test "${udev}" != "no")
-
 # --disable-class
 AC_ARG_ENABLE(class,
 	AC_HELP_STRING([--disable-class],[remove the CCIDCLASSDRIVER from Info.plist]),
@@ -311,7 +305,6 @@ USB drop directory:      ${usbdropdir}
 serial Twin support:     ${twinserial}
 serial twin install dir: ${ccidtwindir}
 compiled for pcsc-lite:  ${pcsclite}
-udev support:            ${udev}
 class driver:            ${class}
 
 EOF

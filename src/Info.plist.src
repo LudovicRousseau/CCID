@@ -20,7 +20,7 @@
 	<key>CFBundleVersion</key>
 	<string>0.0.1d1</string>
 	<key>ifdCapabilities</key>
-	<string>MAGIC_IFDCAPABILITIES</string>
+	<string>0x00000000</string>
 
 	<!-- Possible values for ifdCapabilities bits
 	1: IFD_GENERATE_HOTPLUG

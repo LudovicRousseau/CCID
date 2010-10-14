@@ -26,7 +26,6 @@ use Getopt::Long;
 
 my (@manuf, @product, @name);
 my ($manuf, $product, $name);
-my $ifdCapabilities = "0x00000000";
 my $target = "libccid.so";
 my $version = "1.0.0";
 my $bundle = "ifd-ccid.bundle";
@@ -34,7 +33,7 @@ my $class = "<key>CFBundleName</key>
 	<string>CCIDCLASSDRIVER</string>";
 my $noclass = 0;
 
-GetOptions("ifdCapabilities=s" => \$ifdCapabilities,
+GetOptions(
 	"target=s" => \$target,
 	"version=s" => \$version,
 	"bundle=s" => \$bundle,
@@ -43,7 +42,6 @@ GetOptions("ifdCapabilities=s" => \$ifdCapabilities,
 if ($#ARGV < 1)
 {
 	print "usage: $0 supported_readers.txt Info.plist
-	--ifdCapabilities=$ifdCapabilities
 	--target=$target
 	--version=$version
 	--bundle=$bundle\n";
@@ -86,12 +84,6 @@ while (<IN>)
 	if (m/MAGIC_FRIENDLYNAME/)
 	{
 		print @name;
-		next;
-	}
-	if (m/MAGIC_IFDCAPABILITIES/)
-	{
-		s/MAGIC_IFDCAPABILITIES/$ifdCapabilities/;
-		print;
 		next;
 	}
 	if (m/MAGIC_TARGET/)
