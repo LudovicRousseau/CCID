@@ -2022,6 +2022,13 @@ static int get_IFSC(ATR_t *atr, int *idx)
 		}
 	}
 
+	if (ifsc > 254)
+	{
+		/* 0xFF is not a valid value for IFSC */
+		DEBUG_INFO2("Non ISO IFSC: 0x%X", ifsc);
+		ifsc = 254;
+	}
+
 	return ifsc;
 } /* get_IFSC */
 
