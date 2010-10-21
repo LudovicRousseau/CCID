@@ -318,7 +318,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 
 
 #if !defined(TWIN_SERIAL)
-static RESPONSECODE IFDHPolling(DWORD Lun)
+static RESPONSECODE IFDHPolling(DWORD Lun, int timeout)
 {
 	int reader_index;
 
@@ -327,21 +327,23 @@ static RESPONSECODE IFDHPolling(DWORD Lun)
 
 	/* log only if DEBUG_LEVEL_PERIODIC is set */
 	if (LogLevel & DEBUG_LEVEL_PERIODIC)
-		DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
+		DEBUG_INFO4("%s (lun: %X) %d ms", CcidSlots[reader_index].readerName,
+			Lun, timeout);
 
-	return InterruptRead(reader_index, 60*60*1000);	/* 1 hour */
+	return InterruptRead(reader_index, timeout);
 }
 
 /* on an ICCD device the card is always inserted
  * so no card movement will ever happen: just do nothing */
-static RESPONSECODE IFDHSleep(DWORD Lun)
+static RESPONSECODE IFDHSleep(DWORD Lun, int timeout)
 {
 	int reader_index;
 
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO4("%s (lun: %X) %d ms", CcidSlots[reader_index].readerName, Lun,
+		timeout);
 
 	/* just sleep for 5 seconds since the polling thread is NOT killable
 	 * so pcscd event thread must loop to exit cleanly
@@ -350,7 +352,7 @@ static RESPONSECODE IFDHSleep(DWORD Lun)
 	 * TAG_IFD_POLLING_THREAD_KILLABLE then we could use a much longer delay
 	 * and be killed before pcscd exits
 	 */
-	(void)sleep(600);	/* 10 minutes */
+	(void)usleep(timeout);
 	return IFD_SUCCESS;
 }
 
@@ -528,7 +530,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			break;
 
 #if !defined(TWIN_SERIAL)
-		case TAG_IFD_POLLING_THREAD:
+		case TAG_IFD_POLLING_THREAD_WITH_TIMEOUT:
 			{
 				_ccid_descriptor *ccid_desc;
 
