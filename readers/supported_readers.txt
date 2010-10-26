@@ -68,20 +68,20 @@
 0x047B:0x020B:Silitek SK-3105
 
 # Dell
-0x413c:0x2100:Dell keyboard SK-3106
-0x413c:0X2101:Dell smart card reader keyboard
+0x413C:0x2100:Dell keyboard SK-3106
+0x413C:0x2101:Dell smart card reader keyboard
 
 # Cherry
-0x046a:0x0005:Cherry XX33
-0x046a:0x0010:Cherry XX44
-0x046a:0x002D:Cherry ST1044U
-0x046a:0x003E:Cherry SmartTerminal ST-2XXX
+0x046A:0x0005:Cherry XX33
+0x046A:0x0010:Cherry XX44
+0x046A:0x002D:Cherry ST1044U
+0x046A:0x003E:Cherry SmartTerminal ST-2XXX
 0x046A:0x005B:Cherry SmartBoard XX1X
 0x046A:0x0070:Cherry SmartTerminal XX1X
 0x046A:0x0072:Cherry SmartTerminal XX7X
 
 # Advanced Card Systems
-0x072f:0x90cc:ACS ACR 38U-CCID
+0x072F:0x90CC:ACS ACR 38U-CCID
 0x072F:0x2200:ACS ACR122U PICC Interface
 
 # Kobil
@@ -93,10 +93,10 @@
 0x0D46:0x4289:KOBIL mIDentity visual
 0x0D46:0x4389:KOBIL mIDentity fullsize
 0x0D46:0x43A9:KOBIL mIDentity 4smart fullsize AES
-0x0d46:0x3003:KOBIL KAAN SIM III
-0x0d46:0x3010:KOBIL EMV CAP - SecOVID Reader III
-0x0d46:0x4000:KOBIL mIDentity M
-0x0d46:0x4001:KOBIL mIDentity XL
+0x0D46:0x3003:KOBIL KAAN SIM III
+0x0D46:0x3010:KOBIL EMV CAP - SecOVID Reader III
+0x0D46:0x4000:KOBIL mIDentity M
+0x0D46:0x4001:KOBIL mIDentity XL
 
 # Eutron
 0x073D:0x0B00:Eutron Digipass 860
@@ -287,8 +287,8 @@
 # does not work with libusb-1.0
 #
 # O2 Micro
-#0x0b97:0x7762:O2 Micro Oz776
-#0x0b97:0x7772:O2 Micro Oz776
+#0x0B97:0x7762:O2 Micro Oz776
+#0x0B97:0x7772:O2 Micro Oz776
 #
 # Blutronics
 #0x1B0E:0x1078:Blutronics Bludrive II CCID
