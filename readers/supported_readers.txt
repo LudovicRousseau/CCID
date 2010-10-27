@@ -270,6 +270,9 @@
 # Reiner
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
 
+# BZH
+0x1677:0x0025:BZH uKeyCI800-K18
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/ccid/unsupported.html for a
 # description of the problem(s)
