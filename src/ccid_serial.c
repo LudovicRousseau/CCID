@@ -310,6 +310,12 @@ ack:
 	/* total frame size */
 	to_read = 10+dw2i(buffer, 1);
 
+	if ((to_read < 0) || (to_read > 0x20000))
+	{
+		DEBUG_CRITICAL2("Wrong value for frame size: %d", to_read);
+		return STATUS_COMM_ERROR;
+	}
+
 	DEBUG_COMM2("frame size: %d", to_read);
 	if ((rv = get_bytes(reader_index, buffer+5, to_read-5)) != STATUS_SUCCESS)
 		return rv;
