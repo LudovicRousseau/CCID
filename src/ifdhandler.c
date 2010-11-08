@@ -119,8 +119,8 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 		/* save the current read timeout computed from card capabilities */
 		oldReadTimeout = ccid_descriptor->readTimeout;
 
-		/* 100ms just to resync the USB toggle bits */
-		ccid_descriptor->readTimeout = 100;
+		/* 1000ms just to resync the USB toggle bits */
+		ccid_descriptor->readTimeout = 1000;
 
 		/* Try to access the reader */
 		/* This "warm up" sequence is sometimes needed when pcscd is
