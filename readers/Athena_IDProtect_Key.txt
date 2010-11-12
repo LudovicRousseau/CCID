@@ -1,14 +1,14 @@
  idVendor: 0x0DC3
   iManufacturer: Athena
  idProduct: 0x0900
-  iProduct: IDProtect Key
- bcdDevice: 1.00 (firmware release?)
+  iProduct: IDProtect Key v2
+ bcdDevice: 2.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
- bNumEndpoints: 3
-  bulk-IN, bulk-OUT and Interrupt-IN
+ bNumEndpoints: 2
+  bulk-IN and bulk-OUT
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
@@ -29,11 +29,11 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Input/output error
+   IFD does not support GET CLOCK FREQUENCIES request: Operation timed out
   dwDataRate: 10752 bps
   dwMaxDataRate: 10752 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: Input/output error
+   IFD does not support GET_DATA_RATES request: Operation timed out
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000

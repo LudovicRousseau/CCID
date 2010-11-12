@@ -108,7 +108,7 @@
 # Athena
 0x0DC3:0x1004:Athena ASE IIIe
 0x0DC3:0x1102:Athena ASEDrive IIIe KB
-#0x0DC3:0x0900:Athena IDProtect Key
+0x0DC3:0x0900:Athena IDProtect Key
 
 # SmartEpad
 0x09BE:0x0002:SmartEpad
