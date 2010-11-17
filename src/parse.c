@@ -31,6 +31,10 @@
 #include "defs.h"
 #include "ccid.h"
 
+/* define DISPLAY_EXTRA_VALUES to display the extra (invalid) values
+ * returned by bNumClockSupported and bNumDataRatesSupported */
+#undef DISPLAY_EXTRA_VALUES
+
 #ifndef TRUE
 #define TRUE 1
 #define FALSE 0
@@ -433,8 +437,10 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 						n/4, extra[18]);
 
 					/* we got more data than expected */
+#ifndef DISPLAY_EXTRA_VALUES
 					if (n > extra[18]*4)
 						n = extra[18]*4;
+#endif
 				}
 
 				for (i=0; i<n; i+=4)
@@ -476,8 +482,10 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 						extra[27]);
 
 					/* we got more data than expected */
+#ifndef DISPLAY_EXTRA_VALUES
 					if (n > extra[27]*4)
 						n = extra[27]*4;
+#endif
 				}
 
 				for (i=0; i<n; i+=4)
