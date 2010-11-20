@@ -2,7 +2,7 @@
   iManufacturer: SpringCard
  idProduct: 0x7124
   iProduct: CSB6 Ultimate
- bcdDevice: 1.46 (firmware release?)
+ bcdDevice: 1.50 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: 0
+ iInterface: ?
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
