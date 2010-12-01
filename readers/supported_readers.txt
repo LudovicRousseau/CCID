@@ -273,6 +273,9 @@
 # BZH
 0x1677:0x0025:BZH uKeyCI800-K18
 
+# Free Software Initiative of Japan
+0x234B:0x0000:FSIJ Gnuk
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/ccid/unsupported.html for a
 # description of the problem(s)
