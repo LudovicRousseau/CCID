@@ -117,6 +117,27 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.1 - 3 December 2010, Ludovic Rousseau
+    - Add support of Gemalto Smart Guardian (SG CCID), ReinerSCT
+      cyberJack RFID basis, Akasa AK-CR-03, BZH uKeyCI800-K18, Free
+      Software Initiative of Japan Gnuk token readers
+    - Remove O2 Micro Oz776 and Blutronics Bludrive II CCID since they
+      are no more supported since version 1.4.0
+    - SecurePINVerify() & SecurePINModify(): Accept big and little
+      endian byte orders for multibytes fields. The application
+      should not use HOST_TO_CCID_16() and HOST_TO_CCID_32() any more
+      and just use the normal byte order of the architecture.
+    - Need pcsc-lite 1.6.5 for TAG_IFD_POLLING_THREAD_WITH_TIMEOUT
+    - Add --enable-embedded (default is no) to build libccid for an
+      embedded system.  This will activate the NO_LOG option to disable
+      logging and limit RAM and disk consumption.
+    - Remove --enable-udev option since it is not used anymore with
+      libhal. The udev rules file is now used to change the access
+      rights of the device and not send a hotplug signal to pcscd.
+      See http://ludovicrousseau.blogspot.com/2010/09/pcscd-auto-start.html
+    - some minor bugs removed
+
+
 1.4.0 - 4 August 2010, Ludovic Rousseau
     - add support of Kingtrust Multi-Reader, Dectel CI692, Todos CX00,
       C3PO LTC36, ACS AET65, Broadcom 5880, Tianyu Smart Card Reader,
