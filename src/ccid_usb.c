@@ -161,7 +161,7 @@ status_t OpenUSB(unsigned int reader_index, /*@unused@*/ int Channel)
  ****************************************************************************/
 status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 {
-	int alias = 0;
+	unsigned int alias;
 	struct libusb_device_handle *dev_handle;
 	char infofile[FILENAME_MAX];
 #ifndef __APPLE__
