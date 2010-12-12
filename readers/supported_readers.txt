@@ -228,6 +228,7 @@
 
 # Feitian
 0x096E:0x0503:Feitian SCR301
+0x096E:0x0505:Feitian SCR310
 
 # Softforum
 0x04E8:0x0007:Softforum XecureHSM
