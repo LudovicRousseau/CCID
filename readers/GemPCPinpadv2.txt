@@ -2,7 +2,7 @@
   iManufacturer: Gemplus
  idProduct: 0x3478
   iProduct: USB GemPCPinpad SmartCard Reader
- bcdDevice: 2.10 (firmware release?)
+ bcdDevice: 2.11 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
