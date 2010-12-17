@@ -174,6 +174,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	ssize_t cnt;
 	list_t plist, *values, *ifdVendorID, *ifdProductID, *ifdFriendlyName;
 	int rv;
+	int claim_failed = FALSE;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
@@ -491,6 +492,7 @@ again:
 					(void)libusb_close(dev_handle);
 					DEBUG_CRITICAL4("Can't claim interface %d/%d: %d",
 						bus_number, device_address, r);
+					claim_failed = TRUE;
 					interface_number = -1;
 					continue;
 				}
@@ -572,6 +574,8 @@ end:
 	{
 		/* does not work for libusb <= 1.0.8 */
 		/* libusb_exit(ctx); */
+		if (claim_failed)
+			return STATUS_COMM_ERROR;
 		return STATUS_NO_SUCH_DEVICE;
 	}
 
