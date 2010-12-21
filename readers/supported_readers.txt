@@ -184,6 +184,7 @@
 
 # Oberthur
 0x1A74:0x6354:OCS ID-One Cosmo Card
+0x1A74:0xB111:Oberthur ID-ONE TOKEN SLIM v2
 
 # Aladdin
 0x0529:0x0620:Aladdin eToken PRO USB 72K Java
