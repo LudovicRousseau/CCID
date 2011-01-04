@@ -48,7 +48,7 @@
 #define NORMAL "\33[0m"
 
 /* global variables used in ccid_usb.c but defined in ifdhandler.c */
-int LogLevel = 0;
+int LogLevel = 1+2+4+8; /* full debug */
 int DriverOptions = 0;
 
 static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
