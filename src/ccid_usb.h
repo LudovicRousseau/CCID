@@ -39,6 +39,8 @@ status_t CloseUSB(unsigned int reader_index);
 /*@null@*/ const struct libusb_interface *get_ccid_usb_interface(
 	struct libusb_config_descriptor *desc, int *num);
 
+const unsigned char *get_ccid_device_descriptor(const struct libusb_interface *usb_interface);
+
 int ControlUSB(int reader_index, int requesttype, int request, int value,
 	unsigned char *bytes, unsigned int size);
 

@@ -335,6 +335,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 				const struct libusb_interface *usb_interface = NULL;
 				int interface;
 				int num = 0;
+				const unsigned char *device_descriptor;
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 				static int static_interface = 1;
@@ -463,12 +464,12 @@ again:
 					continue;
 				}
 
-				if (usb_interface->altsetting->extra_length != 54)
+				device_descriptor = get_ccid_device_descriptor(usb_interface);
+				if (NULL == device_descriptor)
 				{
 					(void)libusb_close(dev_handle);
-					DEBUG_CRITICAL4("Extra field for %d/%d has a wrong length: %d",
-						bus_number, device_address,
-						usb_interface->altsetting->extra_length);
+					DEBUG_CRITICAL3("Unable to find the device descriptor for %d/%d",
+						bus_number, device_address);
 					return STATUS_UNSUCCESSFUL;
 				}
 
@@ -535,23 +536,22 @@ again:
 				usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
 				usbDevice[reader_index].ccid.readerID =
 					(desc.idVendor << 16) + desc.idProduct;
-				usbDevice[reader_index].ccid.dwFeatures = dw2i(usb_interface->altsetting->extra, 40);
+				usbDevice[reader_index].ccid.dwFeatures = dw2i(device_descriptor, 40);
 				usbDevice[reader_index].ccid.wLcdLayout =
-					(usb_interface->altsetting->extra[51] << 8) +
-					usb_interface->altsetting->extra[50];
-				usbDevice[reader_index].ccid.bPINSupport = usb_interface->altsetting->extra[52];
-				usbDevice[reader_index].ccid.dwMaxCCIDMessageLength = dw2i(usb_interface->altsetting->extra, 44);
-				usbDevice[reader_index].ccid.dwMaxIFSD = dw2i(usb_interface->altsetting->extra, 28);
-				usbDevice[reader_index].ccid.dwDefaultClock = dw2i(usb_interface->altsetting->extra, 10);
-				usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(usb_interface->altsetting->extra, 23);
-				usbDevice[reader_index].ccid.bMaxSlotIndex = usb_interface->altsetting->extra[4];
+					(device_descriptor[51] << 8) + device_descriptor[50];
+				usbDevice[reader_index].ccid.bPINSupport = device_descriptor[52];
+				usbDevice[reader_index].ccid.dwMaxCCIDMessageLength = dw2i(device_descriptor, 44);
+				usbDevice[reader_index].ccid.dwMaxIFSD = dw2i(device_descriptor, 28);
+				usbDevice[reader_index].ccid.dwDefaultClock = dw2i(device_descriptor, 10);
+				usbDevice[reader_index].ccid.dwMaxDataRate = dw2i(device_descriptor, 23);
+				usbDevice[reader_index].ccid.bMaxSlotIndex = device_descriptor[4];
 				usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
 				usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
 				usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, config_desc, num);
 				usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
 				usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
 				usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
-				usbDevice[reader_index].ccid.bVoltageSupport = usb_interface->altsetting->extra[5];
+				usbDevice[reader_index].ccid.bVoltageSupport = device_descriptor[5];
 				usbDevice[reader_index].ccid.sIFD_serial_number = NULL;
 				if (desc.iSerialNumber)
 				{
@@ -750,6 +750,47 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
 
 /*****************************************************************************
  *
+ *					get_ccid_device_descriptor
+ *
+ ****************************************************************************/
+const unsigned char *get_ccid_device_descriptor(const struct libusb_interface *usb_interface)
+{
+#ifdef O2MICRO_OZ776_PATCH
+	uint8_t last_endpoint;
+#endif
+
+	if (54 == usb_interface->altsetting->extra_length)
+		return usb_interface->altsetting->extra;
+
+	if (0 != usb_interface->altsetting->extra_length)
+	{
+		/* If extra_length is zero, the descriptor might be at
+		 * the end, but if it's not zero, we have a
+		 * problem. */
+		DEBUG_CRITICAL2("Extra field has a wrong length: %d",
+			usb_interface->altsetting->extra_length);
+		return NULL;
+	}
+
+#ifdef O2MICRO_OZ776_PATCH
+	/* Some devices, such as the Oz776, Reiner SCT and bludrive II
+	 * report the device descriptor at the end of the endpoint
+	 * descriptors; to support those, look for it at the end as well.
+	 */
+	last_endpoint = usb_interface->altsetting->bNumEndpoints-1;
+	if (usb_interface->altsetting->endpoint[last_endpoint].extra_length == 54)
+		return usb_interface->altsetting->endpoint[last_endpoint].extra;
+#else
+	DEBUG_CRITICAL2("Extra field has a wrong length: %d",
+		usb_interface->altsetting->extra_length);
+#endif
+
+	return NULL;
+} /* get_ccid_device_descriptor */
+
+
+/*****************************************************************************
+ *
  *					get_end_points
  *
  ****************************************************************************/
@@ -806,9 +847,6 @@ static int get_end_points(struct libusb_config_descriptor *desc,
 {
 	const struct libusb_interface *usb_interface = NULL;
 	int i;
-#ifdef O2MICRO_OZ776_PATCH
-	int readerID;
-#endif
 
 	/* if multiple interfaces use the first one with CCID class type */
 	for (i = *num; i < desc->bNumInterfaces; i++)
@@ -826,32 +864,6 @@ static int get_end_points(struct libusb_config_descriptor *desc,
 			break;
 		}
 	}
-
-#ifdef O2MICRO_OZ776_PATCH
-	readerID = (dev->descriptor.idVendor << 16) + dev->descriptor.idProduct;
-	if (usb_interface != NULL
-		&& ((OZ776 == readerID) || (OZ776_7772 == readerID)
-		|| (REINER_SCT == readerID) || (BLUDRIVEII_CCID == readerID))
-		&& (0 == usb_interface->altsetting->extra_length)) /* this is the bug */
-	{
-		int j;
-		for (j=0; j<usb_interface->altsetting->bNumEndpoints; j++)
-		{
-			/* find the extra[] array */
-			if (54 == usb_interface->altsetting->endpoint[j].extra_length)
-			{
-				/* get the extra[] from the endpoint */
-				usb_interface->altsetting->extra_length = 54;
-				usb_interface->altsetting->extra =
-					usb_interface->altsetting->endpoint[j].extra;
-				/* avoid double free on close */
-				usb_interface->altsetting->endpoint[j].extra = NULL;
-				usb_interface->altsetting->endpoint[j].extra_length = 0;
-				break;
-			}
-		}
-	}
-#endif
 
 	return usb_interface;
 } /* get_ccid_usb_interface */
@@ -934,7 +946,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	n /= sizeof(int);
 
 	/* we do not get the expected number of data rates */
-	len = get_ccid_usb_interface(desc, &num)->altsetting->extra[27]; /* bNumDataRatesSupported */
+	len = get_ccid_device_descriptor(get_ccid_usb_interface(desc, &num))[27]; /* bNumDataRatesSupported */
 	if ((n != len) && len)
 	{
 		DEBUG_INFO3("Got %d data rates but was expecting %d", n, len);
