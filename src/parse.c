@@ -241,7 +241,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	int num)
 {
 	const struct libusb_interface_descriptor *usb_interface;
-	const unsigned char *extra;
+	const unsigned char *device_descriptor;
 	unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 	int r;
 
@@ -357,19 +357,19 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	 * CCID Class Descriptor
 	 */
 	(void)printf(" CCID Class Descriptor\n");
-	extra = usb_interface->extra;
+	device_descriptor = usb_interface->extra;
 
-	(void)printf("  bLength: 0x%02X\n", extra[0]);
-	if (extra[0] != 0x36)
+	(void)printf("  bLength: 0x%02X\n", device_descriptor[0]);
+	if (device_descriptor[0] != 0x36)
 	{
 		(void)printf("   UNSUPPORTED bLength\n");
 		return TRUE;
 	}
 
-	(void)printf("  bDescriptorType: 0x%02X\n", extra[1]);
-	if (extra[1] != 0x21)
+	(void)printf("  bDescriptorType: 0x%02X\n", device_descriptor[1]);
+	if (device_descriptor[1] != 0x21)
 	{
-		if (0xFF == extra[1])
+		if (0xFF == device_descriptor[1])
 			(void)printf("   PROPRIETARY bDescriptorType\n");
 		else
 		{
@@ -378,27 +378,27 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		}
 	}
 
-	(void)printf("  bcdCCID: %X.%02X\n", extra[3], extra[2]);
-	(void)printf("  bMaxSlotIndex: 0x%02X\n", extra[4]);
-	(void)printf("  bVoltageSupport: 0x%02X\n", extra[5]);
-	if (extra[5] & 0x01)
+	(void)printf("  bcdCCID: %X.%02X\n", device_descriptor[3], device_descriptor[2]);
+	(void)printf("  bMaxSlotIndex: 0x%02X\n", device_descriptor[4]);
+	(void)printf("  bVoltageSupport: 0x%02X\n", device_descriptor[5]);
+	if (device_descriptor[5] & 0x01)
 		(void)printf("   5.0V\n");
-	if (extra[5] & 0x02)
+	if (device_descriptor[5] & 0x02)
 		(void)printf("   3.0V\n");
-	if (extra[5] & 0x04)
+	if (device_descriptor[5] & 0x04)
 		(void)printf("   1.8V\n");
 
-	(void)printf("  dwProtocols: 0x%02X%02X 0x%02X%02X\n", extra[9], extra[8],
-		extra[7], extra[6]);
-	if (extra[6] & 0x01)
+	(void)printf("  dwProtocols: 0x%02X%02X 0x%02X%02X\n", device_descriptor[9], device_descriptor[8],
+		device_descriptor[7], device_descriptor[6]);
+	if (device_descriptor[6] & 0x01)
 		(void)printf("   T=0\n");
-	if (extra[6] & 0x02)
+	if (device_descriptor[6] & 0x02)
 		(void)printf("   T=1\n");
 
-	(void)printf("  dwDefaultClock: %.3f MHz\n", dw2i(extra, 10)/1000.0);
-	(void)printf("  dwMaximumClock: %.3f MHz\n", dw2i(extra, 14)/1000.0);
-	(void)printf("  bNumClockSupported: %d%s\n", extra[18],
-		extra[18] ? "" : " (will use whatever is returned)");
+	(void)printf("  dwDefaultClock: %.3f MHz\n", dw2i(device_descriptor, 10)/1000.0);
+	(void)printf("  dwMaximumClock: %.3f MHz\n", dw2i(device_descriptor, 14)/1000.0);
+	(void)printf("  bNumClockSupported: %d%s\n", device_descriptor[18],
+		device_descriptor[18] ? "" : " (will use whatever is returned)");
 	{
 		int n;
 
@@ -431,15 +431,15 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 				int i;
 
 				/* we do not get the expected number of data rates */
-				if ((n != extra[18]*4) && extra[18])
+				if ((n != device_descriptor[18]*4) && device_descriptor[18])
 				{
 					(void)printf("   Got %d clock frequencies but was expecting %d\n",
-						n/4, extra[18]);
+						n/4, device_descriptor[18]);
 
 					/* we got more data than expected */
 #ifndef DISPLAY_EXTRA_VALUES
-					if (n > extra[18]*4)
-						n = extra[18]*4;
+					if (n > device_descriptor[18]*4)
+						n = device_descriptor[18]*4;
 #endif
 				}
 
@@ -447,10 +447,10 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 					(void)printf("   Support %d kHz\n", dw2i(buffer, i));
 			}
 	}
-	(void)printf("  dwDataRate: %d bps\n", dw2i(extra, 19));
-	(void)printf("  dwMaxDataRate: %d bps\n", dw2i(extra, 23));
-	(void)printf("  bNumDataRatesSupported: %d%s\n", extra[27],
-		extra[27] ? "" : " (will use whatever is returned)");
+	(void)printf("  dwDataRate: %d bps\n", dw2i(device_descriptor, 19));
+	(void)printf("  dwMaxDataRate: %d bps\n", dw2i(device_descriptor, 23));
+	(void)printf("  bNumDataRatesSupported: %d%s\n", device_descriptor[27],
+		device_descriptor[27] ? "" : " (will use whatever is returned)");
 	{
 		int n;
 
@@ -476,15 +476,15 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 				int i;
 
 				/* we do not get the expected number of data rates */
-				if ((n != extra[27]*4) && extra[27])
+				if ((n != device_descriptor[27]*4) && device_descriptor[27])
 				{
 					(void)printf("   Got %d data rates but was expecting %d\n", n/4,
-						extra[27]);
+						device_descriptor[27]);
 
 					/* we got more data than expected */
 #ifndef DISPLAY_EXTRA_VALUES
-					if (n > extra[27]*4)
-						n = extra[27]*4;
+					if (n > device_descriptor[27]*4)
+						n = device_descriptor[27]*4;
 #endif
 				}
 
@@ -492,53 +492,53 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 					(void)printf("   Support %d bps\n", dw2i(buffer, i));
 			}
 	}
-	(void)printf("  dwMaxIFSD: %d\n", dw2i(extra, 28));
-	(void)printf("  dwSynchProtocols: 0x%08X\n", dw2i(extra, 32));
-	if (extra[32] & 0x01)
+	(void)printf("  dwMaxIFSD: %d\n", dw2i(device_descriptor, 28));
+	(void)printf("  dwSynchProtocols: 0x%08X\n", dw2i(device_descriptor, 32));
+	if (device_descriptor[32] & 0x01)
 			(void)printf("   2-wire protocol\n");
-	if (extra[32] & 0x02)
+	if (device_descriptor[32] & 0x02)
 			(void)printf("   3-wire protocol\n");
-	if (extra[32] & 0x04)
+	if (device_descriptor[32] & 0x04)
 			(void)printf("   I2C protocol\n");
 
-	(void)printf("  dwMechanical: 0x%08X\n", dw2i(extra, 36));
-	if (extra[36] == 0)
+	(void)printf("  dwMechanical: 0x%08X\n", dw2i(device_descriptor, 36));
+	if (device_descriptor[36] == 0)
 		(void)printf("   No special characteristics\n");
-	if (extra[36] & 0x01)
+	if (device_descriptor[36] & 0x01)
 		(void)printf("   Card accept mechanism\n");
-	if (extra[36] & 0x02)
+	if (device_descriptor[36] & 0x02)
 		(void)printf("   Card ejection mechanism\n");
-	if (extra[36] & 0x04)
+	if (device_descriptor[36] & 0x04)
 		(void)printf("   Card capture mechanism\n");
-	if (extra[36] & 0x08)
+	if (device_descriptor[36] & 0x08)
 		(void)printf("   Card lock/unlock mechanism\n");
 
-	(void)printf("  dwFeatures: 0x%08X\n", dw2i(extra, 40));
-	if (dw2i(extra, 40) == 0)
+	(void)printf("  dwFeatures: 0x%08X\n", dw2i(device_descriptor, 40));
+	if (dw2i(device_descriptor, 40) == 0)
 		(void)printf("   No special characteristics\n");
-	if (extra[40] & 0x02)
+	if (device_descriptor[40] & 0x02)
 		(void)printf("   ....02 Automatic parameter configuration based on ATR data\n");
-	if (extra[40] & 0x04)
+	if (device_descriptor[40] & 0x04)
 		(void)printf("   ....04 Automatic activation of ICC on inserting\n");
-	if (extra[40] & 0x08)
+	if (device_descriptor[40] & 0x08)
 		(void)printf("   ....08 Automatic ICC voltage selection\n");
-	if (extra[40] & 0x10)
+	if (device_descriptor[40] & 0x10)
 		(void)printf("   ....10 Automatic ICC clock frequency change according to parameters\n");
-	if (extra[40] & 0x20)
+	if (device_descriptor[40] & 0x20)
 		(void)printf("   ....20 Automatic baud rate change according to frequency and Fi, Di params\n");
-	if (extra[40] & 0x40)
+	if (device_descriptor[40] & 0x40)
 		(void)printf("   ....40 Automatic parameters negotiation made by the CCID\n");
-	if (extra[40] & 0x80)
+	if (device_descriptor[40] & 0x80)
 		(void)printf("   ....80 Automatic PPS made by the CCID\n");
-	if (extra[41] & 0x01)
+	if (device_descriptor[41] & 0x01)
 		(void)printf("   ..01.. CCID can set ICC in clock stop mode\n");
-	if (extra[41] & 0x02)
+	if (device_descriptor[41] & 0x02)
 		(void)printf("   ..02.. NAD value other than 00 accepted (T=1)\n");
-	if (extra[41] & 0x04)
+	if (device_descriptor[41] & 0x04)
 		(void)printf("   ..04.. Automatic IFSD exchange as first exchange (T=1)\n");
-	if (extra[41] & 0x08)
+	if (device_descriptor[41] & 0x08)
 		(void)printf("   ..08.. Unknown (ICCD?)\n");
-	switch (extra[42] & 0x07)
+	switch (device_descriptor[42] & 0x07)
 	{
 		case 0x00:
 			(void)printf("   00.... Character level exchange\n");
@@ -556,27 +556,27 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			(void)printf("   04.... Short and Extended APDU level exchange\n");
 			break;
 	}
-	if (extra[42] & 0x10)
+	if (device_descriptor[42] & 0x10)
 		(void)printf("   10.... USB Wake up signaling supported on card insertion and removal\n");
 
-	(void)printf("  dwMaxCCIDMessageLength: %d bytes\n", dw2i(extra, 44));
-	(void)printf("  bClassGetResponse: 0x%02X\n", extra[48]);
-	if (0xFF == extra[48])
+	(void)printf("  dwMaxCCIDMessageLength: %d bytes\n", dw2i(device_descriptor, 44));
+	(void)printf("  bClassGetResponse: 0x%02X\n", device_descriptor[48]);
+	if (0xFF == device_descriptor[48])
 		(void)printf("   echoes the APDU class\n");
-	(void)printf("  bClassEnveloppe: 0x%02X\n", extra[49]);
-	if (0xFF == extra[49])
+	(void)printf("  bClassEnveloppe: 0x%02X\n", device_descriptor[49]);
+	if (0xFF == device_descriptor[49])
 		(void)printf("   echoes the APDU class\n");
-	(void)printf("  wLcdLayout: 0x%04X\n", (extra[51] << 8)+extra[50]);
-	if (extra[50])
-		(void)printf("   %d lines\n", extra[50]);
-	if (extra[51])
-		(void)printf("   %d characters per line\n", extra[51]);
-	(void)printf("  bPINSupport: 0x%02X\n", extra[52]);
-	if (extra[52] & 0x01)
+	(void)printf("  wLcdLayout: 0x%04X\n", (device_descriptor[51] << 8)+device_descriptor[50]);
+	if (device_descriptor[50])
+		(void)printf("   %d lines\n", device_descriptor[50]);
+	if (device_descriptor[51])
+		(void)printf("   %d characters per line\n", device_descriptor[51]);
+	(void)printf("  bPINSupport: 0x%02X\n", device_descriptor[52]);
+	if (device_descriptor[52] & 0x01)
 		(void)printf("   PIN Verification supported\n");
-	if (extra[52] & 0x02)
+	if (device_descriptor[52] & 0x02)
 		(void)printf("   PIN Modification supported\n");
-	(void)printf("  bMaxCCIDBusySlots: %d\n", extra[53]);
+	(void)printf("  bMaxCCIDBusySlots: %d\n", device_descriptor[53]);
 
 	return FALSE;
 } /* ccid_parse_interface_descriptor */
