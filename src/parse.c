@@ -240,7 +240,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	struct libusb_config_descriptor *config_desc,
 	int num)
 {
-	const struct libusb_interface_descriptor *usb_interface;
+	const struct libusb_interface_descriptor *usb_interface_descriptor;
 	const unsigned char *device_descriptor;
 	unsigned char buffer[256*sizeof(int)];  /* maximum is 256 records */
 	int r;
@@ -275,18 +275,18 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	(void)printf(" bcdDevice: %X.%02X (firmware release?)\n",
 		desc.bcdDevice >> 8, desc.bcdDevice & 0xFF);
 
-	usb_interface = get_ccid_usb_interface(config_desc, &num)->altsetting;
+	usb_interface_descriptor = get_ccid_usb_interface(config_desc, &num)->altsetting;
 
-	(void)printf(" bLength: %d\n", usb_interface->bLength);
+	(void)printf(" bLength: %d\n", usb_interface_descriptor->bLength);
 
-	(void)printf(" bDescriptorType: %d\n", usb_interface->bDescriptorType);
+	(void)printf(" bDescriptorType: %d\n", usb_interface_descriptor->bDescriptorType);
 
-	(void)printf(" bInterfaceNumber: %d\n", usb_interface->bInterfaceNumber);
+	(void)printf(" bInterfaceNumber: %d\n", usb_interface_descriptor->bInterfaceNumber);
 
-	(void)printf(" bAlternateSetting: %d\n", usb_interface->bAlternateSetting);
+	(void)printf(" bAlternateSetting: %d\n", usb_interface_descriptor->bAlternateSetting);
 
-	(void)printf(" bNumEndpoints: %d\n", usb_interface->bNumEndpoints);
-	switch (usb_interface->bNumEndpoints)
+	(void)printf(" bNumEndpoints: %d\n", usb_interface_descriptor->bNumEndpoints);
+	switch (usb_interface_descriptor->bNumEndpoints)
 	{
 		case 0:
 			(void)printf("  Control only\n");
@@ -304,26 +304,26 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			(void)printf("  UNKNOWN value\n");
 	}
 
-	(void)printf(" bInterfaceClass: 0x%02X", usb_interface->bInterfaceClass);
-	if (usb_interface->bInterfaceClass == 0x0b)
+	(void)printf(" bInterfaceClass: 0x%02X", usb_interface_descriptor->bInterfaceClass);
+	if (usb_interface_descriptor->bInterfaceClass == 0x0b)
 		(void)printf(" [Chip Card Interface Device Class (CCID)]\n");
 	else
 	{
 		(void)printf("\n  NOT A CCID DEVICE\n");
-		if (usb_interface->bInterfaceClass != 0xFF)
+		if (usb_interface_descriptor->bInterfaceClass != 0xFF)
 			return TRUE;
 		else
 			(void)printf("  Class is 0xFF (proprietary)\n");
 	}
 
 	(void)printf(" bInterfaceSubClass: %d\n",
-		usb_interface->bInterfaceSubClass);
-	if (usb_interface->bInterfaceSubClass)
+		usb_interface_descriptor->bInterfaceSubClass);
+	if (usb_interface_descriptor->bInterfaceSubClass)
 		(void)printf("  UNSUPPORTED SubClass\n");
 
 	(void)printf(" bInterfaceProtocol: %d\n",
-		usb_interface->bInterfaceProtocol);
-	switch (usb_interface->bInterfaceProtocol)
+		usb_interface_descriptor->bInterfaceProtocol);
+	switch (usb_interface_descriptor->bInterfaceProtocol)
 	{
 		case 0:
 			(void)printf("  bulk transfer, optional interrupt-IN (CCID)\n");
@@ -338,17 +338,17 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			(void)printf("  UNSUPPORTED InterfaceProtocol\n");
 	}
 
-	r = libusb_get_string_descriptor_ascii(handle, usb_interface->iInterface,
+	r = libusb_get_string_descriptor_ascii(handle, usb_interface_descriptor->iInterface,
 		buffer, sizeof(buffer));
 	if (r < 0)
 		(void)printf(" Can't get iInterface string\n");
 	else
 		(void)printf(" iInterface: %s\n", buffer);
 
-	if (usb_interface->extra_length < 54)
+	if (usb_interface_descriptor->extra_length < 54)
 	{
 		(void)printf("USB extra length is too short: %d\n",
-			usb_interface->extra_length);
+			usb_interface_descriptor->extra_length);
 		(void)printf("\n  NOT A CCID DEVICE\n");
 		return TRUE;
 	}
@@ -357,7 +357,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	 * CCID Class Descriptor
 	 */
 	(void)printf(" CCID Class Descriptor\n");
-	device_descriptor = usb_interface->extra;
+	device_descriptor = usb_interface_descriptor->extra;
 
 	(void)printf("  bLength: 0x%02X\n", device_descriptor[0]);
 	if (device_descriptor[0] != 0x36)
@@ -407,7 +407,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			0xA1, /* request type */
 			0x02, /* GET CLOCK FREQUENCIES */
 			0x00, /* value */
-			usb_interface->bInterfaceNumber, /* interface */
+			usb_interface_descriptor->bInterfaceNumber, /* interface */
 			buffer,
 			sizeof(buffer),
 			2 * 1000);
@@ -459,7 +459,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			0xA1, /* request type */
 			0x03, /* GET DATA RATES */
 			0x00, /* value */
-			usb_interface->bInterfaceNumber, /* interface */
+			usb_interface_descriptor->bInterfaceNumber, /* interface */
 			buffer,
 			sizeof(buffer),
 			2 * 1000);
