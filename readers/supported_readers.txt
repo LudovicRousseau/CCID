@@ -85,6 +85,10 @@
 0x072F:0x2200:ACS ACR122U PICC Interface
 0x072F:0x8201:ACS APG8201 PINhandy 1
 
+# O2 Micro
+0x0B97:0x7762:O2 Micro Oz776
+0x0B97:0x7772:O2 Micro Oz776
+
 # Kobil
 0x0D46:0x3001:KOBIL KAAN Base
 0x0D46:0x3002:KOBIL KAAN Advanced
@@ -157,6 +161,9 @@
 
 # Charismathics
 0x19E7:0x0002:Charismathics token
+
+# Blutronics
+0x1B0E:0x1078:Blutronics Bludrive II CCID
 
 # Covadis
 0x0982:0x0007:Covadis Alya
@@ -292,14 +299,4 @@
 #0x062D:0x0001:iDream or ID-SMID01
 #0x1A74:0x6356:OCS ID-One Cosmo Card
 #0x03F0:0x0036:HP USB CCID Smartcard Keyboard
-
-# The USB descriptor is bogus and the patch in get_ccid_usb_interface()
-# does not work with libusb-1.0
-#
-# O2 Micro
-#0x0B97:0x7762:O2 Micro Oz776
-#0x0B97:0x7772:O2 Micro Oz776
-#
-# Blutronics
-#0x1B0E:0x1078:Blutronics Bludrive II CCID
 
