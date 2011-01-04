@@ -198,7 +198,7 @@ typedef struct
  * The extra[] field is associated with the last endpoint instead of the
  * main USB descriptor
  */
-#undef O2MICRO_OZ776_PATCH
+#define O2MICRO_OZ776_PATCH
 
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
