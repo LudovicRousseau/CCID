@@ -54,7 +54,8 @@ int DriverOptions = 0;
 static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	struct libusb_device_descriptor desc,
 	struct libusb_config_descriptor *config_desc,
-	int num);
+	int num,
+	const struct libusb_interface *usb_interface);
 
 
 /*****************************************************************************
@@ -207,7 +208,8 @@ again:
 		}
 #endif
 
-		(void)ccid_parse_interface_descriptor(handle, desc, config_desc, num);
+		(void)ccid_parse_interface_descriptor(handle, desc, config_desc, num,
+			usb_interface);
 
 #ifndef __APPLE__
 		(void)libusb_release_interface(handle, interface);
@@ -238,7 +240,8 @@ again:
 static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	struct libusb_device_descriptor desc, 
 	struct libusb_config_descriptor *config_desc,
-	int num)
+	int num,
+	const struct libusb_interface *usb_interface)
 {
 	const struct libusb_interface_descriptor *usb_interface_descriptor;
 	const unsigned char *device_descriptor;
@@ -345,10 +348,9 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	else
 		(void)printf(" iInterface: %s\n", buffer);
 
-	if (usb_interface_descriptor->extra_length < 54)
+	device_descriptor = get_ccid_device_descriptor(usb_interface);
+	if (NULL == device_descriptor)
 	{
-		(void)printf("USB extra length is too short: %d\n",
-			usb_interface_descriptor->extra_length);
 		(void)printf("\n  NOT A CCID DEVICE\n");
 		return TRUE;
 	}
@@ -357,7 +359,6 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	 * CCID Class Descriptor
 	 */
 	(void)printf(" CCID Class Descriptor\n");
-	device_descriptor = usb_interface_descriptor->extra;
 
 	(void)printf("  bLength: 0x%02X\n", device_descriptor[0]);
 	if (device_descriptor[0] != 0x36)
