@@ -538,6 +538,11 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Length = 0;
 
 				ccid_desc = get_ccid_descriptor(reader_index);
+
+				/* more than one slot is not supported */
+				if (ccid_desc -> bMaxSlotIndex > 0)
+					break;
+
 				/* CCID and not ICCD */
 				if ((PROTOCOL_CCID == ccid_desc -> bInterfaceProtocol)
 					/* 3 end points */
