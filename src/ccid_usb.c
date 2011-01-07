@@ -714,6 +714,9 @@ status_t CloseUSB(unsigned int reader_index)
 	{
 		DEBUG_COMM("Last slot closed. Release resources");
 
+		if (usbDevice[reader_index].ccid.sIFD_serial_number)
+			free(usbDevice[reader_index].ccid.sIFD_serial_number);
+
 		/* reset so that bSeq starts at 0 again */
 		if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
 			(void)libusb_reset_device(usbDevice[reader_index].dev_handle);
@@ -729,9 +732,6 @@ status_t CloseUSB(unsigned int reader_index)
 	/* mark the resource unused */
 	usbDevice[reader_index].dev_handle = NULL;
 	usbDevice[reader_index].interface = 0;
-
-	if (usbDevice[reader_index].ccid.sIFD_serial_number)
-		free(usbDevice[reader_index].ccid.sIFD_serial_number);
 
 	return STATUS_SUCCESS;
 } /* CloseUSB */
