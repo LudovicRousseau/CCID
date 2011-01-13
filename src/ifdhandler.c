@@ -1996,6 +1996,10 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 
 	timeout = 260*EGT + BWT + 260*CWT;
 
+	/* This is the card/reader timeout.  Add 1 second for the libusb
+	 * timeout so we get the error from the reader. */
+	timeout += 1000;
+
 	return timeout;
 } /* T1_card_timeout  */
 
