@@ -166,7 +166,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 		}
 
 		DEBUG_INFO_XXD("Data Block: ", tmp, r);
-		if (*nlength > r-1)
+		if ((int)*nlength > r-1)
 			*nlength = r-1;
 		memcpy(buffer, tmp+1, *nlength);
 
