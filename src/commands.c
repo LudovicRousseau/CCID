@@ -48,7 +48,9 @@
 #define BOGUS_SCM_FIRMWARE_FOR_dwMaxCCIDMessageLength
 
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
+#ifndef offsetof
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#endif
 
 #ifndef BSWAP_16
 #define BSWAP_8(x)  ((x) & 0xff)
