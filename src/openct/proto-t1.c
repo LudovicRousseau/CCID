@@ -772,7 +772,7 @@ int t1_negotiate_ifsd(t1_state_t * t1, unsigned int dad, int ifsd)
 			|| (sdata[DATA] != ifsd)				/* Wrong ifsd received */
 			|| (sdata[NAD] != swap_nibbles(dad))	/* wrong NAD */
 			|| (!t1_verify_checksum(t1, sdata, n))	/* checksum failed */
-			|| (n != 4 + t1->rc_bytes)				/* wrong frame length */
+			|| (n != 4 + (int)t1->rc_bytes)				/* wrong frame length */
 			|| (sdata[LEN] != 1)					/* wrong data length */
 			|| (sdata[PCB] != (T1_S_BLOCK | T1_S_RESPONSE | T1_S_IFS))) /* wrong PCB */
 			continue;
