@@ -407,7 +407,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			/* If Length is not zero, powerICC has been performed.
 			 * Otherwise, return NULL pointer
 			 * Buffer size is stored in *Length */
-			if (*Length >= CcidSlots[reader_index].nATRLength)
+			if ((int)*Length >= CcidSlots[reader_index].nATRLength)
 			{
 				*Length = CcidSlots[reader_index].nATRLength;
 
