@@ -1814,8 +1814,6 @@ static RESPONSECODE T0ProcSW1(unsigned int reader_index,
 		in_buf = tmp_buf;
 	}
 	sw2 = *rcv_buf = *in_buf;
-	rcv_buf++;
-	in_buf++;
 	in_len--;
 	(*rcv_len)++;
 
