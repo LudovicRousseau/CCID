@@ -672,7 +672,6 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 		 * be the same on 64-bits architectures for example (iMac G5) */
 		rmax_int = rmax;
 		n = CCID_Receive(t1 -> lun, &rmax_int, block, NULL);
-		rmax = rmax_int;
 
 		if (n == IFD_PARITY_ERROR)
 			return -2;
