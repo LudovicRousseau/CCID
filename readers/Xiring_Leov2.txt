@@ -2,7 +2,7 @@
   iManufacturer: XIRING
  idProduct: 0x0038
   iProduct: CCID Smart Card Reader
- bcdDevice: 1.09 (firmware release?)
+ bcdDevice: 1.11 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -28,13 +28,17 @@
    T=1
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
-  bNumClockSupported: 1
-   Got 7 clock frequencies but was expecting 1
+  bNumClockSupported: 0 (will use whatever is returned)
    Support 3600 kHz
+   Support 4000 kHz
+   Support 5050 kHz
+   Support 6000 kHz
+   Support 8000 kHz
+   Support 9600 kHz
+   Support 12000 kHz
   dwDataRate: 9600 bps
-  dwMaxDataRate: 115200 bps
-  bNumDataRatesSupported: 7
-   Got 11 data rates but was expecting 7
+  dwMaxDataRate: 230400 bps
+  bNumDataRatesSupported: 11
    Support 9600 bps
    Support 14400 bps
    Support 19200 bps
@@ -42,6 +46,10 @@
    Support 38400 bps
    Support 57600 bps
    Support 57688 bps
+   Support 115200 bps
+   Support 116129 bps
+   Support 225000 bps
+   Support 230400 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
