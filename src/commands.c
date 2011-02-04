@@ -1843,7 +1843,6 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 	unsigned char tmp_buf[512];
 	unsigned int exp_len, in_len;
 	unsigned char ins, *in_buf;
-	unsigned char backup_len = *rcv_len;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
@@ -1852,12 +1851,15 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
+		unsigned int backup_len;
 
 		/* length is on 16-bits only
 		 * if a size > 0x1000 is used then usb_control_msg() fails with
 		 * "Invalid argument" */
 		if (*rcv_len > 0x1000)
 			*rcv_len = 0x1000;
+
+		backup_len = *rcv_len;
 
 		/* Command to send to the smart card (must be 5 bytes) */
 		memset(cmd, 0, sizeof(cmd));
