@@ -11,7 +11,7 @@ LIBS_TO_INSTALL =
 if WITH_LIBUSB
 lib_LTLIBRARIES += libccid.la
 LIBS_TO_INSTALL += install_ccid
-bin_PROGRAMS = parse
+noinst_PROGRAMS = parse
 endif
 if WITH_TWIN_SERIAL
 lib_LTLIBRARIES += libccidtwin.la
