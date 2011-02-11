@@ -56,12 +56,14 @@ libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(PROVIDED_BY_PCSC) $(T1)
 libccid_la_LIBADD = $(LEXLIB) $(LIBUSB_LIBS) $(PTHREAD_LIBS)
 libccid_la_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS) $(PTHREAD_CFLAGS) \
 	$(SYMBOL_VISIBILITY) -D$(CCID_VERSION)
+libccid_la_LDFLAGS = -avoid-version
 
 libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(TOKEN_PARSER) \
 	$(PROVIDED_BY_PCSC) $(T1)
 libccidtwin_la_CFLAGS = $(PCSC_CFLAGS) $(PTHREAD_CFLAGS) $(SYMBOL_VISIBILITY) \
 	-DTWIN_SERIAL -D$(CCID_VERSION)
 libccidtwin_la_LIBADD = $(PTHREAD_LIBS)
+libccidtwin_la_LDFLAGS = -avoid-version
 
 parse_SOURCES = parse.c debug.c ccid_usb.c $(TOKEN_PARSER)
 parse_LDADD = $(LIBUSB_LIBS)
@@ -83,14 +85,12 @@ DISTCLEANFILES = tokenparser.c Info.plist
 install_ccid: libccid.la Info.plist
 	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
 	cp Info.plist $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/
-	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB).$(VERSION)
-	ln -fs $(CCID_LIB).$(VERSION) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB)
+	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB)
 	$(INSTALL_UDEV_RULE_FILE)
 
 install_ccidtwin: libccidtwin.la
 	$(mkinstalldirs) $(DESTDIR)$(ccidtwindir)
-	cp .libs/$(CCIDTWIN_LIB) $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)
-	ln -fs $(CCIDTWIN_LIB).$(VERSION) $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)
+	cp .libs/$(CCIDTWIN_LIB) $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)
 	$(mkinstalldirs) $(DESTDIR)/etc/reader.conf.d ; \
 		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/etc/reader.conf.d/libccidtwin
 
