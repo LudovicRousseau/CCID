@@ -100,8 +100,8 @@
   bClassGetResponse: 0x00
   bClassEnveloppe: 0x00
   wLcdLayout: 0x0818
-   24 lines
-   8 characters per line
+   8 lines
+   24 characters per line
   bPINSupport: 0x03
    PIN Verification supported
    PIN Modification supported

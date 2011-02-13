@@ -48,7 +48,7 @@
   bClassGetResponse: 0x00
   bClassEnveloppe: 0x00
   wLcdLayout: 0x0211
-   17 lines
-   2 characters per line
+   2 lines
+   17 characters per line
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1

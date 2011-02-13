@@ -51,7 +51,7 @@
   bClassEnveloppe: 0xFF
    echoes the APDU class
   wLcdLayout: 0x0210
-   16 lines
-   2 characters per line
+   2 lines
+   16 characters per line
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1
