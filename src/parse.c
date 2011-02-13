@@ -568,10 +568,10 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	if (0xFF == device_descriptor[49])
 		(void)printf("   echoes the APDU class\n");
 	(void)printf("  wLcdLayout: 0x%04X\n", (device_descriptor[51] << 8)+device_descriptor[50]);
-	if (device_descriptor[50])
-		(void)printf("   %d lines\n", device_descriptor[50]);
 	if (device_descriptor[51])
-		(void)printf("   %d characters per line\n", device_descriptor[51]);
+		(void)printf("   %d lines\n", device_descriptor[51]);
+	if (device_descriptor[50])
+		(void)printf("   %d characters per line\n", device_descriptor[50]);
 	(void)printf("  bPINSupport: 0x%02X\n", device_descriptor[52]);
 	if (device_descriptor[52] & 0x01)
 		(void)printf("   PIN Verification supported\n");
