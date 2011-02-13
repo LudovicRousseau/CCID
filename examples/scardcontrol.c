@@ -305,7 +305,7 @@ int main(int argc, char *argv[])
 	/* connect to a reader (even without a card) */
 	dwActiveProtocol = -1;
 	printf("Using reader: " GREEN "%s\n" NORMAL, readers[reader_nb]);
-	rv = SCardConnect(hContext, readers[reader_nb], SCARD_SHARE_DIRECT,
+	rv = SCardConnect(hContext, readers[reader_nb], SCARD_SHARE_SHARED,
 		SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &hCard, &dwActiveProtocol);
 	printf(" Protocol: " GREEN "%ld\n" NORMAL, dwActiveProtocol);
 	PCSC_ERROR_EXIT(rv, "SCardConnect")
