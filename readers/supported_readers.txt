@@ -225,6 +225,7 @@
 
 # Aktiv Co., ProgramPark
 0x0A89:0x0060:Aktiv Rutoken Magistra
+0x0A89:0x0025:Aktiv Rutoken lite
 0x0A89:0x0030:Aktiv Rutoken ECP
 
 # TianYu CCID Key
