@@ -213,6 +213,7 @@
 
 # Xiring
 0x0F14:0x0011:Xiring XI-SIGN USB V2
+0x0F14:0x0037:Xiring MyLeo
 0x0F14:0x0038:Xiring Leo v2
 
 # VMware
