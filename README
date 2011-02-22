@@ -117,6 +117,19 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.2 - 22 February 2011, Ludovic Rousseau
+    - Add support of Feitian SCR310 reader (also known as 301v2), ACS
+      APG8201 PINhandy 1, Oberthur ID-ONE TOKEN SLIM v2, new Neowave
+      Weneo token, Vasco DIGIPASS KEY 860, Vasco DIGIPASS KEY 200,
+      Xiring Leo v2, Xiring MyLeo, Aktiv Rutoken lite readers
+    - Add back support of "bogus" Oz776, REINER SCT and BLUDRIVE II
+    - Ease detection of OpenCT by pcsc-lite
+    - disable use of interrupt card events for multi slots readers (the
+      algorithm is bogus and can't be used)
+    - fix minor problems detected by the clang tool
+    - some minor bugs removed
+
+
 1.4.1 - 3 December 2010, Ludovic Rousseau
     - Add support of Gemalto Smart Guardian (SG CCID), ReinerSCT
       cyberJack RFID basis, Akasa AK-CR-03, BZH uKeyCI800-K18, Free
