@@ -2014,10 +2014,6 @@ static int get_IFSC(ATR_t *atr, int *idx)
 
 	for (i=0; i<ATR_MAX_PROTOCOLS; i++)
 	{
-		/* protocol T=? */
-		if (atr->ib[i][ATR_INTERFACE_BYTE_TD].present)
-			protocol = atr->ib[i][ATR_INTERFACE_BYTE_TD].value & 0x0F;
-
 		/* TAi (i>2) present and protocol=1 => IFSC */
 		if (i >= 2 && protocol == 1
 			&& atr->ib[i][ATR_INTERFACE_BYTE_TA].present)
@@ -2027,6 +2023,10 @@ static int get_IFSC(ATR_t *atr, int *idx)
 			/* only the first TAi (i>2) must be used */
 			break;
 		}
+
+		/* protocol T=? */
+		if (atr->ib[i][ATR_INTERFACE_BYTE_TD].present)
+			protocol = atr->ib[i][ATR_INTERFACE_BYTE_TD].value & 0x0F;
 	}
 
 	if (ifsc > 254)
