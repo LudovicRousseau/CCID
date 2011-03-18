@@ -484,15 +484,13 @@ void ccid_error(int error, const char *file, int line, const char *function)
 
 		default:
 			if ((error >= 1) && (error <= 127))
-			{
 				(void)snprintf(var_text, sizeof(var_text), "error on byte %d",
 					error);
-				text = var_text;
-			}
 			else
 				(void)snprintf(var_text, sizeof(var_text),
 					"Unknown CCID error: 0x%02X", error);
-				text = var_text;
+
+			text = var_text;
 			break;
 	}
 	log_msg(PCSC_LOG_ERROR, "%s:%d:%s %s", file, line, function, text);
