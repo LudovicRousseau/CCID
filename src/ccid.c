@@ -327,6 +327,13 @@ int ccid_open_hack_post(unsigned int reader_index)
 			}
 			break;
 
+		case HPSMARTCARDKEYBOARD:
+			/* the Secure Pin Entry is bogus so disable it
+			 * http://martinpaljak.net/2011/03/19/insecure-hp-usb-smart-card-keyboard/
+			 */
+			ccid_descriptor->bPINSupport = 0;
+			break;
+
 #if 0
 		/* SCM SCR331-DI contactless */
 		case SCR331DI:
