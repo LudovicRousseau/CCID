@@ -246,7 +246,12 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	GET_KEY("Copyright", values)
 
 	if (NULL == ctx)
-		libusb_init(&ctx);
+	{
+		rv = libusb_init(&ctx);
+		if (rv != 0)
+			DEBUG_CRITICAL2("libusb_init failed: %d", rv);
+		return STATUS_UNSUCCESSFUL;
+	}
 
 	cnt = libusb_get_device_list(ctx, &devs);
 	if (cnt < 0)
