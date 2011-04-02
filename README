@@ -117,6 +117,17 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.3 - 2 April 2011, Ludovic Rousseau
+    - Add support of Neowave Weneo, Vasco DIGIPASS 920, SCM SCL011,
+      Feitian ePass2003 readers
+    - use :libudev: instead of :libhal: naming scheme.
+    - Do not install RSA_SecurID_getpasswd and Kobil_mIDentity_switch
+      and the associated documentation.
+    - the Secure Pin Entry of the HP USB Smart Card Keyboard is bogus so
+      disable it
+    - some minor bugs removed
+
+
 1.4.2 - 22 February 2011, Ludovic Rousseau
     - Add support of Feitian SCR310 reader (also known as 301v2), ACS
       APG8201 PINhandy 1, Oberthur ID-ONE TOKEN SLIM v2, new Neowave
