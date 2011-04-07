@@ -123,6 +123,7 @@
 0x0416:0x3815:Winbond
 
 # HP
+0x03F0:0x0036:HP USB CCID Smartcard Keyboard
 0x03F0:0x0824:HP USB Smartcard Reader
 0x03F0:0x1024:HP USB Smart Card Keyboard
 0x03F0:0x2924:HP MFP Smart Card Reader
@@ -307,5 +308,4 @@
 #0x04E6:0x5292:SCM SCL01x Contactless Reader
 #0x062D:0x0001:iDream or ID-SMID01
 #0x1A74:0x6356:OCS ID-One Cosmo Card
-#0x03F0:0x0036:HP USB CCID Smartcard Keyboard
 

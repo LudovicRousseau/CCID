@@ -2,7 +2,7 @@
   iManufacturer: Hewlett-Packard Company
  idProduct: 0x0036
   iProduct: HP USB CCID Smartcard Keyboard
- bcdDevice: 1.22 (firmware release?)
+ bcdDevice: 1.24 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 1
@@ -19,8 +19,9 @@
   bDescriptorType: 0x21
   bcdCCID: 1.10
   bMaxSlotIndex: 0x00
-  bVoltageSupport: 0x01
+  bVoltageSupport: 0x03
    5.0V
+   3.0V
   dwProtocols: 0x0000 0x0003
    T=0
    T=1
@@ -34,14 +35,7 @@
   dwDataRate: 12903 bps
   dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   Support 12903 bps
-   Support 25806 bps
-   Support 51613 bps
-   Support 103226 bps
-   Support 10753 bps
-   Support 21505 bps
-   Support 43011 bps
-   Support 86022 bps
+   IFD does not support GET_DATA_RATES request: Success
   dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000001
