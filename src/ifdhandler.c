@@ -1932,7 +1932,7 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 
 	/* may happen with non ISO cards */
 	if ((0 == f) || (0 == d) || (0 == clock_frequency))
-		return 60;	/* 60 seconds */
+		return 60 * 1000;	/* 60 seconds */
 
 	/* EGT */
 	/* see ch. 6.5.3 Extra Guard Time, page 12 of ISO 7816-3 */
@@ -1977,7 +1977,7 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 
 	/* may happen with non ISO cards */
 	if ((0 == f) || (0 == d) || (0 == clock_frequency))
-		return 60;	/* 60 seconds */
+		return 60 * 1000;	/* 60 seconds */
 
 	/* see ch. 6.5.2 Transmission factors F and D, page 12 of ISO 7816-3 */
 	etu = f / d / clock_frequency;
