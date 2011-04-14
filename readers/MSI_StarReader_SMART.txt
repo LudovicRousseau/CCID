@@ -2,7 +2,7 @@
   iManufacturer: Generic
  idProduct: 0x0161
   iProduct: USB2.0-CRW
- bcdDevice: 61.10 (firmware release?)
+ bcdDevice: 61.23 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: 6
+ iInterface: Smart Card Reader Interface
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -29,11 +29,11 @@
   dwDefaultClock: 3.750 MHz
   dwMaximumClock: 7.500 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Broken pipe
+   IFD does not support GET CLOCK FREQUENCIES request: Success
   dwDataRate: 10080 bps
   dwMaxDataRate: 312500 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: Broken pipe
+   IFD does not support GET_DATA_RATES request: Success
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
