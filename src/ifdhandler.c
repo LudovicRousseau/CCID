@@ -1754,18 +1754,31 @@ void init_driver(void)
 		PCSCLITE_HP_DROPDIR, BUNDLE);
 
 	rv = bundleParse(infofile, &plist);
-	if (rv)
-		return;
-
-	/* Log level */
-	rv = LTPBundleFindValueWithKey(&plist, "ifdLogLevel", &values);
 	if (0 == rv)
 	{
-		/* convert from hex or dec or octal */
-		LogLevel = strtoul(list_get_at(values, 0), NULL, 0);
+		/* Log level */
+		rv = LTPBundleFindValueWithKey(&plist, "ifdLogLevel", &values);
+		if (0 == rv)
+		{
+			/* convert from hex or dec or octal */
+			LogLevel = strtoul(list_get_at(values, 0), NULL, 0);
 
-		/* print the log level used */
-		DEBUG_INFO2("LogLevel: 0x%.4X", LogLevel);
+			/* print the log level used */
+			DEBUG_INFO2("LogLevel: 0x%.4X", LogLevel);
+		}
+
+		/* Driver options */
+		rv = LTPBundleFindValueWithKey(&plist, "ifdDriverOptions", &values);
+		if (0 == rv)
+		{
+			/* convert from hex or dec or octal */
+			DriverOptions = strtoul(list_get_at(values, 0), NULL, 0);
+
+			/* print the log level used */
+			DEBUG_INFO2("DriverOptions: 0x%.4X", DriverOptions);
+		}
+
+		bundleRelease(&plist);
 	}
 
 	e = getenv("LIBCCID_ifdLogLevel");
@@ -1777,19 +1790,6 @@ void init_driver(void)
 		/* print the log level used */
 		DEBUG_INFO2("LogLevel from LIBCCID_ifdLogLevel: 0x%.4X", LogLevel);
 	}
-
-	/* Driver options */
-	rv = LTPBundleFindValueWithKey(&plist, "ifdDriverOptions", &values);
-	if (0 == rv)
-	{
-		/* convert from hex or dec or octal */
-		DriverOptions = strtoul(list_get_at(values, 0), NULL, 0);
-
-		/* print the log level used */
-		DEBUG_INFO2("DriverOptions: 0x%.4X", DriverOptions);
-	}
-
-	bundleRelease(&plist);
 
 	/* get the voltage parameter */
 	switch ((DriverOptions >> 4) & 0x03)
