@@ -495,6 +495,11 @@ int main(int argc, char *argv[])
 	printf(" Secure verify PIN\n");
 	pin_verify = (PIN_VERIFY_STRUCTURE *)bSendBuffer;
 
+	/* table for bEntryValidationCondition
+	 * 0x01: Max size reached
+	 * 0x02: Validation key pressed
+	 * 0x04: Timeout occured
+	 */
 	/* PC/SC v2.02.05 Part 10 PIN verification data structure */
 	pin_verify -> bTimerOut = 0x00;
 	pin_verify -> bTimerOut2 = 0x00;
