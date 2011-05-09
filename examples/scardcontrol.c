@@ -633,6 +633,11 @@ int main(int argc, char *argv[])
 	 * bConfirmPIN = 1, bNumberMessage = 2: "New Pin" "Confirm Pin"
 	 * bConfirmPIN = 0, bNumberMessage = 1: "New Pin"
 	 */
+	/* table for bMsgIndex[1-3]
+	 * 00: PIN insertion prompt        “ENTER SMARTCARD PIN”
+	 * 01: PIN Modification prompt     “ ENTER NEW PIN”
+	 * 02: NEW PIN Confirmation prompt “ CONFIRM NEW PIN”
+	 */
 	/* PC/SC v2.02.05 Part 10 PIN modification data structure */
 	pin_modify -> bTimerOut = 0x00;
 	pin_modify -> bTimerOut2 = 0x00;
@@ -648,8 +653,8 @@ int main(int argc, char *argv[])
 	pin_modify -> bNumberMessage = 0x03; /* see table above */
 	pin_modify -> wLangId = 0x0904;
 	pin_modify -> bMsgIndex1 = 0x00;
-	pin_modify -> bMsgIndex2 = 0x00;
-	pin_modify -> bMsgIndex3 = 0x00;
+	pin_modify -> bMsgIndex2 = 0x01;
+	pin_modify -> bMsgIndex3 = 0x02;
 	pin_modify -> bTeoPrologue[0] = 0x00;
 	pin_modify -> bTeoPrologue[1] = 0x00;
 	pin_modify -> bTeoPrologue[2] = 0x00;
