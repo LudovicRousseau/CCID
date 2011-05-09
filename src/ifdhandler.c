@@ -1459,6 +1459,24 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		RxBuffer[p++] = tmp & 0xFF;	/* value in little endian order */
 		RxBuffer[p++] = (tmp >> 8) & 0xFF;
 
+		/* only if the reader has a display */
+		if (ccid_descriptor -> wLcdLayout)
+		{
+			/* wLcdMaxCharacters */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_wLcdMaxCharacters;	/* tag */
+			RxBuffer[p++] = 2;	/* length */
+			tmp = ccid_descriptor -> wLcdLayout & 0xFF;
+			RxBuffer[p++] = tmp & 0xFF;	/* value in little endian order */
+			RxBuffer[p++] = (tmp >> 8) & 0xFF;
+
+			/* wLcdMaxLines */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_wLcdMaxLines;	/* tag */
+			RxBuffer[p++] = 2;	/* length */
+			tmp = ccid_descriptor -> wLcdLayout >> 8;
+			RxBuffer[p++] = tmp & 0xFF;	/* value in little endian order */
+			RxBuffer[p++] = (tmp >> 8) & 0xFF;
+		}
+
 		/* bTimeOut2 */
 		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bTimeOut2;
 		RxBuffer[p++] = 1;	/* length */
