@@ -432,8 +432,8 @@ again:
 				if (r < 0)
 				{
 					(void)libusb_close(dev_handle);
-					DEBUG_CRITICAL3("Can't get config descriptor on %d/%d",
-						bus_number, device_address);
+					DEBUG_CRITICAL4("Can't get config descriptor on %d/%d: %d",
+						bus_number, device_address, r);
 					continue;
 				}
 
