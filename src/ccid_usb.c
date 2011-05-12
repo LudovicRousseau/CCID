@@ -425,6 +425,27 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 				}
 
 again:
+#ifdef __APPLE__
+				/* Some early Gemalto Ezio CB+ readers have
+				 * bDeviceClass, bDeviceSubClass and bDeviceProtocol set
+				 * to 0xFF (proprietary) instead of 0x00.
+				 *
+				 * So on Mac OS X the reader configuration is not done
+				 * by the OS/kernel and we do it ourself.
+				 */
+				if (GEMALTO_EZIO_CBP == readerID)
+				{
+					r = libusb_set_configuration(dev_handle, 1);
+					if (r < 0)
+					{
+						(void)libusb_close(dev_handle);
+						DEBUG_CRITICAL4("Can't set configuration on %d/%d: %d",
+							bus_number, device_address, r);
+						continue;
+					}
+				}
+#endif
+
 				r = libusb_get_active_config_descriptor(dev, &config_desc);
 				if (r < 0)
 				{
