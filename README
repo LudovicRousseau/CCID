@@ -118,6 +118,18 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.4 - 13 May 2011, Ludovic Rousseau
+    - Add support of Gemalto Ezio Shield, Gemalto Ezio CB+, Gemalto Ezio
+      Shield Secure Channel, Gemalto Ezio Shield PinPad and Gemalto Ezio
+      Generic
+    - Activate USB automatic power suspend. The Linux kernel should
+      power off the reader automatically if it is not used (pcscd is not
+      running).
+    - Add support of TLV Properties wLcdMaxCharacters and wLcdMaxLines.
+      They just duplicate wLcdLayout
+    - some minor bugs removed
+
+
 1.4.3 - 2 April 2011, Ludovic Rousseau
     - Add support of Neowave Weneo, Vasco DIGIPASS 920, SCM SCL011,
       Feitian ePass2003 readers
