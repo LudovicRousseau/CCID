@@ -386,8 +386,8 @@ int main(int argc, char *argv[])
 	{
 		int value;
 
-		rv = SCardControl(hCard, properties_in_tlv_ioctl, secoder_info,
-			sizeof(secoder_info), bRecvBuffer, sizeof(bRecvBuffer), &length);
+		rv = SCardControl(hCard, properties_in_tlv_ioctl, NULL, 0,
+			bRecvBuffer, sizeof(bRecvBuffer), &length);
 		PCSC_ERROR_CONT(rv, "SCardControl(GET_TLV_PROPERTIES)")
 
 		printf("GET_TLV_PROPERTIES (" GREEN "%ld" NORMAL "): " GREEN, length);
