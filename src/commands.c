@@ -625,8 +625,10 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 			TxBuffer[10] = 0x02;	/* validation key pressed */
 		}
 
-		/* the reader does not support any other value than 3 for the number
-		 * of messages */
+		/* The reader requests a value for bMsgIndex2 and bMsgIndex3
+		 * even if they should not be present. So we fake
+		 * bNumberMessage=3.  The real number of messages will be
+		 * corrected later in the code */
 		bNumberMessage = TxBuffer[11];
 		if (0x03 != TxBuffer[11])
 		{
