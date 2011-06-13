@@ -525,7 +525,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	int old_read_timeout;
 	RESPONSECODE ret;
 #ifdef BOGUS_PINPAD_FIRMWARE
-	int bNumberMessages = 0; /* for GemPC Pinpad */
+	int bNumberMessage = 0; /* for GemPC Pinpad */
 #endif
 
 	pms = (PIN_MODIFY_STRUCTURE *)TxBuffer;
@@ -598,17 +598,17 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	if ((SPR532 == ccid_descriptor->readerID)
 		|| (CHERRYST2000 == ccid_descriptor->readerID))
 	{
-		TxBuffer[11] = 0x03; /* set bNumberMessages to 3 so that
+		TxBuffer[11] = 0x03; /* set bNumberMessage to 3 so that
 								all bMsgIndex123 are filled */
 		TxBuffer[14] = TxBuffer[15] = TxBuffer[16] = 0;	/* bMsgIndex123 */
 	}
 
 	/* the bug is a bit different than for the Cherry ST 2000C
-	 * with bNumberMessages < 3 the command seems to be accepted
+	 * with bNumberMessage < 3 the command seems to be accepted
 	 * and the card sends 6B 80 */
 	if (CHERRYXX44 == ccid_descriptor->readerID)
 	{
-		TxBuffer[11] = 0x03; /* set bNumberMessages to 3 so that
+		TxBuffer[11] = 0x03; /* set bNumberMessage to 3 so that
 								all bMsgIndex123 are filled */
 	}
 
@@ -627,10 +627,10 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 
 		/* the reader does not support any other value than 3 for the number
 		 * of messages */
-		bNumberMessages = TxBuffer[11];
+		bNumberMessage = TxBuffer[11];
 		if (0x03 != TxBuffer[11])
 		{
-			DEBUG_INFO2("Correct bNumberMessages for GemPC Pinpad (was %d)",
+			DEBUG_INFO2("Correct bNumberMessage for GemPC Pinpad (was %d)",
 				TxBuffer[11]);
 			TxBuffer[11] = 0x03; /* 3 messages */
 		}
@@ -704,12 +704,12 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	if ((SPR532 == ccid_descriptor->readerID)
 		|| (CHERRYST2000 == ccid_descriptor->readerID))
 	{
-		cmd[21] = 0x00; /* set bNumberMessages to 0 */
+		cmd[21] = 0x00; /* set bNumberMessage to 0 */
 	}
 
 	if ((GEMPCPINPAD == ccid_descriptor->readerID)
 		|| (VEGAALPHA == ccid_descriptor->readerID))
-		cmd[21] = bNumberMessages;	/* restore the real value */
+		cmd[21] = bNumberMessage;	/* restore the real value */
 #endif
 
 	/* We know the size of the CCID message now */
