@@ -2,7 +2,7 @@
   iManufacturer: OBERTHUR TECHNOLOGIES
  idProduct: 0xB111
   iProduct: ID-ONE TOKEN SLIM v2
- bcdDevice: 1.00 (firmware release?)
+ bcdDevice: 1.10 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -88,7 +88,7 @@
    Support 600000 bps
    Support 688172 bps
    Support 825806 bps
-  dwMaxIFSD: 254
+  dwMaxIFSD: 252
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
