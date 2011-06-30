@@ -321,9 +321,9 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 				int interface;
 				int num = 0;
 				const unsigned char *device_descriptor;
-				int readerID = (vendorID << 16) + productID;
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
+				int readerID = (vendorID << 16) + productID;
 				static int static_interface = 1;
 
 				/* simulate a composite device as when libudev is used */
