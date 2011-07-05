@@ -606,14 +606,16 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			{
 				_ccid_descriptor *ccid_desc;
 
-				/* default value: not supported */
-				*Length = 0;
-
 				ccid_desc = get_ccid_descriptor(reader_index);
 				if (ccid_desc->sIFD_serial_number)
 				{
-					strcpy((char *)Value, ccid_desc->sIFD_serial_number);
+					strlcpy((char *)Value, ccid_desc->sIFD_serial_number, *Length);
 					*Length = strlen((char *)Value);
+				}
+				else
+				{
+					/* not supported */
+					*Length = 0;
 				}
 			}
 			break;
