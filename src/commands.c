@@ -1440,7 +1440,7 @@ static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	unsigned char chain_parameter;
 	unsigned int local_tx_length, sent_length;
-	unsigned int local_rx_length, received_length;
+	unsigned int local_rx_length = 0, received_length;
 	int buffer_overflow = 0;
 
 	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
