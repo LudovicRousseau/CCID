@@ -156,6 +156,7 @@ again:
 		if (r < 0)
 		{
 			(void)fprintf(stderr, "  Can't get config descriptor: %d\n", r);
+			(void)libusb_close(handle);
 			continue;
 		}
 
@@ -170,6 +171,7 @@ again:
 		}
 		if (!class_ff && (0xFF == usb_interface->altsetting->bInterfaceClass))
 		{
+			(void)libusb_close(handle);
 			(void)fprintf(stderr, MAGENTA "  Found a possibly CCID/ICCD device (bInterfaceClass = 0xFF). Use -p\n" NORMAL);
 			continue;
 		}
@@ -210,6 +212,7 @@ again:
 
 		(void)ccid_parse_interface_descriptor(handle, desc, config_desc, num,
 			usb_interface);
+		nb++;
 
 #ifndef __APPLE__
 		(void)libusb_release_interface(handle, interface);
@@ -217,9 +220,6 @@ again:
 		/* check for another CCID interface on the same device */
 		num++;
 		goto again;
-
-		(void)libusb_close(handle);
-		nb++;
 	}
 
 	if ((0 == nb) && (0 != geteuid()))
