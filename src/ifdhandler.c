@@ -38,6 +38,7 @@
 #include "towitoko/atr.h"
 #include "towitoko/pps.h"
 #include "parser.h"
+#include "strlcpycat.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
