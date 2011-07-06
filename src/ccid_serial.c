@@ -43,6 +43,7 @@
 #include "utils.h"
 #include "commands.h"
 #include "parser.h"
+#include "strlcpycat.h"
 
 #define SYNC 0x03
 #define CTRL_ACK 0x06
