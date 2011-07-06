@@ -659,7 +659,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	if (p)
 	{
 		/* copy the second part of the string */
-		strncpy(reader_name, p+1, sizeof(reader_name));
+		strlcpy(reader_name, p+1, sizeof(reader_name));
 
 		/* replace ':' by '\0' so that dev_name only contains the device name */
 		*p = '\0';
