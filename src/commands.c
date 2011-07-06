@@ -831,6 +831,7 @@ again:
 
 	if (length_out < STATUS_OFFSET+1)
 	{
+		free(cmd_out);
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length_out);
 		return_value = IFD_COMMUNICATION_ERROR;
 		goto end;
