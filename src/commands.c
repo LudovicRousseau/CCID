@@ -1819,12 +1819,6 @@ static RESPONSECODE T0ProcSW1(unsigned int reader_index,
 	in_len--;
 	(*rcv_len)++;
 
-	if (return_value != IFD_SUCCESS)
-	{
-		rcv_buf_tmp[0] = rcv_buf_tmp[1] = 0;
-		*rcv_len = rcv_len_tmp;
-	}
-
 	DEBUG_COMM3("Exit: SW=%02X %02X", sw1, sw2);
 
 	return return_value;
