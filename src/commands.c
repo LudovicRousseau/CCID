@@ -1790,8 +1790,6 @@ static RESPONSECODE T0ProcSW1(unsigned int reader_index,
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	UCHAR tmp_buf[512];
-	unsigned char *rcv_buf_tmp = rcv_buf;
-	const unsigned int rcv_len_tmp = *rcv_len;
 	unsigned char sw1, sw2;
 
 	/* store the SW1 */
