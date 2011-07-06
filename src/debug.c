@@ -65,7 +65,8 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 
 	for (i = 0; (i < len) && (c < debug_buf_end); ++i)
 	{
-		(void)sprintf(c, "%02X ", (unsigned char)buffer[i]);
+		/* 2 hex characters, 1 space, 1 NUL : total 4 characters */
+		(void)snprintf(c, 4, "%02X ", (unsigned char)buffer[i]);
 		c += strlen(c);
 	}
 
