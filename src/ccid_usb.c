@@ -239,7 +239,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		return STATUS_UNSUCCESSFUL; \
 	} \
 	else \
-		DEBUG_INFO2(key ": %s", list_get_at(values, 0));
+		DEBUG_INFO2(key ": %s", (char *)list_get_at(values, 0));
 
 	/* general driver info */
 	GET_KEY("ifdManufacturerString", values)
