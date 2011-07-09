@@ -77,7 +77,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	if (! DebugInitialized)
 		init_driver();
 
-	DEBUG_INFO3("lun: %X, device: %s", Lun, lpcDevice);
+	DEBUG_INFO3("lun: %lX, device: %s", Lun, lpcDevice);
 
 	if (-1 == (reader_index = GetNewReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
@@ -198,7 +198,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	if (! DebugInitialized)
 		init_driver();
 
-	DEBUG_INFO2("lun: %X", Lun);
+	DEBUG_INFO2("lun: %lX", Lun);
 
 	if (-1 == (reader_index = GetNewReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
@@ -291,7 +291,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
 
 	/* Restore the default timeout
 	 * No need to wait too long if the reader disapeared */
@@ -328,7 +328,7 @@ static RESPONSECODE IFDHPolling(DWORD Lun, int timeout)
 
 	/* log only if DEBUG_LEVEL_PERIODIC is set */
 	if (LogLevel & DEBUG_LEVEL_PERIODIC)
-		DEBUG_INFO4("%s (lun: %X) %d ms", CcidSlots[reader_index].readerName,
+		DEBUG_INFO4("%s (lun: %lX) %d ms", CcidSlots[reader_index].readerName,
 			Lun, timeout);
 
 	return InterruptRead(reader_index, timeout);
@@ -343,7 +343,7 @@ static RESPONSECODE IFDHSleep(DWORD Lun, int timeout)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("%s (lun: %X) %d ms", CcidSlots[reader_index].readerName, Lun,
+	DEBUG_INFO4("%s (lun: %lX) %d ms", CcidSlots[reader_index].readerName, Lun,
 		timeout);
 
 	/* just sleep for 5 seconds since the polling thread is NOT killable
@@ -364,7 +364,7 @@ static RESPONSECODE IFDHStopPolling(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
 
 	(void)InterruptStop(reader_index);
 	return IFD_SUCCESS;
@@ -398,7 +398,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("tag: 0x%X, %s (lun: %X)", Tag,
+	DEBUG_INFO4("tag: 0x%lX, %s (lun: %lX)", Tag,
 		CcidSlots[reader_index].readerName, Lun);
 
 	switch (Tag)
@@ -657,7 +657,7 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("tag: 0x%X, %s (lun: %X)", Tag,
+	DEBUG_INFO4("tag: 0x%lX, %s (lun: %lX)", Tag,
 		CcidSlots[reader_index].readerName, Lun);
 
 	return IFD_NOT_SUPPORTED;
@@ -699,7 +699,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("protocol T=%d, %s (lun: %X)", Protocol-SCARD_PROTOCOL_T0,
+	DEBUG_INFO4("protocol T=%ld, %s (lun: %lX)", Protocol-SCARD_PROTOCOL_T0,
 		CcidSlots[reader_index].readerName, Lun);
 
 	/* Set to zero buffer */
@@ -917,7 +917,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				/* convert from ATR_PROTOCOL_TYPE_T? to SCARD_PROTOCOL_T? */
 				Protocol = default_protocol +
 				   	(SCARD_PROTOCOL_T0 - ATR_PROTOCOL_TYPE_T0);
-				DEBUG_INFO2("PPS not supported on O2Micro readers. Using T=%d",
+				DEBUG_INFO2("PPS not supported on O2Micro readers. Using T=%ld",
 					Protocol - SCARD_PROTOCOL_T0);
 			}
 			else
@@ -1150,7 +1150,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("action: %s, %s (lun: %X)", actions[Action-IFD_POWER_UP],
+	DEBUG_INFO4("action: %s, %s (lun: %lX)", actions[Action-IFD_POWER_UP],
 		CcidSlots[reader_index].readerName, Lun);
 
 	switch (Action)
@@ -1280,7 +1280,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
 
 	rx_length = *RxLength;
 	return_value = CmdXfrBlock(reader_index, TxLength, TxBuffer, &rx_length,
@@ -1322,7 +1322,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	DEBUG_INFO4("ControlCode: 0x%X, %s (lun: %X)", dwControlCode,
+	DEBUG_INFO4("ControlCode: 0x%lX, %s (lun: %lX)", dwControlCode,
 		CcidSlots[reader_index].readerName, Lun);
 	DEBUG_INFO_XXD("Control TxBuffer: ", TxBuffer, TxLength);
 
@@ -1613,7 +1613,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_PERIODIC3("%s (lun: %X)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_PERIODIC3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
