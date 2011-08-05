@@ -303,6 +303,9 @@
 # Free Software Initiative of Japan
 0x234B:0x0000:FSIJ Gnuk
 
+# Ubisys
+0x19A6:0x0009:Ubisys CCID
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/ccid/unsupported.html for a
 # description of the problem(s)
