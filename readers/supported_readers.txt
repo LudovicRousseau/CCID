@@ -306,6 +306,9 @@
 # Ubisys
 0x19A6:0x0009:Ubisys CCID
 
+# BIFIT
+0x23A0:0x0001:BIFIT USB-Token iBank2key
+
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/ccid/unsupported.html for a
 # description of the problem(s)
