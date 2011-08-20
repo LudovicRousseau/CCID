@@ -53,7 +53,7 @@ typedef struct
 	 * PIN support of the reader (directly from Class Descriptor)
 	 */
 	char bPINSupport;
-	
+
 	/*
 	 * Display dimensions of the reader (directly from Class Descriptor)
 	 */
@@ -182,7 +182,7 @@ typedef struct
 #define MYSMARTPAD	0x09BE0002
 #define CHERRYXX44	0x046a0010
 #define CL1356D		0x0B810200
-#define REINER_SCT	0x0C4B0300 
+#define REINER_SCT	0x0C4B0300
 #define SEG			0x08E68000
 #define BLUDRIVEII_CCID	0x1B0E1078
 #define DELLSCRK    0x413C2101

@@ -238,7 +238,7 @@ again:
  *
  ****************************************************************************/
 static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
-	struct libusb_device_descriptor desc, 
+	struct libusb_device_descriptor desc,
 	struct libusb_config_descriptor *config_desc,
 	int num,
 	const struct libusb_interface *usb_interface)
@@ -425,7 +425,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			}
 		}
 		else
-			if (n % 4) 	/* not a multiple of 4 */
+			if (n % 4)	/* not a multiple of 4 */
 				(void)printf("   wrong size for GET CLOCK FREQUENCIES: %d\n", n);
 			else
 			{
@@ -470,7 +470,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			(void)printf("   IFD does not support GET_DATA_RATES request: %s\n",
 				strerror(errno));
 		else
-			if (n % 4) 	/* not a multiple of 4 */
+			if (n % 4)	/* not a multiple of 4 */
 				(void)printf("   wrong size for GET_DATA_RATES: %d\n", n);
 			else
 			{

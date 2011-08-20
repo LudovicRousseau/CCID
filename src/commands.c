@@ -318,8 +318,8 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	}
 
 	/* On little endian machines we are all set. */
-	/* If on big endian machine and caller is using host byte order */ 
-	if ((pvs->ulDataLength + 19  == TxLength) && 
+	/* If on big endian machine and caller is using host byte order */
+	if ((pvs->ulDataLength + 19  == TxLength) &&
 		(bei2i((unsigned char*)(&pvs->ulDataLength)) == pvs->ulDataLength))
 	{
 		DEBUG_INFO("Reversing order from big to little endian");
@@ -329,8 +329,8 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		pvs->wLangId = BSWAP_16(pvs->wLangId);
 		pvs->ulDataLength = BSWAP_32(pvs->ulDataLength);
 	}
-	/* At this point we now have the above 3 variables in little endian */ 
-	
+	/* At this point we now have the above 3 variables in little endian */
+
 	if (dw2i(TxBuffer, 15) + 19 != TxLength) /* ulDataLength field coherency */
 	{
 		DEBUG_INFO3("Wrong lengths: %d %d", dw2i(TxBuffer, 15) + 19, TxLength);
@@ -552,8 +552,8 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	}
 
 	/* On little endian machines we are all set. */
-	/* If on big endian machine and caller is using host byte order */ 
-	if ((pms->ulDataLength + 24  == TxLength) && 
+	/* If on big endian machine and caller is using host byte order */
+	if ((pms->ulDataLength + 24  == TxLength) &&
 		(bei2i((unsigned char*)(&pms->ulDataLength)) == pms->ulDataLength))
 	{
 		DEBUG_INFO("Reversing order from big to little endian");
@@ -563,7 +563,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		pms->wLangId = BSWAP_16(pms->wLangId);
 		pms->ulDataLength = BSWAP_32(pms->ulDataLength);
 	}
-	/* At this point we now have the above 3 variables in little endian */ 
+	/* At this point we now have the above 3 variables in little endian */
 
 
 	if (dw2i(TxBuffer, 20) + 24 != TxLength) /* ulDataLength field coherency */

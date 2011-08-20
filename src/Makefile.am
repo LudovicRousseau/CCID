@@ -79,7 +79,7 @@ INSTALL_UDEV_RULE_FILE=@/bin/echo -e "\n\33[01;31m***************\n" ; echo "cop
 
 Info.plist: Info.plist.src $(srcdir)/../readers/supported_readers.txt
 	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist.src --target=$(CCID_LIB) --version=$(VERSION) --bundle=$(CCID_BUNDLE) $(NOCLASS) > Info.plist
-	
+
 DISTCLEANFILES = tokenparser.c Info.plist
 
 install_ccid: libccid.la Info.plist
