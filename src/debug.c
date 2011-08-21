@@ -1,6 +1,6 @@
 /*
     debug.c: log (or not) messages
-    Copyright (C) 2003-2010   Ludovic Rousseau
+    Copyright (C) 2003-2011   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -29,24 +29,21 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DEBUG_BUF_SIZE ((256+20)*3+10)
-
-static char DebugBuffer[DEBUG_BUF_SIZE];
-
 #define LOG_TO_STDERR
 
 void log_msg(const int priority, const char *fmt, ...)
 {
+	char debug_buffer[160]; /* up to 2 lines of 80 characters */
 	va_list argptr;
 
 	(void)priority;
 
 	va_start(argptr, fmt);
-	(void)vsnprintf(DebugBuffer, DEBUG_BUF_SIZE, fmt, argptr);
+	(void)vsnprintf(debug_buffer, sizeof debug_buffer, fmt, argptr);
 	va_end(argptr);
 
 #ifdef LOG_TO_STDERR
-	(void)fprintf(stderr, "%s\n", DebugBuffer);
+	(void)fprintf(stderr, "%s\n", debug_buffer);
 #endif
 } /* log_msg */
 
@@ -54,27 +51,22 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 	const int len)
 {
 	int i;
-	char *c, *debug_buf_end;
+	char *c, debug_buffer[len*3 + strlen(msg) +1];
+	size_t l;
 
 	(void)priority;
 
-	debug_buf_end = DebugBuffer + DEBUG_BUF_SIZE - 5;
+	l = strlcpy(debug_buffer, msg, sizeof debug_buffer);
+	c = debug_buffer + l;
 
-	strncpy(DebugBuffer, msg, sizeof(DebugBuffer)-1);
-	c = DebugBuffer + strlen(DebugBuffer);
-
-	for (i = 0; (i < len) && (c < debug_buf_end); ++i)
+	for (i = 0; i < len; ++i)
 	{
 		/* 2 hex characters, 1 space, 1 NUL : total 4 characters */
-		(void)snprintf(c, 4, "%02X ", (unsigned char)buffer[i]);
-		c += strlen(c);
+		(void)snprintf(c, 4, "%02X ", buffer[i]);
+		c += 3;
 	}
 
 #ifdef LOG_TO_STDERR
-	if (c >= debug_buf_end)
-		(void)fprintf(stderr, "Debug buffer too short\n");
-
-	(void)fprintf(stderr, "%s\n", DebugBuffer);
+	(void)fprintf(stderr, "%s\n", debug_buffer);
 #endif
 } /* log_xxd */
-
