@@ -55,19 +55,19 @@ endif
 libccid_la_SOURCES = $(COMMON) $(USB) $(TOKEN_PARSER) $(PROVIDED_BY_PCSC) $(T1)
 libccid_la_LIBADD = $(LEXLIB) $(LIBUSB_LIBS) $(PTHREAD_LIBS)
 libccid_la_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS) $(PTHREAD_CFLAGS) \
-	$(SYMBOL_VISIBILITY) -D$(CCID_VERSION)
+	$(SYMBOL_VISIBILITY) -D$(CCID_VERSION) -DSIMCLIST_NO_DUMPRESTORE
 libccid_la_LDFLAGS = -avoid-version
 
 libccidtwin_la_SOURCES = $(COMMON) $(SERIAL) $(TOKEN_PARSER) \
 	$(PROVIDED_BY_PCSC) $(T1)
 libccidtwin_la_CFLAGS = $(PCSC_CFLAGS) $(PTHREAD_CFLAGS) $(SYMBOL_VISIBILITY) \
-	-DTWIN_SERIAL -D$(CCID_VERSION)
+	-DTWIN_SERIAL -D$(CCID_VERSION) -DSIMCLIST_NO_DUMPRESTORE
 libccidtwin_la_LIBADD = $(PTHREAD_LIBS)
 libccidtwin_la_LDFLAGS = -avoid-version
 
 parse_SOURCES = parse.c debug.c ccid_usb.c $(TOKEN_PARSER)
 parse_LDADD = $(LIBUSB_LIBS)
-parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS)
+parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS) -DSIMCLIST_NO_DUMPRESTORE
 
 EXTRA_DIST = Info.plist.src create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE \
