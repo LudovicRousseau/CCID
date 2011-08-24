@@ -2077,7 +2077,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int reader_index,
 RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	unsigned int length, unsigned char buffer[])
 {
-	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
+	unsigned char cmd[10+length];	/* CCID + APDU buffer */
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	DEBUG_COMM2("length: %d bytes", length);
@@ -2088,10 +2088,6 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = protocol;	/* bProtocolNum */
 	cmd[8] = cmd[9] = 0; /* RFU */
-
-	/* check that the command is not too large */
-	if (length > CMD_BUF_SIZE)
-		return IFD_NOT_SUPPORTED;
 
 	memcpy(cmd+10, buffer, length);
 
