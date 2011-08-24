@@ -490,11 +490,11 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 
 	if (channel < 0)
 	{
-		DEBUG_CRITICAL2("wrong port number: %d", (int) channel);
+		DEBUG_CRITICAL2("wrong port number: %d", channel);
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	(void)snprintf(dev_name, sizeof(dev_name), "/dev/pcsc/%d", (int) channel);
+	(void)snprintf(dev_name, sizeof(dev_name), "/dev/pcsc/%d", channel);
 
 	return OpenSerialByName(reader_index, dev_name);
 } /* OpenSerial */
