@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
 	DWORD mct_readerdirect_ioctl = 0;
 	DWORD properties_in_tlv_ioctl = 0;
 	SCARD_IO_REQUEST pioRecvPci;
- 	SCARD_IO_REQUEST pioSendPci;
+	SCARD_IO_REQUEST pioSendPci;
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
 #if defined(VERIFY_PIN) | defined(MODIFY_PIN)
 	int offset;
@@ -644,7 +644,7 @@ int main(int argc, char *argv[])
 	pin_modify -> bmFormatString = 0x82;
 	pin_modify -> bmPINBlockString = 0x04;
 	pin_modify -> bmPINLengthFormat = 0x00;
-	pin_modify -> bInsertionOffsetOld = 0x00; 	/* offset from APDU start */
+	pin_modify -> bInsertionOffsetOld = 0x00;	/* offset from APDU start */
 	pin_modify -> bInsertionOffsetNew = 0x04;	/* offset from APDU start */
 	pin_modify -> wPINMaxExtraDigit = 0x0408;	/* Min Max */
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
