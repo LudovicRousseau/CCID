@@ -916,7 +916,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			{
 				/* convert from ATR_PROTOCOL_TYPE_T? to SCARD_PROTOCOL_T? */
 				Protocol = default_protocol +
-				   	(SCARD_PROTOCOL_T0 - ATR_PROTOCOL_TYPE_T0);
+					(SCARD_PROTOCOL_T0 - ATR_PROTOCOL_TYPE_T0);
 				DEBUG_INFO2("PPS not supported on O2Micro readers. Using T=%ld",
 					Protocol - SCARD_PROTOCOL_T0);
 			}
@@ -1938,13 +1938,13 @@ static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	 * 5 bytes header cmd  ->
 	 *                    <-		Procedure byte
 	 * 256 data bytes	   ->
-	 * 					  <-		SW1-SW2
+	 *					  <-		SW1-SW2
 	 * = 261 EGT       + 3 WWT     + 3 WWT
 	 *
 	 * ISO_OUT Timeout is the sum of:
 	 * Terminal:                    Smart card:
 	 * 5 bytes header cmd  ->
-	 * 					  <-        Procedure byte + 256 data bytes + SW1-SW2
+	 *					  <-        Procedure byte + 256 data bytes + SW1-SW2
 	 * = 5 EGT          + 1 WWT     + 259 WWT
 	 */
 

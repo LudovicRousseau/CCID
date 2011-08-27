@@ -23,7 +23,7 @@
 
 /*
  * DEBUG_CRITICAL("text");
- * 	log "text" if (LogLevel & DEBUG_LEVEL_CRITICAL) is TRUE
+ *	log "text" if (LogLevel & DEBUG_LEVEL_CRITICAL) is TRUE
  *
  * DEBUG_CRITICAL2("text: %d", 1234);
  *  log "text: 1234" if (DEBUG_LEVEL_CRITICAL & DEBUG_LEVEL_CRITICAL) is TRUE
