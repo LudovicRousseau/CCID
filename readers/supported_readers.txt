@@ -309,6 +309,7 @@
 
 # BIFIT
 0x23A0:0x0001:BIFIT USB-Token iBank2key
+0x23A0:0x0002:BIFIT iBank2Key
 
 # Bogus readers but partly supported
 # See the http://pcsclite.alioth.debian.org/ccid/unsupported.html for a
