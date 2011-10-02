@@ -138,6 +138,13 @@ static void parse_properties(unsigned char *bRecvBuffer, int length)
 					putchar(p[i]);
 				printf(NORMAL "\n");
 				break;
+			case PCSCv2_PART10_PROPERTY_bPPDUSupport:
+				PRINT_GREEN_HEX2(" bPPDUSupport", value);
+				if (value & 1)
+					printf("  PPDU is supported over SCardControl using FEATURE_CCID_ESC_COMMAND\n");
+				if (value & 2)
+					printf("  PPDU is supported over SCardTransmit\n");
+				break;
 			default:
 				printf(" Unknown tag: 0x%02X (length = %d)\n", tag, len);
 		}
@@ -211,6 +218,7 @@ int main(int argc, char *argv[])
 	DWORD pin_properties_ioctl = 0;
 	DWORD mct_readerdirect_ioctl = 0;
 	DWORD properties_in_tlv_ioctl = 0;
+	DWORD ccid_esc_command = 0;
 	SCARD_IO_REQUEST pioRecvPci;
 	SCARD_IO_REQUEST pioSendPci;
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
@@ -375,6 +383,10 @@ int main(int argc, char *argv[])
 			case FEATURE_GET_TLV_PROPERTIES:
 				PRINT_GREEN("Reader supports", "FEATURE_GET_TLV_PROPERTIES");
 				properties_in_tlv_ioctl = ntohl(pcsc_tlv[i].value);
+				break;
+			case FEATURE_CCID_ESC_COMMAND:
+				PRINT_GREEN("Reader supports", "FEATURE_CCID_ESC_COMMAND");
+				ccid_esc_command = ntohl(pcsc_tlv[i].value);
 				break;
 			default:
 				printf("Can't parse tag: " RED "0x%02X" NORMAL, pcsc_tlv[i].tag);
