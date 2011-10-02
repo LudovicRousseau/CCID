@@ -1379,7 +1379,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		int readerID = ccid_descriptor -> readerID;
 
 		/* we need room for up to five records */
-		if (RxLength < 5 * sizeof(PCSC_TLV_STRUCTURE))
+		if (RxLength < 6 * sizeof(PCSC_TLV_STRUCTURE))
 			return IFD_ERROR_INSUFFICIENT_BUFFER;
 
 		/* We can only support direct verify and/or modify currently */
@@ -1427,6 +1427,17 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		pcsc_tlv -> value = htonl(IOCTL_FEATURE_GET_TLV_PROPERTIES);
 		pcsc_tlv++;
 		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
+
+		/* IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE */
+		if (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED)
+		{
+			pcsc_tlv -> tag = FEATURE_CCID_ESC_COMMAND;
+			pcsc_tlv -> length = 0x04; /* always 0x04 */
+			pcsc_tlv -> value = htonl(IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE);
+
+			pcsc_tlv++;
+			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
+		}
 
 		*pdwBytesReturned = iBytesReturned;
 		return_value = IFD_SUCCESS;
@@ -1526,6 +1537,14 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer[p++] = 1;	/* length */
 			RxBuffer[p++] = 0x02;	/* validation key pressed */
 		}
+
+		/* bPPDUSupport */
+		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bPPDUSupport;
+		RxBuffer[p++] = 1;	/* length */
+		RxBuffer[p++] =
+			(DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED) ? 1 : 0;
+			/* bit0: PPDU is supported over SCardControl using
+			 * FEATURE_CCID_ESC_COMMAND */
 
 		*pdwBytesReturned = p;
 		return_value = IFD_SUCCESS;
