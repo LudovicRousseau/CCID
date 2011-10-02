@@ -432,6 +432,29 @@ int main(int argc, char *argv[])
 		printf("\n");
 	}
 
+#ifdef GET_GEMPC_FIRMWARE
+	if (ccid_esc_command)
+	{
+		/* get GemPC firmware */
+		printf("Get GemPC Firmware\n");
+
+		/* this is specific to Gemalto readers */
+		bSendBuffer[0] = 0x02;
+		rv = SCardControl(hCard, ccid_esc_command, bSendBuffer,
+			1, bRecvBuffer, sizeof(bRecvBuffer), &length);
+
+		printf(" Firmware: " GREEN);
+		for (i=0; i<length; i++)
+			printf("%02X ", bRecvBuffer[i]);
+		printf(NORMAL "\n");
+
+		bRecvBuffer[length] = '\0';
+		printf(" Firmware: " GREEN "%s" NORMAL" (length " GREEN "%ld" NORMAL " bytes)\n", bRecvBuffer, length);
+
+		PCSC_ERROR_CONT(rv, "SCardControl")
+	}
+#endif
+
 	if (0 == verify_ioctl)
 	{
 		printf("Reader %s does not support PIN verification\n",
