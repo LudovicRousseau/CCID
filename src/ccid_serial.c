@@ -793,6 +793,8 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	}
 
 	serialDevice[reader_index].ccid.sIFD_serial_number = NULL;
+	serialDevice[reader_index].ccid.sIFD_iManufacturer = NULL;
+	serialDevice[reader_index].ccid.IFD_bcdDevice = 0;
 
 	return STATUS_SUCCESS;
 } /* OpenSerialByName */

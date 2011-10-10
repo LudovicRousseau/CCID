@@ -569,6 +569,23 @@ again:
 						usbDevice[reader_index].ccid.sIFD_serial_number
 							= strdup((char *)serial);
 				}
+
+				usbDevice[reader_index].ccid.sIFD_iManufacturer = NULL;
+				if (desc.iManufacturer)
+				{
+					unsigned char iManufacturer[128];
+					int ret;
+
+					ret = libusb_get_string_descriptor_ascii(dev_handle,
+							desc.iManufacturer, iManufacturer,
+							sizeof(iManufacturer));
+					DEBUG_CRITICAL2("%s\n", iManufacturer);
+					if (ret > 0)
+						usbDevice[reader_index].ccid.sIFD_iManufacturer
+							= strdup((char *)iManufacturer);
+				}
+
+				usbDevice[reader_index].ccid.IFD_bcdDevice = desc.bcdDevice;
 				goto end;
 			}
 		}

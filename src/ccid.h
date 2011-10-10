@@ -126,6 +126,16 @@ typedef struct
 	 * USB serial number of the device (if any)
 	 */
 	char *sIFD_serial_number;
+
+	/*
+	 * USB iManufacturer string
+	 */
+	const char *sIFD_iManufacturer;
+
+	/*
+	 * USB bcdDevice
+	 */
+	int IFD_bcdDevice;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */

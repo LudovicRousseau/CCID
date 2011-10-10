@@ -504,24 +504,34 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			break;
 
 		case SCARD_ATTR_VENDOR_IFD_VERSION:
-			/* Vendor-supplied interface device version (DWORD in the form
-			 * 0xMMmmbbbb where MM = major version, mm = minor version, and
-			 * bbbb = build number). */
-			*Length = sizeof(DWORD);
-			if (Value)
-				*(DWORD *)Value = CCID_VERSION;
+			{
+				int IFD_bcdDevice = get_ccid_descriptor(reader_index)->IFD_bcdDevice;
+
+				/* Vendor-supplied interface device version (DWORD in the form
+				 * 0xMMmmbbbb where MM = major version, mm = minor version, and
+				 * bbbb = build number). */
+				*Length = 4;
+				if (Value)
+					*(uint32_t *)Value = IFD_bcdDevice << 16;
+			}
 			break;
 
 		case SCARD_ATTR_VENDOR_NAME:
-#define VENDOR_NAME "Ludovic Rousseau"
-			if (*Length >= sizeof(VENDOR_NAME))
 			{
-				*Length = sizeof(VENDOR_NAME);
-				if (Value)
-					memcpy(Value, VENDOR_NAME, sizeof(VENDOR_NAME));
+				const char *sIFD_iManufacturer = get_ccid_descriptor(reader_index) -> sIFD_iManufacturer;
+
+				if (sIFD_iManufacturer)
+				{
+					strlcpy((char *)Value, sIFD_iManufacturer, *Length);
+					*Length = strlen((char *)Value) +1;
+					DEBUG_CRITICAL2("%d", *Length);
+				}
+				else
+				{
+					/* not supported */
+					*Length = 0;
+				}
 			}
-			else
-				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
 
 		case SCARD_ATTR_MAXINPUT:
