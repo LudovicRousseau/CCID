@@ -579,7 +579,6 @@ again:
 					ret = libusb_get_string_descriptor_ascii(dev_handle,
 							desc.iManufacturer, iManufacturer,
 							sizeof(iManufacturer));
-					DEBUG_CRITICAL2("%s\n", iManufacturer);
 					if (ret > 0)
 						usbDevice[reader_index].ccid.sIFD_iManufacturer
 							= strdup((char *)iManufacturer);
