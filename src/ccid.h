@@ -130,7 +130,7 @@ typedef struct
 	/*
 	 * USB iManufacturer string
 	 */
-	const char *sIFD_iManufacturer;
+	char *sIFD_iManufacturer;
 
 	/*
 	 * USB bcdDevice
