@@ -524,7 +524,6 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				{
 					strlcpy((char *)Value, sIFD_iManufacturer, *Length);
 					*Length = strlen((char *)Value) +1;
-					DEBUG_CRITICAL2("%d", *Length);
 				}
 				else
 				{
