@@ -118,6 +118,21 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.5 - 11 October 2011, Ludovic Rousseau
+    - Add support of Alcor Micro AU9540, Ubisys 13.56MHz RFID (CCID),
+      BIFIT USB-Token iBank2key, BIFIT iBank2Key, Gemalto Ezio Shield
+      PinPad reader, Gemalto SA .NET Dual, Precise Sense MC reader (with
+      fingerprint), SDS DOMINO-Key TWIN Pro
+    - Add support of bPPDUSupport and FEATURE_CCID_ESC_COMMAND
+    - SCARD_ATTR_VENDOR_NAME and SCARD_ATTR_VENDOR_IFD_VERSION are not
+      the vendor name and version of the driver but of the IFD:
+      InterFace Device i.e. the smart card reader.  We then return the
+      USB iManufacturer string as SCARD_ATTR_VENDOR_NAME and USB
+      bcdDevice as SCARD_ATTR_VENDOR_IFD_VERSION
+    - reduce binary size bu removing unused features from simclist
+    - Fix some warnings reported bu Coverity
+
+
 1.4.4 - 13 May 2011, Ludovic Rousseau
     - Add support of Gemalto Ezio Shield, Gemalto Ezio CB+, Gemalto Ezio
       Shield Secure Channel, Gemalto Ezio Shield PinPad and Gemalto Ezio
