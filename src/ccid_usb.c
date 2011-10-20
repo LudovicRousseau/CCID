@@ -1134,6 +1134,7 @@ void InterruptStop(int reader_index)
 	struct libusb_transfer *transfer;
 
 	transfer = usbDevice[reader_index].polling_transfer;
+	usbDevice[reader_index].polling_transfer = NULL;
 	if (transfer)
 	{
 		int ret;
