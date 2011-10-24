@@ -231,7 +231,6 @@ int main(int argc, char *argv[])
 #ifdef MODIFY_PIN
 	PIN_MODIFY_STRUCTURE *pin_modify;
 #endif
-	char secoder_info[] = { 0x20, 0x70, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 
 	printf("SCardControl sample code\n");
 	printf("V 1.4 © 2004-2010, Ludovic Rousseau <ludovic.rousseau@free.fr>\n\n");
@@ -422,6 +421,8 @@ int main(int argc, char *argv[])
 
 	if (mct_readerdirect_ioctl)
 	{
+		char secoder_info[] = { 0x20, 0x70, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
+
 		rv = SCardControl(hCard, mct_readerdirect_ioctl, secoder_info,
 			sizeof(secoder_info), bRecvBuffer, sizeof(bRecvBuffer), &length);
 		PCSC_ERROR_CONT(rv, "SCardControl(MCT_READER_DIRECT)")
