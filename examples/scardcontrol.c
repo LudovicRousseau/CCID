@@ -432,6 +432,27 @@ int main(int argc, char *argv[])
 		printf("\n");
 	}
 
+	if (pin_properties_ioctl)
+	{
+		PIN_PROPERTIES_STRUCTURE *pin_properties;
+
+		rv = SCardControl(hCard, pin_properties_ioctl, NULL, 0,
+			bRecvBuffer, sizeof(bRecvBuffer), &length);
+		PCSC_ERROR_CONT(rv, "SCardControl(pin_properties_ioctl)")
+
+		printf("PIN PROPERTIES (" GREEN "%ld" NORMAL "): " GREEN, length);
+		for (i=0; i<length; i++)
+			printf("%02X ", bRecvBuffer[i]);
+		printf(NORMAL "\n");
+
+		pin_properties = (PIN_PROPERTIES_STRUCTURE *)bRecvBuffer;
+		PRINT_GREEN_HEX4(" wLcdLayout", pin_properties -> wLcdLayout);
+		PRINT_GREEN_DEC(" bEntryValidationCondition", pin_properties ->	bEntryValidationCondition);
+		PRINT_GREEN_DEC(" bTimeOut2", pin_properties -> bTimeOut2);
+
+		printf("\n");
+	}
+
 #ifdef GET_GEMPC_FIRMWARE
 	if (ccid_esc_command)
 	{
