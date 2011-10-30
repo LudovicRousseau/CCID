@@ -59,6 +59,7 @@ while (<IN>)
 	# print "m: $manuf, p: $product, n: $name\n";
 	push @manuf, $manuf;
 	push @product, $product;
+	$name =~ s/&/&amp;/g;
 	push @name, $name
 }
 close IN;
