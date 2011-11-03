@@ -2,7 +2,7 @@
   iManufacturer: KOBIL Systems
  idProduct: 0x3010
   iProduct: KOBIL Class 3 Reader
- bcdDevice: 0.39 (firmware release?)
+ bcdDevice: 0.40 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -27,11 +27,11 @@
   dwDefaultClock: 2.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: No such file or directory
+   IFD does not support GET CLOCK FREQUENCIES request: Success
   dwDataRate: 10573 bps
   dwMaxDataRate: 344086 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: No such file or directory
+   IFD does not support GET_DATA_RATES request: Success
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
@@ -51,7 +51,7 @@
   bClassEnveloppe: 0xFF
    echoes the APDU class
   wLcdLayout: 0x0210
-   2 lines
+    2 lines
    16 characters per line
   bPINSupport: 0x03
    PIN Verification supported
