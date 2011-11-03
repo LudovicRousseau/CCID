@@ -2,7 +2,7 @@
   iManufacturer: XIRING
  idProduct: 0x0037
   iProduct: CCID Smart Card Reader
- bcdDevice: 2.11 (firmware release?)
+ bcdDevice: 9.14 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -62,13 +62,13 @@
    ....80 Automatic PPS made by the CCID
    ..04.. Automatic IFSD exchange as first exchange (T=1)
    02.... Short APDU level exchange
-  dwMaxCCIDMessageLength: 271 bytes
+  dwMaxCCIDMessageLength: 522 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnveloppe: 0xFF
    echoes the APDU class
   wLcdLayout: 0x020C
-   2 lines
+    2 lines
    12 characters per line
   bPINSupport: 0x03
    PIN Verification supported
