@@ -1025,7 +1025,7 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 			usbDevice[reader_index].bus_number,
 			usbDevice[reader_index].device_address, ret, strerror(errno));
 
-		return STATUS_UNSUCCESSFUL;
+		return ret;
 	}
 
 	if (requesttype & 0x80)
