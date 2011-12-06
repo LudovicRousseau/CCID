@@ -176,6 +176,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	list_t plist, *values, *ifdVendorID, *ifdProductID, *ifdFriendlyName;
 	int rv;
 	int claim_failed = FALSE;
+	int return_value = IFD_SUCCESS;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
@@ -235,8 +236,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	if (rv) \
 	{ \
 		DEBUG_CRITICAL2("Value/Key not defined for " key " in %s", infofile); \
-		bundleRelease(&plist); \
-		return STATUS_UNSUCCESSFUL; \
+		return_value = STATUS_UNSUCCESSFUL; \
+		goto end1; \
 	} \
 	else \
 		DEBUG_INFO2(key ": %s", (char *)list_get_at(values, 0));
@@ -252,7 +253,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		if (rv != 0)
 		{
 			DEBUG_CRITICAL2("libusb_init failed: %d", rv);
-			return STATUS_UNSUCCESSFUL;
+			return_value = STATUS_UNSUCCESSFUL;
+			goto end1;
 		}
 	}
 
@@ -260,7 +262,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	if (cnt < 0)
 	{
 		DEBUG_CRITICAL("libusb_get_device_list() failed\n");
-		return STATUS_UNSUCCESSFUL;
+		return_value = STATUS_UNSUCCESSFUL;
+		goto end1;
 	}
 
 #define GET_KEYS(key, values) \
@@ -268,8 +271,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	if (rv) \
 	{ \
 		DEBUG_CRITICAL2("Value/Key not defined for " key " in %s", infofile); \
-		bundleRelease(&plist); \
-		return STATUS_UNSUCCESSFUL; \
+		return_value = STATUS_UNSUCCESSFUL; \
+		goto end2; \
 	}
 
 	GET_KEYS("ifdVendorID", &ifdVendorID)
@@ -474,7 +477,8 @@ again:
 					(void)libusb_close(dev_handle);
 					DEBUG_CRITICAL3("Unable to find the device descriptor for %d/%d",
 						bus_number, device_address);
-					return STATUS_UNSUCCESSFUL;
+					return_value = STATUS_UNSUCCESSFUL;
+					goto end2;
 				}
 
 				interface = usb_interface->altsetting->bInterfaceNumber;
@@ -511,7 +515,8 @@ again:
 				if (ccid_check_firmware(&desc))
 				{
 					(void)libusb_close(dev_handle);
-					return STATUS_UNSUCCESSFUL;
+					return_value = STATUS_UNSUCCESSFUL;
+					goto end2;
 				}
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
@@ -599,14 +604,19 @@ end:
 		return STATUS_NO_SUCH_DEVICE;
 	}
 
-	/* free the libusb allocated list & devices */
-	libusb_free_device_list(devs, 1);
-
 	/* memorise the current reader_index so we can detect
 	 * a new OpenUSBByName on a multi slot reader */
 	previous_reader_index = reader_index;
 
-	return STATUS_SUCCESS;
+end2:
+	/* free the libusb allocated list & devices */
+	libusb_free_device_list(devs, 1);
+
+end1:
+	/* free bundle list */
+	bundleRelease(&plist);
+
+	return return_value;
 } /* OpenUSBByName */
 
 
