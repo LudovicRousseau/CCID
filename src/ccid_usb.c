@@ -176,7 +176,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	list_t plist, *values, *ifdVendorID, *ifdProductID, *ifdFriendlyName;
 	int rv;
 	int claim_failed = FALSE;
-	int return_value = IFD_SUCCESS;
+	int return_value = STATUS_SUCCESS;
 
 	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
 
