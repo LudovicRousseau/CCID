@@ -168,7 +168,7 @@
 # Giesecke & Devrient
 0x1059:0x000C:Giesecke & Devrient CardToken 350
 0x1059:0x000D:Giesecke & Devrient CardToken 550
-0x1059:0x0017:Giesecke & Devrient StarSign CUT
+0x1059:0x0017:Giesecke & Devrient StarSign Crypto USB Token
 
 # Lenovo
 0x17EF:0x1003:Lenovo Integrated Smart Card Reader
