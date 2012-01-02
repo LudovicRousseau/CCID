@@ -45,8 +45,9 @@ PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
 PCSC_LIBS=${PCSC_LIBS:--framework PCSC}
 
 # use libusb-1.0
+LIBUSB_ARCHIVE=/usr/local/lib/libusb-1.0.a
 LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0
-LIBUSB_LIBS="/usr/local/lib/libusb-1.0.a -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation -lobjc"
+LIBUSB_LIBS="$LIBUSB_ARCHIVE -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation -lobjc"
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
 # define needed here to compile examples/scardcontrol.c since config.h is
@@ -54,7 +55,19 @@ LIBUSB_LIBS="/usr/local/lib/libusb-1.0.a -Wl,-framework -Wl,IOKit -Wl,-framework
 CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
 
 # Build a Universal Binary
-CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64"
+UB=$(file $LIBUSB_ARCHIVE | grep "Mach-O universal binary")
+echo $UB
+if [ -z "$UB" ]
+then
+	echo "*************************"
+	echo "No Universal Binary build"
+	echo "*************************"
+else
+	echo "Universal Binary build"
+	CFLAGS="$CFLAGS -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch x86_64"
+fi
+echo
+
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
 # do not build a static driver
