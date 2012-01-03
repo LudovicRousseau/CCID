@@ -1,0 +1,72 @@
+ idVendor: 0x1862
+  iManufacturer: Teridian Semiconductors
+ idProduct: 0x0000
+  iProduct: TSC12xxFV.09
+ bcdDevice: 0.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: ?
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x04
+  bVoltageSupport: 0x03
+   5.0V
+   3.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 3.600 MHz
+  dwMaximumClock: 8.000 MHz
+  bNumClockSupported: 6
+   Got 7 clock frequencies but was expecting 6
+   Support 3600 kHz
+   Support 4000 kHz
+   Support 5050 kHz
+   Support 6000 kHz
+   Support 8000 kHz
+   Support 9600 kHz
+  dwDataRate: 9600 bps
+  dwMaxDataRate: 230400 bps
+  bNumDataRatesSupported: 11
+   Support 9600 bps
+   Support 14400 bps
+   Support 19200 bps
+   Support 28800 bps
+   Support 38400 bps
+   Support 57600 bps
+   Support 57688 bps
+   Support 115200 bps
+   Support 116129 bps
+   Support 225000 bps
+   Support 230400 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000405F2
+   ....02 Automatic parameter configuration based on ATR data
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....40 Automatic parameters negotiation made by the CCID
+   ....80 Automatic PPS made by the CCID
+   ..01.. CCID can set ICC in clock stop mode
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnveloppe: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 5
