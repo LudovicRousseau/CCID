@@ -30,7 +30,13 @@
 #include <string.h>
 #include "strlcpycat.h"
 
-#define LOG_TO_STDERR
+#undef LOG_TO_STDERR
+
+#ifdef LOG_TO_STDERR
+#define LOG_STREAM stderr
+#else
+#define LOG_STREAM stdout
+#endif
 
 void log_msg(const int priority, const char *fmt, ...)
 {
@@ -43,9 +49,8 @@ void log_msg(const int priority, const char *fmt, ...)
 	(void)vsnprintf(debug_buffer, sizeof debug_buffer, fmt, argptr);
 	va_end(argptr);
 
-#ifdef LOG_TO_STDERR
-	(void)fprintf(stderr, "%s\n", debug_buffer);
-#endif
+	(void)fprintf(LOG_STREAM, "%s\n", debug_buffer);
+	fflush(LOG_STREAM);
 } /* log_msg */
 
 void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
@@ -67,7 +72,6 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 		c += 3;
 	}
 
-#ifdef LOG_TO_STDERR
-	(void)fprintf(stderr, "%s\n", debug_buffer);
-#endif
+	(void)fprintf(LOG_STREAM, "%s\n", debug_buffer);
+	fflush(LOG_STREAM);
 } /* log_xxd */
