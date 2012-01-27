@@ -22,24 +22,24 @@
 0x058F:0x9540:Alcor Micro AU9540
 
 # Athena
-0x0DC3:0x1102:Athena ASEDrive IIIe KB
 0x0DC3:0x1004:Athena ASE IIIe
+0x0DC3:0x1102:Athena ASEDrive IIIe KB
 
 # C3PO
 0x0783:0x0006:C3PO LTC31 v2
 
 # Cherry GmbH
-0x046A:0x002D:Cherry GmbH SmartTerminal XX44
-0x046A:0x003E:Cherry GmbH SmartTerminal ST-2xxx
 0x046A:0x0005:Cherry GmbH SmartBoard XX33
 0x046A:0x0010:Cherry GmbH SmartBoard XX44
+0x046A:0x002D:Cherry GmbH SmartTerminal XX44
+0x046A:0x003E:Cherry GmbH SmartTerminal ST-2xxx
 
 # COVADIS
 0x0982:0x0007:COVADIS ALYA
 
 # Dell
-0x413C:0x2101:Dell Dell Smart Card Reader Keyboard
 0x413C:0x2100:Dell keyboard SK-3106
+0x413C:0x2101:Dell Dell Smart Card Reader Keyboard
 
 # Eutron
 0x073D:0x0007:Eutron CryptoIdentity CCID
@@ -53,17 +53,17 @@
 0x096E:0x0807:Feitian ePass2003
 
 # Gemalto
-0x08E6:0x3480:Gemalto GemCore SIM Pro Smart Card Reader
-0x08E6:0x4433:Gemalto Gemplus USB SmartCard Reader 433-Swap
+0x08E6:0x1227:Gemalto PDT
+0x08E6:0x3437:Gemalto PC Twin Reader
 0x08E6:0x3438:Gemalto USB Shell Token V2
 0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader
-0x08E6:0x3437:Gemalto PC Twin Reader (serial)
+0x08E6:0x3480:Gemalto GemCore SIM Pro Smart Card Reader
+0x08E6:0x34C0:Gemalto Ezio Shield
+0x08E6:0x34C3:Gemalto EZIO CB+
+0x08E6:0x4433:Gemalto Gemplus USB SmartCard Reader 433-Swap
 0x08E6:0x5503:Gemalto Prox Dual USB PC LinkReader
 0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader
 0x08E6:0x8000:Gemalto Smart Enterprise Guardian Secure USB Device
-0x08E6:0x34C3:Gemalto EZIO CB+
-0x08E6:0x34C0:Gemalto Ezio Shield
-0x08E6:0x1227:Gemalto PDT
 
 # Giesecke & Devrient GmbH
 0x1059:0x0017:Giesecke & Devrient GmbH StarSign Crypto USB Token
@@ -72,8 +72,8 @@
 0x0B81:0x0200:id3 Semiconductors CL1356T
 
 # KOBIL
-0x0D46:0x3002:KOBIL KAAN Advanced
 0x0D46:0x3001:KOBIL KAAN Base
+0x0D46:0x3002:KOBIL KAAN Advanced
 0x0D46:0x3003:KOBIL KAAN SIM III
 0x0D46:0x3010:KOBIL EMV CAP - SecOVID Reader III
 
@@ -95,11 +95,11 @@
 # SCM Microsystems Inc.
 0x03F0:0x0824:SCM Microsystems Inc. HP USB Smartcard Reader
 0x04E6:0x5111:SCM Microsystems Inc. SCR 331-DI
-0x04E6:0xE001:SCM Microsystems Inc. SCR 331
+0x04E6:0x5115:SCM Microsystems Inc. SCR 335
 0x04E6:0x5116:SCM Microsystems Inc. SCR 3310
 0x04E6:0x511D:SCM Microsystems Inc. SCR 3311
-0x04E6:0x5115:SCM Microsystems Inc. SCR 335
 0x04E6:0x5410:SCM Microsystems Inc. SCR 355
+0x04E6:0xE001:SCM Microsystems Inc. SCR 331
 0x04E6:0xE003:SCM Microsystems Inc. SPR 532
 
 # TianYu CCID Key
@@ -110,28 +110,28 @@
 0x08E6:0xACE0:Verisign Secure Token
 
 # XIRING
-0x076B:0xA022:XIRING Teo
-0x0F14:0x0038:XIRING Leo v2
-0x0F14:0x0037:XIRING MyLeo
 0x0F14:0x0011:XIRING XI-SIGN USB V2
+0x0F14:0x0037:XIRING MyLeo
+0x0F14:0x0038:XIRING Leo v2
+0x076B:0xA022:XIRING Teo
 
 ##########################
 # section: shouldwork
 ##########################
 
 # ACS
+0x072F:0x8201:ACS APG8201 PINhandy 1
 0x072F:0x90CC:ACS ACR122U
 0x072F:0x90CC:ACS ACR100
 0x072F:0x90CC:ACS ACR38 plugin
 0x072F:0x90CC:ACS AET65
-0x072F:0x8201:ACS APG8201 PINhandy 1
 
 # Akasa
 0x058F:0x9520:Akasa AK-CR-03
 
 # Aktiv
-0x0A89:0x0030:Aktiv Rutoken ECP
 0x0A89:0x0025:Aktiv Rutoken lite
+0x0A89:0x0030:Aktiv Rutoken ECP
 
 # Aktiv Co., ProgramPark
 0x0A89:0x0060:Aktiv Co., ProgramPark Rutoken Magistra
@@ -146,18 +146,18 @@
 0x0DC3:0x0900:Athena IDProtect Key v2
 
 # ATMEL
-0x03EB:0x6011:ATMEL AT90SCR050
-0x03EB:0x6010:ATMEL AT90SCR100
-0x03EB:0x600B:ATMEL AT91SC192192CT-USB ICCD reader
 0x03EB:0x6004:ATMEL AT91SO CCID Smart Card Reader
 0x03EB:0x6009:ATMEL AT98SC032CT-USB
+0x03EB:0x600B:ATMEL AT91SC192192CT-USB ICCD reader
+0x03EB:0x6010:ATMEL AT90SCR100
+0x03EB:0x6011:ATMEL AT90SCR050
 0x03EB:0x6012:ATMEL VaultIC420 Smart Object
 0x03EB:0x6014:ATMEL VaultIC440
 0x03EB:0x6016:ATMEL VaultIC460
 
 # Avtor
-0x15CF:0x001D:Avtor SC Reader 371
 0x15CF:0x0019:Avtor SecureToken
+0x15CF:0x001D:Avtor SC Reader 371
 
 # Axalto
 0x04E6:0x511C:Axalto Reflex USB v3
@@ -175,9 +175,9 @@
 0x0A5C:0x5802:Broadcom Corp 5880
 
 # C3PO
+0x0783:0x0007:C3PO TLTC2USB
 0x0783:0x0009:C3PO KBR36
 0x0783:0x0010:C3PO LTC32
-0x0783:0x0007:C3PO TLTC2USB
 0x0783:0x0036:C3PO LTC36
 
 # charismathics
@@ -189,8 +189,8 @@
 0x046A:0x0072:Cherry GmbH SmartTerminal ST-1275
 
 # COVADIS
-0x0982:0x0040:COVADIS Auriga
 0x0982:0x0008:COVADIS VEGA-ALPHA
+0x0982:0x0040:COVADIS Auriga
 
 # Dectel
 0x0BDA:0x0165:Dectel CI692
@@ -209,12 +209,12 @@
 0x0BF8:0x1017:FujitsuTechnologySolutions GmbH SmartCase KB SCR eSIG
 
 # Gemalto
-0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader
-0x08E6:0x34EC:Gemalto GemPC Express
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
+0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader
 0x08E6:0x34C2:Gemalto Ezio Shield
-0x08E6:0x5743:Gemalto Hybrid Smartcard Reader
+0x08E6:0x34EC:Gemalto GemPC Express
 0x08E6:0x4042:Gemalto SA .NET Dual
+0x08E6:0x5743:Gemalto Hybrid Smartcard Reader
 0x08E6:0x8108:Gemalto Smart Enterprise Guardian Secure USB Device
 
 # Gemplus
@@ -240,12 +240,12 @@
 0x03F0:0x2924:Hewlett Packard MFP Smart Card Reader
 
 # Hewlett-Packard Company
-0x03F0:0x1024:Hewlett-Packard Company HP USB Smart Card Keyboard
 0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
+0x03F0:0x1024:Hewlett-Packard Company HP USB Smart Card Keyboard
 
 # id3 Semiconductors
-0x0B81:0x0220:id3 Semiconductors CL1356A_HID
 0x0B81:0x0200:id3 Semiconductors CL1356T5
+0x0B81:0x0220:id3 Semiconductors CL1356A_HID
 
 # Inside Secure
 0x2406:0x6302:Inside Secure VaultIC 460 Smart Object
@@ -260,18 +260,18 @@
 0x0D46:0x3014:KOBIL Systems Smart Token
 0x0D46:0x4189:KOBIL Systems mIDentity 4smart
 0x0D46:0x41A9:KOBIL Systems mIDentity 4smart AES
+0x0D46:0x4289:KOBIL Systems mIDentity visual
 0x0D46:0x4389:KOBIL Systems mIDentity fullsize
 0x0D46:0x43A9:KOBIL Systems mIDentity fullsize AES
-0x0D46:0x4289:KOBIL Systems mIDentity visual
 
 # MSI
 0x0BDA:0x0161:MSI StarReader SMART
 
 # Neowave
-0x1E0D:0x8033:Neowave Weneo
 0x1E0D:0x0013:Neowave Weneo
 0x1E0D:0x0033:Neowave Weneo
 0x1E0D:0x1023:Neowave Weneo
+0x1E0D:0x8033:Neowave Weneo
 
 # OBERTHUR TECHNOLOGIES
 0x1A74:0xB111:OBERTHUR TECHNOLOGIES ID-ONE TOKEN SLIM v2
@@ -311,15 +311,15 @@
 0x0973:0x0003:SchlumbergerSema SchlumbergerSema Cyberflex Access
 
 # SCM Microsystems Inc.
-0x04E6:0x5293:SCM Microsystems Inc. SCL01x Contactless Reader
-0x04E6:0x512B:SCM Microsystems Inc. SDI011 Contactless Reader
-0x04E6:0x5120:SCM Microsystems Inc. SCR331-DI USB Smart Card Reader
-0x04E6:0x511F:SCM Microsystems Inc. SCR3310 USB Smart Card Reader
-0x04E6:0x5117:SCM Microsystems Inc. SCR3320 - Smart Card Reader
 0x04E6:0x5113:SCM Microsystems Inc. SCR33x USB Smart Card Reader
+0x04E6:0x5117:SCM Microsystems Inc. SCR3320 - Smart Card Reader
 0x04E6:0x5119:SCM Microsystems Inc. SCR3340 - ExpressCard54 Smart Card Reader
-0x04E6:0x5410:SCM Microsystems Inc. SCR35xx v2.0 USB SC Reader
+0x04E6:0x511F:SCM Microsystems Inc. SCR3310 USB Smart Card Reader
+0x04E6:0x5120:SCM Microsystems Inc. SCR331-DI USB Smart Card Reader
 0x04E6:0x5121:SCM Microsystems Inc. SDI010 Smart Card Reader
+0x04E6:0x512B:SCM Microsystems Inc. SDI011 Contactless Reader
+0x04E6:0x5293:SCM Microsystems Inc. SCL01x Contactless Reader
+0x04E6:0x5410:SCM Microsystems Inc. SCR35xx v2.0 USB SC Reader
 
 # Secure Device Solutions
 0x0B81:0x8007:Secure Device Solutions DOMINO-Key TWIN
@@ -331,10 +331,10 @@
 0x04E8:0x0007:Softforum Co., Ltd XecureHSM
 
 # SpringCard
+0x1C34:0x7113:SpringCard CrazyWriter
 0x1C34:0x7121:SpringCard CSB6 Basic
 0x1C34:0x7123:SpringCard CSB6 Secure
 0x1C34:0x7124:SpringCard CSB6 Ultimate
-0x1C34:0x7113:SpringCard CrazyWriter
 0x1C34:0x7136:SpringCard EasyFinger Standard
 0x1C34:0x7138:SpringCard EasyFinger Ultimate
 0x1C34:0x7141:SpringCard Prox'N'Roll
@@ -359,16 +359,16 @@
 0x1CF0:0x0001:Validy TokenA sl vt
 
 # VASCO
-0x1A44:0x0120:VASCO DIGIPASS KEY 202
-0x1A44:0x0122:VASCO DIGIPASS KEY 202
-0x1A44:0x0119:VASCO DIGIPASS KEY 200
-0x1A44:0x0855:VASCO DP855
-0x1A44:0x0117:VASCO DIGIPASS KEY 860
-0x1A44:0x0865:VASCO DP865
 0x1A44:0x0001:VASCO DP905
 0x1A44:0x0101:VASCO DIGIPASS KEY 101
-0x1A44:0x0115:VASCO DIGIPASS KEY 200
 0x1A44:0x0112:VASCO DIGIPASS KEY 860
+0x1A44:0x0115:VASCO DIGIPASS KEY 200
+0x1A44:0x0117:VASCO DIGIPASS KEY 860
+0x1A44:0x0119:VASCO DIGIPASS KEY 200
+0x1A44:0x0120:VASCO DIGIPASS KEY 202
+0x1A44:0x0122:VASCO DIGIPASS KEY 202
+0x1A44:0x0855:VASCO DP855
+0x1A44:0x0865:VASCO DP865
 0x1A44:0x0920:VASCO DIGIPASS 920
 
 # VMware
@@ -411,8 +411,8 @@
 0x0B97:0x7772:O2 Micro Oz776
 
 # Precise Biometrics
-0x08C3:0x0402:Precise Biometrics Precise 200 MC
 0x08C3:0x0401:Precise Biometrics Precise 250 MC
+0x08C3:0x0402:Precise Biometrics Precise 200 MC
 
 ##########################
 # section: disabled
