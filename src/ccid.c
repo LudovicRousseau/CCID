@@ -119,6 +119,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 int ccid_open_hack_post(unsigned int reader_index)
 {
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	RESPONSECODE return_value = IFD_SUCCESS;
 
 	switch (ccid_descriptor->readerID)
 	{
@@ -323,6 +324,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 				else
 				{
 					DEBUG_COMM("Failed to load l10n strings");
+					return_value = IFD_COMMUNICATION_ERROR;
 				}
 			}
 			break;
@@ -375,7 +377,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 #endif
 	}
 
-	return 0;
+	return return_value;
 } /* ccid_open_hack_post */
 
 /*****************************************************************************
