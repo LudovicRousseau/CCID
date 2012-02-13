@@ -68,7 +68,8 @@ static unsigned int T1_card_timeout(double f, double d, int TC1, int BWI,
 static int get_IFSC(ATR_t *atr, int *i);
 
 
-EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
+static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
+	LPSTR lpcDevice, DWORD Channel)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	int reader_index;
@@ -77,7 +78,10 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	if (! DebugInitialized)
 		init_driver();
 
-	DEBUG_INFO3("lun: %lX, device: %s", Lun, lpcDevice);
+	if (lpcDevice)
+		DEBUG_INFO3("lun: %lX, device: %s", Lun, lpcDevice);
+	else
+		DEBUG_INFO3("lun: %lX, Channel: %lX", Lun, Channel);
 
 	if (-1 == (reader_index = GetNewReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
@@ -90,13 +94,20 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 	CcidSlots[reader_index].bPowerFlags = POWERFLAGS_RAZ;
 
 	/* reader name */
-	CcidSlots[reader_index].readerName = strdup(lpcDevice);
+	if (lpcDevice)
+		CcidSlots[reader_index].readerName = strdup(lpcDevice);
+	else
+		CcidSlots[reader_index].readerName = strdup("no name");
 
 #ifdef HAVE_PTHREAD
 	(void)pthread_mutex_lock(&ifdh_context_mutex);
 #endif
 
-	ret = OpenPortByName(reader_index, lpcDevice);
+	if (lpcDevice)
+		ret = OpenPortByName(reader_index, lpcDevice);
+	else
+		ret = OpenPort(reader_index, Channel);
+
 	if (ret != STATUS_SUCCESS)
 	{
 		DEBUG_CRITICAL("failed");
@@ -161,8 +172,13 @@ error:
 	}
 
 	return return_value;
-} /* IFDHCreateChannelByName */
+} /* CreateChannelByNameOrChannel */
 
+
+EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
+{
+	return CreateChannelByNameOrChannel(Lun, lpcDevice, -1);
+}
 
 EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 {
@@ -199,85 +215,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	 *
 	 * IFD_SUCCESS IFD_COMMUNICATION_ERROR
 	 */
-	RESPONSECODE return_value = IFD_SUCCESS;
-	int reader_index;
-
-	if (! DebugInitialized)
-		init_driver();
-
-	DEBUG_INFO2("lun: %lX", Lun);
-
-	if (-1 == (reader_index = GetNewReaderIndex(Lun)))
-		return IFD_COMMUNICATION_ERROR;
-
-	/* Reset ATR buffer */
-	CcidSlots[reader_index].nATRLength = 0;
-	*CcidSlots[reader_index].pcATRBuffer = '\0';
-
-	/* Reset PowerFlags */
-	CcidSlots[reader_index].bPowerFlags = POWERFLAGS_RAZ;
-
-	/* reader name */
-	CcidSlots[reader_index].readerName = strdup("no name");
-
-#ifdef HAVE_PTHREAD
-	(void)pthread_mutex_lock(&ifdh_context_mutex);
-#endif
-
-	if (OpenPort(reader_index, Channel) != STATUS_SUCCESS)
-	{
-		DEBUG_CRITICAL("failed");
-		return_value = IFD_COMMUNICATION_ERROR;
-
-		/* release the allocated reader_index */
-		ReleaseReaderIndex(reader_index);
-	}
-	else
-	{
-		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
-		unsigned int oldReadTimeout;
-		_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
-
-		/* Maybe we have a special treatment for this reader */
-		(void)ccid_open_hack_pre(reader_index);
-
-		/* save the current read timeout computed from card capabilities */
-		oldReadTimeout = ccid_descriptor->readTimeout;
-
-		/* 100ms just to resync the USB toggle bits */
-		ccid_descriptor->readTimeout = 100;
-
-		/* Try to access the reader */
-		/* This "warm up" sequence is sometimes needed when pcscd is
-		 * restarted with the reader already connected. We get some
-		 * "usb_bulk_read: Resource temporarily unavailable" on the first
-		 * few tries. It is an empirical hack */
-		if ((IFD_COMMUNICATION_ERROR == CmdGetSlotStatus(reader_index, pcbuffer))
-			&& (IFD_COMMUNICATION_ERROR == CmdGetSlotStatus(reader_index, pcbuffer))
-			&& (IFD_COMMUNICATION_ERROR == CmdGetSlotStatus(reader_index, pcbuffer)))
-		{
-			DEBUG_CRITICAL("failed");
-			return_value = IFD_COMMUNICATION_ERROR;
-
-			/* release the allocated resources */
-			(void)ClosePort(reader_index);
-			ReleaseReaderIndex(reader_index);
-		}
-		else
-		{
-			/* set back the old timeout */
-			ccid_descriptor->readTimeout = oldReadTimeout;
-
-			/* Maybe we have a special treatment for this reader */
-			(void)ccid_open_hack_post(reader_index);
-		}
-	}
-
-#ifdef HAVE_PTHREAD
-	(void)pthread_mutex_unlock(&ifdh_context_mutex);
-#endif
-
-	return return_value;
+	return CreateChannelByNameOrChannel(Lun, NULL, Channel);
 } /* IFDHCreateChannel */
 
 
