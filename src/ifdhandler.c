@@ -105,9 +105,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 		else
 			return_value = IFD_COMMUNICATION_ERROR;
 
-		/* release the allocated resources */
-		free(CcidSlots[reader_index].readerName);
-		ReleaseReaderIndex(reader_index);
+		goto error;
 	}
 	else
 	{
@@ -135,10 +133,6 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 		{
 			DEBUG_CRITICAL("failed");
 			return_value = IFD_COMMUNICATION_ERROR;
-
-			/* release the allocated resources */
-			(void)ClosePort(reader_index);
-			ReleaseReaderIndex(reader_index);
 		}
 		else
 		{
@@ -154,9 +148,17 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 		}
 	}
 
+error:
 #ifdef HAVE_PTHREAD
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 #endif
+
+	if (return_value != IFD_SUCCESS)
+	{
+		/* release the allocated resources */
+		free(CcidSlots[reader_index].readerName);
+		ReleaseReaderIndex(reader_index);
+	}
 
 	return return_value;
 } /* IFDHCreateChannelByName */
