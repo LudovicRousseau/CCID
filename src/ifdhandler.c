@@ -146,7 +146,11 @@ EXTERNAL RESPONSECODE IFDHCreateChannelByName(DWORD Lun, LPSTR lpcDevice)
 			ccid_descriptor->readTimeout = oldReadTimeout;
 
 			/* Maybe we have a special treatment for this reader */
-			(void)ccid_open_hack_post(reader_index);
+			return_value = ccid_open_hack_post(reader_index);
+			if (return_value != IFD_SUCCESS)
+			{
+				DEBUG_CRITICAL("failed");
+			}
 		}
 	}
 
