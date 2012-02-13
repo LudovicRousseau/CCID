@@ -79,9 +79,13 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		init_driver();
 
 	if (lpcDevice)
+	{
 		DEBUG_INFO3("lun: %lX, device: %s", Lun, lpcDevice);
+	}
 	else
+	{
 		DEBUG_INFO3("lun: %lX, Channel: %lX", Lun, Channel);
+	}
 
 	if (-1 == (reader_index = GetNewReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
