@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-01-27
+# Generated: 2012-02-14
 #
 # DO NOT EDIT BY HAND
 
@@ -239,10 +239,6 @@
 # Hewlett Packard
 0x03F0:0x2924:Hewlett Packard MFP Smart Card Reader
 
-# Hewlett-Packard Company
-0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
-0x03F0:0x1024:Hewlett-Packard Company HP USB Smart Card Keyboard
-
 # id3 Semiconductors
 0x0B81:0x0200:id3 Semiconductors CL1356T5
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
@@ -263,6 +259,9 @@
 0x0D46:0x4289:KOBIL Systems mIDentity visual
 0x0D46:0x4389:KOBIL Systems mIDentity fullsize
 0x0D46:0x43A9:KOBIL Systems mIDentity fullsize AES
+
+# Macally
+0x08AE:0x0BDF:Macally NFC CCID eNetPad
 
 # MSI
 0x0BDA:0x0161:MSI StarReader SMART
@@ -401,6 +400,10 @@
 
 # Feitian
 0x096E:0x0503:Feitian SCR301
+
+# Hewlett-Packard Company
+0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
+0x03F0:0x1024:Hewlett-Packard Company HP USB Smart Card Keyboard
 
 # KOBIL Systems
 0x0D46:0x4000:KOBIL Systems mIDentity M
