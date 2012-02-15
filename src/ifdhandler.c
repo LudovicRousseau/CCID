@@ -44,6 +44,16 @@
 #include <pthread.h>
 #endif
 
+#ifdef __APPLE__
+/* Apple defines DWORD as uint32_t */
+#define DWORD_X "%X"
+#define DWORD_D "%d"
+#else
+/* pcsc-lite defines DWORD as unsigned long */
+#define DWORD_X "%lX"
+#define DWORD_D "%d"
+#endif
+
 /* Array of structures to hold the ATR and other state value of each slot */
 static CcidDesc CcidSlots[CCID_DRIVER_MAX_READERS];
 
@@ -80,11 +90,11 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 
 	if (lpcDevice)
 	{
-		DEBUG_INFO3("lun: %lX, device: %s", Lun, lpcDevice);
+		DEBUG_INFO3("Lun: " DWORD_X ", device: %s", Lun, lpcDevice);
 	}
 	else
 	{
-		DEBUG_INFO3("lun: %lX, Channel: %lX", Lun, Channel);
+		DEBUG_INFO3("Lun: " DWORD_X ", Channel: " DWORD_X, Lun, Channel);
 	}
 
 	if (-1 == (reader_index = GetNewReaderIndex(Lun)))
@@ -240,7 +250,8 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
+		Lun);
 
 	/* Restore the default timeout
 	 * No need to wait too long if the reader disapeared */
@@ -277,8 +288,8 @@ static RESPONSECODE IFDHPolling(DWORD Lun, int timeout)
 
 	/* log only if DEBUG_LEVEL_PERIODIC is set */
 	if (LogLevel & DEBUG_LEVEL_PERIODIC)
-		DEBUG_INFO4("%s (lun: %lX) %d ms", CcidSlots[reader_index].readerName,
-			Lun, timeout);
+		DEBUG_INFO4("%s (lun: " DWORD_X ") %d ms",
+			CcidSlots[reader_index].readerName, Lun, timeout);
 
 	return InterruptRead(reader_index, timeout);
 }
@@ -292,8 +303,8 @@ static RESPONSECODE IFDHSleep(DWORD Lun, int timeout)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("%s (lun: %lX) %d ms", CcidSlots[reader_index].readerName, Lun,
-		timeout);
+	DEBUG_INFO4("%s (lun: " DWORD_X ") %d ms",
+		CcidSlots[reader_index].readerName, Lun, timeout);
 
 	/* just sleep for 5 seconds since the polling thread is NOT killable
 	 * so pcscd event thread must loop to exit cleanly
@@ -313,7 +324,8 @@ static RESPONSECODE IFDHStopPolling(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO3("%s (lun: " DWORD_X ")",
+		CcidSlots[reader_index].readerName, Lun);
 
 	(void)InterruptStop(reader_index);
 	return IFD_SUCCESS;
@@ -347,7 +359,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("tag: 0x%lX, %s (lun: %lX)", Tag,
+	DEBUG_INFO4("tag: 0x" DWORD_X ", %s (lun: " DWORD_X ")", Tag,
 		CcidSlots[reader_index].readerName, Lun);
 
 	switch (Tag)
@@ -615,7 +627,7 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("tag: 0x%lX, %s (lun: %lX)", Tag,
+	DEBUG_INFO4("tag: 0x" DWORD_X ", %s (lun: " DWORD_X ")", Tag,
 		CcidSlots[reader_index].readerName, Lun);
 
 	return IFD_NOT_SUPPORTED;
@@ -657,8 +669,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("protocol T=%ld, %s (lun: %lX)", Protocol-SCARD_PROTOCOL_T0,
-		CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO4("protocol T=" DWORD_D ", %s (lun: " DWORD_X ")",
+		Protocol-SCARD_PROTOCOL_T0, CcidSlots[reader_index].readerName, Lun);
 
 	/* Set to zero buffer */
 	memset(pps, 0, sizeof(pps));
@@ -875,7 +887,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				/* convert from ATR_PROTOCOL_TYPE_T? to SCARD_PROTOCOL_T? */
 				Protocol = default_protocol +
 					(SCARD_PROTOCOL_T0 - ATR_PROTOCOL_TYPE_T0);
-				DEBUG_INFO2("PPS not supported on O2Micro readers. Using T=%ld",
+				DEBUG_INFO2("PPS not supported on O2Micro readers. Using T=" DWORD_D,
 					Protocol - SCARD_PROTOCOL_T0);
 			}
 			else
@@ -1108,8 +1120,8 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("action: %s, %s (lun: %lX)", actions[Action-IFD_POWER_UP],
-		CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO4("action: %s, %s (lun: " DWORD_X ")",
+		actions[Action-IFD_POWER_UP], CcidSlots[reader_index].readerName, Lun);
 
 	switch (Action)
 	{
@@ -1238,7 +1250,8 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
+		Lun);
 
 	rx_length = *RxLength;
 	return_value = CmdXfrBlock(reader_index, TxLength, TxBuffer, &rx_length,
@@ -1280,8 +1293,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	DEBUG_INFO4("ControlCode: 0x%lX, %s (lun: %lX)", dwControlCode,
-		CcidSlots[reader_index].readerName, Lun);
+	DEBUG_INFO4("ControlCode: 0x" DWORD_X ", %s (lun: " DWORD_X ")",
+		dwControlCode, CcidSlots[reader_index].readerName, Lun);
 	DEBUG_INFO_XXD("Control TxBuffer: ", TxBuffer, TxLength);
 
 	/* Set the return length to 0 to avoid problems */
@@ -1590,7 +1603,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_PERIODIC3("%s (lun: %lX)", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_PERIODIC3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName, Lun);
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
