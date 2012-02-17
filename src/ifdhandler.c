@@ -51,7 +51,7 @@
 #else
 /* pcsc-lite defines DWORD as unsigned long */
 #define DWORD_X "%lX"
-#define DWORD_D "%d"
+#define DWORD_D "%ld"
 #endif
 
 /* Array of structures to hold the ATR and other state value of each slot */
