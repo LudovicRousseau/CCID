@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-02-14
+# Generated: 2012-02-23
 #
 # DO NOT EDIT BY HAND
 
@@ -95,7 +95,6 @@
 # SCM Microsystems Inc.
 0x03F0:0x0824:SCM Microsystems Inc. HP USB Smartcard Reader
 0x04E6:0x5111:SCM Microsystems Inc. SCR 331-DI
-0x04E6:0x5115:SCM Microsystems Inc. SCR 335
 0x04E6:0x5116:SCM Microsystems Inc. SCR 3310
 0x04E6:0x511D:SCM Microsystems Inc. SCR 3311
 0x04E6:0x5410:SCM Microsystems Inc. SCR 355
@@ -311,6 +310,7 @@
 
 # SCM Microsystems Inc.
 0x04E6:0x5113:SCM Microsystems Inc. SCR33x USB Smart Card Reader
+0x04E6:0x5115:SCM Microsystems Inc. SCR 335
 0x04E6:0x5117:SCM Microsystems Inc. SCR3320 - Smart Card Reader
 0x04E6:0x5119:SCM Microsystems Inc. SCR3340 - ExpressCard54 Smart Card Reader
 0x04E6:0x511F:SCM Microsystems Inc. SCR3310 USB Smart Card Reader
