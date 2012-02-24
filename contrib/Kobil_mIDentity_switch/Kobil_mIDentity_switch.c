@@ -66,7 +66,7 @@ findintfep() in order to understand why.
 #include "config.h"
 
 #define KOBIL_VENDOR_ID		0x0D46
-#define MID_DEVICE_ID 		0x4081
+#define MID_DEVICE_ID		0x4081
 #define KOBIL_TIMEOUT		5000
 #define VAL_STARTUP_4080        1
 #define VAL_STARTUP_4000        2
@@ -108,13 +108,15 @@ static int kobil_midentity_claim_interface(libusb_device_handle *usb, int ifnum)
 {
 	int rv;
 
-	printf("claiming interface #%d ...\n", ifnum);
+	printf("claiming interface #%d ... ", ifnum);
 	rv = libusb_claim_interface(usb, ifnum);
 	if (rv == 0)
 	{
 		printf("success\n");
 		return rv;
 	}
+	else
+		printf("failed\n");
 
 	printf("failed with error %d, trying to detach kernel driver ....\n", rv);
 	rv = libusb_detach_kernel_driver(usb, ifnum);
@@ -127,6 +129,8 @@ static int kobil_midentity_claim_interface(libusb_device_handle *usb, int ifnum)
 			printf("success\n");
 			return rv;
 		}
+		else
+			printf("failed\n");
 	}
 
 	printf("failed with error %d, giving up.\n", rv);
@@ -172,7 +176,7 @@ int main(int argc, char *argv[])
 		}
 
 		printf("vendor/product: %04X %04X\n", desc.idVendor, desc.idProduct);
-		if (desc.idVendor == KOBIL_VENDOR_ID && desc.idProduct ==MID_DEVICE_ID)
+		if (desc.idVendor == KOBIL_VENDOR_ID && desc.idProduct == MID_DEVICE_ID)
 			found_dev = dev;
 	}
 
@@ -199,6 +203,7 @@ int main(int argc, char *argv[])
 		libusb_close(usb);
 		exit(3);
 	}
+
 	rv = kobil_midentity_claim_interface(usb, 1);
 	if (rv < 0)
 	{
