@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-02-23
+# Generated: 2012-03-13
 #
 # DO NOT EDIT BY HAND
 
@@ -250,6 +250,9 @@
 
 # Kingtrust
 0x0483:0x0007:Kingtrust Multi-Reader
+
+# KOBIL
+0x0D46:0x301D:KOBIL IDToken
 
 # KOBIL Systems
 0x0D46:0x3014:KOBIL Systems Smart Token
