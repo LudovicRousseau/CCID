@@ -1209,7 +1209,13 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 
 	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
+		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 		int r;
+
+		/* wait for ready */
+		r = CmdGetSlotStatus(reader_index, pcbuffer);
+		if (r != IFD_SUCCESS)
+			return r;
 
 		/* Data Block */
 		r = ControlUSB(reader_index, 0xA1, 0x6F, 0, rx_buffer, *rx_length);
