@@ -1517,6 +1517,24 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			/* bit0: PPDU is supported over SCardControl using
 			 * FEATURE_CCID_ESC_COMMAND */
 
+		/* wIdVendor */
+		{
+			int idVendor = ccid_descriptor -> readerID >> 16;
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_wIdVendor;
+			RxBuffer[p++] = 2;	/* length */
+			RxBuffer[p++] = idVendor & 0xFF;
+			RxBuffer[p++] = idVendor >> 8;
+		}
+
+		/* wIdProduct */
+		{
+			int idProduct = ccid_descriptor -> readerID & 0xFFFF;
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_wIdProduct;
+			RxBuffer[p++] = 2;	/* length */
+			RxBuffer[p++] = idProduct & 0xFF;
+			RxBuffer[p++] = idProduct >> 8;
+		}
+
 		*pdwBytesReturned = p;
 		return_value = IFD_SUCCESS;
 	}
