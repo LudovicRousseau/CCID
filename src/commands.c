@@ -702,7 +702,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	i2dw(a - 10, cmd + 1);	/* command length (includes bPINOperation) */
 
 	old_read_timeout = ccid_descriptor -> readTimeout;
-	ccid_descriptor -> readTimeout = max(30, TxBuffer[0]+10)*1000;	/* at least 30 seconds */
+	ccid_descriptor -> readTimeout = max(90, TxBuffer[0]+10)*1000;	/* at least 90 seconds */
 
 	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
 	{
