@@ -13,14 +13,15 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: ?
+ Can't get iInterface string
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
   bcdCCID: 1.10
   bMaxSlotIndex: 0x00
-  bVoltageSupport: 0x01
+  bVoltageSupport: 0x03
    5.0V
+   3.0V
   dwProtocols: 0x0000 0x0003
    T=0
    T=1
@@ -29,21 +30,20 @@
   bNumClockSupported: 0 (will use whatever is returned)
    Support 4000 kHz
   dwDataRate: 10752 bps
-  dwMaxDataRate: 344086 bps
+  dwMaxDataRate: 500000 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
    Support 10753 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x000204BA
+  dwFeatures: 0x000404B2
    ....02 Automatic parameter configuration based on ATR data
-   ....08 Automatic ICC voltage selection
    ....10 Automatic ICC clock frequency change according to parameters
    ....20 Automatic baud rate change according to frequency and Fi, Di params
    ....80 Automatic PPS made by the CCID
    ..04.. Automatic IFSD exchange as first exchange (T=1)
-   02.... Short APDU level exchange
+   04.... Short and Extended APDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0x00
   bClassEnveloppe: 0x00
