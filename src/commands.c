@@ -501,6 +501,44 @@ end:
 } /* SecurePINVerify */
 
 
+#ifdef BOGUS_PINPAD_FIRMWARE
+/*****************************************************************************
+ *
+ *					has_gemalto_modify_pin_bug
+ *
+ ****************************************************************************/
+static int has_gemalto_modify_pin_bug(_ccid_descriptor *ccid_descriptor)
+{
+	/* Bug not present by default */
+	int has_bug = 0;
+
+	/* Covadis Véga-Alpha reader */
+	if (VEGAALPHA == ccid_descriptor->readerID)
+	{
+		/* This reader has the bug (uses a Gemalto firmware) */
+		has_bug = 1;
+	}
+	else
+	{
+		/* Gemalto reader */
+		if ((GET_VENDOR(ccid_descriptor->readerID) == VENDOR_GEMALTO))
+		{
+			has_bug = 1; /* assume it has the bug */
+
+			if (ccid_descriptor->gemalto_firmware_features &&
+				ccid_descriptor->gemalto_firmware_features->bNumberMessageFix)
+			{
+				/* A Gemalto reader has the ModifyPIN structure bug */
+				/* unless it explicitly reports it has been fixed */
+				has_bug = 0;
+			}
+		}
+	}
+
+	return has_bug;
+} /* has_gemalto_modify_pin_bug */
+#endif
+
 /*****************************************************************************
  *
  *					SecurePINModify
@@ -518,6 +556,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	RESPONSECODE ret;
 #ifdef BOGUS_PINPAD_FIRMWARE
 	int bNumberMessage = 0; /* for GemPC Pinpad */
+	int gemalto_modify_pin_bug;
 #endif
 
 	pms = (PIN_MODIFY_STRUCTURE *)TxBuffer;
@@ -608,6 +647,12 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 				TxBuffer[10]);
 			TxBuffer[10] = 0x02;	/* validation key pressed */
 		}
+	}
+
+	gemalto_modify_pin_bug = has_gemalto_modify_pin_bug(ccid_descriptor);
+	if (gemalto_modify_pin_bug)
+	{
+		DEBUG_INFO("Gemalto CCID Modify Pin Bug");
 
 		/* The reader requests a value for bMsgIndex2 and bMsgIndex3
 		 * even if they should not be present. So we fake
@@ -693,8 +738,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		cmd[21] = 0x00; /* set bNumberMessage to 0 */
 	}
 
-	if ((GEMPCPINPAD == ccid_descriptor->readerID)
-		|| (VEGAALPHA == ccid_descriptor->readerID))
+	if (gemalto_modify_pin_bug)
 		cmd[21] = bNumberMessage;	/* restore the real value */
 #endif
 

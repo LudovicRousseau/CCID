@@ -561,6 +561,7 @@ again:
 				usbDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
 				usbDevice[reader_index].ccid.bVoltageSupport = device_descriptor[5];
 				usbDevice[reader_index].ccid.sIFD_serial_number = NULL;
+				usbDevice[reader_index].ccid.gemalto_firmware_features = NULL;
 				if (desc.iSerialNumber)
 				{
 					unsigned char serial[128];
@@ -733,6 +734,12 @@ status_t CloseUSB(unsigned int reader_index)
 	{
 		free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
 		usbDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
+	}
+
+	if (usbDevice[reader_index].ccid.gemalto_firmware_features)
+	{
+		free(usbDevice[reader_index].ccid.gemalto_firmware_features);
+		usbDevice[reader_index].ccid.gemalto_firmware_features = NULL ;
 	}
 
 	/* one slot closed */

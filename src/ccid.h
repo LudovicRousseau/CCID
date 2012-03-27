@@ -136,6 +136,11 @@ typedef struct
 	 * USB bcdDevice
 	 */
 	int IFD_bcdDevice;
+
+	/*
+	 * Gemalto extra features, if any
+	 */
+	struct GEMALTO_FIRMWARE_FEATURES *gemalto_firmware_features;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */
@@ -257,7 +262,7 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index);
 #define GEMPLUS_CUSTOM_DATA_RATES 10753, 21505, 43011, 125000
 
 /* Structure returned by Gemalto readers for the CCID Escape command 0x6A */
-typedef struct
+struct GEMALTO_FIRMWARE_FEATURES
 {
 	UCHAR	bLogicalLCDLineNumber;	/* Logical number of LCD lines */
 	UCHAR	bLogicalLCDRowNumber;	/* Logical number of characters per LCD line */
@@ -310,5 +315,5 @@ typedef struct
 	UCHAR	FirewalledCommand_SW1;
 	UCHAR	FirewalledCommand_SW2;
 	UCHAR	RFUb6[3];
-} GEMALTO_FIRMWARE_FEATURES;
+};
 
