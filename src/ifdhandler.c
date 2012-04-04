@@ -1535,6 +1535,23 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer[p++] = idProduct >> 8;
 		}
 
+		/* dwMaxAPDUDataSize */
+		{
+			int MaxAPDUDataSize = 0; /* short APDU only by default */
+
+			/* reader is TPDU or extended APDU */
+			if ((ccid_descriptor -> dwFeatures & CCID_CLASS_EXTENDED_APDU)
+				|| (ccid_descriptor -> dwFeatures & CCID_CLASS_TPDU))
+				MaxAPDUDataSize = 0x10000;
+
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_dwMaxAPDUDataSize;
+			RxBuffer[p++] = 4;	/* length */
+			RxBuffer[p++] = MaxAPDUDataSize & 0xFF;
+			RxBuffer[p++] = (MaxAPDUDataSize >> 8) & 0xFF;
+			RxBuffer[p++] = (MaxAPDUDataSize >> 16) & 0xFF;
+			RxBuffer[p++] = (MaxAPDUDataSize >> 24) & 0xFF;
+		}
+
 		*pdwBytesReturned = p;
 		return_value = IFD_SUCCESS;
 	}
