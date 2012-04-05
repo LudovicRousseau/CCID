@@ -201,7 +201,7 @@ static void set_gemalto_firmware_features(unsigned int reader_index)
 		{
 			/* Command is not supported, let's free allocated memory */
 			free(gf_features);
-			DEBUG_INFO3("GET_FIRMWARE_FEATURES failed: %ld, len=%d",
+			DEBUG_INFO3("GET_FIRMWARE_FEATURES failed: " DWORD_D ", len=%d",
 				ret, len_features);
 		}
 	}
