@@ -44,16 +44,6 @@
 #include <pthread.h>
 #endif
 
-#ifdef __APPLE__
-/* Apple defines DWORD as uint32_t */
-#define DWORD_X "%X"
-#define DWORD_D "%d"
-#else
-/* pcsc-lite defines DWORD as unsigned long */
-#define DWORD_X "%lX"
-#define DWORD_D "%ld"
-#endif
-
 /* Array of structures to hold the ATR and other state value of each slot */
 static CcidDesc CcidSlots[CCID_DRIVER_MAX_READERS];
 

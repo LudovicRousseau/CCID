@@ -77,6 +77,17 @@ typedef enum {
 /* Default communication read timeout in milliseconds */
 #define DEFAULT_COM_READ_TIMEOUT (2*1000)
 
+/* DWORD type formating */
+#ifdef __APPLE__
+/* Apple defines DWORD as uint32_t */
+#define DWORD_X "%X"
+#define DWORD_D "%d"
+#else
+/* pcsc-lite defines DWORD as unsigned long */
+#define DWORD_X "%lX"
+#define DWORD_D "%ld"
+#endif
+
 /*
  * communication ports abstraction
  */
