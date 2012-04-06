@@ -118,6 +118,39 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.6 - 6 April 2012, Ludovic Rousseau
+    -Add support of
+       . Avtor SC Reader 371
+       . Avtor SecureToken
+       . DIGIPASS KEY 202
+       . Fujitsu SmartCase KB SCR eSIG
+       . Giesecke & Devrient StarSign CUT
+       . Inside Secure VaultIC 460 Smart Object
+       . Macally NFC CCID eNetPad reader
+       . OmniKey 6321 USB
+       . SCM SDI 011
+       . Teridian TSC12xxF
+       . Vasco DIGIPASS KEY 101
+    - Remove support of readers without a USB CCID descriptor file
+       . 0x08E6:0x34C1:Gemalto Ezio Shield Secure Channel
+       . 0x08E6:0x34C4:Gemalto Ezio Generic
+       . 0x04E6:0x511A:SCM SCR 3310 NTTCom
+       . 0x0783:0x0008:C3PO LTC32 USBv2 with keyboard support
+       . 0x0783:0x9002:C3PO TLTC2USB
+       . 0x047B:0x020B:Silitek SK-3105
+    - Disable SPE for HP USB CCID Smartcard Keyboard. The reader is
+      bogus and unsafe.
+    - Convert "&" in a reader name into "&amp;" to fix a problem on Mac
+      OS X
+    - Fix a problem with ICCD type A devices. We now wait for device ready
+    - Secure PIN Verify and PIN Modify: set the minimum timeout to 90
+      seconds
+    - Add support of wIdVendor and wIdProduct properties
+    - Add support of dwMaxAPDUDataSize
+    - Add support of Gemalto firmware features
+    - some minor bugs removed
+
+
 1.4.5 - 11 October 2011, Ludovic Rousseau
     - Add support of Alcor Micro AU9540, Ubisys 13.56MHz RFID (CCID),
       BIFIT USB-Token iBank2key, BIFIT iBank2Key, Gemalto Ezio Shield
