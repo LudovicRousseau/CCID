@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-04-04
+# Generated: 2012-04-08
 #
 # DO NOT EDIT BY HAND
 
@@ -178,6 +178,9 @@
 0x0783:0x0009:C3PO KBR36
 0x0783:0x0010:C3PO LTC32
 0x0783:0x0036:C3PO LTC36
+
+# CCB
+0x8829:0xCCB2:CCB eSafeLD
 
 # charismathics
 0x19E7:0x0002:charismathics plug'n'crypt CCID token
