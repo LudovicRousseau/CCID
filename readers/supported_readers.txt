@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-04-08
+# Generated: 2012-04-12
 #
 # DO NOT EDIT BY HAND
 
@@ -214,6 +214,7 @@
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
 0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader
 0x08E6:0x34C2:Gemalto Ezio Shield
+0x08E6:0x34C5:Gemalto Ezio Shield Branch Reader
 0x08E6:0x34EC:Gemalto GemPC Express
 0x08E6:0x4042:Gemalto SA .NET Dual
 0x08E6:0x5743:Gemalto Hybrid Smartcard Reader
