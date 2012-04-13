@@ -119,7 +119,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
  ****************************************************************************/
 static void dump_gemalto_firmware_features(struct GEMALTO_FIRMWARE_FEATURES *gff)
 {
-	DEBUG_INFO2("Dumping Gemalto firmware features (%ld bytes):",
+	DEBUG_INFO2("Dumping Gemalto firmware features (%zd bytes):",
 		sizeof(struct GEMALTO_FIRMWARE_FEATURES));
 
 #define YESNO(x) (x) ? "yes" : "no"
