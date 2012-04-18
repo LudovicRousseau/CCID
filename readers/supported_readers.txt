@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-04-12
+# Generated: 2012-04-18
 #
 # DO NOT EDIT BY HAND
 
@@ -274,6 +274,9 @@
 0x1E0D:0x0033:Neowave Weneo
 0x1E0D:0x1023:Neowave Weneo
 0x1E0D:0x8033:Neowave Weneo
+
+# NXP
+0x1FC9:0x010B:NXP PR533
 
 # OBERTHUR TECHNOLOGIES
 0x1A74:0xB111:OBERTHUR TECHNOLOGIES ID-ONE TOKEN SLIM v2
