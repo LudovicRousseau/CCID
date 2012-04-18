@@ -450,37 +450,37 @@
 ##########################
 # section: duplicates
 ##########################
-#0x0B81:0x0200:id3 Semiconductors CL1356T (id3_CL1356T.txt)
-#0x0B81:0x0200:id3 Semiconductors CL1356T5 (id3_CL1356T5.txt)
+#0x04E6:0x5410:SCM Microsystems Inc. SCR35xx v2.0 USB SC Reader (SCR3500.txt)
+#0x04E6:0x5410:SCM Microsystems Inc. SCR 355 (SCR355.txt)
 
-#0x072F:0x90CC:ACS ACR 38U-CCID (ACR38U-CCID.txt)
-#0x072F:0x90CC:ACS AET65 (ACS_AET65.txt)
-#0x072F:0x90CC:ACS ACR122U (ACR122U.txt)
-#0x072F:0x90CC:ACS ACR38 plugin (ACS_ACR38_plugin.txt)
-#0x072F:0x90CC:ACS ACR100 (ACS_ACR100.txt)
-
-#0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v3.txt)
-#0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt)
-
-#0x058F:0x9520:Akasa AK-CR-03 (Akasa_AK-CR-03.txt)
 #0x058F:0x9520:Alcor Micro AU9520 (AU9520.txt)
+#0x058F:0x9520:Akasa AK-CR-03 (Akasa_AK-CR-03.txt)
 #0x058F:0x9520:Alcor Micro SCR001 (Alcor_SCR001.txt)
 
-#0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN.txt)
-#0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN_6000.txt)
-
-#0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpad.txt)
-#0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpadv2.txt)
+#0x072F:0x90CC:ACS ACR122U (ACR122U.txt)
+#0x072F:0x90CC:ACS ACR 38U-CCID (ACR38U-CCID.txt)
+#0x072F:0x90CC:ACS ACR100 (ACS_ACR100.txt)
+#0x072F:0x90CC:ACS ACR38 plugin (ACS_ACR38_plugin.txt)
+#0x072F:0x90CC:ACS AET65 (ACS_AET65.txt)
 
 #0x073D:0x0C00:Eutron Card Reader (Eutron_SIM_Pocket_Combo_(Card_Reader).txt)
 #0x073D:0x0C00:Eutron SIM Reader (Eutron_SIM_Pocket_Combo_(SIM_Reader).txt)
 
-#0x04E6:0x5410:SCM Microsystems Inc. SCR 355 (SCR355.txt)
-#0x04E6:0x5410:SCM Microsystems Inc. SCR35xx v2.0 USB SC Reader (SCR3500.txt)
+#0x076B:0x3021:OMNIKEY AG CardMan 3021 (CardMan3021.txt)
+#0x076B:0x3021:OMNIKEY AG CardMan 3121 (CardMan3121.txt)
 
 #0x076B:0xA022:Precise Biometrics Sense MC (Precise_Sense_MC.txt)
 #0x076B:0xA022:XIRING Teo (Teo.txt)
 
-#0x076B:0x3021:OMNIKEY AG CardMan 3021 (CardMan3021.txt)
-#0x076B:0x3021:OMNIKEY AG CardMan 3121 (CardMan3121.txt)
+#0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpad.txt)
+#0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpadv2.txt)
+
+#0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v3.txt)
+#0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt)
+
+#0x0B81:0x0200:id3 Semiconductors CL1356T (id3_CL1356T.txt)
+#0x0B81:0x0200:id3 Semiconductors CL1356T5 (id3_CL1356T5.txt)
+
+#0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN.txt)
+#0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN_6000.txt)
 
