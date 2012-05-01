@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-04-18
+# Generated: 2012-05-01
 #
 # DO NOT EDIT BY HAND
 
@@ -89,9 +89,6 @@
 # Precise Biometrics
 0x076B:0xA022:Precise Biometrics Sense MC
 
-# RSA
-0x15E1:0x2007:RSA RSA SecurID (R) Authenticator
-
 # SCM Microsystems Inc.
 0x03F0:0x0824:SCM Microsystems Inc. HP USB Smartcard Reader
 0x04E6:0x5111:SCM Microsystems Inc. SCR 331-DI
@@ -137,6 +134,7 @@
 
 # Alcor Micro
 0x058F:0x9520:Alcor Micro SCR001
+0x058F:0x9522:Alcor Micro AU9522
 
 # ASK-RFID
 0x1FD3:0xCC1D:ASK-RFID CPL108
@@ -430,6 +428,9 @@
 # Precise Biometrics
 0x08C3:0x0401:Precise Biometrics Precise 250 MC
 0x08C3:0x0402:Precise Biometrics Precise 200 MC
+
+# RSA
+0x15E1:0x2007:RSA RSA SecurID (R) Authenticator
 
 ##########################
 # section: disabled
