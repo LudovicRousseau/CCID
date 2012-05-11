@@ -225,6 +225,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	/* Info.plist full patch filename */
 	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
+	DEBUG_INFO2("Using: %s", infofile);
 
 	rv = bundleParse(infofile, &plist);
 	if (rv)
