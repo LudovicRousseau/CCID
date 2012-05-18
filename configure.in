@@ -4,9 +4,9 @@
 # $Id$
 
 # Require autoconf 2.61
-AC_PREREQ(2.61)
+AC_PREREQ([2.69])
 
-AC_INIT(ccid, 1.4.6)
+AC_INIT([ccid],[1.4.6])
 AC_CONFIG_SRCDIR(src/ifdhandler.c)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE(1.8 dist-bzip2 no-dist-gzip)
@@ -21,7 +21,7 @@ AC_PREFIX_DEFAULT(/usr/local)
 AC_CANONICAL_HOST
 
 # create a config.h file (Automake will add -DHAVE_CONFIG_H)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 # Options
 AM_MAINTAINER_MODE
@@ -60,7 +60,7 @@ CPPFLAGS="$saved_CPPFLAGS"
 # Add libtool support.
 # Static lib is disabled by default. Use --enable-static if needed
 LT_INIT(disable-static)
-AM_PROG_LIBTOOL
+LT_INIT
 
 # Automatically update the libtool script if it becomes out-of-date.
 AC_SUBST(LIBTOOL_DEPS)
@@ -95,7 +95,7 @@ SunOS)
 
 # --disable-libusb
 AC_ARG_ENABLE(libusb,
-	AC_HELP_STRING([--disable-libusb],[do not use libusb]),
+	AS_HELP_STRING([--disable-libusb],[do not use libusb]),
 	[ use_libusb="${enableval}" ], [ use_libusb=yes ] )
 
 # check if libusb is used
@@ -139,8 +139,7 @@ AM_CONDITIONAL(WITH_LIBUSB, test "${use_libusb}" != "no")
 # --enable-composite-as-multislot
 use_composite_as_multislot=no
 AC_ARG_ENABLE(composite-as-multislot,
-	AC_HELP_STRING([--enable-composite-as-multislot],
-		[composite device are seen as multi-slots]),
+	AS_HELP_STRING([--enable-composite-as-multislot],[composite device are seen as multi-slots]),
 	[ use_composite_as_multislot="${enableval}" ] )
 
 if test "x$use_composite_as_multislot" = xyes; then
@@ -160,7 +159,7 @@ AC_SUBST(SYMBOL_VISIBILITY)
 
 # --disable-multi-thread
 AC_ARG_ENABLE(multi-thread,
-	AC_HELP_STRING([--disable-multi-thread],[disable multi threading]),
+	AS_HELP_STRING([--disable-multi-thread],[disable multi threading]),
 	[ multithread="${enableval}" ], [ multithread=yes ] )
 
 if test "${multithread}" != no ; then
@@ -174,7 +173,7 @@ fi
 
 # --enable-bundle=NAME
 AC_ARG_ENABLE(bundle,
-	AC_HELP_STRING([--enable-bundle=NAME],[bundle directory name
+	AS_HELP_STRING([--enable-bundle=NAME],[bundle directory name
 	(default ifd-ccid.bundle)]),
 	[bundle="${enableval}"], [bundle=false])
 if test "${bundle}" = false ; then
@@ -184,7 +183,7 @@ AC_DEFINE_UNQUOTED(BUNDLE, "$bundle", [bundle directory name])
 
 # --enable-usbdropdir=DIR
 AC_ARG_ENABLE(usbdropdir,
-	AC_HELP_STRING([--enable-usbdropdir=DIR],[directory containing USB
+	AS_HELP_STRING([--enable-usbdropdir=DIR],[directory containing USB
 	drivers (default to pcscd config or $(prefix)/pcsc/drivers)]),
 	[usbdropdir="${enableval}"], [usbdropdir=false])
 if test "${usbdropdir}" = false ; then
@@ -197,13 +196,13 @@ fi
 
 # --enable-twinserial
 AC_ARG_ENABLE(twinserial,
-	AC_HELP_STRING([--enable-twinserial],[also compile and install the serial Twin driver]),
+	AS_HELP_STRING([--enable-twinserial],[also compile and install the serial Twin driver]),
 	[twinserial="${enableval}"], [twinserial=no])
 AM_CONDITIONAL(WITH_TWIN_SERIAL, test "${twinserial}" != "no")
 
 # --enable-ccidtwindir=DIR
 AC_ARG_ENABLE(ccidtwindir,
-	AC_HELP_STRING([--enable-ccidtwindir=DIR],[directory to install the
+	AS_HELP_STRING([--enable-ccidtwindir=DIR],[directory to install the
 	serial Twin driver (default to pcscd config or $(prefix)/pcsc/drivers/serial)]),
 	[ccidtwindir="${enableval}"], [ccidtwindir=false])
 if test "${ccidtwindir}" = false ; then
@@ -212,7 +211,7 @@ fi
 
 # --disable-pcsclite
 AC_ARG_ENABLE(pcsclite,
-	AC_HELP_STRING([--disable-pcsclite],[do not use pcsc-lite debug support]),
+	AS_HELP_STRING([--disable-pcsclite],[do not use pcsc-lite debug support]),
 	[ pcsclite="${enableval}" ], [ pcsclite=yes ] )
 
 if test "${pcsclite}" != no ; then
@@ -234,7 +233,7 @@ AM_CONDITIONAL(WITHOUT_PCSC, test "${pcsclite}" != "yes")
 
 # --disable-class
 AC_ARG_ENABLE(class,
-	AC_HELP_STRING([--disable-class],[remove the CCIDCLASSDRIVER from Info.plist]),
+	AS_HELP_STRING([--disable-class],[remove the CCIDCLASSDRIVER from Info.plist]),
 	[class="${enableval}"], [class=yes])
 if test "${class}" != yes ; then
 	NOCLASS="--no-class"
@@ -243,7 +242,7 @@ AC_SUBST(NOCLASS)
 
 # --enable-embedded
 AC_ARG_ENABLE(embedded,
-  AC_HELP_STRING([--enable-embedded], [limit RAM and CPU ressources by disabling features (log)]),
+  AS_HELP_STRING([--enable-embedded],[limit RAM and CPU ressources by disabling features (log)]),
   [ use_embedded="${enableval}" ])
 
 if test x$use_embedded = xyes; then
