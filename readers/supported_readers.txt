@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-05-15
+# Generated: 2012-05-19
 #
 # DO NOT EDIT BY HAND
 
@@ -263,6 +263,7 @@
 
 # KOBIL Systems
 0x0D46:0x3014:KOBIL Systems Smart Token
+0x0D46:0x301D:KOBIL Systems IDToken
 0x0D46:0x4189:KOBIL Systems mIDentity 4smart
 0x0D46:0x41A9:KOBIL Systems mIDentity 4smart AES
 0x0D46:0x4289:KOBIL Systems mIDentity visual
@@ -371,7 +372,7 @@
 0x1CF0:0x0001:Validy TokenA sl vt
 
 # VASCO
-0x1A44:0x0001:VASCO DP905
+0x1A44:0x0001:VASCO DP905v1.1
 0x1A44:0x0101:VASCO DIGIPASS KEY 101
 0x1A44:0x0112:VASCO DIGIPASS KEY 860
 0x1A44:0x0115:VASCO DIGIPASS KEY 200
