@@ -1256,6 +1256,57 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	DEBUG_INFO3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
 		Lun);
 
+	/* special APDU for the Kobil IDToken (CLASS = 0xFF) */
+	if (KOBIL_IDTOKEN == get_ccid_descriptor(reader_index) -> readerID)
+	{
+		char manufacturer[] = {0xFF, 0x9A, 0x01, 0x01, 0x00};
+		char product_name[] = {0xFF, 0x9A, 0x01, 0x03, 0x00};
+		char firmware_version[] = {0xFF, 0x9A, 0x01, 0x06, 0x00};
+		char driver_version[] = {0xFF, 0x9A, 0x01, 0x07, 0x00};
+
+		if ((sizeof manufacturer == TxLength)
+			&& (memcmp(TxBuffer, manufacturer, sizeof manufacturer) == 0))
+		{
+			DEBUG_INFO("IDToken: Manufacturer command");
+			memcpy(RxBuffer, "KOBIL systems\220\0", 15);
+			*RxLength = 15;
+			return IFD_SUCCESS;
+		}
+
+		if ((sizeof product_name == TxLength)
+			&& (memcmp(TxBuffer, product_name, sizeof product_name) == 0))
+		{
+			DEBUG_INFO("IDToken: Product name command");
+			memcpy(RxBuffer, "IDToken\220\0", 9);
+			*RxLength = 9;
+			return IFD_SUCCESS;
+		}
+
+		if ((sizeof firmware_version == TxLength)
+			&& (memcmp(TxBuffer, firmware_version, sizeof firmware_version) == 0))
+		{
+			int IFD_bcdDevice = get_ccid_descriptor(reader_index)->IFD_bcdDevice;
+
+			DEBUG_INFO("IDToken: Firmware version command");
+			*RxLength = sprintf((char *)RxBuffer, "%X.%02X",
+				IFD_bcdDevice >> 8, IFD_bcdDevice & 0xFF);
+			RxBuffer[(*RxLength)++] = 0x90;
+			RxBuffer[(*RxLength)++] = 0x00;
+			return IFD_SUCCESS;
+		}
+
+		if ((sizeof driver_version == TxLength)
+			&& (memcmp(TxBuffer, driver_version, sizeof driver_version) == 0))
+		{
+			DEBUG_INFO("IDToken: Driver version command");
+#define DRIVER_VERSION "2012.2.7\220\0"
+			memcpy(RxBuffer, DRIVER_VERSION, sizeof DRIVER_VERSION -1);
+			*RxLength = sizeof DRIVER_VERSION -1;
+			return IFD_SUCCESS;
+		}
+
+	}
+
 	rx_length = *RxLength;
 	return_value = CmdXfrBlock(reader_index, TxLength, TxBuffer, &rx_length,
 		RxBuffer, SendPci.Protocol);
