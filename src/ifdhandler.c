@@ -1141,6 +1141,19 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			ccid_descriptor = get_ccid_descriptor(reader_index);
 			oldReadTimeout = ccid_descriptor->readTimeout;
 
+			/* The German eID card is bogus and need to be powered off
+			 * before a power on */
+			if (KOBIL_IDTOKEN == ccid_descriptor -> readerID)
+			{
+				/* send the command */
+				if (IFD_SUCCESS != CmdPowerOff(reader_index))
+				{
+					DEBUG_CRITICAL("PowerDown failed");
+					return_value = IFD_ERROR_POWER_ACTION;
+					goto end;
+				}
+			}
+
 			/* use a very long timeout since the card can use up to
 			 * (9600+12)*33 ETU in total
 			 * 12 ETU per byte
