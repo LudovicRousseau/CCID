@@ -58,6 +58,12 @@
 #define BSWAP_32(x) ((BSWAP_16(x) << 16) | BSWAP_16((x) >> 16))
 #endif
 
+#define CHECK_STATUS(res) \
+	if (STATUS_NO_SUCH_DEVICE == res) \
+		return IFD_NO_SUCH_DEVICE; \
+	if (STATUS_SUCCESS != res) \
+		return IFD_COMMUNICATION_ERROR;
+
 /* internal functions */
 static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
 	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
@@ -211,16 +217,14 @@ again:
 	cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
-	if (res != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	CHECK_STATUS(res)
 
 	/* reset available buffer size */
 	/* needed if we go back after a switch to ISO mode */
 	*nlength = length;
 
 	res = ReadPort(reader_index, nlength, buffer);
-	if (res != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	CHECK_STATUS(res)
 
 	if (*nlength < STATUS_OFFSET+1)
 	{
@@ -293,6 +297,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int old_read_timeout;
 	RESPONSECODE ret;
+	status_t res;
 
 	pvs = (PIN_VERIFY_STRUCTURE *)TxBuffer;
 	cmd[0] = 0x69;	/* Secure */
@@ -465,9 +470,13 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	old_read_timeout = ccid_descriptor -> readTimeout;
 	ccid_descriptor -> readTimeout = max(90, TxBuffer[0]+10)*1000;	/* at least 90 seconds */
 
-	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
+	res = WritePort(reader_index, a, cmd);
+	if (STATUS_SUCCESS != res)
 	{
-		ret = IFD_COMMUNICATION_ERROR;
+		if (STATUS_NO_SUCH_DEVICE == res)
+			ret = IFD_NO_SUCH_DEVICE;
+		else
+			ret = IFD_COMMUNICATION_ERROR;
 		goto end;
 	}
 
@@ -554,6 +563,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int old_read_timeout;
 	RESPONSECODE ret;
+	status_t res;
 #ifdef BOGUS_PINPAD_FIRMWARE
 	int bNumberMessage = 0; /* for GemPC Pinpad */
 	int gemalto_modify_pin_bug;
@@ -748,9 +758,13 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	old_read_timeout = ccid_descriptor -> readTimeout;
 	ccid_descriptor -> readTimeout = max(90, TxBuffer[0]+10)*1000;	/* at least 90 seconds */
 
-	if (WritePort(reader_index, a, cmd) != STATUS_SUCCESS)
+	res = WritePort(reader_index, a, cmd);
+	if (STATUS_SUCCESS != res)
 	{
-		ret = IFD_COMMUNICATION_ERROR;
+		if (STATUS_NO_SUCH_DEVICE == res)
+			ret = IFD_NO_SUCH_DEVICE;
+		else
+			ret = IFD_COMMUNICATION_ERROR;
 		goto end;
 	}
 
@@ -834,7 +848,10 @@ again:
 	if (res != STATUS_SUCCESS)
 	{
 		free(cmd_out);
-		return_value = IFD_COMMUNICATION_ERROR;
+		if (STATUS_NO_SUCH_DEVICE == res)
+			return_value = IFD_NO_SUCH_DEVICE;
+		else
+			return_value = IFD_COMMUNICATION_ERROR;
 		goto end;
 	}
 
@@ -853,7 +870,10 @@ again:
 	if (res != STATUS_SUCCESS)
 	{
 		free(cmd_out);
-		return_value = IFD_COMMUNICATION_ERROR;
+		if (STATUS_NO_SUCH_DEVICE == res)
+			return_value = IFD_NO_SUCH_DEVICE;
+		else
+			return_value = IFD_COMMUNICATION_ERROR;
 		goto end;
 	}
 
@@ -953,13 +973,11 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
-	if (res != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	CHECK_STATUS(res)
 
 	length = sizeof(cmd);
 	res = ReadPort(reader_index, &length, cmd);
-	if (res != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	CHECK_STATUS(res)
 
 	if (length < STATUS_OFFSET+1)
 	{
@@ -1073,17 +1091,11 @@ again_status:
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
-	if (res != STATUS_SUCCESS)
-	{
-		if (STATUS_NO_SUCH_DEVICE == res)
-			return IFD_NO_SUCH_DEVICE;
-		return IFD_COMMUNICATION_ERROR;
-	}
+	CHECK_STATUS(res)
 
 	length = SIZE_GET_SLOT_STATUS;
 	res = ReadPort(reader_index, &length, buffer);
-	if (res != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	CHECK_STATUS(res)
 
 	if (length < STATUS_OFFSET+1)
 	{
@@ -1226,10 +1238,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	memcpy(cmd+10, tx_buffer, tx_length);
 
 	ret = WritePort(reader_index, 10+tx_length, cmd);
-	if (STATUS_NO_SUCH_DEVICE == ret)
-		return IFD_NO_SUCH_DEVICE;
-	if (ret != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	CHECK_STATUS(ret)
 
 	return IFD_SUCCESS;
 } /* CCID_Transmit */
@@ -1371,12 +1380,7 @@ time_request_ICCD_B:
 time_request:
 	length = sizeof(cmd);
 	ret = ReadPort(reader_index, &length, cmd);
-	if (ret != STATUS_SUCCESS)
-	{
-		if (STATUS_NO_SUCH_DEVICE == ret)
-			return IFD_NO_SUCH_DEVICE;
-		return IFD_COMMUNICATION_ERROR;
-	}
+	CHECK_STATUS(ret)
 
 	if (length < STATUS_OFFSET+1)
 	{
@@ -2106,6 +2110,7 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 {
 	unsigned char cmd[10+length];	/* CCID + APDU buffer */
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	status_t res;
 
 	DEBUG_COMM2("length: %d bytes", length);
 
@@ -2118,12 +2123,12 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 
 	memcpy(cmd+10, buffer, length);
 
-	if (WritePort(reader_index, 10+length, cmd) != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	res = WritePort(reader_index, 10+length, cmd);
+	CHECK_STATUS(res)
 
 	length = sizeof(cmd);
-	if (ReadPort(reader_index, &length, cmd) != STATUS_SUCCESS)
-		return IFD_COMMUNICATION_ERROR;
+	res = ReadPort(reader_index, &length, cmd);
+	CHECK_STATUS(res)
 
 	if (length < STATUS_OFFSET+1)
 	{
