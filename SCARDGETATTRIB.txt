@@ -49,9 +49,11 @@ SCARD_ATTR_VENDOR_IFD_VERSION
     MM = major version,
     mm = minor version,
     and bbbb = build number
+    It is the bcdDevice USB field.
 
 SCARD_ATTR_VENDOR_NAME
-   name of the IFD (driver) vendor
+   name of the IFD (reader) vendor. It is the iManufacturer USB field
+   (if any).
 
 SCARD_ATTR_MAXINPUT
    maximum size of an APDU supported by the reader.
