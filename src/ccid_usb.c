@@ -279,6 +279,15 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	GET_KEYS("ifdProductID", &ifdProductID);
 	GET_KEYS("ifdFriendlyName", &ifdFriendlyName)
 
+	/* The 3 lists do not have the same size */
+	if  ((list_size(ifdVendorID) != list_size(ifdProductID))
+		|| (list_size(ifdVendorID) != list_size(ifdFriendlyName)))
+	{
+		DEBUG_CRITICAL2("Error parsing %s", infofile);
+		return_value = STATUS_UNSUCCESSFUL;
+		goto end1;
+	}
+
 	/* for any supported reader */
 	for (alias=0; alias<list_size(ifdVendorID); alias++)
 	{
