@@ -291,6 +291,10 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 				DEBUG_COMM4("received: %d, expected: %d, more: %d",
 					t1_seq(pcb), t1->ns, t1->more);
 
+				/* ISO 7816-3 Rule 7.4.2 */
+				if (retries == 0)
+					goto resync;
+
 				/* ISO 7816-3 Rule 7.2 */
 				if (T1_R_BLOCK == t1_block_type(t1->previous_block[PCB]))
 				{
@@ -300,9 +304,6 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 				}
 
 				DEBUG_COMM("R-Block required");
-				/* ISO 7816-3 Rule 7.4.2 */
-				if (retries == 0)
-					goto resync;
 				slen = t1_build(t1, sdata,
 						dad, T1_R_BLOCK | T1_OTHER_ERROR,
 						NULL, NULL);
