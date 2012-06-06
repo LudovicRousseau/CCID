@@ -361,6 +361,11 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 			 * an R block */
 			if (t1_seq(pcb) != t1->nr) {
 				DEBUG_COMM("wrong nr");
+
+				/* ISO 7816-3 Rule 7.4.2 */
+				if (retries == 0)
+					goto resync;
+
 				slen = t1_build(t1, sdata, dad,
 						T1_R_BLOCK | T1_OTHER_ERROR,
 						NULL, NULL);
