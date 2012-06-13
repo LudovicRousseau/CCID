@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-05-19
+# Generated: 2012-06-13
 #
 # DO NOT EDIT BY HAND
 
@@ -122,6 +122,7 @@
 0x072F:0x90CC:ACS ACR100
 0x072F:0x90CC:ACS ACR38 plugin
 0x072F:0x90CC:ACS AET65
+0x072F:0x90DB:ACS CryptoMate64
 
 # Akasa
 0x058F:0x9520:Akasa AK-CR-03
