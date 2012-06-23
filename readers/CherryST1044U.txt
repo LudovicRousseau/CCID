@@ -1,18 +1,19 @@
-Parsing Interface Descriptor for device: 001/004
  idVendor: 0x046A
   iManufacturer: Cherry GmbH
  idProduct: 0x002D
   iProduct: SmartTerminal XX44
- bcdDevice: 1.00 (firmware release?)
+ bcdDevice: 2.03 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
- iInterface: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -27,7 +28,7 @@ Parsing Interface Descriptor for device: 001/004
    T=1
   dwDefaultClock: 4.800 MHz
   dwMaximumClock: 8.000 MHz
-  bNumClockSupported: 0x04
+  bNumClockSupported: 4
    Got 256 clock frequencies but was expecting 4
    Support 4000 kHz
    Support 4800 kHz
@@ -145,6 +146,9 @@ Parsing Interface Descriptor for device: 001/004
    Support 58593 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000007
+   2-wire protocol
+   3-wire protocol
+   I2C protocol
   dwMechanical: 0x00000000
    No special characteristics
   dwFeatures: 0x000207B2
