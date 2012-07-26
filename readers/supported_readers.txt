@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-06-13
+# Generated: 2012-07-26
 #
 # DO NOT EDIT BY HAND
 
@@ -282,6 +282,9 @@
 0x1E0D:0x0033:Neowave Weneo
 0x1E0D:0x1023:Neowave Weneo
 0x1E0D:0x8033:Neowave Weneo
+
+# NTT Communications Corp.
+0x04E6:0x511A:NTT Communications Corp. SCR3310-NTTCom USB SmartCard Reader
 
 # NXP
 0x1FC9:0x010B:NXP PR533
