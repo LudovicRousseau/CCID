@@ -138,7 +138,9 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		 * few tries. It is an empirical hack */
 
 		/* The reader may have to start here so give it some time */
-		CmdGetSlotStatus(reader_index, pcbuffer);
+		ret = CmdGetSlotStatus(reader_index, pcbuffer);
+		if (IFD_NO_SUCH_DEVICE == ret)
+			return ret;
 
 		/* save the current read timeout computed from card capabilities */
 		oldReadTimeout = ccid_descriptor->readTimeout;
