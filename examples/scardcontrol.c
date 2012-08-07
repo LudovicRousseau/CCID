@@ -145,6 +145,15 @@ static void parse_properties(unsigned char *bRecvBuffer, int length)
 				if (value & 2)
 					printf("  PPDU is supported over SCardTransmit\n");
 				break;
+			case PCSCv2_PART10_PROPERTY_dwMaxAPDUDataSize:
+				PRINT_GREEN_DEC(" dwMaxAPDUDataSize", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_wIdVendor:
+				PRINT_GREEN_HEX2(" wIdVendor", value);
+				break;
+			case PCSCv2_PART10_PROPERTY_wIdProduct:
+				PRINT_GREEN_HEX2(" wIdProduct", value);
+				break;
 			default:
 				printf(" Unknown tag: 0x%02X (length = %d)\n", tag, len);
 		}
