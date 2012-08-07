@@ -35,6 +35,8 @@
 #endif
 #include <reader.h>
 
+#include "PCSCv2part10.h"
+
 #undef VERIFY_PIN
 #define MODIFY_PIN
 #undef GET_GEMPC_FIRMWARE
@@ -74,6 +76,9 @@ else \
 
 #define PRINT_GREEN_DEC(text, value) \
 	printf("%s: " GREEN "%d\n" NORMAL, text, value)
+
+#define PRINT_RED_DEC(text, value) \
+	printf("%s: " RED "%d\n" NORMAL, text, value)
 
 #define PRINT_GREEN_HEX2(text, value) \
 	printf("%s: " GREEN "0x%02X\n" NORMAL, text, value)
@@ -161,49 +166,6 @@ static void parse_properties(unsigned char *bRecvBuffer, int length)
 		p += len;
 	}
 } /* parse_properties */
-
-static int find_property_by_tag(unsigned char *bRecvBuffer, int length,
-	int tag_searched)
-{
-	unsigned char *p;
-	int found = 0, len, value = -1;
-
-	p = bRecvBuffer;
-	while (p-bRecvBuffer < length)
-	{
-		if (*p++ == tag_searched)
-		{
-			found = 1;
-			break;
-		}
-
-		/* go to next tag */
-		len = *p++;
-		p += len;
-	}
-
-	if (found)
-	{
-		len = *p++;
-
-		switch(len)
-		{
-			case 1:
-				value = *p;
-				break;
-			case 2:
-				value = *p + (*(p+1)<<8);
-				break;
-			case 4:
-				value = *p + (*(p+1)<<8) + (*(p+2)<<16) + (*(p+3)<<24);
-				break;
-			default:
-				value = -1;
-		}
-	}
-
-	return value;
-} /* find_property_by_tag */
 
 int main(int argc, char *argv[])
 {
@@ -397,7 +359,7 @@ int main(int argc, char *argv[])
 				ccid_esc_command = ntohl(pcsc_tlv[i].value);
 				break;
 			default:
-				printf("Can't parse tag: " RED "0x%02X" NORMAL, pcsc_tlv[i].tag);
+				PRINT_RED_DEC("Can't parse tag", pcsc_tlv[i].tag);
 		}
 	}
 	printf("\n");
@@ -405,6 +367,7 @@ int main(int argc, char *argv[])
 	if (properties_in_tlv_ioctl)
 	{
 		int value;
+		int ret;
 
 		rv = SCardControl(hCard, properties_in_tlv_ioctl, NULL, 0,
 			bRecvBuffer, sizeof(bRecvBuffer), &length);
@@ -419,11 +382,17 @@ int main(int argc, char *argv[])
 		parse_properties(bRecvBuffer, length);
 
 		printf("\nFind a specific property:\n");
-		value = find_property_by_tag(bRecvBuffer, length, PCSCv2_PART10_PROPERTY_bEntryValidationCondition);
-		PRINT_GREEN_DEC(" bEntryValidationCondition", value);
+		ret = PCSCv2Part10_find_TLV_property_by_tag_from_buffer(bRecvBuffer, length, PCSCv2_PART10_PROPERTY_wIdVendor, &value);
+		if (ret)
+			PRINT_RED_DEC(" wIdVendor", ret);
+		else
+			PRINT_GREEN_HEX4(" wIdVendor", value);
 
-		value = find_property_by_tag(bRecvBuffer, length, PCSCv2_PART10_PROPERTY_bMaxPINSize);
-		PRINT_GREEN_DEC(" bMaxPINSize", value);
+		ret = PCSCv2Part10_find_TLV_property_by_tag_from_hcard(hCard, PCSCv2_PART10_PROPERTY_wIdProduct, &value);
+		if (ret)
+			PRINT_RED_DEC(" wIdProduct", ret);
+		else
+			PRINT_GREEN_HEX4(" wIdProduct", value);
 
 		printf("\n");
 	}
