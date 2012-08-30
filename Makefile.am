@@ -4,7 +4,7 @@ SUBDIRS = readers examples contrib src
 
 EXTRA_DIST = bootstrap ChangeLog SCARDGETATTRIB.txt \
 	$(AUX_DIST) \
-	m4/acx_pthread.m4 \
+	m4/ax_pthread.m4 \
 	MacOSX/configure \
 	MacOSX/convert_reader_h.pl \
 	MacOSX/debuglog.h \
