@@ -255,6 +255,7 @@
 
 # Inside Secure
 0x2406:0x6300:Inside Secure VaultIC 420 Smart Object
+0x2406:0x6301:Inside Secure VaultIC 440 Smart Object
 0x2406:0x6302:Inside Secure VaultIC 460 Smart Object
 
 # KEBTechnology
