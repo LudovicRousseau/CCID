@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-09-03
+# Generated: 2012-09-13
 #
 # DO NOT EDIT BY HAND
 
@@ -446,6 +446,9 @@
 
 # jNet Technology inc.
 #0x0483:0x2010:jNet Technology inc. jToken s1
+
+# MX5
+#0x0980:0x902F:MX5 MX5  SMART CCID DRIVER
 
 # OCS ID-One Cosmo Card
 #0x1A74:0x6356:OCS ID-One Cosmo Card USB Smart Chip Device
