@@ -44,10 +44,10 @@ fi
 PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
 PCSC_LIBS=${PCSC_LIBS:--framework PCSC}
 
-# use libusb-1.0
-LIBUSB_ARCHIVE=/usr/local/lib/libusb-1.0.a
-LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0
-LIBUSB_LIBS="$LIBUSB_ARCHIVE -Wl,-framework -Wl,IOKit -Wl,-framework -Wl,CoreFoundation -lobjc"
+# use libusb-1.0 (or libusbx-1.0)
+LIBUSB_ARCHIVE=$(pkg-config --variable=libdir libusb-1.0)/libusb-1.0.a
+LIBUSB_CFLAGS=$(pkg-config --cflags --static libusb-1.0)
+LIBUSB_LIBS=$(pkg-config --libs --static libusb-1.0)
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
 # define needed here to compile examples/scardcontrol.c since config.h is
