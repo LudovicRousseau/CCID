@@ -120,7 +120,7 @@ History:
 
 1.4.8 - 22 June 2012, Ludovic Rousseau
     -Add support of
-       . SCR3310-NTTCom USB (waw removed in version 1.4.6)
+       . SCR3310-NTTCom USB (was removed in version 1.4.6)
        . Inside Secure VaultIC 420 Smart Object
        . Inside Secure VaultIC 440 Smart Object
     - Wait up to 3 seconds for reader start up
