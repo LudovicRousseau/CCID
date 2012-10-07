@@ -118,6 +118,20 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.8 - 22 June 2012, Ludovic Rousseau
+    -Add support of
+       . SCR3310-NTTCom USB (waw removed in version 1.4.6)
+       . Inside Secure VaultIC 420 Smart Object
+       . Inside Secure VaultIC 440 Smart Object
+    - Wait up to 3 seconds for reader start up
+    - Add support of new PC/SC V2 part 10 properties:
+        . dwMaxAPDUDataSize
+        . wIdVendor
+        . wIdProduct
+    - Use helper functions from libPCSCv2part10 to parse the PC/SC v2
+      part 10 features
+
+
 1.4.7 - 22 June 2012, Ludovic Rousseau
     -Add support of
        . ACS ACR101 ICC Reader
