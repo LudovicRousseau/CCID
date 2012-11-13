@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2012-10-31
+# Generated: 2012-11-13
 #
 # DO NOT EDIT BY HAND
 
@@ -324,6 +324,7 @@
 0x14DD:0x1006:Raritan D2CIM-DVUSB VM/CCID
 
 # REINER SCT
+0x0C4B:0x0504:REINER SCT cyberJack go
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
 
 # SchlumbergerSema
