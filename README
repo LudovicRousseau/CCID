@@ -118,8 +118,16 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.9 - 16 January 2013, Ludovic Rousseau
+    - Add support of
+       . Aktiv Rutoken PINPad In
+       . Aktiv Rutoken PINPad Ex
+       . REINER SCT cyberJack go
+    - Info.plist: Correctly handle reader names containing &
+
+
 1.4.8 - 22 June 2012, Ludovic Rousseau
-    -Add support of
+    - Add support of
        . SCR3310-NTTCom USB (was removed in version 1.4.6)
        . Inside Secure VaultIC 420 Smart Object
        . Inside Secure VaultIC 440 Smart Object
@@ -133,7 +141,7 @@ History:
 
 
 1.4.7 - 22 June 2012, Ludovic Rousseau
-    -Add support of
+    - Add support of
        . ACS ACR101 ICC Reader
        . ACS CryptoMate64
        . Alcor Micro AU9522
@@ -164,7 +172,7 @@ History:
 
 
 1.4.6 - 6 April 2012, Ludovic Rousseau
-    -Add support of
+    - Add support of
        . Avtor SC Reader 371
        . Avtor SecureToken
        . DIGIPASS KEY 202
