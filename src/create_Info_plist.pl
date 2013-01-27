@@ -28,7 +28,6 @@ my (@manuf, @product, @name);
 my ($manuf, $product, $name);
 my $target = "libccid.so";
 my $version = "1.0.0";
-my $bundle = "ifd-ccid.bundle";
 my $class = "<key>CFBundleName</key>
 	<string>CCIDCLASSDRIVER</string>";
 my $noclass = 0;
@@ -36,7 +35,6 @@ my $noclass = 0;
 GetOptions(
 	"target=s" => \$target,
 	"version=s" => \$version,
-	"bundle=s" => \$bundle,
 	"no-class" => \$noclass);
 
 if ($#ARGV < 1)
@@ -44,7 +42,6 @@ if ($#ARGV < 1)
 	print "usage: $0 supported_readers.txt Info.plist
 	--target=$target
 	--version=$version
-	--bundle=$bundle\n";
 	exit;
 }
 
@@ -96,12 +93,6 @@ while (<IN>)
 	if (m/MAGIC_VERSION/)
 	{
 		s/MAGIC_VERSION/$version/;
-		print;
-		next;
-	}
-	if (m/MAGIC_BUNDLE/)
-	{
-		s/MAGIC_BUNDLE/$bundle/;
 		print;
 		next;
 	}
