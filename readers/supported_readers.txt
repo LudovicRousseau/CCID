@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-01-22
+# Generated: 2013-01-31
 #
 # DO NOT EDIT BY HAND
 
@@ -401,6 +401,9 @@
 
 # XIRING
 0x0F14:0x0011:XIRING XI-SIGN USB V2
+
+# Yubico
+0x1050:0x0111:Yubico Yubikey NEO OTP+CCID
 
 ##########################
 # section: unsupported
