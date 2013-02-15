@@ -41,7 +41,7 @@ if ($#ARGV < 1)
 {
 	print "usage: $0 supported_readers.txt Info.plist
 	--target=$target
-	--version=$version
+	--version=$version\n";
 	exit;
 }
 
