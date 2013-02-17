@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-01-31
+# Generated: 2013-02-17
 #
 # DO NOT EDIT BY HAND
 
@@ -240,6 +240,9 @@
 # Giesecke & Devrient GmbH
 0x1059:0x000C:Giesecke & Devrient GmbH Star Sign Card Token 350 (ICCD)
 0x1059:0x000D:Giesecke & Devrient GmbH Star Sign Card Token 550 (ICCD)
+
+# GIS Ltd
+0x0F1A:0x0002:GIS Ltd SmartMouse USB
 
 # GoldKey Security
 0x19C8:0x0012:GoldKey Security PIV Token
