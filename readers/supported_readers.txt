@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-02-17
+# Generated: 2013-02-18
 #
 # DO NOT EDIT BY HAND
 
@@ -118,6 +118,7 @@
 # ACS
 0x072F:0x1204:ACS ACR101 ICC Reader
 0x072F:0x8201:ACS APG8201 PINhandy 1
+0x072F:0x8202:ACS APG8201 USB Reader
 0x072F:0x90CC:ACS ACR122U
 0x072F:0x90CC:ACS ACR100
 0x072F:0x90CC:ACS ACR38 plugin
