@@ -331,6 +331,9 @@
 0x0C4B:0x0504:REINER SCT cyberJack go
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
 
+# SafeTech
+0x24A2:0x0102:SafeTech SafeTouch
+
 # SchlumbergerSema
 0x0973:0x0003:SchlumbergerSema SchlumbergerSema Cyberflex Access
 
