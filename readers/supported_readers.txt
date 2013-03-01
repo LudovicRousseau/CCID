@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-02-18
+# Generated: 2013-03-01
 #
 # DO NOT EDIT BY HAND
 
@@ -364,6 +364,7 @@
 0x1C34:0x7138:SpringCard EasyFinger Ultimate
 0x1C34:0x7141:SpringCard Prox'N'Roll
 0x1C34:0x8141:SpringCard NFC'Roll
+0x1C34:0xA1A1:SpringCard H512 Series
 
 # SYNNIX
 0x1206:0x2105:SYNNIX STD200
