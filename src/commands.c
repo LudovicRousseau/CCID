@@ -1701,7 +1701,6 @@ static RESPONSECODE T0ProcACK(unsigned int reader_index,
 	unsigned int proc_len, int is_rcv)
 {
 	RESPONSECODE return_value;
-	unsigned int remain_len;
 	unsigned char tmp_buf[512];
 	unsigned int ret_len;
 
@@ -1709,6 +1708,8 @@ static RESPONSECODE T0ProcACK(unsigned int reader_index,
 
 	if (is_rcv == 1)
 	{	/* Receiving mode */
+		unsigned int remain_len;
+
 		if (*in_len > 0)
 		{	/* There are still available data in our buffer */
 			if (*in_len >= proc_len)
