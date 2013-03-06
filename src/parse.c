@@ -96,7 +96,9 @@ int main(int argc, char *argv[])
 		struct libusb_config_descriptor *config_desc;
 		struct libusb_device_handle *handle;
 		const struct libusb_interface *usb_interface = NULL;
+#ifndef __APPLE__
 		int interface;
+#endif
 		int num = 0;
 
 		r = libusb_open(dev, &handle);
@@ -189,8 +191,8 @@ again:
 		}
 #endif
 
-		interface = usb_interface->altsetting->bInterfaceNumber;
 #ifndef __APPLE__
+		interface = usb_interface->altsetting->bInterfaceNumber;
 		r = libusb_claim_interface(handle, interface);
 		if (r < 0)
 		{
