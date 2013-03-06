@@ -647,7 +647,7 @@ static int t1_verify_checksum(t1_state_t * t1, unsigned char *rbuf,
 static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 	size_t rmax)
 {
-	int n, m;
+	int n;
 	_ccid_descriptor *ccid_desc ;
 	int oldReadTimeout;
 	unsigned int rmax_int;
@@ -721,6 +721,8 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 
 	if (n >= 0)
 	{
+		int m;
+
 		m = block[2] + 3 + t1->rc_bytes;
 		if (m < n)
 			n = m;
