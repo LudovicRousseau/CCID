@@ -158,7 +158,7 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 {
 	ct_buf_t sbuf, rbuf, tbuf;
 	unsigned char sdata[T1_BUFFER_SIZE], sblk[5];
-	unsigned int slen, retries, resyncs, sent_length = 0;
+	unsigned int slen, retries, resyncs;
 	size_t last_send = 0;
 
 	if (snd_len == 0)
@@ -331,7 +331,6 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 			 * block successfully */
 			if (t1_seq(pcb) != t1->ns) {
 				ct_buf_get(&sbuf, NULL, last_send);
-				sent_length += last_send;
 				last_send = 0;
 				t1->ns ^= 1;
 			}
@@ -393,7 +392,6 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 				DEBUG_COMM("S-Block answer received");
 				/* ISO 7816-3 Rule 6.3 */
 				t1->state = SENDING;
-				sent_length = 0;
 				last_send = 0;
 				resyncs = 3;
 				retries = t1->retries;
