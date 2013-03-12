@@ -750,9 +750,11 @@ int main(int argc, char *argv[])
 			{
 				/* read the fake digits */
 				char in[40];	/* 4 digits + \n + \0 */
+				char *ret;
 
-				(void)fgets(in, sizeof(in), stdin);
-				printf("keyboard sent: %s", in);
+				ret = fgets(in, sizeof(in), stdin);
+				if (ret)
+					printf("keyboard sent: %s", in);
 			}
 		}
 	}
