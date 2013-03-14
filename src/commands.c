@@ -855,6 +855,8 @@ again:
 		goto end;
 	}
 
+time_request:
+	length_out = 10 + *RxLength;
 	res = ReadPort(reader_index, &length_out, cmd_out);
 
 	/* replay the command if NAK
@@ -883,6 +885,12 @@ again:
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length_out);
 		return_value = IFD_COMMUNICATION_ERROR;
 		goto end;
+	}
+
+	if (cmd_out[STATUS_OFFSET] & CCID_TIME_EXTENSION)
+	{
+		DEBUG_COMM2("Time extension requested: 0x%02X", cmd_out[ERROR_OFFSET]);
+		goto time_request;
 	}
 
 	if (cmd_out[STATUS_OFFSET] & CCID_COMMAND_FAILED)
