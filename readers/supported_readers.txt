@@ -283,6 +283,7 @@
 
 # Morpho
 0x079B:0x0026:Morpho MSO350/MSO351 Fingerprint Sensor & SmartCard Reader
+0x079B:0x0052:Morpho MSO1350 Fingerprint Sensor & SmartCard Reader
 
 # MSI
 0x0BDA:0x0161:MSI StarReader SMART
