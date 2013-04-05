@@ -29,7 +29,9 @@ ATTRS{idVendor}=="046a", ATTRS{idProduct}=="003e", GROUP="pcscd"
 ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2100", GROUP="pcscd"
 # MySmartPad.txt
 ATTRS{idVendor}=="09be", ATTRS{idProduct}=="0002", GROUP="pcscd"
-# SCR331-DI-NTTCom.txt
+# SCR3310-NTTCom USB SmartCard Reader
+ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="511a", GROUP="pcscd"
+# SCR331-DI USB Smart Card Reader
 ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5120", GROUP="pcscd"
 # SCR331-DI.txt
 ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5111", GROUP="pcscd"
