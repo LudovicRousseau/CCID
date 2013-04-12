@@ -265,6 +265,7 @@
 0x2406:0x6302:Inside Secure VaultIC 460 Smart Object
 0x2406:0x6403:Inside Secure AT90SCR100
 0x2406:0x6404:Inside Secure AT90SCR050
+0x2406:0x6407:Inside Secure AT90SCR200
 
 # KEBTechnology
 0x04CC:0x5072:KEBTechnology KONA USB SmartCard
