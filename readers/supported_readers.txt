@@ -261,6 +261,7 @@
 
 # Identive
 0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
+0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
 0x04E6:0x5810:Identive CLOUD 2700 R Smart Card Reader
 
 # Inside Secure
