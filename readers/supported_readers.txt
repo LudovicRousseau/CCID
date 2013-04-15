@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-04-12
+# Generated: 2013-04-15
 #
 # DO NOT EDIT BY HAND
 
@@ -258,6 +258,9 @@
 # id3 Semiconductors
 0x0B81:0x0200:id3 Semiconductors CL1356T5
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
+
+# Identive
+0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
 
 # Inside Secure
 0x2406:0x6300:Inside Secure VaultIC 420 Smart Object
