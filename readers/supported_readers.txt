@@ -264,6 +264,7 @@
 0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
 0x04E6:0x5720:Identive Identive CLOUD 4700 F Dual Interface Reader
 0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader
+0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader
 0x04E6:0x5810:Identive CLOUD 2700 R Smart Card Reader
 
 # Inside Secure
@@ -508,6 +509,9 @@
 
 #0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader (Identive_CLOUD_4500_F.txt)
 #0x04E6:0x5720:Identive Identive CLOUD 4700 F Dual Interface Reader (Identive_CLOUD_4700_F.txt)
+
+#0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader (Identive_CLOUD_4510_F.txt)
+#0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader (Identive_CLOUD_4710_F.txt)
 
 #0x058F:0x9520:Alcor Micro AU9520 (AU9520.txt)
 #0x058F:0x9520:Akasa AK-CR-03 (Akasa_AK-CR-03.txt)
