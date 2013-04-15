@@ -29,7 +29,7 @@ Parsing Interface Descriptor for device: 001/095
    T=1
   dwDefaultClock: 1.500 MHz
   dwMaximumClock: 1.500 MHz
-  bNumClockSupported: 0x00
+  bNumClockSupported: 0
    Support 4032 bps
    Support 23437 bps
    Support 46875 bps
@@ -46,8 +46,8 @@ Parsing Interface Descriptor for device: 001/095
    NAD value other than 00 accepted (T=1)
    TPDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
-  bClassGetResponse: 0
-  bClassEnveloppe: 0
+  bClassGetResponse: 0x00
+  bClassEnveloppe: 0x00
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1

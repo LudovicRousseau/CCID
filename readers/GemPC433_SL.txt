@@ -25,7 +25,7 @@ Parsing Interface Descriptor for device: 001/038
    T=1
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
-  bNumClockSupported: 0x00
+  bNumClockSupported: 0
    IFD does not support GET CLOCK FREQUENCIES request
   dwDataRate: 10752 bps
   dwMaxDataRate: 344086 bps
@@ -43,8 +43,8 @@ Parsing Interface Descriptor for device: 001/038
    ..04.. Automatic IFSD exchange as first exchange (T=1)
    02.... Short APDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
-  bClassGetResponse: 0
-  bClassEnveloppe: 0
+  bClassGetResponse: 0x00
+  bClassEnveloppe: 0x00
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1

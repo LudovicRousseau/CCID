@@ -27,7 +27,7 @@ Parsing Interface Descriptor for device: 003/005
    T=1
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 12.000 MHz
-  bNumClockSupported: 0x00
+  bNumClockSupported: 0
    IFD does not support GET CLOCK FREQUENCIES request
   dwDataRate: 10753 bps
   dwMaxDataRate: 344105 bps
@@ -45,8 +45,8 @@ Parsing Interface Descriptor for device: 003/005
    ....80 Automatic PPS made by the CCID
    01.... TPDU level exchange
   dwMaxCCIDMessageLength: 263 bytes
-  bClassGetResponse: 255
-  bClassEnveloppe: 255
+  bClassGetResponse: 0xFF
+  bClassEnveloppe: 0xFF
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1
