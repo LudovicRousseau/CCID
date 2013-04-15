@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 001/038
  idVendor: 0x08E6
   iManufacturer: GEMPLUS
  idProduct: 0x4433

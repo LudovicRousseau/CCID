@@ -1,4 +1,3 @@
-Parsing Interface Descriptor for device: 004/012
  idVendor: 0x046A
   iManufacturer: Cherry GmbH
  idProduct: 0x0010
