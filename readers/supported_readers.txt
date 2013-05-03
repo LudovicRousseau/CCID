@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-04-16
+# Generated: 2013-05-03
 #
 # DO NOT EDIT BY HAND
 
@@ -456,12 +456,16 @@
 
 # Broadcom Corp
 0x0A5C:0x5801:Broadcom Corp 5880
+0x0A5C:0x5801:Broadcom Corp 5880
 
 # C3PO
 0x0783:0x0003:C3PO LTC3x USB
 
 # Feitian
 0x096E:0x0503:Feitian SCR301
+
+# Gemalto
+0x08E6:0x3437:Gemalto IDBridge CT30
 
 # Hewlett-Packard Company
 0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
@@ -543,6 +547,9 @@
 #0x076B:0xA022:Precise Biometrics Sense MC (Precise_Sense_MC.txt)
 #0x076B:0xA022:XIRING Teo (Teo.txt)
 
+#0x08E6:0x3437:Gemalto PC Twin Reader (GemPCTwin.txt)
+#0x08E6:0x3437:Gemalto IDBridge CT30 (Gemalto_IDBridge_CT30.txt)
+
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpad.txt)
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpadv2.txt)
 
@@ -551,6 +558,9 @@
 
 #0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader (GemProxSU.txt)
 #0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader (GemProxSU.txt_i1)
+
+#0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt)
+#0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt_i1)
 
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v3.txt)
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt)
