@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-05-03
+# Generated: 2013-05-04
 #
 # DO NOT EDIT BY HAND
 
@@ -486,6 +486,9 @@
 # RSA
 0x15E1:0x2007:RSA RSA SecurID (R) Authenticator
 
+# THRC
+0x062D:0x0001:THRC Smart Card Reader
+
 ##########################
 # section: disabled
 ##########################
@@ -508,9 +511,6 @@
 
 # SMART
 #0x0B8C:0x000E:SMART SBV280
-
-# THRC
-#0x062D:0x0001:THRC USB Smart Card Reader
 
 ##########################
 # section: duplicates
