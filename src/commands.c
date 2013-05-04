@@ -1264,10 +1264,10 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	status_t ret;
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	unsigned int old_timeout;
 
 #ifndef TWIN_SERIAL
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
-
 	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
 	{
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
@@ -1385,9 +1385,15 @@ time_request_ICCD_B:
 	}
 #endif
 
+	/* store the original value of read timeout*/
+	old_timeout = ccid_descriptor -> readTimeout;
+
 time_request:
 	length = sizeof(cmd);
 	ret = ReadPort(reader_index, &length, cmd);
+
+	/* restore the original value of read timeout */
+	ccid_descriptor -> readTimeout = old_timeout;
 	CHECK_STATUS(ret)
 
 	if (length < STATUS_OFFSET+1)
@@ -1428,6 +1434,12 @@ time_request:
 	if (cmd[STATUS_OFFSET] & CCID_TIME_EXTENSION)
 	{
 		DEBUG_COMM2("Time extension requested: 0x%02X", cmd[ERROR_OFFSET]);
+
+		/* compute the new value of read timeout */
+		if (cmd[ERROR_OFFSET] > 0)
+			ccid_descriptor -> readTimeout *= cmd[ERROR_OFFSET];
+
+		DEBUG_COMM2("New timeout: %d ms", ccid_descriptor -> readTimeout);
 		goto time_request;
 	}
 
