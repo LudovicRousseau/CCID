@@ -14,37 +14,9 @@ ENV{DEVTYPE}!="usb_device", GOTO="pcscd_ccid_rules_end"
 # Kobil mIDentity
 ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
-# generic CCID device (bInterfaceClass = 0x0b)
-# change group from default "root" to "pcscd"
-ENV{ID_USB_INTERFACES}=="*:0b0000:*", GROUP="pcscd"
-
 # set USB power management to auto. "power/level" has been deprecated in
 # Linux 2.6.35 and replaced by "power/control"
 ENV{ID_USB_INTERFACES}==":0b0000:", RUN+="/bin/sh -c 'echo auto > /sys/$devpath/power/level ; echo auto > /sys/$devpath/power/control'"
-
-# non CCID generic (InterfaceClass: 0xFF)
-# CherrySmartTerminalST2XXX.txt
-ATTRS{idVendor}=="046a", ATTRS{idProduct}=="003e", GROUP="pcscd"
-# DellSK-3106.txt
-ATTRS{idVendor}=="413c", ATTRS{idProduct}=="2100", GROUP="pcscd"
-# MySmartPad.txt
-ATTRS{idVendor}=="09be", ATTRS{idProduct}=="0002", GROUP="pcscd"
-# SCR3310-NTTCom USB SmartCard Reader
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="511a", GROUP="pcscd"
-# SCR331-DI USB Smart Card Reader
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5120", GROUP="pcscd"
-# SCR331-DI.txt
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5111", GROUP="pcscd"
-# SDI010.txt
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5121", GROUP="pcscd"
-# SPR532.txt
-ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="e003", GROUP="pcscd"
-# Verisign_secure_storage_token.txt
-ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="1359", GROUP="pcscd"
-# Verisign_secure_token.txt
-ATTRS{idVendor}=="08e6", ATTRS{idProduct}=="ace0", GROUP="pcscd"
-# SchlumbergerSema Cyberflex Access e-gate
-ATTRS{idVendor}=="0973", ATTRS{idProduct}=="0003", GROUP="pcscd"
 
 # All done
 LABEL="pcscd_ccid_rules_end"
