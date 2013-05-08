@@ -126,6 +126,7 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 	{
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 		unsigned int oldReadTimeout;
+		RESPONSECODE cmd_ret;
 		_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
 		/* Maybe we have a special treatment for this reader */
@@ -138,9 +139,9 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		 * few tries. It is an empirical hack */
 
 		/* The reader may have to start here so give it some time */
-		ret = CmdGetSlotStatus(reader_index, pcbuffer);
-		if (IFD_NO_SUCH_DEVICE == ret)
-			return ret;
+		cmd_ret = CmdGetSlotStatus(reader_index, pcbuffer);
+		if (IFD_NO_SUCH_DEVICE == cmd_ret)
+			return cmd_ret;
 
 		/* save the current read timeout computed from card capabilities */
 		oldReadTimeout = ccid_descriptor->readTimeout;
