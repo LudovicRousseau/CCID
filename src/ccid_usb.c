@@ -130,6 +130,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0DC3, 0x0900, 0x0200 }, /* Athena IDProtect Key v2 */
 	{ 0x03F0, 0x0036, 0x0124 }, /* HP USB CCID Smartcard Keyboard */
 	{ 0x062D, 0x0001, 0x0102 }, /* THRC Smart Card Reader */
+	{ 0x04E6, 0x5291, 0x0112 }, /* SCM SCL010 Contactless Reader */
 
 	/* the firmware version is not correct since I do not have received a
 	 * working reader yet */
