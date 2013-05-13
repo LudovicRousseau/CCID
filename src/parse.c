@@ -174,7 +174,7 @@ again:
 		if (!class_ff && (0xFF == usb_interface->altsetting->bInterfaceClass))
 		{
 			(void)libusb_close(handle);
-			(void)fprintf(stderr, MAGENTA "  Found a possibly CCID/ICCD device (bInterfaceClass = 0xFF). Use -p\n" NORMAL);
+			(void)fprintf(stderr, MAGENTA "  Found a possibly CCID/ICCD device (bInterfaceClass = 0xFF). Use %s -p\n" NORMAL, argv[0]);
 			continue;
 		}
 		(void)fprintf(stderr,
