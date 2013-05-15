@@ -206,7 +206,13 @@ again:
 			{
 				(void)fprintf(stderr,
 					BRIGHT_RED " Please, stop pcscd and retry\n\n" NORMAL);
-				return TRUE;
+
+				if (class_ff)
+					/* maybe the device with Class = 0xFF is NOT a CCID
+					 * reader */
+					continue;
+				else
+					return TRUE;
 			}
 			continue;
 		}
