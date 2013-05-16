@@ -706,6 +706,15 @@ read_again:
 		return STATUS_UNSUCCESSFUL;
 	}
 
+	if (0 == actual_length)
+	{
+		/* Zero Length Packet */
+		/* The Gemalto IDBridge CT30 and IDBridge K30 readers may send
+		 * a ZLP after some commands when connected on a USB3 bus */
+		DEBUG_INFO("ZLP detected. read again!");
+		goto read_again;
+	}
+
 	*length = actual_length;
 
 	DEBUG_XXD(debug_header, buffer, *length);
