@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-05-11
+# Generated: 2013-05-17
 #
 # DO NOT EDIT BY HAND
 
@@ -369,6 +369,7 @@
 0x04E6:0x5120:SCM Microsystems Inc. SCR331-DI USB Smart Card Reader
 0x04E6:0x5121:SCM Microsystems Inc. SDI010 Smart Card Reader
 0x04E6:0x512B:SCM Microsystems Inc. SDI011 Contactless Reader
+0x04E6:0x512C:SCM Microsystems Inc. SDI011 Contactless Reader
 0x04E6:0x5291:SCM Microsystems Inc. SCL010 Contactless Reader
 0x04E6:0x5293:SCM Microsystems Inc. SCL01x Contactless Reader
 0x04E6:0x5410:SCM Microsystems Inc. SCR35xx v2.0 USB SC Reader
