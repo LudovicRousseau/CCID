@@ -572,7 +572,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	(void)printf("  bClassGetResponse: 0x%02X\n", device_descriptor[48]);
 	if (0xFF == device_descriptor[48])
 		(void)printf("   echoes the APDU class\n");
-	(void)printf("  bClassEnveloppe: 0x%02X\n", device_descriptor[49]);
+	(void)printf("  bClassEnvelope: 0x%02X\n", device_descriptor[49]);
 	if (0xFF == device_descriptor[49])
 		(void)printf("   echoes the APDU class\n");
 	(void)printf("  wLcdLayout: 0x%04X\n", (device_descriptor[51] << 8)+device_descriptor[50]);
