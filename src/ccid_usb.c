@@ -1,16 +1,16 @@
 /*
-    ccid_usb.c: USB access routines using the libusb library
-    Copyright (C) 2003-2010   Ludovic Rousseau
+	ccid_usb.c: USB access routines using the libusb library
+	Copyright (C) 2003-2010	Ludovic Rousseau
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
 
 	You should have received a copy of the GNU Lesser General Public License
 	along with this library; if not, write to the Free Software Foundation,
@@ -45,7 +45,7 @@
 
 /* write timeout
  * we don't have to wait a long time since the card was doing nothing */
-#define USB_WRITE_TIMEOUT (5 * 1000)  /* 5 seconds timeout */
+#define USB_WRITE_TIMEOUT (5 * 1000)	/* 5 seconds timeout */
 
 /*
  * Proprietary USB Class (0xFF) are (or are not) accepted
@@ -102,9 +102,9 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 /* ne need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
 
-#define PCSCLITE_MANUKEY_NAME                   "ifdVendorID"
-#define PCSCLITE_PRODKEY_NAME                   "ifdProductID"
-#define PCSCLITE_NAMEKEY_NAME                   "ifdFriendlyName"
+#define PCSCLITE_MANUKEY_NAME "ifdVendorID"
+#define PCSCLITE_PRODKEY_NAME "ifdProductID"
+#define PCSCLITE_NAMEKEY_NAME "ifdFriendlyName"
 
 struct _bogus_firmware
 {
@@ -282,7 +282,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	GET_KEYS("ifdFriendlyName", &ifdFriendlyName)
 
 	/* The 3 lists do not have the same size */
-	if  ((list_size(ifdVendorID) != list_size(ifdProductID))
+	if ((list_size(ifdVendorID) != list_size(ifdProductID))
 		|| (list_size(ifdVendorID) != list_size(ifdFriendlyName)))
 	{
 		DEBUG_CRITICAL2("Error parsing %s", infofile);
@@ -973,7 +973,7 @@ int ccid_check_firmware(struct libusb_device_descriptor *desc)
 
 /*****************************************************************************
  *
- *                                      get_data_rates
+ *					get_data_rates
  *
  ****************************************************************************/
 static unsigned int *get_data_rates(unsigned int reader_index,
@@ -1041,7 +1041,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 
 /*****************************************************************************
  *
- *                                      ControlUSB
+ *					ControlUSB
  *
  ****************************************************************************/
 int ControlUSB(int reader_index, int requesttype, int request, int value,
