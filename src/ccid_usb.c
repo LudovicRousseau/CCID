@@ -759,12 +759,6 @@ status_t CloseUSB(unsigned int reader_index)
 		usbDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
 	}
 
-	if (usbDevice[reader_index].ccid.gemalto_firmware_features)
-	{
-		free(usbDevice[reader_index].ccid.gemalto_firmware_features);
-		usbDevice[reader_index].ccid.gemalto_firmware_features = NULL ;
-	}
-
 	/* one slot closed */
 	(*usbDevice[reader_index].nb_opened_slots)--;
 
@@ -772,6 +766,9 @@ status_t CloseUSB(unsigned int reader_index)
 	if (0 == *usbDevice[reader_index].nb_opened_slots)
 	{
 		DEBUG_COMM("Last slot closed. Release resources");
+
+		if (usbDevice[reader_index].ccid.gemalto_firmware_features)
+			free(usbDevice[reader_index].ccid.gemalto_firmware_features);
 
 		if (usbDevice[reader_index].ccid.sIFD_serial_number)
 			free(usbDevice[reader_index].ccid.sIFD_serial_number);
