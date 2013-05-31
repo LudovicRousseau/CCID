@@ -45,7 +45,7 @@
    01.... TPDU level exchange
   dwMaxCCIDMessageLength: 263 bytes
   bClassGetResponse: 0xFF
-  bClassEnveloppe: 0xFF
+  bClassEnvelope: 0xFF
   wLcdLayout: 0x0000
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1

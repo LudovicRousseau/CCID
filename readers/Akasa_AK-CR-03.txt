@@ -104,7 +104,7 @@
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
-  bClassEnveloppe: 0xFF
+  bClassEnvelope: 0xFF
    echoes the APDU class
   wLcdLayout: 0x0000
   bPINSupport: 0x00

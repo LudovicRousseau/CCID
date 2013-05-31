@@ -43,7 +43,7 @@
    02.... Short APDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0x00
-  bClassEnveloppe: 0x00
+  bClassEnvelope: 0x00
   wLcdLayout: 0x0000
   bPINSupport: 0x03
    PIN Verification supported
