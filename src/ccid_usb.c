@@ -837,7 +837,8 @@ const unsigned char *get_ccid_device_descriptor(const struct libusb_interface *u
 	 * descriptors; to support those, look for it at the end as well.
 	 */
 	last_endpoint = usb_interface->altsetting->bNumEndpoints-1;
-	if (usb_interface->altsetting->endpoint[last_endpoint].extra_length == 54)
+	if (usb_interface->altsetting->endpoint
+		&& usb_interface->altsetting->endpoint[last_endpoint].extra_length == 54)
 		return usb_interface->altsetting->endpoint[last_endpoint].extra;
 #else
 	DEBUG_CRITICAL2("Extra field has a wrong length: %d",
