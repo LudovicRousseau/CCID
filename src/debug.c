@@ -28,6 +28,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
+#include <stdlib.h>
+
 #include "strlcpycat.h"
 
 #undef LOG_TO_STDERR
@@ -42,14 +45,83 @@ void log_msg(const int priority, const char *fmt, ...)
 {
 	char debug_buffer[160]; /* up to 2 lines of 80 characters */
 	va_list argptr;
+	static struct timeval last_time = { 0, 0 };
+	struct timeval new_time = { 0, 0 };
+	struct timeval tmp;
+	int delta;
+	const char *color_pfx = "", *color_sfx = "\33[0m";
+	const char *time_pfx = "\33[36m", *time_sfx = color_sfx;
+	static int initialized = 0;
+	static int LogDoColor = 0;
 
-	(void)priority;
+	if (!initialized)
+	{
+		char *term;
+
+		initialized = 1;
+		term = getenv("TERM");
+		if (term)
+		{
+			const char *terms[] = { "linux", "xterm", "xterm-color", "Eterm", "rxvt", "rxvt-unicode", "xterm-256color" };
+			unsigned int i;
+
+			/* for each known color terminal */
+			for (i = 0; i < sizeof(terms) / sizeof(terms[0]); i++)
+			{
+				/* we found a supported term? */
+				if (0 == strcmp(terms[i], term))
+				{
+					LogDoColor = 1;
+					break;
+				}
+			}
+		}
+	}
+
+	switch (priority)
+	{
+		case PCSC_LOG_CRITICAL:
+			color_pfx = "\33[01;31m"; /* bright + Red */
+			break;
+
+		case PCSC_LOG_ERROR:
+			color_pfx = "\33[35m"; /* Magenta */
+			break;
+
+		case PCSC_LOG_INFO:
+			color_pfx = "\33[34m"; /* Blue */
+			break;
+
+		case PCSC_LOG_DEBUG:
+			color_pfx = ""; /* normal (black) */
+			color_sfx = "";
+			break;
+	}
+
+	gettimeofday(&new_time, NULL);
+	if (0 == last_time.tv_sec)
+		last_time = new_time;
+
+	tmp.tv_sec = new_time.tv_sec - last_time.tv_sec;
+	tmp.tv_usec = new_time.tv_usec - last_time.tv_usec;
+	if (tmp.tv_usec < 0)
+	{
+		tmp.tv_sec--;
+		tmp.tv_usec += 1000000;
+	}
+	if (tmp.tv_sec < 100)
+		delta = tmp.tv_sec * 1000000 + tmp.tv_usec;
+	else
+		delta = 99999999;
+
+	last_time = new_time;
 
 	va_start(argptr, fmt);
 	(void)vsnprintf(debug_buffer, sizeof debug_buffer, fmt, argptr);
 	va_end(argptr);
 
-	(void)fprintf(LOG_STREAM, "%s\n", debug_buffer);
+	(void)fprintf(LOG_STREAM, "%s%.8d%s %s%s%s\n", time_pfx, delta, time_sfx,
+		color_pfx, debug_buffer, color_sfx);
 	fflush(LOG_STREAM);
 } /* log_msg */
 
