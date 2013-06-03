@@ -50,7 +50,7 @@ void log_msg(const int priority, const char *fmt, ...)
 	struct timeval tmp;
 	int delta;
 	const char *color_pfx = "", *color_sfx = "";
-	const char *time_pfx = "", *time_sfx = color_sfx;
+	const char *time_pfx = "", *time_sfx = "";
 	static int initialized = 0;
 	static int LogDoColor = 0;
 
@@ -81,7 +81,8 @@ void log_msg(const int priority, const char *fmt, ...)
 	if (LogDoColor)
 	{
 		color_sfx = "\33[0m";
-		time_pfx = "\33[36m";
+		time_sfx = color_sfx;
+		time_pfx = "\33[36m"; /* Cyan */
 
 		switch (priority)
 		{
