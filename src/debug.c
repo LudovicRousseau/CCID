@@ -49,8 +49,8 @@ void log_msg(const int priority, const char *fmt, ...)
 	struct timeval new_time = { 0, 0 };
 	struct timeval tmp;
 	int delta;
-	const char *color_pfx = "", *color_sfx = "\33[0m";
-	const char *time_pfx = "\33[36m", *time_sfx = color_sfx;
+	const char *color_pfx = "", *color_sfx = "";
+	const char *time_pfx = "", *time_sfx = color_sfx;
 	static int initialized = 0;
 	static int LogDoColor = 0;
 
@@ -78,24 +78,30 @@ void log_msg(const int priority, const char *fmt, ...)
 		}
 	}
 
-	switch (priority)
+	if (LogDoColor)
 	{
-		case PCSC_LOG_CRITICAL:
-			color_pfx = "\33[01;31m"; /* bright + Red */
-			break;
+		color_sfx = "\33[0m";
+		time_pfx = "\33[36m";
 
-		case PCSC_LOG_ERROR:
-			color_pfx = "\33[35m"; /* Magenta */
-			break;
+		switch (priority)
+		{
+			case PCSC_LOG_CRITICAL:
+				color_pfx = "\33[01;31m"; /* bright + Red */
+				break;
 
-		case PCSC_LOG_INFO:
-			color_pfx = "\33[34m"; /* Blue */
-			break;
+			case PCSC_LOG_ERROR:
+				color_pfx = "\33[35m"; /* Magenta */
+				break;
 
-		case PCSC_LOG_DEBUG:
-			color_pfx = ""; /* normal (black) */
-			color_sfx = "";
-			break;
+			case PCSC_LOG_INFO:
+				color_pfx = "\33[34m"; /* Blue */
+				break;
+
+			case PCSC_LOG_DEBUG:
+				color_pfx = ""; /* normal (black) */
+				color_sfx = "";
+				break;
+		}
 	}
 
 	gettimeofday(&new_time, NULL);
