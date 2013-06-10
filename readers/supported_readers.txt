@@ -224,6 +224,7 @@
 
 # Gemalto
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
+0x08E6:0x3437:Gemalto IDBridge CT30
 0x08E6:0x3438:Gemalto IDBridge K30
 0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader
 0x08E6:0x34C2:Gemalto Ezio Shield
@@ -466,9 +467,6 @@
 
 # Feitian
 0x096E:0x0503:Feitian SCR301
-
-# Gemalto
-0x08E6:0x3437:Gemalto IDBridge CT30
 
 # Hewlett-Packard Company
 0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
