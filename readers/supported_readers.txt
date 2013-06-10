@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-05-17
+# Generated: 2013-06-10
 #
 # DO NOT EDIT BY HAND
 
@@ -224,6 +224,7 @@
 
 # Gemalto
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
+0x08E6:0x3438:Gemalto IDBridge K30
 0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader
 0x08E6:0x34C2:Gemalto Ezio Shield
 0x08E6:0x34C5:Gemalto Ezio Shield Branch Reader
@@ -554,6 +555,9 @@
 
 #0x08E6:0x3437:Gemalto PC Twin Reader (GemPCTwin.txt)
 #0x08E6:0x3437:Gemalto IDBridge CT30 (Gemalto_IDBridge_CT30.txt)
+
+#0x08E6:0x3438:Gemalto USB Shell Token V2 (GemPCKey.txt)
+#0x08E6:0x3438:Gemalto IDBridge K30 (Gemalto_IDBridge_K30.txt)
 
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpad.txt)
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpadv2.txt)
