@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-06-10
+# Generated: 2013-06-11
 #
 # DO NOT EDIT BY HAND
 
@@ -66,6 +66,7 @@
 0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader
 0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader
 0x08E6:0x8000:Gemalto Smart Enterprise Guardian Secure USB Device
+0x08E6:0x8141:Gemalto IDBridge K3000
 
 # Giesecke & Devrient GmbH
 0x1059:0x0017:Giesecke & Devrient GmbH StarSign Crypto USB Token
@@ -233,7 +234,6 @@
 0x08E6:0x4042:Gemalto SA .NET Dual
 0x08E6:0x5743:Gemalto Hybrid Smartcard Reader
 0x08E6:0x8108:Gemalto Smart Enterprise Guardian Secure USB Device
-0x08E6:0x8141:Gemalto IDBridge K3000
 
 # Gemplus
 0x08E6:0x3479:Gemplus GemCore POS Pro Smart Card Reader
