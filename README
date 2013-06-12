@@ -118,6 +118,20 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.11 - 12 June 2013, Ludovic Rousseau
+    - Add support of
+       . Gemalto IDBridge CT30
+       . Gemalto IDBridge K30
+       . SCM Microsystems Inc. SCL010 Contactless Reader
+       . SCM Microsystems Inc. SDI011 Contactless Reader
+       . THRC reader
+    - Better management of time extension requests
+    - parse: better support of devices with bInterfaceClass = 0xFF
+    - udev rule file: Remove setting group to pcscd, remove support of
+      Linux kernel < 2.6.35 for auto power up management
+    - some minor bugs removed
+
+
 1.4.10 - 16 April 2013, Ludovic Rousseau
     - Add support of
        . ACS APG8201 USB Reader with PID 0x8202
