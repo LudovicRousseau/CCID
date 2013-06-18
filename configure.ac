@@ -211,6 +211,15 @@ if test "${ccidtwindir}" = false ; then
 	ccidtwindir=$usbdropdir/serial
 fi
 
+# --enable-serialconfdir=DIR
+AC_ARG_ENABLE(serialconfdir,
+	AS_HELP_STRING([--enable-serialconfdir=dir],[directory containing
+		serial drivers (default to pcscd config)]),
+	[serialconfdir="${enableval}"], [serialconfdir=false])
+if test "${serialconfdir}" = false ; then
+	serialconfdir=`$PKG_CONFIG libpcsclite --variable=serialconfdir`
+fi
+
 # --disable-pcsclite
 AC_ARG_ENABLE(pcsclite,
 	AS_HELP_STRING([--disable-pcsclite],[do not use pcsc-lite debug support]),
@@ -256,6 +265,7 @@ AC_SUBST(ac_aux_dir)
 AC_SUBST(bundle)
 AC_SUBST(usbdropdir)
 AC_SUBST(ccidtwindir)
+AC_SUBST(serialconfdir)
 AS_AC_EXPAND(bindir_exp,$bindir)
 AS_AC_EXPAND(sysconfdir_exp,$sysconfdir)
 
@@ -294,6 +304,7 @@ bundle directory name:   ${bundle}
 USB drop directory:      ${usbdropdir}
 serial Twin support:     ${twinserial}
 serial twin install dir: ${ccidtwindir}
+serial config directory: ${serialconfdir}
 compiled for pcsc-lite:  ${pcsclite}
 class driver:            ${class}
 
