@@ -142,6 +142,28 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
 unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 
+/*****************************************************************************
+ *
+ *					close_libusb_if_needed
+ *
+ ****************************************************************************/
+static void close_libusb_if_needed(void)
+{
+	int i, to_exit = TRUE;
+
+	/* if at least 1 reader is still in use we do not exit libusb */
+	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+	{
+		if (usbDevice[i].dev_handle != NULL)
+			to_exit = FALSE;
+	}
+
+	if (to_exit)
+	{
+		DEBUG_INFO("libusb_exit");
+		libusb_exit(ctx);
+	}
+} /* close_libusb_if_needed */
 
 /*****************************************************************************
  *
@@ -612,8 +634,7 @@ again:
 end:
 	if (usbDevice[reader_index].dev_handle == NULL)
 	{
-		/* does not work for libusb <= 1.0.8 */
-		/* libusb_exit(ctx); */
+		close_libusb_if_needed();
 		if (claim_failed)
 			return STATUS_COMM_ERROR;
 		return STATUS_NO_SUCH_DEVICE;
@@ -785,14 +806,13 @@ status_t CloseUSB(unsigned int reader_index)
 		(void)libusb_release_interface(usbDevice[reader_index].dev_handle,
 			usbDevice[reader_index].interface);
 		(void)libusb_close(usbDevice[reader_index].dev_handle);
-
-		/* does not work for libusb <= 1.0.8 */
-		/* libusb_exit(ctx); */
 	}
 
 	/* mark the resource unused */
 	usbDevice[reader_index].dev_handle = NULL;
 	usbDevice[reader_index].interface = 0;
+
+	close_libusb_if_needed();
 
 	return STATUS_SUCCESS;
 } /* CloseUSB */
