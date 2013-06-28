@@ -162,6 +162,7 @@ static void close_libusb_if_needed(void)
 	{
 		DEBUG_INFO("libusb_exit");
 		libusb_exit(ctx);
+		ctx = NULL;
 	}
 } /* close_libusb_if_needed */
 
