@@ -105,14 +105,6 @@ if test "x$use_libusb" != xno ; then
 	PKG_CHECK_EXISTS([libusb-1.0], [
 	PKG_CHECK_MODULES(LIBUSB, libusb-1.0, [],
 		[
-			AC_CHECK_PROG([LIBUSBCONFIG], [libusb-config], [yes])
-
-			if test "$LIBUSBCONFIG" = "yes" ; then
-				LIBUSB_CFLAGS="$LIBUSB_CFLAGS `libusb-config --cflags`"
-				LIBUSB_LIBS="$LIBUSB_LIBS `libusb-config --libs`"
-			else
-				AC_MSG_WARN([libusb-config not found.])
-			fi
 		])
 	])
 
