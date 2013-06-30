@@ -694,7 +694,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 			usbDevice[reader_index].bus_number,
 			usbDevice[reader_index].device_address, rv, strerror(errno));
 
-		if (ENODEV == errno)
+		if ((ENODEV == errno) || (LIBUSB_ERROR_NO_DEVICE == rv))
 			return STATUS_NO_SUCH_DEVICE;
 
 		return STATUS_UNSUCCESSFUL;
