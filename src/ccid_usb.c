@@ -386,9 +386,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 				int interface;
 				int num = 0;
 				const unsigned char *device_descriptor;
-#if defined(USE_COMPOSITE_AS_MULTISLOT) || defined(__APPLE__)
 				int readerID = (vendorID << 16) + productID;
-#endif
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 				static int static_interface = 1;
@@ -450,8 +448,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 						 * and the reader is multi-slot */
 						usbDevice[reader_index] = usbDevice[previous_reader_index];
 						/* the other slots do not have the same data rates */
-						if ((GEMCOREPOSPRO == usbDevice[reader_index].ccid.readerID)
-							|| (GEMCORESIMPRO == usbDevice[reader_index].ccid.readerID))
+						if ((GEMCOREPOSPRO == readerID)
+							|| (GEMCORESIMPRO == readerID))
 						{
 							usbDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
 							usbDevice[reader_index].ccid.dwMaxDataRate = 125000;
