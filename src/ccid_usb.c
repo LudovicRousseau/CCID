@@ -815,13 +815,6 @@ status_t CloseUSB(unsigned int reader_index)
 		usbDevice[reader_index].bus_number,
 		usbDevice[reader_index].device_address);
 
-	if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates
-		&& (usbDevice[reader_index].ccid.bCurrentSlotIndex == 0))
-	{
-		free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
-		usbDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
-	}
-
 	/* one slot closed */
 	(*usbDevice[reader_index].nb_opened_slots)--;
 
@@ -862,6 +855,9 @@ status_t CloseUSB(unsigned int reader_index)
 		/* reset so that bSeq starts at 0 again */
 		if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
 			(void)libusb_reset_device(usbDevice[reader_index].dev_handle);
+
+		if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates)
+			free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
 
 		(void)libusb_release_interface(usbDevice[reader_index].dev_handle,
 			usbDevice[reader_index].interface);
