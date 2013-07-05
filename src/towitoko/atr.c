@@ -127,9 +127,9 @@ ATR_InitFromArray (ATR_t * atr, const BYTE atr_buffer[ATR_MAX_SIZE], unsigned le
 	  TDi = atr->ib[pn][ATR_INTERFACE_BYTE_TD].value = atr_buffer[pointer];
 	  atr->ib[pn][ATR_INTERFACE_BYTE_TD].present = TRUE;
 	  (atr->TCK).present = ((TDi & 0x0F) != ATR_PROTOCOL_TYPE_T0);
+	  pn++;
 	  if (pn >= ATR_MAX_PROTOCOLS)
 	    return (ATR_MALFORMED);
-	  pn++;
 	}
       else
 	{
