@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-06-11
+# Generated: 2013-07-06
 #
 # DO NOT EDIT BY HAND
 
@@ -259,6 +259,9 @@
 
 # Hewlett Packard
 0x03F0:0x2924:Hewlett Packard MFP Smart Card Reader
+
+# HID OMNIKEY
+0x076B:0x5127:HID OMNIKEY 5127 CK
 
 # id3 Semiconductors
 0x0B81:0x0200:id3 Semiconductors CL1356T5
