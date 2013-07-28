@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-07-06
+# Generated: 2013-07-28
 #
 # DO NOT EDIT BY HAND
 
@@ -262,6 +262,7 @@
 
 # HID OMNIKEY
 0x076B:0x5127:HID OMNIKEY 5127 CK
+0x076B:0x5326:HID OMNIKEY 5326 DFR
 
 # id3 Semiconductors
 0x0B81:0x0200:id3 Semiconductors CL1356T5
