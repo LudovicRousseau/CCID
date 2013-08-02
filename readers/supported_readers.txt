@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-07-28
+# Generated: 2013-08-02
 #
 # DO NOT EDIT BY HAND
 
@@ -302,6 +302,9 @@
 0x0D46:0x4289:KOBIL Systems mIDentity visual
 0x0D46:0x4389:KOBIL Systems mIDentity fullsize
 0x0D46:0x43A9:KOBIL Systems mIDentity fullsize AES
+
+# Lenovo
+0x17EF:0x6007:Lenovo Lenovo USB Smartcard Keyboard
 
 # Macally
 0x08AE:0x0BDF:Macally NFC CCID eNetPad
