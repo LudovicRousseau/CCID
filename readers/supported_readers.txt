@@ -71,6 +71,9 @@
 # id3 Semiconductors
 0x0B81:0x0200:id3 Semiconductors CL1356T
 
+# Ingenico
+0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader
+
 # KOBIL
 0x0D46:0x3001:KOBIL KAAN Base
 0x0D46:0x3002:KOBIL KAAN Advanced
@@ -558,4 +561,7 @@
 
 #0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN.txt)
 #0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN_6000.txt)
+
+#0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_badge.txt)
+#0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_base.txt)
 
