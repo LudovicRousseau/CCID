@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-08-02
+# Generated: 2013-08-05
 #
 # DO NOT EDIT BY HAND
 
@@ -46,7 +46,6 @@
 0x073D:0x0008:Eutron CryptoIdentity CCID
 0x073D:0x0B00:Eutron Digipass 860
 0x073D:0x0C00:Eutron Card Reader
-0x073D:0x0C00:Eutron SIM Reader
 0x073D:0x0C01:Eutron Smart Pocket
 
 # Feitian
@@ -62,8 +61,6 @@
 0x08E6:0x34C3:Gemalto EZIO CB+
 0x08E6:0x4433:Gemalto Gemplus USB SmartCard Reader 433-Swap
 0x08E6:0x5503:Gemalto Prox Dual USB PC LinkReader
-0x08E6:0x5503:Gemalto Prox Dual USB PC LinkReader
-0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader
 0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader
 0x08E6:0x8000:Gemalto Smart Enterprise Guardian Secure USB Device
 0x08E6:0x8141:Gemalto IDBridge K3000
@@ -112,7 +109,6 @@
 0x0F14:0x0011:XIRING XI-SIGN USB V2
 0x0F14:0x0037:XIRING MyLeo
 0x0F14:0x0038:XIRING Leo v2
-0x076B:0xA022:XIRING Teo
 
 ##########################
 # section: shouldwork
@@ -122,14 +118,9 @@
 0x072F:0x1204:ACS ACR101 ICC Reader
 0x072F:0x8201:ACS APG8201 PINhandy 1
 0x072F:0x8202:ACS APG8201 USB Reader
-0x072F:0x90CC:ACS ACR122U
-0x072F:0x90CC:ACS ACR100
-0x072F:0x90CC:ACS ACR38 plugin
-0x072F:0x90CC:ACS AET65
 0x072F:0x90DB:ACS CryptoMate64
 
 # Akasa
-0x058F:0x9520:Akasa AK-CR-03
 
 # Aktiv
 0x0A89:0x0025:Aktiv Rutoken lite
@@ -141,7 +132,6 @@
 0x0A89:0x0060:Aktiv Co., ProgramPark Rutoken Magistra
 
 # Alcor Micro
-0x058F:0x9520:Alcor Micro SCR001
 0x058F:0x9522:Alcor Micro AU9522
 
 # ASK-RFID
@@ -183,8 +173,6 @@
 # Broadcom Corp
 0x0A5C:0x5800:Broadcom Corp 5880
 0x0A5C:0x5802:Broadcom Corp 5880
-0x0A5C:0x5802:Broadcom Corp 5880
-0x0A5C:0x5802:Broadcom Corp 5880
 
 # C3PO
 0x0783:0x0007:C3PO TLTC2USB
@@ -225,9 +213,6 @@
 
 # Gemalto
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
-0x08E6:0x3437:Gemalto IDBridge CT30
-0x08E6:0x3438:Gemalto IDBridge K30
-0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader
 0x08E6:0x34C2:Gemalto Ezio Shield
 0x08E6:0x34C5:Gemalto Ezio Shield Branch Reader
 0x08E6:0x34EC:Gemalto GemPC Express
@@ -265,19 +250,12 @@
 0x076B:0x5326:HID OMNIKEY 5326 DFR
 
 # id3 Semiconductors
-0x0B81:0x0200:id3 Semiconductors CL1356T5
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
 
 # Identive
 0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
 0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
-0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
-0x04E6:0x5720:Identive Identive CLOUD 4700 F Dual Interface Reader
-0x04E6:0x5720:Identive Identive CLOUD 4700 F Dual Interface Reader
 0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader
-0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader
-0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader
-0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader
 0x04E6:0x5810:Identive CLOUD 2700 R Smart Card Reader
 
 # Inside Secure
@@ -341,7 +319,6 @@
 0x076B:0x6321:OMNIKEY 6321 CLi USB
 
 # OMNIKEY AG
-0x076B:0x3021:OMNIKEY AG CardMan 3021
 0x076B:0x3621:OMNIKEY AG CardMan 3621
 0x076B:0x3821:OMNIKEY AG CardMan 3821
 0x076B:0x5121:OMNIKEY AG CardMan 5121
@@ -381,7 +358,6 @@
 0x04E6:0x512C:SCM Microsystems Inc. SDI011 Contactless Reader
 0x04E6:0x5291:SCM Microsystems Inc. SCL010 Contactless Reader
 0x04E6:0x5293:SCM Microsystems Inc. SCL01x Contactless Reader
-0x04E6:0x5410:SCM Microsystems Inc. SCR35xx v2.0 USB SC Reader
 
 # Secure Device Solutions
 0x0B81:0x8007:Secure Device Solutions DOMINO-Key TWIN
@@ -443,7 +419,6 @@
 0x0416:0x3815:Winbond CCID SmartCard Controller
 
 # XIRING
-0x0F14:0x0011:XIRING XI-SIGN USB V2
 
 # Yubico
 0x1050:0x0111:Yubico Yubikey NEO OTP+CCID
@@ -466,7 +441,6 @@
 0x03EB:0x6016:ATMEL VaultIC460
 
 # Broadcom Corp
-0x0A5C:0x5801:Broadcom Corp 5880
 0x0A5C:0x5801:Broadcom Corp 5880
 
 # C3PO
@@ -514,7 +488,6 @@
 #0x0C4B:0x0300:Reiner-SCT cyberJack pinpad(a)
 
 # SCM Microsystems Inc.
-#0x04E6:0x5291:SCM Microsystems Inc. SCL010 Contactless Reader
 #0x04E6:0x5292:SCM Microsystems Inc. SCL01x Contactless Reader
 
 # SMART
