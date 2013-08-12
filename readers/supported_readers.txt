@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-08-08
+# Generated: 2013-08-12
 #
 # DO NOT EDIT BY HAND
 
@@ -365,6 +365,9 @@
 
 # Secure Device Solutions
 0x0B81:0x8007:Secure Device Solutions DOMINO-Key TWIN
+
+# SecuTech
+0x0403:0xC587:SecuTech SecuTech Token
 
 # Sitecom
 0x0DF6:0x800A:Sitecom Sitecom USB simcard reader MD-010
