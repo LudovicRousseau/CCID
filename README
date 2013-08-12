@@ -118,6 +118,22 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.12 - 12 August 2013, Ludovic Rousseau
+    - Add support of
+      . HID OMNIKEY 5127 CK
+      . HID OMNIKEY 5326 DFR
+      . HID OMNIKEY 5427 CK
+      . Ingenico WITEO USB Smart Card Reader (Base and Badge)
+      . SecuTech SecuTech Token
+    - Add support of card movement notifications for multi-slot readers
+    - Check libusb is at least at version 1.0.8
+    - Get the serialconfdir value from pcsc-lite pkg config instead of
+      using $(DESTDIR)/$(sysconfdir)/reader.conf.d/
+    - Disable class driver on Mac OS X
+    - Update the bundle name template to include the vendor name
+    - some minor bugs removed
+
+
 1.4.11 - 12 June 2013, Ludovic Rousseau
     - Add support of
        . Gemalto IDBridge CT30
