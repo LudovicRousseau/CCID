@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-08-12
+# Generated: 2013-08-20
 #
 # DO NOT EDIT BY HAND
 
@@ -336,6 +336,9 @@
 # Philips Semiconductors
 0x0471:0x040F:Philips Semiconductors JCOP41V221
 0x04B9:0x1400:Philips Semiconductors SmartMX Sample
+
+# Planeta
+0x21AB:0x0010:Planeta RC700-NFC CCID
 
 # Raritan
 0x14DD:0x1006:Raritan D2CIM-DVUSB VM/CCID
