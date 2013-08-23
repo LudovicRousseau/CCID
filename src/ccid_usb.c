@@ -1055,7 +1055,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 {
 	int n, i, len;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
-	unsigned int *int_array;
+	unsigned int *uint_array;
 
 	/* See CCID 3.7.3 page 25 */
 	n = ControlUSB(reader_index,
@@ -1092,8 +1092,8 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 			n = len;
 	}
 
-	int_array = calloc(n+1, sizeof(int));
-	if (NULL == int_array)
+	uint_array = calloc(n+1, sizeof(uint_array[0]));
+	if (NULL == uint_array)
 	{
 		DEBUG_CRITICAL("Memory allocation failed");
 		return NULL;
@@ -1102,14 +1102,14 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	/* convert in correct endianess */
 	for (i=0; i<n; i++)
 	{
-		int_array[i] = dw2i(buffer, i*4);
-		DEBUG_INFO2("declared: %d bps", int_array[i]);
+		uint_array[i] = dw2i(buffer, i*4);
+		DEBUG_INFO2("declared: %d bps", uint_array[i]);
 	}
 
 	/* end of array marker */
-	int_array[i] = 0;
+	uint_array[i] = 0;
 
-	return int_array;
+	return uint_array;
 } /* get_data_rates */
 
 
