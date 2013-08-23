@@ -1405,7 +1405,10 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	/* Implement the PC/SC v2.02.07 Part 10 IOCTL mechanism */
 
 	/* Query for features */
-	if (CM_IOCTL_GET_FEATURE_REQUEST == dwControlCode)
+	/* 0x313520 is the Windows value for SCARD_CTL_CODE(3400)
+	 * This hack is needed for RDP applications */
+	if ((CM_IOCTL_GET_FEATURE_REQUEST == dwControlCode)
+		|| (0x313520 == dwControlCode))
 	{
 		unsigned int iBytesReturned = 0;
 		PCSC_TLV_STRUCTURE *pcsc_tlv = (PCSC_TLV_STRUCTURE *)RxBuffer;
