@@ -8,14 +8,17 @@ CCID_VERSION=CCID_VERSION=`$(srcdir)/convert_version.pl $(PACKAGE_VERSION)`
 
 lib_LTLIBRARIES =
 LIBS_TO_INSTALL =
+LIBS_TO_UNINSTALL =
 if WITH_LIBUSB
 lib_LTLIBRARIES += libccid.la
 LIBS_TO_INSTALL += install_ccid
+LIBS_TO_UNINSTALL += uninstall_ccid
 noinst_PROGRAMS = parse
 endif
 if WITH_TWIN_SERIAL
 lib_LTLIBRARIES += libccidtwin.la
 LIBS_TO_INSTALL += install_ccidtwin
+LIBS_TO_UNINSTALL += uninstall_ccidtwin
 endif
 
 COMMON = ccid.c \
@@ -96,11 +99,12 @@ install_ccidtwin: libccidtwin.la
 
 # do not uninstall the serial driver by default
 # use explicitely 'make uninstall_ccidtwin'
-uninstall-local: uninstall_ccid
+uninstall-local: $(LIBS_TO_UNINSTALL)
 
 uninstall_ccid:
 	rm -rf $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)
 
 uninstall_ccidtwin:
-	rm -f $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB).$(VERSION)
+	rm -f $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)
+	rm -f $(DESTDIR)/$(serialconfdir)/libccidtwin
 
