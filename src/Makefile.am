@@ -73,7 +73,7 @@ EXTRA_DIST = Info.plist.src create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE \
 	convert_version.pl 92_pcscd_ccid.rules
 
-install: $(LIBS_TO_INSTALL)
+install-exec-local: $(LIBS_TO_INSTALL)
 
 INSTALL_UDEV_RULE_FILE=@/bin/echo -e "\n\33[01;31m***************\n" ; echo "copy the src/92_pcscd_ccid.rules file in udev directory (/etc/udev/rules.d/)" ; /bin/echo -e "\n***************\n\33[0m"
 
@@ -96,7 +96,7 @@ install_ccidtwin: libccidtwin.la
 
 # do not uninstall the serial driver by default
 # use explicitely 'make uninstall_ccidtwin'
-uninstall: uninstall_ccid
+uninstall-local: uninstall_ccid
 
 uninstall_ccid:
 	rm -rf $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)
