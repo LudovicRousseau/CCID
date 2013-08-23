@@ -1929,6 +1929,7 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 			return return_value;
 
 		/* wait for ready */
+		pcbuffer[0] = 0;
 		return_value = CmdGetSlotStatus(reader_index, pcbuffer);
 		if (return_value != IFD_SUCCESS)
 			return return_value;
