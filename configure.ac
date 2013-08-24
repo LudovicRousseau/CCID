@@ -9,7 +9,7 @@ AC_PREREQ([2.69])
 AC_INIT([ccid],[1.4.12])
 AC_CONFIG_SRCDIR(src/ifdhandler.c)
 AC_CONFIG_AUX_DIR([.])
-AM_INIT_AUTOMAKE(1.8 dist-bzip2 no-dist-gzip)
+AM_INIT_AUTOMAKE(1.8 dist-bzip2 no-dist-gzip subdir-objects)
 AC_CONFIG_MACRO_DIR([m4])
 
 # silent build by default
