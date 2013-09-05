@@ -107,6 +107,7 @@ if test "x$use_libusb" != xno ; then
 	PKG_CHECK_MODULES(LIBUSB, libusb-1.0 >= $LIBUSB_NEEDED_VERSION, [],
 		[
 		AC_MSG_WARN([install libusb $LIBUSB_NEEDED_VERSION or later])
+		PKG_CHECK_MODULES(LIBUSB, libusb-1.0)
 		])
 	])
 
