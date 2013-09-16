@@ -59,9 +59,11 @@ UB=$(file $LIBUSB_ARCHIVE | grep "Mach-O universal binary")
 echo $UB
 if [ -z "$UB" ]
 then
+	echo -en $RED
 	echo "*************************"
 	echo "No Universal Binary build"
 	echo "*************************"
+	echo -en $NORMAL
 else
 	echo "Universal Binary build"
 	CFLAGS="$CFLAGS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk -arch i386 -arch x86_64"
