@@ -160,9 +160,6 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		}
 		else
 		{
-			/* set back the old timeout */
-			ccid_descriptor->readTimeout = oldReadTimeout;
-
 			/* Maybe we have a special treatment for this reader */
 			return_value = ccid_open_hack_post(reader_index);
 			if (return_value != IFD_SUCCESS)
@@ -170,6 +167,9 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 				DEBUG_CRITICAL("failed");
 			}
 		}
+
+		/* set back the old timeout */
+		ccid_descriptor->readTimeout = oldReadTimeout;
 	}
 
 error:
