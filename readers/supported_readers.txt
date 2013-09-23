@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-08-20
+# Generated: 2013-09-23
 #
 # DO NOT EDIT BY HAND
 
@@ -116,6 +116,9 @@
 ##########################
 # section: shouldwork
 ##########################
+
+# Access IS
+0x0DB5:0x0138:Access IS ePassport Reader
 
 # ACS
 0x072F:0x1204:ACS ACR101 ICC Reader
