@@ -839,6 +839,9 @@ status_t CloseUSB(unsigned int reader_index)
 
 			/* Deallocate the extension itself */
 			free(msExt);
+
+			/* Stop the slot */
+			usbDevice[reader_index].multislot_extension = NULL;
 		}
 
 		if (usbDevice[reader_index].ccid.gemalto_firmware_features)
@@ -1577,9 +1580,6 @@ static void Multi_InterruptStop(int reader_index)
 
 	DEBUG_PERIODIC2("Stop (%d)", reader_index);
 
-	/* Stop the slot */
-	usbDevice[reader_index].multislot_extension = NULL;
-
 	interrupt_byte = (usbDevice[reader_index].ccid.bCurrentSlotIndex / 4) + 1;
 	interrupt_mask = 0x02 << (2 * (usbDevice[reader_index].ccid.bCurrentSlotIndex % 4));
 
@@ -1588,6 +1588,7 @@ static void Multi_InterruptStop(int reader_index)
 	/* Broacast an interrupt to wake-up the slot's thread */
 	msExt->buffer[interrupt_byte] |= interrupt_mask;
 	pthread_cond_broadcast(&msExt->condition);
+
 	pthread_mutex_unlock(&msExt->mutex);
 } /* Multi_InterruptStop */
 
