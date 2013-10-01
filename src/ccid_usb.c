@@ -1017,7 +1017,7 @@ int ccid_check_firmware(struct libusb_device_descriptor *desc)
 {
 	unsigned int i;
 
-	for (i=0; i<sizeof(Bogus_firmwares)/sizeof(Bogus_firmwares[0]); i++)
+	for (i=0; i<COUNT_OF(Bogus_firmwares); i++)
 	{
 		if (desc->idVendor != Bogus_firmwares[i].vendor)
 			continue;
