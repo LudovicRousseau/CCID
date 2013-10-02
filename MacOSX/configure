@@ -82,11 +82,19 @@ CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-pcsclite"
 # simulate a composite device as multi slots
 CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-composite-as-multislot"
 
-# do not build a class driver (not yet used by pcsc-lite on Mac OS X)
-#CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-class"
+# set BUNDLE_ID to a specific value for a specific driver
+#BUNDLE_ID="vendor-reader"
+if [ ! -z "$BUNDLE_ID" ]
+then
+	# do not build a class driver (not yet used by pcsc-lite on Mac OS X)
+	CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-class"
 
-# use a specific bundle name to NOT overwrite the official CCID driver
-#CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-bundle=ifd-ccid-vendor-reader.bundle"
+	# use a specific bundle name to NOT overwrite the official CCID driver
+	CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-bundle=ifd-ccid-$BUNDLE_ID.bundle"
+
+	# differentiate each libccid library by the dynamic linker
+	CONFIGURE_ARGS="$CONFIGURE_ARGS	--prefix=/fake/$BUNDLE_ID"
+fi
 
 set -x
 ./configure \
