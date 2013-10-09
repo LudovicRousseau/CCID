@@ -118,6 +118,23 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.13 - 9 October 2013, Ludovic Rousseau
+    - Add support of
+      . Access IS ePassport Reader
+      . Planeta RC700-NFC CCID
+    - Add support of Windows value for CM_IOCTL_GET_FEATURE_REQUEST
+      Windows uses 0x313520 for SCARD_CTL_CODE(3400) pcsc-lite uses
+      0x42000D48 for SCARD_CTL_CODE(3400)
+      RDP aplications (like rdesktop) will convert SCardControl()
+      commands from a Windows application (so using 0x313520) to
+      pcsc-lite.
+    - fix multi-slot support for card movement notification (introduced
+      in 1.4.12)
+    - Mac OS X: differentiate each libccid library by the dynamic linker
+      using --prefix=/fake/$BUNDLE_ID
+    - some minor bugs removed
+
+
 1.4.12 - 12 August 2013, Ludovic Rousseau
     - Add support of
       . HID OMNIKEY 5127 CK
