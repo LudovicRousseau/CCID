@@ -1,0 +1,27 @@
+[2, 16, 0, 7, 255, 4, 0, 0, 0, 0, 0, 0, 1, 1, 16, 0, 0, 0, 0, 0, 0]
+LogicalLCDLineNumber (Logical number of LCD lines): 2
+LogicalLCDRowNumber (Logical number of characters per LCD line): 16
+LcdInfo: 0
+  b0 indicates if scrolling available: False
+EntryValidationCondition: 7
+PC/SCv2 features:
+ VerifyPinStart: True
+ VerifyPinFinish: True
+ ModifyPinStart: True
+ ModifyPinFinish: True
+ GetKeyPressed: True
+ VerifyPinDirect: True
+ ModifyPinDirect: True
+ Abort: True
+ GetKey: False
+ WriteDisplay: False
+ SetSpeMessage: True
+ bTimeOut2: False
+ bListSupportedLanguages: False
+ bNumberMessageFix: False
+ bPPDUSupportOverXferBlock: False
+ bPPDUSupportOverEscape: False
+VersionNumber: 1
+MinimumPINSize: 1
+MaximumPINSize: 16
+Firewall: False
