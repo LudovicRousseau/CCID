@@ -1,3 +1,6 @@
+Reader:    Gemalto USB GemPCPinpad SmartCard Reader 00 00
+IdVendor:  0x08E6
+IdProduct: 0x3478
 [2, 16, 0, 7, 255, 4, 0, 0, 0, 0, 0, 0, 1, 1, 16, 0, 0, 0, 0, 0, 0]
 LogicalLCDLineNumber (Logical number of LCD lines): 2
 LogicalLCDRowNumber (Logical number of characters per LCD line): 16
