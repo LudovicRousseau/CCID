@@ -1397,8 +1397,9 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			unsigned int iBytesReturned;
 
 			iBytesReturned = RxLength;
-			return_value = CmdEscape(reader_index, TxBuffer, TxLength, RxBuffer,
-				&iBytesReturned);
+			/* 30 seconds timeout for long commands */
+			return_value = CmdEscape(reader_index, TxBuffer, TxLength,
+				RxBuffer, &iBytesReturned, 30*1000);
 			*pdwBytesReturned = iBytesReturned;
 		}
 	}
@@ -1543,7 +1544,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			unsigned int len;
 
 			len = sizeof(firmware);
-			ret = CmdEscape(reader_index, cmd, sizeof(cmd), firmware, &len);
+			ret = CmdEscape(reader_index, cmd, sizeof(cmd), firmware, &len, 0);
 
 			if (IFD_SUCCESS == ret)
 			{
@@ -1670,8 +1671,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 			/* we just transmit the buffer as a CCID Escape command */
 			iBytesReturned = RxLength;
-			return_value = CmdEscape(reader_index, TxBuffer, TxLength, RxBuffer,
-				&iBytesReturned);
+			return_value = CmdEscape(reader_index, TxBuffer, TxLength,
+				RxBuffer, &iBytesReturned, 0);
 			*pdwBytesReturned = iBytesReturned;
 		}
 	}
@@ -1792,7 +1793,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 		if (! (LogLevel & DEBUG_LEVEL_PERIODIC))
 			LogLevel &= ~DEBUG_LEVEL_COMM;
 
-		ret = CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res);
+		ret = CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res, 0);
 
 		/* set back the old LogLevel */
 		LogLevel = oldLogLevel;

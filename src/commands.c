@@ -245,7 +245,7 @@ again:
 			unsigned int res_length = sizeof(res_tmp);
 
 			if ((return_value = CmdEscape(reader_index, cmd_tmp,
-				sizeof(cmd_tmp), res_tmp, &res_length)) != IFD_SUCCESS)
+				sizeof(cmd_tmp), res_tmp, &res_length, 0)) != IFD_SUCCESS)
 				return return_value;
 
 			/* avoid looping if we can't switch mode */
@@ -455,7 +455,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 		/* the SPR532 will append the PIN code without any padding */
 		return_value = CmdEscape(reader_index, cmd_tmp, sizeof(cmd_tmp),
-			res_tmp, &res_length);
+			res_tmp, &res_length, 0);
 		if (return_value != IFD_SUCCESS)
 			return return_value;
 
@@ -805,7 +805,7 @@ end:
  ****************************************************************************/
 RESPONSECODE CmdEscape(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,
-	unsigned char RxBuffer[], unsigned int *RxLength)
+	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout)
 {
 	unsigned char *cmd_in, *cmd_out;
 	status_t res;
@@ -814,8 +814,12 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 	int old_read_timeout;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	old_read_timeout = ccid_descriptor -> readTimeout;
-	ccid_descriptor -> readTimeout = 30*1000;	/* 30 seconds */
+	/* a value of 0 do not change the default read timeout */
+	if (timeout > 0)
+	{
+		old_read_timeout = ccid_descriptor -> readTimeout;
+		ccid_descriptor -> readTimeout = timeout;
+	}
 
 again:
 	/* allocate buffers */
@@ -909,7 +913,9 @@ time_request:
 	free(cmd_out);
 
 end:
-	ccid_descriptor -> readTimeout = old_read_timeout;
+	if (timeout > 0)
+		ccid_descriptor -> readTimeout = old_read_timeout;
+
 	return return_value;
 } /* Escape */
 

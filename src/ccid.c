@@ -200,7 +200,7 @@ static void set_gemalto_firmware_features(unsigned int reader_index)
 		RESPONSECODE ret;
 
 		ret = CmdEscape(reader_index, cmd, sizeof cmd,
-			(unsigned char*)gf_features, &len_features);
+			(unsigned char*)gf_features, &len_features, 0);
 		if ((IFD_SUCCESS == ret) &&
 		    (len_features == sizeof *gf_features))
 		{
@@ -242,7 +242,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 				unsigned char res[10];
 				unsigned int length_res = sizeof(res);
 
-				if (CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res) == IFD_SUCCESS)
+				if (CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res, 0) == IFD_SUCCESS)
 				{
 					ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
 					ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
@@ -427,7 +427,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 				}
 
 				(void)sleep(1);
-				if (IFD_SUCCESS == CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res))
+				if (IFD_SUCCESS == CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res, 0))
 				{
 					DEBUG_COMM("l10n string loaded successfully");
 				}
@@ -467,8 +467,8 @@ int ccid_open_hack_post(unsigned int reader_index)
 				unsigned char res[20];
 				unsigned int length_res = sizeof(res);
 
-				if ((IFD_SUCCESS == CmdEscape(reader_index, cmd1, sizeof(cmd1), res, &length_res))
-					&& (IFD_SUCCESS == CmdEscape(reader_index, cmd2, sizeof(cmd2), res, &length_res)))
+				if ((IFD_SUCCESS == CmdEscape(reader_index, cmd1, sizeof(cmd1), res, &length_res, 0))
+					&& (IFD_SUCCESS == CmdEscape(reader_index, cmd2, sizeof(cmd2), res, &length_res, 0)))
 				{
 					DEBUG_COMM("SCM SCR331-DI contactless detected");
 				}

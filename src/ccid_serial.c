@@ -760,18 +760,13 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned int rx_length = sizeof(rx_buffer);
 
 		/* 2 seconds timeout to not wait too long if no reader is connected */
-		serialDevice[reader].ccid.readTimeout = 2*1000;
-
 		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
-			rx_buffer, &rx_length))
+			rx_buffer, &rx_length, 2*1000))
 		{
 			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not connected");
 			(void)CloseSerial(reader_index);
 			return STATUS_UNSUCCESSFUL;
 		}
-
-		/* normal timeout: 2 seconds */
-		serialDevice[reader].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT ;
 
 		rx_buffer[rx_length] = '\0';
 		DEBUG_INFO2("Firmware: %s", rx_buffer);
@@ -786,7 +781,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned int rx_length = sizeof(rx_buffer);
 
 		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
-			rx_buffer, &rx_length))
+			rx_buffer, &rx_length, 0))
 		{
 			DEBUG_CRITICAL("Change card movement notification failed.");
 			(void)CloseSerial(reader_index);
