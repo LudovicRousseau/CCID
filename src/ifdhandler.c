@@ -1182,8 +1182,9 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			if (return_value != IFD_SUCCESS)
 			{
 				/* used by GemCore SIM PRO: no card is present */
-				get_ccid_descriptor(reader_index)->dwSlotStatus
-					= IFD_ICC_NOT_PRESENT;
+				if (GEMCORESIMPRO == ccid_descriptor -> readerID)
+					get_ccid_descriptor(reader_index)->dwSlotStatus
+						= IFD_ICC_NOT_PRESENT;
 
 				DEBUG_CRITICAL("PowerUp failed");
 				return_value = IFD_ERROR_POWER_ACTION;
