@@ -447,9 +447,12 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 						/* we reuse the same device
 						 * and the reader is multi-slot */
 						usbDevice[reader_index] = usbDevice[previous_reader_index];
-						/* the other slots do not have the same data rates */
+						/* The other slots of GemCore SIM Pro firmware
+						 * 1.0 do not have the same data rates.
+						 * Firmware 2.0 do not have this limitation */
 						if ((GEMCOREPOSPRO == readerID)
-							|| (GEMCORESIMPRO == readerID))
+							|| ((GEMCORESIMPRO == readerID)
+							&& (usbDevice[reader_index].ccid.IFD_bcdDevice < 0x0200)))
 						{
 							usbDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
 							usbDevice[reader_index].ccid.dwMaxDataRate = 125000;

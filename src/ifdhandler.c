@@ -1709,8 +1709,11 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	if (GEMCORESIMPRO == ccid_descriptor->readerID)
+	if ((GEMCORESIMPRO == ccid_descriptor->readerID)
+	     && (ccid_descriptor->IFD_bcdDevice < 0x0200))
 	{
+		/* GemCore SIM Pro firmware 2.00 and up features
+		 * a full independant second slot */
 		return_value = ccid_descriptor->dwSlotStatus;
 		goto end;
 	}
