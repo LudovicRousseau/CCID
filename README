@@ -276,10 +276,15 @@ History:
 
 
 1.4.5 - 11 October 2011, Ludovic Rousseau
-    - Add support of Alcor Micro AU9540, Ubisys 13.56MHz RFID (CCID),
-      BIFIT USB-Token iBank2key, BIFIT iBank2Key, Gemalto Ezio Shield
-      PinPad reader, Gemalto SA .NET Dual, Precise Sense MC reader (with
-      fingerprint), SDS DOMINO-Key TWIN Pro
+    - Add support of
+      . Alcor Micro AU9540
+      . BIFIT USB-Token iBank2key
+      . BIFIT iBank2Key
+      . Gemalto Ezio Shield PinPad reader
+      . Gemalto SA .NET Dual
+      . Precise Sense MC reader (with fingerprint)
+      . SDS DOMINO-Key TWIN Pro
+      . Ubisys 13.56MHz RFID (CCID)
     - Add support of bPPDUSupport and FEATURE_CCID_ESC_COMMAND
     - SCARD_ATTR_VENDOR_NAME and SCARD_ATTR_VENDOR_IFD_VERSION are not
       the vendor name and version of the driver but of the IFD:
@@ -291,9 +296,12 @@ History:
 
 
 1.4.4 - 13 May 2011, Ludovic Rousseau
-    - Add support of Gemalto Ezio Shield, Gemalto Ezio CB+, Gemalto Ezio
-      Shield Secure Channel, Gemalto Ezio Shield PinPad and Gemalto Ezio
-      Generic
+    - Add support of
+      . Gemalto Ezio CB+
+      . Gemalto Ezio Generic
+      . Gemalto Ezio Shield
+      . Gemalto Ezio Shield PinPad
+      . Gemalto Ezio Shield Secure Channel
     - Activate USB automatic power suspend. The Linux kernel should
       power off the reader automatically if it is not used (pcscd is not
       running).
@@ -303,8 +311,11 @@ History:
 
 
 1.4.3 - 2 April 2011, Ludovic Rousseau
-    - Add support of Neowave Weneo, Vasco DIGIPASS 920, SCM SCL011,
-      Feitian ePass2003 readers
+    - Add support of
+      . Feitian ePass2003 readers
+      . Neowave Weneo
+      . SCM SCL011
+      . Vasco DIGIPASS 920
     - use :libudev: instead of :libhal: naming scheme.
     - Do not install RSA_SecurID_getpasswd and Kobil_mIDentity_switch
       and the associated documentation.
@@ -314,10 +325,16 @@ History:
 
 
 1.4.2 - 22 February 2011, Ludovic Rousseau
-    - Add support of Feitian SCR310 reader (also known as 301v2), ACS
-      APG8201 PINhandy 1, Oberthur ID-ONE TOKEN SLIM v2, new Neowave
-      Weneo token, Vasco DIGIPASS KEY 860, Vasco DIGIPASS KEY 200,
-      Xiring Leo v2, Xiring MyLeo, Aktiv Rutoken lite readers
+    - Add support of
+      . ACS APG8201 PINhandy 1
+      . Aktiv Rutoken lite readers
+      . Feitian SCR310 reader (also known as 301v2)
+      . Oberthur ID-ONE TOKEN SLIM v2
+      . Vasco DIGIPASS KEY 200
+      . Vasco DIGIPASS KEY 860
+      . Xiring Leo v2
+      . Xiring MyLeo
+      . new Neowave Weneo token
     - Add back support of "bogus" Oz776, REINER SCT and BLUDRIVE II
     - Ease detection of OpenCT by pcsc-lite
     - disable use of interrupt card events for multi slots readers (the
@@ -327,9 +344,11 @@ History:
 
 
 1.4.1 - 3 December 2010, Ludovic Rousseau
-    - Add support of Gemalto Smart Guardian (SG CCID), ReinerSCT
-      cyberJack RFID basis, Akasa AK-CR-03, BZH uKeyCI800-K18, Free
-      Software Initiative of Japan Gnuk token readers
+    - Add support of
+      . Akasa AK-CR-03, BZH uKeyCI800-K18
+      . Free Software Initiative of Japan Gnuk token readers
+      . Gemalto Smart Guardian (SG CCID)
+      . ReinerSCT cyberJack RFID basis
     - Remove O2 Micro Oz776 and Blutronics Bludrive II CCID since they
       are no more supported since version 1.4.0
     - SecurePINVerify() & SecurePINModify(): Accept big and little
@@ -348,9 +367,15 @@ History:
 
 
 1.4.0 - 4 August 2010, Ludovic Rousseau
-    - add support of Kingtrust Multi-Reader, Dectel CI692, Todos CX00,
-      C3PO LTC36, ACS AET65, Broadcom 5880, Tianyu Smart Card Reader,
-      Gemalto Hybrid Smartcard Reader
+    - add support of
+      . ACS AET65
+      . Broadcom 5880
+      . C3PO LTC36
+      . Dectel CI692
+      . Gemalto Hybrid Smartcard Reader
+      . Kingtrust Multi-Reader
+      . Tianyu Smart Card Reader
+      . Todos CX00
     - Add support of the SCM SDI 010 again. At least the contact
       interface can be used.
     - Use libusb-1.0 instead of libusb-0.1
@@ -373,14 +398,31 @@ History:
 
 
 1.3.12 - 8 May 2010, Ludovic Rousseau
-    - add support of Todos AGM2 CCID, Cherry SmartTerminal XX7X, Smart
-      SBV280, Ask CPL108, German Privacy Foundation Crypto Stick v1.2,
-      id3 CL1356T5, Covadis Auriga, GoldKey PIV Token, Vasco DIGIPASS
-      KEY 860, Vasco DIGIPASS KEY 200, Vasco DP855, Vasco DP865, Atmel
-      AT90SCR100, Atmel AT90SCR050, Atmel VaultIC420, Atmel VaultIC440,
-      Atmel VaultIC460, KOBIL Smart Token, KOBIL mIDentity 4smart, KOBIL
-      mIDentity 4smart AES, KOBIL mIDentity visual, KOBIL mIDentity
-      fullsize, KOBIL mIDentity 4smart fullsize AES, SCM SCR3500
+    - add support of
+      . Ask CPL108
+      . Atmel AT90SCR050
+      . Atmel AT90SCR100
+      . Atmel VaultIC420
+      . Atmel VaultIC440
+      . Atmel VaultIC460
+      . Cherry SmartTerminal XX7X
+      . Covadis Auriga
+      . German Privacy Foundation Crypto Stick v1.2
+      . GoldKey PIV Token
+      . KOBIL Smart Token
+      . KOBIL mIDentity 4smart
+      . KOBIL mIDentity 4smart AES
+      . KOBIL mIDentity 4smart fullsize AES
+      . KOBIL mIDentity fullsize
+      . KOBIL mIDentity visual
+      . SCM SCR3500
+      . Smart SBV280
+      . Todos AGM2 CCID
+      . Vasco DIGIPASS KEY 200
+      . Vasco DIGIPASS KEY 860
+      . Vasco DP855
+      . Vasco DP865
+      . id3 CL1356T5
     - remove support of Smart SBV280 on manufacturer request. They use
       libusb directly.
     - remove support of SCM SDI 010 on manufacturer request since not
@@ -419,10 +461,17 @@ History:
 
 
 1.3.11 - 28 July 2009, Ludovic Rousseau
-    - add support of Raritan D2CIM-DVUSB VM/CCID, Feitian SCR301,
-      Softforum XecureHSM, 2 Neowave Weneo tokens, Synnix STD200, Aktiv
-      Rutoken ECP, Alcor Micro SCR001, ATMEL AT91SC192192CT-USB,
-      Panasonic USB Smart Card Reader 7A-Smart, Gemalto GemProx DU and SU
+    - add support of
+      . Raritan D2CIM-DVUSB VM/CCID
+      . Feitian SCR301
+      . Softforum XecureHSM
+      . 2 Neowave Weneo tokens
+      . Synnix STD200
+      . Aktiv Rutoken ECP
+      . Alcor Micro SCR001
+      . ATMEL AT91SC192192CT-USB
+      . Panasonic USB Smart Card Reader 7A-Smart
+      . Gemalto GemProx DU and SU
     - remove support of Reiner-SCT cyberJack pinpad(a) on request of
       Reiner-SCT.  You should user the Reiner-SCT driver instead
     - define CFBundleName to CCIDCLASSDRIVER so that non class drivers
@@ -442,10 +491,15 @@ History:
 
 
 1.3.10 - 7 March 2009, Ludovic Rousseau
-    - add support for MSI StarReader SMART, Noname reader (from
-      Omnikey), Xiring Xi Sign PKI, Realtek 43 in 1 + Sim + Smart Card
-      Reader, Atmel AT98SC032CT, Aktiv Rutoken Magistra, TianYu CCID
-      SmartKey, Precise Biometrics 200 MC and 250 MC
+    - add support for
+      . Aktiv Rutoken Magistra
+      . Atmel AT98SC032CT
+      . MSI StarReader SMART
+      . Noname reader (from Omnikey)
+      . Precise Biometrics 200 MC and 250 MC
+      . Realtek 43 in 1 + Sim + Smart Card Reader
+      . TianYu CCID SmartKey
+      . Xiring Xi Sign PKI
     - add a patch to support the bogus OpenPGP card (on board key
       generation sometimes timed out)
     - disable support of the contactless part of SDI010 and SCR331DI
@@ -454,12 +508,22 @@ History:
 
 
 1.3.9 - 18 November 2008, Ludovic Rousseau
-    - add support for Aladdin eToken PRO USB 72K Java, Cherry
-      SmartTerminal ST-1200USB, Atmel AT91SO, SpringCard Prox'N'Roll,
-      CSB6 Basic, EasyFinger Ultimate, CSB6 Ultimate, EasyFinger
-      Standard, CrazyWriter, CSB6 Secure, KONA USB SmartCard, HP MFP
-      Smart Card Reader, ACS ACR122U PICC, Gemalto PDT, VMware Virtual
-      USB CCID
+    - add support for
+     . ACS ACR122U PICC
+     . Aladdin eToken PRO USB 72K Java
+     . Atmel AT91SO
+     . CSB6 Basic
+     . CSB6 Secure
+     . CSB6 Ultimate
+     . Cherry SmartTerminal ST-1200USB
+     . CrazyWriter
+     . EasyFinger Standard
+     . EasyFinger Ultimate
+     . Gemalto PDT
+     . HP MFP Smart Card Reader
+     . KONA USB SmartCard
+     . SpringCard Prox'N'Roll
+     . VMware Virtual USB CCID
     - MacOSX/configure: do not overwrite PCSC_CFLAGS, PCSC_LIBS,
       LIBUSB_CFLAGS and LIBUSB_LIBS if already defined by the user
     - by default, link statically against libusb on Mac OS X
@@ -472,7 +536,8 @@ History:
 
 
 1.3.8 - 27 June 2008, Ludovic Rousseau
-    - add support for Oberthur ID-One Cosmo Card
+    - add support for
+      . Oberthur ID-One Cosmo Card
     - do not include the release number in the Info.plist to avoid a
       diff of a configuration file when upgrading the package.
     - do not fail compilation if libusb is not available
@@ -482,8 +547,10 @@ History:
 
 
 1.3.7 - 8 June 2008, Ludovic Rousseau
-    - add support for ActivCard Activkey Sim, Pro-Active CSB6 Ultimate,
-      id3 Semiconductors CL1356A HID
+    - add support for
+      . ActivCard Activkey Sim
+      . Pro-Active CSB6 Ultimate
+      . id3 Semiconductors CL1356A HID
     - src/parse: do not try to parse devices with bInterfaceClass=0xFF
       by default (use command line argument -p for proprietary class)
     - configure.in: check if libusb-0.1 is emulated by libusb-compat +
@@ -495,8 +562,12 @@ History:
 
 
 1.3.6 - 30 April 2008, Ludovic Rousseau
-    - add support for Covadis Alya, Covadis Véga, Precise Biometrics 250
-      MC, Vasco DP905, Validy TokenA sl vt
+    - add support for
+     . Covadis Alya
+     . Covadis Véga
+     . Precise Biometrics 250 MC
+     . Validy TokenA sl vt
+     . Vasco DP905
     - better support for the O2Micro OZ776, GemCore SIM Pro
     - the environment variable LIBCCID_ifdLogLevel overwrite the value
       of ifdLogLevel read from the Info.plist file
