@@ -118,6 +118,14 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.14 - 25 NOvember 2013, Ludovic Rousseau
+    - Add support of
+      . Gemalto GemCore SIM Pro firmware 2.0 (using USB)
+    - report FEATURE_IFD_PIN_PROPERTIES only for pinpad readers
+    - Generalize the management of (old) readers with bDeviceClass = 0xFF
+    - some minor bugs removed
+
+
 1.4.13 - 9 October 2013, Ludovic Rousseau
     - Add support of
       . Access IS ePassport Reader
