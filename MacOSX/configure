@@ -66,7 +66,7 @@ then
 	echo -en $NORMAL
 else
 	echo "Universal Binary build"
-	CFLAGS="$CFLAGS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk -arch i386 -arch x86_64"
+	CFLAGS="$CFLAGS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk -arch i386 -arch x86_64"
 fi
 echo
 
