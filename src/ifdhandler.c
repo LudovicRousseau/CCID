@@ -1441,13 +1441,16 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 		}
 
-		/* We can always forward wLcdLayout */
-		pcsc_tlv -> tag = FEATURE_IFD_PIN_PROPERTIES;
-		pcsc_tlv -> length = 0x04; /* always 0x04 */
-		pcsc_tlv -> value = htonl(IOCTL_FEATURE_IFD_PIN_PROPERTIES);
+		/* Provide IFD_PIN_PROPERTIES only for pinpad readers */
+		if (ccid_descriptor -> bPINSupport)
+		{
+			pcsc_tlv -> tag = FEATURE_IFD_PIN_PROPERTIES;
+			pcsc_tlv -> length = 0x04; /* always 0x04 */
+			pcsc_tlv -> value = htonl(IOCTL_FEATURE_IFD_PIN_PROPERTIES);
 
-		pcsc_tlv++;
-		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
+			pcsc_tlv++;
+			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
+		}
 
 		if ((KOBIL_TRIBANK == readerID)
 			|| (KOBIL_MIDENTITY_VISUAL == readerID))
