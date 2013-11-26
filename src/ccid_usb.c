@@ -1074,12 +1074,11 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	unsigned int *uint_array;
 
 	/* See CCID 3.7.3 page 25 */
-	n = ControlUSB_mayfail(reader_index,
+	n = ControlUSB(reader_index,
 		0xA1, /* request type */
 		0x03, /* GET_DATA_RATES */
 		0x00, /* value */
-		buffer, sizeof(buffer),
-		TRUE);
+		buffer, sizeof(buffer));
 
 	/* we got an error? */
 	if (n <= 0)
@@ -1135,8 +1134,8 @@ static unsigned int *get_data_rates(unsigned int reader_index,
  *					ControlUSB
  *
  ****************************************************************************/
-int ControlUSB_mayfail(int reader_index, int requesttype, int request,
-	int value, unsigned char *bytes, unsigned int size, int mayfail)
+int ControlUSB(int reader_index, int requesttype, int request, int value,
+	unsigned char *bytes, unsigned int size)
 {
 	int ret;
 
@@ -1151,18 +1150,9 @@ int ControlUSB_mayfail(int reader_index, int requesttype, int request,
 
 	if (ret < 0)
 	{
-		if (mayfail)
-		{
-			DEBUG_INFO5("control failed (%d/%d): %d %s",
-				usbDevice[reader_index].bus_number,
-				usbDevice[reader_index].device_address, ret, strerror(errno));
-		}
-		else
-		{
-			DEBUG_CRITICAL5("control failed (%d/%d): %d %s",
-				usbDevice[reader_index].bus_number,
-				usbDevice[reader_index].device_address, ret, strerror(errno));
-		}
+		DEBUG_CRITICAL5("control failed (%d/%d): %d %s",
+			usbDevice[reader_index].bus_number,
+			usbDevice[reader_index].device_address, ret, strerror(errno));
 
 		return ret;
 	}
@@ -1171,18 +1161,6 @@ int ControlUSB_mayfail(int reader_index, int requesttype, int request,
 		DEBUG_XXD("receive: ", bytes, ret);
 
 	return ret;
-} /* ControlUSB */
-
-/*****************************************************************************
- *
- *					ControlUSB
- *
- ****************************************************************************/
-int ControlUSB(int reader_index, int requesttype, int request, int value,
-	unsigned char *bytes, unsigned int size)
-{
-	return ControlUSB_mayfail(reader_index, requesttype, request, value,
-		bytes, size, FALSE);
 } /* ControlUSB */
 
 /*****************************************************************************
