@@ -73,6 +73,8 @@ extern int LogLevel;
 
 #define DEBUG_INFO4(fmt, data1, data2, data3) if (LogLevel & DEBUG_LEVEL_INFO) Log4(PCSC_LOG_INFO, fmt, data1, data2, data3)
 
+#define DEBUG_INFO5(fmt, data1, data2, data3, data4) if (LogLevel & DEBUG_LEVEL_INFO) Log5(PCSC_LOG_INFO, fmt, data1, data2, data3, data4)
+
 #define DEBUG_INFO_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_INFO) log_xxd(PCSC_LOG_INFO, msg, buffer, size)
 
 /* DEBUG_PERIODIC */
