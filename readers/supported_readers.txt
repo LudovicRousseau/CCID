@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2013-11-25
+# Generated: 2013-12-06
 #
 # DO NOT EDIT BY HAND
 
@@ -203,6 +203,9 @@
 
 # Dectel
 0x0BDA:0x0165:Dectel CI692
+
+# DUALi
+0x1DB2:0x088B:DUALi DRAGON NFC READER
 
 # Feitian Technologies
 0x096E:0x0505:Feitian Technologies FT SCR310
@@ -575,4 +578,7 @@
 
 #0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_badge.txt)
 #0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_base.txt)
+
+#0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt)
+#0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt_i1)
 
