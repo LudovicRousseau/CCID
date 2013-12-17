@@ -568,7 +568,7 @@ int main(int argc, char *argv[])
 	pin_verify -> abData[offset++] = 0x00;	/* '\0' */
 	pin_verify -> ulDataLength = offset;	/* APDU size */
 
-	length = sizeof(PIN_VERIFY_STRUCTURE) + offset -1;	/* -1 because PIN_VERIFY_STRUCTURE contains the first byte of abData[] */
+	length = sizeof(PIN_VERIFY_STRUCTURE) + offset;
 
 	printf(" command:");
 	for (i=0; i<length; i++)
@@ -712,7 +712,7 @@ int main(int argc, char *argv[])
 	pin_modify -> abData[offset++] = 0x30;	/* '0' */
 	pin_modify -> ulDataLength = offset;	/* APDU size */
 
-	length = sizeof(PIN_MODIFY_STRUCTURE) + offset -1;	/* -1 because PIN_MODIFY_STRUCTURE contains the first byte of abData[] */
+	length = sizeof(PIN_MODIFY_STRUCTURE) + offset;
 
 	printf(" command:");
 	for (i=0; i<length; i++)
