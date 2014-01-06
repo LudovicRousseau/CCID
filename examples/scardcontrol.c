@@ -167,6 +167,39 @@ static void parse_properties(unsigned char *bRecvBuffer, int length)
 	}
 } /* parse_properties */
 
+
+static const char *pinpad_return_codes(unsigned char bRecvBuffer[])
+{
+	const char * ret = "UNKNOWN";
+
+	if ((0x90 == bRecvBuffer[0]) && (0x00 == bRecvBuffer[1]))
+		ret = "Success";
+
+	if (0x64 == bRecvBuffer[0])
+	{
+		switch (bRecvBuffer[1])
+		{
+			case 0x00:
+				ret = "Timeout";
+				break;
+
+			case 0x01:
+				ret = "Cancelled by user";
+				break;
+
+			case 0x02:
+				ret = "PIN mismatch";
+				break;
+
+			case 0x03:
+				ret = "Too short or too long PIN";
+				break;
+		}
+	}
+
+	return ret;
+}
+
 int main(int argc, char *argv[])
 {
 	LONG rv;
@@ -608,7 +641,7 @@ int main(int argc, char *argv[])
 	printf(" card response:");
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
-	printf("\n");
+	printf(": %s\n", pinpad_return_codes(bRecvBuffer));
 	PCSC_ERROR_CONT(rv, "SCardControl")
 
 	/* verify PIN dump */
