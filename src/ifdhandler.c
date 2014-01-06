@@ -1579,6 +1579,25 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer[p++] = 0x02;	/* validation key pressed */
 		}
 
+		/* Cherry GmbH SmartTerminal ST-2xxx */
+		if (CHERRYST2000 == ccid_descriptor -> readerID)
+		{
+			/* bMinPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 0;	/* min PIN size */
+
+			/* bMaxPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMaxPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 25;	/* max PIN size */
+
+			/* bEntryValidationCondition */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bEntryValidationCondition;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 0x02;	/* validation key pressed */
+		}
+
 		/* bPPDUSupport */
 		RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bPPDUSupport;
 		RxBuffer[p++] = 1;	/* length */
