@@ -238,6 +238,13 @@ int main(int argc, char *argv[])
 	int PIN_min_size = 4;
 	int PIN_max_size = 8;
 
+	/* table for bEntryValidationCondition
+	 * 0x01: Max size reached
+	 * 0x02: Validation key pressed
+	 * 0x04: Timeout occured
+	 */
+	int bEntryValidationCondition = 7;
+
 	printf("SCardControl sample code\n");
 	printf("V 1.4 © 2004-2010, Ludovic Rousseau <ludovic.rousseau@free.fr>\n\n");
 
@@ -444,6 +451,14 @@ int main(int argc, char *argv[])
 			PRINT_GREEN_DEC(" PIN min size defined", PIN_max_size);
 		}
 
+		ret = PCSCv2Part10_find_TLV_property_by_tag_from_hcard(hCard, PCSCv2_PART10_PROPERTY_bEntryValidationCondition, &value);
+		if (0 == ret)
+		{
+			bEntryValidationCondition = value;
+			PRINT_GREEN_DEC(" Entry Validation Condition defined", 
+				bEntryValidationCondition);
+		}
+
 		printf("\n");
 	}
 
@@ -580,11 +595,6 @@ int main(int argc, char *argv[])
 	printf(" Secure verify PIN\n");
 	pin_verify = (PIN_VERIFY_STRUCTURE *)bSendBuffer;
 
-	/* table for bEntryValidationCondition
-	 * 0x01: Max size reached
-	 * 0x02: Validation key pressed
-	 * 0x04: Timeout occured
-	 */
 	/* PC/SC v2.02.05 Part 10 PIN verification data structure */
 	pin_verify -> bTimerOut = 0x00;
 	pin_verify -> bTimerOut2 = 0x00;
@@ -592,7 +602,7 @@ int main(int argc, char *argv[])
 	pin_verify -> bmPINBlockString = 0x04;
 	pin_verify -> bmPINLengthFormat = 0x00;
 	pin_verify -> wPINMaxExtraDigit = (PIN_min_size << 8) + PIN_max_size;
-	pin_verify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
+	pin_verify -> bEntryValidationCondition = bEntryValidationCondition;
 	pin_verify -> bNumberMessage = 0x01;
 	pin_verify -> wLangId = 0x0904;
 	pin_verify -> bMsgIndex = 0x00;
@@ -735,7 +745,7 @@ int main(int argc, char *argv[])
 	pin_modify -> wPINMaxExtraDigit = (PIN_min_size << 8) + PIN_max_size;
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
 									/* b1 set = current PIN entry requested */
-	pin_modify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
+	pin_modify -> bEntryValidationCondition = bEntryValidationCondition;
 	pin_modify -> bNumberMessage = 0x03; /* see table above */
 	pin_modify -> wLangId = 0x0904;
 	pin_modify -> bMsgIndex1 = 0x00;
