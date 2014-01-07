@@ -37,8 +37,8 @@
 
 #include "PCSCv2part10.h"
 
-#undef VERIFY_PIN
-#define MODIFY_PIN
+#define VERIFY_PIN
+#undef MODIFY_PIN
 #undef GET_GEMPC_FIRMWARE
 
 #ifndef TRUE
