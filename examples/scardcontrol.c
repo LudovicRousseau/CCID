@@ -235,6 +235,8 @@ int main(int argc, char *argv[])
 #ifdef MODIFY_PIN
 	PIN_MODIFY_STRUCTURE *pin_modify;
 #endif
+	int PIN_min_size = 4;
+	int PIN_max_size = 8;
 
 	printf("SCardControl sample code\n");
 	printf("V 1.4 © 2004-2010, Ludovic Rousseau <ludovic.rousseau@free.fr>\n\n");
@@ -427,6 +429,21 @@ int main(int argc, char *argv[])
 		else
 			PRINT_GREEN_HEX4(" wIdProduct", value);
 
+		ret = PCSCv2Part10_find_TLV_property_by_tag_from_hcard(hCard, PCSCv2_PART10_PROPERTY_bMinPINSize, &value);
+		if (0 == ret)
+		{
+			PIN_min_size = value;
+			PRINT_GREEN_DEC(" PIN min size defined", PIN_min_size);
+		}
+
+
+		ret = PCSCv2Part10_find_TLV_property_by_tag_from_hcard(hCard, PCSCv2_PART10_PROPERTY_bMaxPINSize, &value);
+		if (0 == ret)
+		{
+			PIN_max_size = value;
+			PRINT_GREEN_DEC(" PIN min size defined", PIN_max_size);
+		}
+
 		printf("\n");
 	}
 
@@ -574,7 +591,7 @@ int main(int argc, char *argv[])
 	pin_verify -> bmFormatString = 0x82;
 	pin_verify -> bmPINBlockString = 0x04;
 	pin_verify -> bmPINLengthFormat = 0x00;
-	pin_verify -> wPINMaxExtraDigit = 0x0408; /* Min Max */
+	pin_verify -> wPINMaxExtraDigit = (PIN_min_size << 8) + PIN_max_size;
 	pin_verify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
 	pin_verify -> bNumberMessage = 0x01;
 	pin_verify -> wLangId = 0x0904;
@@ -714,7 +731,7 @@ int main(int argc, char *argv[])
 	pin_modify -> bmPINLengthFormat = 0x00;
 	pin_modify -> bInsertionOffsetOld = 0x00;	/* offset from APDU start */
 	pin_modify -> bInsertionOffsetNew = 0x04;	/* offset from APDU start */
-	pin_modify -> wPINMaxExtraDigit = 0x0408;	/* Min Max */
+	pin_modify -> wPINMaxExtraDigit = (PIN_min_size << 8) + PIN_max_size;
 	pin_modify -> bConfirmPIN = 0x03;	/* b0 set = confirmation requested */
 									/* b1 set = current PIN entry requested */
 	pin_modify -> bEntryValidationCondition = 0x02;	/* validation key pressed */
