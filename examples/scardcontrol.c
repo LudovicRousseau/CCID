@@ -646,9 +646,10 @@ int main(int argc, char *argv[])
 		{
 			/* read the fake digits */
 			char in[40];	/* 4 digits + \n + \0 */
-			(void)fgets(in, sizeof(in), stdin);
+			char *s = fgets(in, sizeof(in), stdin);
 
-			printf("keyboard sent: %s", in);
+			if (s)
+				printf("keyboard sent: %s", in);
 		}
 		else
 			/* if it is not a keyboard */
