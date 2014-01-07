@@ -1488,13 +1488,25 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	if (IOCTL_FEATURE_IFD_PIN_PROPERTIES == dwControlCode)
 	{
 		PIN_PROPERTIES_STRUCTURE *caps = (PIN_PROPERTIES_STRUCTURE *)RxBuffer;
+		int validation;
 
 		if (RxLength < sizeof(PIN_PROPERTIES_STRUCTURE))
 			return IFD_ERROR_INSUFFICIENT_BUFFER;
 
 		/* Only give the LCD size for now */
 		caps -> wLcdLayout = ccid_descriptor -> wLcdLayout;
-		caps -> bEntryValidationCondition = 0x07; /* Default */
+		switch (ccid_descriptor->readerID)
+		{
+			case GEMPCPINPAD:
+			case VEGAALPHA:
+			case CHERRYST2000:
+				validation = 0x02; /* Validation key pressed */
+				break;
+			default:
+				validation = 0x07; /* Default */
+		}
+
+		caps -> bEntryValidationCondition = validation;
 		caps -> bTimeOut2 = 0x00; /* We do not distinguish bTimeOut from TimeOut2 */
 
 		*pdwBytesReturned = sizeof(*caps);
