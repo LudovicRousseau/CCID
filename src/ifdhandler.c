@@ -1495,6 +1495,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 		/* Only give the LCD size for now */
 		caps -> wLcdLayout = ccid_descriptor -> wLcdLayout;
+
+		/* Hardcoded special reader cases */
 		switch (ccid_descriptor->readerID)
 		{
 			case GEMPCPINPAD:
@@ -1505,6 +1507,10 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			default:
 				validation = 0x07; /* Default */
 		}
+
+		/* Gemalto readers providing firmware features */
+		if (ccid_descriptor -> gemalto_firmware_features)
+			validation = ccid_descriptor -> gemalto_firmware_features -> bEntryValidationCondition;
 
 		caps -> bEntryValidationCondition = validation;
 		caps -> bTimeOut2 = 0x00; /* We do not distinguish bTimeOut from TimeOut2 */
@@ -1571,7 +1577,8 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		}
 
 		/* Gemalto PC Pinpad V1 */
-		if ((GEMPCPINPAD == ccid_descriptor -> readerID)
+		if (((GEMPCPINPAD == ccid_descriptor -> readerID)
+			&& (0x0100 == ccid_descriptor -> IFD_bcdDevice))
 			/* Covadis Véga-Alpha */
 			|| (VEGAALPHA == ccid_descriptor->readerID))
 		{
@@ -1608,6 +1615,27 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bEntryValidationCondition;
 			RxBuffer[p++] = 1;	/* length */
 			RxBuffer[p++] = 0x02;	/* validation key pressed */
+		}
+
+		/* Gemalto readers providing firmware features */
+		if (ccid_descriptor -> gemalto_firmware_features)
+		{
+			struct GEMALTO_FIRMWARE_FEATURES *features = ccid_descriptor -> gemalto_firmware_features;
+
+			/* bMinPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = features -> MinimumPINSize;	/* min PIN size */
+
+			/* bMaxPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMaxPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = features -> MaximumPINSize;	/* max PIN size */
+
+			/* bEntryValidationCondition */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bEntryValidationCondition;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = features -> bEntryValidationCondition;	/* validation key pressed */
 		}
 
 		/* bPPDUSupport */
