@@ -448,7 +448,7 @@ int main(int argc, char *argv[])
 		if (0 == ret)
 		{
 			PIN_max_size = value;
-			PRINT_GREEN_DEC(" PIN min size defined", PIN_max_size);
+			PRINT_GREEN_DEC(" PIN max size defined", PIN_max_size);
 		}
 
 		ret = PCSCv2Part10_find_TLV_property_by_tag_from_hcard(hCard, PCSCv2_PART10_PROPERTY_bEntryValidationCondition, &value);
