@@ -11,4 +11,3 @@
 #DEVICENAME        /dev/ttySn[:reader]
 #FRIENDLYNAME      "GemPCTwin serial"
 #LIBPATH           TARGET
-#CHANNELID         n
