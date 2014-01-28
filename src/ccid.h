@@ -185,6 +185,7 @@ typedef struct
 #define GEMPCTWIN	0x08E63437
 #define GEMPCPINPAD 0x08E63478
 #define GEMCORESIMPRO 0x08E63480
+#define GEMCORESIMPRO2 0x08E60000 /* Does NOT match a real VID/PID as new firmware release exposes same VID/PID */
 #define GEMCOREPOSPRO 0x08E63479
 #define GEMALTOPROXDU 0x08E65503
 #define GEMALTOPROXSU 0x08E65504
@@ -266,6 +267,19 @@ _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index);
 
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
 #define GEMPLUS_CUSTOM_DATA_RATES 10753, 21505, 43011, 125000
+
+/* data rates for GemCore SIM Pro 2 */
+#define SIMPRO2_ISO_DATA_RATES 8709, 10322, 12403, 12500, \
+		12903, 17204, 18750, 20645, 24806, \
+		25000, 25806, 28125, 30967, 34408, \
+		37500, 41290, 46875, 49612, 50000, \
+		51612, 56250, 62500, 64516, 68817, \
+		74418, 75000, 82580, 86021, 93750, \
+		99224, 100000, 103225, 112500, 124031, \
+		125000, 137634, 150000, 154838, 165161, \
+		172043, 187500, 198449, 200000, 206451, \
+		258064, 275268, 300000, 396899, 400000, \
+		412903, 550537, 600000, 825806
 
 /* Structure returned by Gemalto readers for the CCID Escape command 0x6A */
 struct GEMALTO_FIRMWARE_FEATURES

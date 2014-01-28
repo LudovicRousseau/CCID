@@ -154,6 +154,9 @@ unsigned int SerialExtendedDataRates[] = { ISO_DATA_RATES, 500000, 0 };
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
 unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 
+/* data rates supported by the GemCore SIM Pro 2 */
+unsigned int SIMPro2DataRates[] = { SIMPRO2_ISO_DATA_RATES, 0  };
+
 /* no need to initialize to 0 since it is static */
 static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];
 
@@ -522,6 +525,8 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 		readerID = GEMCOREPOSPRO;
 	else if (0 == strcasecmp(reader_name,"GemCoreSIMPro"))
 		readerID = GEMCORESIMPRO;
+	else if (0 == strcasecmp(reader_name,"GemCoreSIMPro2"))
+		readerID = GEMCORESIMPRO2;
 	else if (0 == strcasecmp(reader_name,"GemPCPinPad"))
 		readerID = GEMPCPINPAD;
 
@@ -620,6 +625,14 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
 			serialDevice[reader_index].echo = FALSE;
 			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
+			break;
+
+		case GEMCORESIMPRO2:
+			serialDevice[reader_index].ccid.dwDefaultClock = 4800;
+			serialDevice[reader_index].ccid.bMaxSlotIndex = 1; /* 2 slots */
+			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SIMPro2DataRates;
+			serialDevice[reader_index].echo = FALSE;
+			serialDevice[reader_index].ccid.dwMaxDataRate = 825806;
 			break;
 
 		case GEMPCPINPAD:
@@ -739,6 +752,58 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	/* Do not echo characters because if you connect to a host it or your modem
 	 * will echo characters for you.  Don't generate signals. */
 	current_termios.c_lflag = 0;
+
+	if (0 == strcasecmp(reader_name,"GemCoreSIMPro2"))
+	{
+		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
+		unsigned int old_timeout;
+		RESPONSECODE r;
+
+		/* Unless we resume from a stand-by condition, GemCoreSIMPro2
+		 * starts at 9600 bauds, so let's first try this speed */
+		/* set serial port speed to 9600 bauds */
+		(void)cfsetspeed(&current_termios, B9600);
+		DEBUG_INFO("Set serial port baudrate to 9600 and correct configuration");
+		if (tcsetattr(serialDevice[reader_index].fd, TCSANOW, &current_termios) == -1)
+		{
+			(void)close(serialDevice[reader_index].fd);
+			serialDevice[reader_index].fd = -1;
+			DEBUG_CRITICAL2("tcsetattr error: %s", strerror(errno));
+
+			return STATUS_UNSUCCESSFUL;
+		}
+
+		/* Test current speed issuing a CmdGetSlotStatus with a very
+		 * short time out of 1 seconds */
+		old_timeout = serialDevice[reader_index].ccid.readTimeout;
+
+		serialDevice[reader_index].ccid.readTimeout = 1*1000;
+		r = CmdGetSlotStatus(reader_index, pcbuffer);
+
+		/* Restore default time out value */
+		serialDevice[reader_index].ccid.readTimeout = old_timeout;
+
+		if (IFD_SUCCESS == r)
+		{
+			/* We are at 9600 bauds, let's move to 115200 */
+			unsigned char tx_buffer[] = { 0x01, 0x10, 0x20 };
+			unsigned char rx_buffer[50];
+			unsigned int rx_length = sizeof(rx_buffer);
+
+			if (IFD_SUCCESS == CmdEscape(reader_index, tx_buffer,
+				sizeof(tx_buffer), rx_buffer, &rx_length, 0))
+			{
+				/* Let the reader setup its new communication speed */
+				(void)usleep(250*1000);
+			}
+			else
+			{
+				DEBUG_INFO("CmdEscape to configure 115200 bauds failed");
+			}
+		}
+		/* In case of a failure, reader is probably already at 115200
+		 * bauds as code below assumes */
+	}
 
 	/* set serial port speed to 115200 bauds */
 	(void)cfsetspeed(&current_termios, B115200);
