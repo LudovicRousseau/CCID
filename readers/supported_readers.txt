@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-01-21
+# Generated: 2014-02-03
 #
 # DO NOT EDIT BY HAND
 
@@ -560,6 +560,9 @@
 
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpad.txt)
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpadv2.txt)
+
+#0x08E6:0x34C0:Gemalto Ezio Shield (Gemalto_Ezio_Shield.txt)
+#0x08E6:0x34C0:Gemalto Ezio Shield Pro SC (Gemalto_Ezio_Shield_Pro_SC.txt)
 
 #0x08E6:0x5503:Gemalto Prox Dual USB PC LinkReader (GemProxDU.txt)
 #0x08E6:0x5503:Gemalto Prox Dual USB PC LinkReader (GemProxDU.txt_i1)
