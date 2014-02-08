@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-02-03
+# Generated: 2014-02-08
 #
 # DO NOT EDIT BY HAND
 
@@ -201,11 +201,11 @@
 0x0982:0x0008:COVADIS VEGA-ALPHA
 0x0982:0x0040:COVADIS Auriga
 
-# Dectel
-0x0BDA:0x0165:Dectel CI692
-
 # DUALi
 0x1DB2:0x088B:DUALi DRAGON NFC READER
+
+# Feitian
+0x096E:0x061A:Feitian bR301
 
 # Feitian Technologies
 0x096E:0x0505:Feitian Technologies FT SCR310
@@ -234,6 +234,7 @@
 0x08E6:0x3479:Gemplus GemCore POS Pro Smart Card Reader
 
 # Generic
+0x0BDA:0x0165:Generic Smart Card Reader Interface
 0x0BDA:0x0169:Generic USB2.0-CRW
 
 # German Privacy Foundation
