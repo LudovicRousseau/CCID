@@ -441,6 +441,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 
 		case HPSMARTCARDKEYBOARD:
 		case HP_CCIDSMARTCARDKEYBOARD:
+		case FUJITSUSMARTKEYB:
 			/* the Secure Pin Entry is bogus so disable it
 			 * http://martinpaljak.net/2011/03/19/insecure-hp-usb-smart-card-keyboard/
 			 */
