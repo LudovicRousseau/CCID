@@ -118,7 +118,38 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
-1.4.14 - 25 NOvember 2013, Ludovic Rousseau
+1.4.15 - 14 February 2014, Ludovic Rousseau
+    - Add support of
+      . DUALi DRAGON NFC READER
+      . Feitian bR301
+      . Gemalto CR30 reader in serial communication
+      . Gemalto Ezio Shield Pro SC
+      . IIT E.Key Almaz-1C
+    - PIN_MODIFY_STRUCTURE & PIN_VERIFY_STRUCTURE: Fix calculation of
+      the command length after pcsc-lite 1.8.9 (October 2013) changed
+      the PCSC/reader.h header
+    - Add specific PIN min (0) & max (25) sizes for SmartTerminal
+      ST-2xxx
+    - Do not get the data rates if bNumDataRatesSupported = 0
+    - Support Gemalto features for pinpad readers MinimumPINSize,
+      MaximumPINSize and bEntryValidationCondition are fetched from the
+      reader firmware
+    - disable (broken) pinpad for Fujitsu SmartCase KB SCR eSIG
+    - examples/scardcontrol.c:
+      . Parse codes returned by a pinpad (as SW1/SW2)
+        Known codes for now are:
+        0x9000: Success
+        0x6400: Timeout
+        0x6401: Cancelled by user
+        0x6402: PIN mismatch
+        0x6403: Too short or too long PIN
+      . Retrieve min and max PIN sizes from the driver
+      . Retrieve bEntryValidationCondition from the driver
+    - be more strict for bInterfaceClass = 255 by also checking extra_length
+    - some minor bugs removed
+
+
+1.4.14 - 25 November 2013, Ludovic Rousseau
     - Add support of
       . Gemalto GemCore SIM Pro firmware 2.0 (using USB)
     - report FEATURE_IFD_PIN_PROPERTIES only for pinpad readers
