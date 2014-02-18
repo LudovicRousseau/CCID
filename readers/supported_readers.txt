@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-02-08
+# Generated: 2014-02-18
 #
 # DO NOT EDIT BY HAND
 
@@ -200,6 +200,9 @@
 # COVADIS
 0x0982:0x0008:COVADIS VEGA-ALPHA
 0x0982:0x0040:COVADIS Auriga
+
+# Crypto Stick
+0x20A0:0x4108:Crypto Stick Crypto Stick v1.4
 
 # DUALi
 0x1DB2:0x088B:DUALi DRAGON NFC READER
