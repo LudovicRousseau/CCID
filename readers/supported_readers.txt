@@ -305,6 +305,9 @@
 # Macally
 0x08AE:0x0BDF:Macally NFC CCID eNetPad
 
+# Microchip
+0x0424:0x1104:Microchip SEC1110
+
 # Morpho
 0x079B:0x0026:Morpho MSO350/MSO351 Fingerprint Sensor & SmartCard Reader
 0x079B:0x0052:Morpho MSO1350 Fingerprint Sensor & SmartCard Reader
