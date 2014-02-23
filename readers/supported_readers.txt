@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-02-18
+# Generated: 2014-02-23
 #
 # DO NOT EDIT BY HAND
 
@@ -263,6 +263,9 @@
 0x076B:0x5127:HID OMNIKEY 5127 CK
 0x076B:0x5326:HID OMNIKEY 5326 DFR
 0x076B:0x5427:HID OMNIKEY 5427 CK
+
+# HP
+0x03F0:0x104A:HP HP USB Smartcard CCID Keyboard
 
 # id3 Semiconductors
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
