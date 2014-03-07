@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-02-23
+# Generated: 2014-03-07
 #
 # DO NOT EDIT BY HAND
 
@@ -284,6 +284,9 @@
 0x2406:0x6403:Inside Secure AT90SCR100
 0x2406:0x6404:Inside Secure AT90SCR050
 0x2406:0x6407:Inside Secure AT90SCR200
+
+# INSIDE Secure
+0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
 
 # KEBTechnology
 0x04CC:0x5072:KEBTechnology KONA USB SmartCard
