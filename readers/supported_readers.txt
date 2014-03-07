@@ -287,6 +287,7 @@
 
 # INSIDE Secure
 0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
+0x2406:0x6305:INSIDE Secure VaultIC 441 Smart Object
 
 # KEBTechnology
 0x04CC:0x5072:KEBTechnology KONA USB SmartCard
