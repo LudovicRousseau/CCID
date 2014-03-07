@@ -257,15 +257,13 @@
 0x1677:0x0025:HDZB uKeyCI800-K18
 
 # Hewlett Packard
+0x03F0:0x104A:Hewlett Packard HP USB Smartcard CCID Keyboard
 0x03F0:0x2924:Hewlett Packard MFP Smart Card Reader
 
 # HID OMNIKEY
 0x076B:0x5127:HID OMNIKEY 5127 CK
 0x076B:0x5326:HID OMNIKEY 5326 DFR
 0x076B:0x5427:HID OMNIKEY 5427 CK
-
-# HP
-0x03F0:0x104A:HP HP USB Smartcard CCID Keyboard
 
 # id3 Semiconductors
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
