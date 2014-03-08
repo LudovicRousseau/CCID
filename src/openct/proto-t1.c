@@ -314,6 +314,10 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 				/* ISO 7816-3 Rule 7.2 */
 				if (T1_R_BLOCK == t1_block_type(t1->previous_block[1]))
 				{
+					/* ISO 7816-3 Rule 7.4.2 */
+					if (retries <= 0)
+						goto resync;
+
 					DEBUG_COMM("Rule 7.2");
 					slen = t1_rebuild(t1, sdata);
 					continue;
