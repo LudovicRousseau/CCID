@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-03-07
+# Generated: 2014-03-09
 #
 # DO NOT EDIT BY HAND
 
@@ -449,6 +449,9 @@
 # VMware
 0x0E0F:0x0004:VMware Virtual USB CCID
 
+# Watchdata W5181
+0x163C:0x0A03:Watchdata W5181 
+
 # Winbond
 0x0416:0x3815:Winbond CCID SmartCard Controller
 
@@ -601,6 +604,10 @@
 
 #0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_badge.txt)
 #0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_base.txt)
+
+#0x163C:0x0A03:Watchdata W5181  (Watchdata_W5181.txt)
+#0x163C:0x0A03:Watchdata W5181  (Watchdata_W5181.txt_i1)
+#0x163C:0x0A03:Watchdata W5181  (Watchdata_W5181.txt_i2)
 
 #0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt)
 #0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt_i1)
