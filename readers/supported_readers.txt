@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-03-09
+# Generated: 2014-03-11
 #
 # DO NOT EDIT BY HAND
 
@@ -273,6 +273,9 @@
 0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
 0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader
 0x04E6:0x5810:Identive CLOUD 2700 R Smart Card Reader
+
+# IID
+0x2406:0x6200:IID AT90S064 CCID READER
 
 # IIT
 0x03EB:0x9324:IIT E.Key Almaz-1C
