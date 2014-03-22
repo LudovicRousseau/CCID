@@ -1214,6 +1214,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 	ret = libusb_submit_transfer(transfer);
 	if (ret < 0) {
 		libusb_free_transfer(transfer);
+		DEBUG_CRITICAL2("libusb_submit_transfer failed: %d", ret);
 		return ret;
 	}
 
@@ -1231,6 +1232,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 				if (libusb_handle_events(ctx) < 0)
 					break;
 			libusb_free_transfer(transfer);
+			DEBUG_CRITICAL2("libusb_handle_events failed: %d", ret);
 			return ret;
 		}
 	}
