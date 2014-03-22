@@ -436,6 +436,21 @@ int ccid_open_hack_post(unsigned int reader_index)
 					DEBUG_COMM("Failed to load l10n strings");
 					return_value = IFD_COMMUNICATION_ERROR;
 				}
+
+				if (DriverOptions & DRIVER_OPTION_DISABLE_PIN_RETRIES)
+				{
+					/* disable VERIFY from reader */
+					const unsigned char cmd2[] = {0xb5, 0x00};
+					length_res = sizeof(res);
+					if (IFD_SUCCESS == CmdEscape(reader_index, cmd2, sizeof(cmd2), res, &length_res, DEFAULT_COM_READ_TIMEOUT))
+					{
+						DEBUG_COMM("Disable SPE retry counter successfull");
+					}
+					else
+					{
+						DEBUG_CRITICAL("Failed to disable SPE retry counter");
+					}
+				}
 			}
 			break;
 

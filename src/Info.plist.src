@@ -89,6 +89,11 @@
 	 32: power on the card at 1.8V, then 3V and then 5V
 	 48: let the reader decide
 
+	0x40: DRIVER_OPTION_DISABLE_PIN_RETRIES
+		The Gemalto pinpad reader sends a VERIFY command with no PIN
+		value in order to retreive the remaining retries from the card.
+		Some cards (like the OpenPGP card) do not support this.
+
 	Default value: 0
 	-->
 
