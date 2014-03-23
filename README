@@ -118,6 +118,28 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.16 - 23 March 2014, Ludovic Rousseau
+    - Add support of
+      . Crypto Stick Crypto Stick v1.4
+      . Hewlett Packard USB Smartcard CCID Keyboard
+      . IID AT90S064 CCID READER
+      . INSIDE Secure VaultIC 405 Smart Object
+      . INSIDE Secure VaultIC 441 Smart Object
+      . Microchip SEC1110
+      . Microchip SEC1210
+      . Watchdata W5181
+    - Add support of DRIVER_OPTION_DISABLE_PIN_RETRIES
+      The Gemalto pinpad reader sends a VERIFY command with no PIN value
+      in order to retreive the remaining retries from the card.  Some
+      cards (like the OpenPGP card) do not support this.
+      It is now possible to disable this behavior from the Gemalto
+      Pinpad and Covadis Véga Alpha.
+    - add support of WTX received before SW during Secure Pin Entry Verify
+      The Swiss health care card sends a WTX request before returning
+      the SW code. If the reader is in TPDU and the card is in T=1 the
+      driver must manage the request itself.
+
+
 1.4.15 - 14 February 2014, Ludovic Rousseau
     - Add support of
       . DUALi DRAGON NFC READER
