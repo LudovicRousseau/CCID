@@ -508,7 +508,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 			#define T1_S_WTX		0x03
 
 			/* WTX S-block */
-			if (T1_S_BLOCK | T1_S_WTX == RxBuffer[PCB])
+			if ((T1_S_BLOCK | T1_S_WTX) == RxBuffer[PCB])
 			{
 /*
  * The Swiss health care card sends a WTX request before returning the
