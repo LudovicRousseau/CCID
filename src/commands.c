@@ -526,7 +526,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 				unsigned char sblk[1]; /* we only need 1 byte of data */
 				t1_state_t *t1 = &get_ccid_slot(reader_index)->t1;
 				unsigned int slen;
-				int n, oldReadTimeout;
+				int oldReadTimeout;
 
 				DEBUG_COMM2("CT sent S-block with wtx=%u", RxBuffer[DATA]);
 				t1->wtx = RxBuffer[DATA];
@@ -542,7 +542,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 				ct_buf_init(&tbuf, sblk, sizeof(sblk));
 				t1->wtx = RxBuffer[DATA];
-				n = ct_buf_putc(&tbuf, RxBuffer[DATA]);
+				ct_buf_putc(&tbuf, RxBuffer[DATA]);
 
 				slen = t1_build(t1, RxBuffer, 0,
 					T1_S_BLOCK | T1_S_RESPONSE | T1_S_TYPE(RxBuffer[PCB]),
