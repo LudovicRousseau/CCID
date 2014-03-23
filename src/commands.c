@@ -497,8 +497,72 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		}
 		else
 		{
-			/* get only the T=1 data */
 			/* FIXME: manage T=1 error blocks */
+
+			/* defines from openct/proto-t1.c */
+			#define PCB 1
+			#define DATA 3
+			#define T1_S_BLOCK		0xC0
+			#define T1_S_RESPONSE		0x20
+			#define T1_S_TYPE(pcb)		((pcb) & 0x0F)
+			#define T1_S_WTX		0x03
+
+			/* WTX S-block */
+			if (T1_S_BLOCK | T1_S_WTX == RxBuffer[PCB])
+			{
+/*
+ * The Swiss health care card sends a WTX request before returning the
+ * SW code. If the reader is in TPDU the driver must manage the request
+ * itself.
+ *
+ * received: 00 C3 01 09 CB
+ * openct/proto-t1.c:432:t1_transceive() S-Block request received
+ * openct/proto-t1.c:489:t1_transceive() CT sent S-block with wtx=9
+ * sending: 00 E3 01 09 EB
+ * openct/proto-t1.c:667:t1_xcv() New timeout at WTX request: 23643 sec
+ * received: 00 40 02 90 00 D2
+*/
+				ct_buf_t tbuf;
+				unsigned char sblk[1]; /* we only need 1 byte of data */
+				t1_state_t *t1 = &get_ccid_slot(reader_index)->t1;
+				unsigned int slen;
+				int n, oldReadTimeout;
+
+				DEBUG_COMM2("CT sent S-block with wtx=%u", RxBuffer[DATA]);
+				t1->wtx = RxBuffer[DATA];
+
+				oldReadTimeout = ccid_descriptor->readTimeout;
+				if (t1->wtx > 1)
+				{
+					/* set the new temporary timeout at WTX card request */
+					ccid_descriptor->readTimeout *= t1->wtx;
+					DEBUG_INFO2("New timeout at WTX request: %d sec",
+							ccid_descriptor->readTimeout);
+				}
+
+				ct_buf_init(&tbuf, sblk, sizeof(sblk));
+				t1->wtx = RxBuffer[DATA];
+				n = ct_buf_putc(&tbuf, RxBuffer[DATA]);
+
+				slen = t1_build(t1, RxBuffer, 0,
+					T1_S_BLOCK | T1_S_RESPONSE | T1_S_TYPE(RxBuffer[PCB]),
+					&tbuf, NULL);
+
+				ret = CCID_Transmit(t1 -> lun, slen, RxBuffer, 0, t1->wtx);
+				if (ret != IFD_SUCCESS)
+					return ret;
+
+				/* I guess we have at least 6 bytes in RxBuffer */
+				*RxLength = 6;
+				ret = CCID_Receive(reader_index, RxLength, RxBuffer, NULL);
+				if (ret != IFD_SUCCESS)
+					return ret;
+
+				/* Restore initial timeout */
+				ccid_descriptor->readTimeout = oldReadTimeout;
+			}
+
+			/* get only the T=1 data */
 			memmove(RxBuffer, RxBuffer+3, *RxLength -4);
 			*RxLength -= 4;	/* remove NAD, PCB, LEN and CRC */
 		}
