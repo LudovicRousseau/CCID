@@ -78,6 +78,10 @@ int ccid_open_hack_pre(unsigned int reader_index)
 				DEBUG_INFO("ZLP fixup");
 			}
 			break;
+
+		case OZ776_7772:
+			ccid_descriptor->dwMaxDataRate = 9600;
+			break;
 	}
 
 	/* CCID */
