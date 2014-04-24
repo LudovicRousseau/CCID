@@ -219,6 +219,9 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	char infofile[FILENAME_MAX];
 #ifndef __APPLE__
 	unsigned int device_vendor, device_product;
+#else
+	/* 100 ms delay */
+	struct timespec sleep_time = { 0, 100 * 1000 * 1000 };
 #endif
 	int interface_number = -1;
 	int i;
@@ -311,6 +314,10 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		}
 	}
 
+#ifdef __APPLE__
+	/* give some time to libusb to detect the new USB devices on Mac OS X */
+	nanosleep(&sleep_time, NULL);
+#endif
 	cnt = libusb_get_device_list(ctx, &devs);
 	if (cnt < 0)
 	{
