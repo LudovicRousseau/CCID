@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-03-11
+# Generated: 2014-04-24
 #
 # DO NOT EDIT BY HAND
 
@@ -259,6 +259,9 @@
 # Hewlett Packard
 0x03F0:0x104A:Hewlett Packard HP USB Smartcard CCID Keyboard
 0x03F0:0x2924:Hewlett Packard MFP Smart Card Reader
+
+# HID Global
+0x076B:0x5400:HID Global veriCLASS Reader
 
 # HID OMNIKEY
 0x076B:0x5127:HID OMNIKEY 5127 CK
