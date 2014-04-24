@@ -694,6 +694,7 @@ end:
 		close_libusb_if_needed();
 		if (claim_failed)
 			return STATUS_COMM_ERROR;
+		DEBUG_INFO("Device not found?");
 		return STATUS_NO_SUCH_DEVICE;
 	}
 
