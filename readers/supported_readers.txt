@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-05-14
+# Generated: 2014-05-23
 #
 # DO NOT EDIT BY HAND
 
@@ -442,6 +442,9 @@
 
 # ubisys
 0x19A6:0x0009:ubisys 13.56MHz RFID (CCID)
+
+# udea
+0x2A17:0x0001:udea MILKO V1.
 
 # Validy
 0x1CF0:0x0001:Validy TokenA sl vt
