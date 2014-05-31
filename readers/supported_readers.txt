@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-05-23
+# Generated: 2014-05-31
 #
 # DO NOT EDIT BY HAND
 
@@ -208,6 +208,7 @@
 0x1DB2:0x088B:DUALi DRAGON NFC READER
 
 # Feitian
+0x096E:0x060D:Feitian R502
 0x096E:0x061A:Feitian bR301
 
 # Feitian Technologies
@@ -605,6 +606,10 @@
 
 #0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader (GemProxSU.txt)
 #0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader (GemProxSU.txt_i1)
+
+#0x096E:0x060D:Feitian R502 (Feitian_R502.txt)
+#0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i1)
+#0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i2)
 
 #0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt)
 #0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt_i1)
