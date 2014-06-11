@@ -118,6 +118,20 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.17 - 11 June 2014, Ludovic Rousseau
+    - Add support of
+      . Feitian R502
+      . Free Software Initiative of Japan Gnuk Token
+      . German Privacy Foundation Crypto Stick v2.0
+      . HID Global veriCLASS Reader
+      . HID OMNIKEY 5025-CL
+      . Identive Technologies Multi-ISO HF Reader - USB
+      . OMNIKEY 5421
+      . OMNIKEY AG 3121 USB
+      . udea MILKO V1.
+    - Fix support of O2 Micro Oz776. The reader is limited to 9600 bps
+    - some minor bugs removed
+
 1.4.16 - 23 March 2014, Ludovic Rousseau
     - Add support of
       . Crypto Stick Crypto Stick v1.4
