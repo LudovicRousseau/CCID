@@ -65,7 +65,7 @@ extern int LogLevel;
 #define DEBUG_CRITICAL5(fmt, data1, data2, data3, data4) if (LogLevel & DEBUG_LEVEL_CRITICAL) Log5(PCSC_LOG_CRITICAL, fmt, data1, data2, data3, data4)
 
 /* DEBUG_INFO */
-#define DEBUG_INFO(fmt) if (LogLevel & DEBUG_LEVEL_INFO) Log1(PCSC_LOG_INFO, fmt)
+#define DEBUG_INFO1(fmt) if (LogLevel & DEBUG_LEVEL_INFO) Log1(PCSC_LOG_INFO, fmt)
 
 #define DEBUG_INFO2(fmt, data) if (LogLevel & DEBUG_LEVEL_INFO) Log2(PCSC_LOG_INFO, fmt, data)
 

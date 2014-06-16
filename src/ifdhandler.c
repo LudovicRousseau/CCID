@@ -892,7 +892,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 #endif
 			if (PPS_Exchange(reader_index, pps, &len, &pps[2]) != PPS_OK)
 			{
-				DEBUG_INFO("PPS_Exchange Failed");
+				DEBUG_INFO1("PPS_Exchange Failed");
 
 				return IFD_ERROR_PTS_FAILURE;
 			}
@@ -1276,7 +1276,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		if ((sizeof manufacturer == TxLength)
 			&& (memcmp(TxBuffer, manufacturer, sizeof manufacturer) == 0))
 		{
-			DEBUG_INFO("IDToken: Manufacturer command");
+			DEBUG_INFO1("IDToken: Manufacturer command");
 			memcpy(RxBuffer, "KOBIL systems\220\0", 15);
 			*RxLength = 15;
 			return IFD_SUCCESS;
@@ -1285,7 +1285,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		if ((sizeof product_name == TxLength)
 			&& (memcmp(TxBuffer, product_name, sizeof product_name) == 0))
 		{
-			DEBUG_INFO("IDToken: Product name command");
+			DEBUG_INFO1("IDToken: Product name command");
 			memcpy(RxBuffer, "IDToken\220\0", 9);
 			*RxLength = 9;
 			return IFD_SUCCESS;
@@ -1296,7 +1296,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		{
 			int IFD_bcdDevice = get_ccid_descriptor(reader_index)->IFD_bcdDevice;
 
-			DEBUG_INFO("IDToken: Firmware version command");
+			DEBUG_INFO1("IDToken: Firmware version command");
 			*RxLength = sprintf((char *)RxBuffer, "%X.%02X",
 				IFD_bcdDevice >> 8, IFD_bcdDevice & 0xFF);
 			RxBuffer[(*RxLength)++] = 0x90;
@@ -1307,7 +1307,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		if ((sizeof driver_version == TxLength)
 			&& (memcmp(TxBuffer, driver_version, sizeof driver_version) == 0))
 		{
-			DEBUG_INFO("IDToken: Driver version command");
+			DEBUG_INFO1("IDToken: Driver version command");
 #define DRIVER_VERSION "2012.2.7\220\0"
 			memcpy(RxBuffer, DRIVER_VERSION, sizeof DRIVER_VERSION -1);
 			*RxLength = sizeof DRIVER_VERSION -1;
@@ -1389,7 +1389,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 		if (!allowed)
 		{
-			DEBUG_INFO("ifd exchange (Escape command) not allowed");
+			DEBUG_INFO1("ifd exchange (Escape command) not allowed");
 			return_value = IFD_COMMUNICATION_ERROR;
 		}
 		else
@@ -1724,7 +1724,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			|| (TxBuffer[4] != 0x00)	/* Lind */
 		   )
 		{
-			DEBUG_INFO("MCT Command refused by driver");
+			DEBUG_INFO1("MCT Command refused by driver");
 			return_value = IFD_COMMUNICATION_ERROR;
 		}
 		else
@@ -1865,7 +1865,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 		if (ret != IFD_SUCCESS)
 		{
-			DEBUG_INFO("CmdEscape failed");
+			DEBUG_INFO1("CmdEscape failed");
 			/* simulate a card absent */
 			res[0] = 0;
 		}
@@ -1907,7 +1907,7 @@ void init_driver(void)
 	int rv;
 	list_t plist, *values;
 
-	DEBUG_INFO("Driver version: " VERSION);
+	DEBUG_INFO1("Driver version: " VERSION);
 
 	/* Info.plist full patch filename */
 	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
@@ -2027,7 +2027,7 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 			/* Init TC1 */
 			atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
 			atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
-			DEBUG_INFO("Extra EGT patch applied");
+			DEBUG_INFO1("Extra EGT patch applied");
 		}
 
 		if (SCARD_PROTOCOL_T1 == Protocol)
@@ -2044,7 +2044,7 @@ void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
 					/* Init TC1 */
 					atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
 					atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
-					DEBUG_INFO("Extra EGT patch applied");
+					DEBUG_INFO1("Extra EGT patch applied");
 
 					/* only the first TBi (i>2) must be used */
 					break;

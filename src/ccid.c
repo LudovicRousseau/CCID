@@ -83,7 +83,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			if (0x0200 == ccid_descriptor->IFD_bcdDevice)
 			{
 				ccid_descriptor->zlp = TRUE;
-				DEBUG_INFO("ZLP fixup");
+				DEBUG_INFO1("ZLP fixup");
 			}
 			break;
 
@@ -156,7 +156,7 @@ static void dump_gemalto_firmware_features(struct GEMALTO_FIRMWARE_FEATURES *gff
 	DEBUG_INFO2(" bEntryValidationCondition: 0x%02X",
 		gff->bEntryValidationCondition);
 
-	DEBUG_INFO(" Reader supports PC/SCv2 features:");
+	DEBUG_INFO1(" Reader supports PC/SCv2 features:");
 	DEBUG_INFO2("  VerifyPinStart: %s", YESNO(gff->VerifyPinStart));
 	DEBUG_INFO2("  VerifyPinFinish: %s", YESNO(gff->VerifyPinFinish));
 	DEBUG_INFO2("  ModifyPinStart: %s", YESNO(gff->ModifyPinStart));

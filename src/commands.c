@@ -191,19 +191,19 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 
 		if ((1 == voltage) && !(bVoltageSupport & 1))
 		{
-			DEBUG_INFO("5V requested but not support by reader");
+			DEBUG_INFO1("5V requested but not support by reader");
 			voltage = 2;	/* 3V */
 		}
 
 		if ((2 == voltage) && !(bVoltageSupport & 2))
 		{
-			DEBUG_INFO("3V requested but not support by reader");
+			DEBUG_INFO1("3V requested but not support by reader");
 			voltage = 3;	/* 1.8V */
 		}
 
 		if ((3 == voltage) && !(bVoltageSupport & 4))
 		{
-			DEBUG_INFO("1.8V requested but not support by reader");
+			DEBUG_INFO1("1.8V requested but not support by reader");
 			voltage = 0;	/* auto */
 		}
 	}
@@ -319,7 +319,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	if ((pvs->ulDataLength + 19  == TxLength) &&
 		(bei2i((unsigned char*)(&pvs->ulDataLength)) == pvs->ulDataLength))
 	{
-		DEBUG_INFO("Reversing order from big to little endian");
+		DEBUG_INFO1("Reversing order from big to little endian");
 		/* If ulDataLength is big endian, assume others are too */
 		/* reverse the byte order for 3 fields */
 		pvs->wPINMaxExtraDigit = BSWAP_16(pvs->wPINMaxExtraDigit);
@@ -393,7 +393,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		tmp = TxBuffer[6];
 		TxBuffer[6] = TxBuffer[5];
 		TxBuffer[5] = tmp;
-		DEBUG_INFO("Correcting wPINMaxExtraDigit for Dell keyboard");
+		DEBUG_INFO1("Correcting wPINMaxExtraDigit for Dell keyboard");
 	}
 #endif
 
@@ -653,7 +653,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	if ((pms->ulDataLength + 24  == TxLength) &&
 		(bei2i((unsigned char*)(&pms->ulDataLength)) == pms->ulDataLength))
 	{
-		DEBUG_INFO("Reversing order from big to little endian");
+		DEBUG_INFO1("Reversing order from big to little endian");
 		/* If ulDataLength is big endian, assume others are too */
 		/* reverse the byte order for 3 fields */
 		pms->wPINMaxExtraDigit = BSWAP_16(pms->wPINMaxExtraDigit);
@@ -726,7 +726,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	gemalto_modify_pin_bug = has_gemalto_modify_pin_bug(ccid_descriptor);
 	if (gemalto_modify_pin_bug)
 	{
-		DEBUG_INFO("Gemalto CCID Modify Pin Bug");
+		DEBUG_INFO1("Gemalto CCID Modify Pin Bug");
 
 		/* The reader requests a value for bMsgIndex2 and bMsgIndex3
 		 * even if they should not be present. So we fake

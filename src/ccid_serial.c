@@ -763,7 +763,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		 * starts at 9600 bauds, so let's first try this speed */
 		/* set serial port speed to 9600 bauds */
 		(void)cfsetspeed(&current_termios, B9600);
-		DEBUG_INFO("Set serial port baudrate to 9600 and correct configuration");
+		DEBUG_INFO1("Set serial port baudrate to 9600 and correct configuration");
 		if (tcsetattr(serialDevice[reader_index].fd, TCSANOW, &current_termios) == -1)
 		{
 			(void)close(serialDevice[reader_index].fd);
@@ -798,7 +798,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			}
 			else
 			{
-				DEBUG_INFO("CmdEscape to configure 115200 bauds failed");
+				DEBUG_INFO1("CmdEscape to configure 115200 bauds failed");
 			}
 		}
 		/* In case of a failure, reader is probably already at 115200
@@ -808,7 +808,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	/* set serial port speed to 115200 bauds */
 	(void)cfsetspeed(&current_termios, B115200);
 
-	DEBUG_INFO("Set serial port baudrate to 115200 and correct configuration");
+	DEBUG_INFO1("Set serial port baudrate to 115200 and correct configuration");
 	if (tcsetattr(serialDevice[reader].fd, TCSANOW, &current_termios) == -1)
 	{
 		(void)close(serialDevice[reader].fd);

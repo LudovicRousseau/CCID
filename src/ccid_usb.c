@@ -188,7 +188,7 @@ static void close_libusb_if_needed(void)
 
 	if (to_exit)
 	{
-		DEBUG_INFO("libusb_exit");
+		DEBUG_INFO1("libusb_exit");
 		libusb_exit(ctx);
 		ctx = NULL;
 	}
@@ -647,7 +647,7 @@ again:
 				else
 				{
 					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
-					DEBUG_INFO("bNumDataRatesSupported is 0");
+					DEBUG_INFO1("bNumDataRatesSupported is 0");
 				}
 				usbDevice[reader_index].ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
 				usbDevice[reader_index].ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
@@ -701,7 +701,7 @@ end:
 		close_libusb_if_needed();
 		if (claim_failed)
 			return STATUS_COMM_ERROR;
-		DEBUG_INFO("Device not found?");
+		DEBUG_INFO1("Device not found?");
 		return STATUS_NO_SUCH_DEVICE;
 	}
 
@@ -817,7 +817,7 @@ read_again:
 			DEBUG_CRITICAL("Too many duplicate frame detected");
 			return STATUS_UNSUCCESSFUL;
 		}
-		DEBUG_INFO("Duplicate frame detected");
+		DEBUG_INFO1("Duplicate frame detected");
 		goto read_again;
 	}
 
