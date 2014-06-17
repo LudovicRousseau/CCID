@@ -4,12 +4,12 @@
  * Copyright (C) 2003, Olaf Kirch <okir@suse.de>
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-#include <stdlib.h>
+#include "config.h"
+
+#ifdef HAVE_STRING_H
 #include <string.h>
-#include <unistd.h>
+#endif
+
 #include <openct/buffer.h>
 
 void

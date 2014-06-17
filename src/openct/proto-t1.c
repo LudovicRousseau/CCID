@@ -7,6 +7,8 @@
  * Copyright (C) 2004 Ludovic Rousseau <ludovic.rousseau@free.fr>
  */
 
+#include "config.h"
+
 #include <pcsclite.h>
 #include <ifdhandler.h>
 #include "commands.h"
@@ -17,7 +19,9 @@
 
 #include "ccid.h"
 
+#ifdef HAVE_STRING_H
 #include <string.h>
+#endif
 
 /* I block */
 #define T1_I_SEQ_SHIFT		6

@@ -26,7 +26,6 @@
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
-#include <unistd.h>
 
 #include "buffer.h"
 

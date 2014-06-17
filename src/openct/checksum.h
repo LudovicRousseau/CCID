@@ -26,7 +26,9 @@
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 
 extern unsigned int	csum_lrc_compute(const uint8_t *, size_t, unsigned char *);
 extern unsigned int	csum_crc_compute(const uint8_t *, size_t, unsigned char *);

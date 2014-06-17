@@ -11,7 +11,9 @@
 extern "C" {
 #endif
 
+#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
+#endif
 
 typedef struct ct_buf {
 	unsigned char *		base;
