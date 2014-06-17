@@ -20,9 +20,12 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "config.h"
+
 #include "atr.h"
-#include <stdlib.h>
+#ifdef HAVE_STRING_H
 #include <string.h>
+#endif
 #include "debug.h"
 
 /*
