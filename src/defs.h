@@ -31,12 +31,12 @@ typedef struct CCID_DESC
 	 * ATR
 	 */
 	int nATRLength;
-	UCHAR pcATRBuffer[MAX_ATR_SIZE];
+	unsigned char pcATRBuffer[MAX_ATR_SIZE];
 
 	/*
 	 * Card state
 	 */
-	UCHAR bPowerFlags;
+	unsigned char bPowerFlags;
 
 	/*
 	 * T=1 Protocol context
