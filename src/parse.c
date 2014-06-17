@@ -27,6 +27,7 @@
 # include <sys/types.h>
 # endif
 #include <errno.h>
+#include <unistd.h>
 
 #include "defs.h"
 #include "ccid.h"
