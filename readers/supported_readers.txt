@@ -559,6 +559,9 @@
 #0x0424:0x1202:Microchip SEC1210 (Microchip_SEC1210.txt)
 #0x0424:0x1202:Microchip SEC1210 (Microchip_SEC1210.txt_i1)
 
+#0x046A:0x0090:Cherry Smart Card Reader USB (Cherry_Smart_Card_Reader_USB.txt)
+#0x046A:0x0090:Cherry Cherry TC 1100 (Cherry_Smart_Card_Reader_USB_2_04.txt)
+
 #0x04E6:0x5291:SCM Microsystems Inc. SCL010 Contactless Reader (SCL010.txt)
 #0x04E6:0x5291:SCM Microsystems Inc. SCL010 Contactless Reader (SCM_SCL010.txt)
 
