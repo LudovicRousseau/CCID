@@ -58,12 +58,6 @@ int ccid_open_hack_pre(unsigned int reader_index)
 
 	switch (ccid_descriptor->readerID)
 	{
-		case CARDMAN3121+1:
-			/* Reader announces APDU but is in fact TPDU */
-			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
-			ccid_descriptor->dwFeatures |= CCID_CLASS_TPDU;
-			break;
-
 		case MYSMARTPAD:
 			ccid_descriptor->dwMaxIFSD = 254;
 			break;
