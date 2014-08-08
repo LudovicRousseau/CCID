@@ -547,7 +547,7 @@ int main(int argc, char *argv[])
 		goto end;
 	}
 
-	/* connect to a reader (even without a card) */
+	/* re-connect to a reader (with a card) */
 	dwActiveProtocol = -1;
 	rv = SCardReconnect(hCard, SCARD_SHARE_SHARED,
 		SCARD_PROTOCOL_T0|SCARD_PROTOCOL_T1, SCARD_LEAVE_CARD,
