@@ -666,6 +666,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	unsigned int len;
 	int convention;
 	int reader_index;
+	int atr_ret;
 
 	/* Set ccid desc params */
 	CcidDesc *ccid_slot;
@@ -694,8 +695,10 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	}
 
 	/* Get ATR of the card */
-	(void)ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer,
+	atr_ret = ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer,
 		ccid_slot->nATRLength);
+	if (ATR_MALFORMED == atr_ret)
+		return IFD_PROTOCOL_NOT_SUPPORTED;
 
 	/* Apply Extra EGT patch for bogus cards */
 	extra_egt(&atr, ccid_desc, Protocol);
