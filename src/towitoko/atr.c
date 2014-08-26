@@ -317,25 +317,38 @@ ATR_GetParameter (ATR_t * atr, int name, double *parameter)
  * It was rewritten by Ludovic Rousseau, 2004
  */
 #define PROTOCOL_UNSET -1
-int ATR_GetDefaultProtocol(ATR_t * atr, int *protocol)
+int ATR_GetDefaultProtocol(ATR_t * atr, int *protocol, int *availableProtocols)
 {
 	int i;
 
 	/* default value */
 	*protocol = PROTOCOL_UNSET;
+	if (availableProtocols)
+		*availableProtocols = 0;
 
 	for (i=0; i<ATR_MAX_PROTOCOLS; i++)
-		if (atr->ib[i][ATR_INTERFACE_BYTE_TD].present && (PROTOCOL_UNSET == *protocol))
+		if (atr->ib[i][ATR_INTERFACE_BYTE_TD].present)
 		{
-			/* set to the first protocol byte found */
-			*protocol = atr->ib[i][ATR_INTERFACE_BYTE_TD].value & 0x0F;
-			DEBUG_COMM2("default protocol: T=%d", *protocol);
+			int T = atr->ib[i][ATR_INTERFACE_BYTE_TD].value & 0x0F;
+
+			DEBUG_COMM2("T=%d Protocol Found", T);
+			if (availableProtocols)
+				*availableProtocols |= 1 << T;
+
+			if (PROTOCOL_UNSET == *protocol)
+			{
+				/* set to the first protocol byte found */
+				*protocol = T;
+				DEBUG_COMM2("default protocol: T=%d", *protocol);
+			}
 		}
 
 	/* specific mode if TA2 present */
 	if (atr->ib[1][ATR_INTERFACE_BYTE_TA].present)
 	{
 		*protocol = atr->ib[1][ATR_INTERFACE_BYTE_TA].value & 0x0F;
+		if (availableProtocols)
+			*availableProtocols = 1 << *protocol;
 		DEBUG_COMM2("specific mode found: T=%d", *protocol);
 	}
 
@@ -343,6 +356,8 @@ int ATR_GetDefaultProtocol(ATR_t * atr, int *protocol)
 	{
 		DEBUG_INFO1("no default protocol found in ATR. Using T=0");
 		*protocol = ATR_PROTOCOL_TYPE_T0;
+		if (availableProtocols)
+			*availableProtocols = 1 << *protocol;
 	}
 
 	return ATR_OK;

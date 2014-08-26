@@ -884,7 +884,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	{
 		int default_protocol;
 
-		ATR_GetDefaultProtocol(&atr, &default_protocol);
+		ATR_GetDefaultProtocol(&atr, &default_protocol, NULL);
 
 		/* if the requested protocol is not the default one
 		 * or a TA1/PPS1 is present */

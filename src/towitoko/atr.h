@@ -101,7 +101,7 @@ extern int ATR_InitFromArray(ATR_t * atr, const BYTE buffer[ATR_MAX_SIZE],
 
 /* General smartcard characteristics */
 extern int ATR_GetConvention(ATR_t * atr, /*@out@*/ int *convention);
-extern int ATR_GetDefaultProtocol(ATR_t * atr, /*@out@*/ int *protocol);
+extern int ATR_GetDefaultProtocol(ATR_t * atr, /*@out@*/ int *protocol, int *availableProtocols);
 
 /* ATR parameters and integer values */
 extern int ATR_GetIntegerValue(ATR_t * atr, int name, BYTE * value);
