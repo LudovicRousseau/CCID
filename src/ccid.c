@@ -523,6 +523,7 @@ int ccid_open_hack_post(unsigned int reader_index)
  ****************************************************************************/
 void ccid_error(int error, const char *file, int line, const char *function)
 {
+#ifndef NO_LOG
 	const char *text;
 	char var_text[30];
 
@@ -640,6 +641,7 @@ void ccid_error(int error, const char *file, int line, const char *function)
 			break;
 	}
 	log_msg(PCSC_LOG_ERROR, "%s:%d:%s %s", file, line, function, text);
+#endif
 
 } /* ccid_error */
 
