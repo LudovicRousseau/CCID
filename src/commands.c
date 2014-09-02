@@ -269,7 +269,9 @@ again:
 		/* continue with 3 volts and 5 volts */
 		if (voltage > 1)
 		{
+#ifndef NO_LOG
 			const char *voltage_code[] = { "auto", "5V", "3V", "1.8V" };
+#endif
 
 			DEBUG_INFO3("Power up with %s failed. Try with %s.",
 				voltage_code[voltage], voltage_code[voltage-1]);

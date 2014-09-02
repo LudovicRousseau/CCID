@@ -1120,7 +1120,9 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	RESPONSECODE return_value = IFD_SUCCESS;
 	unsigned char pcbuffer[10+MAX_ATR_SIZE];
 	int reader_index;
+#ifndef NO_LOG
 	const char *actions[] = { "PowerUp", "PowerDown", "Reset" };
+#endif
 	unsigned int oldReadTimeout;
 	_ccid_descriptor *ccid_descriptor;
 
