@@ -22,7 +22,7 @@
 #ifndef __CHECKSUM_H__
 #define __CHECKSUM_H__
 
-#include "config.h"
+#include <config.h>
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif

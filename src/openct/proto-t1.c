@@ -7,7 +7,7 @@
  * Copyright (C) 2004 Ludovic Rousseau <ludovic.rousseau@free.fr>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <pcsclite.h>
 #include <ifdhandler.h>

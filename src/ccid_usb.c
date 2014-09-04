@@ -35,7 +35,7 @@
 #include <sys/time.h>
 #include <ifdhandler.h>
 
-#include "config.h"
+#include <config.h>
 #include "misc.h"
 #include "ccid.h"
 #include "debug.h"

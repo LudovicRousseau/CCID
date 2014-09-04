@@ -20,7 +20,7 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "config.h"
+#include <config.h>
 
 #include "atr.h"
 #ifdef HAVE_STRING_H

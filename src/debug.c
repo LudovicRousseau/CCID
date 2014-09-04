@@ -22,7 +22,7 @@
  */
 
 
-#include "config.h"
+#include <config.h>
 #include "misc.h"
 #include "debug.h"
 
