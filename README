@@ -118,6 +118,20 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.18 - 13 September 2014, Ludovic Rousseau
+    - Add support of
+      . Cherry Cherry TC 1100
+      . Cherry Smart Card Reader USB
+      . Cherry Smartcard Keyboard G87-1xx44
+      . FujitsuTechnologySolutions GmbH Keyboard KB SCR2
+      . Lenovo Lenovo USB Smartcard Keyboard
+      . Yubico Yubikey NEO OTP+U2F+CCID
+      . Yubico Yubikey NEO U2F+CCID
+      . eID_R6 001 X8
+    - fix support of Omnikey CardMan 3121
+    - reduce memory consumed when configured with --enable-embedded 
+    - prepare the port to UEFI
+
 1.4.17 - 11 June 2014, Ludovic Rousseau
     - Add support of
       . Feitian R502
