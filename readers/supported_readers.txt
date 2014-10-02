@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-09-30
+# Generated: 2014-10-02
 #
 # DO NOT EDIT BY HAND
 
@@ -376,6 +376,7 @@
 0x076B:0x5121:OMNIKEY AG CardMan 5121
 0x076B:0x5125:OMNIKEY AG CardMan 5125
 0x076B:0x6622:OMNIKEY AG CardMan 6121
+0x076B:0x6623:OMNIKEY AG 6121 USB mobile
 0x076B:0xA021:OMNIKEY AG Smart Card Reader
 
 # Panasonic
