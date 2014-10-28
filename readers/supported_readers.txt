@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-10-02
+# Generated: 2014-10-28
 #
 # DO NOT EDIT BY HAND
 
@@ -47,9 +47,6 @@
 0x073D:0x0B00:Eutron Digipass 860
 0x073D:0x0C00:Eutron Card Reader
 0x073D:0x0C01:Eutron Smart Pocket
-
-# Feitian
-0x096E:0x0807:Feitian ePass2003
 
 # Gemalto
 0x08E6:0x1227:Gemalto PDT
@@ -214,9 +211,13 @@
 # eID_R6 001
 0x257B:0xD205:eID_R6 001 X8
 
+# Elatec
+0x09D8:0x0427:Elatec TWN4 SmartCard NFC
+
 # Feitian
 0x096E:0x060D:Feitian R502
 0x096E:0x061A:Feitian bR301
+0x096E:0x0807:Feitian ePass2003
 
 # Feitian Technologies
 0x096E:0x0505:Feitian Technologies FT SCR310
