@@ -141,11 +141,6 @@ typedef struct
 	 * Gemalto extra features, if any
 	 */
 	struct GEMALTO_FIRMWARE_FEATURES *gemalto_firmware_features;
-
-	/*
-	 * Zero Length Packet fixup (boolean)
-	 */
-	char zlp;
 } _ccid_descriptor;
 
 /* Features from dwFeatures */
