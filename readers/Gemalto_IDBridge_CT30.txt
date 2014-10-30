@@ -2,7 +2,7 @@
   iManufacturer: Gemalto
  idProduct: 0x3437
   iProduct: USB SmartCard Reader
- bcdDevice: 2.00 (firmware release?)
+ bcdDevice: 2.01 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
