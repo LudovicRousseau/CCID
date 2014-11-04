@@ -745,7 +745,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	{
 		DEBUG_CRITICAL5("write failed (%d/%d): %d %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, rv, strerror(errno));
+			usbDevice[reader_index].device_address, rv, libusb_error_name(rv));
 
 		if ((ENODEV == errno) || (LIBUSB_ERROR_NO_DEVICE == rv))
 			return STATUS_NO_SUCH_DEVICE;
@@ -784,7 +784,7 @@ read_again:
 		*length = 0;
 		DEBUG_CRITICAL5("read failed (%d/%d): %d %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, rv, strerror(errno));
+			usbDevice[reader_index].device_address, rv, libusb_error_name(rv));
 
 		if ((ENODEV == errno) || (LIBUSB_ERROR_NO_DEVICE == rv))
 			return STATUS_NO_SUCH_DEVICE;
@@ -1156,7 +1156,7 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 	{
 		DEBUG_CRITICAL5("control failed (%d/%d): %d %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, ret, strerror(errno));
+			usbDevice[reader_index].device_address, ret, libusb_error_name(ret));
 
 		return ret;
 	}
@@ -1255,7 +1255,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 			/* if libusb_interrupt_transfer() times out we get EILSEQ or EAGAIN */
 			DEBUG_COMM4("InterruptRead (%d/%d): %s",
 				usbDevice[reader_index].bus_number,
-				usbDevice[reader_index].device_address, strerror(errno));
+				usbDevice[reader_index].device_address, libusb_error_name(ret));
 			return_value = IFD_COMMUNICATION_ERROR;
 	}
 
