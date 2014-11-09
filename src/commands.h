@@ -41,6 +41,11 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout);
 
+RESPONSECODE CmdEscapeCheck(unsigned int reader_index,
+	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout,
+	int mayfail);
+
 RESPONSECODE CmdPowerOff(unsigned int reader_index);
 
 RESPONSECODE CmdGetSlotStatus(unsigned int reader_index,

@@ -48,6 +48,7 @@
 #include "defs.h"
 #include "ccid_ifdhandler.h"
 #include "debug.h"
+#include "utils.h"
 
 /* All the pinpad readers I used are more or less bogus
  * I use code to change the user command and make the firmware happy */
@@ -884,6 +885,21 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout)
 {
+	return CmdEscapeCheck(reader_index, TxBuffer, TxLength, RxBuffer, RxLength,
+		timeout, FALSE);
+} /* CmdEscape */
+
+
+/*****************************************************************************
+ *
+ *					Escape (with check of gravity)
+ *
+ ****************************************************************************/
+RESPONSECODE CmdEscapeCheck(unsigned int reader_index,
+	const unsigned char TxBuffer[], unsigned int TxLength,
+	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout,
+	int mayfail)
+{
 	unsigned char *cmd_in, *cmd_out;
 	status_t res;
 	unsigned int length_in, length_out;
@@ -976,7 +992,9 @@ time_request:
 
 	if (cmd_out[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(PCSC_LOG_ERROR, cmd_out[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
+		/* mayfail: the error may be expected and not fatal */
+		ccid_error(mayfail ? PCSC_LOG_INFO : PCSC_LOG_ERROR,
+			cmd_out[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -994,7 +1012,7 @@ end:
 		ccid_descriptor -> readTimeout = old_read_timeout;
 
 	return return_value;
-} /* Escape */
+} /* EscapeCheck */
 
 
 /*****************************************************************************
