@@ -195,8 +195,8 @@ static void set_gemalto_firmware_features(unsigned int reader_index)
 		unsigned int len_features = sizeof *gf_features;
 		RESPONSECODE ret;
 
-		ret = CmdEscape(reader_index, cmd, sizeof cmd,
-			(unsigned char*)gf_features, &len_features, 0);
+		ret = CmdEscapeCheck(reader_index, cmd, sizeof cmd,
+			(unsigned char*)gf_features, &len_features, 0, TRUE);
 		if ((IFD_SUCCESS == ret) &&
 		    (len_features == sizeof *gf_features))
 		{
