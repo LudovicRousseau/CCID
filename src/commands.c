@@ -178,7 +178,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 
 			/* Status Information? */
 			if (0x40 == tmp[0])
-				ccid_error(tmp[2], __FILE__, __LINE__, __FUNCTION__);
+				ccid_error(PCSC_LOG_ERROR, tmp[2], __FILE__, __LINE__, __FUNCTION__);
 			return IFD_COMMUNICATION_ERROR;
 		}
 
@@ -245,7 +245,7 @@ again:
 
 	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
+		ccid_error(PCSC_LOG_ERROR, buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 
 		if (0xBB == buffer[ERROR_OFFSET] &&	/* Protocol error in EMV mode */
 			((GEMPC433 == ccid_descriptor->readerID)
@@ -976,7 +976,7 @@ time_request:
 
 	if (cmd_out[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd_out[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
+		ccid_error(PCSC_LOG_ERROR, cmd_out[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1078,7 +1078,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
+		ccid_error(PCSC_LOG_ERROR, cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1199,7 +1199,7 @@ again_status:
 		&& (buffer[ERROR_OFFSET] != 0xFE))
 	{
 		return_value = IFD_COMMUNICATION_ERROR;
-		ccid_error(buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
+		ccid_error(PCSC_LOG_ERROR, buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 	}
 
 	return return_value;
@@ -1428,7 +1428,7 @@ time_request_ICCD_B:
 
 			case 0x40:
 				/* Status Information */
-				ccid_error(rx_buffer[2], __FILE__, __LINE__, __FUNCTION__);
+				ccid_error(PCSC_LOG_ERROR, rx_buffer[2], __FILE__, __LINE__, __FUNCTION__);
 				return IFD_COMMUNICATION_ERROR;
 
 			case 0x80:
@@ -1487,7 +1487,7 @@ time_request:
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
+		ccid_error(PCSC_LOG_ERROR, cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		switch (cmd[ERROR_OFFSET])
 		{
 			case 0xEF:	/* cancel */
@@ -2243,7 +2243,7 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 
 	if (cmd[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
+		ccid_error(PCSC_LOG_ERROR, cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		if (0x00 == cmd[ERROR_OFFSET])	/* command not supported */
 			return IFD_NOT_SUPPORTED;
 		else

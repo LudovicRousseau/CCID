@@ -244,7 +244,8 @@ typedef struct
 
 int ccid_open_hack_pre(unsigned int reader_index);
 int ccid_open_hack_post(unsigned int reader_index);
-void ccid_error(int error, const char *file, int line, const char *function);
+void ccid_error(int log_level, int error, const char *file, int line,
+	const char *function);
 _ccid_descriptor *get_ccid_descriptor(unsigned int reader_index);
 
 /* convert a 4 byte integer in USB format into an int */
