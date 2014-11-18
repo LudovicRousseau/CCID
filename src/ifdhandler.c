@@ -355,7 +355,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	 * ignore Lun.
 	 *
 	 * Tag - the tag for the information requested example: TAG_IFD_ATR -
-	 * return the Atr and it's size (required). these tags are defined in
+	 * return the Atr and its size (required). these tags are defined in
 	 * ifdhandler.h
 	 *
 	 * Length - the length of the returned data Value - the value of the
@@ -1090,7 +1090,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	 * Action - Action to be taken on the card.
 	 *
 	 * IFD_POWER_UP - Power and reset the card if not done so (store the
-	 * ATR and return it and it's length).
+	 * ATR and return it and its length).
 	 *
 	 * IFD_POWER_DOWN - Power down the card if not done already
 	 * (Atr/AtrLength should be zero'd)
@@ -1100,7 +1100,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	 *
 	 * Atr - Answer to Reset of the card.  The driver is responsible for
 	 * caching this value in case IFDHGetCapabilities is called requesting
-	 * the ATR and it's length.  This should not exceed MAX_ATR_SIZE.
+	 * the ATR and its length.  This should not exceed MAX_ATR_SIZE.
 	 *
 	 * AtrLength - Length of the Atr.  This should not exceed
 	 * MAX_ATR_SIZE.
