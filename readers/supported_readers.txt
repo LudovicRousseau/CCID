@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-11-16
+# Generated: 2014-11-19
 #
 # DO NOT EDIT BY HAND
 
@@ -187,6 +187,9 @@
 0x0783:0x0009:C3PO KBR36
 0x0783:0x0010:C3PO LTC32
 0x0783:0x0036:C3PO LTC36
+
+# CASTLES
+0x0CA6:0x00A0:CASTLES EZCCID Smart Card Reader
 
 # CCB
 0x8829:0xCCB2:CCB eSafeLD
