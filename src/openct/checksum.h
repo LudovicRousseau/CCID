@@ -1,5 +1,5 @@
 /*
-    proto-t1.h: header file for proto-t1.c
+    checksum.h: header file checksum.c
     Copyright (C) 2004   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
