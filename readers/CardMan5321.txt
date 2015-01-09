@@ -2,7 +2,7 @@
   iManufacturer: OMNIKEY
  idProduct: 0x5321
   iProduct: Smart Card Reader USB
- bcdDevice: 5.00 (firmware release?)
+ bcdDevice: 5.20 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: 0
+ Can't get iInterface string
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -28,7 +28,7 @@
    T=1
   dwDefaultClock: 4.800 MHz
   dwMaximumClock: 8.000 MHz
-  bNumClockSupported: 4 
+  bNumClockSupported: 4
    Got 256 clock frequencies but was expecting 4
    Support 4000 kHz
    Support 4800 kHz
@@ -36,7 +36,7 @@
    Support 8000 kHz
   dwDataRate: 10752 bps
   dwMaxDataRate: 412903 bps
-  bNumDataRatesSupported: 106 
+  bNumDataRatesSupported: 106
    Got 256 data rates but was expecting 106
    Support 10752 bps
    Support 21505 bps
@@ -151,15 +151,13 @@
    I2C protocol
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x000207B2
-   ....02 Automatic parameter configuration based on ATR data
+  dwFeatures: 0x000103B0
    ....10 Automatic ICC clock frequency change according to parameters
    ....20 Automatic baud rate change according to frequency and Fi, Di params
    ....80 Automatic PPS made by the CCID
    ..01.. CCID can set ICC in clock stop mode
    ..02.. NAD value other than 00 accepted (T=1)
-   ..04.. Automatic IFSD exchange as first exchange (T=1)
-   02.... Short APDU level exchange
+   01.... TPDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
