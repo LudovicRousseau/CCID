@@ -325,7 +325,7 @@ static RESPONSECODE IFDHSleep(DWORD Lun, int timeout)
 	 * TAG_IFD_POLLING_THREAD_KILLABLE then we could use a much longer delay
 	 * and be killed before pcscd exits
 	 */
-	(void)usleep(timeout);
+	(void)usleep(timeout * 1000);
 	return IFD_SUCCESS;
 }
 
