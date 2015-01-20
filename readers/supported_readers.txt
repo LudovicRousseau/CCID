@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2014-11-29
+# Generated: 2015-01-20
 #
 # DO NOT EDIT BY HAND
 
@@ -398,6 +398,9 @@
 # Philips Semiconductors
 0x0471:0x040F:Philips Semiconductors JCOP41V221
 0x04B9:0x1400:Philips Semiconductors SmartMX Sample
+
+# PIVKey
+0x096E:0x0603:PIVKey T800
 
 # Planeta
 0x21AB:0x0010:Planeta RC700-NFC CCID
