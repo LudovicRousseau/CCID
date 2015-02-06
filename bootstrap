@@ -1,11 +1,18 @@
-#! /bin/sh
+#! /bin/bash
 
 # $Id:$
 
 set -x
 
+LIBTOOLIZE=libtoolize
+# From brew(1) on Mac OS X
+# ==> Caveats
+#  In order to prevent conflicts with Apple's own libtool we have prepended a "g"
+#  so, you have instead: glibtool and glibtoolize.
+type glibtoolize && LIBTOOLIZE=glibtoolize
+
 aclocal -I m4
-libtoolize --copy --force --automake
+$LIBTOOLIZE --copy --force --automake
 autoheader --force
 autoconf --force
 automake --add-missing --copy --force --foreign
