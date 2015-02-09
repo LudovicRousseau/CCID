@@ -490,8 +490,9 @@ int main(int argc, char *argv[])
 		printf(NORMAL "\n");
 
 		pin_properties = (PIN_PROPERTIES_STRUCTURE *)bRecvBuffer;
+		bEntryValidationCondition = pin_properties ->	bEntryValidationCondition;
 		PRINT_GREEN_HEX4(" wLcdLayout", pin_properties -> wLcdLayout);
-		PRINT_GREEN_DEC(" bEntryValidationCondition", pin_properties ->	bEntryValidationCondition);
+		PRINT_GREEN_DEC(" bEntryValidationCondition", bEntryValidationCondition);
 		PRINT_GREEN_DEC(" bTimeOut2", pin_properties -> bTimeOut2);
 
 		printf("\n");
