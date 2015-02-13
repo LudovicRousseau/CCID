@@ -1218,6 +1218,9 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			memcpy(Atr, pcbuffer, *AtrLength);
 			memcpy(CcidSlots[reader_index].pcATRBuffer, pcbuffer, *AtrLength);
 
+			/* Log ATR */
+			DEBUG_XXD_APPLE("ATR: ", Atr, *AtrLength);
+
 			/* initialise T=1 context */
 			(void)t1_init(&(get_ccid_slot(reader_index) -> t1), reader_index);
 			break;
@@ -1282,6 +1285,9 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	DEBUG_INFO3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
 		Lun);
 
+	/* Log command */
+	DEBUG_XXD_APPLE("APDU: ", TxBuffer, TxLength);
+
 	/* special APDU for the Kobil IDToken (CLASS = 0xFF) */
 	if (KOBIL_IDTOKEN == get_ccid_descriptor(reader_index) -> readerID)
 	{
@@ -1340,6 +1346,9 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		*RxLength = rx_length;
 	else
 		*RxLength = 0;
+
+	/* Log response */
+	DEBUG_XXD_APPLE("SW: ", RxBuffer, *RxLength);
 
 	return return_value;
 } /* IFDHTransmitToICC */
