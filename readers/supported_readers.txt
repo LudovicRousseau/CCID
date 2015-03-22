@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-03-18
+# Generated: 2015-03-22
 #
 # DO NOT EDIT BY HAND
 
@@ -200,6 +200,7 @@
 
 # Cherry
 0x046A:0x0090:Cherry Smart Card Reader USB
+0x046A:0x0092:Cherry TC 1300
 0x046A:0x00A3:Cherry Smartcard Keyboard G87-1xx44
 
 # Cherry GmbH
