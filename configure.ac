@@ -238,6 +238,17 @@ fi
 AM_CONDITIONAL(WITHOUT_PCSC, test "${pcsclite}" != "yes")
 
 
+
+# --enable-syslog
+AC_ARG_ENABLE(syslog,
+	AS_HELP_STRING([--enable-syslog],[use syslog instead of printf for debug (Yosemite)]),
+	[ use_syslog="${enableval}" ], [ use_syslog=no ] )
+
+if test x$use_syslog = xyes; then
+  AC_DEFINE(USE_SYSLOG, 1, [Use syslog(3) for debug])
+fi
+
+
 # --disable-class
 AC_ARG_ENABLE(class,
 	AS_HELP_STRING([--disable-class],[remove the CCIDCLASSDRIVER from Info.plist]),
