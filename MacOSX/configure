@@ -72,13 +72,6 @@ echo
 
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
-# Are we on a CryptoTokenKit system? (like Mac OS X 10.10 Yosemite)
-if [ -d /System/Library/CryptoTokenKit ]
-then
-	# so we use syslog(3) to log errors
-	CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-syslog"
-fi
-
 # do not build a static driver
 # (building fails when linking statically with libusb)
 CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-static"

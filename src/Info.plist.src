@@ -94,10 +94,6 @@
 		value in order to retreive the remaining retries from the card.
 		Some cards (like the OpenPGP card) do not support this.
 
-	0x80: DRIVER_OPTION_LOG
-		Log the ATR, APDU + response.
-		This is usefull on Yosemite since pcscd disapeared.
-
 	Default value: 0
 	-->
 

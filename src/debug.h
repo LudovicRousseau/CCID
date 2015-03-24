@@ -96,7 +96,5 @@ extern int LogLevel;
 /* DEBUG_XXD */
 #define DEBUG_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_COMM) LogXxd(PCSC_LOG_DEBUG, msg, buffer, size)
 
-#define DEBUG_XXD_APPLE(msg, buffer, size) if (DriverOptions & DRIVER_OPTION_LOG) LogXxd(PCSC_LOG_DEBUG, msg, buffer, size)
-
 #endif
 

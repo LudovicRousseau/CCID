@@ -43,7 +43,6 @@
 #define DRIVER_OPTION_USE_BOGUS_FIRMWARE 4
 #define DRIVER_OPTION_RESET_ON_CLOSE 8
 #define DRIVER_OPTION_DISABLE_PIN_RETRIES (1 << 6)
-#define DRIVER_OPTION_LOG (1 << 7)
 
 extern int DriverOptions;
 
