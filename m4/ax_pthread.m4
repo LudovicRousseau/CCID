@@ -1,1 +1,1 @@
-../../../PCSC/m4/ax_pthread.m4
+../../PCSC/m4/ax_pthread.m4
