@@ -417,6 +417,7 @@
 
 # REINER SCT
 0x0C4B:0x0504:REINER SCT cyberJack go
+0x0C4B:0x0520:REINER SCT tanJack Bluetooth
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
 
 # SafeTech
