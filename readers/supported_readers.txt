@@ -233,6 +233,7 @@
 0x096E:0x060D:Feitian R502
 0x096E:0x061A:Feitian bR301
 0x096E:0x0807:Feitian ePass2003
+0x096E:0x080F:Feitian eJAVA Token
 
 # Feitian Technologies
 0x096E:0x0505:Feitian Technologies FT SCR310
