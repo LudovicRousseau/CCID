@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-03-22
+# Generated: 2015-05-05
 #
 # DO NOT EDIT BY HAND
 
@@ -182,6 +182,7 @@
 # Broadcom Corp
 0x0A5C:0x5800:Broadcom Corp 5880
 0x0A5C:0x5802:Broadcom Corp 5880
+0x0A5C:0x5804:Broadcom Corp 5880
 
 # C3PO
 0x0783:0x0007:C3PO TLTC2USB
@@ -249,7 +250,7 @@
 
 # Gemalto
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
-0x08E6:0x34C1:Gemalto ING Shield Pro SC
+0x08E6:0x34C1:Gemalto Ezio Shield Secure Channel
 0x08E6:0x34C2:Gemalto Ezio Shield
 0x08E6:0x34C5:Gemalto Ezio Shield Branch Reader
 0x08E6:0x34EC:Gemalto GemPC Express
@@ -656,6 +657,9 @@
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v3.txt)
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt)
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt_i1)
+
+#0x0A5C:0x5804:Broadcom Corp 5880 (Broadcom_5880v5.txt)
+#0x0A5C:0x5804:Broadcom Corp 5880 (Broadcom_5880v5.txt_i1)
 
 #0x0B81:0x0200:id3 Semiconductors CL1356T (id3_CL1356T.txt)
 #0x0B81:0x0200:id3 Semiconductors CL1356T5 (id3_CL1356T5.txt)

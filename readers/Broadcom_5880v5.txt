@@ -1,0 +1,616 @@
+ idVendor: 0x0A5C
+  iManufacturer: Broadcom Corp
+ idProduct: 0x5804
+  iProduct: 5880
+ bcdDevice: 1.01 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 1
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: Contacted SmartCard
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   Support 265249792 kHz
+   Support -30718 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 96661504 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 4 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 33386496 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 520 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 17747968 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 25 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 47255552 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 26 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 52498432 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 532 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 142876672 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 473 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 207757312 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 15 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 33492992 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 37 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 38735872 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 16 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 53903360 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 5 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 149016576 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 17 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 157843456 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 65 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 218148864 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 62 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 216838144 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 44 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 72253440 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 41 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 55279616 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 499 kHz
+   Support 31 kHz
+   Support 100625408 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 142884864 kHz
+   Support 0 kHz
+   Support 268435456 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 308942400 kHz
+   Support -30718 kHz
+   Support -2126528807 kHz
+   Support -1 kHz
+   Support -2126528521 kHz
+   Support -1 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+   Support 0 kHz
+  dwDataRate: 9600 bps
+  dwMaxDataRate: 250000 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   Support 265249792 bps
+   Support -30718 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 96661504 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 4 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 33386496 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 520 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 17747968 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 25 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 47255552 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 26 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 52498432 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 532 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 142876672 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 473 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 207757312 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 15 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 33492992 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 37 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 38735872 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 16 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 53903360 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 5 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 149016576 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 17 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 157843456 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 65 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 218148864 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 62 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 216838144 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 44 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 72253440 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 41 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 55279616 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 499 bps
+   Support 31 bps
+   Support 100625408 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 142884864 bps
+   Support 0 bps
+   Support 268435456 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 308942400 bps
+   Support -30718 bps
+   Support -2126528807 bps
+   Support -1 bps
+   Support -2126528521 bps
+   Support -1 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+  dwMaxIFSD: 247
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000102BA
+   ....02 Automatic parameter configuration based on ATR data
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..02.. NAD value other than 00 accepted (T=1)
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
+ idVendor: 0x0A5C
+  iManufacturer: Broadcom Corp
+ idProduct: 0x5804
+  iProduct: 5880
+ bcdDevice: 1.01 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 2
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: Contactless SmartCard
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.01
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 3.580 MHz
+  dwMaximumClock: 3.580 MHz
+  bNumClockSupported: 1
+   Support 3580 kHz
+  dwDataRate: 9600 bps
+  dwMaxDataRate: 9600 bps
+  bNumDataRatesSupported: 1
+   Support 9600 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000204BA
+   ....02 Automatic parameter configuration based on ATR data
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 512 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
