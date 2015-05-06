@@ -197,6 +197,12 @@ AC_ARG_ENABLE(twinserial,
 	[twinserial="${enableval}"], [twinserial=no])
 AM_CONDITIONAL(WITH_TWIN_SERIAL, test "${twinserial}" != "no")
 
+# --enable-extras
+AC_ARG_ENABLE(extras,
+	AS_HELP_STRING([--enable-extras],[also compile examples and contrib]),
+	[extras="${enableval}"], [extras=no])
+AM_CONDITIONAL(WITH_EXTRAS, test "${extras}" != "no")
+
 # --enable-ccidtwindir=DIR
 AC_ARG_ENABLE(ccidtwindir,
 	AS_HELP_STRING([--enable-ccidtwindir=DIR],[directory to install the
