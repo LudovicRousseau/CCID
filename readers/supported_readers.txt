@@ -254,6 +254,7 @@
 0x0BF8:0x1017:FujitsuTechnologySolutions GmbH SmartCase KB SCR eSIG
 0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Smartcard Keyboard G87-914x
 0x0BF8:0x1022:FujitsuTechnologySolutions GmbH Keyboard KB100 SCR
+0x0BF8:0x1023:FujitsuTechnologySolutions GmbH Keyboard KB100 SCR eSIG
 
 # Gemalto
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
