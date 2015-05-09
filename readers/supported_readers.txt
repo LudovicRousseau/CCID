@@ -205,6 +205,7 @@
 0x046A:0x00A1:Cherry KC 1000 SC
 0x046A:0x00A2:Cherry KC 1000 SC/DI
 0x046A:0x00A3:Cherry Smartcard Keyboard G87-1xx44
+0x046A:0x00A4:Cherry KC 1000 SC Z
 
 # Cherry GmbH
 0x046A:0x005B:Cherry GmbH SmartBoard XX1X
