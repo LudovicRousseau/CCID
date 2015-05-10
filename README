@@ -132,6 +132,7 @@ History:
     - reduce memory consumed when configured with --enable-embedded 
     - prepare the port to UEFI
 
+
 1.4.17 - 11 June 2014, Ludovic Rousseau
     - Add support of
       . Feitian R502
@@ -145,6 +146,7 @@ History:
       . udea MILKO V1.
     - Fix support of O2 Micro Oz776. The reader is limited to 9600 bps
     - some minor bugs removed
+
 
 1.4.16 - 23 March 2014, Ludovic Rousseau
     - Add support of
