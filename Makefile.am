@@ -23,7 +23,5 @@ libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
 ChangeLog:
-	svn2cl --group-by-day --stdout --include-rev --reparagraph \
-	| perl -pe 's/  rousseau/  Ludovic Rousseau/; \
-	s+trunk/Drivers/ccid/++g;' > $@
+	git log --stat --decorate=short > $@
 
