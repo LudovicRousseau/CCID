@@ -1,1 +1,1 @@
-../../PCSC/m4/as-ac-expand.m4
+../PCSC/m4/as-ac-expand.m4

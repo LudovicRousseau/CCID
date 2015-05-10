@@ -1,1 +1,1 @@
-../../contrib/libPCSCv2part10/PCSCv2part10.h
+../contrib_libPCSCv2part10/libPCSCv2part10/PCSCv2part10.h

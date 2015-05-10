@@ -1,1 +1,1 @@
-../../PCSC/src/strlcpy.c
+../PCSC/src/strlcpy.c

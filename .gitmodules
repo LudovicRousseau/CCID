@@ -1,0 +1,6 @@
+[submodule "PCSC"]
+	path = PCSC
+	url = ../PCSC.git
+[submodule "contrib_libPCSCv2part10"]
+	path = contrib_libPCSCv2part10
+	url = ../contrib.git
