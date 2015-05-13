@@ -118,6 +118,41 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.19 - 13 May 2014, Ludovic Rousseau
+    - Add support of
+      . AK910 CKey (idProduct 0x0001)
+      . AK910 CKey (idProduct 0x0011)
+      . AK910 IDONE
+      . Broadcom Corp 5880 (idProduct: 0x5804)
+      . CASTLES EZCCID Smart Card Reader
+      . Cherry KC 1000 SC
+      . Cherry KC 1000 SC Z
+      . Cherry KC 1000 SC/DI
+      . Cherry KC 1000 SC/DI Z
+      . Cherry TC 1300
+      . Chicony USB Smart Card Keyboard
+      . Elatec TWN4 SmartCard NFC
+      . Feitian 502-CL
+      . Feitian eJAVA Token
+      . FujitsuTechnologySolutions GmbH Keyboard KB100 SCR
+      . FujitsuTechnologySolutions GmbH Keyboard KB100 SCR eSIG
+      . Hewlett-Packard HP lt4112 Gobi 4G Module
+      . Identive SCT3522CC token
+      . OMNIKEY AG 6121 USB mobile
+      . PIVKey T800
+      . REINER SCT tanJack Bluetooth
+      . Watchdata USB Key
+    - Add syslog(3) debug for Mac OS X Yosemite.
+      Use: sudo syslog -c "com.apple.ifdreader PID" -d to change the logging level.
+      See also "Change syslog logging level on Yosemite"
+      http://ludovicrousseau.blogspot.com/2015/03/change-syslog-logging-level-on-yosemite.html
+    - Remove ZLP patch for Gemalto IDBridge CT30 and K30. The patch was
+      causing problems with the K50.  A new reader firmware (version F)
+      solved the problem so the patch is no more needed.
+    - Fix a memory leak in an error path
+    - some minor bugs removed
+
+
 1.4.18 - 13 September 2014, Ludovic Rousseau
     - Add support of
       . Cherry Cherry TC 1100
