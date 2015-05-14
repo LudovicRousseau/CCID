@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-05-09
+# Generated: 2015-05-14
 #
 # DO NOT EDIT BY HAND
 
@@ -272,6 +272,7 @@
 # Generic
 0x0BDA:0x0165:Generic Smart Card Reader Interface
 0x0BDA:0x0169:Generic USB2.0-CRW
+0x048D:0x1366:Generic MultiCard Device
 
 # German Privacy Foundation
 0x20A0:0x4107:German Privacy Foundation Crypto Stick v1.2
