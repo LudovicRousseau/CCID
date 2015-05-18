@@ -1,6 +1,8 @@
+ChangeLog
 Makefile
 Makefile.in
 aclocal.m4
+ar-lib
 autom4te.cache/
 compile
 config.guess
@@ -29,6 +31,7 @@ examples/.deps/
 examples/Makefile
 examples/Makefile.in
 examples/scardcontrol
+examples/scardcontrol-PCSCv2part10.o
 examples/scardcontrol-scardcontrol.o
 examples/tags
 install-sh
