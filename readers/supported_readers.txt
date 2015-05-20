@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-05-14
+# Generated: 2015-05-20
 #
 # DO NOT EDIT BY HAND
 
@@ -178,6 +178,7 @@
 
 # BLUTRONICS
 0x1B0E:0x1078:BLUTRONICS BLUDRIVE II CCID
+0x1B0E:0x1079:BLUTRONICS BLUDRIVE II CCID
 
 # Broadcom Corp
 0x0A5C:0x5800:Broadcom Corp 5880
