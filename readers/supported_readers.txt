@@ -430,6 +430,9 @@
 0x0C4B:0x0520:REINER SCT tanJack Bluetooth
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
 
+# SafeNet
+0x0529:0x0602:SafeNet eToken 7300
+
 # SafeTech
 0x24A2:0x0102:SafeTech SafeTouch
 
