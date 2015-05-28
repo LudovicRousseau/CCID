@@ -432,6 +432,7 @@
 
 # SafeNet
 0x0529:0x0602:SafeNet eToken 7300
+0x0529:0x0620:SafeNet eToken 5100
 
 # SafeTech
 0x24A2:0x0102:SafeTech SafeTouch
@@ -543,7 +544,6 @@
 0x09C3:0x0008:ActivCard ActivCard USB Reader V2
 
 # Aladdin
-0x0529:0x0620:Aladdin eToken PRO USB 72K Java
 
 # ATMEL
 0x03EB:0x6016:ATMEL VaultIC460
@@ -625,6 +625,9 @@
 #0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader (Identive_CLOUD_4510_F.txt_i1)
 #0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader (Identive_CLOUD_4710_F.txt)
 #0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader (Identive_CLOUD_4710_F.txt_i1)
+
+#0x0529:0x0620:Aladdin eToken PRO USB 72K Java (Aladdin_eToken_PRO_USB_72K_Java.txt)
+#0x0529:0x0620:SafeNet eToken 5100 (SafeNet_Token_JC.txt)
 
 #0x058F:0x9520:Alcor Micro AU9520 (AU9520.txt)
 #0x058F:0x9520:Akasa AK-CR-03 (Akasa_AK-CR-03.txt)
