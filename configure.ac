@@ -101,7 +101,7 @@ AC_ARG_ENABLE(libusb,
 	[ use_libusb="${enableval}" ], [ use_libusb=yes ] )
 
 # check if libusb is used
-LIBUSB_NEEDED_VERSION="1.0.8"
+LIBUSB_NEEDED_VERSION="1.0.9"
 if test "x$use_libusb" != xno ; then
 	PKG_CHECK_EXISTS([libusb-1.0], [
 	PKG_CHECK_MODULES(LIBUSB, libusb-1.0 >= $LIBUSB_NEEDED_VERSION, [],
