@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-05-28
+# Generated: 2015-06-10
 #
 # DO NOT EDIT BY HAND
 
@@ -122,6 +122,7 @@
 
 # ACS
 0x072F:0x1204:ACS ACR101 ICC Reader
+0x072F:0x221A:ACS ACR1251 Dual Reader
 0x072F:0x8201:ACS APG8201 PINhandy 1
 0x072F:0x8202:ACS APG8201 USB Reader
 0x072F:0x90DB:ACS CryptoMate64
@@ -632,6 +633,9 @@
 #0x058F:0x9520:Alcor Micro AU9520 (AU9520.txt)
 #0x058F:0x9520:Akasa AK-CR-03 (Akasa_AK-CR-03.txt)
 #0x058F:0x9520:Alcor Micro SCR001 (Alcor_SCR001.txt)
+
+#0x072F:0x221A:ACS ACR1251 Dual Reader (ACS_ACR1251_Dual_Reader.txt)
+#0x072F:0x221A:ACS ACR1251 Dual Reader (ACS_ACR1251_Dual_Reader.txt_i1)
 
 #0x072F:0x90CC:ACS ACR122U (ACR122U.txt)
 #0x072F:0x90CC:ACS ACR 38U-CCID (ACR38U-CCID.txt)
