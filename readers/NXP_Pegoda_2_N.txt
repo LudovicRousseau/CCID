@@ -1,0 +1,60 @@
+ idVendor: 0x1FC9
+  iManufacturer: NXP
+ idProduct: 0x0107
+  iProduct: Pegoda 2 N
+ bcdDevice: 5.10 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.800 MHz
+  dwMaximumClock: 8.000 MHz
+  bNumClockSupported: 4
+   Got 256 clock frequencies but was expecting 4
+   Support 10752 kHz
+   Support 21505 kHz
+   Support 43010 kHz
+   Support 86021 kHz
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 250000 bps
+  bNumDataRatesSupported: 106
+   Got 5 data rates but was expecting 106
+   Support 10752 bps
+   Support 21505 bps
+   Support 43010 bps
+   Support 86021 bps
+   Support 172043 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00020430
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1

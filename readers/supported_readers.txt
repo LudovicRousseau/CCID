@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-06-10
+# Generated: 2015-06-11
 #
 # DO NOT EDIT BY HAND
 
@@ -385,6 +385,7 @@
 0x04E6:0x511A:NTT Communications Corp. SCR3310-NTTCom USB SmartCard Reader
 
 # NXP
+0x1FC9:0x0107:NXP Pegoda 2 N
 0x1FC9:0x010B:NXP PR533
 
 # OBERTHUR TECHNOLOGIES
