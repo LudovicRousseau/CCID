@@ -71,6 +71,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			ccid_descriptor->readTimeout = 60*1000; /* 60 seconds */
 			break;
 
+		case OZ776:
 		case OZ776_7772:
 			ccid_descriptor->dwMaxDataRate = 9600;
 			break;
