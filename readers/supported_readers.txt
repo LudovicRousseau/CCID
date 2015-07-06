@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-06-19
+# Generated: 2015-07-06
 #
 # DO NOT EDIT BY HAND
 
@@ -535,6 +535,7 @@
 0x1050:0x0112:Yubico Yubikey NEO CCID
 0x1050:0x0115:Yubico Yubikey NEO U2F+CCID
 0x1050:0x0116:Yubico Yubikey NEO OTP+U2F+CCID
+0x1050:0x0404:Yubico Yubikey 4 CCID
 
 ##########################
 # section: unsupported
