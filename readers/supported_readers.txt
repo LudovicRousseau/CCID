@@ -536,6 +536,7 @@
 0x1050:0x0115:Yubico Yubikey NEO U2F+CCID
 0x1050:0x0116:Yubico Yubikey NEO OTP+U2F+CCID
 0x1050:0x0404:Yubico Yubikey 4 CCID
+0x1050:0x0405:Yubico Yubikey 4 OTP+CCID
 
 ##########################
 # section: unsupported
