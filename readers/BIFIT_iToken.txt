@@ -1,0 +1,49 @@
+ idVendor: 0x23A0
+  iManufacturer: BIFIT
+ idProduct: 0x0003
+  iProduct: iToken
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 2
+  bulk-IN and bulk-OUT
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: iToken
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0001
+   T=0
+  dwDefaultClock: 1.500 MHz
+  dwMaximumClock: 1.500 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: Resource temporarily unavailable
+  dwDataRate: 4032 bps
+  dwMaxDataRate: 93750 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
+  dwMaxIFSD: 0
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000100B8
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 270 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
