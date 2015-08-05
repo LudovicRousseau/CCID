@@ -118,6 +118,25 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.20 - 5 August 2015, Ludovic Rousseau
+    - Add support of
+      . ACS ACR1251 Dual Reader
+      . Access IS NFC Smart Module
+      . BIFIT iToken
+      . BLUTRONICS BLUDRIVE II CCID (idProduct: 0x1079)
+      . Generic MultiCard Device
+      . NXP Pegoda 2 N
+      . SafeNet eToken 5100
+      . SafeNet eToken 7300
+      . Yubico Yubikey 4 CCID
+      . Yubico Yubikey 4 OTP+CCID
+      . Yubico Yubikey 4 OTP+U2F+CCID
+      . Yubico Yubikey 4 U2F+CCID
+    - Depends on libusb version 1.0.9 instead of 1.0.8
+    - The O2 Micro Oz776 reader only supports 9600 bps
+    - Change installation directory for Mac OS X El Capitan 10.11
+
+
 1.4.19 - 13 May 2014, Ludovic Rousseau
     - Add support of
       . AK910 CKey (idProduct 0x0001)
