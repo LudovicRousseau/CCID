@@ -715,3 +715,6 @@
 #0x20A0:0x4108:Crypto Stick Crypto Stick v1.4 (Crypto_Stick_Crypto_Stick_v1.4.txt)
 #0x20A0:0x4108:Nitrokey Nitrokey Pro (Nitrokey_Pro.txt)
 
+#0x20A0:0x4211:Free Software Initiative of Japan Gnuk Token (Free_Software_Initiative_of_Japan_Gnuk_Token.txt)
+#0x20A0:0x4211:Nitrokey Nitrokey Start (Nitrokey_Start.txt)
+
