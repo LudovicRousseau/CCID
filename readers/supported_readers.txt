@@ -712,3 +712,6 @@
 #0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt)
 #0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt_i1)
 
+#0x20A0:0x4108:Crypto Stick Crypto Stick v1.4 (Crypto_Stick_Crypto_Stick_v1.4.txt)
+#0x20A0:0x4108:Nitrokey Nitrokey Pro (Nitrokey_Pro.txt)
+
