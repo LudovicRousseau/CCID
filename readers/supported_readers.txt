@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-07-28
+# Generated: 2015-08-29
 #
 # DO NOT EDIT BY HAND
 
@@ -19,7 +19,6 @@
 
 # Alcor Micro
 0x058F:0x9520:Alcor Micro AU9520
-0x058F:0x9540:Alcor Micro AU9540
 
 # Athena
 0x0DC3:0x1004:Athena ASE IIIe
@@ -383,6 +382,9 @@
 0x1E0D:0x1023:Neowave Weneo
 0x1E0D:0x8033:Neowave Weneo
 
+# Nitrokey
+0x20A0:0x4230:Nitrokey Nitrokey HSM
+
 # NTT Communications Corp.
 0x04E6:0x511A:NTT Communications Corp. SCR3310-NTTCom USB SmartCard Reader
 
@@ -552,6 +554,9 @@
 0x09C3:0x0008:ActivCard ActivCard USB Reader V2
 
 # Aladdin
+
+# Alcor Micro
+0x058F:0x9540:Alcor Micro AU9540
 
 # ATMEL
 0x03EB:0x6016:ATMEL VaultIC460
