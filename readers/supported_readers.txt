@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-08-29
+# Generated: 2015-08-30
 #
 # DO NOT EDIT BY HAND
 
@@ -225,9 +225,6 @@
 0x0982:0x0008:COVADIS VEGA-ALPHA
 0x0982:0x0040:COVADIS Auriga
 
-# Crypto Stick
-0x20A0:0x4108:Crypto Stick Crypto Stick v1.4
-
 # DUALi
 0x1DB2:0x088B:DUALi DRAGON NFC READER
 
@@ -249,7 +246,6 @@
 
 # Free Software Initiative of Japan
 0x234B:0x0000:Free Software Initiative of Japan Gnuk
-0x20A0:0x4211:Free Software Initiative of Japan Gnuk Token
 
 # Fujitsu Siemens Computers
 0x0BF8:0x1005:Fujitsu Siemens Computers SmartCard Keyboard USB 2A
@@ -383,6 +379,8 @@
 0x1E0D:0x8033:Neowave Weneo
 
 # Nitrokey
+0x20A0:0x4108:Nitrokey Nitrokey Pro
+0x20A0:0x4211:Nitrokey Nitrokey Start
 0x20A0:0x4230:Nitrokey Nitrokey HSM
 
 # NTT Communications Corp.
@@ -711,10 +709,4 @@
 
 #0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt)
 #0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt_i1)
-
-#0x20A0:0x4108:Crypto Stick Crypto Stick v1.4 (Crypto_Stick_Crypto_Stick_v1.4.txt)
-#0x20A0:0x4108:Nitrokey Nitrokey Pro (Nitrokey_Pro.txt)
-
-#0x20A0:0x4211:Free Software Initiative of Japan Gnuk Token (Free_Software_Initiative_of_Japan_Gnuk_Token.txt)
-#0x20A0:0x4211:Nitrokey Nitrokey Start (Nitrokey_Start.txt)
 
