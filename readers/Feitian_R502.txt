@@ -2,7 +2,7 @@
   iManufacturer: Feitian
  idProduct: 0x060D
   iProduct: R502
- bcdDevice: 1.60 (firmware release?)
+ bcdDevice: 1.63 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -57,7 +57,7 @@
   iManufacturer: Feitian
  idProduct: 0x060D
   iProduct: R502
- bcdDevice: 1.60 (firmware release?)
+ bcdDevice: 1.63 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 1
@@ -115,7 +115,7 @@
   iManufacturer: Feitian
  idProduct: 0x060D
   iProduct: R502
- bcdDevice: 1.60 (firmware release?)
+ bcdDevice: 1.63 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 2
