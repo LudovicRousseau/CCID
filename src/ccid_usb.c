@@ -399,7 +399,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 
 				/* simulate a composite device as when libudev is used */
 				if ((GEMALTOPROXDU == readerID)
-					|| (GEMALTOPROXSU == readerID))
+					|| (GEMALTOPROXSU == readerID)
+					|| (FEITIANR502DUAL == readerID))
 				{
 						/*
 						 * We can't talk to the two CCID interfaces
@@ -608,9 +609,14 @@ again:
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 				/* use the next interface for the next "slot" */
 				static_interface++;
-
+				
 				/* reset for a next reader */
-				if (static_interface > 2)
+				if (FEITIANR502DUAL == readerID)
+				{
+					if (static_interface >= 2)	
+						static_interface = 0;
+				}
+				else if (static_interface > 2)
 					static_interface = 1;
 #endif
 
