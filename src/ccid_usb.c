@@ -571,7 +571,7 @@ again:
 					/* an interface was specified and it is not the
 					 * current one */
 					DEBUG_INFO3("Found interface %d but expecting %d",
-						interface_number, interface);
+						interface, interface_number);
 					DEBUG_INFO3("Wrong interface for USB device %d/%d."
 						" Checking next one.", bus_number, device_address);
 
