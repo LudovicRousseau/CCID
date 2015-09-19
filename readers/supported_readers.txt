@@ -320,6 +320,7 @@
 0x04E6:0x5816:Identiv uTrust 3512 SAM slot Token
 0x04E6:0x5818:Identiv @MAXX Light2 token
 0x04E6:0x5819:Identiv @MAXX ID-1 Smart Card Reader
+0x04E6:0x581A:Identiv uTrust 3522 embd SE RFID Token
 
 # Identive
 0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
