@@ -381,6 +381,7 @@
 # Liteon
 0x03F0:0x164A:Liteon HP SC Keyboard - Apollo (Liteon)
 0x03F0:0x174A:Liteon HP SC Keyboard - Apollo KR (Liteon)
+0x03F0:0x184A:Liteon HP SC Keyboard - Apollo JP (Liteon)
 
 # Macally
 0x08AE:0x0BDF:Macally NFC CCID eNetPad
