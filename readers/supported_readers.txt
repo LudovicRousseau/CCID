@@ -378,6 +378,9 @@
 0x17EF:0x6007:Lenovo Lenovo USB Smartcard Keyboard
 0x17EF:0x6055:Lenovo Lenovo USB Smartcard Keyboard
 
+# Liteon
+0x03F0:0x164A:Liteon HP SC Keyboard - Apollo (Liteon)
+
 # Macally
 0x08AE:0x0BDF:Macally NFC CCID eNetPad
 
