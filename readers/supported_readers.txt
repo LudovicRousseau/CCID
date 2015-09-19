@@ -318,6 +318,7 @@
 0x04E6:0x5814:Identiv SCR3500 A Contact Reader
 0x04E6:0x5815:Identiv SCR3500 B Contact Reader
 0x04E6:0x5816:Identiv uTrust 3512 SAM slot Token
+0x04E6:0x5818:Identiv @MAXX Light2 token
 
 # Identive
 0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
