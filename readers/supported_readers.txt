@@ -331,6 +331,7 @@
 0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
 0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
 0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader
+0x04E6:0x5723:Identive Identive CLOUD 4000 F DTC
 0x04E6:0x5810:Identive CLOUD 2700 R Smart Card Reader
 0x04E6:0x5817:Identive SCT3522CC token
 
@@ -653,6 +654,9 @@
 #0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader (Identive_CLOUD_4510_F.txt_i1)
 #0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader (Identive_CLOUD_4710_F.txt)
 #0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader (Identive_CLOUD_4710_F.txt_i1)
+
+#0x04E6:0x5723:Identive Identive CLOUD 4000 F DTC (Identive_Identive_CLOUD_4000_F_DTC.txt)
+#0x04E6:0x5723:Identive Identive CLOUD 4000 F DTC (Identive_Identive_CLOUD_4000_F_DTC.txt_i1)
 
 #0x0529:0x0620:Aladdin eToken PRO USB 72K Java (Aladdin_eToken_PRO_USB_72K_Java.txt)
 #0x0529:0x0620:SafeNet eToken 5100 (SafeNet_Token_JC.txt)
