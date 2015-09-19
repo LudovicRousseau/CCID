@@ -313,6 +313,7 @@
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
 
 # Identiv
+0x04E6:0x5713:Identiv CLOUD 2980 F Smart Card Reader
 0x04E6:0x5811:Identiv uTrust 2900 R Smart Card Reader
 0x04E6:0x5812:Identiv uTrust 2910 R Smart Card Reader
 0x04E6:0x5814:Identiv SCR3500 A Contact Reader
