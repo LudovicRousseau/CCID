@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-09-19
+# Generated: 2015-09-21
 #
 # DO NOT EDIT BY HAND
 
@@ -458,6 +458,9 @@
 0x0C4B:0x0504:REINER SCT cyberJack go
 0x0C4B:0x0520:REINER SCT tanJack Bluetooth
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
+
+# Rocketek
+0x14CD:0x8166:Rocketek RT-SCR1
 
 # SafeNet
 0x0529:0x0602:SafeNet eToken 7300
