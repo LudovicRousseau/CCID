@@ -2,18 +2,20 @@
   iManufacturer: Cherry GmbH
  idProduct: 0x003E
   iProduct: SmartTerminal ST-2xxx
- bcdDevice: 5.08 (firmware release?)
+ bcdDevice: 6.01 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0xFF
   NOT A CCID DEVICE
   Class is 0xFF (proprietary)
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
- iInterface: 4
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: Vendor Interface
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -27,12 +29,12 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 8.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request
+   IFD does not support GET CLOCK FREQUENCIES request: Operation timed out
   dwDataRate: 10753 bps
   dwMaxDataRate: 344105 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request
-  dwMaxIFSD: 252
+   IFD does not support GET_DATA_RATES request: Operation timed out
+  dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
@@ -43,7 +45,7 @@
    ....20 Automatic baud rate change according to frequency and Fi, Di params
    ....80 Automatic PPS made by the CCID
    01.... TPDU level exchange
-  dwMaxCCIDMessageLength: 263 bytes
+  dwMaxCCIDMessageLength: 270 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnvelope: 0xFF
