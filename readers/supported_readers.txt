@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-09-21
+# Generated: 2015-10-03
 #
 # DO NOT EDIT BY HAND
 
@@ -241,6 +241,7 @@
 0x096E:0x0608:Feitian 502-CL
 0x096E:0x060D:Feitian R502
 0x096E:0x061A:Feitian bR301
+0x096E:0x0624:Feitian bR301 BLE
 0x096E:0x0807:Feitian ePass2003
 0x096E:0x080F:Feitian eJAVA Token
 
