@@ -2,7 +2,7 @@
   iManufacturer: Feitian
  idProduct: 0x0608
   iProduct: R502
- bcdDevice: 1.60 (firmware release?)
+ bcdDevice: 1.64 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -26,11 +26,11 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Resource temporarily unavailable
+   IFD does not support GET CLOCK FREQUENCIES request: Operation timed out
   dwDataRate: 10752 bps
   dwMaxDataRate: 688172 bps
   bNumDataRatesSupported: 44
-   IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
+   IFD does not support GET_DATA_RATES request: Operation timed out
   dwMaxIFSD: 61
   dwSynchProtocols: 0x00000007
    2-wire protocol
