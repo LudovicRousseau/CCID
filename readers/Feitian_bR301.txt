@@ -1,8 +1,8 @@
  idVendor: 0x096E
-  iManufacturer: Feitian
+  iManufacturer: FEITIAN
  idProduct: 0x061A
   iProduct: bR301
- bcdDevice: 1.30 (firmware release?)
+ bcdDevice: 2.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: R502 Contactless Reader
+ iInterface: bR301 Bluetooth Reader
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -29,11 +29,11 @@
   dwDefaultClock: 3.700 MHz
   dwMaximumClock: 3.700 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: No such file or directory
+   IFD does not support GET CLOCK FREQUENCIES request: Resource temporarily unavailable
   dwDataRate: 9946 bps
   dwMaxDataRate: 318280 bps
-  bNumDataRatesSupported: 53
-   IFD does not support GET_DATA_RATES request: No such file or directory
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
   dwMaxIFSD: 272
   dwSynchProtocols: 0x00000007
    2-wire protocol
