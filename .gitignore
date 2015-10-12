@@ -49,6 +49,7 @@ readers/Makefile
 readers/Makefile.in
 src/.deps/
 src/.libs/
+src/Info.plist
 src/Makefile
 src/Makefile.in
 src/libccid.la
