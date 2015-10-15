@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-10-07
+# Generated: 2015-10-15
 #
 # DO NOT EDIT BY HAND
 
@@ -553,6 +553,9 @@
 
 # VMware
 0x0E0F:0x0004:VMware Virtual USB CCID
+
+# WatchCNPC
+0x163C:0x0406:WatchCNPC USB CCID Key
 
 # Watchdata
 0x163C:0x0407:Watchdata USB Key
