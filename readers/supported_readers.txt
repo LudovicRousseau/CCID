@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-10-15
+# Generated: 2015-10-17
 #
 # DO NOT EDIT BY HAND
 
@@ -254,6 +254,9 @@
 
 # Free Software Initiative of Japan
 0x234B:0x0000:Free Software Initiative of Japan Gnuk
+
+# FT
+0x096E:0x080A:FT ePass2003Auto
 
 # Fujitsu Siemens Computers
 0x0BF8:0x1005:Fujitsu Siemens Computers SmartCard Keyboard USB 2A
