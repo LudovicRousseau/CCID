@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-10-17
+# Generated: 2015-10-20
 #
 # DO NOT EDIT BY HAND
 
@@ -282,7 +282,6 @@
 0x08E6:0x3479:Gemplus GemCore POS Pro Smart Card Reader
 
 # Generic
-0x0BDA:0x0165:Generic Smart Card Reader Interface
 0x0BDA:0x0169:Generic USB2.0-CRW
 0x048D:0x1366:Generic MultiCard Device
 
@@ -607,6 +606,9 @@
 
 # Feitian
 0x096E:0x0503:Feitian SCR301
+
+# Generic
+0x0BDA:0x0165:Generic Smart Card Reader Interface
 
 # Hewlett-Packard Company
 0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
