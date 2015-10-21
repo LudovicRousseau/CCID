@@ -118,6 +118,50 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.21 - 21 October 2015, Ludovic Rousseau
+    - Add support of
+      . ACS ACR1252 Dual Reader
+      . Chicony HP USB Smartcard CCID Keyboard JP
+      . Chicony HP USB Smartcard CCID Keyboard KR
+      . FT ePass2003Auto
+      . Feitian bR301 BLE
+      . Feitian iR301 (ProductID 0x0619)
+      . Feitian iR301 (ProductID 0x061C)
+      . Identiv @MAXX ID-1 Smart Card Reader
+      . Identiv @MAXX Light2 token
+      . Identiv CLOUD 2980 F Smart Card Reader
+      . Identiv Identiv uTrust 4701 F Dual Interface Reader
+      . Identiv SCR3500 A Contact Reader
+      . Identiv SCR3500 B Contact Reader
+      . Identiv SCR35xx USB Smart Card Reader
+      . Identiv uTrust 2900 R Smart Card Reader
+      . Identiv uTrust 2910 R Smart Card Reader
+      . Identiv uTrust 2910 R Taglio SC Reader
+      . Identiv uTrust 3512 SAM slot Token
+      . Identiv uTrust 3522 embd SE RFID Token
+      . Identiv uTrust 3700 F CL Reader
+      . Identiv uTrust 3701 F CL Reader
+      . Identive Identive CLOUD 4000 F DTC
+      . Liteon HP SC Keyboard - Apollo (Liteon)
+      . Liteon HP SC Keyboard - Apollo JP (Liteon)
+      . Liteon HP SC Keyboard - Apollo KR (Liteon)
+      . Nitrokey Nitrokey HSM
+      . Nitrokey Nitrokey Pro
+      . Nitrokey Nitrokey Start
+      . Rocketek RT-SCR1
+      . VASCO DIGIPASS 875
+      . WatchCNPC USB CCID Key
+    - Remove support of
+      . Crypto Stick Crypto Stick v1.4 is an old version of Nitrokey Nitrokey Pro
+      . Free Software Initiative of Japan Gnuk Token is an old version
+        of Nitrokey Nitrokey Start
+    - Add Feitain R502 dual interface (composite) reader on Mac OS X
+    - display a human readable version of the error code returned by
+      libusb
+    - Mac OS X: wait until libusb/the reader is ready
+    - some minor bugs fixed
+
+
 1.4.20 - 5 August 2015, Ludovic Rousseau
     - Add support of
       . ACS ACR1251 Dual Reader
