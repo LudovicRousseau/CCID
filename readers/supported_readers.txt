@@ -147,6 +147,7 @@
 
 # Aladdin R.D.
 0x24DC:0x0101:Aladdin R.D. JaCarta
+0x24DC:0x0102:Aladdin R.D. JaCarta LT
 
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522
