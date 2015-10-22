@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-10-20
+# Generated: 2015-10-22
 #
 # DO NOT EDIT BY HAND
 
@@ -144,6 +144,9 @@
 
 # Aktiv Co., ProgramPark
 0x0A89:0x0060:Aktiv Co., ProgramPark Rutoken Magistra
+
+# Aladdin R.D.
+0x24DC:0x0101:Aladdin R.D. JaCarta
 
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522
