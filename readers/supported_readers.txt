@@ -149,6 +149,7 @@
 0x24DC:0x0101:Aladdin R.D. JaCarta
 0x24DC:0x0102:Aladdin R.D. JaCarta LT
 0x24DC:0x0201:Aladdin R.D. JCR-770
+0x24DC:0x0401:Aladdin R.D. JC-WebPass (JC600)
 0x24DC:0x100F:Aladdin R.D. JaCarta Flash
 
 # Alcor Micro
