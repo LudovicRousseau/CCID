@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-10-22
+# Generated: 2015-10-28
 #
 # DO NOT EDIT BY HAND
 
@@ -325,6 +325,9 @@
 0x076B:0x5127:HID OMNIKEY 5127 CK
 0x076B:0x5326:HID OMNIKEY 5326 DFR
 0x076B:0x5427:HID OMNIKEY 5427 CK
+
+# Hitachi, Ltd.
+0x04A4:0x00C7:Hitachi, Ltd. Hitachi Biometric Reader
 
 # id3 Semiconductors
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
