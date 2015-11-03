@@ -214,6 +214,8 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	char infofile[FILENAME_MAX];
 #ifndef __APPLE__
 	unsigned int device_vendor, device_product;
+	unsigned int device_bus = 0;
+	unsigned int device_addr = 0;
 #else
 	/* 100 ms delay */
 	struct timespec sleep_time = { 0, 100 * 1000 * 1000 };
@@ -259,9 +261,11 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		 */
 		if ((dirname = strstr(device, "libudev:")) != NULL)
 		{
-			/* convert the interface number */
-			interface_number = atoi(dirname + 8 /* "libudev:" */);
-			DEBUG_COMM2("interface_number: %d", interface_number);
+			/* convert the interface number, bus and device ids */
+			if (sscanf(dirname + 8, "%d:/dev/bus/usb/%d/%d", &interface_number, &device_bus, &device_addr) == 3) {
+				DEBUG_COMM2("interface_number: %d", interface_number);
+				DEBUG_COMM3("usb bus/device: %d/%d", device_bus, device_addr);
+			}
 		}
 	}
 #endif
@@ -372,6 +376,14 @@ again_libusb:
 			struct libusb_config_descriptor *config_desc;
 			uint8_t bus_number = libusb_get_bus_number(dev);
 			uint8_t device_address = libusb_get_device_address(dev);
+
+#ifndef __APPLE__
+			if ((bus_number != device_bus)
+				|| (device_address != device_addr)) {
+				/* not USB the device we are looking for */
+				continue;
+			}
+#endif
 
 			int r = libusb_get_device_descriptor(dev, &desc);
 			if (r < 0)
