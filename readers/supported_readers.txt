@@ -161,6 +161,7 @@
 
 # Athena
 0x0DC3:0x0900:Athena IDProtect Key v2
+0x0DC3:0x1007:Athena ASEDrive IIIe KB Bio PIV
 0x0DC3:0x1008:Athena ASEDrive IIIe Combo Bio PIV
 
 # ATMEL
