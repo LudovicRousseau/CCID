@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-10-28
+# Generated: 2015-11-04
 #
 # DO NOT EDIT BY HAND
 
@@ -161,6 +161,7 @@
 
 # Athena
 0x0DC3:0x0900:Athena IDProtect Key v2
+0x0DC3:0x1008:Athena ASEDrive IIIe Combo Bio PIV
 
 # ATMEL
 0x03EB:0x6004:ATMEL AT91SO CCID Smart Card Reader

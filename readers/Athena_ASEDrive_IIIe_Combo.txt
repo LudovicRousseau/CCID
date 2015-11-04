@@ -1,0 +1,58 @@
+ idVendor: 0x0DC3
+  iManufacturer: Athena
+ idProduct: 0x1008
+  iProduct: ASEDrive IIIe Combo?
+ bcdDevice: 16.28 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: ASEDrive IIIe Combo?
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 18.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   Support 4000 kHz
+   Support 4500 kHz
+   Support 5140 kHz
+   Support 6000 kHz
+   Support 7200 kHz
+   Support 9000 kHz
+   Support 12000 kHz
+   Support 18000 kHz
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 999936 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   wrong size for GET_DATA_RATES: 1
+  dwMaxIFSD: 253
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00010230
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ..02.. NAD value other than 00 accepted (T=1)
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
