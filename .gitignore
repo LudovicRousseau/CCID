@@ -87,6 +87,9 @@ src/openct/.libs/
 src/openct/libccid_la-buffer.lo
 src/openct/libccid_la-checksum.lo
 src/openct/libccid_la-proto-t1.lo
+src/openct/libccidtwin_la-buffer.lo
+src/openct/libccidtwin_la-checksum.lo
+src/openct/libccidtwin_la-proto-t1.lo
 src/parse
 src/parse-ccid_usb.o
 src/parse-debug.o
@@ -101,5 +104,7 @@ src/towitoko/.dirstamp
 src/towitoko/.libs/
 src/towitoko/libccid_la-atr.lo
 src/towitoko/libccid_la-pps.lo
+src/towitoko/libccidtwin_la-atr.lo
+src/towitoko/libccidtwin_la-pps.lo
 stamp-h1
 tags
