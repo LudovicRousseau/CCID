@@ -55,7 +55,6 @@
  * of 260 bytes since the driver check this value */
 #define BOGUS_SCM_FIRMWARE_FOR_dwMaxCCIDMessageLength
 
-#define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #ifndef offsetof
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 #endif
