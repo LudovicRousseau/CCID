@@ -17,11 +17,6 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- * $Id$
- */
-
-
 #include <config.h>
 #include "misc.h"
 #include "debug.h"

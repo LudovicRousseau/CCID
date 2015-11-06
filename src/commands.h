@@ -17,10 +17,6 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- * $Id$
- */
-
 #define SIZE_GET_SLOT_STATUS 10
 #define STATUS_OFFSET 7
 #define ERROR_OFFSET 8

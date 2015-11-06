@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# $Id$
-
 # I use
 # - autoconf (GNU Autoconf) 2.61
 # - automake (GNU automake) 1.10

@@ -18,10 +18,6 @@
 */
 
 /*
- * $Id$
- */
-
-/*
  * DEBUG_CRITICAL("text");
  *	log "text" if (LogLevel & DEBUG_LEVEL_CRITICAL) is TRUE
  *

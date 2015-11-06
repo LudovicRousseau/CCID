@@ -10,5 +10,3 @@ I used version 2.0.7 of Carlos driver available at
 http://www.geocities.com/cprados/
 
 I added the function ATR_GetDefaultProtocol() in towitoko/atr.c
-
-$Id$
