@@ -1273,11 +1273,16 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	RESPONSECODE return_value;
 	unsigned int rx_length;
 	int reader_index;
+	int old_read_timeout;
+	int restore_timeout = FALSE;
+	_ccid_descriptor *ccid_descriptor;
 
 	(void)RecvPci;
 
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
+
+	ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	DEBUG_INFO3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
 		Lun);
@@ -1333,6 +1338,16 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 
 	}
 
+	/* Pseudo-APDU as defined in PC/SC v2 part 10 supplement document
+	 * CLA=0xFF, INS=0xC2, P1=0x01 */
+	if (0 == memcmp(TxBuffer, "\xFF\xC2\x01", 3))
+	{
+		/* Yes, use the same timeout as for SCardControl() */
+		restore_timeout = TRUE;
+		old_read_timeout = ccid_descriptor -> readTimeout;
+		ccid_descriptor -> readTimeout = 90;	/* 90 seconds */
+	}
+
 	rx_length = *RxLength;
 	return_value = CmdXfrBlock(reader_index, TxLength, TxBuffer, &rx_length,
 		RxBuffer, SendPci.Protocol);
@@ -1340,6 +1355,10 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		*RxLength = rx_length;
 	else
 		*RxLength = 0;
+
+	/* restore timeout */
+	if (restore_timeout)
+		ccid_descriptor -> readTimeout = old_read_timeout;
 
 	return return_value;
 } /* IFDHTransmitToICC */
