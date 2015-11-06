@@ -1,8 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 # You may need to use autoconf 2.56 or newer
 
-# $Id$
-
 # Require autoconf 2.61
 AC_PREREQ([2.69])
 
