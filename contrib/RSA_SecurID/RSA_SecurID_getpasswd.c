@@ -22,11 +22,20 @@
 #include <string.h>
 #include <winscard.h>
 
+/* DWORD printf(3) format */
+#ifdef __APPLE__
+/* Apple defines DWORD as uint32_t so %d is correct */
+#define LF
+#else
+/* pcsc-lite defines DWORD as unsigned long so %ld is correct */
+#define LF "l"
+#endif
+
 /* PCSC error message pretty print */
 #define PCSC_ERROR_EXIT(rv, text) \
 if (rv != SCARD_S_SUCCESS) \
 { \
-	printf(text ": %s (0x%lX)\n", pcsc_stringify_error(rv), rv); \
+	printf(text ": %s (0x%"LF"X)\n", pcsc_stringify_error(rv), rv); \
 	goto end; \
 }
 
@@ -51,7 +60,7 @@ int main(void)
 	rv = SCardEstablishContext(SCARD_SCOPE_SYSTEM, NULL, NULL, &hContext);
 	if (rv != SCARD_S_SUCCESS)
 	{
-		printf("SCardEstablishContext: Cannot Connect to Resource Manager %lX\n", rv);
+		printf("SCardEstablishContext: Cannot Connect to Resource Manager %"LF"X\n", rv);
 		return 1;
 	}
 
@@ -101,7 +110,7 @@ int main(void)
 	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	if ((length != 2) || (bRecvBuffer[0] != 0x90) || (bRecvBuffer[1] != 0x00))
 	{
-		printf("cmd1 failed (%ld): %02X%02X\n", length, bRecvBuffer[length-2],
+		printf("cmd1 failed (%"LF"d): %02X%02X\n", length, bRecvBuffer[length-2],
 			bRecvBuffer[length-1]);
 		goto end;
 	}
@@ -113,8 +122,8 @@ int main(void)
 	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	if ((length != 6) || (bRecvBuffer[4] != 0x90) || (bRecvBuffer[5] != 0x00))
 	{
-		printf("cmd2 failed (%ld) : %02X%02X\n", length, bRecvBuffer[length-2],
-			bRecvBuffer[length-1]);
+		printf("cmd2 failed (%"LF"d) : %02X%02X\n", length,
+			bRecvBuffer[length-2], bRecvBuffer[length-1]);
 		goto end;
 	}
 
@@ -128,7 +137,7 @@ int main(void)
 	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	if ((length != 2) || (bRecvBuffer[0] != 0x90) || (bRecvBuffer[1] != 0x00))
 	{
-		printf("cmd3 failed (%ld): %02X%02X\n", length, bRecvBuffer[length-2],
+		printf("cmd3 failed (%"LF"d): %02X%02X\n", length, bRecvBuffer[length-2],
 			bRecvBuffer[length-1]);
 		goto end;
 	}
@@ -140,7 +149,7 @@ int main(void)
 	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	if ((length != 7) || (bRecvBuffer[5] != 0x90) || (bRecvBuffer[6] != 0x00))
 	{
-		printf("cmd4 failed (%ld): %02X%02X\n", length, bRecvBuffer[length-2],
+		printf("cmd4 failed (%"LF"d): %02X%02X\n", length, bRecvBuffer[length-2],
 			bRecvBuffer[length-1]);
 		goto end;
 	}
@@ -151,7 +160,7 @@ end:
 	/* We try to leave things as clean as possible */
     rv = SCardReleaseContext(hContext);
     if (rv != SCARD_S_SUCCESS)
-        printf("SCardReleaseContext: %s (0x%lX)\n", pcsc_stringify_error(rv),
+        printf("SCardReleaseContext: %s (0x%"LF"X)\n", pcsc_stringify_error(rv),
             rv);
 
     /* free allocated memory */
