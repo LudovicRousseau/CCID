@@ -1345,7 +1345,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 		/* Yes, use the same timeout as for SCardControl() */
 		restore_timeout = TRUE;
 		old_read_timeout = ccid_descriptor -> readTimeout;
-		ccid_descriptor -> readTimeout = 90;	/* 90 seconds */
+		ccid_descriptor -> readTimeout = 90 * 1000;	/* 90 seconds */
 	}
 
 	rx_length = *RxLength;
