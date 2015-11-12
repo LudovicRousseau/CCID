@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-11-04
+# Generated: 2015-11-12
 #
 # DO NOT EDIT BY HAND
 
@@ -277,6 +277,9 @@
 0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Smartcard Keyboard G87-914x
 0x0BF8:0x1022:FujitsuTechnologySolutions GmbH Keyboard KB100 SCR
 0x0BF8:0x1023:FujitsuTechnologySolutions GmbH Keyboard KB100 SCR eSIG
+
+# GEMALTO
+0x08E6:0x3440:GEMALTO CT1100
 
 # Gemalto
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
