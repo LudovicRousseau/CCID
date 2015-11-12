@@ -736,6 +736,9 @@
 #0x08E6:0x3438:Gemalto USB Shell Token V2 (GemPCKey.txt)
 #0x08E6:0x3438:Gemalto IDBridge K30 (Gemalto_IDBridge_K30.txt)
 
+#0x08E6:0x3440:GEMALTO CT1100 (Gemalto_CT1100.txt)
+#0x08E6:0x3440:GEMALTO K1100 (Gemalto_K1100.txt)
+
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpad.txt)
 #0x08E6:0x3478:Gemalto USB GemPCPinpad SmartCard Reader (GemPCPinpadv2.txt)
 
