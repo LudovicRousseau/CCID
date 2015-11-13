@@ -207,7 +207,7 @@ error:
 	if (return_value != IFD_SUCCESS)
 	{
 		/* release the allocated resources */
-		IFDHCloseChannel(Lun);
+		FreeChannel(reader_index);
 	}
 
 	return return_value;
