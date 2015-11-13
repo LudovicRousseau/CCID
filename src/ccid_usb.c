@@ -378,8 +378,9 @@ again_libusb:
 			uint8_t device_address = libusb_get_device_address(dev);
 
 #ifndef __APPLE__
-			if ((bus_number != device_bus)
-				|| (device_address != device_addr)) {
+			if ((device_bus || device_addr)
+				&& ((bus_number != device_bus)
+				|| (device_address != device_addr))) {
 				/* not USB the device we are looking for */
 				continue;
 			}
