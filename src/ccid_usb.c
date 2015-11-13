@@ -721,7 +721,6 @@ end:
 			goto again_libusb;
 		}
 #endif
-		close_libusb_if_needed();
 		if (claim_failed)
 			return STATUS_COMM_ERROR;
 		DEBUG_INFO1("Device not found?");
