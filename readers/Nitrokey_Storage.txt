@@ -1,7 +1,7 @@
  idVendor: 0x20A0
-  iManufacturer: German Privacy Foundation
+  iManufacturer: Nitrokey
  idProduct: 0x4109
-  iProduct: Crypto Stick v2.0
+  iProduct: Nitrokey Storage
  bcdDevice: 1.00 (firmware release?)
  bLength: 9
  bDescriptorType: 4
@@ -31,7 +31,7 @@
   dwMaxDataRate: 116129 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
    IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
-  dwMaxIFSD: 254
+  dwMaxIFSD: 48
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
