@@ -540,6 +540,9 @@
 # Teridian Semiconductors
 0x1862:0x0000:Teridian Semiconductors TSC12xxFV.09
 
+# THURSBY SOFTWARE
+0x1976:0x0001:THURSBY SOFTWARE TSS-PK1
+
 # Thursby Software Systems, Inc.
 
 # Tianyu
