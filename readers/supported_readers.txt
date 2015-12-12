@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-12-05
+# Generated: 2015-12-12
 #
 # DO NOT EDIT BY HAND
 
@@ -540,6 +540,8 @@
 # Teridian Semiconductors
 0x1862:0x0000:Teridian Semiconductors TSC12xxFV.09
 
+# Thursby Software Systems, Inc.
+
 # Tianyu
 0xA625:0x0810:Tianyu Smart Card Reader
 
@@ -755,6 +757,9 @@
 #0x096E:0x060D:Feitian R502 (Feitian_R502.txt)
 #0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i1)
 #0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i2)
+
+#0x096E:0x061C:FEITIAN iR301 (Feitian_iR301-U_8PIN.txt)
+#0x096E:0x061C:Thursby Software Systems, Inc. TSS-PK7 (Thursby_TSS_PK7.txt)
 
 #0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt)
 #0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt_i1)
