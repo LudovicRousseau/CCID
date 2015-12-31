@@ -314,17 +314,6 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		}
 	}
 
-#ifdef __APPLE__
-again_libusb:
-#endif
-	cnt = libusb_get_device_list(ctx, &devs);
-	if (cnt < 0)
-	{
-		DEBUG_CRITICAL("libusb_get_device_list() failed\n");
-		return_value = STATUS_UNSUCCESSFUL;
-		goto end1;
-	}
-
 #define GET_KEYS(key, values) \
 	rv = LTPBundleFindValueWithKey(&plist, key, values); \
 	if (rv) \
@@ -343,6 +332,17 @@ again_libusb:
 		|| (list_size(ifdVendorID) != list_size(ifdFriendlyName)))
 	{
 		DEBUG_CRITICAL2("Error parsing %s", infofile);
+		return_value = STATUS_UNSUCCESSFUL;
+		goto end1;
+	}
+
+#ifdef __APPLE__
+again_libusb:
+#endif
+	cnt = libusb_get_device_list(ctx, &devs);
+	if (cnt < 0)
+	{
+		DEBUG_CRITICAL("libusb_get_device_list() failed\n");
 		return_value = STATUS_UNSUCCESSFUL;
 		goto end1;
 	}
