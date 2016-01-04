@@ -1188,6 +1188,11 @@ again_status:
 	}
 #endif
 
+#ifdef __APPLE__
+	if (MICROCHIP_SEC1100 == ccid_descriptor->readerID)
+		InterruptRead(reader_index, 10);
+#endif
+
 	cmd[0] = 0x65; /* GetSlotStatus */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
