@@ -385,6 +385,7 @@ again_libusb:
 				continue;
 			}
 #endif
+			DEBUG_COMM3("Try device: %d/%d", bus_number, device_address);
 
 			int r = libusb_get_device_descriptor(dev, &desc);
 			if (r < 0)
@@ -393,6 +394,8 @@ again_libusb:
 					bus_number, device_address);
 				continue;
 			}
+
+			DEBUG_COMM3("vid/pid : %04X/%04X", desc.idVendor, desc.idProduct);
 
 			if (desc.idVendor == vendorID && desc.idProduct == productID)
 			{
