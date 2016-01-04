@@ -494,6 +494,20 @@ int ccid_open_hack_post(unsigned int reader_index)
 			}
 			break;
 #endif
+		case CHERRY_KC1000SC:
+			if ((0x0100 == ccid_descriptor->IFD_bcdDevice)
+				&& (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK) == CCID_CLASS_SHORT_APDU)
+			{
+				/* firmware 1.00 is bogus
+				 * With a T=1 card and case 2 APDU (data from card to
+				 * host) the maximum size returned by the reader is 128
+				 * byes. The reader is then using chaining as with
+				 * extended APDU.
+				 */
+				ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+				ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
+			}
+			break;
 	}
 
 	/* Gemalto readers may report additional information */
