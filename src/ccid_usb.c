@@ -320,7 +320,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	{ \
 		DEBUG_CRITICAL2("Value/Key not defined for " key " in %s", infofile); \
 		return_value = STATUS_UNSUCCESSFUL; \
-		goto end2; \
+		goto end1; \
 	}
 
 	GET_KEYS("ifdVendorID", &ifdVendorID)
