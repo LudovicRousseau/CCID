@@ -118,6 +118,37 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.22 - 10 January 2016, Ludovic Rousseau
+    - Add support of
+      . Aktiv Rutoken PINPad 2
+      . Aladdin R.D. JC-WebPass (JC600)
+      . Aladdin R.D. JCR-770
+      . Aladdin R.D. JaCarta
+      . Aladdin R.D. JaCarta Flash
+      . Aladdin R.D. JaCarta LT
+      . Aladdin R.D. JaCarta U2F (JC602)
+      . Athena ASEDrive IIIe Combo Bio PIV
+      . Athena ASEDrive IIIe KB Bio PIV
+      . GEMALTO CT1100
+      . GEMALTO K1100
+      . Hitachi, Ltd. Hitachi Biometric Reader
+      . Hitachi, Ltd. Hitachi Portable Biometric Reader
+      . Nitrokey Nitrokey Storage
+      . THURSBY SOFTWARE TSS-PK1
+      . Thursby Software Systems, Inc. TSS-PK7
+      . Thursby Software Systems, Inc. TSS-PK8
+    - Patch for Microchip SEC1110 reader on Mac OS X (card events notification)
+    - Patch for Cherry KC 1000 SC (problem was with a T=1 card and case 2 APDU)
+    - Fix support of FEATURE_MCT_READER_DIRECT for the Kobil mIDentity
+      visual reader
+    - Set timeout to 90 sec for PPDU (Pseudo APDU) commands. This change
+      allows the use of a Secure Verify command sent as a PPDU through
+      SCardTransmit().
+    - Fix a crash when reader reader initialization failed
+    - Fix initialization bug with Gemalto Pinpad reader on Mac OS X
+    - Some minor bugs fixed
+
+
 1.4.21 - 21 October 2015, Ludovic Rousseau
     - Add support of
       . ACS ACR1252 Dual Reader
