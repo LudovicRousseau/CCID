@@ -125,6 +125,10 @@ set -x
 	$CONFIGURE_ARGS \
 	"$@"
 
+r=$?
+
 # force a regeneration of Info.plist
 rm -f src/Info.plist
 
+# exit with the return code from ./configure
+exit $r
