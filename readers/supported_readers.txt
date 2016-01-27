@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2015-12-12
+# Generated: 2016-01-27
 #
 # DO NOT EDIT BY HAND
 
@@ -19,6 +19,7 @@
 
 # Alcor Micro
 0x058F:0x9520:Alcor Micro AU9520
+0x058F:0x9540:Alcor Micro AU9560
 
 # Athena
 0x0DC3:0x1004:Athena ASE IIIe
@@ -616,7 +617,6 @@
 # Aladdin
 
 # Alcor Micro
-0x058F:0x9540:Alcor Micro AU9540
 
 # ATMEL
 0x03EB:0x6016:ATMEL VaultIC460
@@ -714,6 +714,9 @@
 #0x058F:0x9520:Alcor Micro AU9520 (AU9520.txt)
 #0x058F:0x9520:Akasa AK-CR-03 (Akasa_AK-CR-03.txt)
 #0x058F:0x9520:Alcor Micro SCR001 (Alcor_SCR001.txt)
+
+#0x058F:0x9540:Alcor Micro AU9540 (AU9540.txt)
+#0x058F:0x9540:Alcor Micro AU9560 (AlcorMicro_AU9560.txt)
 
 #0x072F:0x221A:ACS ACR1251 Dual Reader (ACS_ACR1251_Dual_Reader.txt)
 #0x072F:0x221A:ACS ACR1251 Dual Reader (ACS_ACR1251_Dual_Reader.txt_i1)
