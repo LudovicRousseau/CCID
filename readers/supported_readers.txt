@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-01-27
+# Generated: 2016-02-06
 #
 # DO NOT EDIT BY HAND
 
@@ -655,6 +655,8 @@
 # THRC
 0x062D:0x0001:THRC Smart Card Reader
 
+# VMware
+
 ##########################
 # section: disabled
 ##########################
@@ -782,6 +784,9 @@
 
 #0x0B81:0x0200:id3 Semiconductors CL1356T (id3_CL1356T.txt)
 #0x0B81:0x0200:id3 Semiconductors CL1356T5 (id3_CL1356T5.txt)
+
+#0x0E0F:0x0004:VMware Virtual USB CCID (VMware_Virtual_USB_CCID.txt)
+#0x0E0F:0x0004:VMware Virtual USB CCID (VMware_Virtual_USB_CCID2.txt)
 
 #0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN.txt)
 #0x0F14:0x0011:XIRING XI-SIGN USB V2 (Xiring_XI-SIGN_6000.txt)
