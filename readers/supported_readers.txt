@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-02-06
+# Generated: 2016-02-27
 #
 # DO NOT EDIT BY HAND
 
@@ -660,6 +660,9 @@
 ##########################
 # section: disabled
 ##########################
+
+# DUALi
+#0x1DB2:0x0600:DUALi DE-ABCM6
 
 # jNet Technology inc.
 #0x0483:0x2010:jNet Technology inc. jToken s1
