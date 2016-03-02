@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-02-27
+# Generated: 2016-03-02
 #
 # DO NOT EDIT BY HAND
 
@@ -128,6 +128,7 @@
 0x072F:0x8201:ACS APG8201 PINhandy 1
 0x072F:0x8202:ACS APG8201 USB Reader
 0x072F:0x90DB:ACS CryptoMate64
+0x072F:0xB000:ACS ACR3901U ICC Reader
 0x072F:0xB100:ACS ACR39U ICC Reader
 
 # AK910
