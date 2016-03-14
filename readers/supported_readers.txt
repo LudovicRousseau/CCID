@@ -388,6 +388,7 @@
 # KACST
 0x2A18:0x5000:KACST HSID Reader
 0x2A18:0x5001:KACST HSID Reader Single Storage
+0x2A18:0x5002:KACST HSID Reader Dual Storage
 
 # KEBTechnology
 0x04CC:0x5072:KEBTechnology KONA USB SmartCard
