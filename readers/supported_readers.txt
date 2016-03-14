@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-03-02
+# Generated: 2016-03-14
 #
 # DO NOT EDIT BY HAND
 
@@ -384,6 +384,9 @@
 # INSIDE Secure
 0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
 0x2406:0x6305:INSIDE Secure VaultIC 441 Smart Object
+
+# KACST
+0x2A18:0x5000:KACST HSID Reader
 
 # KEBTechnology
 0x04CC:0x5072:KEBTechnology KONA USB SmartCard
