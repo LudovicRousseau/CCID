@@ -77,11 +77,7 @@
 		- activate this option but you will have problems depending on
 		  the bug
 
-	0x08: DRIVER_OPTION_RESET_ON_CLOSE
-		This option may be required on Linux 2.4 so that the
-		device reset if sequencial (bSeq) counter and can be
-		reused if pcscd restart. Otherwise the reader needs to
-		be unplugged/replugged.
+	0x08: free
 
 	bits 4 & 5: (values 0x00, 0x10, 0x20, 0x30)
 	 0x00: power on the card at 5V (default value)

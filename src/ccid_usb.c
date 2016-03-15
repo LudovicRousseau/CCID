@@ -895,10 +895,6 @@ status_t CloseUSB(unsigned int reader_index)
 		if (usbDevice[reader_index].ccid.sIFD_iManufacturer)
 			free(usbDevice[reader_index].ccid.sIFD_iManufacturer);
 
-		/* reset so that bSeq starts at 0 again */
-		if (DriverOptions & DRIVER_OPTION_RESET_ON_CLOSE)
-			(void)libusb_reset_device(usbDevice[reader_index].dev_handle);
-
 		if (usbDevice[reader_index].ccid.arrayOfSupportedDataRates)
 			free(usbDevice[reader_index].ccid.arrayOfSupportedDataRates);
 
