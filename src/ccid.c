@@ -451,7 +451,10 @@ int ccid_open_hack_post(unsigned int reader_index)
 		case HP_CCIDSMARTCARDKEYBOARD:
 		case FUJITSUSMARTKEYB:
 			/* the Secure Pin Entry is bogus so disable it
-			 * http://martinpaljak.net/2011/03/19/insecure-hp-usb-smart-card-keyboard/
+			 * https://web.archive.org/web/20120320001756/http://martinpaljak.net/2011/03/19/insecure-hp-usb-smart-card-keyboard/
+			 *
+			 * The problem is that the PIN code entered using the Secure
+			 * Pin Entry function is also sent to the host.
 			 */
 			ccid_descriptor->bPINSupport = 0;
 			break;
