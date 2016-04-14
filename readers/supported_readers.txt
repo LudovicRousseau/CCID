@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-03-14
+# Generated: 2016-04-14
 #
 # DO NOT EDIT BY HAND
 
@@ -270,6 +270,9 @@
 
 # FT
 0x096E:0x080A:FT ePass2003Auto
+
+# Fujitsu
+0x0BF8:0x1024:Fujitsu Smartcard Reader D323
 
 # Fujitsu Siemens Computers
 0x0BF8:0x1005:Fujitsu Siemens Computers SmartCard Keyboard USB 2A
