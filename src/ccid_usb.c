@@ -174,6 +174,9 @@ static void close_libusb_if_needed(void)
 {
 	int i, to_exit = TRUE;
 
+	if (NULL == ctx)
+		return;
+
 	/* if at least 1 reader is still in use we do not exit libusb */
 	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
 	{
