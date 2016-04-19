@@ -330,6 +330,7 @@
 
 # HID Global
 0x076B:0x3031:HID Global OMNIKEY 3x21 Smart Card Reader
+0x076B:0x5022:HID Global OMNIKEY 5022 Smart Card Reader
 0x076B:0x5400:HID Global veriCLASS Reader
 
 # HID OMNIKEY
