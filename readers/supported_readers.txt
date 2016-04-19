@@ -392,6 +392,9 @@
 0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
 0x2406:0x6305:INSIDE Secure VaultIC 441 Smart Object
 
+# IonIDe
+0x076B:0x3B01:IonIDe Smartcard Reader
+
 # KACST
 0x2A18:0x5000:KACST HSID Reader
 0x2A18:0x5001:KACST HSID Reader Single Storage
