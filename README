@@ -118,6 +118,29 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.23 - 20 April 2016, Ludovic Rousseau
+    - Add support of
+      . ACS ACR3901U ICC Reader
+      . Alcor Micro AU9560
+      . Cherry SmartTerminal XX44
+      . HID Global OMNIKEY 3x21 Smart Card Reader
+      . HID Global OMNIKEY 5022 Smart Card Reader
+      . HID Global OMNIKEY 6121 Smart Card Reader
+      . IonIDe Smartcard Reader reader
+      . KACST HSID Reader
+      . KACST HSID Reader Dual Storage
+      . KACST HSID Reader Single Storage
+    - Remove support of
+      . VMware Virtual USB CCID
+    - Do NOT add support of
+      . DUALi DE-ABCM6
+    - Fix a busy loop consuming 100% of CPU for some composite USB devices
+      impacted readers: Yubico Yubikey NEO U2F+CCID and Broadcom BCM5880
+    - Remove support of (unused) option DRIVER_OPTION_RESET_ON_CLOSE
+    - log libusb error name instead of decimal value
+    - Some minor improvements
+
+
 1.4.22 - 10 January 2016, Ludovic Rousseau
     - Add support of
       . Aktiv Rutoken PINPad 2
