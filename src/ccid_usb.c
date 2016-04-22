@@ -1251,14 +1251,14 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 
 	while (!completed)
 	{
-		ret = libusb_handle_events(ctx);
+		ret = libusb_handle_events_completed(ctx, &completed);
 		if (ret < 0)
 		{
 			if (ret == LIBUSB_ERROR_INTERRUPTED)
 				continue;
 			libusb_cancel_transfer(transfer);
 			while (!completed)
-				if (libusb_handle_events(ctx) < 0)
+				if (libusb_handle_events_completed(ctx, &completed) < 0)
 					break;
 			libusb_free_transfer(transfer);
 			DEBUG_CRITICAL2("libusb_handle_events failed: %s",
@@ -1378,7 +1378,7 @@ static void *Multi_PollingProc(void *p_ext)
 		completed = 0;
 		while (!completed && !msExt->terminated)
 		{
-			rv = libusb_handle_events(ctx);
+			rv = libusb_handle_events_completed(ctx, &completed);
 			if (rv < 0)
 			{
 				DEBUG_COMM2("libusb_handle_events err %d", rv);
@@ -1390,7 +1390,7 @@ static void *Multi_PollingProc(void *p_ext)
 
 				while (!completed && !msExt->terminated)
 				{
-					if (libusb_handle_events(ctx) < 0)
+					if (libusb_handle_events_completed(ctx, &completed) < 0)
 						break;
 				}
 
