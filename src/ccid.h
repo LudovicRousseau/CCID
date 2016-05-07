@@ -210,6 +210,7 @@ typedef struct
 #define MICROCHIP_SEC1100 0x04241104
 #define CHERRY_KC1000SC 0x046A00A1
 #define ElatecTWN4	0x09D80427
+#define SCM_SCL011 0x04E65293
 
 #define VENDOR_GEMALTO 0x08E6
 #define GET_VENDOR(readerID) ((readerID >> 16) & 0xFFFF)
