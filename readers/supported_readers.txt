@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-04-19
+# Generated: 2016-05-09
 #
 # DO NOT EDIT BY HAND
 
@@ -327,6 +327,9 @@
 
 # Hewlett-Packard
 0x03F0:0x581D:Hewlett-Packard HP lt4112 Gobi 4G Module
+
+# HID
+0x076B:0x3A21:HID AVIATOR Generic
 
 # HID Global
 0x076B:0x3031:HID Global OMNIKEY 3x21 Smart Card Reader
