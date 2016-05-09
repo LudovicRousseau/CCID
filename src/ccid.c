@@ -467,6 +467,13 @@ int ccid_open_hack_post(unsigned int reader_index)
 			 */
 			ccid_descriptor->bPINSupport = 0;
 			break;
+		case HID_AVIATOR:
+			/* The chip advertises pinpad but actually doesn't have one */
+			ccid_descriptor->bPINSupport = 0;
+			/* Firmware uses chaining */
+			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+			ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
+			break;
 
 #if 0
 		/* SCM SCR331-DI contactless */
