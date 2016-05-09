@@ -1,1 +1,1 @@
-../PCSC/c.sh
+PCSC/c.sh
