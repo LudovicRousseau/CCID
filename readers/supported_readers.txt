@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-05-09
+# Generated: 2016-05-19
 #
 # DO NOT EDIT BY HAND
 
@@ -305,6 +305,9 @@
 0x0BDA:0x0169:Generic USB2.0-CRW
 0x048D:0x1366:Generic MultiCard Device
 
+# Generic USB
+0x076B:0x3A21:Generic USB Smart Card Reader
+
 # German Privacy Foundation
 0x20A0:0x4107:German Privacy Foundation Crypto Stick v1.2
 
@@ -329,7 +332,6 @@
 0x03F0:0x581D:Hewlett-Packard HP lt4112 Gobi 4G Module
 
 # HID
-0x076B:0x3A21:HID AVIATOR Generic
 
 # HID Global
 0x076B:0x3031:HID Global OMNIKEY 3x21 Smart Card Reader
@@ -759,6 +761,9 @@
 
 #0x076B:0x3021:OMNIKEY AG CardMan 3021 (CardMan3021.txt)
 #0x076B:0x3021:OMNIKEY AG CardMan 3121 (CardMan3121.txt)
+
+#0x076B:0x3A21:Generic USB Smart Card Reader (Generic_USB_Smart_Card_Reader.txt)
+#0x076B:0x3A21:HID AVIATOR Generic (HID_Aviator.txt)
 
 #0x076B:0xA022:Precise Biometrics Sense MC (Precise_Sense_MC.txt)
 #0x076B:0xA022:XIRING Teo (Teo.txt)
