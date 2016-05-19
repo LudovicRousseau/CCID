@@ -67,6 +67,7 @@
 
 # Giesecke & Devrient GmbH
 0x1059:0x0017:Giesecke & Devrient GmbH StarSign Crypto USB Token
+0x1059:0x0019:Giesecke & Devrient GmbH StarSign CUT S
 
 # id3 Semiconductors
 0x0B81:0x0200:id3 Semiconductors CL1356T
