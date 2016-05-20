@@ -596,7 +596,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				if (ccid_desc->sIFD_serial_number)
 				{
 					strlcpy((char *)Value, ccid_desc->sIFD_serial_number, *Length);
-					*Length = strlen((char *)Value);
+					*Length = strlen((char *)Value)+1;
 				}
 				else
 				{
