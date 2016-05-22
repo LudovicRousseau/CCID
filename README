@@ -121,6 +121,7 @@ History:
 1.4.24 - 22 May 2016, Ludovic Rousseau
     - Add support of
      . Generic USB Smart Card Reader
+     . Giesecke & Devrient GmbH StarSign CUT S
      . HID AVIATOR Generic
     - better support of Elatec TWN4 SmartCard NFC
     - better support of SCM SCL011
