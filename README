@@ -118,6 +118,18 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.24 - 22 May 2016, Ludovic Rousseau
+    - Add support of
+     . Generic USB Smart Card Reader
+     . HID AVIATOR Generic
+    - better support of Elatec TWN4 SmartCard NFC
+    - better support of SCM SCL011
+    - betetr support of HID Aviator generic
+    - fix SCARD_ATTR_VENDOR_IFD_SERIAL_NO attribute size
+    - fix a race condition on card events with multiple readers
+    - Some minor improvements
+
+
 1.4.23 - 20 April 2016, Ludovic Rousseau
     - Add support of
       . ACS ACR3901U ICC Reader
