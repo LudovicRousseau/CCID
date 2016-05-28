@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-05-19
+# Generated: 2016-05-28
 #
 # DO NOT EDIT BY HAND
 
@@ -203,6 +203,7 @@
 0x0A5C:0x5800:Broadcom Corp 5880
 0x0A5C:0x5802:Broadcom Corp 5880
 0x0A5C:0x5804:Broadcom Corp 5880
+0x0A5C:0x5805:Broadcom Corp 5880
 
 # C3PO
 0x0783:0x0007:C3PO TLTC2USB
@@ -809,6 +810,9 @@
 
 #0x0A5C:0x5804:Broadcom Corp 5880 (Broadcom_5880v5.txt)
 #0x0A5C:0x5804:Broadcom Corp 5880 (Broadcom_5880v5.txt_i1)
+
+#0x0A5C:0x5805:Broadcom Corp 5880 (Broadcom_5880_0x5805.txt)
+#0x0A5C:0x5805:Broadcom Corp 5880 (Broadcom_5880_0x5805.txt_i1)
 
 #0x0B81:0x0200:id3 Semiconductors CL1356T (id3_CL1356T.txt)
 #0x0B81:0x0200:id3 Semiconductors CL1356T5 (id3_CL1356T5.txt)
