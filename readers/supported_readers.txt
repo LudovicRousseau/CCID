@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-05-28
+# Generated: 2016-06-09
 #
 # DO NOT EDIT BY HAND
 
@@ -159,6 +159,9 @@
 
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522
+
+# appidkey GmbH
+0x2406:0x5004:appidkey GmbH ID100-USB  SC Reader
 
 # ASK-RFID
 0x1FD3:0xCC1D:ASK-RFID CPL108
