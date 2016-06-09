@@ -161,6 +161,7 @@
 0x058F:0x9522:Alcor Micro AU9522
 
 # appidkey GmbH
+0x2406:0x5003:appidkey GmbH ID50 -USB
 0x2406:0x5004:appidkey GmbH ID100-USB  SC Reader
 
 # ASK-RFID
