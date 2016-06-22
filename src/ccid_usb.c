@@ -622,12 +622,17 @@ again:
 				}
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
-				/* use the next interface for the next "slot" */
-				static_interface++;
+				if ((GEMALTOPROXDU == readerID)
+					|| (GEMALTOPROXSU == readerID)
+					|| (FEITIANR502DUAL == readerID))
+				{
+					/* use the next interface for the next "slot" */
+					static_interface++;
 
-				/* reset for a next reader */
-				if (static_interface > 2)
-					static_interface = (FEITIANR502DUAL == readerID) ? 0: 1;
+					/* reset for a next reader */
+					if (static_interface > 2)
+						static_interface = (FEITIANR502DUAL == readerID) ? 0: 1;
+				}
 #endif
 
 				/* Get Endpoints values*/
