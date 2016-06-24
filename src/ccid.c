@@ -446,7 +446,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 					length_res = sizeof(res);
 					if (IFD_SUCCESS == CmdEscape(reader_index, cmd2, sizeof(cmd2), res, &length_res, DEFAULT_COM_READ_TIMEOUT))
 					{
-						DEBUG_COMM("Disable SPE retry counter successfull");
+						DEBUG_COMM("Disable SPE retry counter successful");
 					}
 					else
 					{
