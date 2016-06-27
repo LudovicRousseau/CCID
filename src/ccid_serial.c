@@ -559,7 +559,18 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 			{
 				case GEMCOREPOSPRO:
 				case GEMCORESIMPRO:
-					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
+					{
+						/* Allocate a memory buffer that will be
+						 * released in CloseUSB() */
+						void *ptr = malloc(sizeof SerialCustomDataRates);
+						if (ptr)
+						{
+							memcpy(ptr, SerialCustomDataRates,
+									sizeof SerialCustomDataRates);
+						}
+
+						serialDevice[reader_index].ccid.arrayOfSupportedDataRates = ptr;
+					}
 					serialDevice[reader_index].ccid.dwMaxDataRate = 125000;
 					break;
 

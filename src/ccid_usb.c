@@ -476,7 +476,16 @@ again_libusb:
 							|| ((GEMCORESIMPRO == readerID)
 							&& (usbDevice[reader_index].ccid.IFD_bcdDevice < 0x0200)))
 						{
-							usbDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialCustomDataRates;
+							/* Allocate a memory buffer that will be
+							 * released in CloseUSB() */
+							void *ptr = malloc(sizeof SerialCustomDataRates);
+							if (ptr)
+							{
+								memcpy(ptr, SerialCustomDataRates,
+									sizeof SerialCustomDataRates);
+							}
+
+							usbDevice[reader_index].ccid.arrayOfSupportedDataRates = ptr;
 							usbDevice[reader_index].ccid.dwMaxDataRate = 125000;
 						}
 
