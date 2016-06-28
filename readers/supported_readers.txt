@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-06-26
+# Generated: 2016-06-28
 #
 # DO NOT EDIT BY HAND
 
@@ -258,7 +258,7 @@
 0x09D8:0x0427:Elatec TWN4 SmartCard NFC
 
 # ESMART
-0x2CE4:0x7479:ESMART Token GOST X2 ET1020-A
+0x2CE4:0x7479:ESMART Token GOST
 
 # FEITIAN
 0x096E:0x0619:FEITIAN iR301
