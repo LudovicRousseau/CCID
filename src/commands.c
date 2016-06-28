@@ -2190,6 +2190,7 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 
 		/* Error, unrecognized situation found */
 		DEBUG_CRITICAL2("Unrecognized Procedure byte (0x%02X) found!", *in_buf);
+		return_value = IFD_COMMUNICATION_ERROR;
 		return return_value;
 	}
 
