@@ -414,9 +414,6 @@
 0x2A18:0x5001:KACST HSID Reader Single Storage
 0x2A18:0x5002:KACST HSID Reader Dual Storage
 
-# KEBTechnology
-0x04CC:0x5072:KEBTechnology KONA USB SmartCard
-
 # Kingtrust
 0x0483:0x0007:Kingtrust Multi-Reader
 
@@ -666,6 +663,9 @@
 # Hewlett-Packard Company
 0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
 0x03F0:0x1024:Hewlett-Packard Company HP USB Smart Card Keyboard
+
+# KEBTechnology
+0x04CC:0x5072:KEBTechnology KONA USB SmartCard
 
 # KOBIL Systems
 0x0D46:0x4000:KOBIL Systems mIDentity M
