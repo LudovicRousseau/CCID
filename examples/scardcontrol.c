@@ -642,6 +642,7 @@ int main(int argc, char *argv[])
 	printf("\n");
 	printf("Enter your PIN: ");
 	fflush(stdout);
+	memset(bRecvBuffer, 0xAA, sizeof bRecvBuffer);
 	rv = SCardControl(hCard, verify_ioctl, bSendBuffer,
 		length, bRecvBuffer, sizeof(bRecvBuffer), &length);
 
@@ -787,6 +788,7 @@ int main(int argc, char *argv[])
 	printf("\n");
 	printf("Enter your PIN: ");
 	fflush(stdout);
+	memset(bRecvBuffer, 0xAA, sizeof bRecvBuffer);
 	rv = SCardControl(hCard, modify_ioctl, bSendBuffer,
 		length, bRecvBuffer, sizeof(bRecvBuffer), &length);
 
