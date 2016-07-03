@@ -204,7 +204,6 @@
 0x1B0E:0x1079:BLUTRONICS BLUDRIVE II CCID
 
 # Broadcom Corp
-0x0A5C:0x5800:Broadcom Corp 5880
 0x0A5C:0x5802:Broadcom Corp 5880
 0x0A5C:0x5804:Broadcom Corp 5880
 
@@ -648,6 +647,7 @@
 0x03EB:0x6016:ATMEL VaultIC460
 
 # Broadcom Corp
+0x0A5C:0x5800:Broadcom Corp 5880
 0x0A5C:0x5801:Broadcom Corp 5880
 0x0A5C:0x5805:Broadcom Corp 5880
 
