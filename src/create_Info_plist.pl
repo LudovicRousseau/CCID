@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
-#    create_Info_plist.pl: generate Infor.plist from a template and a
-#    list of suported readers
+#    create_Info_plist.pl: generate Info.plist from a template and a
+#    list of supported readers
 #
 #    Copyright (C) 2004-2009  Ludovic Rousseau  <ludovic.rousseau@free.fr>
 #
