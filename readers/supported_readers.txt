@@ -718,9 +718,6 @@
 ##########################
 # section: duplicates
 ##########################
-#0x0424:0x1202:Microchip SEC1210 (Microchip_SEC1210.txt)
-#0x0424:0x1202:Microchip SEC1210 (Microchip_SEC1210.txt_i1)
-
 #0x046A:0x0090:Cherry Smart Card Reader USB (Cherry_Smart_Card_Reader_USB.txt)
 #0x046A:0x0090:Cherry Cherry TC 1100 (Cherry_Smart_Card_Reader_USB_2_04.txt)
 
@@ -731,20 +728,10 @@
 #0x04E6:0x5410:SCM Microsystems Inc. SCR 355 (SCR355.txt)
 
 #0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader (Identive_CLOUD_4500_F.txt)
-#0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader (Identive_CLOUD_4500_F.txt_i1)
 #0x04E6:0x5720:Identive Identive CLOUD 4700 F Dual Interface Reader (Identive_CLOUD_4700_F.txt)
-#0x04E6:0x5720:Identive Identive CLOUD 4700 F Dual Interface Reader (Identive_CLOUD_4700_F.txt_i1)
 
 #0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader (Identive_CLOUD_4510_F.txt)
-#0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader (Identive_CLOUD_4510_F.txt_i1)
 #0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader (Identive_CLOUD_4710_F.txt)
-#0x04E6:0x5721:Identive Identive CLOUD 4710 F Contactless + SAM Reader (Identive_CLOUD_4710_F.txt_i1)
-
-#0x04E6:0x5723:Identive Identive CLOUD 4000 F DTC (Identive_Identive_CLOUD_4000_F_DTC.txt)
-#0x04E6:0x5723:Identive Identive CLOUD 4000 F DTC (Identive_Identive_CLOUD_4000_F_DTC.txt_i1)
-
-#0x04E6:0x5724:Identiv Identiv uTrust 4701 F Dual Interface Reader (Identiv_Identiv_uTrust_4701_F_Dual_Interface_Reader.txt)
-#0x04E6:0x5724:Identiv Identiv uTrust 4701 F Dual Interface Reader (Identiv_Identiv_uTrust_4701_F_Dual_Interface_Reader.txt_i1)
 
 #0x0529:0x0620:Aladdin eToken PRO USB 72K Java (Aladdin_eToken_PRO_USB_72K_Java.txt)
 #0x0529:0x0620:SafeNet eToken 5100 (SafeNet_Token_JC.txt)
@@ -755,12 +742,6 @@
 
 #0x058F:0x9540:Alcor Micro AU9540 (AU9540.txt)
 #0x058F:0x9540:Alcor Micro AU9560 (AlcorMicro_AU9560.txt)
-
-#0x072F:0x221A:ACS ACR1251 Dual Reader (ACS_ACR1251_Dual_Reader.txt)
-#0x072F:0x221A:ACS ACR1251 Dual Reader (ACS_ACR1251_Dual_Reader.txt_i1)
-
-#0x072F:0x223B:ACS ACR1252 Dual Reader (ACS_ACR1252_Dual_Reader.txt)
-#0x072F:0x223B:ACS ACR1252 Dual Reader (ACS_ACR1252_Dual_Reader.txt_i1)
 
 #0x072F:0x90CC:ACS ACR122U (ACR122U.txt)
 #0x072F:0x90CC:ACS ACR 38U-CCID (ACR38U-CCID.txt)
@@ -795,38 +776,8 @@
 #0x08E6:0x34C0:Gemalto Ezio Shield (Gemalto_Ezio_Shield.txt)
 #0x08E6:0x34C0:Gemalto Ezio Shield Pro SC (Gemalto_Ezio_Shield_Pro_SC.txt)
 
-#0x08E6:0x5503:Gemalto Prox Dual USB PC Link Reader (GemProxDU.txt)
-#0x08E6:0x5503:Gemalto Prox Dual USB PC Link Reader (GemProxDU.txt_i1)
-
-#0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader (GemProxSU.txt)
-#0x08E6:0x5504:Gemalto Prox SU USB PC LinkReader (GemProxSU.txt_i1)
-
-#0x096E:0x060D:Feitian R502 (Feitian_R502.txt)
-#0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i1)
-#0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i2)
-#0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i3)
-
-#0x096E:0x0619:FEITIAN iR301 (Feitian_iR301-U_30PIN.txt)
-#0x096E:0x0619:Thursby Software Systems, Inc. TSS-PK8 (Thursby_TSS_PK8.txt)
-
-#0x096E:0x061C:FEITIAN iR301 (Feitian_iR301-U_8PIN.txt)
-#0x096E:0x061C:Thursby Software Systems, Inc. TSS-PK7 (Thursby_TSS_PK7.txt)
-
-#0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader (Feitian_vR504.txt)
-#0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader (Feitian_vR504.txt_i1)
-
-#0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt)
-#0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt_i1)
-
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v3.txt)
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt)
-#0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt_i1)
-
-#0x0A5C:0x5804:Broadcom Corp 5880 (Broadcom_5880v5.txt)
-#0x0A5C:0x5804:Broadcom Corp 5880 (Broadcom_5880v5.txt_i1)
-
-#0x0A5C:0x5805:Broadcom Corp 5880 (Broadcom_5880_0x5805.txt)
-#0x0A5C:0x5805:Broadcom Corp 5880 (Broadcom_5880_0x5805.txt_i1)
 
 #0x0B81:0x0200:id3 Semiconductors CL1356T (id3_CL1356T.txt)
 #0x0B81:0x0200:id3 Semiconductors CL1356T5 (id3_CL1356T5.txt)
@@ -839,11 +790,4 @@
 
 #0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_badge.txt)
 #0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader (Ingenico_WITEO_base.txt)
-
-#0x163C:0x0A03:Watchdata W5181  (Watchdata_W5181.txt)
-#0x163C:0x0A03:Watchdata W5181  (Watchdata_W5181.txt_i1)
-#0x163C:0x0A03:Watchdata W5181  (Watchdata_W5181.txt_i2)
-
-#0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt)
-#0x1DB2:0x088B:DUALi DRAGON NFC READER (DUALi_DRAGON_NFC_READER.txt_i1)
 
