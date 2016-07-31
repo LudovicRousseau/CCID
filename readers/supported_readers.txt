@@ -802,6 +802,7 @@
 #0x096E:0x060D:Feitian R502 (Feitian_R502.txt)
 #0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i1)
 #0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i2)
+#0x096E:0x060D:Feitian R502 (Feitian_R502.txt_i3)
 
 #0x096E:0x0619:FEITIAN iR301 (Feitian_iR301-U_30PIN.txt)
 #0x096E:0x0619:Thursby Software Systems, Inc. TSS-PK8 (Thursby_TSS_PK8.txt)
