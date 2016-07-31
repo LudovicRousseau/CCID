@@ -267,6 +267,7 @@
 # Feitian
 0x096E:0x0608:Feitian 502-CL
 0x096E:0x060D:Feitian R502
+0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader
 0x096E:0x0623:Feitian bR500
 0x096E:0x0624:Feitian bR301
 0x096E:0x0807:Feitian ePass2003
@@ -810,6 +811,9 @@
 
 #0x096E:0x061C:FEITIAN iR301 (Feitian_iR301-U_8PIN.txt)
 #0x096E:0x061C:Thursby Software Systems, Inc. TSS-PK7 (Thursby_TSS_PK7.txt)
+
+#0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader (Feitian_vR504.txt)
+#0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader (Feitian_vR504.txt_i1)
 
 #0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt)
 #0x0A5C:0x5801:Broadcom Corp 5880 (Broadcom_5880v2.txt_i1)
