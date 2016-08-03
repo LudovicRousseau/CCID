@@ -766,6 +766,7 @@
 
 #0x08E6:0x3437:Gemalto PC Twin Reader (GemPCTwin.txt)
 #0x08E6:0x3437:Gemalto IDBridge CT30 (Gemalto_IDBridge_CT30.txt)
+#0x08E6:0x3437:Gemalto K50 (Gemalto_K50.txt)
 
 #0x08E6:0x3438:Gemalto USB Shell Token V2 (GemPCKey.txt)
 #0x08E6:0x3438:Gemalto IDBridge K30 (Gemalto_IDBridge_K30.txt)
