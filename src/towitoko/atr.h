@@ -36,7 +36,7 @@
 #define ATR_IO_ERROR	3	/* I/O stream error */
 
 /* Paramenters */
-#define ATR_MAX_SIZE 		33	/* Maximum size of ATR byte array */
+#define ATR_MAX_SIZE		33	/* Maximum size of ATR byte array */
 #define ATR_MAX_HISTORICAL	15	/* Maximum number of historical bytes */
 #define ATR_MAX_PROTOCOLS	7	/* Maximun number of protocols */
 #define ATR_MAX_IB		4	/* Maximum number of interface bytes per protocol */
@@ -66,7 +66,7 @@
 /* Default values for paramenters */
 #define ATR_DEFAULT_F	372
 #define ATR_DEFAULT_D	1
-#define ATR_DEFAULT_I 	50
+#define ATR_DEFAULT_I	50
 #define ATR_DEFAULT_N	0
 #define ATR_DEFAULT_P	5
 
