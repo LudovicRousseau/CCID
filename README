@@ -118,6 +118,27 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.25 - 30 September 2016, Ludovic Rousseau
+    - Add support of
+      . Aladdin R.D. JaCarta (idProduct: 0x0402)
+      . Broadcom Corp 5880 (idProduct: 0x5832)
+      . Broadcom Corp 5880 (idProduct: 0x5833)
+      . Broadcom Corp 5880 (idProduct: 0x5834)
+      . ESMART Token GOST X2 ET1020-A
+      . Feitian VR504 VHBR Contactless & Contact Card Reader
+      . Feitian bR500
+      . Gemalto K50
+      . appidkey GmbH ID100-USB  SC Reader
+      . appidkey GmbH ID50 -USB
+    - Remove suport of
+     . Broadcom Corp 5880 (idProduct: 0x5800)
+     . Broadcom Corp 5880 (idProduct: 0x5805)
+     . KEBTechnology KONA USB SmartCard
+    - macOS: Fix composite device enumeration
+    - Fix crash with GemCore Pos Pro and GemCore Sim Pro
+    - Some minor improvements
+
+
 1.4.24 - 22 May 2016, Ludovic Rousseau
     - Add support of
      . Generic USB Smart Card Reader
