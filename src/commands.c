@@ -190,7 +190,8 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	/* store length of buffer[] */
 	length = *nlength;
 
-	if (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
+	if ((ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
+		|| (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_ACTIVATION))
 		voltage = 0;	/* automatic voltage selection */
 	else
 	{
