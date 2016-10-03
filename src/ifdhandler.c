@@ -65,7 +65,7 @@ static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
 int DriverOptions = 0;
-int PowerOnVoltage = VOLTAGE_5V;
+int PowerOnVoltage = VOLTAGE_1_8V;
 static int DebugInitialized = FALSE;
 
 /* local functions */
