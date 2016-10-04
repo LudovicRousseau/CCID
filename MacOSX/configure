@@ -52,21 +52,12 @@ LIBUSB_LIBS=$(pkg-config --libs --static libusb-1.0)
 # not included
 CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
 
-# Build a Universal Binary
-UB=$(file $LIBUSB_ARCHIVE | grep "Mach-O universal binary")
-echo $UB
-if [ -z "$UB" ]
-then
-	echo -en $RED
-	echo "*************************"
-	echo "No Universal Binary build"
-	echo "*************************"
-	echo -en $NORMAL
-else
-	echo "Universal Binary build"
-	CFLAGS="$CFLAGS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk -arch i386 -arch x86_64"
-fi
-echo
+# Locate the latest OSX SDK
+SDKS_PATH="$(xcode-select -p)/Platforms/MacOSX.platform/Developer/SDKs"
+SDK_PATH="${SDK_PATH:-$SDKS_PATH/$(ls -1 ${SDKS_PATH} | sort -n -k2 -t. -r | head -1)}"
+
+# It is x86_64 since 10.9+
+CFLAGS="$CFLAGS -isysroot ${SDK_PATH} -arch x86_64"
 
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
