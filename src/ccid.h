@@ -231,19 +231,14 @@ typedef struct
 /*
  * Possible values :
  * 3 -> 1.8V, 3V, 5V
- * 2 -> 3V, 5V
- * 1 -> 5V only
+ * 2 -> 3V, 5V, 1.8V
+ * 1 -> 5V, 1.8V, 3V
  * 0 -> automatic (selection made by the reader)
  */
 /*
- * The default was to start at 5V
+ * The default is to start at 5V
  * otherwise we would have to parse the ATR and get the value of TAi (i>2) when
  * in T=15
- *
- * The CCID 1.1 indicates page 105 in ch. "9.3 Voltage management"
- * that the driver should use growing voltage when supported by the
- * reader.
- * So the default is now to use the sequence 1.8V, 3V and 5V.
  */
 #define VOLTAGE_AUTO 0
 #define VOLTAGE_5V 1

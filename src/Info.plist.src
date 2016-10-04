@@ -80,8 +80,8 @@
 	0x08: free
 
 	bits 4 & 5: (values 0x00, 0x10, 0x20, 0x30)
-	 0x00: power on the card at 5V (default value)
-	 0x10: power on the card at 3V and then, if 3V fails use 5V
+	 0x00: power on the card at 5V, then 1.8V then 3V (default value)
+	 0x10: power on the card at 3V, then 5V then 1.8V
 	 0x20: power on the card at 1.8V, then 3V and then 5V
 	 0x30: let the reader decide
 
