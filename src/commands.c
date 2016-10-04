@@ -197,6 +197,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	{
 		int bVoltageSupport = ccid_descriptor->bVoltageSupport;
 
+check_again:
 		if ((1 == voltage) && !(bVoltageSupport & 1))
 		{
 			DEBUG_INFO1("5V requested but not support by reader");
@@ -212,7 +213,8 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 		if ((3 == voltage) && !(bVoltageSupport & 4))
 		{
 			DEBUG_INFO1("1.8V requested but not support by reader");
-			voltage = 0;	/* auto */
+			voltage = 1;	/* 5V */
+			goto check_again;
 		}
 	}
 
