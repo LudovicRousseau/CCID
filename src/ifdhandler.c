@@ -831,9 +831,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				/* the card is too fast for the reader */
 				if ((card_baudrate > ccid_desc->dwMaxDataRate +2)
 					/* but TA1 <= 97 */
-					&& (atr.ib[0][ATR_INTERFACE_BYTE_TA].value <= 0x97)
-					/* and the reader has a baud rate table */
-					&& ccid_desc->arrayOfSupportedDataRates)
+					&& (atr.ib[0][ATR_INTERFACE_BYTE_TA].value <= 0x97))
 				{
 					unsigned char old_TA1;
 
@@ -850,8 +848,15 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 						card_baudrate = (unsigned int) (1000 *
 							ccid_desc->dwDefaultClock * d / f);
 
-						if (find_baud_rate(card_baudrate,
+						/* the reader has a baud rate table */
+						if ((ccid_desc->arrayOfSupportedDataRates
+							/* and the baud rate is supported */
+							&& find_baud_rate(card_baudrate,
 							ccid_desc->arrayOfSupportedDataRates))
+							/* or the reader has NO baud rate table */
+							|| ((NULL == ccid_desc->arrayOfSupportedDataRates)
+							/* and the baud rate is bellow the limit */
+							&& (card_baudrate <= ccid_desc->dwMaxDataRate)))
 						{
 							pps[1] |= 0x10; /* PTS1 presence */
 							pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
