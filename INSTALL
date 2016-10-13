@@ -62,28 +62,37 @@ You have to create or edit the file /etc/reader.conf. The file should
 contain something like:
 
 # Gemalto reader with serial communication
+#  - n is the serial port to use n in [0..3]
 #  - reader is the reader name. It is needed for multi-slot readers.
-#    Possible reader values are: GemPCPinPad, GemCorePOSPro, GemCoreSIMPro,
-#    GemPCTwin (default value)
+#    Possible reader values are: 
+#     GemCorePOSPro
+#     GemCoreSIMPro
+#     GemCoreSIMPro2
+#     GemPCPinPad
+#     GemPCTwin (default value)
 # example: /dev/ttyS0:GemPCPinPad
-#FRIENDLYNAME      "GemPCTwin serial"
 #DEVICENAME        /dev/ttySn[:reader]
-#LIBPATH           TARGET
-#CHANNELID         1
+#FRIENDLYNAME      "GemPCTwin serial"
+#LIBPATH           /usr/lib/pcsc/drivers/serial/libccidtwin.so
 
 FRIENDLYNAME      "GemPC Twin serial"
 DEVICENAME        /dev/ttyS0
-LIBPATH           /usr/local/pcsc/drivers/serial/libccidtwin.so.1.2.3
-CHANNELID         1
+LIBPATH           /usr/lib/pcsc/drivers/serial/libccidtwin.so
 
-You will have to adapt the library path to your configuration and library
-version.
+You will have to adapt the library path to your configuration.
 
 By default the GemPC Twin serial reader parameters are loaded by the
-driver, if you use a GemPC PinPad, a GemCore POS Pro or a GemCore SIM
-Pro you have to indicate it in the DEVICENAME field. You will then have
-something like:
-DEVICENAME        /dev/ttyS0:GemPCPinPad
+driver, if you use a GemPC PinPad, a GemCore POS Pro, a GemCore SIM
+Pro or GemCore SIM Pro 2 (or IDBridge CR30) you have to indicate it in the
+DEVICENAME field. Supported values are:
+- GemCorePOSPro for GemCore POS Pro
+- GemCoreSIMPro for GemCore SIM Pro
+- GemCoreSIMPro2 for IDBridge CR30
+- GemPCPinPad for GemPC PinPad
+- GemPCTwin for GemPC Twin (default value)
+
+You will then have something like:
+DEVICENAME /dev/ttyS0:GemPCPinPad
 
 /dev/ttyS0 (DEVICENAME field) is the first serial port under Linux
 (known as COM1 under DOS/Windows). Of course if your reader is connected
