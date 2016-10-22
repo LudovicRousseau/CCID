@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-09-29
+# Generated: 2016-10-22
 #
 # DO NOT EDIT BY HAND
 
@@ -71,6 +71,9 @@
 
 # id3 Semiconductors
 0x0B81:0x0200:id3 Semiconductors CL1356T
+
+# INGENICO
+0x0F14:0x003B:INGENICO Leo
 
 # Ingenico
 0x0F14:0x003D:Ingenico WITEO USB Smart Card Reader
