@@ -1121,8 +1121,10 @@ RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 	unsigned char cmd[10];
 	status_t res;
 	unsigned int length;
+	int retries = 2;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	int saved_timeout = ccid_descriptor->readTimeout;
 
 #ifndef TWIN_SERIAL
 	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
@@ -1211,11 +1213,24 @@ again_status:
 	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
+	/* There is a bug when the reader sometimes ignores the first request
+	 * and we get a timeout from libusb. Since we expect it let's reduce
+	 * the timeout here to come back from it quickly. We'll restore the
+	 * timeout on the retry */
+	if (ccid_descriptor->readerID == VMWARE_CCID)
+		ccid_descriptor->readTimeout = 150;
+again:
 	res = WritePort(reader_index, sizeof(cmd), cmd);
 	CHECK_STATUS(res)
 
 	length = SIZE_GET_SLOT_STATUS;
 	res = ReadPort(reader_index, &length, buffer);
+	if (ccid_descriptor->readerID == VMWARE_CCID &&
+	    res != STATUS_SUCCESS && retries > 0) {
+		retries--;
+		ccid_descriptor->readTimeout = saved_timeout;
+		goto again;
+	}
 	CHECK_STATUS(res)
 
 	if (length < STATUS_OFFSET+1)
