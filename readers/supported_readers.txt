@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-10-22
+# Generated: 2016-11-18
 #
 # DO NOT EDIT BY HAND
 
@@ -702,6 +702,9 @@
 
 # DUALi
 #0x1DB2:0x0600:DUALi DE-ABCM6
+
+# HID OMNIKEY
+#0x076B:0x5340:HID OMNIKEY 5021 CL
 
 # jNet Technology inc.
 #0x0483:0x2010:jNet Technology inc. jToken s1
