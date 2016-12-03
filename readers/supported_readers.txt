@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-11-18
+# Generated: 2016-12-03
 #
 # DO NOT EDIT BY HAND
 
@@ -202,6 +202,7 @@
 0x25DD:0x1201:Bit4id cryptokey
 0x25DD:0x2221:Bit4id iAM
 0x25DD:0x2321:Bit4id CKey4
+0x25DD:0x2341:Bit4id tokenME FIPS v3
 0x25DD:0x3111:Bit4id miniLector
 
 # BLUTRONICS
