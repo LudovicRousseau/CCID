@@ -64,6 +64,9 @@ fi
 # not included
 CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
 
+# get the Mac OS X major version. Example: El Capitan 10.11 -> 10011
+MAC_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 * 1000 + $2}')
+
 # Build a Universal Binary
 UB=$(file $LIBUSB_ARCHIVE | grep "Mach-O universal binary")
 echo $UB
@@ -89,9 +92,7 @@ then
 	CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-syslog"
 fi
 
-# get the Mac OS X major version. Example: El Capitan 10.11 -> 10011
-MAC_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 * 1000 + $2}')
-
+# Check where to install the driver
 if [ 10011 -gt $MAC_VERSION ]
 then
 	# Mac OS X < 10.11
