@@ -43,9 +43,21 @@ PCSC_CFLAGS=${PCSC_CFLAGS:--I$(pwd)/MacOSX}
 PCSC_LIBS=${PCSC_LIBS:--framework PCSC}
 
 # use libusb-1.0
-LIBUSB_ARCHIVE=$(pkg-config --variable=libdir libusb-1.0)/libusb-1.0.a
+LIBUSB_DIR=$(pkg-config --variable=libdir libusb-1.0)
+LIBUSB_ARCHIVE="$LIBUSB_DIR"/libusb-1.0.a
 LIBUSB_CFLAGS=$(pkg-config --cflags --static libusb-1.0)
 LIBUSB_LIBS=$(pkg-config --libs --static libusb-1.0)
+
+if ls "$LIBUSB_DIR"/*.dylib 2> /dev/null
+then
+	echo -en $RED
+	echo "*****************************"
+	echo "Dynamic library libusb found in $LIBUSB_DIR"
+	echo "*****************************"
+	echo -en $NORMAL
+	echo "Rename it to force a static link"
+	exit
+fi
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
 # define needed here to compile examples/scardcontrol.c since config.h is
