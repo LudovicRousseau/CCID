@@ -114,7 +114,17 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		DEBUG_INFO3("Lun: " DWORD_X ", Channel: " DWORD_X, Lun, Channel);
 	}
 
-	if (-1 == (reader_index = GetNewReaderIndex(Lun)))
+#ifdef HAVE_PTHREAD
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
+#endif
+
+	reader_index = GetNewReaderIndex(Lun);
+
+#ifdef HAVE_PTHREAD
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
+#endif
+
+	if (-1 == reader_index)
 		return IFD_COMMUNICATION_ERROR;
 
 	/* Reset ATR buffer */
@@ -129,10 +139,6 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		CcidSlots[reader_index].readerName = strdup(lpcDevice);
 	else
 		CcidSlots[reader_index].readerName = strdup("no name");
-
-#ifdef HAVE_PTHREAD
-	(void)pthread_mutex_lock(&ifdh_context_mutex);
-#endif
 
 	if (lpcDevice)
 		ret = OpenPortByName(reader_index, lpcDevice);
@@ -203,10 +209,6 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 	}
 
 error:
-#ifdef HAVE_PTHREAD
-	(void)pthread_mutex_unlock(&ifdh_context_mutex);
-#endif
-
 	if (return_value != IFD_SUCCESS)
 	{
 		/* release the allocated resources */
