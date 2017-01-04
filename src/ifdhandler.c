@@ -85,10 +85,11 @@ static void FreeChannel(int reader_index)
 #endif
 
 	(void)ClosePort(reader_index);
-	ReleaseReaderIndex(reader_index);
 
 	free(CcidSlots[reader_index].readerName);
 	memset(&CcidSlots[reader_index], 0, sizeof(CcidSlots[reader_index]));
+
+	ReleaseReaderIndex(reader_index);
 
 #ifdef HAVE_PTHREAD
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
