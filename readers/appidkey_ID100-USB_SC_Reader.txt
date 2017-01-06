@@ -1,8 +1,8 @@
  idVendor: 0x2406
   iManufacturer: appidkey GmbH
  idProduct: 0x5004
-  iProduct: ID100-USB  SC Reader 
- bcdDevice: 1.05 (firmware release?)
+  iProduct: ID100L-USB-SC-Reader
+ bcdDevice: 4.74 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0

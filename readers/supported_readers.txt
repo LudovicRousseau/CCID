@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2016-12-03
+# Generated: 2017-01-06
 #
 # DO NOT EDIT BY HAND
 
@@ -166,7 +166,7 @@
 
 # appidkey GmbH
 0x2406:0x5003:appidkey GmbH ID50 -USB
-0x2406:0x5004:appidkey GmbH ID100-USB  SC Reader
+0x2406:0x5004:appidkey GmbH ID100L-USB-SC-Reader
 
 # ASK-RFID
 0x1FD3:0xCC1D:ASK-RFID CPL108
