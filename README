@@ -118,6 +118,21 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.26 - 7 January 2017, Ludovic Rousseau
+    - Add support of
+      . Bit4id Digital DNA Key
+      . Bit4id tokenME FIPS v3
+      . INGENICO Leo
+      . appidkey GmbH ID60-USB
+    - Add support of
+    - PowerOn: the default algorithm is now 5V then 1.8V then 3V then fail.
+      It is still possible to change the initial voltage in the
+      Info.plist file.  Now, in any case, all the values are tried
+      before failing.
+    - Negociate maximum baud rate when bNumDataRatesSupported = 0
+    - Some minor improvements
+
+
 1.4.25 - 30 September 2016, Ludovic Rousseau
     - Add support of
       . Aladdin R.D. JaCarta (idProduct: 0x0402)
@@ -315,7 +330,7 @@ History:
       . Yubico Yubikey NEO U2F+CCID
       . eID_R6 001 X8
     - fix support of Omnikey CardMan 3121
-    - reduce memory consumed when configured with --enable-embedded 
+    - reduce memory consumed when configured with --enable-embedded
     - prepare the port to UEFI
 
 
@@ -979,7 +994,7 @@ History:
       SCM Micro SCR 355, SCR 3311, SCR 3320, SCR 3340 ExpressCard54,
       Gemplus GemCore SIM Pro, GemCore POS Pro (serial and USB), GemPC
       Express (ExpressCard/54 interface), SmartEpad (v 2.0), OmniKey
-      CardMan 5121 
+      CardMan 5121
     - greatly improve support of PIN PAD readers. We now support TPDU
       readers with T=1 cards
     - use l10n strings for the Gemplus GemPC PIN PAD (it has a screen).
