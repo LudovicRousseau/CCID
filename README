@@ -124,7 +124,6 @@ History:
       . Bit4id tokenME FIPS v3
       . INGENICO Leo
       . appidkey GmbH ID60-USB
-    - Add support of
     - PowerOn: the default algorithm is now 5V then 1.8V then 3V then fail.
       It is still possible to change the initial voltage in the
       Info.plist file.  Now, in any case, all the values are tried
