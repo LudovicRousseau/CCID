@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-01-06
+# Generated: 2017-01-09
 #
 # DO NOT EDIT BY HAND
 
@@ -257,6 +257,7 @@
 0x0982:0x0040:COVADIS Auriga
 
 # DUALi
+0x1DB2:0x0801:DUALi DE-620 Combi
 0x1DB2:0x088B:DUALi DRAGON NFC READER
 
 # eID_R6 001
