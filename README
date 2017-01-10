@@ -57,7 +57,7 @@ The Info.plist is installed, by default, in
 or set the environment variable LIBCCID_ifdLogLevel.
 
 The debug level is set in the ifdLogLevel field. It is a binary OR
-combinaison of 4 different levels.
+combination of 4 different levels.
 - 1: critical: important error messages
 - 2: info:     informative messages like what reader was detected
 - 4: comm:     a dump of all the bytes exchanged between the host and the
@@ -70,8 +70,8 @@ critical and info levels.
 
 You have to restart the driver so it read the configuration file again
 and use the new debug level value.  To restart the driver you just need
-to unplug all your CCID readers so the the driver is unloaded and then
-replug your readers. You can also restart pcscd.
+to unplug all your CCID readers so the driver is unloaded and then replug
+your readers. You can also restart pcscd.
 
 
 Voltage selection
@@ -82,7 +82,7 @@ file.  The Info.plist is installed, by default, in
 /usr/local/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist
 
 The voltage level is set in the ifdDriverOptions field. It is a binary OR
-combinaison of 4 different levels.
+combination of 4 different levels.
 
 -  0: power on the card at 5V (default value)
 - 16: power on the card at 3V and, if 3V fails then use 5V
@@ -93,8 +93,8 @@ By default the voltage level is set to 0 and correspond to 5V.
 
 You have to restart the driver so it read the configuration file again
 and use the new debug level value.  To restart the driver you just need
-to unplug all your CCID readers so the the driver is unloaded and then
-replug your readers.  You can also restart pcscd.
+to unplug all your CCID readers so the driver is unloaded and then replug
+your readers.  You can also restart pcscd.
 
 
 Licence:
@@ -128,7 +128,7 @@ History:
       It is still possible to change the initial voltage in the
       Info.plist file.  Now, in any case, all the values are tried
       before failing.
-    - Negociate maximum baud rate when bNumDataRatesSupported = 0
+    - Negotiate maximum baud rate when bNumDataRatesSupported = 0
     - Some minor improvements
 
 
