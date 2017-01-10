@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-01-09
+# Generated: 2017-01-10
 #
 # DO NOT EDIT BY HAND
 
@@ -718,6 +718,9 @@
 
 # OCS ID-One Cosmo Card
 #0x1A74:0x6356:OCS ID-One Cosmo Card USB Smart Chip Device
+
+# OMNIKEY
+#0x076B:0x532A:OMNIKEY 5321 CLi USB
 
 # Precise Biometrics
 #0x08C3:0x0406:Precise Biometrics Precise 200 MC Upgrade
