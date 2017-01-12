@@ -1258,7 +1258,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 		libusb_free_transfer(transfer);
 		DEBUG_CRITICAL2("libusb_submit_transfer failed: %s",
 			libusb_error_name(ret));
-		return ret;
+		return IFD_COMMUNICATION_ERROR;
 	}
 
 	usbDevice[reader_index].polling_transfer = transfer;
@@ -1277,7 +1277,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 			libusb_free_transfer(transfer);
 			DEBUG_CRITICAL2("libusb_handle_events failed: %s",
 				libusb_error_name(ret));
-			return ret;
+			return IFD_COMMUNICATION_ERROR;
 		}
 	}
 
