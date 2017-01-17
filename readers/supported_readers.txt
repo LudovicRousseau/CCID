@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-01-11
+# Generated: 2017-01-17
 #
 # DO NOT EDIT BY HAND
 
@@ -459,6 +459,9 @@
 
 # MSI
 0x0BDA:0x0161:MSI StarReader SMART
+
+# Mulann
+0x4D55:0x0010:Mulann PVT
 
 # Neowave
 0x1E0D:0x0013:Neowave Weneo
