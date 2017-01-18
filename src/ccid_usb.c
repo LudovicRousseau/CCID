@@ -437,7 +437,16 @@ again_libusb:
 	* 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
 						 */
 
-					/* the CCID interfaces are 1 and 2 */
+					/* for the Gemalto Prox-DU/SU the interfaces are:
+					 * 0: Prox-DU HID (not used)
+					 * 1: Prox-DU Contactless (CCID)
+					 * 2: Prox-DU Contact (CCID)
+					 *
+					 * For the Feitian R502 the interfaces are:
+					 * 0: R502 Contactless Reader (CCID)
+					 * 1: R502 Contact Reader (CCID)
+					 * 2: R502 SAM1 Reader (CCID)
+					 */
 					interface_number = static_interface;
 				}
 #endif
