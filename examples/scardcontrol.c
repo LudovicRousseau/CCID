@@ -460,7 +460,7 @@ int main(int argc, char *argv[])
 		if (0 == ret)
 		{
 			bEntryValidationCondition = value;
-			PRINT_GREEN_DEC(" Entry Validation Condition defined", 
+			PRINT_GREEN_DEC(" Entry Validation Condition defined",
 				bEntryValidationCondition);
 		}
 
