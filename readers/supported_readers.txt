@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-01-17
+# Generated: 2017-01-21
 #
 # DO NOT EDIT BY HAND
 
@@ -405,6 +405,10 @@
 # IIT
 0x03EB:0x9324:IIT E.Key Almaz-1C
 
+# INSIDE Secure
+0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
+0x2406:0x6305:INSIDE Secure VaultIC 441 Smart Object
+
 # Inside Secure
 0x2406:0x6300:Inside Secure VaultIC 420 Smart Object
 0x2406:0x6301:Inside Secure VaultIC 440 Smart Object
@@ -412,10 +416,6 @@
 0x2406:0x6403:Inside Secure AT90SCR100
 0x2406:0x6404:Inside Secure AT90SCR050
 0x2406:0x6407:Inside Secure AT90SCR200
-
-# INSIDE Secure
-0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
-0x2406:0x6305:INSIDE Secure VaultIC 441 Smart Object
 
 # IonIDe
 0x076B:0x3B01:IonIDe Smartcard Reader
@@ -520,6 +520,9 @@
 
 # Raritan
 0x14DD:0x1006:Raritan D2CIM-DVUSB VM/CCID
+
+# Regula
+0x1C6A:0x7050:Regula RFID Reader
 
 # REINER SCT
 0x0C4B:0x0504:REINER SCT cyberJack go
