@@ -67,6 +67,19 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			ccid_descriptor->readTimeout = 60*1000; /* 60 seconds */
 			break;
 
+		case GEMPCTWIN:
+		case GEMPCKEY:
+		case DELLSCRK:
+			/* Only the chipset with firmware version 2.00 is "bogus"
+			 * The reader may send packets of 0 bytes when the reader is
+			 * connected to a USB 3 port */
+			if (0x0200 == ccid_descriptor->IFD_bcdDevice)
+			{
+				ccid_descriptor->zlp = TRUE;
+				DEBUG_INFO1("ZLP fixup");
+			}
+			break;
+
 		case OZ776:
 		case OZ776_7772:
 			ccid_descriptor->dwMaxDataRate = 9600;
