@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-01-21
+# Generated: 2017-01-28
 #
 # DO NOT EDIT BY HAND
 
@@ -291,6 +291,7 @@
 
 # FT
 0x096E:0x080A:FT ePass2003Auto
+0x096E:0x0856:FT U2F CCID KBOARD
 
 # Fujitsu
 0x0BF8:0x1024:Fujitsu Smartcard Reader D323
