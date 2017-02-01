@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-01-28
+# Generated: 2017-02-01
 #
 # DO NOT EDIT BY HAND
 
@@ -722,6 +722,9 @@
 
 # jNet Technology inc.
 #0x0483:0x2010:jNet Technology inc. jToken s1
+
+# Morpho
+#0x1A6F:0x0104:Morpho ypsID Key E
 
 # MX5
 #0x0980:0x902F:MX5 MX5  SMART CCID DRIVER
