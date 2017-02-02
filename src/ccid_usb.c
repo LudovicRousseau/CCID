@@ -379,6 +379,11 @@ again_libusb:
 			struct libusb_config_descriptor *config_desc;
 			uint8_t bus_number = libusb_get_bus_number(dev);
 			uint8_t device_address = libusb_get_device_address(dev);
+#ifndef __APPLE__
+			if ((bus_number != device_bus) || (device_address != device_addr)) {
+				continue;
+			}
+#endif
 
 #ifndef __APPLE__
 			if ((device_bus || device_addr)
