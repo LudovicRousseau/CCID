@@ -270,6 +270,21 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 				DEBUG_COMM3("usb bus/device: %d/%d", device_bus, device_addr);
 			}
 		}
+		else
+		{
+			/* format usb:%04x/%04x:libusb-1.0:%d:%d:%d */
+			if ((dirname = strstr(device, "libusb-1.0:")) != NULL)
+			{
+				/* convert the interface number, bus and device ids */
+				if (sscanf(dirname + 11, "%d:%d:%d",
+					&device_bus, &device_addr, &interface_number) == 3)
+				{
+					DEBUG_COMM2("interface_number: %d", interface_number);
+					DEBUG_COMM3("usb bus/device: %d/%d", device_bus,
+						device_addr);
+				}
+			}
+		}
 	}
 #endif
 
