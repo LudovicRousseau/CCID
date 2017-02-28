@@ -1008,7 +1008,10 @@ time_request:
 	/* copy the response */
 	length_out = dw2i(cmd_out, 1);
 	if (length_out > *RxLength)
+	{
 		length_out = *RxLength;
+		return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
+	}
 	*RxLength = length_out;
 	memcpy(RxBuffer, &cmd_out[10], length_out);
 
