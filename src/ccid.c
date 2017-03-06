@@ -80,6 +80,15 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			/* The SCM SCL011 reader needs 350 ms to answer */
 			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT * 4;
 			break;
+
+		case VMWARE_CCID:
+			/* This is not an actual reader, it's an emulated reader that
+			 * acts as a proxy to the reader present on the host machine.
+			 * Anounced dwFeatures are wrong, override them here. */
+			ccid_descriptor->dwFeatures = 0x0002047E;
+			/* It also doesn't have any pinpad */
+			ccid_descriptor->bPINSupport = 0;
+			break;
 	}
 
 	/* CCID */
