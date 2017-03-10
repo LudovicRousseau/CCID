@@ -463,9 +463,13 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 					 * multi-slot reader */
 					int readerID =  get_ccid_descriptor(reader_index) -> readerID;
 
-					if ((GEMALTOPROXDU == readerID) || (GEMALTOPROXSU == readerID))
+					/* 2 CCID interfaces */
+					if ((GEMALTOPROXDU == readerID)
+						|| (GEMALTOPROXSU == readerID)
+						|| (HID_OMNIKEY_5422 == readerID))
 						*Value = 2;
 
+					/* 3 CCID interfaces */
 					if (FEITIANR502DUAL == readerID)
 						*Value = 3;
 				}

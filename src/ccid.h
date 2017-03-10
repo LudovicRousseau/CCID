@@ -213,6 +213,7 @@ typedef struct
 #define ElatecTWN4	0x09D80427
 #define SCM_SCL011 0x04E65293
 #define HID_AVIATOR	0x076B3A21
+#define HID_OMNIKEY_5422 0x076B5422
 
 #define VENDOR_GEMALTO 0x08E6
 #define GET_VENDOR(readerID) ((readerID >> 16) & 0xFFFF)

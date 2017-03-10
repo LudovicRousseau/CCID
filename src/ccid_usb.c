@@ -427,10 +427,12 @@ again_libusb:
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 				/* use the first CCID interface on first call */
 				static int static_interface = -1;
+				int max_interface_number = 2;
 
 				/* simulate a composite device as when libudev is used */
 				if ((GEMALTOPROXDU == readerID)
 					|| (GEMALTOPROXSU == readerID)
+					|| (HID_OMNIKEY_5422 == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 						/*
@@ -462,8 +464,16 @@ again_libusb:
 					 * 0: R502 Contactless Reader (CCID)
 					 * 1: R502 Contact Reader (CCID)
 					 * 2: R502 SAM1 Reader (CCID)
+					 *
+					 * For the HID Omnikey 5422 the interfaces are:
+					 * 0: OMNIKEY 5422CL Smartcard Reader
+					 * 1: OMNIKEY 5422 Smartcard Reader
 					 */
 					interface_number = static_interface;
+
+					if (HID_OMNIKEY_5422 == readerID)
+						/* only 2 interfaces for this device */
+						max_interface_number = 1;
 				}
 #endif
 				/* is it already opened? */
@@ -658,6 +668,7 @@ again:
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 				if ((GEMALTOPROXDU == readerID)
 					|| (GEMALTOPROXSU == readerID)
+					|| (HID_OMNIKEY_5422 == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 					/* use the next interface for the next "slot" */
@@ -665,7 +676,7 @@ again:
 
 					/* reset for a next reader */
 					/* max interface number for all 3 readers is 2 */
-					if (static_interface > 2)
+					if (static_interface > max_interface_number)
 						static_interface = -1;
 				}
 #endif
