@@ -425,7 +425,8 @@ again_libusb:
 				int readerID = (vendorID << 16) + productID;
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
-				static int static_interface = 1;
+				/* use the first CCID interface on first call */
+				static int static_interface = -1;
 
 				/* simulate a composite device as when libudev is used */
 				if ((GEMALTOPROXDU == readerID)
@@ -660,11 +661,12 @@ again:
 					|| (FEITIANR502DUAL == readerID))
 				{
 					/* use the next interface for the next "slot" */
-					static_interface++;
+					static_interface = interface + 1;
 
 					/* reset for a next reader */
+					/* max interface number for all 3 readers is 2 */
 					if (static_interface > 2)
-						static_interface = (FEITIANR502DUAL == readerID) ? 0: 1;
+						static_interface = -1;
 				}
 #endif
 
