@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-03-11
+# Generated: 2017-03-14
 #
 # DO NOT EDIT BY HAND
 
@@ -580,6 +580,9 @@
 0x1C34:0x8141:SpringCard NFC'Roll
 0x1C34:0x91B1:SpringCard H663 Series
 0x1C34:0xA1A1:SpringCard H512 Series
+
+# Spyrus Inc
+0x08DF:0x3201:Spyrus Inc PocketVault P-3X
 
 # SYNNIX
 0x1206:0x2105:SYNNIX STD200
