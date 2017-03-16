@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-03-14
+# Generated: 2017-03-16
 #
 # DO NOT EDIT BY HAND
 
@@ -163,6 +163,9 @@
 
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522
+
+# ANCUD
+0x0483:0xACD1:ANCUD CCID USB Reader & RNG
 
 # appidkey GmbH
 0x2406:0x5003:appidkey GmbH ID50 -USB
