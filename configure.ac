@@ -265,6 +265,15 @@ if test x$use_embedded = xyes; then
   AC_DEFINE(NO_LOG, 1, [Disable logging support])
 fi
 
+# --enable-zlp
+AC_ARG_ENABLE(zlp,
+  AS_HELP_STRING([--enable-zlp],[enable the Zero Length Packet patch for some Gemalto readers]),
+  [ use_zlp="${enableval}" ])
+
+if test x$use_zlp = xyes; then
+  AC_DEFINE(ENABLE_ZLP, 1, [Enable Zero Length Packet patch])
+fi
+
 # Setup dist stuff
 AC_SUBST(ac_aux_dir)
 AC_SUBST(bundle)

@@ -722,7 +722,9 @@ again:
 				usbDevice[reader_index].ccid.bVoltageSupport = device_descriptor[5];
 				usbDevice[reader_index].ccid.sIFD_serial_number = NULL;
 				usbDevice[reader_index].ccid.gemalto_firmware_features = NULL;
+#ifdef ENABLE_ZLP
 				usbDevice[reader_index].ccid.zlp = FALSE;
+#endif
 				if (desc.iSerialNumber)
 				{
 					unsigned char serial[128];
@@ -822,6 +824,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	(void)snprintf(debug_header, sizeof(debug_header), "-> %06X ",
 		(int)reader_index);
 
+#ifdef ENABLE_ZLP
 	if (usbDevice[reader_index].ccid.zlp)
 	{ /* Zero Length Packet */
 		int dummy_length;
@@ -831,6 +834,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 		(void)libusb_bulk_transfer(usbDevice[reader_index].dev_handle,
 			usbDevice[reader_index].bulk_in, NULL, 0, &dummy_length, 10);
 	}
+#endif
 
 	DEBUG_XXD(debug_header, buffer, length);
 

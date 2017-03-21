@@ -67,6 +67,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			ccid_descriptor->readTimeout = 60*1000; /* 60 seconds */
 			break;
 
+#ifdef ENABLE_ZLP
 		case GEMPCTWIN:
 		case GEMPCKEY:
 		case DELLSCRK:
@@ -79,6 +80,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 				DEBUG_INFO1("ZLP fixup");
 			}
 			break;
+#endif
 
 		case OZ776:
 		case OZ776_7772:

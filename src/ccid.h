@@ -138,10 +138,12 @@ typedef struct
 	 */
 	struct GEMALTO_FIRMWARE_FEATURES *gemalto_firmware_features;
 
+#ifdef ENABLE_ZLP
 	/*
 	 * Zero Length Packet fixup (boolean)
 	 */
 	char zlp;
+#endif
 } _ccid_descriptor;
 
 /* Features from dwFeatures */

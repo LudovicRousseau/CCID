@@ -614,7 +614,9 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 	serialDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
 	serialDevice[reader_index].ccid.bVoltageSupport = 0x07;	/* 1.8V, 3V and 5V */
 	serialDevice[reader_index].ccid.gemalto_firmware_features = NULL;
+#ifdef ENABLE_ZLP
 	serialDevice[reader_index].ccid.zlp = FALSE;
+#endif
 	serialDevice[reader_index].echo = TRUE;
 
 	/* change some values depending on the reader */
