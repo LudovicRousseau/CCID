@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-03-17
+# Generated: 2017-03-21
 #
 # DO NOT EDIT BY HAND
 
@@ -430,6 +430,9 @@
 0x2A18:0x5000:KACST HSID Reader
 0x2A18:0x5001:KACST HSID Reader Single Storage
 0x2A18:0x5002:KACST HSID Reader Dual Storage
+
+# Kapsch TrafficCom
+0x28B9:0x0002:Kapsch TrafficCom USB SAM reader
 
 # Kingtrust
 0x0483:0x0007:Kingtrust Multi-Reader
