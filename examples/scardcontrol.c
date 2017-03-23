@@ -605,7 +605,7 @@ int main(int argc, char *argv[])
 	pin_verify -> bTimerOut = 0x00;
 	pin_verify -> bTimerOut2 = 0x00;
 	pin_verify -> bmFormatString = 0x82;
-	pin_verify -> bmPINBlockString = 0x04;
+	pin_verify -> bmPINBlockString = 0x08;
 	pin_verify -> bmPINLengthFormat = 0x00;
 	pin_verify -> wPINMaxExtraDigit = (PIN_min_size << 8) + PIN_max_size;
 	pin_verify -> bEntryValidationCondition = bEntryValidationCondition;
