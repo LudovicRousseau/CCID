@@ -1,0 +1,310 @@
+ idVendor: 0x1FC9
+  iManufacturer: InfoThink
+ idProduct: 0x0102
+  iProduct: IT-102MU Reader
+ bcdDevice: 1.01 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 3.685 MHz
+  dwMaximumClock: 14.320 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: Resource temporarily unavailable
+  dwDataRate: 9909 bps
+  dwMaxDataRate: 848000 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   Support 0 bps
+   Support 3145774 bps
+   Support -65488 bps
+   Support 2125150 bps
+   Support 2125170 bps
+   Support 2125430 bps
+   Support 2125202 bps
+   Support 2125430 bps
+   Support 2125232 bps
+   Support 2125250 bps
+   Support 2125268 bps
+   Support 2125286 bps
+   Support 2125304 bps
+   Support 2125332 bps
+   Support 2125350 bps
+   Support 2125740 bps
+   Support 2125600 bps
+   Support 2125664 bps
+   Support 2125670 bps
+   Support 2125606 bps
+   Support 2125740 bps
+   Support 2125726 bps
+   Support 2125734 bps
+   Support 1094845251 bps
+   Support 222958870 bps
+   Support 1108545300 bps
+   Support 1242895937 bps
+   Support 1108284429 bps
+   Support 1242895937 bps
+   Support 1108284429 bps
+   Support 1242895937 bps
+   Support 1108284429 bps
+   Support 1242895937 bps
+   Support 1108349711 bps
+   Support 1242895937 bps
+   Support 1108349711 bps
+   Support 1242895937 bps
+   Support 1108349711 bps
+   Support 1242895937 bps
+   Support 1091572495 bps
+   Support 1242895938 bps
+   Support 1242895938 bps
+   Support 353780034 bps
+   Support 252972362 bps
+   Support 353780034 bps
+   Support 252972362 bps
+   Support 353780034 bps
+   Support 286265162 bps
+   Support 353780034 bps
+   Support 286265162 bps
+   Support 1094845251 bps
+   Support 222958870 bps
+   Support 51580692 bps
+   Support 353780034 bps
+   Support 319753546 bps
+   Support 373375491 bps
+   Support 252529173 bps
+   Support 1111687955 bps
+   Support 1242895937 bps
+   Support 1208947725 bps
+   Support 1058082835 bps
+   Support 252446985 bps
+   Support 437916946 bps
+   Support 774249754 bps
+   Support 926365494 bps
+   Support -51401 bps
+   Support 252694523 bps
+   Support 65536 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 0 bps
+   Support 1 bps
+   Support 1 bps
+   Support 1 bps
+   Support 0 bps
+   Support 1 bps
+   Support 0 bps
+   Support 1 bps
+   Support 0 bps
+   Support 1 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 16777216 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 1094861571 bps
+   Support 927601942 bps
+   Support 353764168 bps
+   Support 51713539 bps
+   Support 369300758 bps
+   Support 373424917 bps
+   Support 927156245 bps
+   Support 1094845256 bps
+   Support 222958870 bps
+   Support 1107497748 bps
+   Support 1242895937 bps
+   Support 1107497741 bps
+   Support 1242895937 bps
+   Support -12446963 bps
+   Support 759444807 bps
+   Support 1142371124 bps
+   Support 389231661 bps
+   Support 859057476 bps
+   Support 875381783 bps
+   Support 859051827 bps
+   Support 1143817239 bps
+   Support 1143817261 bps
+   Support 389231661 bps
+   Support 759442756 bps
+   Support 1142371124 bps
+   Support 875381805 bps
+   Support 1143817267 bps
+   Support 1143817261 bps
+   Support 892159789 bps
+   Support 1145603397 bps
+   Support 388903732 bps
+   Support 775107652 bps
+   Support 1142370096 bps
+   Support 808334132 bps
+   Support 1195644719 bps
+   Support 892548141 bps
+   Support 775978821 bps
+   Support -2062078160 bps
+   Support 859064132 bps
+   Support 1160720437 bps
+   Support 763702574 bps
+   Support 808662084 bps
+   Support -2060565201 bps
+   Support 808662084 bps
+   Support -2060565201 bps
+   Support 808662084 bps
+   Support -2060565201 bps
+   Support 808662084 bps
+   Support -2060565201 bps
+   Support 808662084 bps
+   Support 791555973 bps
+   Support 775107630 bps
+   Support 808333104 bps
+   Support -2059129297 bps
+   Support 791686960 bps
+   Support 791686960 bps
+   Support 201785858 bps
+   Support 454628881 bps
+   Support 606150429 bps
+   Support 757803046 bps
+   Support 892547375 bps
+   Support 1144994103 bps
+   Support -10464693 bps
+   Support 319488513 bps
+   Support 723723035 bps
+   Support 1145256755 bps
+   Support 1414286408 bps
+   Support 1818516572 bps
+   Support -1988069523 bps
+   Support -104 bps
+   Support 65536 bps
+   Support 33554432 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 65536 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support 0 bps
+   Support -16711680 bps
+   Support -1017 bps
+   Support -33 bps
+   Support 471075851 bps
+   Support 858860580 bps
+   Support 993539893 bps
+   Support 1145192510 bps
+   Support -47034 bps
+   Support 100731808 bps
+   Support 97517569 bps
+   Support 132610 bps
+   Support 100860648 bps
+   Support 24379396 bps
+   Support 525828 bps
+   Support 100991162 bps
+   Support 11534352 bps
+   Support 2098950 bps
+   Support 117899357 bps
+   Support 16252992 bps
+   Support 787976 bps
+   Support 118030624 bps
+   Support 146276372 bps
+   Support 66833 bps
+   Support 85066844 bps
+   Support 36569090 bps
+   Support 263443 bps
+   Support 85197079 bps
+   Support 12189704 bps
+   Support 1050133 bps
+   Support 118882480 bps
+   Support 6094880 bps
+   Support 4196119 bps
+   Support 85459130 bps
+   Support 18874380 bps
+   Support 1312537 bps
+   Support 69274342 bps
+   Support 91422721 bps
+   Support 132130 bps
+   Support 69403321 bps
+   Support 22806532 bps
+   Support 525348 bps
+   Support 69533866 bps
+   Support 17825808 bps
+   Support 2098982 bps
+   Support 119996544 bps
+   Support 15204416 bps
+   Support 787496 bps
+   Support 120127920 bps
+   Support 195035156 bps
+   Support 66353 bps
+   Support 53609936 bps
+   Support 48758786 bps
+   Support 262963 bps
+   Support 53739892 bps
+   Support 12189704 bps
+   Support 1049397 bps
+   Support 53870685 bps
+   Support 11534368 bps
+   Support 4196151 bps
+   Support 54001912 bps
+   Support 9699340 bps
+   Support 1311545 bps
+   Support 37817620 bps
+   Support 109707265 bps
+   Support 131650 bps
+   Support 37946181 bps
+   Support 27394052 bps
+   Support 524868 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000204BE
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1

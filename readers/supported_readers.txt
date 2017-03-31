@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-03-22
+# Generated: 2017-03-31
 #
 # DO NOT EDIT BY HAND
 
@@ -411,6 +411,9 @@
 
 # IIT
 0x03EB:0x9324:IIT E.Key Almaz-1C
+
+# InfoThink
+0x1FC9:0x0102:InfoThink IT-102MU Reader
 
 # INSIDE Secure
 0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
