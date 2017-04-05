@@ -227,7 +227,7 @@ if test "${pcsclite}" != no ; then
 	AC_MSG_CHECKING([for SCardEstablishContext])
 	AC_TRY_LINK_FUNC(SCardEstablishContext,
 	    [ AC_MSG_RESULT([yes]) ],
-		[ AC_MSG_ERROR([SCardEstablishContext() not found, install pcsc-lite 1.2.9-beta9 or later,or use PCSC_LIBS=...  ./configure]) ])
+		[ AC_MSG_ERROR([SCardEstablishContext() not found, install pcsc-lite, or use PCSC_LIBS=...  ./configure]) ])
 	LIBS="$OLD_LIBS"
 	CFLAGS="$OLD_CFLAGS"
 
