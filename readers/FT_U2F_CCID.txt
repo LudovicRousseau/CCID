@@ -1,8 +1,8 @@
  idVendor: 0x096E
   iManufacturer: FT
  idProduct: 0x0856
-  iProduct: U2F CCID KBOARD
- bcdDevice: 40.04 (firmware release?)
+  iProduct: U2F CCID
+ bcdDevice: 41.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 1
@@ -28,11 +28,11 @@
   dwDefaultClock: 4.000 MHz
   dwMaximumClock: 4.000 MHz
   bNumClockSupported: 0 (will use whatever is returned)
-   IFD does not support GET CLOCK FREQUENCIES request: Resource temporarily unavailable
+   IFD does not support GET CLOCK FREQUENCIES request: No such file or directory
   dwDataRate: 307200 bps
   dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
-   IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
+   IFD does not support GET_DATA_RATES request: No such file or directory
   dwMaxIFSD: 1024
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
