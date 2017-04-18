@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-03-31
+# Generated: 2017-04-18
 #
 # DO NOT EDIT BY HAND
 
@@ -296,6 +296,7 @@
 
 # FT
 0x096E:0x080A:FT ePass2003Auto
+0x096E:0x0855:FT CCID KB
 0x096E:0x0856:FT U2F CCID KBOARD
 
 # Fujitsu
