@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-04-18
+# Generated: 2017-05-05
 #
 # DO NOT EDIT BY HAND
 
@@ -418,10 +418,6 @@
 # InfoThink
 0x1FC9:0x0102:InfoThink IT-102MU Reader
 
-# INSIDE Secure
-0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
-0x2406:0x6305:INSIDE Secure VaultIC 441 Smart Object
-
 # Inside Secure
 0x2406:0x6300:Inside Secure VaultIC 420 Smart Object
 0x2406:0x6301:Inside Secure VaultIC 440 Smart Object
@@ -429,6 +425,10 @@
 0x2406:0x6403:Inside Secure AT90SCR100
 0x2406:0x6404:Inside Secure AT90SCR050
 0x2406:0x6407:Inside Secure AT90SCR200
+
+# INSIDE Secure
+0x2406:0x6303:INSIDE Secure VaultIC 405 Smart Object
+0x2406:0x6305:INSIDE Secure VaultIC 441 Smart Object
 
 # IonIDe
 0x076B:0x3B01:IonIDe Smartcard Reader
@@ -468,6 +468,9 @@
 # Microchip
 0x0424:0x1104:Microchip SEC1110
 0x0424:0x1202:Microchip SEC1210
+
+# MK Technology
+0x0416:0xC136:MK Technology KeyPass S1
 
 # Morpho
 0x079B:0x0026:Morpho MSO350/MSO351 Fingerprint Sensor & SmartCard Reader
