@@ -525,6 +525,8 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 		readerID = GEMCORESIMPRO2;
 	else if (0 == strcasecmp(reader_name,"GemPCPinPad"))
 		readerID = GEMPCPINPAD;
+	else if (0 == strcasecmp(reader_name,"SEC1210"))
+		readerID = SEC1210;
 
 	/* check if the same channel is not already used to manage multi-slots readers*/
 	for (i = 0; i < CCID_DRIVER_MAX_READERS; i++)
@@ -572,6 +574,11 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 						serialDevice[reader_index].ccid.arrayOfSupportedDataRates = ptr;
 					}
 					serialDevice[reader_index].ccid.dwMaxDataRate = 125000;
+					break;
+
+				case SEC1210:
+					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
+					serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
 					break;
 
 				/* GemPC Twin or GemPC Card */
@@ -649,6 +656,16 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
 			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
 			break;
+
+		case SEC1210:
+			serialDevice[reader_index].ccid.dwFeatures = 0x000100B2;
+			serialDevice[reader_index].ccid.dwDefaultClock = 4800;
+			serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
+			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
+			serialDevice[reader_index].ccid.bMaxSlotIndex = 1;	/* 2 slots */
+			serialDevice[reader_index].echo = FALSE;
+			break;
+
 	}
 
 end:
@@ -834,6 +851,11 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
+		if (0 == strcasecmp(reader_name,"SEC1210"))
+		{
+			tx_buffer[0] = 0x06;
+		}
+
 		/* 2 seconds timeout to not wait too long if no reader is connected */
 		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length, 2*1000))
@@ -850,6 +872,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	/* perform a command to configure GemPC Twin reader card movement
 	 * notification to synchronous mode: the card movement is notified _after_
 	 * the host command and _before_ the reader anwser */
+	if (0 != strcasecmp(reader_name,"SEC1210"))
 	{
 		unsigned char tx_buffer[] = { 0x01, 0x01, 0x01};
 		unsigned char rx_buffer[50];

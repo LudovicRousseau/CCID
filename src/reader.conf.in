@@ -7,6 +7,7 @@
 #     GemCoreSIMPro2
 #     GemPCPinPad
 #     GemPCTwin (default value)
+#     SEC1210 (Dual slot Reader)
 # example: /dev/ttyS0:GemPCPinPad
 #DEVICENAME        /dev/ttySn[:reader]
 #FRIENDLYNAME      "GemPCTwin serial"
