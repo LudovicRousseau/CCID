@@ -847,14 +847,14 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	/* perform a command to be sure a Gemalto reader is connected
 	 * get the reader firmware */
 	{
-		unsigned char tx_buffer[] = { 0x02 };
+		unsigned char tx_buffer[1];
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
 		if (0 == strcasecmp(reader_name,"SEC1210"))
-		{
-			tx_buffer[0] = 0x06;
-		}
+			tx_buffer[0] = 0x06; // unknown but supported command
+		else
+			tx_buffer[0] = 0x02; // get reader firmware
 
 		/* 2 seconds timeout to not wait too long if no reader is connected */
 		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
