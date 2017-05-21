@@ -118,6 +118,35 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.27 - 21 May 2017, Ludovic Rousseau
+    - Add support of
+     . ACS ACR1255U-J1
+     . ACS CryptoMate (T2)
+     . ANCUD CCID USB Reader & RNG
+     . DUALi DE-620 Combi
+     . FT CCID
+     . FT CCID KB
+     . FT U2F CCID KB
+     . FT U2F CCID KBOARD
+     . HID Global OMNIKEY 5422 Smartcard Reader
+     . InfoThink IT-102MU Reader
+     . Kapsch TrafficCom USB SAM reader
+     . MK Technology KeyPass S1
+     . Mulann PVT
+     . Regula RFID Reader
+     . Spyrus Inc PocketVault P-3X
+     . Unicept GmbH AirID USB
+    - Add Microchip SEC1210 UART support (when connected on a serial port)
+    - Add Zero Length Packet (ZLP) support for Gemalto IDBridge CT30 and K30
+      enable the patch using ./configure --enable-zlp
+    - Add support of HID Omnikey 5422 as multi slot reader (for macOS)
+    - Escape command: signals buffer overflow instead of silently
+      truncating the buffer
+    - Fix a bug with multi readers and pcscd uses hotplug_libusb (not the
+      recommended configuration)
+    - Some minor improvements
+
+
 1.4.26 - 7 January 2017, Ludovic Rousseau
     - Add support of
       . Bit4id Digital DNA Key
