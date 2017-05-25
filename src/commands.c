@@ -1413,46 +1413,30 @@ RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
-		unsigned char rx_tmp[4];
-		unsigned char *old_rx_buffer = NULL;
-		int old_rx_length = 0;
-
-		/* read a nul block. buffer need to be at least 4-bytes */
-		if (NULL == rx_buffer)
-		{
-			rx_buffer = rx_tmp;
-			*rx_length = sizeof(rx_tmp);
-		}
+		unsigned char *new_rx_buffer = NULL;
+		int new_rx_length = *rx_length + 1; /* DATA_BLOCK is length of data + 1 */
 
 		/* the buffer must be 4 bytes minimum for ICCD-B */
-		if (*rx_length < 4)
-		{
-			old_rx_buffer = rx_buffer;
-			old_rx_length = *rx_length;
-			rx_buffer = rx_tmp;
-			*rx_length = sizeof(rx_tmp);
-		}
+		if (new_rx_length < 4 || NULL == rx_buffer)
+			new_rx_length = 4;
+
+		if (NULL == (new_rx_buffer = malloc(new_rx_length))) 
+			return IFD_COMMUNICATION_ERROR;
 
 time_request_ICCD_B:
 		/* Data Block */
-		r = ControlUSB(reader_index, 0xA1, 0x6F, 0, rx_buffer, *rx_length);
+		r = ControlUSB(reader_index, 0xA1, 0x6F, 0, new_rx_buffer, new_rx_length);
 
 		/* we got an error? */
 		if (r < 0)
 		{
 			DEBUG_INFO2("ICC Data Block failed: %s", strerror(errno));
-			return IFD_COMMUNICATION_ERROR;
-		}
-
-		/* copy from the 4 bytes buffer if used */
-		if (old_rx_buffer)
-		{
-			memcpy(old_rx_buffer, rx_buffer, min(r, old_rx_length));
-			rx_buffer = old_rx_buffer;
+			return_value = IFD_COMMUNICATION_ERROR;
+			goto end_ICCD_B;
 		}
 
 		/* bResponseType */
-		switch (rx_buffer[0])
+		switch (new_rx_buffer[0])
 		{
 			case 0x00:
 				/* the abData field contains the information created by the
@@ -1461,15 +1445,16 @@ time_request_ICCD_B:
 
 			case 0x40:
 				/* Status Information */
-				ccid_error(PCSC_LOG_ERROR, rx_buffer[2], __FILE__, __LINE__, __FUNCTION__);
-				return IFD_COMMUNICATION_ERROR;
+				ccid_error(PCSC_LOG_ERROR, new_rx_buffer[2], __FILE__, __LINE__, __FUNCTION__);
+				return_value = IFD_COMMUNICATION_ERROR;
+				goto end_ICCD_B;
 
 			case 0x80:
 				/* Polling */
 			{
 				int delay;
 
-				delay = (rx_buffer[2] << 8) + rx_buffer[1];
+				delay = (new_rx_buffer[2] << 8) + new_rx_buffer[1];
 				DEBUG_COMM2("Pooling delay: %d", delay);
 
 				if (0 == delay)
@@ -1486,18 +1471,25 @@ time_request_ICCD_B:
 				/* Extended case
 				 * Only valid for Data Block frames */
 				if (chain_parameter)
-					*chain_parameter = rx_buffer[0];
+					*chain_parameter = new_rx_buffer[0];
 				break;
 
 			default:
-				DEBUG_CRITICAL2("Unknown bResponseType: 0x%02X", rx_buffer[0]);
-				return IFD_COMMUNICATION_ERROR;
+				DEBUG_CRITICAL2("Unknown bResponseType: 0x%02X", new_rx_buffer[0]);
+				return_value = IFD_COMMUNICATION_ERROR;
+				goto end_ICCD_B;
 		}
 
-		memmove(rx_buffer, rx_buffer+1, r-1);
 		*rx_length = r-1;
 
-		return IFD_SUCCESS;
+		/* copy from the extended buffer if not read a nul block */
+		if (rx_buffer)
+			memcpy(rx_buffer, new_rx_buffer+1, min(*rx_length, new_rx_length - 1));
+
+end_ICCD_B:
+		free(new_rx_buffer);
+
+		return return_value;
 	}
 #endif
 
