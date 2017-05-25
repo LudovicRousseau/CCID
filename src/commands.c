@@ -2280,6 +2280,12 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 		ccid_error(PCSC_LOG_ERROR, cmd[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);    /* bError */
 		if (0x00 == cmd[ERROR_OFFSET])	/* command not supported */
 			return IFD_NOT_SUPPORTED;
+		else if (0xFE == cmd[ERROR_OFFSET])
+			if ((cmd[STATUS_OFFSET] & CCID_ICC_STATUS_MASK) == CCID_ICC_ABSENT)
+				/* no ICC present */
+				return IFD_COMMUNICATION_ERROR;
+			else
+				return IFD_SUCCESS;
 		else
 			if ((cmd[ERROR_OFFSET] >= 1) && (cmd[ERROR_OFFSET] <= 127))
 				/* a parameter is not changeable */
