@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-05-05
+# Generated: 2017-06-12
 #
 # DO NOT EDIT BY HAND
 
@@ -740,6 +740,9 @@
 
 # HID OMNIKEY
 #0x076B:0x5340:HID OMNIKEY 5021 CL
+
+# Jinmuyu Electronics Co., Ltd.
+#0x03EB:0x6120:Jinmuyu Electronics Co., Ltd. MR800
 
 # jNet Technology inc.
 #0x0483:0x2010:jNet Technology inc. jToken s1
