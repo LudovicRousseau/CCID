@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-06-12
+# Generated: 2017-06-22
 #
 # DO NOT EDIT BY HAND
 
@@ -554,6 +554,7 @@
 # SafeNet
 0x0529:0x0602:SafeNet eToken 7300
 0x0529:0x0620:SafeNet eToken 5100
+0x08E6:0x34CC:SafeNet eToken 5300
 
 # SafeTech
 0x24A2:0x0102:SafeTech SafeTouch
