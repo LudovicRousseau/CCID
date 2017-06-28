@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-06-22
+# Generated: 2017-06-28
 #
 # DO NOT EDIT BY HAND
 
@@ -738,6 +738,9 @@
 
 # DUALi
 #0x1DB2:0x0600:DUALi DE-ABCM6
+
+# Elatec
+#0x09D8:0x0428:Elatec TWN4/B1.06/CPF3.05/S1SC1.32/P (Beta 3)
 
 # HID OMNIKEY
 #0x076B:0x5340:HID OMNIKEY 5021 CL
