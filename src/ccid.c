@@ -87,10 +87,14 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			ccid_descriptor->dwMaxDataRate = 9600;
 			break;
 
-		case ElatecTWN4:
-			/* use a timeout of 400 ms instead of 100 ms in CmdGetSlotStatus()
-			 * used by CreateChannelByNameOrChannel()
-			 * The reader answers after 280 ms if no tag is present */
+		case ElatecTWN4_CCID_CDC:
+		case ElatecTWN4_CCID:
+			/* Use a timeout of 1000 ms instead of 100 ms in
+			 * CmdGetSlotStatus() used by CreateChannelByNameOrChannel()
+			 * The reader answers after up to 1 s if no tag is present */
+			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT * 10;
+			break;
+
 		case SCM_SCL011:
 			/* The SCM SCL011 reader needs 350 ms to answer */
 			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT * 4;
@@ -543,7 +547,8 @@ int ccid_open_hack_post(unsigned int reader_index)
 			}
 			break;
 
-		case ElatecTWN4:
+		case ElatecTWN4_CCID_CDC:
+		case ElatecTWN4_CCID:
 		case SCM_SCL011:
 			/* restore default timeout (modified in ccid_open_hack_pre()) */
 			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT;
