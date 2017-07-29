@@ -1,0 +1,50 @@
+ idVendor: 0x03EB
+  iManufacturer: IIT
+ idProduct: 0x9308
+  iProduct: E.Key Crystal-1
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 2
+  bulk-IN and bulk-OUT
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x02
+   3.0V
+  dwProtocols: 0x0000 0x0002
+   T=1
+  dwDefaultClock: 5.000 MHz
+  dwMaximumClock: 5.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: Resource temporarily unavailable
+  dwDataRate: 161290 bps
+  dwMaxDataRate: 161290 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x0002044E
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....40 Automatic parameters negotiation made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 264 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1

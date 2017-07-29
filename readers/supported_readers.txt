@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-07-28
+# Generated: 2017-07-29
 #
 # DO NOT EDIT BY HAND
 
@@ -414,6 +414,7 @@
 0x2406:0x6200:IID AT90S064 CCID READER
 
 # IIT
+0x03EB:0x9308:IIT E.Key Crystal-1
 0x03EB:0x9324:IIT E.Key Almaz-1C
 
 # InfoThink
