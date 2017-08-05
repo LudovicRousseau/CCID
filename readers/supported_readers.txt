@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-07-29
+# Generated: 2017-08-05
 #
 # DO NOT EDIT BY HAND
 
@@ -564,6 +564,9 @@
 
 # SafeTech
 0x24A2:0x0102:SafeTech SafeTouch
+
+# SAFETRUST
+0x2EE1:0x0001:SAFETRUST SABRE SCR
 
 # SchlumbergerSema
 0x0973:0x0003:SchlumbergerSema SchlumbergerSema Cyberflex Access
