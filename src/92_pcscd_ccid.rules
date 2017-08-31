@@ -12,7 +12,7 @@ ENV{DEVTYPE}!="usb_device", GOTO="pcscd_ccid_rules_end"
 ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
 # set USB power management to auto.
-ENV{ID_USB_INTERFACES}==":0b0000:", RUN+="/bin/sh -c 'echo auto > /sys/$devpath/power/control'"
+ENV{ID_USB_INTERFACES}==":0b0000:", TEST=="power/control", ATTR{power/control}="auto"
 
 # All done
 LABEL="pcscd_ccid_rules_end"
