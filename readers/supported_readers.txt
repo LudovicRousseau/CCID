@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-08-30
+# Generated: 2017-09-08
 #
 # DO NOT EDIT BY HAND
 
@@ -552,6 +552,7 @@
 0x1C6A:0x7050:Regula RFID Reader
 
 # REINER SCT
+0x0C4B:0x0500:REINER SCT cyberJack RFID standard
 0x0C4B:0x0504:REINER SCT cyberJack go
 0x0C4B:0x0520:REINER SCT tanJack Bluetooth
 0x0C4B:0x0580:REINER SCT cyberJack one
