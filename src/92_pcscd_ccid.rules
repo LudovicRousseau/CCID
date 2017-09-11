@@ -17,5 +17,8 @@ TEST=="power/control", ATTR{idVendor}=="0783", ATTR{idProduct}=="0003", ATTR{pow
 # set USB power management to auto.
 ENV{ID_USB_INTERFACES}==":0b0000:", TEST=="power/control", ATTR{power/control}="auto"
 
+# Keep USB autosuspend off for the C3PO LTC31 v1 SmartCard Reader
+ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{idVendor}=="0783", ATTR{idProduct}=="0003", ATTR{power/control}="on"
+
 # All done
 LABEL="pcscd_ccid_rules_end"
