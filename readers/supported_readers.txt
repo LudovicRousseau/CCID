@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-09-18
+# Generated: 2017-09-20
 #
 # DO NOT EDIT BY HAND
 
@@ -181,7 +181,6 @@
 0x0DC3:0x0900:Athena IDProtect Key v2
 0x0DC3:0x1007:Athena ASEDrive IIIe KB Bio PIV
 0x0DC3:0x1008:Athena ASEDrive IIIe Combo Bio PIV
-0x0DC3:0x100F:Athena IDProtect Flash
 
 # ATMEL
 0x03EB:0x6004:ATMEL AT91SO CCID Smart Card Reader
@@ -702,6 +701,9 @@
 # Aladdin
 
 # Alcor Micro
+
+# Athena
+0x0DC3:0x100F:Athena IDProtect Flash
 
 # ATMEL
 0x03EB:0x6016:ATMEL VaultIC460
