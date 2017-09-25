@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-09-20
+# Generated: 2017-09-25
 #
 # DO NOT EDIT BY HAND
 
@@ -454,6 +454,9 @@
 0x0D46:0x4289:KOBIL Systems mIDentity visual
 0x0D46:0x4389:KOBIL Systems mIDentity fullsize
 0x0D46:0x43A9:KOBIL Systems mIDentity fullsize AES
+
+# KRONEGGER
+0x2D25:0x0000:KRONEGGER NFC blue Reader Platform
 
 # Ledger
 0x2C97:0x0001:Ledger Nano S
