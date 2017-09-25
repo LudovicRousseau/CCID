@@ -457,6 +457,7 @@
 
 # KRONEGGER
 0x2D25:0x0000:KRONEGGER NFC blue Reader Platform
+0x2D25:0x0001:KRONEGGER Micro Core Platform
 
 # Ledger
 0x2C97:0x0001:Ledger Nano S
