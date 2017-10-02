@@ -86,25 +86,25 @@ Info.plist: Info.plist.src $(srcdir)/../readers/supported_readers.txt
 DISTCLEANFILES = tokenparser.c Info.plist
 
 install_ccid: libccid.la Info.plist
-	$(mkinstalldirs) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/
-	cp Info.plist $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/
-	cp .libs/$(CCID_LIB) $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB)
+	$(mkinstalldirs) "$(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/"
+	cp Info.plist "$(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/"
+	cp .libs/$(CCID_LIB) "$(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/$(CCID_LIB)"
 	$(INSTALL_UDEV_RULE_FILE)
 
 install_ccidtwin: libccidtwin.la
-	$(mkinstalldirs) $(DESTDIR)$(ccidtwindir)
-	cp .libs/$(CCIDTWIN_LIB) $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)
-	$(mkinstalldirs) $(DESTDIR)/$(serialconfdir) ; \
-		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB)| ; print" $(srcdir)/reader.conf.in > $(DESTDIR)/$(serialconfdir)/libccidtwin
+	$(mkinstalldirs) "$(DESTDIR)$(ccidtwindir)"
+	cp .libs/$(CCIDTWIN_LIB) "$(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)"
+	$(mkinstalldirs) "$(DESTDIR)/$(serialconfdir)" ; \
+		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB)| ; print" $(srcdir)/reader.conf.in > "$(DESTDIR)/$(serialconfdir)/libccidtwin"
 
 # do not uninstall the serial driver by default
 # use explicitely 'make uninstall_ccidtwin'
 uninstall: $(LIBS_TO_UNINSTALL)
 
 uninstall_ccid:
-	rm -rf $(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)
+	rm -rf "$(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)"
 
 uninstall_ccidtwin:
-	rm -f $(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)
-	rm -f $(DESTDIR)/$(serialconfdir)/libccidtwin
+	rm -f "$(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)"
+	rm -f "$(DESTDIR)/$(serialconfdir)/libccidtwin"
 
