@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-09-27
+# Generated: 2017-10-02
 #
 # DO NOT EDIT BY HAND
 
@@ -647,6 +647,7 @@
 
 # Unicept GmbH
 0x2DFF:0x1540:Unicept GmbH AirID USB
+0x2DFF:0x1543:Unicept GmbH AirID USB Dongle
 
 # Validy
 0x1CF0:0x0001:Validy TokenA sl vt
