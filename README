@@ -118,6 +118,32 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.28 - 11 October 2017, Ludovic Rousseau
+    - Add support of
+     . Athena IDProtect Flash
+     . Elatec TWN4/B1.06/CPF3.05/S1SC1.32/P (Beta 3)
+     . HID Global OMNIKEY 5122 Dual
+     . HID Global OMNIKEY 5122 Smartcard Reader
+     . IIT E.Key Crystal-1
+     . KRONEGGER Micro Core Platform
+     . KRONEGGER NFC blue Reader Platform
+     . Ledger Nano S
+     . REINER SCT cyberJack RFID standard
+     . REINER SCT cyberJack one
+     . SAFETRUST SABRE SCR
+     . SafeNet eToken 5300
+     . Unicept GmbH AirID USB Dongle
+     . Watchdata USB Key
+     . mCore SCard-Reader
+    - Disabled readers
+     . Jinmuyu Electronics Co., Ltd. MR800
+    - Fix non-pinpad HID global devices
+    - udev rules:
+     . allow rule overwrite
+     . Disable USB autosuspend on C3PO LTC31 v1 reader
+    - Some minor improvements
+
+
 1.4.27 - 21 May 2017, Ludovic Rousseau
     - Add support of
      . ACS ACR1255U-J1
