@@ -213,6 +213,9 @@
 0x25DD:0x2351:Bit4id Digital DNA Key
 0x25DD:0x3111:Bit4id miniLector
 
+# Bluink Ltd.
+0x2ABE:0x1003:Bluink Ltd. Bluink CCID
+
 # BLUTRONICS
 0x1B0E:0x1079:BLUTRONICS BLUDRIVE II CCID
 
