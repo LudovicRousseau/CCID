@@ -70,7 +70,6 @@ static int DebugInitialized = FALSE;
 
 /* local functions */
 static void init_driver(void);
-static void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol);
 static char find_baud_rate(unsigned int baudrate, unsigned int *list);
 static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	int clock_frequency);
@@ -716,9 +715,6 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		ccid_slot->nATRLength);
 	if (ATR_MALFORMED == atr_ret)
 		return IFD_PROTOCOL_NOT_SUPPORTED;
-
-	/* Apply Extra EGT patch for bogus cards */
-	extra_egt(&atr, ccid_desc, Protocol);
 
 	if (SCARD_PROTOCOL_T0 == Protocol)
 		pps[1] |= ATR_PROTOCOL_TYPE_T0;
@@ -2031,83 +2027,6 @@ void init_driver(void)
 
 	DebugInitialized = TRUE;
 } /* init_driver */
-
-
-void extra_egt(ATR_t *atr, _ccid_descriptor *ccid_desc, DWORD Protocol)
-{
-	/* This function use an EGT value for cards who comply with followings
-	 * criterias:
-	 * - TA1 > 11
-	 * - current EGT = 0x00 or 0xFF
-	 * - T=0 or (T=1 and CWI >= 2)
-	 *
-	 * Without this larger EGT some non ISO 7816-3 smart cards may not
-	 * communicate with the reader.
-	 *
-	 * This modification is harmless, the reader will just be less restrictive
-	 */
-
-	unsigned int card_baudrate;
-	unsigned int default_baudrate;
-	double f, d;
-
-	/* if TA1 not present */
-	if (! atr->ib[0][ATR_INTERFACE_BYTE_TA].present)
-		return;
-
-	(void)ATR_GetParameter(atr, ATR_PARAMETER_D, &d);
-	(void)ATR_GetParameter(atr, ATR_PARAMETER_F, &f);
-
-	/* may happen with non ISO cards */
-	if ((0 == f) || (0 == d))
-		return;
-
-	/* Baudrate = f x D/F */
-	card_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock * d / f);
-
-	default_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock
-		* ATR_DEFAULT_D / ATR_DEFAULT_F);
-
-	/* TA1 > 11? */
-	if (card_baudrate <= default_baudrate)
-		return;
-
-	/* Current EGT = 0 or FF? */
-	if (atr->ib[0][ATR_INTERFACE_BYTE_TC].present &&
-		((0x00 == atr->ib[0][ATR_INTERFACE_BYTE_TC].value) ||
-		(0xFF == atr->ib[0][ATR_INTERFACE_BYTE_TC].value)))
-	{
-		if (SCARD_PROTOCOL_T0 == Protocol)
-		{
-			/* Init TC1 */
-			atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
-			atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
-			DEBUG_INFO1("Extra EGT patch applied");
-		}
-
-		if (SCARD_PROTOCOL_T1 == Protocol)
-		{
-			int i;
-
-			/* TBi (i>2) present? BWI/CWI */
-			for (i=2; i<ATR_MAX_PROTOCOLS; i++)
-			{
-				/* CWI >= 2 ? */
-				if (atr->ib[i][ATR_INTERFACE_BYTE_TB].present &&
-					((atr->ib[i][ATR_INTERFACE_BYTE_TB].value & 0x0F) >= 2))
-				{
-					/* Init TC1 */
-					atr->ib[0][ATR_INTERFACE_BYTE_TC].present = TRUE;
-					atr->ib[0][ATR_INTERFACE_BYTE_TC].value = 2;
-					DEBUG_INFO1("Extra EGT patch applied");
-
-					/* only the first TBi (i>2) must be used */
-					break;
-				}
-			}
-		}
-	}
-} /* extra_egt */
 
 
 static char find_baud_rate(unsigned int baudrate, unsigned int *list)
