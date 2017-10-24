@@ -2,7 +2,7 @@
   iManufacturer: HID Global
  idProduct: 0x3031
   iProduct: OMNIKEY 3x21 Smart Card Reader
- bcdDevice: 1.03 (firmware release?)
+ bcdDevice: 1.05 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -27,16 +27,12 @@
    T=0
    T=1
   dwDefaultClock: 4.800 MHz
-  dwMaximumClock: 8.000 MHz
-  bNumClockSupported: 4
-   Support 4000 kHz
+  dwMaximumClock: 4.800 MHz
+  bNumClockSupported: 1
    Support 4800 kHz
-   Support 6000 kHz
-   Support 8000 kHz
   dwDataRate: 10752 bps
   dwMaxDataRate: 412903 bps
-  bNumDataRatesSupported: 96
-   Got 105 data rates but was expecting 96
+  bNumDataRatesSupported: 106
    Support 10752 bps
    Support 21505 bps
    Support 43010 bps
@@ -107,6 +103,7 @@
    Support 75000 bps
    Support 150000 bps
    Support 300000 bps
+   Support 600000 bps
    Support 112500 bps
    Support 187500 bps
    Support 5208 bps
@@ -133,6 +130,15 @@
    Support 70312 bps
    Support 117187 bps
    Support 2604 bps
+   Support 52083 bps
+   Support 3125 bps
+   Support 1953 bps
+   Support 39062 bps
+   Support 2343 bps
+   Support 28125 bps
+   Support 2929 bps
+   Support 35156 bps
+   Support 58593 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000007
    2-wire protocol
@@ -155,7 +161,5 @@
   bClassEnvelope: 0xFF
    echoes the APDU class
   wLcdLayout: 0x0000
-  bPINSupport: 0x03
-   PIN Verification supported
-   PIN Modification supported
+  bPINSupport: 0x00
   bMaxCCIDBusySlots: 1
