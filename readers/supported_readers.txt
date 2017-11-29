@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-11-10
+# Generated: 2017-11-29
 #
 # DO NOT EDIT BY HAND
 
@@ -211,6 +211,7 @@
 0x25DD:0x2321:Bit4id CKey4
 0x25DD:0x2341:Bit4id tokenME FIPS v3
 0x25DD:0x2351:Bit4id Digital DNA Key
+0x25DD:0x2361:Bit4id Digital-DNA Key BT
 0x25DD:0x3111:Bit4id miniLector
 
 # Bluink Ltd.
