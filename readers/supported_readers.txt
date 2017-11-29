@@ -212,6 +212,7 @@
 0x25DD:0x2341:Bit4id tokenME FIPS v3
 0x25DD:0x2351:Bit4id Digital DNA Key
 0x25DD:0x2361:Bit4id Digital-DNA Key BT
+0x25DD:0x2362:Bit4id Digital-DNA Key
 0x25DD:0x3111:Bit4id miniLector
 
 # Bluink Ltd.
