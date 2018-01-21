@@ -484,6 +484,8 @@ int ccid_open_hack_post(unsigned int reader_index)
 			 * The problem is that the PIN code entered using the Secure
 			 * Pin Entry function is also sent to the host.
 			 */
+
+		case C3PO_LTC31_v2:
 			ccid_descriptor->bPINSupport = 0;
 			break;
 
