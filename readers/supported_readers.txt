@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2017-11-29
+# Generated: 2018-01-25
 #
 # DO NOT EDIT BY HAND
 
@@ -373,6 +373,7 @@
 # HID Global
 0x076B:0x3031:HID Global OMNIKEY 3x21 Smart Card Reader
 0x076B:0x5022:HID Global OMNIKEY 5022 Smart Card Reader
+0x076B:0x5023:HID Global OMNIKEY 5023 Smart Card Reader
 0x076B:0x5400:HID Global veriCLASS Reader
 0x076B:0x5412:HID Global OMNIKEY 5122 Smartcard Reader
 0x076B:0x5422:HID Global OMNIKEY 5422 Smartcard Reader
