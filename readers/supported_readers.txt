@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-01-25
+# Generated: 2018-01-31
 #
 # DO NOT EDIT BY HAND
 
@@ -685,6 +685,7 @@
 # Watchdata
 0x163C:0x0407:Watchdata USB Key
 0x163C:0x0417:Watchdata USB Key
+0x163C:0x0418:Watchdata USB Key
 
 # Watchdata W5181
 0x163C:0x0A03:Watchdata W5181 
