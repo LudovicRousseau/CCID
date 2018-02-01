@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-01-31
+# Generated: 2018-02-01
 #
 # DO NOT EDIT BY HAND
 
@@ -453,6 +453,9 @@
 
 # Kapsch TrafficCom
 0x28B9:0x0002:Kapsch TrafficCom USB SAM reader
+
+# KeyXentic Inc.
+0x2F76:0x0906:KeyXentic Inc. KX906 Smart Card Reader
 
 # Kingtrust
 0x0483:0x0007:Kingtrust Multi-Reader
