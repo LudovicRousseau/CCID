@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-02-19
+# Generated: 2018-02-20
 #
 # DO NOT EDIT BY HAND
 
@@ -632,6 +632,7 @@
 
 # Spyrus Inc
 0x08DF:0x0004:Spyrus Inc Rosetta USB
+0x08DF:0x3115:Spyrus Inc WorkSafe Pro
 0x08DF:0x3201:Spyrus Inc PocketVault P-3X
 
 # SYNNIX
