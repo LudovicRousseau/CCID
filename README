@@ -118,6 +118,23 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.29 - 21 February 2018, Ludovic Rousseau
+    - Add support of
+     . Access IS NFC Smart Module (With idProduct 0x0164)
+     . Bit4id Digital-DNA Key
+     . Bit4id Digital-DNA Key BT
+     . Bluink Ltd. Bluink CCID
+     . Chicony HP Skylab USB Smartcard Keyboard
+     . HID Global OMNIKEY 5023 Smart Card Reader
+     . HID Global OMNIKEY 5027CK CCID CONFIG IF
+     . KeyXentic Inc. KX906 Smart Card Reader
+     . Spyrus Inc Rosetta USB
+     . Spyrus Inc WorkSafe Pro
+     . Watchdata USB Key (idProduct: 0x0418)
+    - The C3PO LTC31 v2 wrongly declares PIN support
+    - Remove extra EGT patch because if has bad side effects
+
+
 1.4.28 - 11 October 2017, Ludovic Rousseau
     - Add support of
      . Athena IDProtect Flash
