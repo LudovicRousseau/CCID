@@ -634,6 +634,7 @@
 # Spyrus Inc
 0x08DF:0x0004:Spyrus Inc Rosetta USB
 0x08DF:0x3115:Spyrus Inc WorkSafe Pro
+0x08DF:0x3117:Spyrus Inc WorkSafe Pro
 0x08DF:0x3201:Spyrus Inc PocketVault P-3X
 
 # SYNNIX
