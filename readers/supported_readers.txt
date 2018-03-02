@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-02-23
+# Generated: 2018-03-02
 #
 # DO NOT EDIT BY HAND
 
@@ -267,6 +267,9 @@
 # COVADIS
 0x0982:0x0008:COVADIS VEGA-ALPHA
 0x0982:0x0040:COVADIS Auriga
+
+# DC.Ltd
+0x257B:0xC305:DC.Ltd DC4 5CCID READER
 
 # DUALi
 0x1DB2:0x0801:DUALi DE-620 Combi
