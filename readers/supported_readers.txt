@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-03-02
+# Generated: 2018-03-15
 #
 # DO NOT EDIT BY HAND
 
@@ -203,6 +203,7 @@
 0x23A0:0x0001:BIFIT USB-Token iBank2key
 0x23A0:0x0002:BIFIT iBank2Key
 0x23A0:0x0003:BIFIT iToken
+0x23A0:0x0008:BIFIT ANGARA
 
 # Bit4id
 0x25DD:0x1101:Bit4id miniLector-s
