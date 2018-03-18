@@ -3,4 +3,4 @@
 	url = ../PCSC.git
 [submodule "PCSC-contrib"]
 	path = PCSC-contrib
-	url = git@salsa.debian.org:rousseau/PCSC-contrib.git
+	url = ../PCSC-contrib.git
