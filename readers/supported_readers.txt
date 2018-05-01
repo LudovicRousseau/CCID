@@ -351,6 +351,7 @@
 
 # Genesys Logic
 0x05E3:0x0757:Genesys Logic CCID Card Reader
+0x05E3:0x0758:Genesys Logic Combo Card Reader
 
 # German Privacy Foundation
 0x20A0:0x4107:German Privacy Foundation Crypto Stick v1.2
