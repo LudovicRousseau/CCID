@@ -4,7 +4,7 @@
 #
 # DO NOT EDIT BY HAND
 
-# Website: http://pcsclite.alioth.debian.org/ccid.html
+# Website: https://ccid.apdu.fr/
 
 ##########################
 # section: supported
