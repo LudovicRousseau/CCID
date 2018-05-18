@@ -24,13 +24,13 @@ CCID and ICCD readers:
 
 A reader can be in one of these list:
 - supported
-    See http://pcsclite.alioth.debian.org/ccid/supported.html
-- should working
-    See http://pcsclite.alioth.debian.org/ccid/shouldwork.html
+    See https://ccid.apdu.fr/ccid/supported.html
+- should work
+    See https://ccid.apdu.fr/ccid/shouldwork.html
 - unsupported
-    See http://pcsclite.alioth.debian.org/ccid/unsupported.html
+    See https://ccid.apdu.fr/ccid/unsupported.html
 - disabled
-    See http://pcsclite.alioth.debian.org/ccid/disabled.html
+    See https://ccid.apdu.fr/ccid/disabled.html
 
 
 Supported operating systems:
@@ -39,8 +39,7 @@ Supported operating systems:
 - GNU/Linux (libusb 1.0)
 - MacOS X/Darwin (libusb 1.0)
 
-See also http://pcsclite.alioth.debian.org/ccid.html for more
-information.
+See also https://ccid.apdu.fr/ for more information.
 
 
 Debug informations:
