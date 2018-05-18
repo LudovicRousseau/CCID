@@ -133,6 +133,5 @@ Test procedure:
   ccid_usb.c:224 Using USB bus/device: 001/047
 
   If you don't see this the driver is not installed correctly or your
-  reader is not yet supported. Read
-  http://pcsclite.alioth.debian.org/ccid.html#CCID_compliant to know
-  what to do.
+  reader is not yet supported. Read https://ccid.apdu.fr/#CCID_compliant
+  to know what to do.
