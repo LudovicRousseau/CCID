@@ -34,7 +34,7 @@ then
 	echo "ERROR!"
 	echo "run ./MacOSX/configure from the source top directory"
 	echo -e $NORMAL
-	exit;
+	exit -1
 fi
 
 # find pcsc-lite header files in MacOSX/
