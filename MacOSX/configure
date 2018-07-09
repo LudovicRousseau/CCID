@@ -56,7 +56,7 @@ then
 	echo "*****************************"
 	echo -en $NORMAL
 	echo "Rename it to force a static link"
-	exit
+	exit -1
 fi
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
