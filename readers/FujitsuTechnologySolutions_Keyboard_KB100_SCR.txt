@@ -1,8 +1,8 @@
  idVendor: 0x0BF8
-  iManufacturer: FujitsuTechnologySolutions GmbH
+  iManufacturer: Fujitsu
  idProduct: 0x1022
   iProduct: Keyboard KB100 SCR
- bcdDevice: 1.00 (firmware release?)
+ bcdDevice: 1.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 2
@@ -140,7 +140,8 @@
    I2C protocol
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x000207B8
+  dwFeatures: 0x000407BA
+   ....02 Automatic parameter configuration based on ATR data
    ....08 Automatic ICC voltage selection
    ....10 Automatic ICC clock frequency change according to parameters
    ....20 Automatic baud rate change according to frequency and Fi, Di params
@@ -148,7 +149,7 @@
    ..01.. CCID can set ICC in clock stop mode
    ..02.. NAD value other than 00 accepted (T=1)
    ..04.. Automatic IFSD exchange as first exchange (T=1)
-   02.... Short APDU level exchange
+   04.... Short and Extended APDU level exchange
   dwMaxCCIDMessageLength: 271 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class

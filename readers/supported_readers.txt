@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-05-25
+# Generated: 2018-07-16
 #
 # DO NOT EDIT BY HAND
 
@@ -315,6 +315,7 @@
 0x096E:0x0859:FT CCID
 
 # Fujitsu
+0x0BF8:0x1022:Fujitsu Keyboard KB100 SCR
 0x0BF8:0x1024:Fujitsu Smartcard Reader D323
 
 # Fujitsu Siemens Computers
@@ -324,7 +325,6 @@
 # FujitsuTechnologySolutions GmbH
 0x0BF8:0x1017:FujitsuTechnologySolutions GmbH SmartCase KB SCR eSIG
 0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Smartcard Keyboard G87-914x
-0x0BF8:0x1022:FujitsuTechnologySolutions GmbH Keyboard KB100 SCR
 0x0BF8:0x1023:FujitsuTechnologySolutions GmbH Keyboard KB100 SCR eSIG
 
 # GEMALTO
