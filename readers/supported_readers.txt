@@ -325,7 +325,7 @@
 
 # FujitsuTechnologySolutions GmbH
 0x0BF8:0x1017:FujitsuTechnologySolutions GmbH SmartCase KB SCR eSIG
-0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Smartcard Keyboard G87-914x
+0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Keyboard KB SCR2
 
 # GEMALTO
 0x08E6:0x3440:GEMALTO CT1100
