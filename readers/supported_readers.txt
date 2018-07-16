@@ -316,6 +316,7 @@
 
 # Fujitsu
 0x0BF8:0x1022:Fujitsu Keyboard KB100 SCR
+0x0BF8:0x1023:Fujitsu Keyboard KB100 SCR eSIG
 0x0BF8:0x1024:Fujitsu Smartcard Reader D323
 
 # Fujitsu Siemens Computers
@@ -325,7 +326,6 @@
 # FujitsuTechnologySolutions GmbH
 0x0BF8:0x1017:FujitsuTechnologySolutions GmbH SmartCase KB SCR eSIG
 0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Smartcard Keyboard G87-914x
-0x0BF8:0x1023:FujitsuTechnologySolutions GmbH Keyboard KB100 SCR eSIG
 
 # GEMALTO
 0x08E6:0x3440:GEMALTO CT1100
