@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-07-16
+# Generated: 2018-07-27
 #
 # DO NOT EDIT BY HAND
 
@@ -241,6 +241,9 @@
 
 # CCB
 0x8829:0xCCB2:CCB eSafeLD
+
+# Certgate GmbH
+0x2DFF:0xB601:Certgate GmbH AirID 2 USB
 
 # charismathics
 0x19E7:0x0002:charismathics plug'n'crypt CCID token
