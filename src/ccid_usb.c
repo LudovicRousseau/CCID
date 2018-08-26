@@ -787,6 +787,10 @@ end:
 			goto again_libusb;
 		}
 #endif
+
+		/* free bundle list */
+		bundleRelease(&plist);
+
 		/* failed */
 		close_libusb_if_needed();
 
