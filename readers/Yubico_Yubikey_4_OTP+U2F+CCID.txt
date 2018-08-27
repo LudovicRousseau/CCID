@@ -1,8 +1,8 @@
  idVendor: 0x1050
   iManufacturer: Yubico
  idProduct: 0x0407
-  iProduct: Yubikey 4 OTP+U2F+CCID
- bcdDevice: 4.37 (firmware release?)
+  iProduct: YubiKey OTP+FIDO+CCID
+ bcdDevice: 5.03 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 2
@@ -33,7 +33,7 @@
   dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
    IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
-  dwMaxIFSD: 2038
+  dwMaxIFSD: 3062
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
