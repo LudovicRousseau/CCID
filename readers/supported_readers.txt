@@ -720,10 +720,10 @@
 0x1050:0x0112:Yubico Yubikey NEO CCID
 0x1050:0x0115:Yubico Yubikey NEO U2F+CCID
 0x1050:0x0116:Yubico Yubikey NEO OTP+U2F+CCID
-0x1050:0x0404:Yubico Yubikey 4 CCID
-0x1050:0x0405:Yubico Yubikey 4 OTP+CCID
-0x1050:0x0406:Yubico Yubikey 4 U2F+CCID
-0x1050:0x0407:Yubico Yubikey 4 OTP+U2F+CCID
+0x1050:0x0404:Yubico YubiKey CCID
+0x1050:0x0405:Yubico YubiKey OTP+CCID
+0x1050:0x0406:Yubico YubiKey FIDO+CCID
+0x1050:0x0407:Yubico YubiKey OTP+FIDO+CCID
 
 ##########################
 # section: unsupported
