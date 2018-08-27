@@ -1,8 +1,8 @@
  idVendor: 0x1050
   iManufacturer: Yubico
  idProduct: 0x0405
-  iProduct: Yubikey 4 OTP+CCID
- bcdDevice: 4.20 (firmware release?)
+  iProduct: YubiKey OTP+CCID
+ bcdDevice: 5.03 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 1
@@ -33,7 +33,7 @@
   dwMaxDataRate: 307200 bps
   bNumDataRatesSupported: 0 (will use whatever is returned)
    IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
-  dwMaxIFSD: 2038
+  dwMaxIFSD: 3062
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
@@ -46,7 +46,7 @@
    ....40 Automatic parameters negotiation made by the CCID
    ....80 Automatic PPS made by the CCID
    04.... Short and Extended APDU level exchange
-  dwMaxCCIDMessageLength: 2048 bytes
+  dwMaxCCIDMessageLength: 3072 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnvelope: 0xFF
