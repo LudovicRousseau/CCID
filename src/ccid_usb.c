@@ -1396,7 +1396,8 @@ void InterruptStop(int reader_index)
 
 		ret = libusb_cancel_transfer(transfer);
 		if (ret < 0)
-			DEBUG_CRITICAL2("libusb_cancel_transfer failed: %d", ret);
+			DEBUG_CRITICAL2("libusb_cancel_transfer failed: %s",
+				libusb_error_name(ret));
 	}
 } /* InterruptStop */
 
