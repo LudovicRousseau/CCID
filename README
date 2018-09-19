@@ -117,6 +117,32 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.30 - 19 September 2018, Ludovic Rousseau
+    - The project moved to https://ccid.apdu.fr/
+    - Add support of
+     . ACS ACR33 ICC Reader
+     . BIFIT ANGARA
+     . Broadcom Corp 58200
+     . Certgate GmbH AirID 2 USB
+     . DC.Ltd DC4 5CCID READER
+     . Genesys Logic CCID Card Reader
+     . Genesys Logic Combo Card Reader
+     . InfoThink IT-500U Reader
+     . Spyrus Inc WorkSafe Pro (ProductID 0x3117)
+    - Disabled readers
+     . REINER SCT cyberJack RFID standard
+    - Update reader names for
+     . Fujitsu Keyboard KB100 SCR
+     . Fujitsu Keyboard KB100 SCR eSIG
+     . FujitsuTechnologySolutions GmbH Keyboard KB SCR2
+     . Yubico YubiKey CCID
+     . Yubico YubiKey FIDO+CCID
+     . Yubico YubiKey OTP+CCID
+     . Yubico YubiKey OTP+FIDO+CCID
+    - Fix libusb config descriptor leak
+    - Fix leaking an allocated bundle in case no matching reader was found
+
+
 1.4.29 - 21 February 2018, Ludovic Rousseau
     - Add support of
      . Access IS NFC Smart Module (With idProduct 0x0164)
