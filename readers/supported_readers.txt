@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-10-12
+# Generated: 2018-10-24
 #
 # DO NOT EDIT BY HAND
 
@@ -441,6 +441,9 @@
 # IIT
 0x03EB:0x9308:IIT E.Key Crystal-1
 0x03EB:0x9324:IIT E.Key Almaz-1C
+
+# InfoCert
+0x2FD2:0x0100:InfoCert WirelessKey
 
 # InfoThink
 0x1FC9:0x0102:InfoThink IT-102MU Reader
