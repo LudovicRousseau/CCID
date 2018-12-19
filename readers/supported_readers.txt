@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-11-30
+# Generated: 2018-12-19
 #
 # DO NOT EDIT BY HAND
 
@@ -426,6 +426,7 @@
 0x04E6:0x581A:Identiv uTrust 3522 embd SE RFID Token
 0x04E6:0x581B:Identiv uTrust 2910 R Taglio SC Reader
 0x04E6:0x581C:Identiv SCR35xx USB Smart Card Reader
+0x04E6:0x581D:Identiv SCR3500 C Contact Reader
 
 # Identive
 0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
