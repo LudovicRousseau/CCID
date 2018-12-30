@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-12-19
+# Generated: 2018-12-30
 #
 # DO NOT EDIT BY HAND
 
@@ -165,6 +165,9 @@
 0x24DC:0x0402:Aladdin R.D. JaCarta
 0x24DC:0x0501:Aladdin R.D. JaCarta U2F (JC602)
 0x24DC:0x100F:Aladdin R.D. JaCarta Flash
+
+# Alcor Link
+0x2CE3:0x9563:Alcor Link AK9563
 
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522

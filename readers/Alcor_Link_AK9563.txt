@@ -1,0 +1,156 @@
+ idVendor: 0x2CE3
+  iManufacturer: Generic
+ idProduct: 0x9563
+  iProduct: EMV Smartcard Reader
+ bcdDevice: 1.20 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 12.000 MHz
+  bNumClockSupported: 3
+   Support 4000 kHz
+   Support 4800 kHz
+   Support 12000 kHz
+  dwDataRate: 10753 bps
+  dwMaxDataRate: 688172 bps
+  bNumDataRatesSupported: 95
+   Support 1953 bps
+   Support 2151 bps
+   Support 2604 bps
+   Support 2688 bps
+   Support 3584 bps
+   Support 3906 bps
+   Support 4301 bps
+   Support 4688 bps
+   Support 5208 bps
+   Support 5376 bps
+   Support 5859 bps
+   Support 6250 bps
+   Support 6452 bps
+   Support 7169 bps
+   Support 7813 bps
+   Support 8065 bps
+   Support 8602 bps
+   Support 9375 bps
+   Support 10417 bps
+   Support 10753 bps
+   Support 11719 bps
+   Support 12500 bps
+   Support 12903 bps
+   Support 14337 bps
+   Support 15625 bps
+   Support 16129 bps
+   Support 17204 bps
+   Support 18750 bps
+   Support 20833 bps
+   Support 21505 bps
+   Support 23438 bps
+   Support 25000 bps
+   Support 25806 bps
+   Support 28674 bps
+   Support 31250 bps
+   Support 32258 bps
+   Support 34409 bps
+   Support 37500 bps
+   Support 39063 bps
+   Support 41667 bps
+   Support 43011 bps
+   Support 46875 bps
+   Support 50000 bps
+   Support 51613 bps
+   Support 52083 bps
+   Support 53764 bps
+   Support 56250 bps
+   Support 57348 bps
+   Support 62500 bps
+   Support 64516 bps
+   Support 68817 bps
+   Support 70313 bps
+   Support 71685 bps
+   Support 75000 bps
+   Support 77419 bps
+   Support 78125 bps
+   Support 83333 bps
+   Support 86022 bps
+   Support 93750 bps
+   Support 96774 bps
+   Support 100000 bps
+   Support 103226 bps
+   Support 104167 bps
+   Support 107527 bps
+   Support 112500 bps
+   Support 114695 bps
+   Support 117188 bps
+   Support 125000 bps
+   Support 129032 bps
+   Support 137634 bps
+   Support 143369 bps
+   Support 150000 bps
+   Support 156250 bps
+   Support 161290 bps
+   Support 166667 bps
+   Support 172043 bps
+   Support 187500 bps
+   Support 206452 bps
+   Support 215054 bps
+   Support 229391 bps
+   Support 250000 bps
+   Support 258065 bps
+   Support 275269 bps
+   Support 300000 bps
+   Support 333333 bps
+   Support 344086 bps
+   Support 375000 bps
+   Support 400000 bps
+   Support 412903 bps
+   Support 458781 bps
+   Support 500000 bps
+   Support 516129 bps
+   Support 550538 bps
+   Support 600000 bps
+   Support 688172 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000007
+   2-wire protocol
+   3-wire protocol
+   I2C protocol
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000404BE
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 272 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
