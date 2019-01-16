@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2018-12-30
+# Generated: 2019-01-16
 #
 # DO NOT EDIT BY HAND
 
@@ -252,6 +252,7 @@
 
 # Certgate GmbH
 0x2DFF:0xB601:Certgate GmbH AirID 2 USB
+0x2DFF:0xB602:Certgate GmbH ONEKEY ID 2 USB
 
 # charismathics
 0x19E7:0x0002:charismathics plug'n'crypt CCID token
