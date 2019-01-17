@@ -222,6 +222,7 @@
 0x25DD:0x2371:Bit4id TokenME EVO v2
 0x25DD:0x3111:Bit4id miniLector
 0x25DD:0x3211:Bit4id miniLector AIR EVO
+0x25DD:0xB001:Bit4id miniLector Blue
 
 # Bluink Ltd.
 0x2ABE:0x1003:Bluink Ltd. Bluink CCID
