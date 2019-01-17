@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-01-16
+# Generated: 2019-01-17
 #
 # DO NOT EDIT BY HAND
 
@@ -220,6 +220,7 @@
 0x25DD:0x2361:Bit4id Digital-DNA Key BT
 0x25DD:0x2362:Bit4id Digital-DNA Key
 0x25DD:0x3111:Bit4id miniLector
+0x25DD:0x3211:Bit4id miniLector AIR EVO
 
 # Bluink Ltd.
 0x2ABE:0x1003:Bluink Ltd. Bluink CCID
