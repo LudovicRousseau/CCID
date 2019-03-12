@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-01-17
+# Generated: 2019-03-12
 #
 # DO NOT EDIT BY HAND
 
@@ -163,6 +163,7 @@
 0x24DC:0x0201:Aladdin R.D. JCR-770
 0x24DC:0x0401:Aladdin R.D. JC-WebPass (JC600)
 0x24DC:0x0402:Aladdin R.D. JaCarta
+0x24DC:0x0428:Aladdin R.D. JaCarta3
 0x24DC:0x0501:Aladdin R.D. JaCarta U2F (JC602)
 0x24DC:0x100F:Aladdin R.D. JaCarta Flash
 
