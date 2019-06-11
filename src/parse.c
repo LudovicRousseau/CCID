@@ -101,7 +101,8 @@ int main(int argc, char *argv[])
 		r = libusb_open(dev, &handle);
 		if (r < 0)
 		{
-			(void)fprintf(stderr, "Can't libusb_open(): %s\n", strerror(errno));
+			(void)fprintf(stderr, "Can't libusb_open(): %s\n",
+				libusb_error_name(r));
 			if (getuid())
 			{
 				(void)fprintf(stderr,
@@ -196,7 +197,7 @@ again:
 			(void)fprintf(stderr,
 				"Can't claim interface (bus %d, device %d): %s\n",
 				libusb_get_bus_number(dev), libusb_get_device_address(dev),
-				strerror(errno));
+				libusb_error_name(r));
 			(void)libusb_close(handle);
 
 			if (EBUSY == errno)
@@ -421,7 +422,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		/* we got an error? */
 		if (n <= 0)
 		{
-			(void)(void)printf("   IFD does not support GET CLOCK FREQUENCIES request: %s\n", strerror(errno));
+			(void)(void)printf("   IFD does not support GET CLOCK FREQUENCIES request: %s\n", libusb_error_name(n));
 			if (EBUSY == errno)
 			{
 				(void)fprintf(stderr,
@@ -473,7 +474,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		/* we got an error? */
 		if (n <= 0)
 			(void)printf("   IFD does not support GET_DATA_RATES request: %s\n",
-				strerror(errno));
+				libusb_error_name(n));
 		else
 			if (n % 4)	/* not a multiple of 4 */
 				(void)printf("   wrong size for GET_DATA_RATES: %d\n", n);
