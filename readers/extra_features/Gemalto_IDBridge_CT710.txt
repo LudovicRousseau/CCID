@@ -1,0 +1,39 @@
+Reader:    Gemalto Ezio Shield 00 00
+IdVendor:  0x08E6
+IdProduct: 0x34C2
+[2, 17, 0, 2, 127, 0, 0, 0, 6, 0, 0, 0, 1, 4, 15, 1, 255, 255, 0, 0, 0]
+LogicalLCDLineNumber (Logical number of LCD lines): 2
+LogicalLCDRowNumber (Logical number of characters per LCD line): 17
+LcdInfo: 0
+  b0 indicates if scrolling available: False
+EntryValidationCondition: 2
+PC/SCv2 features:
+ VerifyPinStart: True
+ VerifyPinFinish: True
+ ModifyPinStart: True
+ ModifyPinFinish: True
+ GetKeyPressed: True
+ VerifyPinDirect: True
+ ModifyPinDirect: True
+ Abort: False
+ GetKey: False
+ WriteDisplay: False
+ SetSpeMessage: False
+ bTimeOut2: False
+ bListSupportedLanguages: True
+  [9, 4, 12, 4, 37, 4, 25, 4, 21, 4, 22, 4]
+  0x0409: English (United States)
+  0x040C: French (Standard)
+  0x0425: Estonian
+  0x0419: Russian
+  0x0415: Polish
+  0x0416: Portuguese (Brazil)
+ bNumberMessageFix: True
+ bPPDUSupportOverXferBlock: False
+ bPPDUSupportOverEscape: False
+VersionNumber: 1
+MinimumPINSize: 4
+MaximumPINSize: 15
+Firewall: True
+FirewalledCommand_SW1: 0xFF
+FirewalledCommand_SW2: 0xFF
