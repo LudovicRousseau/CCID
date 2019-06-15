@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-04-02
+# Generated: 2019-06-15
 #
 # DO NOT EDIT BY HAND
 
@@ -609,6 +609,9 @@
 
 # Rocketek
 0x14CD:0x8166:Rocketek RT-SCR1
+
+# Route1
+0x13FE:0xC831:Route1 MobiKEY Fusion3
 
 # SafeNet
 0x0529:0x0602:SafeNet eToken 7300
