@@ -400,6 +400,7 @@
 0x09C3:0x0028:HID Global Crescendo Key
 0x09C3:0x0029:HID Global Crescendo Key
 0x09C3:0x002B:HID Global Crescendo Key
+0x09C3:0x002D:HID Global Crescendo Key
 0x076B:0x3031:HID Global OMNIKEY 3x21 Smart Card Reader
 0x076B:0x5022:HID Global OMNIKEY 5022 Smart Card Reader
 0x076B:0x5023:HID Global OMNIKEY 5023 Smart Card Reader
