@@ -48,7 +48,7 @@ LIBUSB_ARCHIVE="$LIBUSB_DIR"/libusb-1.0.a
 LIBUSB_CFLAGS=$(pkg-config --cflags --static libusb-1.0)
 LIBUSB_LIBS=$(pkg-config --libs --static libusb-1.0)
 
-if ls "$LIBUSB_DIR"/*.dylib 2> /dev/null
+if ls "$LIBUSB_DIR"/libusb-1.0*.dylib 2> /dev/null
 then
 	echo -en $RED
 	echo "*****************************"
