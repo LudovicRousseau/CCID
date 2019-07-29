@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-06-17
+# Generated: 2019-07-29
 #
 # DO NOT EDIT BY HAND
 
@@ -197,6 +197,9 @@
 0x03EB:0x6011:ATMEL AT90SCR050
 0x03EB:0x6012:ATMEL VaultIC420 Smart Object
 0x03EB:0x6014:ATMEL VaultIC440
+
+# AvestUA
+0xC1A6:0x0131:AvestUA AvestKey
 
 # Avtor
 0x15CF:0x0019:Avtor SecureToken
