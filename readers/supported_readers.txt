@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-07-29
+# Generated: 2019-07-31
 #
 # DO NOT EDIT BY HAND
 
@@ -658,6 +658,9 @@
 
 # Softforum Co., Ltd
 0x04E8:0x0007:Softforum Co., Ltd XecureHSM
+
+# SPECINFOSYSTEMS
+0x316E:0x0001:SPECINFOSYSTEMS DIAMOND token
 
 # SpringCard
 0x1C34:0x7113:SpringCard CrazyWriter
