@@ -117,6 +117,33 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.31 - 10 August 2019, Ludovic Rousseau
+   - Add support of
+     - ACS ACR1252 Reader
+     - Aladdin R.D. JaCartaReader
+     - Alcor Link AK9563
+     - AvestUA AvestKey
+     - Avtor SecureToken (idProduct: 0x0020)
+     - Bit4id TokenME EVO v2
+     - Bit4id miniLector AIR EVO
+     - Bit4id miniLector Blue
+     - Broadcom Corp 58200 (idProduct: 0x5843)
+     - Broadcom Corp 58200 (idProduct: 0x5844)
+     - Broadcom Corp 58200 (idProduct: 0x5845)
+     - Certgate GmbH ONEKEY ID 2 USB
+     - HID Global Crescendo Key 0x0028
+     - HID Global Crescendo Key 0x0029
+     - HID Global Crescendo Key 0x002B
+     - HID Global Crescendo Key 0x002D
+     - Identiv SCR3500 C Contact Reader
+     - InfoCert WirelessKey
+     - NXP PN7462AU CCID
+     - Route1 MobiKEY Fusion3
+     - SPECINFOSYSTEMS DIAMOND token
+   - MacOSX/configure: fix checking error for dynamic library libusb
+   - Some minor improvements for debug
+
+
 1.4.30 - 19 September 2018, Ludovic Rousseau
    - The project moved to https://ccid.apdu.fr/
    - Add support of
