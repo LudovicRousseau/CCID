@@ -3,6 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = readers examples contrib src
 
 EXTRA_DIST = bootstrap ChangeLog SCARDGETATTRIB.txt \
+	README.md \
 	$(AUX_DIST) \
 	m4/ax_pthread.m4 \
 	MacOSX/configure \
