@@ -96,6 +96,9 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			break;
 
 		case SCM_SCL011:
+		case IDENTIV_uTrust3700F:
+		case IDENTIV_uTrust3701F:
+		case IDENTIV_uTrust4701F:
 			/* The SCM SCL011 reader needs 350 ms to answer */
 			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT * 4;
 			break;
