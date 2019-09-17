@@ -13,11 +13,11 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: ?
+ Can't get iInterface string
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
-  bcdCCID: 1.00
+  bcdCCID: 1.10
   bMaxSlotIndex: 0x00
   bVoltageSupport: 0x07
    5.0V
