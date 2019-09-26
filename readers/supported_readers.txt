@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-07-31
+# Generated: 2019-09-26
 #
 # DO NOT EDIT BY HAND
 
@@ -279,6 +279,7 @@
 0x046A:0x005B:Cherry GmbH SmartBoard XX1X
 0x046A:0x0070:Cherry GmbH SmartTerminal XX1X
 0x046A:0x0072:Cherry GmbH SmartTerminal ST-1275
+0x046A:0x01A2:Cherry GmbH CHERRY SECURE BOARD 1.0
 
 # Chicony
 0x04F2:0x0967:Chicony USB Smart Card Keyboard
