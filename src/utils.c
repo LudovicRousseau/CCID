@@ -17,6 +17,7 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <string.h>
 #include <pcsclite.h>
 
 #include <config.h>
@@ -79,3 +80,62 @@ void ReleaseReaderIndex(const int index)
 	ReaderIndex[index] = -1;
 } /* ReleaseReaderIndex */
 
+/* Read a non aligned 16-bit integer */
+uint16_t get_U16(void *buf)
+{
+	uint16_t value;
+
+	memcpy(&value, buf, sizeof value);
+
+	return value;
+}
+
+/* Read a non aligned 32-bit integer */
+uint32_t get_U32(void *buf)
+{
+	uint32_t value;
+
+	memcpy(&value, buf, sizeof value);
+
+	return value;
+}
+
+/* Write a non aligned 16-bit integer */
+void set_U16(void *buf, uint16_t value)
+{
+	memcpy(buf, &value, sizeof value);
+}
+
+/* Write a non aligned 32-bit integer */
+void set_U32(void *buf, uint32_t value)
+{
+	memcpy(buf, &value, sizeof value);
+}
+
+/* swap a 16-bits integer in memory */
+/* "AB" -> "BA" */
+void p_bswap_16(void *ptr)
+{
+	uint8_t *array, tmp;
+
+	array = ptr;
+	tmp = array[0];
+	array[0] = array[1];
+	array[1] = tmp;
+}
+
+/* swap a 32-bits integer in memory */
+/* "ABCD" -> "DCBA" */
+void p_bswap_32(void *ptr)
+{
+	uint8_t *array, tmp;
+
+	array = ptr;
+	tmp = array[0];
+	array[0] = array[3];
+	array[3] = tmp;
+
+	tmp = array[1];
+	array[1] = array[2];
+	array[2] = tmp;
+}

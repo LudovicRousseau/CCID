@@ -59,12 +59,6 @@
 #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 #endif
 
-#ifndef BSWAP_16
-#define BSWAP_8(x)  ((x) & 0xff)
-#define BSWAP_16(x) ((BSWAP_8(x) << 8) | BSWAP_8((x) >> 8))
-#define BSWAP_32(x) ((BSWAP_16(x) << 16) | BSWAP_16((x) >> 16))
-#endif
-
 #define CHECK_STATUS(res) \
 	if (STATUS_NO_SUCH_DEVICE == res) \
 		return IFD_NO_SUCH_DEVICE; \
@@ -320,6 +314,8 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	RESPONSECODE ret;
 	status_t res;
 
+	uint32_t ulDataLength;
+
 	pvs = (PIN_VERIFY_STRUCTURE *)TxBuffer;
 	cmd[0] = 0x69;	/* Secure */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
@@ -337,15 +333,16 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 	/* On little endian machines we are all set. */
 	/* If on big endian machine and caller is using host byte order */
-	if ((pvs->ulDataLength + 19  == TxLength) &&
-		(bei2i((unsigned char*)(&pvs->ulDataLength)) == pvs->ulDataLength))
+	ulDataLength = get_U32(&pvs->ulDataLength);
+	if ((ulDataLength + 19 == TxLength) &&
+		(bei2i((unsigned char*)(&pvs->ulDataLength)) == ulDataLength))
 	{
 		DEBUG_INFO1("Reversing order from big to little endian");
 		/* If ulDataLength is big endian, assume others are too */
 		/* reverse the byte order for 3 fields */
-		pvs->wPINMaxExtraDigit = BSWAP_16(pvs->wPINMaxExtraDigit);
-		pvs->wLangId = BSWAP_16(pvs->wLangId);
-		pvs->ulDataLength = BSWAP_32(pvs->ulDataLength);
+		p_bswap_16(&pvs->wPINMaxExtraDigit);
+		p_bswap_16(&pvs->wLangId);
+		p_bswap_32(&pvs->ulDataLength);
 	}
 	/* At this point we now have the above 3 variables in little endian */
 
@@ -653,6 +650,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	int bNumberMessage = 0; /* for GemPC Pinpad */
 	int gemalto_modify_pin_bug;
 #endif
+	uint32_t ulDataLength;
 
 	pms = (PIN_MODIFY_STRUCTURE *)TxBuffer;
 	cmd[0] = 0x69;	/* Secure */
@@ -671,15 +669,16 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 
 	/* On little endian machines we are all set. */
 	/* If on big endian machine and caller is using host byte order */
-	if ((pms->ulDataLength + 24  == TxLength) &&
-		(bei2i((unsigned char*)(&pms->ulDataLength)) == pms->ulDataLength))
+	ulDataLength = get_U32(&pms->ulDataLength);
+	if ((ulDataLength + 24 == TxLength) &&
+		(bei2i((unsigned char*)(&pms->ulDataLength)) == ulDataLength))
 	{
 		DEBUG_INFO1("Reversing order from big to little endian");
 		/* If ulDataLength is big endian, assume others are too */
 		/* reverse the byte order for 3 fields */
-		pms->wPINMaxExtraDigit = BSWAP_16(pms->wPINMaxExtraDigit);
-		pms->wLangId = BSWAP_16(pms->wLangId);
-		pms->ulDataLength = BSWAP_32(pms->ulDataLength);
+		p_bswap_16(&pms->wPINMaxExtraDigit);
+		p_bswap_16(&pms->wLangId);
+		p_bswap_32(&pms->ulDataLength);
 	}
 	/* At this point we now have the above 3 variables in little endian */
 
