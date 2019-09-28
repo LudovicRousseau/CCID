@@ -575,7 +575,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* APDU select applet */
-	printf("Select applet: ");
+	printf("Select applet:");
 	send_length = 11;
 	memcpy(bSendBuffer, "\x00\xA4\x04\x00\x06\xA0\x00\x00\x00\x18\xFF",
 		send_length);
@@ -680,7 +680,7 @@ int main(int argc, char *argv[])
 	PCSC_ERROR_CONT(rv, "SCardControl")
 
 	/* verify PIN dump */
-	printf("\nverify PIN dump: ");
+	printf("\nverify PIN dump:");
 	send_length = 5;
 	memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
 		send_length);
@@ -698,7 +698,7 @@ int main(int argc, char *argv[])
 
 	if ((2 == length) && (0x6C == bRecvBuffer[0]))
 	{
-		printf("\nverify PIN dump: ");
+		printf("\nverify PIN dump:");
 		send_length = 5;
 		memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
 			send_length);
@@ -837,7 +837,7 @@ int main(int argc, char *argv[])
 	PCSC_ERROR_CONT(rv, "SCardControl")
 
 	/* modify PIN dump */
-	printf("\nmodify PIN dump: ");
+	printf("\nmodify PIN dump:");
 	send_length = 5;
 	memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
 		send_length);
@@ -855,7 +855,7 @@ int main(int argc, char *argv[])
 
 	if ((2 == length) && (0x6C == bRecvBuffer[0]))
 	{
-		printf("\nverify PIN dump: ");
+		printf("\nverify PIN dump:");
 		send_length = 5;
 		memcpy(bSendBuffer, "\x00\x40\x00\x00\xFF",
 			send_length);
