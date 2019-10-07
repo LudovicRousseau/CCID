@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-09-26
+# Generated: 2019-10-07
 #
 # DO NOT EDIT BY HAND
 
@@ -662,6 +662,7 @@
 
 # SPECINFOSYSTEMS
 0x316E:0x0001:SPECINFOSYSTEMS DIAMOND token
+0x316E:0x0010:SPECINFOSYSTEMS DIAMOND HSM
 
 # SpringCard
 0x1C34:0x7113:SpringCard CrazyWriter
