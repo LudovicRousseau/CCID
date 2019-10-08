@@ -6,8 +6,8 @@ Card Interface Devices) and ICCD (Integrated Circuit(s) Card Devices)
 driver. See the USB CCID [1] and ICCD [2] specifications from the USB
 working group.
 
-* [1] http://www.usb.org/developers/docs/devclass_docs/DWG_Smart-Card_CCID_Rev110.pdf
-* [2] http://www.usb.org/developers/docs/devclass_docs/DWG_Smart-Card_USB-ICC_ICCD_rev10.pdf
+* [1] https://www.usb.org/sites/default/files/DWG_Smart-Card_CCID_Rev110.pdf
+* [2] https://www.usb.org/sites/default/files/DWG_Smart-Card_USB-ICC_ICCD_rev10.pdf
 
 Authors:
 ========
