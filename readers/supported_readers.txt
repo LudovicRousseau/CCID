@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-10-07
+# Generated: 2019-11-18
 #
 # DO NOT EDIT BY HAND
 
@@ -125,6 +125,7 @@
 0x0DB5:0x0138:Access IS ePassport Reader
 0x0DB5:0x0160:Access IS NFC Smart Module
 0x0DB5:0x0164:Access IS NFC Smart Module
+0x0DB5:0x0170:Access IS ATR210
 
 # ACS
 0x072F:0x1204:ACS ACR101 ICC Reader
