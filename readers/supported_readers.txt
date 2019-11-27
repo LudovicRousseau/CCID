@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-11-18
+# Generated: 2019-11-27
 #
 # DO NOT EDIT BY HAND
 
@@ -688,6 +688,9 @@
 
 # SYNNIX
 0x1206:0x2105:SYNNIX STD200
+
+# Sysking
+0x0E6A:0x5083:Sysking MII136C
 
 # Teridian Semiconductors
 0x1862:0x0000:Teridian Semiconductors TSC12xxFV.09

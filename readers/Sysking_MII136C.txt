@@ -1,0 +1,48 @@
+ idVendor: 0x0E6A
+  iManufacturer: Sysking
+ idProduct: 0x5083
+  iProduct: MII136C
+ bcdDevice: 7.02 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: Smart Card Reader
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   wrong size for GET CLOCK FREQUENCIES: 2
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 129032 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   wrong size for GET_DATA_RATES: 2
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x00010030
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
