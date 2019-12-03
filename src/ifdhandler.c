@@ -1674,6 +1674,20 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer[p++] = 0x02;	/* validation key pressed */
 		}
 
+		/* Cherry KC 1000 SC */
+		if (CHERRY_KC1000SC == ccid_descriptor -> readerID)
+		{
+			/* bMinPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 0;	/* min PIN size */
+
+			/* bMaxPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMaxPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 32;	/* max PIN size */
+		}
+
 		/* Gemalto readers providing firmware features */
 		if (ccid_descriptor -> gemalto_firmware_features)
 		{
