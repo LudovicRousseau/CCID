@@ -1,6 +1,6 @@
 /*
     scardcontrol.c: sample code to use/test SCardControl() API
-    Copyright (C) 2004-2011   Ludovic Rousseau
+    Copyright (C) 2004-2019   Ludovic Rousseau
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ else \
 
 #define PCSC_ERROR_CONT(rv, text) \
 if (rv != SCARD_S_SUCCESS) \
-	printf(text ": " BLUE "%s (0x%"LF"X)\n" NORMAL, pcsc_stringify_error(rv), rv); \
+	printf(text ": " RED "%s (0x%"LF"X)\n" NORMAL, pcsc_stringify_error(rv), rv); \
 else \
 	printf(text ": " BLUE "OK\n\n" NORMAL);
 
@@ -173,9 +173,13 @@ static void parse_properties(unsigned char *bRecvBuffer, int length)
 } /* parse_properties */
 
 
-static const char *pinpad_return_codes(unsigned char bRecvBuffer[])
+static const char *pinpad_return_codes(int length,
+	unsigned char bRecvBuffer[])
 {
 	const char * ret = "UNKNOWN";
+
+	if (length < 2)
+		return "";
 
 	if ((0x90 == bRecvBuffer[0]) && (0x00 == bRecvBuffer[1]))
 		ret = "Success";
@@ -240,6 +244,7 @@ int main(int argc, char *argv[])
 #ifdef MODIFY_PIN
 	PIN_MODIFY_STRUCTURE *pin_modify;
 #endif
+	char error;
 	int PIN_min_size = 4;
 	int PIN_max_size = 8;
 
@@ -673,10 +678,16 @@ int main(int argc, char *argv[])
 			printf("\n");
 	}
 
-	printf(" card response:");
+	error = FALSE;
+	if (length != 2 || bRecvBuffer[0] != 0x90 || bRecvBuffer[1] != 0x00)
+		error = TRUE;
+
+	printf(error ? RED : GREEN);
+	printf(" card response [%d bytes]:", length);
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
-	printf(": %s\n", pinpad_return_codes(bRecvBuffer));
+	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
+	printf(NORMAL "\n");
 	PCSC_ERROR_CONT(rv, "SCardControl")
 
 	/* verify PIN dump */
@@ -830,10 +841,16 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	printf(" card response:");
+	error = FALSE;
+	if (length != 2 || bRecvBuffer[0] != 0x90 || bRecvBuffer[1] != 0x00)
+		error = TRUE;
+
+	printf(error ? RED : GREEN);
+	printf(" card response [%d bytes]:", length);
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
-	printf("\n");
+	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
+	printf(NORMAL "\n");
 	PCSC_ERROR_CONT(rv, "SCardControl")
 
 	/* modify PIN dump */
