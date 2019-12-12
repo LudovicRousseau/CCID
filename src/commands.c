@@ -760,6 +760,18 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 			TxBuffer[11] = 0x03; /* 3 messages */
 		}
 	}
+
+	/* Bug workaround for Cherry KC 1000 SC */
+	if (CHERRY_KC1000SC == ccid_descriptor->readerID)
+	{
+		/* The reader rejects bNumberMessage 0x00 in a PIN modify
+		 * command. Change it to 0xff which is accepted. */
+		if (0x00 == TxBuffer[11])
+		{
+			DEBUG_INFO1("Correct bNumberMessage for Cherry KC 1000 SC (was 0)");
+			TxBuffer[11] = 0xff;
+		}
+	}
 #endif
 
 	/* T=1 Protocol Management for a TPDU reader */
