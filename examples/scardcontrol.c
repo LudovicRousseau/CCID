@@ -615,7 +615,7 @@ int main(int argc, char *argv[])
 	pin_verify -> wPINMaxExtraDigit = (PIN_min_size << 8) + PIN_max_size;
 	pin_verify -> bEntryValidationCondition = bEntryValidationCondition;
 	pin_verify -> bNumberMessage = 0x01;
-	pin_verify -> wLangId = 0x0904;
+	pin_verify -> wLangId = 0x0409;		/* United States */
 	pin_verify -> bMsgIndex = 0x00;
 	pin_verify -> bTeoPrologue[0] = 0x00;
 	pin_verify -> bTeoPrologue[1] = 0x00;
@@ -765,7 +765,7 @@ int main(int argc, char *argv[])
 									/* b1 set = current PIN entry requested */
 	pin_modify -> bEntryValidationCondition = bEntryValidationCondition;
 	pin_modify -> bNumberMessage = 0x03; /* see table above */
-	pin_modify -> wLangId = 0x0904;
+	pin_modify -> wLangId = 0x0409;		/* United States */
 	pin_modify -> bMsgIndex1 = 0x00;
 	pin_modify -> bMsgIndex2 = 0x01;
 	pin_modify -> bMsgIndex3 = 0x02;
