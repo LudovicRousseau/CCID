@@ -516,6 +516,7 @@
 
 # Ledger
 0x2C97:0x0001:Ledger Nano S
+0x2C97:0x0004:Ledger Nano X
 
 # Lenovo
 0x17EF:0x6007:Lenovo Lenovo USB Smartcard Keyboard
