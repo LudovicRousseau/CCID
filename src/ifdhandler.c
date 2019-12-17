@@ -1688,6 +1688,20 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer[p++] = 32;	/* max PIN size */
 		}
 
+		/* Omnikey 3821 */
+		if (HID_OMNIKEY_3821 == ccid_descriptor -> readerID)
+		{
+			/* bMinPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 1;	/* min PIN size */
+
+			/* bMaxPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMaxPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 31;	/* max PIN size */
+		}
+
 		/* Gemalto readers providing firmware features */
 		if (ccid_descriptor -> gemalto_firmware_features)
 		{
