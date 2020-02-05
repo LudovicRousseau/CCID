@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2019-11-27
+# Generated: 2020-02-05
 #
 # DO NOT EDIT BY HAND
 
@@ -916,6 +916,7 @@
 #0x076B:0xA022:XIRING Teo (Teo.txt)
 
 #0x08E6:0x3437:Gemalto PC Twin Reader (GemPCTwin.txt)
+#0x08E6:0x3437:Gemalto PC Twin Reader (serial) (GemPCTwinSerial.txt)
 #0x08E6:0x3437:Gemalto IDBridge CT30 (Gemalto_IDBridge_CT30.txt)
 #0x08E6:0x3437:Gemalto K50 (Gemalto_K50.txt)
 
