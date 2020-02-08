@@ -607,6 +607,9 @@
 # Planeta
 0x21AB:0x0010:Planeta RC700-NFC CCID
 
+# Purism, SPC
+0x316D:0x4C4B:Purism, SPC Librem Key
+
 # Raritan
 0x14DD:0x1006:Raritan D2CIM-DVUSB VM/CCID
 
