@@ -144,6 +144,7 @@
 
 # AF Care
 0x1C34:0xAFC0:AF Care One
+0x1C34:0xAFC1:AF Care One
 
 # AK910
 0x2021:0x0001:AK910 CKey
