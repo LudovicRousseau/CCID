@@ -674,6 +674,7 @@
 0x316E:0x0010:SPECINFOSYSTEMS DIAMOND HSM
 
 # SpringCard
+0x1C34:0x601A:SpringCard SpringCore
 0x1C34:0x6132:SpringCard Puck
 0x1C34:0x7113:SpringCard CrazyWriter
 0x1C34:0x7121:SpringCard CSB6 Basic
