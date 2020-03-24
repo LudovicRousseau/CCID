@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-02-08
+# Generated: 2020-03-24
 #
 # DO NOT EDIT BY HAND
 
@@ -301,6 +301,9 @@
 
 # DC.Ltd
 0x257B:0xC305:DC.Ltd DC4 5CCID READER
+
+# Doctolib
+0x1C34:0xAFD0:Doctolib SR
 
 # DUALi
 0x1DB2:0x0801:DUALi DE-620 Combi
