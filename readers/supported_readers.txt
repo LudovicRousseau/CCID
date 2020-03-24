@@ -304,6 +304,7 @@
 
 # Doctolib
 0x1C34:0xAFD0:Doctolib SR
+0x1C34:0xAFD1:Doctolib SR
 
 # DUALi
 0x1DB2:0x0801:DUALi DE-620 Combi
