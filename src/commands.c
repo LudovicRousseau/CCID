@@ -1571,7 +1571,7 @@ time_request:
 	}
 
 	/* we have read less (or more) data than the CCID frame says to contain */
-	if (length-10 != dw2i(cmd, 1))
+	if (length-10 < dw2i(cmd, 1))
 	{
 		DEBUG_CRITICAL3("Can't read all data (%d out of %d expected)",
 			length-10, dw2i(cmd, 1));
