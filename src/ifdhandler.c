@@ -612,6 +612,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			}
 			break;
 
+#if !defined(TWIN_SERIAL)
 		case SCARD_ATTR_CHANNEL_ID:
 			{
 				*Length = sizeof(uint32_t);
@@ -622,6 +623,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				}
 			}
 			break;
+#endif
 
 		default:
 			return_value = IFD_ERROR_TAG;
