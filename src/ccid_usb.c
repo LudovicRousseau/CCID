@@ -1105,7 +1105,7 @@ EXTERNAL uint8_t get_ccid_usb_bus_number(int reader_index) {
 	return usbDevice[reader_index].bus_number;
 }
 
-EXTERNAL uint8_t get_ccid_usb_device_address(int reader_index) {
+EXTERNAL uint8_t get_ccid_usb_port_number(int reader_index) {
 	return usbDevice[reader_index].port_number;
 }
 

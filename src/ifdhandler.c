@@ -618,7 +618,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Length = sizeof(uint32_t);
 				if (Value) {
 					uint32_t bus  = get_ccid_usb_bus_number(reader_index);
-					uint32_t addr = get_ccid_usb_device_address(reader_index);
+					uint32_t addr = get_ccid_usb_port_number(reader_index);
 					*(uint32_t *)Value = ((uint32_t)0x0020 << 16) | bus << 8 | addr;
 				}
 			}
