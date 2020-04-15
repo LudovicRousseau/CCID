@@ -81,6 +81,7 @@ typedef struct
 	uint8_t bus_number;
 	uint8_t device_address;
 	int interface;
+	uint8_t port_number;
 
 	/*
 	 * Endpoints
@@ -697,6 +698,7 @@ again:
 				usbDevice[reader_index].real_nb_opened_slots = 1;
 				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
 				usbDevice[reader_index].polling_transfer = NULL;
+				usbDevice[reader_index].port_number = libusb_get_port_number(dev);
 
 				/* CCID common informations */
 				usbDevice[reader_index].ccid.real_bSeq = 0;
@@ -1104,7 +1106,7 @@ EXTERNAL uint8_t get_ccid_usb_bus_number(int reader_index) {
 }
 
 EXTERNAL uint8_t get_ccid_usb_device_address(int reader_index) {
-	return usbDevice[reader_index].device_address;
+	return usbDevice[reader_index].port_number;
 }
 
 /*****************************************************************************
