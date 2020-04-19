@@ -529,6 +529,8 @@ int main(int argc, char *argv[])
 
 		PCSC_ERROR_CONT(rv, "SCardControl")
 	}
+#else
+	(void)ccid_esc_command;
 #endif
 
 	if (0 == verify_ioctl)
