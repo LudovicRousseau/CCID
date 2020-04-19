@@ -685,7 +685,7 @@ int main(int argc, char *argv[])
 		error = TRUE;
 
 	printf(error ? RED : GREEN);
-	printf(" card response [%ld bytes]:", length);
+	printf(" card response [%"LF"d bytes]:", length);
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
 	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
