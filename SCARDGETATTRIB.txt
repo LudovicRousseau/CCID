@@ -66,6 +66,11 @@ SCARD_ATTR_MAXINPUT
 SCARD_ATTR_VENDOR_IFD_SERIAL_NO
     reader serial number (if available).
 
+SCARD_ATTR_CHANNEL_ID
+    DWORD in the form 0xDDDDCCCC with:
+    DDDD equal to 0x0020 for USB devices
+    CCCC equal to bus number in the high byte and device address in the
+    low byte
 
 Sample code
 ===========
