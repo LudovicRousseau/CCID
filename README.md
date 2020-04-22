@@ -117,6 +117,47 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.32 - 22 April 2020, Ludovic Rousseau
+   - Add support of
+     - AF Care One (idProduct: 0xAFC0)
+     - AF Care One (idProduct: 0xAFC1)
+     - AF Care Two (idProduct: 0xAFC2)
+     - AF Care Two (idProduct: 0xAFC3)
+     - Access IS ATR210
+     - Access IS ATR220
+     - Cherry GmbH CHERRY SECURE BOARD 1.0
+     - Doctolib SR with idProduct: 0xAFD0
+     - Doctolib SR with idProduct: 0xAFD1
+     - Doctolib SR with idProduct: 0xAFD2
+     - Doctolib SR with idProduct: 0xAFD3
+     - F-Secure Foundry USB Armory Mk II
+     - Gemalto RF CR5400
+     - Ledger Nano X support
+     - Purism, SPC Librem Key
+     - SPECINFOSYSTEMS DIAMOND HSM
+     - SPECINFOSYSTEMS DIAMOND PLUS token
+     - SPECINFOSYSTEMS DIAMOND PRO token
+     - SpringCard E518 (idProduct: 0x6112)
+     - SpringCard E518 (idProduct: 0x611A)
+     - SpringCard H518 (idProduct: 0x6122)
+     - SpringCard H518 (idProduct: 0x612A)
+     - SpringCard Puck
+     - SpringCard Puck (dProduct: 0x613A)
+     - SpringCard SpringCore (idProduct: 0x6012)
+     - SpringCard SpringCore (idProduct: 0x601A)
+     - Sysking MII136C
+   - Add SCardGetAttrib(.., SCARD_ATTR_CHANNEL_ID, ..) for USB devices
+   - Increase the timeout used to detect the Identiv uTrust 3700/3701 F readers
+   - Fix PowerOn bug for ICCD type A & B devices
+   - Fix "Bus Error" on SPARC64 CPU and Solaris C compiler
+   - Cherry KC 1000 SC
+     - Add support of min & max PIN size
+     - Fix a bNumberMessage issue
+   - Add support of min & max PIN size for the Omnikey 3821
+   - Disable pinpad for Chicony HP Skylab USB Smartcard Keyboard
+   - Some minor improvements
+
+
 1.4.31 - 10 August 2019, Ludovic Rousseau
    - Add support of
      - ACS ACR1252 Reader
