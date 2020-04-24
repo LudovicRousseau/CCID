@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
 	/* table for bEntryValidationCondition
 	 * 0x01: Max size reached
 	 * 0x02: Validation key pressed
-	 * 0x04: Timeout occured
+	 * 0x04: Timeout occurred
 	 */
 	int bEntryValidationCondition = 7;
 
