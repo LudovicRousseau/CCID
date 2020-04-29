@@ -106,6 +106,7 @@
    Support 75000 bps
    Support 150000 bps
    Support 300000 bps
+   Support 600000 bps
    Support 112500 bps
    Support 187500 bps
    Support 5208 bps
@@ -198,8 +199,7 @@
    Support 8000 kHz
   dwDataRate: 10752 bps
   dwMaxDataRate: 412903 bps
-  bNumDataRatesSupported: 96
-   Got 105 data rates but was expecting 96
+  bNumDataRatesSupported: 106
    Support 10752 bps
    Support 21505 bps
    Support 43010 bps
@@ -270,6 +270,7 @@
    Support 75000 bps
    Support 150000 bps
    Support 300000 bps
+   Support 600000 bps
    Support 112500 bps
    Support 187500 bps
    Support 5208 bps
@@ -296,23 +297,29 @@
    Support 70312 bps
    Support 117187 bps
    Support 2604 bps
+   Support 52083 bps
+   Support 3125 bps
+   Support 1953 bps
+   Support 39062 bps
+   Support 2343 bps
+   Support 28125 bps
+   Support 2929 bps
+   Support 35156 bps
+   Support 58593 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x000407FF
-   ....02 Automatic parameter configuration based on ATR data
-   ....04 Automatic activation of ICC on inserting
+  dwFeatures: 0x000407B8
    ....08 Automatic ICC voltage selection
    ....10 Automatic ICC clock frequency change according to parameters
    ....20 Automatic baud rate change according to frequency and Fi, Di params
-   ....40 Automatic parameters negotiation made by the CCID
    ....80 Automatic PPS made by the CCID
    ..01.. CCID can set ICC in clock stop mode
    ..02.. NAD value other than 00 accepted (T=1)
    ..04.. Automatic IFSD exchange as first exchange (T=1)
    04.... Short and Extended APDU level exchange
-  dwMaxCCIDMessageLength: 271 bytes
+  dwMaxCCIDMessageLength: 520 bytes
   bClassGetResponse: 0xFF
    echoes the APDU class
   bClassEnvelope: 0xFF
