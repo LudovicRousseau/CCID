@@ -41,6 +41,60 @@
 #define LOG_STREAM stdout
 #endif
 
+#ifdef USE_OS_LOG
+
+void log_msg(const int priority, const char *fmt, ...)
+{
+	char debug_buffer[3 * 80]; /* up to 3 lines of 80 characters */
+	va_list argptr;
+	int os_log_type;
+
+	switch(priority)
+	{
+		case PCSC_LOG_CRITICAL:
+			os_log_type = OS_LOG_TYPE_FAULT;
+			break;
+		case PCSC_LOG_ERROR:
+			os_log_type = OS_LOG_TYPE_ERROR;
+			break;
+		case PCSC_LOG_INFO:
+			os_log_type = OS_LOG_TYPE_INFO;
+			break;
+		default:
+			os_log_type = OS_LOG_TYPE_DEBUG;
+	}
+
+	va_start(argptr, fmt);
+	(void)vsnprintf(debug_buffer, sizeof debug_buffer, fmt, argptr);
+	va_end(argptr);
+
+	os_log_with_type(OS_LOG_DEFAULT, os_log_type, "%s", debug_buffer);
+} /* log_msg */
+
+void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
+	const int len)
+{
+	int i;
+	char *c, debug_buffer[len*3 + strlen(msg) +1];
+	size_t l;
+
+	(void)priority;
+
+	l = strlcpy(debug_buffer, msg, sizeof debug_buffer);
+	c = debug_buffer + l;
+
+	for (i = 0; i < len; ++i)
+	{
+		/* 2 hex characters, 1 space, 1 NUL : total 4 characters */
+		(void)snprintf(c, 4, "%02X ", buffer[i]);
+		c += 3;
+	}
+
+	os_log(OS_LOG_DEFAULT, "%s", debug_buffer);
+} /* log_xxd */
+
+#else
+
 void log_msg(const int priority, const char *fmt, ...)
 {
 	char debug_buffer[3 * 80]; /* up to 3 lines of 80 characters */
@@ -181,3 +235,6 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 	fflush(LOG_STREAM);
 #endif
 } /* log_xxd */
+
+#endif
+

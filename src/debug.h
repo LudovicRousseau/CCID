@@ -49,6 +49,35 @@ extern int LogLevel;
 
 #include <debuglog.h>	/* from pcsc-lite */
 
+#ifdef USE_OS_LOG
+#include <os/log.h>
+
+#define DEBUG_CRITICAL(fmt) os_log_fault(OS_LOG_DEFAULT, fmt)
+#define DEBUG_CRITICAL2(fmt, data1) os_log_fault(OS_LOG_DEFAULT, fmt, data1)
+#define DEBUG_CRITICAL3(fmt, data1, data2) os_log_fault(OS_LOG_DEFAULT, fmt, data1, data2)
+#define DEBUG_CRITICAL4(fmt, data1, data2, data3) os_log_fault(OS_LOG_DEFAULT, fmt, data1, data2, data3)
+#define DEBUG_CRITICAL5(fmt, data1, data2, data3, data4) os_log_fault(OS_LOG_DEFAULT, fmt, data1, data2, data3, data4)
+
+#define DEBUG_INFO1(fmt) os_log_info(OS_LOG_DEFAULT, fmt)
+#define DEBUG_INFO2(fmt, data1) os_log_info(OS_LOG_DEFAULT, fmt, data1)
+#define DEBUG_INFO3(fmt, data1, data2) os_log_info(OS_LOG_DEFAULT, fmt, data1, data2)
+#define DEBUG_INFO4(fmt, data1, data2, data3) os_log_info(OS_LOG_DEFAULT, fmt, data1, data2, data3)
+#define DEBUG_INFO5(fmt, data1, data2, data3, data4) os_log_info(OS_LOG_DEFAULT, fmt, data1, data2, data3, data4)
+
+#define DEBUG_PERIODIC(fmt) os_log_debug(OS_LOG_DEFAULT, fmt)
+#define DEBUG_PERIODIC2(fmt, data1) os_log_debug(OS_LOG_DEFAULT, fmt, data1)
+#define DEBUG_PERIODIC3(fmt, data1, data2) os_log_debug(OS_LOG_DEFAULT, fmt, data1, data2)
+
+#define DEBUG_COMM(fmt) os_log_info(OS_LOG_DEFAULT, fmt)
+#define DEBUG_COMM2(fmt, data1) os_log_info(OS_LOG_DEFAULT, fmt, data1)
+#define DEBUG_COMM3(fmt, data1, data2) os_log_info(OS_LOG_DEFAULT, fmt, data1, data2)
+#define DEBUG_COMM4(fmt, data1, data2, data3) os_log_info(OS_LOG_DEFAULT, fmt, data1, data2, data3)
+
+#define DEBUG_INFO_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_INFO) log_xxd(PCSC_LOG_INFO, msg, buffer, size)
+#define DEBUG_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_COMM) log_xxd(PCSC_LOG_DEBUG, msg, buffer, size)
+
+#else
+
 /* DEBUG_CRITICAL */
 #define DEBUG_CRITICAL(fmt) if (LogLevel & DEBUG_LEVEL_CRITICAL) Log1(PCSC_LOG_CRITICAL, fmt)
 
@@ -91,6 +120,8 @@ extern int LogLevel;
 
 /* DEBUG_XXD */
 #define DEBUG_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_COMM) LogXxd(PCSC_LOG_DEBUG, msg, buffer, size)
+
+#endif
 
 #endif
 
