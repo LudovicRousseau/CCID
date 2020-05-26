@@ -82,7 +82,7 @@ typedef struct
   struct
   {
     BYTE value;
-    bool present;
+    int present;
   }
   ib[ATR_MAX_PROTOCOLS][ATR_MAX_IB], TCK;
   unsigned pn;

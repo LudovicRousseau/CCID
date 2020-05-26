@@ -48,9 +48,5 @@
 
 #include <wintypes.h>
 
-#ifndef __cplusplus
-typedef int                bool;
-#endif
-
 #endif /* DEFINES_H */
 

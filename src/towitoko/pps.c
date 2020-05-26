@@ -38,7 +38,7 @@
  * Not exported funtions declaration
  */
 
-static bool PPS_Match (BYTE * request, unsigned len_request, BYTE * reply, unsigned len_reply);
+static int PPS_Match (BYTE * request, unsigned len_request, BYTE * reply, unsigned len_reply);
 
 static unsigned PPS_GetLength (BYTE * block);
 
@@ -86,7 +86,7 @@ PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
   return ret;
 }
 
-static bool
+static int
 PPS_Match (BYTE * request, unsigned len_request, BYTE * confirm, unsigned len_confirm)
 {
   /* See if the reply differs from request */
