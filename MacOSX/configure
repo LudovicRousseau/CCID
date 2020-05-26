@@ -92,8 +92,14 @@ CONFIGURE_ARGS="--disable-dependency-tracking"
 # Are we on a CryptoTokenKit system? (like Mac OS X 10.10 Yosemite)
 if [ -d /System/Library/CryptoTokenKit ]
 then
-	# so we use syslog(3) to log errors
-	CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-syslog"
+	if [ 10012 -gt $MAC_VERSION ]
+	then
+		# use syslog(3) to logs for macOS < 10.12
+		CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-syslog"
+	else
+		# use os_log(3) to logs for macOS >= 10.12
+		CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-oslog"
+	fi
 fi
 
 # Check where to install the driver
