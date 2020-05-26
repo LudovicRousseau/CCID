@@ -239,11 +239,20 @@ AM_CONDITIONAL(WITHOUT_PCSC, test "${pcsclite}" != "yes")
 
 # --enable-syslog
 AC_ARG_ENABLE(syslog,
-	AS_HELP_STRING([--enable-syslog],[use syslog instead of printf for debug (Yosemite)]),
+	AS_HELP_STRING([--enable-syslog],[use syslog(3) instead of printf() for debug (Yosemite 10.10)]),
 	[ use_syslog="${enableval}" ], [ use_syslog=no ] )
 
 if test x$use_syslog = xyes; then
   AC_DEFINE(USE_SYSLOG, 1, [Use syslog(3) for debug])
+fi
+
+# --enable-oslog
+AC_ARG_ENABLE(oslog,
+	AS_HELP_STRING([--enable-oslog],[use os_log(3) instead of printf() for debug (Sierra 10.12)]),
+	[ use_oslog="${enableval}" ], [ use_oslog=no ] )
+
+if test x$use_oslog = xyes; then
+  AC_DEFINE(USE_OS_LOG, 1, [Use os_log(3) for debug])
 fi
 
 
@@ -321,6 +330,7 @@ serial twin install dir: ${ccidtwindir}
 serial config directory: ${serialconfdir}
 compiled for pcsc-lite:  ${pcsclite}
 syslog debug:            ${use_syslog}
+os_log debug:            ${use_oslog}
 class driver:            ${class}
 
 EOF
