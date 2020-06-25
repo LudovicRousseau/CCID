@@ -117,6 +117,17 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.33 - 25 June 2020, Ludovic Rousseau
+   - Add support of
+     - Genesys Logic CCID Card Reader (idProduct: 0x0771)
+     - Swissbit Secure USB PU-50n SE/PE
+     - TOPPAN FORMS CO.,LTD TC63CUT021
+   - add --enable-oslog argument for macOS
+     use os_log(3) for macOS >= 10.12 (Sierra)
+   - Update PCSC submodule to get Unicode support
+   - Some minor improvements
+
+
 1.4.32 - 22 April 2020, Ludovic Rousseau
    - Add support of
      - AF Care One (idProduct: 0xAFC0)
