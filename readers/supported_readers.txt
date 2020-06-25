@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-06-18
+# Generated: 2020-06-25
 #
 # DO NOT EDIT BY HAND
 
@@ -714,6 +714,9 @@
 0x08DF:0x3115:Spyrus Inc WorkSafe Pro
 0x08DF:0x3117:Spyrus Inc WorkSafe Pro
 0x08DF:0x3201:Spyrus Inc PocketVault P-3X
+
+# Swissbit
+0x1370:0x0901:Swissbit Secure USB PU-50n SE/PE
 
 # SYNNIX
 0x1206:0x2105:SYNNIX STD200
