@@ -90,6 +90,7 @@ DEVICENAME field. Supported values are:
 - GemCoreSIMPro2 for IDBridge CR30
 - GemPCPinPad for GemPC PinPad
 - GemPCTwin for GemPC Twin (default value)
+- SEC1210 for Microchip SEC1210
 
 You will then have something like:
 DEVICENAME /dev/ttyS0:GemPCPinPad
