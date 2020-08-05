@@ -1948,6 +1948,12 @@ static RESPONSECODE T0ProcACK(unsigned int reader_index,
 		if (return_value != IFD_SUCCESS)
 			return return_value;
 
+		if (proc_len > *snd_len)
+		{
+			DEBUG_CRITICAL("proc_len > snd_len");
+			return IFD_COMMUNICATION_ERROR;
+		}
+
 		*snd_len -= proc_len;
 		*snd_buf += proc_len;
 	}
