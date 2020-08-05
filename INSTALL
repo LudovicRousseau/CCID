@@ -58,8 +58,8 @@ target directory to use.
 configuring the driver for the serial reader
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You have to create or edit the file /etc/reader.conf. The file should
-contain something like:
+You have to create a file in the /etc/reader.conf.d/ directory. The file
+should contain something like:
 
 # Gemalto reader with serial communication
 #  - n is the serial port to use n in [0..3]
