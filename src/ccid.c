@@ -699,7 +699,7 @@ void ccid_error(int log_level, int error, const char *file, int line,
 			break;
 	}
 #ifdef USE_OS_LOG
-	(log_level);
+	(void)log_level;
 	os_log_error(OS_LOG_DEFAULT, "%s:%d:%s %s", file, line, function, text);
 #else
 	log_msg(log_level, "%s:%d:%s %s", file, line, function, text);
