@@ -140,6 +140,9 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 	else
 		CcidSlots[reader_index].readerName = strdup("no name");
 
+	/* init T=1 structure just in case */
+	t1_init(&CcidSlots[reader_index].t1, reader_index);
+
 	if (lpcDevice)
 		ret = OpenPortByName(reader_index, lpcDevice);
 	else
