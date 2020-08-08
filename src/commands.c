@@ -235,7 +235,7 @@ again:
 	res = ReadPort(reader_index, nlength, buffer);
 	CHECK_STATUS(res)
 
-	if (*nlength < STATUS_OFFSET+1)
+	if (*nlength < CCID_RESPONSE_HEADER_SIZE)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", *nlength);
 		return IFD_COMMUNICATION_ERROR;
@@ -998,7 +998,7 @@ time_request:
 		goto end;
 	}
 
-	if (length_out < STATUS_OFFSET+1)
+	if (length_out < CCID_RESPONSE_HEADER_SIZE)
 	{
 		free(cmd_out);
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length_out);
@@ -1113,7 +1113,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	res = ReadPort(reader_index, &length, cmd);
 	CHECK_STATUS(res)
 
-	if (length < STATUS_OFFSET+1)
+	if (length < CCID_RESPONSE_HEADER_SIZE)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
 		return IFD_COMMUNICATION_ERROR;
@@ -1236,7 +1236,7 @@ again_status:
 	res = ReadPort(reader_index, &length, buffer);
 	CHECK_STATUS(res)
 
-	if (length < STATUS_OFFSET+1)
+	if (length < CCID_RESPONSE_HEADER_SIZE)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
 		return IFD_COMMUNICATION_ERROR;
@@ -1527,7 +1527,7 @@ time_request:
 	ccid_descriptor -> readTimeout = old_timeout;
 	CHECK_STATUS(ret)
 
-	if (length < STATUS_OFFSET+1)
+	if (length < CCID_RESPONSE_HEADER_SIZE)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
 		return IFD_COMMUNICATION_ERROR;
@@ -2293,7 +2293,7 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	res = ReadPort(reader_index, &length, cmd);
 	CHECK_STATUS(res)
 
-	if (length < STATUS_OFFSET+1)
+	if (length < CCID_RESPONSE_HEADER_SIZE)
 	{
 		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
 		return IFD_COMMUNICATION_ERROR;

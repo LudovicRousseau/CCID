@@ -21,6 +21,7 @@
 #define STATUS_OFFSET 7
 #define ERROR_OFFSET 8
 #define CHAIN_PARAMETER_OFFSET 9
+#define CCID_RESPONSE_HEADER_SIZE 10
 
 RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	/*@out@*/ unsigned char buffer[], int voltage);
