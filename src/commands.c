@@ -1374,7 +1374,8 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	cmd[8] = rx_length & 0xFF;	/* Expected length, in character mode only */
 	cmd[9] = (rx_length >> 8) & 0xFF;
 
-	memcpy(cmd+10, tx_buffer, tx_length);
+	if (tx_buffer)
+		memcpy(cmd+10, tx_buffer, tx_length);
 
 	ret = WritePort(reader_index, 10+tx_length, cmd);
 	CHECK_STATUS(ret)
