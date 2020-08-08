@@ -908,7 +908,7 @@ read_again:
 	DEBUG_XXD(debug_header, buffer, *length);
 
 #define BSEQ_OFFSET 6
-	if ((*length >= BSEQ_OFFSET)
+	if ((*length >= BSEQ_OFFSET +1)
 		&& (buffer[BSEQ_OFFSET] < *ccid_descriptor->pbSeq -1))
 	{
 		duplicate_frame++;
