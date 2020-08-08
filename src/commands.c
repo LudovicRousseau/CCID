@@ -1855,6 +1855,9 @@ static RESPONSECODE T0ProcACK(unsigned int reader_index,
 
 	DEBUG_COMM2("Enter, is_rcv = %d", is_rcv);
 
+	if (proc_len < 0)
+		return IFD_COMMUNICATION_ERROR;
+
 	if (is_rcv == 1)
 	{	/* Receiving mode */
 		unsigned int remain_len;
