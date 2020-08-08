@@ -1001,8 +1001,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 						0x00, 0xFF, 0x81, 0x31, 0x80, 0x45, 0x00, 0x31,
 						0xC1, 0x73, 0xC0, 0x01, 0x00, 0x00, 0x90, 0x00, 0xB1 };
 
-					if (0 == memcmp(ccid_slot->pcATRBuffer, openpgp_atr,
-						ccid_slot->nATRLength))
+					if ((ccid_slot->nATRLength == sizeof openpgp_atr)
+						&& (0 == memcmp(ccid_slot->pcATRBuffer, openpgp_atr, ccid_slot->nATRLength)))
 						/* change BWI from 4 to 7 to increase BWT from
 						 * 1.4s to 11s and avoid a timeout during on
 						 * board key generation (bogus card) */
