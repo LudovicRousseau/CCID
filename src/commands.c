@@ -209,7 +209,10 @@ check_again:
 		{
 			DEBUG_INFO1("1.8V requested but not supported by reader");
 			voltage = 1;	/* 5V */
-			goto check_again;
+
+			/* do not (infinite) loop if bVoltageSupport == 0 */
+			if (bVoltageSupport)
+				goto check_again;
 		}
 	}
 	init_voltage = voltage;
