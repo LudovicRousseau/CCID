@@ -195,19 +195,19 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 check_again:
 		if ((1 == voltage) && !(bVoltageSupport & 1))
 		{
-			DEBUG_INFO1("5V requested but not support by reader");
+			DEBUG_INFO1("5V requested but not supported by reader");
 			voltage = 2;	/* 3V */
 		}
 
 		if ((2 == voltage) && !(bVoltageSupport & 2))
 		{
-			DEBUG_INFO1("3V requested but not support by reader");
+			DEBUG_INFO1("3V requested but not supported by reader");
 			voltage = 3;	/* 1.8V */
 		}
 
 		if ((3 == voltage) && !(bVoltageSupport & 4))
 		{
-			DEBUG_INFO1("1.8V requested but not support by reader");
+			DEBUG_INFO1("1.8V requested but not supported by reader");
 			voltage = 1;	/* 5V */
 			goto check_again;
 		}
