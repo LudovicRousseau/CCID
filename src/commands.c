@@ -1186,7 +1186,7 @@ again_status:
 	if (PROTOCOL_ICCD_B == ccid_descriptor->bInterfaceProtocol)
 	{
 		int r;
-		unsigned char buffer_tmp[3];
+		unsigned char buffer_tmp[3] = {0, 2, 0};
 
 		/* SlotStatus */
 		r = ControlUSB(reader_index, 0xA1, 0x81, 0, buffer_tmp,
