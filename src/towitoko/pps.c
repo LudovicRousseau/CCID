@@ -98,7 +98,9 @@ PPS_Match (BYTE * request, unsigned len_request, BYTE * confirm, unsigned len_co
     return FALSE;
 
   /* See if the card specifies other than default FI and D */
-  if ((PPS_HAS_PPS1 (confirm)) && (confirm[2] != request[2]))
+  if ((PPS_HAS_PPS1 (confirm))
+		&& (len_confirm > 2)
+		&& (confirm[2] != request[2]))
     return FALSE;
 
   return TRUE;
