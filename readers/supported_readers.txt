@@ -972,6 +972,9 @@
 #0x08E6:0x34C0:Gemalto Ezio Shield (Gemalto_Ezio_Shield.txt)
 #0x08E6:0x34C0:Gemalto Ezio Shield Pro SC (Gemalto_Ezio_Shield_Pro_SC.txt)
 
+#0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader (Feitian_vR504.txt)
+#0x096E:0x0622:Feitian vR504 Contactless Reader (Feitian_vR504_Contactless_Reader.txt)
+
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v3.txt)
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt)
 
