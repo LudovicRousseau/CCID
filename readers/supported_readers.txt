@@ -325,19 +325,20 @@
 # F-Secure Foundry
 0x1209:0x2702:F-Secure Foundry USB Armory Mk II
 
-# FEITIAN
-0x096E:0x0619:FEITIAN iR301
-0x096E:0x061A:FEITIAN bR301
-0x096E:0x061C:FEITIAN iR301
-
 # Feitian
 0x096E:0x0608:Feitian 502-CL
 0x096E:0x060D:Feitian R502
+0x096E:0x0621:Feitian BLE CCID Dongle
 0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader
 0x096E:0x0623:Feitian bR500
 0x096E:0x0624:Feitian bR301
 0x096E:0x0807:Feitian ePass2003
 0x096E:0x080F:Feitian eJAVA Token
+
+# FEITIAN
+0x096E:0x0619:FEITIAN iR301
+0x096E:0x061A:FEITIAN bR301
+0x096E:0x061C:FEITIAN iR301
 
 # Feitian Technologies
 0x096E:0x0505:Feitian Technologies FT SCR310
