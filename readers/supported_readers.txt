@@ -332,6 +332,7 @@
 0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader
 0x096E:0x0623:Feitian bR500
 0x096E:0x0624:Feitian bR301
+0x096E:0x0685:Feitian R805
 0x096E:0x0807:Feitian ePass2003
 0x096E:0x080F:Feitian eJAVA Token
 
