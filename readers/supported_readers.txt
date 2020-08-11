@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-06-25
+# Generated: 2020-08-11
 #
 # DO NOT EDIT BY HAND
 
@@ -351,6 +351,7 @@
 0x096E:0x0855:FT CCID KB
 0x096E:0x0856:FT U2F CCID
 0x096E:0x0859:FT CCID
+0x096E:0x086C:FT Biopass CCID
 
 # Fujitsu
 0x0BF8:0x1022:Fujitsu Keyboard KB100 SCR
