@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-08-11
+# Generated: 2020-08-12
 #
 # DO NOT EDIT BY HAND
 
@@ -237,6 +237,9 @@
 0x25DD:0x3111:Bit4id miniLector
 0x25DD:0x3211:Bit4id miniLector AIR EVO
 0x25DD:0xB001:Bit4id miniLector Blue
+
+# BIT4ID
+0x25DD:0x3403:BIT4ID miniLector AIR NFC v3
 
 # Bluink Ltd.
 0x2ABE:0x1003:Bluink Ltd. Bluink CCID
