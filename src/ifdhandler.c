@@ -150,11 +150,16 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 
 	if (ret != STATUS_SUCCESS)
 	{
-		DEBUG_CRITICAL("failed");
 		if (STATUS_NO_SUCH_DEVICE == ret)
+		{
+			DEBUG_INFO1("failed");
 			return_value = IFD_NO_SUCH_DEVICE;
+		}
 		else
+		{
+			DEBUG_CRITICAL("failed");
 			return_value = IFD_COMMUNICATION_ERROR;
+		}
 
 		goto error;
 	}
