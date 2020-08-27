@@ -10,7 +10,7 @@
 #include <string.h>
 #endif
 
-#include <openct/buffer.h>
+#include "buffer.h"
 
 void
 ct_buf_init(ct_buf_t *bp, void *mem, size_t len)
