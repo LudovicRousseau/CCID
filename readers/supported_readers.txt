@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-08-29
+# Generated: 2020-08-31
 #
 # DO NOT EDIT BY HAND
 
@@ -458,6 +458,7 @@
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
 
 # Identiv
+0x04E6:0x5612:Identiv uTrust 3720 Contactless Reader
 0x04E6:0x5713:Identiv CLOUD 2980 F Smart Card Reader
 0x04E6:0x5724:Identiv Identiv uTrust 4701 F Dual Interface Reader
 0x04E6:0x5790:Identiv uTrust 3700 F CL Reader
