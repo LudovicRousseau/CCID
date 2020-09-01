@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>MAGIC_TARGET</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.debian.alioth.pcsclite.smartcardccid</string>
+	<string>fr.apdu.ccid.smartcardccid</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	MAGIC_CLASS
