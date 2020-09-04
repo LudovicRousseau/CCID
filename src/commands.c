@@ -1558,6 +1558,12 @@ time_request:
 			case 0xFD:	/* Parity error during exchange */
 				return IFD_PARITY_ERROR;
 
+			case 0xFE:	/* Card absent or mute */
+				if (2 == (cmd[STATUS_OFFSET] & 0x02)) /* No ICC */
+					return IFD_ICC_NOT_PRESENT;
+				else
+					return IFD_COMMUNICATION_ERROR;
+
 			default:
 				return IFD_COMMUNICATION_ERROR;
 		}
