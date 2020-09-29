@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-08-31
+# Generated: 2020-09-29
 #
 # DO NOT EDIT BY HAND
 
@@ -305,6 +305,9 @@
 
 # DC.Ltd
 0x257B:0xC305:DC.Ltd DC4 5CCID READER
+
+# DESKO GmbH
+0x1AC2:0x0300:DESKO GmbH IDenty chrom
 
 # Doctolib
 0x1C34:0xAFD0:Doctolib SR
