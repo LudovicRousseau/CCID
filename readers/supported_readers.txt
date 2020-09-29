@@ -308,6 +308,7 @@
 
 # DESKO GmbH
 0x1AC2:0x0300:DESKO GmbH IDenty chrom
+0x1AC2:0x0302:DESKO GmbH PENTA Scanner
 
 # Doctolib
 0x1C34:0xAFD0:Doctolib SR
