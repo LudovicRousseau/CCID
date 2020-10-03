@@ -1451,7 +1451,8 @@ static void *Multi_PollingProc(void *p_ext)
 		if (NULL == transfer)
 		{
 			rv = LIBUSB_ERROR_NO_MEM;
-			DEBUG_COMM2("libusb_alloc_transfer err %d", rv);
+			DEBUG_COMM3("libusb_alloc_transfer err %d %s", rv,
+				libusb_error_name(rv));
 			break;
 		}
 
@@ -1467,7 +1468,8 @@ static void *Multi_PollingProc(void *p_ext)
 		if (rv)
 		{
 			libusb_free_transfer(transfer);
-			DEBUG_COMM2("libusb_submit_transfer err %d", rv);
+			DEBUG_COMM3("libusb_submit_transfer err %d %s", rv,
+				libusb_error_name(rv));
 			break;
 		}
 
@@ -1479,7 +1481,8 @@ static void *Multi_PollingProc(void *p_ext)
 			rv = libusb_handle_events_completed(ctx, &completed);
 			if (rv < 0)
 			{
-				DEBUG_COMM2("libusb_handle_events err %d", rv);
+				DEBUG_COMM3("libusb_handle_events err %d %s", rv,
+					libusb_error_name(rv));
 
 				if (rv == LIBUSB_ERROR_INTERRUPTED)
 					continue;
@@ -1579,9 +1582,10 @@ static void *Multi_PollingProc(void *p_ext)
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL4("Multi_PollingProc (%d/%d): error %d",
+		DEBUG_CRITICAL5("Multi_PollingProc (%d/%d): error %d %s",
 			usbDevice[msExt->reader_index].bus_number,
-			usbDevice[msExt->reader_index].device_address, rv);
+			usbDevice[msExt->reader_index].device_address,
+			rv, libusb_error_name(rv));
 	}
 
 	/* Wake up the slot threads so they will exit as well */
