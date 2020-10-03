@@ -409,7 +409,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	{
 		int n;
 
-		/* See CCID 3.7.2 page 25 */
+		/* See CCID 5.3.2 page 24 */
 		n = libusb_control_transfer(handle,
 			0xA1, /* request type */
 			0x02, /* GET CLOCK FREQUENCIES */
@@ -461,7 +461,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	{
 		int n;
 
-		/* See CCID 3.7.3 page 25 */
+		/* See CCID 5.3.3 page 24 */
 		n = libusb_control_transfer(handle,
 			0xA1, /* request type */
 			0x03, /* GET DATA RATES */
