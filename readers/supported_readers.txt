@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-09-29
+# Generated: 2020-10-03
 #
 # DO NOT EDIT BY HAND
 
@@ -741,6 +741,9 @@
 
 # Sysking
 0x0E6A:0x5083:Sysking MII136C
+
+# sysmocom - s.f.m.c. GmbH
+0x1D50:0x6141:sysmocom - s.f.m.c. GmbH sysmoOCTSIM
 
 # Teridian Semiconductors
 0x1862:0x0000:Teridian Semiconductors TSC12xxFV.09

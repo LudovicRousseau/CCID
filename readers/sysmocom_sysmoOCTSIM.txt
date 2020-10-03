@@ -1,0 +1,52 @@
+ idVendor: 0x1D50
+  iManufacturer: sysmocom - s.f.m.c. GmbH
+ idProduct: 0x6141
+  iProduct: sysmoOCTSIM 0.2.40-172b
+ bcdDevice: 0.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: CCID
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x07
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0001
+   T=0
+  dwDefaultClock: 2.500 MHz
+  dwMaximumClock: 20.000 MHz
+  bNumClockSupported: 4
+   IFD does not support GET CLOCK FREQUENCIES request: LIBUSB_ERROR_TIMEOUT
+  dwDataRate: 6720 bps
+  dwMaxDataRate: 921600 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: LIBUSB_ERROR_TIMEOUT
+  dwMaxIFSD: 0
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000100B0
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 272 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 8
