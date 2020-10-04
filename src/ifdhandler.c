@@ -731,6 +731,14 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		goto end;
 	}
 
+	/* check the protocol is supported by the reader */
+	if (!(Protocol & ccid_desc->dwProtocols))
+	{
+		DEBUG_CRITICAL2("Protocol T=%ld not supported by reader",
+			Protocol - SCARD_PROTOCOL_T0);
+		return IFD_ERROR_NOT_SUPPORTED;
+	}
+
 	/* Get ATR of the card */
 	atr_ret = ATR_InitFromArray(&atr, ccid_slot->pcATRBuffer,
 		ccid_slot->nATRLength);
