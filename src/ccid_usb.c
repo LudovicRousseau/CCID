@@ -727,6 +727,7 @@ again:
 				usbDevice[reader_index].ccid.bVoltageSupport = device_descriptor[5];
 				usbDevice[reader_index].ccid.sIFD_serial_number = NULL;
 				usbDevice[reader_index].ccid.gemalto_firmware_features = NULL;
+				usbDevice[reader_index].ccid.dwProtocols = dw2i(device_descriptor, 6);
 #ifdef ENABLE_ZLP
 				usbDevice[reader_index].ccid.zlp = FALSE;
 #endif
