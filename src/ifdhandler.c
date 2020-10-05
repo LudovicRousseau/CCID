@@ -734,7 +734,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	/* check the protocol is supported by the reader */
 	if (!(Protocol & ccid_desc->dwProtocols))
 	{
-		DEBUG_CRITICAL2("Protocol T=%ld not supported by reader",
+		DEBUG_CRITICAL2("Protocol T=" DWORD_D " not supported by reader",
 			Protocol - SCARD_PROTOCOL_T0);
 		return IFD_ERROR_NOT_SUPPORTED;
 	}
