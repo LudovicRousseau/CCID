@@ -216,6 +216,7 @@
 0x15CF:0x001D:Avtor SC Reader 371
 0x15CF:0x0020:Avtor SecureToken
 0x096E:0x0608:Avtor SC Reader KP382
+0x096E:0x0624:Avtor KP-375BLE
 
 # Axalto
 0x04E6:0x511C:Axalto Reflex USB v3
@@ -339,7 +340,6 @@
 0x096E:0x0621:Feitian BLE CCID Dongle
 0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader
 0x096E:0x0623:Feitian bR500
-0x096E:0x0624:Feitian bR301
 0x096E:0x0685:Feitian R805
 0x096E:0x0807:Feitian ePass2003
 0x096E:0x080F:Feitian eJAVA Token
@@ -992,6 +992,9 @@
 
 #0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader (Feitian_vR504.txt)
 #0x096E:0x0622:Feitian vR504 Contactless Reader (Feitian_vR504_Contactless_Reader.txt)
+
+#0x096E:0x0624:Avtor KP-375BLE (Avtor_KP-375BLE.txt)
+#0x096E:0x0624:Feitian bR301 (Feitian_bR301_BLE.txt)
 
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v3.txt)
 #0x0A5C:0x5802:Broadcom Corp 5880 (Broadcom_5880v4.txt)
