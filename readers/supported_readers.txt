@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-11-25
+# Generated: 2020-12-03
 #
 # DO NOT EDIT BY HAND
 
@@ -420,6 +420,9 @@
 
 # GoldKey Security
 0x19C8:0x0012:GoldKey Security PIV Token
+
+# GoTrust
+0x32A3:0x3201:GoTrust Idem Key
 
 # HDZB
 0x1677:0x0025:HDZB uKeyCI800-K18
