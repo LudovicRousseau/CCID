@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2020-12-05
+# Generated: 2021-01-07
 #
 # DO NOT EDIT BY HAND
 
@@ -19,7 +19,6 @@
 
 # Alcor Micro
 0x058F:0x9520:Alcor Micro AU9520
-0x058F:0x9540:Alcor Micro AU9560
 
 # Athena
 0x0DC3:0x1004:Athena ASE IIIe
@@ -840,6 +839,7 @@
 # Aladdin
 
 # Alcor Micro
+0x058F:0x9540:Alcor Micro AU9540
 
 # Athena
 0x0DC3:0x100F:Athena IDProtect Flash
