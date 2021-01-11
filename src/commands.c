@@ -1605,7 +1605,7 @@ time_request:
 		DEBUG_CRITICAL2("Nul block expected but got %d bytes", length);
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
-	else
+	else if (length)
 		memcpy(rx_buffer, cmd+10, length);
 
 	/* Extended case?
