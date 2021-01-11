@@ -1606,7 +1606,8 @@ time_request:
 		return_value = IFD_COMMUNICATION_ERROR;
 	}
 	else
-		memcpy(rx_buffer, cmd+10, length);
+		if (length)
+			memcpy(rx_buffer, cmd+10, length);
 
 	/* Extended case?
 	 * Only valid for RDR_to_PC_DataBlock frames */
