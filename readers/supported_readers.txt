@@ -245,6 +245,7 @@
 
 # BIT4ID
 0x25DD:0x3403:BIT4ID miniLector AIR NFC v3
+0x25DD:0x3503:BIT4ID mLector AIR DI V3
 
 # Bluink Ltd.
 0x2ABE:0x1003:Bluink Ltd. Bluink CCID
