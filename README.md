@@ -117,6 +117,37 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.34 - 24 January 2021, Ludovic Rousseau
+   - Add support of
+     - ACS ACR1252IMP Reader
+     - ACS CryptoMate EVO
+     - Aktiv Rutoken SCR 3001 Reader
+     - Avtor KP-375BLE
+     - Avtor SC Reader KP382
+     - BIT4ID mLector AIR DI V3
+     - BIT4ID miniLector AIR NFC v3
+     - Bit4id Digital-DNA Key (ProductID 0x2354)
+     - Canokeys Canokey
+     - DESKO GmbH IDenty chrom
+     - DESKO GmbH PENTA Scanner
+     - FT Biopass CCID
+     - FT Biopass FIDO2
+     - FT Biopass KB CCID
+     - FT Biopass KB FIDO CCID
+     - Feitian BLE CCID Dongle
+     - Feitian R805
+     - Feitian vR504 Contactless Reader
+     - GoTrust Idem Key
+     - Identiv uTrust 3720 Contactless Reader
+     - Sunrex HP USB Business Slim Smartcard CCID Keyboard
+     - sysmocom - s.f.m.c. GmbH sysmoOCTSIM
+   - Fail if the requested protocol is not supported by reader
+   - Disable USB suspend for the AlcorMicro AU9520 reader
+   - Return "no smart card" if we get notified during a transmit
+   - Minor improvements reported by Maksim Ivanov
+   - Some other minor improvements
+
+
 1.4.33 - 25 June 2020, Ludovic Rousseau
    - Add support of
      - Genesys Logic CCID Card Reader (idProduct: 0x0771)
