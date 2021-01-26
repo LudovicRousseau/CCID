@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-01-20
+# Generated: 2021-01-26
 #
 # DO NOT EDIT BY HAND
 
@@ -580,6 +580,7 @@
 
 # MK Technology
 0x0416:0xC136:MK Technology KeyPass S1
+0x0416:0xC137:MK Technology KeyPass D1
 
 # Morpho
 0x079B:0x0026:Morpho MSO350/MSO351 Fingerprint Sensor & SmartCard Reader
