@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-01-26
+# Generated: 2021-02-06
 #
 # DO NOT EDIT BY HAND
 
@@ -739,6 +739,7 @@
 0x08DF:0x3115:Spyrus Inc WorkSafe Pro
 0x08DF:0x3117:Spyrus Inc WorkSafe Pro
 0x08DF:0x3201:Spyrus Inc PocketVault P-3X
+0x08DF:0x3203:Spyrus Inc PocketVault P-3X
 
 # Sunrex
 0x05AF:0x605A:Sunrex HP USB Business Slim Smartcard CCID Keyboard
