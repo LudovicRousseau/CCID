@@ -74,14 +74,15 @@ int main(int argc, char *argv[])
 	r = libusb_init(NULL);
 	if (r < 0)
 	{
-		(void)printf("libusb_init() failed\n");
+		(void)printf("libusb_init() failed: %s\n", libusb_error_name(r));
         return r;
 	}
 
 	cnt = libusb_get_device_list(NULL, &devs);
     if (cnt < 0)
 	{
-		(void)printf("libusb_get_device_list() failed\n");
+		(void)printf("libusb_get_device_list() failed: %s\n",
+			libusb_error_name(r));
         return (int)cnt;
 	}
 
@@ -116,7 +117,8 @@ int main(int argc, char *argv[])
         if (r < 0)
 		{
             (void)fprintf(stderr,
-				BRIGHT_RED "failed to get device descriptor" NORMAL);
+				BRIGHT_RED "failed to get device descriptor: %s" NORMAL,
+				libusb_error_name(r));
             return 1;
         }
 
@@ -130,7 +132,8 @@ int main(int argc, char *argv[])
 			buffer, sizeof(buffer));
 		if (r < 0)
 		{
-			(void)fprintf(stderr, "  Can't get iManufacturer string\n");
+			(void)fprintf(stderr, "  Can't get iManufacturer string: %s\n",
+				libusb_error_name(r));
 			if (getuid())
 			{
 				(void)fprintf(stderr,
@@ -146,7 +149,8 @@ int main(int argc, char *argv[])
 		r = libusb_get_string_descriptor_ascii(handle, desc.iProduct,
 			buffer, sizeof(buffer));
 		if (r < 0)
-			(void)fprintf(stderr, "  Can't get iProduct string\n");
+			(void)fprintf(stderr, "  Can't get iProduct string: %s\n",
+				libusb_error_name(r));
 		else
 			(void)fprintf(stderr, "  iProduct: " BLUE "%s\n" NORMAL, buffer);
 
@@ -155,7 +159,8 @@ again:
 		r = libusb_get_active_config_descriptor(dev, &config_desc);
 		if (r < 0)
 		{
-			(void)fprintf(stderr, "  Can't get config descriptor: %d\n", r);
+			(void)fprintf(stderr, "  Can't get config descriptor: %s\n",
+				libusb_error_name(r));
 			(void)libusb_close(handle);
 			continue;
 		}
@@ -262,7 +267,8 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		buffer, sizeof(buffer));
 	if (r < 0)
 	{
-		(void)printf("  Can't get iManufacturer string\n");
+		(void)printf("  Can't get iManufacturer string: %s\n",
+			libusb_error_name(r));
 		if (getuid())
 		{
 			(void)fprintf(stderr,
@@ -277,7 +283,8 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	r =  libusb_get_string_descriptor_ascii(handle, desc.iProduct,
 		buffer, sizeof(buffer));
 	if (r < 0)
-		(void)printf("  Can't get iProduct string\n");
+		(void)printf("  Can't get iProduct string: %s\n",
+			libusb_error_name(r));
 	else
 		(void)printf("  iProduct: %s\n", buffer);
 
@@ -350,7 +357,8 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	r = libusb_get_string_descriptor_ascii(handle, usb_interface_descriptor->iInterface,
 		buffer, sizeof(buffer));
 	if (r < 0)
-		(void)printf(" Can't get iInterface string\n");
+		(void)printf(" Can't get iInterface string: %s\n",
+			libusb_error_name(r));
 	else
 		(void)printf(" iInterface: %s\n", buffer);
 
