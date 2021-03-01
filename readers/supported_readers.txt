@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-02-06
+# Generated: 2021-03-01
 #
 # DO NOT EDIT BY HAND
 
@@ -749,6 +749,7 @@
 
 # SYNNIX
 0x1206:0x2105:SYNNIX STD200
+0x1206:0x2107:SYNNIX CL-2100R
 
 # Sysking
 0x0E6A:0x5083:Sysking MII136C
