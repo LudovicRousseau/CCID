@@ -723,14 +723,6 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	ccid_slot = get_ccid_slot(reader_index);
 	ccid_desc = get_ccid_descriptor(reader_index);
 
-	/* Do not send CCID command SetParameters or PPS to the CCID
-	 * The CCID will do this himself */
-	if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
-	{
-		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
-		goto end;
-	}
-
 	/* check the protocol is supported by the reader */
 	if (!(Protocol & ccid_desc->dwProtocols))
 	{
@@ -794,6 +786,14 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 				/* only the first TCi (i>2) must be used */
 				break;
 			}
+	}
+
+    /* Do not send CCID command SetParameters or PPS to the CCID
+	 * The CCID will do this himself */
+	if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
+	{
+		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
+		goto end;
 	}
 
 	/* PTS1? */
@@ -1092,6 +1092,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			return ret;
 	}
 
+end:
 	/* set IFSC & IFSD in T=1 */
 	if (SCARD_PROTOCOL_T1 == Protocol)
 	{
@@ -1117,7 +1118,6 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		DEBUG_COMM3("T=1: IFSC=%d, IFSD=%d", t1->ifsc, t1->ifsd);
 	}
 
-end:
 	/* store used protocol for use by the secure commands (verify/change PIN) */
 	ccid_desc->cardProtocol = Protocol;
 
