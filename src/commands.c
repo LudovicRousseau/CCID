@@ -1912,29 +1912,29 @@ static RESPONSECODE T0ProcACK(unsigned int reader_index,
 
 #ifdef O2MICRO_OZ776_PATCH
 		if((0 != remain_len) && (0 == (remain_len + 10) % 64))
-        {
-			/* special hack to avoid a command of size modulo 64
-			 * we send two commands instead */
-            ret_len = 1;
-            return_value = CCID_Transmit(reader_index, 0, *snd_buf, ret_len, 0);
-            if (return_value != IFD_SUCCESS)
-                return return_value;
-            return_value = CCID_Receive(reader_index, &ret_len, tmp_buf, NULL);
-            if (return_value != IFD_SUCCESS)
-                return return_value;
+		{
+		    /* special hack to avoid a command of size modulo 64
+		     * we send two commands instead */
+		    ret_len = 1;
+		    return_value = CCID_Transmit(reader_index, 0, *snd_buf, ret_len, 0);
+		    if (return_value != IFD_SUCCESS)
+				return return_value;
+		    return_value = CCID_Receive(reader_index, &ret_len, tmp_buf, NULL);
+		    if (return_value != IFD_SUCCESS)
+				return return_value;
 
-            ret_len = remain_len - 1;
-            return_value = CCID_Transmit(reader_index, 0, *snd_buf, ret_len, 0);
-            if (return_value != IFD_SUCCESS)
-                return return_value;
-            return_value = CCID_Receive(reader_index, &ret_len, &tmp_buf[1],
-				NULL);
-            if (return_value != IFD_SUCCESS)
-                return return_value;
+		    ret_len = remain_len - 1;
+		    return_value = CCID_Transmit(reader_index, 0, *snd_buf, ret_len, 0);
+		    if (return_value != IFD_SUCCESS)
+				return return_value;
+		    return_value = CCID_Receive(reader_index, &ret_len, &tmp_buf[1],
+			    NULL);
+		    if (return_value != IFD_SUCCESS)
+				return return_value;
 
-            ret_len += 1;
-        }
-        else
+		    ret_len += 1;
+		}
+		else
 #endif
 		{
 			ret_len = remain_len;
