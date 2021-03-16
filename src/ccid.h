@@ -240,6 +240,7 @@ typedef struct
 #define IDENTIV_uTrust4701F		0x04E65724
 
 #define VENDOR_GEMALTO 0x08E6
+#define VENDOR_FEITIAN 0x096E
 #define GET_VENDOR(readerID) ((readerID >> 16) & 0xFFFF)
 
 /*

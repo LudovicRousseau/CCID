@@ -476,9 +476,9 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 						|| (HID_OMNIKEY_5422 == readerID))
 						*Value = 2;
 
-					/* 3 CCID interfaces */
+					/* 4 CCID interfaces */
 					if (FEITIANR502DUAL == readerID)
-						*Value = 3;
+						*Value = 4;
 				}
 #endif
 				DEBUG_INFO2("Reader supports %d slot(s)", *Value);
@@ -1467,7 +1467,10 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 				&& (0 == memcmp(TxBuffer, switch_interface, sizeof(switch_interface))))
 				allowed = TRUE;
 		}
-
+		if (VENDOR_FEITIAN == GET_VENDOR(readerID))
+		{
+			allowed = TRUE;
+		}
 		if (!allowed)
 		{
 			DEBUG_INFO1("ifd exchange (Escape command) not allowed");
