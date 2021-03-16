@@ -464,6 +464,7 @@ again_libusb:
 					 * 0: R502 Contactless Reader (CCID)
 					 * 1: R502 Contact Reader (CCID)
 					 * 2: R502 SAM1 Reader (CCID)
+					 * 3: R502 SAM2 Reader (CCID)
 					 *
 					 * For the HID Omnikey 5422 the interfaces are:
 					 * 0: OMNIKEY 5422CL Smartcard Reader
@@ -474,6 +475,10 @@ again_libusb:
 					if (HID_OMNIKEY_5422 == readerID)
 						/* only 2 interfaces for this device */
 						max_interface_number = 1;
+
+					if (FEITIANR502DUAL == readerID)
+						/* 4 interfaces for Feitian R502 reader */
+						max_interface_number = 3;
 				}
 #endif
 				/* is it already opened? */
