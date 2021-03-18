@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-03-03
+# Generated: 2021-03-18
 #
 # DO NOT EDIT BY HAND
 
@@ -347,6 +347,7 @@
 0x096E:0x0621:Feitian BLE CCID Dongle
 0x096E:0x0622:Feitian VR504 VHBR Contactless & Contact Card Reader
 0x096E:0x0623:Feitian bR500
+0x096E:0x062E:Feitian R701
 0x096E:0x0685:Feitian R805
 0x096E:0x0807:Feitian ePass2003
 0x096E:0x080F:Feitian eJAVA Token
