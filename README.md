@@ -42,8 +42,8 @@ Supported operating systems:
 See also https://ccid.apdu.fr/ for more information.
 
 
-Debug informations:
-===================
+Debug information:
+==================
 
 The driver uses the debug function provided by pcscd. So if pcscd sends
 its debug to stdout (`pcscd --foreground`) then the CCID driver will also
@@ -55,7 +55,7 @@ The `Info.plist` file is installed, by default, in
 `/usr/local/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist`
 or set the environment variable `LIBCCID_ifdLogLevel`.
 
-The debug level is set in the `ifdLogLevel` field. It is a binary OR
+The debug level is set in the `ifdLogLevel` field. It is a binary OR
 combination of 4 different levels.
 - 1: critical: important error messages
 - 2: info:     informative messages like what reader was detected
@@ -68,7 +68,7 @@ By default the debug level is set to 3 (1 + 2) and correspond to the
 critical and info levels.
 
 You have to restart the driver so it reads the configuration file again
-and use the new debug level value.  To restart the driver you just need
+and uses the new debug level value.  To restart the driver you just need
 to unplug all your CCID readers so the driver is unloaded and then replug
 your readers. You can also restart pcscd.
 
@@ -91,7 +91,7 @@ combination of 4 different levels.
 By default the voltage level is set to 0 and corresponds to 5V.
 
 You have to restart the driver so it reads the configuration file again
-and use the new voltage level value.  To restart the driver you just need
+and uses the new voltage level value.  To restart the driver you just need
 to unplug all your CCID readers so the driver is unloaded and then replug
 your readers.  You can also restart pcscd.
 
