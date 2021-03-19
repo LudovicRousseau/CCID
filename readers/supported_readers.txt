@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-03-18
+# Generated: 2021-03-19
 #
 # DO NOT EDIT BY HAND
 
@@ -306,6 +306,9 @@
 0x03F0:0x114A:Chicony HP USB Smartcard CCID Keyboard KR
 0x03F0:0x124A:Chicony HP USB Smartcard CCID Keyboard JP
 0x04F2:0x1469:Chicony HP Skylab USB Smartcard Keyboard
+
+# Circle
+0x31AA:0x0224:Circle Idaxis SecurePIV
 
 # COVADIS
 0x0982:0x0008:COVADIS VEGA-ALPHA
