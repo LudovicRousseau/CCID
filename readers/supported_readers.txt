@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-03-19
+# Generated: 2021-03-22
 #
 # DO NOT EDIT BY HAND
 
@@ -520,6 +520,9 @@
 
 # InfoCert
 0x2FD2:0x0100:InfoCert WirelessKey
+
+# Infocrypt
+0x2022:0x016C:Infocrypt HWDSSL DEVICE
 
 # InfoThink
 0x1FC9:0x0102:InfoThink IT-102MU Reader
