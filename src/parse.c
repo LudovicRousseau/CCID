@@ -464,10 +464,15 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	}
 	(void)printf("  dwDataRate: %d bps\n", dw2i(device_descriptor, 19));
 	(void)printf("  dwMaxDataRate: %d bps\n", dw2i(device_descriptor, 23));
-	(void)printf("  bNumDataRatesSupported: %d%s\n", device_descriptor[27],
-		device_descriptor[27] ? "" : " (will use whatever is returned)");
+	int bNumDataRatesSupported = device_descriptor[27];
+	(void)printf("  bNumDataRatesSupported: %d%s\n", bNumDataRatesSupported,
+		bNumDataRatesSupported ? "" : " (will use whatever is returned)");
 	{
 		int n;
+
+		if (0 == bNumDataRatesSupported)
+			/* read up to the buffer size */
+			bNumDataRatesSupported = sizeof(buffer) / sizeof(int);
 
 		/* See CCID 5.3.3 page 24 */
 		n = libusb_control_transfer(handle,
@@ -476,7 +481,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			0x00, /* value */
 			usb_interface_descriptor->bInterfaceNumber, /* interface */
 			buffer,
-			sizeof(buffer),
+			bNumDataRatesSupported * sizeof(int),
 			2 * 1000);
 
 		/* we got an error? */
