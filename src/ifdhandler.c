@@ -1094,7 +1094,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 end:
 	/* set IFSC & IFSD in T=1 */
-	if (SCARD_PROTOCOL_T1 == Protocol)
+	if ((SCARD_PROTOCOL_T1 == Protocol)
+		&& (CCID_CLASS_TPDU == (ccid_desc->dwFeatures & CCID_CLASS_EXCHANGE_MASK)))
 	{
 		t1_state_t *t1 = &(ccid_slot -> t1);
 		int i, ifsc;
