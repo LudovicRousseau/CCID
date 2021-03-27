@@ -1210,13 +1210,21 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	int n, i, len;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
 	unsigned int *uint_array;
+	int bNumDataRatesSupported;
+
+	bNumDataRatesSupported = get_ccid_device_descriptor(get_ccid_usb_interface(desc, &num))[27];
+	if (0 == bNumDataRatesSupported)
+		/* read up to the buffer size */
+		len = sizeof(buffer) / sizeof(int);
+	else
+		bNumDataRatesSupported = len;
 
 	/* See CCID 3.7.3 page 25 */
 	n = ControlUSB(reader_index,
 		0xA1, /* request type */
 		0x03, /* GET_DATA_RATES */
 		0x00, /* value */
-		buffer, sizeof(buffer));
+		buffer, len * sizeof(int));
 
 	/* we got an error? */
 	if (n <= 0)
@@ -1236,8 +1244,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	n /= sizeof(int);
 
 	/* we do not get the expected number of data rates */
-	len = get_ccid_device_descriptor(get_ccid_usb_interface(desc, &num))[27]; /* bNumDataRatesSupported */
-	if ((n != len) && len)
+	if ((n != bNumDataRatesSupported) && bNumDataRatesSupported)
 	{
 		DEBUG_INFO3("Got %d data rates but was expecting %d", n, len);
 
