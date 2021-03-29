@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- Can't get iInterface string
+ Can't get iInterface string: LIBUSB_ERROR_INVALID_PARAM
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -35,7 +35,144 @@
   dwDataRate: 9946 bps
   dwMaxDataRate: 688172 bps
   bNumDataRatesSupported: 138
-   IFD does not support GET_DATA_RATES request: Resource temporarily unavailable
+   Support 1807 bps
+   Support 1989 bps
+   Support 2409 bps
+   Support 2487 bps
+   Support 3315 bps
+   Support 3613 bps
+   Support 3978 bps
+   Support 4818 bps
+   Support 4973 bps
+   Support 6631 bps
+   Support 7227 bps
+   Support 7957 bps
+   Support 9635 bps
+   Support 9946 bps
+   Support 13262 bps
+   Support 14453 bps
+   Support 15914 bps
+   Support 19271 bps
+   Support 19892 bps
+   Support 21680 bps
+   Support 23871 bps
+   Support 26523 bps
+   Support 28906 bps
+   Support 29839 bps
+   Support 31828 bps
+   Support 36133 bps
+   Support 38542 bps
+   Support 39785 bps
+   Support 43359 bps
+   Support 48177 bps
+   Support 49731 bps
+   Support 53047 bps
+   Support 57813 bps
+   Support 59677 bps
+   Support 63656 bps
+   Support 66308 bps
+   Support 72266 bps
+   Support 77083 bps
+   Support 79570 bps
+   Support 86719 bps
+   Support 96354 bps
+   Support 99462 bps
+   Support 106093 bps
+   Support 115625 bps
+   Support 119355 bps
+   Support 132616 bps
+   Support 144531 bps
+   Support 154167 bps
+   Support 159140 bps
+   Support 198925 bps
+   Support 212186 bps
+   Support 231250 bps
+   Support 318280 bps
+   Support 2344 bps
+   Support 2581 bps
+   Support 3125 bps
+   Support 3226 bps
+   Support 4301 bps
+   Support 4688 bps
+   Support 5161 bps
+   Support 5859 bps
+   Support 6250 bps
+   Support 6452 bps
+   Support 7813 bps
+   Support 8065 bps
+   Support 8602 bps
+   Support 9375 bps
+   Support 10323 bps
+   Support 10753 bps
+   Support 11719 bps
+   Support 12500 bps
+   Support 12903 bps
+   Support 15625 bps
+   Support 16129 bps
+   Support 17204 bps
+   Support 18750 bps
+   Support 20645 bps
+   Support 21505 bps
+   Support 23438 bps
+   Support 25000 bps
+   Support 25806 bps
+   Support 28125 bps
+   Support 30968 bps
+   Support 31250 bps
+   Support 32258 bps
+   Support 34409 bps
+   Support 37500 bps
+   Support 38710 bps
+   Support 41290 bps
+   Support 43011 bps
+   Support 46875 bps
+   Support 50000 bps
+   Support 51613 bps
+   Support 56250 bps
+   Support 62500 bps
+   Support 64516 bps
+   Support 68817 bps
+   Support 70313 bps
+   Support 75000 bps
+   Support 77419 bps
+   Support 82581 bps
+   Support 86022 bps
+   Support 93750 bps
+   Support 96774 bps
+   Support 100000 bps
+   Support 103226 bps
+   Support 112500 bps
+   Support 117188 bps
+   Support 125000 bps
+   Support 127312 bps
+   Support 129032 bps
+   Support 137634 bps
+   Support 150000 bps
+   Support 156250 bps
+   Support 161290 bps
+   Support 165161 bps
+   Support 172043 bps
+   Support 187500 bps
+   Support 200000 bps
+   Support 206452 bps
+   Support 215054 bps
+   Support 250000 bps
+   Support 258065 bps
+   Support 275269 bps
+   Support 300000 bps
+   Support 308333 bps
+   Support 344086 bps
+   Support 375000 bps
+   Support 400000 bps
+   Support 412903 bps
+   Support 424373 bps
+   Support 462500 bps
+   Support 500000 bps
+   Support 516129 bps
+   Support 550538 bps
+   Support 600000 bps
+   Support 636559 bps
+   Support 688172 bps
   dwMaxIFSD: 254
   dwSynchProtocols: 0x00000007
    2-wire protocol
