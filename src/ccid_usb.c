@@ -1217,7 +1217,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 		/* read up to the buffer size */
 		len = sizeof(buffer) / sizeof(int);
 	else
-		bNumDataRatesSupported = len;
+		len = bNumDataRatesSupported;
 
 	/* See CCID 3.7.3 page 25 */
 	n = ControlUSB(reader_index,
