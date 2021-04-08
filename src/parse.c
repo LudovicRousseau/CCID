@@ -496,15 +496,15 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 				int i;
 
 				/* we do not get the expected number of data rates */
-				if ((n != device_descriptor[27]*4) && device_descriptor[27])
+				if ((n != bNumDataRatesSupported*4) && bNumDataRatesSupported)
 				{
 					(void)printf("   Got %d data rates but was expecting %d\n", n/4,
-						device_descriptor[27]);
+						bNumDataRatesSupported);
 
 					/* we got more data than expected */
 #ifndef DISPLAY_EXTRA_VALUES
-					if (n > device_descriptor[27]*4)
-						n = device_descriptor[27]*4;
+					if (n > bNumDataRatesSupported*4)
+						n = bNumDataRatesSupported*4;
 #endif
 				}
 
