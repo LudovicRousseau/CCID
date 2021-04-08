@@ -412,10 +412,15 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 
 	(void)printf("  dwDefaultClock: %.3f MHz\n", dw2i(device_descriptor, 10)/1000.0);
 	(void)printf("  dwMaximumClock: %.3f MHz\n", dw2i(device_descriptor, 14)/1000.0);
-	(void)printf("  bNumClockSupported: %d%s\n", device_descriptor[18],
-		device_descriptor[18] ? "" : " (will use whatever is returned)");
+	int bNumClockSupported = device_descriptor[18];
+	(void)printf("  bNumClockSupported: %d%s\n", bNumClockSupported,
+		bNumClockSupported ? "" : " (will use whatever is returned)");
 	{
 		int n;
+
+		if (0 == bNumClockSupported)
+			/* read up to the buffer size */
+			bNumClockSupported = sizeof(buffer) / sizeof(int);
 
 		/* See CCID 5.3.2 page 24 */
 		n = libusb_control_transfer(handle,
@@ -424,7 +429,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			0x00, /* value */
 			usb_interface_descriptor->bInterfaceNumber, /* interface */
 			buffer,
-			sizeof(buffer),
+			bNumClockSupported * sizeof(int),
 			2 * 1000);
 
 		/* we got an error? */
@@ -446,15 +451,15 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 				int i;
 
 				/* we do not get the expected number of data rates */
-				if ((n != device_descriptor[18]*4) && device_descriptor[18])
+				if ((n != bNumClockSupported*4) && bNumClockSupported)
 				{
 					(void)printf("   Got %d clock frequencies but was expecting %d\n",
-						n/4, device_descriptor[18]);
+						n/4, bNumClockSupported);
 
 					/* we got more data than expected */
 #ifndef DISPLAY_EXTRA_VALUES
-					if (n > device_descriptor[18]*4)
-						n = device_descriptor[18]*4;
+					if (n > bNumClockSupported*4)
+						n = bNumClockSupported*4;
 #endif
 				}
 
