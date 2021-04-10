@@ -8,10 +8,12 @@
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
- iInterface: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string: LIBUSB_ERROR_INVALID_PARAM
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -26,16 +28,14 @@
    T=1
   dwDefaultClock: 4.800 MHz
   dwMaximumClock: 8.000 MHz
-  bNumClockSupported: 4 
-   Got 256 clock frequencies but was expecting 4
+  bNumClockSupported: 4
    Support 4000 kHz
    Support 4800 kHz
    Support 6000 kHz
    Support 8000 kHz
   dwDataRate: 10752 bps
   dwMaxDataRate: 412903 bps
-  bNumDataRatesSupported: 106 
-   Got 256 data rates but was expecting 106
+  bNumDataRatesSupported: 106
    Support 10752 bps
    Support 21505 bps
    Support 43010 bps
