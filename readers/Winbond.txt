@@ -1,5 +1,5 @@
  idVendor: 0x0416
-  iManufacturer: Winbond
+  iManufacturer: Winbond 
  idProduct: 0x3815
   iProduct: CCID SmartCard Controller
  bcdDevice: 0.06 (firmware release?)
@@ -8,10 +8,12 @@
  bInterfaceNumber: 0
  bAlternateSetting: 0
  bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
  bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
- iInterface: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string: LIBUSB_ERROR_INVALID_PARAM
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -25,7 +27,6 @@
   dwDefaultClock: 3.000 MHz
   dwMaximumClock: 3.000 MHz
   bNumClockSupported: 1
-   Got 3 clock frequencies but was expecting 1
    Support 3000 kHz
   dwDataRate: 8065 bps
   dwMaxDataRate: 32258 bps
