@@ -385,7 +385,11 @@ int get_bytes(unsigned int reader_index, unsigned char *buffer, int length)
 		rv = ReadChunk(reader_index, serialDevice[reader_index].buffer,
 			sizeof(serialDevice[reader_index].buffer), length - present);
 		if (rv < 0)
+		{
+			serialDevice[reader_index].buffer_offset = 0;
+			serialDevice[reader_index].buffer_offset_last = 0;
 			return STATUS_COMM_ERROR;
+		}
 
 		/* fill the buffer */
 		memcpy(buffer + present, serialDevice[reader_index].buffer,
