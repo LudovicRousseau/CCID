@@ -192,6 +192,9 @@
 0x2406:0x5004:appidkey GmbH ID100L-USB-SC-Reader
 0x2406:0x5006:appidkey GmbH ID60-USB
 
+# ArkSigner
+0x33B6:0x0001:ArkSigner Connect2Sign
+
 # ASK-RFID
 0x1FD3:0xCC1D:ASK-RFID CPL108
 
