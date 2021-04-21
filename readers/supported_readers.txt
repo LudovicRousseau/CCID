@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-03-22
+# Generated: 2021-04-21
 #
 # DO NOT EDIT BY HAND
 
@@ -527,6 +527,9 @@
 # InfoThink
 0x1FC9:0x0102:InfoThink IT-102MU Reader
 0x1403:0x7506:InfoThink IT-500U Reader
+
+# INMAX
+0x1403:0x750D:INMAX DWR18 HPC
 
 # Inside Secure
 0x2406:0x6300:Inside Secure VaultIC 420 Smart Object
