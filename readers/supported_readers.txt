@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-04-21
+# Generated: 2021-04-22
 #
 # DO NOT EDIT BY HAND
 
@@ -420,6 +420,7 @@
 # Generic
 0x0BDA:0x0169:Generic USB2.0-CRW
 0x048D:0x1366:Generic MultiCard Device
+0x058C:0x9590:Generic EMV Smartcard Reader
 
 # Generic USB
 0x076B:0x3A21:Generic USB Smart Card Reader
