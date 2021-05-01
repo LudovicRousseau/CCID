@@ -759,6 +759,18 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		}
 	}
 
+	if ((VENDOR_GEMALTO == GET_VENDOR(ccid_descriptor->readerID))
+		&& (ccid_descriptor->gemalto_firmware_features))
+	{
+		int bEntryValidationCondition = ccid_descriptor->gemalto_firmware_features->bEntryValidationCondition;
+		if (TxBuffer[10] & ~bEntryValidationCondition)
+		{
+			DEBUG_INFO2("Correct bEntryValidationCondition (was 0x%02X)",
+				TxBuffer[10]);
+			TxBuffer[10] &= bEntryValidationCondition;
+		}
+	}
+
 	gemalto_modify_pin_bug = has_gemalto_modify_pin_bug(ccid_descriptor);
 	if (gemalto_modify_pin_bug)
 	{
