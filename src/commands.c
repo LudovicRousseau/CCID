@@ -390,6 +390,18 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 	}
 
+	if ((VENDOR_GEMALTO == GET_VENDOR(ccid_descriptor->readerID))
+		&& (ccid_descriptor->gemalto_firmware_features))
+	{
+		int bEntryValidationCondition = ccid_descriptor->gemalto_firmware_features->bEntryValidationCondition;
+		if (TxBuffer[7] & ~bEntryValidationCondition)
+		{
+			DEBUG_INFO2("Correct bEntryValidationCondition (was 0x%02X)",
+				TxBuffer[7]);
+			TxBuffer[7] &= bEntryValidationCondition;
+		}
+	}
+
 	if ((DELLSCRK == ccid_descriptor->readerID)
 		|| (DELLSK == ccid_descriptor->readerID))
 	{
