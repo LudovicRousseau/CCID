@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-04-22
+# Generated: 2021-05-05
 #
 # DO NOT EDIT BY HAND
 
@@ -730,6 +730,9 @@
 
 # Softforum Co., Ltd
 0x04E8:0x0007:Softforum Co., Ltd XecureHSM
+
+# SoloKeys
+0x1209:0xBEEE:SoloKeys Solo 2
 
 # SPECINFOSYSTEMS
 0x316E:0x0001:SPECINFOSYSTEMS DIAMOND token
