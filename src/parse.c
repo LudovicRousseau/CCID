@@ -562,7 +562,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	if (device_descriptor[41] & 0x04)
 		(void)printf("   ..04.. Automatic IFSD exchange as first exchange (T=1)\n");
 	if (device_descriptor[41] & 0x08)
-		(void)printf("   ..08.. Unknown (ICCD?)\n");
+		(void)printf("   ..08.. ICCD token\n");
 	switch (device_descriptor[42] & 0x07)
 	{
 		case 0x00:
