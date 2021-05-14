@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-05-05
+# Generated: 2021-05-14
 #
 # DO NOT EDIT BY HAND
 
@@ -490,7 +490,6 @@
 0x04E6:0x5612:Identiv uTrust 3720 Contactless Reader
 0x04E6:0x5713:Identiv CLOUD 2980 F Smart Card Reader
 0x04E6:0x5724:Identiv Identiv uTrust 4701 F Dual Interface Reader
-0x04E6:0x5790:Identiv uTrust 3700 F CL Reader
 0x04E6:0x5791:Identiv uTrust 3701 F CL Reader
 0x04E6:0x5811:Identiv uTrust 2900 R Smart Card Reader
 0x04E6:0x5812:Identiv uTrust 2910 R Smart Card Reader
@@ -896,6 +895,9 @@
 # Hewlett-Packard Company
 0x03F0:0x0036:Hewlett-Packard Company HP USB CCID Smartcard Keyboard
 0x03F0:0x1024:Hewlett-Packard Company HP USB Smart Card Keyboard
+
+# Identiv
+0x04E6:0x5790:Identiv uTrust 3700 F CL Reader
 
 # KEBTechnology
 0x04CC:0x5072:KEBTechnology KONA USB SmartCard
