@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-05-14
+# Generated: 2021-05-19
 #
 # DO NOT EDIT BY HAND
 
@@ -488,6 +488,7 @@
 
 # Identiv
 0x04E6:0x5612:Identiv uTrust 3720 Contactless Reader
+0x04E6:0x5613:Identiv uTrust 3721 Contactless Reader
 0x04E6:0x5713:Identiv CLOUD 2980 F Smart Card Reader
 0x04E6:0x5724:Identiv Identiv uTrust 4701 F Dual Interface Reader
 0x04E6:0x5791:Identiv uTrust 3701 F CL Reader
