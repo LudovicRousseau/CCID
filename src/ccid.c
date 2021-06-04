@@ -564,6 +564,12 @@ int ccid_open_hack_post(unsigned int reader_index)
 			/* restore default timeout (modified in ccid_open_hack_pre()) */
 			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT;
 			break;
+
+		case BIT4ID_MINILECTOR:
+			/* The firmware 1.11 advertises pinpad but actually doesn't
+			 * have one */
+			ccid_descriptor->bPINSupport = 0;
+			break;
 	}
 
 	/* Gemalto readers may report additional information */
