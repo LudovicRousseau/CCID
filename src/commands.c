@@ -268,7 +268,7 @@ again:
 		if (voltage)
 		{
 #ifndef NO_LOG
-			const char *voltage_code[] = { "auto", "5V", "3V", "1.8V" };
+			const char *voltage_code[] = { "1.8V", "5V", "3V", "1.8V" };
 #endif
 
 			DEBUG_INFO3("Power up with %s failed. Try with %s.",
