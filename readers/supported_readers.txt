@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-06-18
+# Generated: 2021-06-22
 #
 # DO NOT EDIT BY HAND
 
@@ -741,6 +741,9 @@
 
 # SoloKeys
 0x1209:0xBEEE:SoloKeys Solo 2
+
+# SONY
+0x054C:0x0DC9:SONY Felica RC-S300/P
 
 # SPECINFOSYSTEMS
 0x316E:0x0001:SPECINFOSYSTEMS DIAMOND token
