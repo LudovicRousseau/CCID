@@ -505,6 +505,12 @@ int ccid_open_hack_post(unsigned int reader_index)
 			ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
 			break;
 
+		case KOBIL_TRIBANK:
+			/* Firmware does NOT supported extended APDU */
+			ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
+			ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
+			break;
+
 #if 0
 		/* SCM SCR331-DI contactless */
 		case SCR331DI:
