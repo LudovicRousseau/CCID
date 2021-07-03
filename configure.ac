@@ -289,18 +289,12 @@ AC_SUBST(bundle)
 AC_SUBST(usbdropdir)
 AC_SUBST(ccidtwindir)
 AC_SUBST(serialconfdir)
-AS_AC_EXPAND(bindir_exp,$bindir)
-AS_AC_EXPAND(sysconfdir_exp,$sysconfdir)
 
 cat << EOF
 
 libccid has been configured with following options:
 
 Version:             ${PACKAGE_VERSION}
-User binaries:       $(eval eval eval echo "${bindir_exp}")
-Configuration files: $(eval eval eval echo "${sysconfdir_exp}")
-
-
 Host:                ${host}
 Compiler:            ${CC}
 Preprocessor flags:  ${CPPFLAGS}
