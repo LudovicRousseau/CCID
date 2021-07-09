@@ -1550,7 +1550,7 @@ static void *Multi_PollingProc(void *p_ext)
 							change = (slot_status & 2) ? "status changed" : "no change";
 
 							DEBUG_COMM3("slot %d status: %d",
-								s + b*4, slot_status);
+								s + slot, slot_status);
 							DEBUG_COMM3("ICC %s, %s", present, change);
 						}
 						slot += 4;
