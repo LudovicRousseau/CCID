@@ -117,6 +117,48 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.35 - 25 July 2021, Ludovic Rousseau
+   - Add support of
+     - ArkSigner Connect2Sign
+     - Circle CCR7115 ICC
+     - Circle CCR7315
+     - Circle CIR215 CL
+     - Circle CIR215 PICC
+     - Circle CIR315
+     - Circle CIR315 (idProduct: 0x3100)
+     - Circle CIR315 CL
+     - Circle CIR315 Dual & 1S
+     - Circle CIR415 CL & 1S
+     - Circle Idaxis SecurePIV
+     - DUALi DE-ABCM6 RFRW
+     - Feitian R701
+     - Generic EMV Smartcard Reader (0x058C:0x9590)
+     - INMAX DWR18 HC
+     - INMAX DWR18 HPC
+     - Identiv Identiv uTrust 4711 F CL + SAM Reader
+     - Identiv uTrust 3721 Contactless Reader
+     - Infocrypt HWDSSL DEVICE
+     - Infocrypt Token++ lite
+     - MK Technology KeyPass D1
+     - SONY Felica RC-S300/P
+     - SONY Felica RC-S300/S
+     - SONY Felica RC-S660/U
+     - SYNNIX CL-2100R
+     - SoloKeys Solo 2
+     - Spyrus Inc PocketVault P-3X (idProduct: 0x3203)
+  - parse: use "ICCD token" for ICCD tokens
+  - Support 4 card slots with Feitian R502 C9
+  - ccid_usb: ask for bNumDataRatesSupported data rates
+  - Solve a performance issue with T=1 and CCID_CLASS_AUTO_PPS_PROP
+  - Fix a possible buffer overflow in T0ProcACK
+  - IFDHSetProtocolParameters: set IFSC/IFSD only for TPDU readers
+  - CCID serial: Reset buffers on failed read
+  - Fix yylex missing symbol
+  - Gemalto pinpad: fix incorrect bEntryValidationCondition for
+    SecurePINVerify and SecurePINModify
+  - Fix bit4id miniLector-EVO pinpad support
+  - The Kobil TriBank reader does NOT support extended APDU
+
 1.4.34 - 24 January 2021, Ludovic Rousseau
    - Add support of
      - ACS ACR1252IMP Reader
