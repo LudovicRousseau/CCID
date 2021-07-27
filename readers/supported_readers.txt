@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-06-22
+# Generated: 2021-07-27
 #
 # DO NOT EDIT BY HAND
 
@@ -593,6 +593,7 @@
 # Lenovo
 0x17EF:0x6007:Lenovo Lenovo USB Smartcard Keyboard
 0x17EF:0x6055:Lenovo Lenovo USB Smartcard Keyboard
+0x17EF:0x6111:Lenovo Lenovo Smartcard Wired Keyboard II
 
 # Liteon
 0x03F0:0x164A:Liteon HP SC Keyboard - Apollo (Liteon)
