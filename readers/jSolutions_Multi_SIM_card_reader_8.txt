@@ -1,0 +1,51 @@
+ idVendor: 0x04D8
+  iManufacturer: Microchip Technology Inc.
+ idProduct: 0xEB61
+  iProduct: Multi SIM card reader 4/8
+ bcdDevice: 1.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: SIM card reader
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x07
+  bVoltageSupport: 0x06
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0001
+   T=0
+  dwDefaultClock: 3.573 MHz
+  dwMaximumClock: 3.573 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   Support 3573 kHz
+  dwDataRate: 9600 bps
+  dwMaxDataRate: 9600 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   Support 9600 bps
+  dwMaxIFSD: 247
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000100BA
+   ....02 Automatic parameter configuration based on ATR data
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   01.... TPDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0x00
+  bClassEnvelope: 0x00
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 8

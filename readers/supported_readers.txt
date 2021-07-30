@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-07-27
+# Generated: 2021-07-30
 #
 # DO NOT EDIT BY HAND
 
@@ -558,6 +558,9 @@
 
 # IonIDe
 0x076B:0x3B01:IonIDe Smartcard Reader
+
+# jSolutions s.r.o.
+0x04D8:0xEB61:jSolutions s.r.o. Multi SIM card reader 4/8
 
 # KACST
 0x2A18:0x5000:KACST HSID Reader
