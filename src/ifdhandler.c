@@ -1,16 +1,16 @@
 /*
-    ifdhandler.c: IFDH API
-    Copyright (C) 2003-2010   Ludovic Rousseau
+	ifdhandler.c: IFDH API
+	Copyright (C) 2003-2010   Ludovic Rousseau
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Lesser General Public
+	License as published by the Free Software Foundation; either
+	version 2.1 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Lesser General Public License for more details.
 
 	You should have received a copy of the GNU Lesser General Public License
 	along with this library; if not, write to the Free Software Foundation,
@@ -788,7 +788,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			}
 	}
 
-    /* Do not send CCID command SetParameters or PPS to the CCID
+	/* Do not send CCID command SetParameters or PPS to the CCID
 	 * The CCID will do this himself */
 	if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
 	{
@@ -1508,7 +1508,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			pcsc_tlv -> tag = FEATURE_VERIFY_PIN_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
 			set_U32(&pcsc_tlv -> value,
-			    htonl(IOCTL_FEATURE_VERIFY_PIN_DIRECT));
+				htonl(IOCTL_FEATURE_VERIFY_PIN_DIRECT));
 
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
@@ -1519,7 +1519,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			pcsc_tlv -> tag = FEATURE_MODIFY_PIN_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
 			set_U32(&pcsc_tlv -> value,
-			    htonl(IOCTL_FEATURE_MODIFY_PIN_DIRECT));
+				htonl(IOCTL_FEATURE_MODIFY_PIN_DIRECT));
 
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
@@ -1531,7 +1531,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			pcsc_tlv -> tag = FEATURE_IFD_PIN_PROPERTIES;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
 			set_U32(&pcsc_tlv -> value,
-			    htonl(IOCTL_FEATURE_IFD_PIN_PROPERTIES));
+				htonl(IOCTL_FEATURE_IFD_PIN_PROPERTIES));
 
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
@@ -1543,7 +1543,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			pcsc_tlv -> tag = FEATURE_MCT_READER_DIRECT;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
 			set_U32(&pcsc_tlv -> value,
-			    htonl(IOCTL_FEATURE_MCT_READER_DIRECT));
+				htonl(IOCTL_FEATURE_MCT_READER_DIRECT));
 
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
@@ -1552,7 +1552,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		pcsc_tlv -> tag = FEATURE_GET_TLV_PROPERTIES;
 		pcsc_tlv -> length = 0x04; /* always 0x04 */
 		set_U32(&pcsc_tlv -> value,
-		    htonl(IOCTL_FEATURE_GET_TLV_PROPERTIES));
+			htonl(IOCTL_FEATURE_GET_TLV_PROPERTIES));
 		pcsc_tlv++;
 		iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
 
@@ -1562,7 +1562,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			pcsc_tlv -> tag = FEATURE_CCID_ESC_COMMAND;
 			pcsc_tlv -> length = 0x04; /* always 0x04 */
 			set_U32(&pcsc_tlv -> value,
-			    htonl(IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE));
+				htonl(IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE));
 
 			pcsc_tlv++;
 			iBytesReturned += sizeof(PCSC_TLV_STRUCTURE);
@@ -1888,7 +1888,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
 	if ((GEMCORESIMPRO == ccid_descriptor->readerID)
-	     && (ccid_descriptor->IFD_bcdDevice < 0x0200))
+		&& (ccid_descriptor->IFD_bcdDevice < 0x0200))
 	{
 		/* GemCore SIM Pro firmware 2.00 and up features
 		 * a full independant second slot */
@@ -2182,7 +2182,7 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 
 	/* Timeout applied on ISO in + ISO out card exchange
 	 *
-     * Timeout is the sum of:
+	 * Timeout is the sum of:
 	 * - ISO in delay between leading edge of the first character sent by the
 	 *   interface device and the last one (NAD PCB LN APDU CKS) = 260 EGT,
 	 * - delay between ISO in and ISO out = BWT,

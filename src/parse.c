@@ -1,16 +1,16 @@
 /*
-    parse.c: parse CCID structure
-    Copyright (C) 2003-2010   Ludovic Rousseau
+	parse.c: parse CCID structure
+	Copyright (C) 2003-2010   Ludovic Rousseau
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License along
 	with this program; if not, write to the Free Software Foundation, Inc., 51
@@ -75,15 +75,15 @@ int main(int argc, char *argv[])
 	if (r < 0)
 	{
 		(void)printf("libusb_init() failed: %s\n", libusb_error_name(r));
-        return r;
+		return r;
 	}
 
 	cnt = libusb_get_device_list(NULL, &devs);
-    if (cnt < 0)
+	if (cnt < 0)
 	{
 		(void)printf("libusb_get_device_list() failed: %s\n",
 			libusb_error_name(r));
-        return (int)cnt;
+		return (int)cnt;
 	}
 
 	/* for every device */
@@ -114,18 +114,18 @@ int main(int argc, char *argv[])
 		}
 
 		r = libusb_get_device_descriptor(dev, &desc);
-        if (r < 0)
+		if (r < 0)
 		{
-            (void)fprintf(stderr,
+			(void)fprintf(stderr,
 				BRIGHT_RED "failed to get device descriptor: %s" NORMAL,
 				libusb_error_name(r));
-            return 1;
-        }
+			return 1;
+		}
 
 		(void)fprintf(stderr,
 			"Parsing USB bus/device: %04X:%04X (bus %d, device %d)\n",
 			desc.idVendor, desc.idProduct,
-            libusb_get_bus_number(dev), libusb_get_device_address(dev));
+			libusb_get_bus_number(dev), libusb_get_device_address(dev));
 
 		(void)fprintf(stderr, " idVendor:  0x%04X", desc.idVendor);
 		r = libusb_get_string_descriptor_ascii(handle, desc.iManufacturer,
