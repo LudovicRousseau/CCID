@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-07-30
+# Generated: 2021-08-07
 #
 # DO NOT EDIT BY HAND
 
@@ -695,6 +695,7 @@
 # REINER SCT
 0x0C4B:0x0504:REINER SCT cyberJack go
 0x0C4B:0x0520:REINER SCT tanJack Bluetooth
+0x0C4B:0x0551:REINER SCT tanJack USB
 0x0C4B:0x0580:REINER SCT cyberJack one
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
 
