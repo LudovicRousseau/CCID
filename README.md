@@ -117,6 +117,15 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.4.36 - 30 August 2021, Ludovic Rousseau
+   - Add support of
+     - Lenovo Lenovo Smartcard Wired Keyboard II
+     - REINER SCT tanJack USB
+     - SafeNet eToken 5110+ FIPS
+     - SafeNet eToken 5300 C
+     - jSolutions s.r.o. Multi SIM card reader 4/8
+   - parse: fix check when bNumDataRatesSupported = 0
+
 1.4.35 - 25 July 2021, Ludovic Rousseau
    - Add support of
      - ArkSigner Connect2Sign
