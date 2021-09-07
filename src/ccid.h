@@ -239,6 +239,7 @@ typedef struct
 #define IDENTIV_uTrust3701F		0x04E65791
 #define IDENTIV_uTrust4701F		0x04E65724
 #define BIT4ID_MINILECTOR		0x25DD3111
+#define SAFENET_ETOKEN_5100		0x05290620
 
 #define VENDOR_GEMALTO 0x08E6
 #define GET_VENDOR(readerID) ((readerID >> 16) & 0xFFFF)
