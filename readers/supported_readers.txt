@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-08-30
+# Generated: 2021-09-19
 #
 # DO NOT EDIT BY HAND
 
@@ -354,6 +354,10 @@
 0x09D8:0x0427:Elatec TWN4 SmartCard NFC
 0x09D8:0x0428:Elatec TWN4/B1.06/CPF3.05/S1SC1.32/P (Beta 3)
 
+# ELYCTIS
+0x1FFA:0x0002:ELYCTIS CL reader
+0x04E6:0x5810:ELYCTIS CNT reader
+
 # ESMART
 0x2CE4:0x7479:ESMART Token GOST
 
@@ -516,7 +520,6 @@
 0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
 0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader
 0x04E6:0x5723:Identive Identive CLOUD 4000 F DTC
-0x04E6:0x5810:Identive CLOUD 2700 R Smart Card Reader
 0x04E6:0x5817:Identive SCT3522CC token
 
 # Identive Technologies
