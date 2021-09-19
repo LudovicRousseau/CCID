@@ -356,7 +356,6 @@
 
 # ELYCTIS
 0x1FFA:0x0002:ELYCTIS CL reader
-0x04E6:0x5810:ELYCTIS CNT reader
 
 # ESMART
 0x2CE4:0x7479:ESMART Token GOST
@@ -520,6 +519,7 @@
 0x04E6:0x5720:Identive Identive CLOUD 4500 F Dual Interface Reader
 0x04E6:0x5721:Identive Identive CLOUD 4510 F Contactless + SAM Reader
 0x04E6:0x5723:Identive Identive CLOUD 4000 F DTC
+0x04E6:0x5810:Identive CLOUD 2700 R Smart Card Reader
 0x04E6:0x5817:Identive SCT3522CC token
 
 # Identive Technologies
@@ -880,6 +880,8 @@
 0x1050:0x0405:Yubico YubiKey OTP+CCID
 0x1050:0x0406:Yubico YubiKey FIDO+CCID
 0x1050:0x0407:Yubico YubiKey OTP+FIDO+CCID
+
+# ~ELYCTIS
 
 ##########################
 # section: unsupported

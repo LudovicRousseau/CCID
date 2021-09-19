@@ -54,7 +54,7 @@
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1
  idVendor: 0x04E6
-  iManufacturer: ELYCTIS
+  iManufacturer: ~ELYCTIS
  idProduct: 0x5810
   iProduct: CNT reader
  bcdDevice: 1.01 (firmware release?)
@@ -109,7 +109,7 @@
   bPINSupport: 0x00
   bMaxCCIDBusySlots: 1
  idVendor: 0x04E6
-  iManufacturer: ELYCTIS
+  iManufacturer: ~ELYCTIS
  idProduct: 0x5810
   iProduct: CNT reader
  bcdDevice: 1.01 (firmware release?)
