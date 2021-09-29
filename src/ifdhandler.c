@@ -1468,6 +1468,10 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 				allowed = TRUE;
 		}
 
+		/* allow APDU exchange with this reader without a card in the field */
+		if (HID_OMNIKEY_5427CK == readerID)
+			allowed = TRUE;
+
 		if (!allowed)
 		{
 			DEBUG_INFO1("ifd exchange (Escape command) not allowed");
