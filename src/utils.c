@@ -28,13 +28,14 @@
 #include "debug.h"
 
 int ReaderIndex[CCID_DRIVER_MAX_READERS];
+#define FREE_ENTRY -42
 
 void InitReaderIndex(void)
 {
 	int i;
 
 	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
-		ReaderIndex[i] = -1;
+		ReaderIndex[i] = FREE_ENTRY;
 } /* InitReaderIndex */
 
 int GetNewReaderIndex(const int Lun)
@@ -53,7 +54,7 @@ int GetNewReaderIndex(const int Lun)
 	}
 
 	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
-		if (-1 == ReaderIndex[i])
+		if (FREE_ENTRY == ReaderIndex[i])
 		{
 			ReaderIndex[i] = Lun;
 			return i;
@@ -77,7 +78,7 @@ int LunToReaderIndex(const int Lun)
 
 void ReleaseReaderIndex(const int index)
 {
-	ReaderIndex[index] = -1;
+	ReaderIndex[index] = FREE_ENTRY;
 } /* ReleaseReaderIndex */
 
 /* Read a non aligned 16-bit integer */
