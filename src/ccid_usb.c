@@ -104,6 +104,7 @@ typedef struct
 	/* pointer to the multislot extension (if any) */
 	struct usbDevice_MultiSlot_Extension *multislot_extension;
 
+	char disconnected;
 } _usbDevice;
 
 /* The _usbDevice structure must be defined before including ccid_usb.h */
@@ -702,6 +703,7 @@ again:
 				usbDevice[reader_index].real_nb_opened_slots = 1;
 				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
 				usbDevice[reader_index].polling_transfer = NULL;
+				usbDevice[reader_index].disconnected = FALSE;
 
 				/* CCID common informations */
 				usbDevice[reader_index].ccid.real_bSeq = 0;
@@ -840,6 +842,12 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	(void)snprintf(debug_header, sizeof(debug_header), "-> %06X ",
 		(int)reader_index);
 
+	if (usbDevice[reader_index].disconnected)
+	{
+		DEBUG_COMM("Reader disconnected");
+		return STATUS_NO_SUCH_DEVICE;
+	}
+
 #ifdef ENABLE_ZLP
 	if (usbDevice[reader_index].ccid.zlp)
 	{ /* Zero Length Packet */
@@ -887,6 +895,12 @@ status_t ReadUSB(unsigned int reader_index, unsigned int * length,
 	char debug_header[] = "<- 121234 ";
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int duplicate_frame = 0;
+
+	if (usbDevice[reader_index].disconnected)
+	{
+		DEBUG_COMM("Reader disconnected");
+		return STATUS_NO_SUCH_DEVICE;
+	}
 
 read_again:
 	(void)snprintf(debug_header, sizeof(debug_header), "<- %06X ",
@@ -1002,6 +1016,20 @@ status_t CloseUSB(unsigned int reader_index)
 
 	return STATUS_SUCCESS;
 } /* CloseUSB */
+
+
+/*****************************************************************************
+ *
+ *					DisconnectUSB
+ *
+ ****************************************************************************/
+status_t DisconnectUSB(unsigned int reader_index)
+{
+	DEBUG_COMM("Disconnect reader");
+	usbDevice[reader_index].disconnected = TRUE;
+
+	return STATUS_SUCCESS;
+} /* DisconnectUSB */
 
 
 /*****************************************************************************

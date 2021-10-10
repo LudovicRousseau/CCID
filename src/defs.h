@@ -96,6 +96,7 @@ typedef enum {
 #define ClosePort CloseSerial
 #define ReadPort ReadSerial
 #define WritePort WriteSerial
+#define DisconnectPort DisconnectSerial
 #include "ccid_serial.h"
 
 #else
@@ -105,6 +106,7 @@ typedef enum {
 #define ClosePort CloseUSB
 #define ReadPort ReadUSB
 #define WritePort WriteUSB
+#define DisconnectPort DisconnectUSB
 #include "ccid_usb.h"
 
 #endif

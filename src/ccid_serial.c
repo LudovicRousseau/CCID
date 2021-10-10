@@ -936,6 +936,21 @@ status_t CloseSerial(unsigned int reader_index)
 
 /*****************************************************************************
  *
+ *					DisconnectSerial
+ *
+ ****************************************************************************/
+status_t DisconnectSerial(unsigned int reader_index)
+{
+	(void)reader_index;
+
+	DEBUG_COMM("Disconnect reader");
+
+	return STATUS_UNSUCCESSFUL;
+} /* DisconnectSerial */
+
+
+/*****************************************************************************
+ *
  *					get_ccid_descriptor
  *
  ****************************************************************************/

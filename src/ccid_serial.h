@@ -32,4 +32,6 @@ status_t ReadSerial(unsigned int reader_index, unsigned int *length,
 
 status_t CloseSerial(unsigned int reader_index);
 
+status_t DisconnectSerial(unsigned int reader_index);
+
 #endif

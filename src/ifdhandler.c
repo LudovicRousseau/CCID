@@ -602,6 +602,13 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			break;
 #endif
 
+#ifdef TAG_IFD_DEVICE_REMOVED
+		case TAG_IFD_DEVICE_REMOVED:
+			if (Value && (1 == *Length))
+				Value[0] = 1;
+			break;
+#endif
+
 		case SCARD_ATTR_VENDOR_IFD_SERIAL_NO:
 			{
 				_ccid_descriptor *ccid_desc;
@@ -661,6 +668,7 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	 * IFD_ERROR_VALUE_READ_ONLY
 	 */
 
+	RESPONSECODE return_value = IFD_SUCCESS;
 	(void)Length;
 	(void)Value;
 
@@ -672,7 +680,20 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	DEBUG_INFO4("tag: 0x" DWORD_X ", %s (lun: " DWORD_X ")", Tag,
 		CcidSlots[reader_index].readerName, Lun);
 
-	return IFD_NOT_SUPPORTED;
+	switch (Tag)
+	{
+#ifdef TAG_IFD_DEVICE_REMOVED
+		case TAG_IFD_DEVICE_REMOVED:
+			if ((1 == Length) && (Value != NULL) && (Value[0] != 0))
+				DisconnectPort(reader_index);
+			break;
+#endif
+
+		default:
+			return_value = IFD_ERROR_TAG;
+	}
+
+	return return_value;
 } /* IFDHSetCapabilities */
 
 
@@ -1918,6 +1939,12 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 
 	/* set back the old LogLevel */
 	LogLevel = oldLogLevel;
+
+	if (IFD_NO_SUCH_DEVICE == return_value)
+	{
+		return_value = IFD_ICC_NOT_PRESENT;
+		goto end;
+	}
 
 	if (return_value != IFD_SUCCESS)
 		return return_value;
