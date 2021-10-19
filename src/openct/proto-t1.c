@@ -159,7 +159,8 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 {
 	ct_buf_t sbuf, rbuf, tbuf;
 	unsigned char sdata[T1_BUFFER_SIZE], sblk[5];
-	unsigned int slen, retries, resyncs;
+	unsigned int slen, resyncs;
+	int retries;
 	size_t last_send = 0;
 
 	if (snd_len == 0)
