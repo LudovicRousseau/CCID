@@ -745,7 +745,7 @@ int t1_negotiate_ifsd(t1_state_t * t1, unsigned int dad, int ifsd)
 	ct_buf_t sbuf;
 	unsigned char sdata[T1_BUFFER_SIZE];
 	unsigned int slen;
-	unsigned int retries;
+	int retries;
 	size_t snd_len;
 	int n;
 	unsigned char snd_buf[1];
@@ -764,13 +764,13 @@ int t1_negotiate_ifsd(t1_state_t * t1, unsigned int dad, int ifsd)
 		/* Build the block */
 		slen = t1_build(t1, sdata, 0, T1_S_BLOCK | T1_S_IFS, &sbuf, NULL);
 
-		/* Send the block */
-		n = t1_xcv(t1, sdata, slen, sizeof(sdata));
-
 		retries--;
 		/* ISO 7816-3 Rule 7.4.2 */
-		if (retries <= 0)
+		if (retries < 0)
 			goto error;
+
+		/* Send the block */
+		n = t1_xcv(t1, sdata, slen, sizeof(sdata));
 
 		if (-1 == n)
 		{
