@@ -544,7 +544,7 @@ again_libusb:
 					}
 					else
 					{
-						/* if an interface number is given by HAL we
+						/* if an interface number is given by udev we
 						 * continue with this device. */
 						if (-1 == interface_number)
 						{
