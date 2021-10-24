@@ -400,7 +400,7 @@ again_libusb:
 			if ((device_bus || device_addr)
 				&& ((bus_number != device_bus)
 				|| (device_address != device_addr))) {
-				/* not USB the device we are looking for */
+				/* not the USB device we are looking for */
 				continue;
 			}
 #endif
