@@ -221,7 +221,7 @@ again:
 	cmd[0] = 0x62; /* IccPowerOn */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = voltage;
 	cmd[8] = cmd[9] = 0; /* RFU */
 
@@ -323,7 +323,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	pvs = (PIN_VERIFY_STRUCTURE *)TxBuffer;
 	cmd[0] = 0x69;	/* Secure */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = 0;		/* bBWI */
 	cmd[8] = 0;		/* wLevelParameter */
 	cmd[9] = 0;
@@ -496,7 +496,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		/* we need to set bSeq again to avoid a "Duplicate frame detected"
 		 * error since the bSeq of CmdEscape is now greater than bSeq set at
 		 * the beginning of this function */
-		cmd[6] = ccid_descriptor->bSeq++;
+		cmd[6] = (*ccid_descriptor->pbSeq)++;
 	}
 
 	i2dw(a - 10, cmd + 1);  /* CCID message length */
@@ -671,7 +671,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 	pms = (PIN_MODIFY_STRUCTURE *)TxBuffer;
 	cmd[0] = 0x69;	/* Secure */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = 0;		/* bBWI */
 	cmd[8] = 0;		/* wLevelParameter */
 	cmd[9] = 0;
@@ -980,7 +980,7 @@ again:
 	cmd_in[0] = 0x6B; /* PC_to_RDR_Escape */
 	i2dw(length_in - 10, cmd_in+1);	/* dwLength */
 	cmd_in[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd_in[6] = ccid_descriptor->bSeq++;
+	cmd_in[6] = (*ccid_descriptor->pbSeq)++;
 	cmd_in[7] = cmd_in[8] = cmd_in[9] = 0; /* RFU */
 
 	/* copy the command */
@@ -1127,7 +1127,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	cmd[0] = 0x63; /* IccPowerOff */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
@@ -1250,7 +1250,7 @@ again_status:
 	cmd[0] = 0x65; /* GetSlotStatus */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
@@ -1393,7 +1393,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 	cmd[0] = 0x6F; /* XfrBlock */
 	i2dw(tx_length, cmd+1);	/* APDU length */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = bBWI;	/* extend block waiting timeout */
 	cmd[8] = rx_length & 0xFF;	/* Expected length, in character mode only */
 	cmd[9] = (rx_length >> 8) & 0xFF;
@@ -2312,7 +2312,7 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	cmd[0] = 0x61; /* SetParameters */
 	i2dw(length, cmd+1);	/* APDU length */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = ccid_descriptor->bSeq++;
+	cmd[6] = (*ccid_descriptor->pbSeq)++;
 	cmd[7] = protocol;	/* bProtocolNum */
 	cmd[8] = cmd[9] = 0; /* RFU */
 
