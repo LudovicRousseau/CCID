@@ -602,8 +602,7 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 	}
 
 	/* Common to all readers */
-	serialDevice[reader_index].ccid.real_bSeq = 0;
-	serialDevice[reader_index].ccid.pbSeq = &serialDevice[reader_index].ccid.real_bSeq;
+	serialDevice[reader_index].ccid.bSeq = 0;
 	serialDevice[reader_index].real_nb_opened_slots = 1;
 	serialDevice[reader_index].nb_opened_slots = &serialDevice[reader_index].real_nb_opened_slots;
 	serialDevice[reader_index].ccid.bCurrentSlotIndex = 0;

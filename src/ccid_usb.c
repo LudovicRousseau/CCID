@@ -706,8 +706,7 @@ again:
 				usbDevice[reader_index].disconnected = FALSE;
 
 				/* CCID common informations */
-				usbDevice[reader_index].ccid.real_bSeq = 0;
-				usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
+				usbDevice[reader_index].ccid.bSeq = 0;
 				usbDevice[reader_index].ccid.readerID =
 					(desc.idVendor << 16) + desc.idProduct;
 				usbDevice[reader_index].ccid.dwFeatures = dw2i(device_descriptor, 40);
@@ -929,7 +928,7 @@ read_again:
 
 #define BSEQ_OFFSET 6
 	if ((*length >= BSEQ_OFFSET +1)
-		&& (buffer[BSEQ_OFFSET] < *ccid_descriptor->pbSeq -1))
+		&& (buffer[BSEQ_OFFSET] < ccid_descriptor->bSeq -1))
 	{
 		duplicate_frame++;
 		if (duplicate_frame > 10)
