@@ -71,6 +71,11 @@ typedef struct
 	char bMaxSlotIndex;
 
 	/*
+	 * Maximum number of slots which can be simultaneously busy
+	 */
+	char bMaxCCIDBusySlots;
+
+	/*
 	 * Slot in use
 	 */
 	char bCurrentSlotIndex;

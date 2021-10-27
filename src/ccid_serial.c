@@ -620,6 +620,7 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 	serialDevice[reader_index].ccid.bPINSupport = 0x0;
 	serialDevice[reader_index].ccid.dwMaxDataRate = 344086;
 	serialDevice[reader_index].ccid.bMaxSlotIndex = 0;
+	serialDevice[reader_index].ccid.bMaxCCIDBusySlots = 1;
 	serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialTwinDataRates;
 	serialDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
 	serialDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
