@@ -490,8 +490,12 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 		case TAG_IFD_SLOT_THREAD_SAFE:
 			if (*Length >= 1)
 			{
+				_ccid_descriptor *ccid_desc =  get_ccid_descriptor(reader_index);
 				*Length = 1;
-				*Value = 0; /* Can NOT talk to multiple slots at the same time */
+				if (ccid_desc->bMaxSlotIndex +1 == ccid_desc->bMaxCCIDBusySlots)
+					*Value = 1; /* all slots can be used simultanesously */
+				else
+					*Value = 0; /* Can NOT talk to multiple slots at the same time */
 			}
 			else
 				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
