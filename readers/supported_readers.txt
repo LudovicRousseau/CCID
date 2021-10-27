@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-10-25
+# Generated: 2021-10-27
 #
 # DO NOT EDIT BY HAND
 
@@ -131,6 +131,7 @@
 # ACS
 0x072F:0x1204:ACS ACR101 ICC Reader
 0x072F:0x221A:ACS ACR1251 Dual Reader
+0x072F:0x2224:ACS ACR1281U
 0x072F:0x223B:ACS ACR1252 Dual Reader
 0x072F:0x223E:ACS ACR1252 Reader
 0x072F:0x223F:ACS ACR1255U-J1
