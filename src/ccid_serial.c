@@ -558,6 +558,7 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 
 			*serialDevice[reader_index].nb_opened_slots += 1;
 			serialDevice[reader_index].ccid.bCurrentSlotIndex++;
+			serialDevice[reader_index].ccid.bSeq = 0;
 			serialDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
 			DEBUG_INFO2("Opening slot: %d",
 					serialDevice[reader_index].ccid.bCurrentSlotIndex);
