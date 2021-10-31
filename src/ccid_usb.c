@@ -1026,7 +1026,16 @@ status_t CloseUSB(unsigned int reader_index)
 status_t DisconnectUSB(unsigned int reader_index)
 {
 	DEBUG_COMM("Disconnect reader");
-	usbDevice[reader_index].disconnected = TRUE;
+	libusb_device_handle * dev_handle = usbDevice[reader_index].dev_handle;
+
+	for (int i=0; i<CCID_DRIVER_MAX_READERS; i++)
+	{
+		if (usbDevice[i].dev_handle == dev_handle)
+		{
+			DEBUG_COMM2("Disconnect reader: %d", i);
+			usbDevice[i].disconnected = TRUE;
+		}
+	}
 
 	return STATUS_SUCCESS;
 } /* DisconnectUSB */
