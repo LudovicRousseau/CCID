@@ -29,6 +29,7 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <stdatomic.h>
+#include <unistd.h>
 #include <ifdhandler.h>
 
 #include <config.h>
@@ -1942,6 +1943,9 @@ static void *Multi_ReadProc(void *p_ext)
 					usbDevice[reader_index].device_address,
 					libusb_error_name(rv));
 			}
+
+			/* wait a bit to avoid a fast error loop */
+			(void)usleep(100*1000);
 
 			continue;
 		}
