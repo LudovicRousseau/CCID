@@ -1696,9 +1696,9 @@ static int Multi_InterruptRead(int reader_index, int timeout /* in ms */)
 
 	msExt = usbDevice[reader_index].multislot_extension;
 
-	/* When stopped, return 0 so IFDHPolling will return IFD_NO_SUCH_DEVICE */
+	/* When stopped, returns IFD_NO_SUCH_DEVICE */
 	if ((msExt == NULL) || msExt->terminated)
-		return 0;
+		return IFD_NO_SUCH_DEVICE;
 
 	DEBUG_PERIODIC3("Multi_InterruptRead (%d), timeout: %d ms",
 		reader_index, timeout);
@@ -1736,9 +1736,9 @@ again:
 	/* Don't forget to unlock the mutex */
 	pthread_mutex_unlock(&msExt->mutex);
 
-	/* When stopped, return 0 so IFDHPolling will return IFD_NO_SUCH_DEVICE */
+	/* When stopped, returns IFD_NO_SUCH_DEVICE */
 	if (msExt->terminated)
-		return 0;
+		return IFD_NO_SUCH_DEVICE;
 
 	/* Not stopped */
 	if (status == LIBUSB_TRANSFER_COMPLETED)
