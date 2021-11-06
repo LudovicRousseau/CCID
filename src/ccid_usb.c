@@ -532,7 +532,6 @@ again_libusb:
 
 						*usbDevice[reader_index].nb_opened_slots += 1;
 						usbDevice[reader_index].ccid.bCurrentSlotIndex++;
-						usbDevice[reader_index].ccid.bSeq = 0;
 						usbDevice[reader_index].ccid.dwSlotStatus =
 							IFD_ICC_PRESENT;
 						DEBUG_INFO2("Opening slot: %d",
