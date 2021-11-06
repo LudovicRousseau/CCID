@@ -27,7 +27,7 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 	unsigned char *Buffer);
 
 status_t ReadUSB(unsigned int reader_index, unsigned int *length,
-	/*@out@*/ unsigned char *Buffer);
+	/*@out@*/ unsigned char *Buffer, int bSeq);
 
 status_t CloseUSB(unsigned int reader_index);
 status_t DisconnectUSB(unsigned int reader_index);

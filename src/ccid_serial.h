@@ -28,7 +28,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 	unsigned char *Buffer);
 
 status_t ReadSerial(unsigned int reader_index, unsigned int *length,
-	unsigned char *Buffer);
+	unsigned char *Buffer, int bSeq);
 
 status_t CloseSerial(unsigned int reader_index);
 

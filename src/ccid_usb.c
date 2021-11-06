@@ -902,12 +902,11 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
  *
  ****************************************************************************/
 status_t ReadUSB(unsigned int reader_index, unsigned int * length,
-	unsigned char *buffer)
+	unsigned char *buffer, int bSeq)
 {
 	int rv;
 	int actual_length;
 	char debug_header[] = "<- 121234 ";
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	int duplicate_frame = 0;
 
 	if (usbDevice[reader_index].disconnected)
@@ -1004,7 +1003,8 @@ read_again:
 
 #define BSEQ_OFFSET 6
 	if ((*length >= BSEQ_OFFSET +1)
-		&& (buffer[BSEQ_OFFSET] < *ccid_descriptor->pbSeq -1))
+		&& (bSeq != -1)
+		&& (buffer[BSEQ_OFFSET] != bSeq))
 	{
 		duplicate_frame++;
 		if (duplicate_frame > 10)
@@ -1012,7 +1012,7 @@ read_again:
 			DEBUG_CRITICAL("Too many duplicate frame detected");
 			return STATUS_UNSUCCESSFUL;
 		}
-		DEBUG_INFO1("Duplicate frame detected");
+		DEBUG_INFO1("Invalid frame detected");
 		goto read_again;
 	}
 

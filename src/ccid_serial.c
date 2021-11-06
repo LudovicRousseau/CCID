@@ -220,13 +220,16 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
  *
  *****************************************************************************/
 status_t ReadSerial(unsigned int reader_index,
-	unsigned int *length, unsigned char *buffer)
+	unsigned int *length, unsigned char *buffer, int bSeq)
 {
 	unsigned char c;
 	int rv;
 	int echo;
 	int to_read;
 	int i;
+
+	/* ignore bSeq */
+	(void)bSeq;
 
 	/* we get the echo first */
 	echo = serialDevice[reader_index].echo;

@@ -95,6 +95,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned char buffer[], int voltage)
 {
 	unsigned char cmd[10];
+	int bSeq;
 	status_t res;
 	int length, count = 1;
 	unsigned int atr_len;
@@ -218,10 +219,11 @@ check_again:
 	init_voltage = voltage;
 
 again:
+	bSeq = (*ccid_descriptor->pbSeq)++;
 	cmd[0] = 0x62; /* IccPowerOn */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = (*ccid_descriptor->pbSeq)++;
+	cmd[6] = bSeq;
 	cmd[7] = voltage;
 	cmd[8] = cmd[9] = 0; /* RFU */
 
@@ -232,7 +234,7 @@ again:
 	/* needed if we go back after a switch to ISO mode */
 	*nlength = length;
 
-	res = ReadPort(reader_index, nlength, buffer);
+	res = ReadPort(reader_index, nlength, buffer, bSeq);
 	CHECK_STATUS(res)
 
 	if (*nlength < CCID_RESPONSE_HEADER_SIZE)
@@ -947,6 +949,7 @@ RESPONSECODE CmdEscapeCheck(unsigned int reader_index,
 	int mayfail)
 {
 	unsigned char *cmd_in, *cmd_out;
+	int bSeq;
 	status_t res;
 	unsigned int length_in, length_out;
 	RESPONSECODE return_value = IFD_SUCCESS;
@@ -977,10 +980,11 @@ again:
 		goto end;
 	}
 
+	bSeq = (*ccid_descriptor->pbSeq)++;
 	cmd_in[0] = 0x6B; /* PC_to_RDR_Escape */
 	i2dw(length_in - 10, cmd_in+1);	/* dwLength */
 	cmd_in[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd_in[6] = (*ccid_descriptor->pbSeq)++;
+	cmd_in[6] = bSeq;
 	cmd_in[7] = cmd_in[8] = cmd_in[9] = 0; /* RFU */
 
 	/* copy the command */
@@ -1000,7 +1004,7 @@ again:
 
 time_request:
 	length_out = 10 + *RxLength;
-	res = ReadPort(reader_index, &length_out, cmd_out);
+	res = ReadPort(reader_index, &length_out, cmd_out, bSeq);
 
 	/* replay the command if NAK
 	 * This (generally) happens only for the first command sent to the reader
@@ -1072,6 +1076,7 @@ end:
 RESPONSECODE CmdPowerOff(unsigned int reader_index)
 {
 	unsigned char cmd[10];
+	int bSeq;
 	status_t res;
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
@@ -1124,17 +1129,18 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	}
 #endif
 
+	bSeq = (*ccid_descriptor->pbSeq)++;
 	cmd[0] = 0x63; /* IccPowerOff */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = (*ccid_descriptor->pbSeq)++;
+	cmd[6] = bSeq;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
 	CHECK_STATUS(res)
 
 	length = sizeof(cmd);
-	res = ReadPort(reader_index, &length, cmd);
+	res = ReadPort(reader_index, &length, cmd, bSeq);
 	CHECK_STATUS(res)
 
 	if (length < CCID_RESPONSE_HEADER_SIZE)
@@ -1161,6 +1167,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
 {
 	unsigned char cmd[10];
+	int bSeq;
 	status_t res;
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
@@ -1247,17 +1254,18 @@ again_status:
 		InterruptRead(reader_index, 10);
 #endif
 
+	bSeq = (*ccid_descriptor->pbSeq)++;
 	cmd[0] = 0x65; /* GetSlotStatus */
 	cmd[1] = cmd[2] = cmd[3] = cmd[4] = 0;	/* dwLength */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = (*ccid_descriptor->pbSeq)++;
+	cmd[6] = bSeq;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
 	res = WritePort(reader_index, sizeof(cmd), cmd);
 	CHECK_STATUS(res)
 
 	length = SIZE_GET_SLOT_STATUS;
-	res = ReadPort(reader_index, &length, buffer);
+	res = ReadPort(reader_index, &length, buffer, bSeq);
 	CHECK_STATUS(res)
 
 	if (length < CCID_RESPONSE_HEADER_SIZE)
@@ -1546,7 +1554,7 @@ time_request_ICCD_B:
 
 time_request:
 	length = sizeof(cmd);
-	ret = ReadPort(reader_index, &length, cmd);
+	ret = ReadPort(reader_index, &length, cmd, -1);
 
 	/* restore the original value of read timeout */
 	ccid_descriptor -> readTimeout = old_timeout;
@@ -2304,15 +2312,17 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	unsigned int length, unsigned char buffer[])
 {
 	unsigned char cmd[10+length];	/* CCID + APDU buffer */
+	int bSeq;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	status_t res;
 
 	DEBUG_COMM2("length: %d bytes", length);
 
+	bSeq = (*ccid_descriptor->pbSeq)++;
 	cmd[0] = 0x61; /* SetParameters */
 	i2dw(length, cmd+1);	/* APDU length */
 	cmd[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
-	cmd[6] = (*ccid_descriptor->pbSeq)++;
+	cmd[6] = bSeq;
 	cmd[7] = protocol;	/* bProtocolNum */
 	cmd[8] = cmd[9] = 0; /* RFU */
 
@@ -2322,7 +2332,7 @@ RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	CHECK_STATUS(res)
 
 	length = sizeof(cmd);
-	res = ReadPort(reader_index, &length, cmd);
+	res = ReadPort(reader_index, &length, cmd, bSeq);
 	CHECK_STATUS(res)
 
 	if (length < CCID_RESPONSE_HEADER_SIZE)
