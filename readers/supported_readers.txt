@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2021-10-27
+# Generated: 2022-01-05
 #
 # DO NOT EDIT BY HAND
 
@@ -316,6 +316,7 @@
 # Circle
 0x31AA:0x0224:Circle Idaxis SecurePIV
 0x31AA:0x1000:Circle CIR115 ICC
+0x31AA:0x1100:Circle CIR125 ICC
 0x31AA:0x2000:Circle CIR215 PICC
 0x31AA:0x2001:Circle CIR215 CL
 0x31AA:0x3000:Circle CIR315 Dual & 1S
