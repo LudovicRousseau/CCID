@@ -1106,7 +1106,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		ccid_desc->readTimeout = T0_card_timeout(f, d, param[2] /* TC1 */,
 			param[3] /* TC2 */, ccid_desc->dwDefaultClock);
 
-		DEBUG_COMM2("Communication timeout: %d ms", ccid_desc->readTimeout);
+		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
 
 		ret = SetParameters(reader_index, 0, sizeof(param), param);
 		if (IFD_SUCCESS != ret)
