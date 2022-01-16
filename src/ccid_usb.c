@@ -73,7 +73,6 @@ struct usbDevice_MultiSlot_Extension
 	pthread_t thread_proc;
 	pthread_mutex_t mutex;
 	pthread_cond_t condition;
-	struct libusb_transfer *transfer;
 };
 
 typedef struct
@@ -1829,7 +1828,6 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 
 	atomic_init(&msExt->terminated, FALSE);
 	msExt->status = 0;
-	msExt->transfer = NULL;
 
 	/* Create mutex and condition object for the interrupt polling */
 	pthread_mutex_init(&msExt->mutex, NULL);
