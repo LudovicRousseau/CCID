@@ -869,9 +869,9 @@ status_t WriteUSB(unsigned int reader_index, unsigned int length,
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL5("write failed (%d/%d): %d %s",
+		DEBUG_CRITICAL4("write failed (%d/%d): %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, rv, libusb_error_name(rv));
+			usbDevice[reader_index].device_address, libusb_error_name(rv));
 
 		if (LIBUSB_ERROR_NO_DEVICE == rv)
 			return STATUS_NO_SUCH_DEVICE;
@@ -914,9 +914,10 @@ read_again:
 	if (rv < 0)
 	{
 		*length = 0;
-		DEBUG_CRITICAL5("read failed (%d/%d): %d %s",
+		DEBUG_CRITICAL4("read failed (%d/%d): %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, rv, libusb_error_name(rv));
+			usbDevice[reader_index].device_address,
+			libusb_error_name(rv));
 
 		if (LIBUSB_ERROR_NO_DEVICE == rv)
 			return STATUS_NO_SUCH_DEVICE;
@@ -1333,9 +1334,10 @@ int ControlUSB(int reader_index, int requesttype, int request, int value,
 
 	if (ret < 0)
 	{
-		DEBUG_CRITICAL5("control failed (%d/%d): %d %s",
+		DEBUG_CRITICAL4("control failed (%d/%d): %s",
 			usbDevice[reader_index].bus_number,
-			usbDevice[reader_index].device_address, ret, libusb_error_name(ret));
+			usbDevice[reader_index].device_address,
+			libusb_error_name(ret));
 
 		return ret;
 	}
@@ -1502,7 +1504,7 @@ static void *Multi_PollingProc(void *p_ext)
 		if (NULL == transfer)
 		{
 			rv = LIBUSB_ERROR_NO_MEM;
-			DEBUG_COMM3("libusb_alloc_transfer err %d %s", rv,
+			DEBUG_COMM2("libusb_alloc_transfer err %s",
 				libusb_error_name(rv));
 			break;
 		}
@@ -1519,7 +1521,7 @@ static void *Multi_PollingProc(void *p_ext)
 		if (rv)
 		{
 			libusb_free_transfer(transfer);
-			DEBUG_COMM3("libusb_submit_transfer err %d %s", rv,
+			DEBUG_COMM2("libusb_submit_transfer err %s",
 				libusb_error_name(rv));
 			break;
 		}
@@ -1533,7 +1535,7 @@ static void *Multi_PollingProc(void *p_ext)
 			rv = libusb_handle_events_completed(ctx, &completed);
 			if (rv < 0)
 			{
-				DEBUG_COMM3("libusb_handle_events err %d %s", rv,
+				DEBUG_COMM2("libusb_handle_events err %s",
 					libusb_error_name(rv));
 
 				if (rv == LIBUSB_ERROR_INTERRUPTED)
