@@ -1434,9 +1434,10 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 
 		default:
 			/* if libusb_interrupt_transfer() times out we get EILSEQ or EAGAIN */
-			DEBUG_COMM4("InterruptRead (%d/%d): %d",
+			DEBUG_COMM4("InterruptRead (%d/%d): %s",
 				usbDevice[reader_index].bus_number,
-				usbDevice[reader_index].device_address, ret);
+				usbDevice[reader_index].device_address,
+				libusb_error_name(ret));
 			return_value = IFD_COMMUNICATION_ERROR;
 	}
 
