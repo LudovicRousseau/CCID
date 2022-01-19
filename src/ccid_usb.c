@@ -1635,10 +1635,16 @@ static void *Multi_PollingProc(void *p_ext)
 
 	if (rv < 0)
 	{
-		DEBUG_CRITICAL5("Multi_PollingProc (%d/%d): error %d %s",
-			usbDevice[msExt->reader_index].bus_number,
-			usbDevice[msExt->reader_index].device_address,
-			rv, libusb_error_name(rv));
+		if	(rv != LIBUSB_ERROR_NO_DEVICE)
+			DEBUG_CRITICAL4("Multi_PollingProc (%d/%d): error %s",
+				usbDevice[msExt->reader_index].bus_number,
+				usbDevice[msExt->reader_index].device_address,
+				libusb_error_name(rv));
+		else
+			DEBUG_COMM4("Multi_PollingProc (%d/%d): error %s",
+				usbDevice[msExt->reader_index].bus_number,
+				usbDevice[msExt->reader_index].device_address,
+				libusb_error_name(rv));
 	}
 
 	/* Wake up the slot threads so they will exit as well */
