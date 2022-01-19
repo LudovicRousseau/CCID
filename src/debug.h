@@ -73,53 +73,46 @@ extern int LogLevel;
 #define DEBUG_COMM3(fmt, data1, data2) os_log_info(OS_LOG_DEFAULT, fmt, data1, data2)
 #define DEBUG_COMM4(fmt, data1, data2, data3) os_log_info(OS_LOG_DEFAULT, fmt, data1, data2, data3)
 
-#define DEBUG_INFO_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_INFO) log_xxd(PCSC_LOG_INFO, msg, buffer, size)
-#define DEBUG_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_COMM) log_xxd(PCSC_LOG_DEBUG, msg, buffer, size)
+#define DEBUG_INFO_XXD(msg, buffer, size) do { if (LogLevel & DEBUG_LEVEL_INFO) log_xxd(PCSC_LOG_INFO, msg, buffer, size); } while (0)
+#define DEBUG_XXD(msg, buffer, size) do { if (LogLevel & DEBUG_LEVEL_COMM) log_xxd(PCSC_LOG_DEBUG, msg, buffer, size); } while (0)
 
 #else
 
+#define TO_PCSCD_LOG(fmt, CCID_LEVEL, PCSCD_LEVEL)  do { if (LogLevel & DEBUG_LEVEL_ ## CCID_LEVEL) Log1(PCSC_LOG_ ## PCSCD_LEVEL, fmt); } while (0)
+#define TO_PCSCD_LOG2(fmt, data, CCID_LEVEL, PCSCD_LEVEL)  do { if (LogLevel & DEBUG_LEVEL_ ## CCID_LEVEL) Log2(PCSC_LOG_ ## PCSCD_LEVEL, fmt, data); } while (0)
+#define TO_PCSCD_LOG3(fmt, data1, data2, CCID_LEVEL, PCSCD_LEVEL)  do { if (LogLevel & DEBUG_LEVEL_ ## CCID_LEVEL) Log3(PCSC_LOG_ ## PCSCD_LEVEL, fmt, data1, data2); } while (0)
+#define TO_PCSCD_LOG4(fmt, data1, data2, data3, CCID_LEVEL, PCSCD_LEVEL)  do { if (LogLevel & DEBUG_LEVEL_ ## CCID_LEVEL) Log4(PCSC_LOG_ ## PCSCD_LEVEL, fmt, data1, data2, data3); } while (0)
+#define TO_PCSCD_LOG5(fmt, data1, data2, data3, data4, CCID_LEVEL, PCSCD_LEVEL)  do { if (LogLevel & DEBUG_LEVEL_ ## CCID_LEVEL) Log5(PCSC_LOG_ ## PCSCD_LEVEL, fmt, data1, data2, data3, data4); } while (0)
+
 /* DEBUG_CRITICAL */
-#define DEBUG_CRITICAL(fmt) if (LogLevel & DEBUG_LEVEL_CRITICAL) Log1(PCSC_LOG_CRITICAL, fmt)
-
-#define DEBUG_CRITICAL2(fmt, data) if (LogLevel & DEBUG_LEVEL_CRITICAL) Log2(PCSC_LOG_CRITICAL, fmt, data)
-
-#define DEBUG_CRITICAL3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_CRITICAL) Log3(PCSC_LOG_CRITICAL, fmt, data1, data2)
-
-#define DEBUG_CRITICAL4(fmt, data1, data2, data3) if (LogLevel & DEBUG_LEVEL_CRITICAL) Log4(PCSC_LOG_CRITICAL, fmt, data1, data2, data3)
-
-#define DEBUG_CRITICAL5(fmt, data1, data2, data3, data4) if (LogLevel & DEBUG_LEVEL_CRITICAL) Log5(PCSC_LOG_CRITICAL, fmt, data1, data2, data3, data4)
+#define DEBUG_CRITICAL(fmt) TO_PCSCD_LOG(fmt, CRITICAL, CRITICAL)
+#define DEBUG_CRITICAL2(fmt, data) TO_PCSCD_LOG2(fmt, data, CRITICAL, CRITICAL)
+#define DEBUG_CRITICAL3(fmt, data1, data2) TO_PCSCD_LOG3(fmt, data1, data2, CRITICAL, CRITICAL)
+#define DEBUG_CRITICAL4(fmt, data1, data2, data3) TO_PCSCD_LOG4(fmt, data1, data2, data3, CRITICAL, CRITICAL)
+#define DEBUG_CRITICAL5(fmt, data1, data2, data3, data4) TO_PCSCD_LOG5(fmt, data1, data2, data3, data4, CRITICAL, CRITICAL)
 
 /* DEBUG_INFO */
-#define DEBUG_INFO1(fmt) if (LogLevel & DEBUG_LEVEL_INFO) Log1(PCSC_LOG_INFO, fmt)
+#define DEBUG_INFO1(fmt) TO_PCSCD_LOG(fmt, INFO, INFO)
+#define DEBUG_INFO2(fmt, data) TO_PCSCD_LOG2(fmt, data, INFO, INFO)
+#define DEBUG_INFO3(fmt, data1, data2) TO_PCSCD_LOG3(fmt, data1, data2, INFO, INFO)
+#define DEBUG_INFO4(fmt, data1, data2, data3) TO_PCSCD_LOG4(fmt, data1, data2, data3, INFO, INFO)
+#define DEBUG_INFO5(fmt, data1, data2, data3, data4) TO_PCSCD_LOG5(fmt, data1, data2, data3, data4, INFO, INFO)
 
-#define DEBUG_INFO2(fmt, data) if (LogLevel & DEBUG_LEVEL_INFO) Log2(PCSC_LOG_INFO, fmt, data)
-
-#define DEBUG_INFO3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_INFO) Log3(PCSC_LOG_INFO, fmt, data1, data2)
-
-#define DEBUG_INFO4(fmt, data1, data2, data3) if (LogLevel & DEBUG_LEVEL_INFO) Log4(PCSC_LOG_INFO, fmt, data1, data2, data3)
-
-#define DEBUG_INFO5(fmt, data1, data2, data3, data4) if (LogLevel & DEBUG_LEVEL_INFO) Log5(PCSC_LOG_INFO, fmt, data1, data2, data3, data4)
-
-#define DEBUG_INFO_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_INFO) LogXxd(PCSC_LOG_INFO, msg, buffer, size)
+#define DEBUG_INFO_XXD(msg, buffer, size) do { if (LogLevel & DEBUG_LEVEL_INFO) log_xxd(PCSC_LOG_INFO, msg, buffer, size); } while (0)
 
 /* DEBUG_PERIODIC */
-#define DEBUG_PERIODIC(fmt) if (LogLevel & DEBUG_LEVEL_PERIODIC) Log1(PCSC_LOG_DEBUG, fmt)
-
-#define DEBUG_PERIODIC2(fmt, data) if (LogLevel & DEBUG_LEVEL_PERIODIC) Log2(PCSC_LOG_DEBUG, fmt, data)
-
-#define DEBUG_PERIODIC3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_PERIODIC) Log3(PCSC_LOG_DEBUG, fmt, data1, data2)
+#define DEBUG_PERIODIC(fmt) TO_PCSCD_LOG(fmt, PERIODIC, DEBUG)
+#define DEBUG_PERIODIC2(fmt, data) TO_PCSCD_LOG2(fmt, data, PERIODIC, DEBUG)
+#define DEBUG_PERIODIC3(fmt, data1, data2) TO_PCSCD_LOG3(fmt, data1, data2, PERIODIC, DEBUG)
 
 /* DEBUG_COMM */
-#define DEBUG_COMM(fmt) if (LogLevel & DEBUG_LEVEL_COMM) Log1(PCSC_LOG_DEBUG, fmt)
-
-#define DEBUG_COMM2(fmt, data) if (LogLevel & DEBUG_LEVEL_COMM) Log2(PCSC_LOG_DEBUG, fmt, data)
-
-#define DEBUG_COMM3(fmt, data1, data2) if (LogLevel & DEBUG_LEVEL_COMM) Log3(PCSC_LOG_DEBUG, fmt, data1, data2)
-
-#define DEBUG_COMM4(fmt, data1, data2, data3) if (LogLevel & DEBUG_LEVEL_COMM) Log4(PCSC_LOG_DEBUG, fmt, data1, data2, data3)
+#define DEBUG_COMM(fmt) TO_PCSCD_LOG(fmt, COMM, DEBUG)
+#define DEBUG_COMM2(fmt, data) TO_PCSCD_LOG2(fmt, data, COMM, DEBUG)
+#define DEBUG_COMM3(fmt, data1, data2) TO_PCSCD_LOG3(fmt, data1, data2, COMM, DEBUG)
+#define DEBUG_COMM4(fmt, data1, data2, data3) TO_PCSCD_LOG4(fmt, data1, data2, data3, COMM, DEBUG)
 
 /* DEBUG_XXD */
-#define DEBUG_XXD(msg, buffer, size) if (LogLevel & DEBUG_LEVEL_COMM) LogXxd(PCSC_LOG_DEBUG, msg, buffer, size)
+#define DEBUG_XXD(msg, buffer, size) do { if (LogLevel & DEBUG_LEVEL_COMM) log_xxd(PCSC_LOG_DEBUG, msg, buffer, size); } while (0)
 
 #endif
 
