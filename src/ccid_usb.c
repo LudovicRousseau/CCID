@@ -963,7 +963,11 @@ read_again:
 				slot);
 			if (concurrent[slot].length > 0)
 			{
-				*length = concurrent[slot].length;
+				if (concurrent[slot].length > *length)
+					DEBUG_CRITICAL3("Received %d bytes but expected only %d",
+						concurrent[slot].length, *length);
+				else
+					*length = concurrent[slot].length;
 				memcpy(buffer, concurrent[slot].buffer, *length);
 				concurrent[slot].length = 0;
 			}
