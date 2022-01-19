@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <stdatomic.h>
 #include <ifdhandler.h>
 
 #include <config.h>
@@ -66,7 +67,7 @@ struct usbDevice_MultiSlot_Extension
 	int reader_index;
 
 	/* The multi-threaded polling part */
-	int terminated;
+	_Atomic int terminated;
 	int status;
 	unsigned char buffer[CCID_INTERRUPT_SIZE];
 	pthread_t thread_proc;
@@ -1816,7 +1817,7 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 	/* Remember the index */
 	msExt->reader_index = reader_index;
 
-	msExt->terminated = FALSE;
+	atomic_init(&msExt->terminated, FALSE);
 	msExt->status = 0;
 	msExt->transfer = NULL;
 
