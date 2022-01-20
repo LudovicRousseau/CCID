@@ -812,10 +812,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	/* Do not send CCID command SetParameters or PPS to the CCID
 	 * The CCID will do this himself */
 	if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
-	{
-		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
 		goto end;
-	}
 
 	/* PTS1? */
 	if (Flags & IFD_NEGOTIATE_PTS1)
@@ -988,6 +985,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		&& (atr.ib[1][ATR_INTERFACE_BYTE_TA].value & 0x10))
 		return IFD_COMMUNICATION_ERROR;
 
+end:
 	/* T=1 */
 	if (SCARD_PROTOCOL_T1 == Protocol)
 	{
@@ -1067,9 +1065,14 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
 
-		ret = SetParameters(reader_index, 1, sizeof(param), param);
-		if (IFD_SUCCESS != ret)
-			return ret;
+		if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
+			DEBUG_COMM("Skip SetParameters");
+		else
+		{
+			ret = SetParameters(reader_index, 1, sizeof(param), param);
+			if (IFD_SUCCESS != ret)
+				return ret;
+		}
 	}
 	else
 	/* T=0 */
@@ -1108,12 +1111,16 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 		DEBUG_COMM2("Timeout: %d ms", ccid_desc->readTimeout);
 
-		ret = SetParameters(reader_index, 0, sizeof(param), param);
-		if (IFD_SUCCESS != ret)
-			return ret;
+		if (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_PROP)
+			DEBUG_COMM("Skip SetParameters");
+		else
+		{
+			ret = SetParameters(reader_index, 0, sizeof(param), param);
+			if (IFD_SUCCESS != ret)
+				return ret;
+		}
 	}
 
-end:
 	/* set IFSC & IFSD in T=1 */
 	if ((SCARD_PROTOCOL_T1 == Protocol)
 		&& (CCID_CLASS_TPDU == (ccid_desc->dwFeatures & CCID_CLASS_EXCHANGE_MASK)))
