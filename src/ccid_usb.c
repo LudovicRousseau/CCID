@@ -86,6 +86,7 @@ struct usbDevice_MultiSlot_Extension
 
 	pthread_t thread_concurrent;
 	struct multiSlot_ConcurrentAccess *concurrent;
+	libusb_device_handle *dev_handle;
 };
 
 typedef struct
@@ -1918,12 +1919,12 @@ static void *Multi_ReadProc(void *p_ext)
 		usbDevice[reader_index].bus_number,
 		usbDevice[reader_index].device_address);
 
-	while (usbDevice[reader_index].dev_handle)
+	while (! msExt->terminated)
 	{
 		int slot;
 
 		DEBUG_COMM2("Waiting read for reader %d", reader_index);
-		rv = libusb_bulk_transfer(usbDevice[reader_index].dev_handle,
+		rv = libusb_bulk_transfer(msExt->dev_handle,
 			usbDevice[reader_index].bulk_in, buffer, sizeof buffer,
 			&length, 5 * 1000);
 
@@ -1994,6 +1995,9 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 
 	/* Remember the index */
 	msExt->reader_index = reader_index;
+
+	/* dev_handle of the physical reader */
+	msExt->dev_handle = usbDevice[reader_index].dev_handle;
 
 	atomic_init(&msExt->terminated, FALSE);
 	msExt->status = 0;
