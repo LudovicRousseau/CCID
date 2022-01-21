@@ -1607,10 +1607,10 @@ static void *Multi_PollingProc(void *p_ext)
 				default:
 					/* if libusb_interrupt_transfer() times out
 					 * we get EILSEQ or EAGAIN */
-					DEBUG_COMM4("Multi_PollingProc (%d/%d): %d",
+					DEBUG_COMM4("Multi_PollingProc (%d/%d): %s",
 						usbDevice[msExt->reader_index].bus_number,
 						usbDevice[msExt->reader_index].device_address,
-						status);
+						libusb_error_name(status));
 			}
 
 			/* Tell other slots that there's a new interrupt buffer */
