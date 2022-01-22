@@ -1626,7 +1626,6 @@ static void *Multi_PollingProc(void *p_ext)
 	}
 
 	libusb_free_transfer(transfer);
-	msExt->terminated = TRUE;
 
 	if (rv < 0)
 	{
