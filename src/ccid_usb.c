@@ -1492,21 +1492,19 @@ static void *Multi_PollingProc(void *p_ext)
 		usbDevice[msExt->reader_index].bus_number,
 		usbDevice[msExt->reader_index].device_address);
 
+	transfer = libusb_alloc_transfer(0);
+	if (NULL == transfer)
+	{
+		DEBUG_COMM("libusb_alloc_transfer error");
+		goto end;
+	}
+
 	rv = 0;
 	while (!msExt->terminated)
 	{
 		DEBUG_COMM3("Multi_PollingProc (%d/%d): waiting",
 			usbDevice[msExt->reader_index].bus_number,
 			usbDevice[msExt->reader_index].device_address);
-
-		transfer = libusb_alloc_transfer(0);
-		if (NULL == transfer)
-		{
-			rv = LIBUSB_ERROR_NO_MEM;
-			DEBUG_COMM2("libusb_alloc_transfer err %s",
-				libusb_error_name(rv));
-			break;
-		}
 
 		libusb_fill_bulk_transfer(transfer,
 			usbDevice[msExt->reader_index].dev_handle,
@@ -1519,7 +1517,6 @@ static void *Multi_PollingProc(void *p_ext)
 		rv = libusb_submit_transfer(transfer);
 		if (rv)
 		{
-			libusb_free_transfer(transfer);
 			DEBUG_COMM2("libusb_submit_transfer err %s",
 				libusb_error_name(rv));
 			break;
@@ -1555,16 +1552,12 @@ static void *Multi_PollingProc(void *p_ext)
 		atomic_store(&usbDevice[msExt->reader_index].polling_transfer,
 			NULL);
 
-		if (rv < 0)
-			libusb_free_transfer(transfer);
-		else
+		if (0 == rv)
 		{
 			int b, slot;
 
 			actual_length = transfer->actual_length;
 			status = transfer->status;
-
-			libusb_free_transfer(transfer);
 
 			switch (status)
 			{
@@ -1632,6 +1625,7 @@ static void *Multi_PollingProc(void *p_ext)
 		}
 	}
 
+	libusb_free_transfer(transfer);
 	msExt->terminated = TRUE;
 
 	if (rv < 0)
@@ -1663,6 +1657,7 @@ static void *Multi_PollingProc(void *p_ext)
 	/* Unlock */
 	pthread_mutex_unlock(&msExt->mutex);
 
+end:
 	/* Now exit */
 	DEBUG_COMM3("Multi_PollingProc (%d/%d): Thread terminated",
 		usbDevice[msExt->reader_index].bus_number,
