@@ -964,7 +964,7 @@ read_again:
 				slot);
 			if (concurrent[slot].length > 0)
 			{
-				if (concurrent[slot].length > *length)
+				if (concurrent[slot].length > (int)*length)
 					DEBUG_CRITICAL3("Received %d bytes but expected only %d",
 						concurrent[slot].length, *length);
 				else
