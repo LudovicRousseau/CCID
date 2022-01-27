@@ -117,6 +117,32 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.5.0 - 27 January 2022, Ludovic Rousseau
+   - Add support of
+     - ACS ACR1281U
+     - Circle CCR7125 ICC
+     - Circle CIR125 ICC
+     - Circle CIR125-DOT ICC
+     - Circle CIR215 CL with iProduct 0x2100
+     - Circle CIR315 DI
+     - Circle CIR315 with idProduct: 0x0324
+     - Circle CIR315 with idProduct: 0x7004
+     - Circle CIR415 CL
+     - Circle CIR515 ICC
+     - Circle CIR615 CL
+     - Circle CIR615 CL & 1S
+     - ELYCTIS CL reader
+     - Nitrokey Nitrokey 3
+     - Thales Shield M4 Reader
+   - Add support of simultaneous slot access on multi slots readers
+   - Use FeliCa instead of Felica on SONY request
+   - Fix SafeNet eToken 5110 SC issue
+   - Allow vendor control commands for Omnikey 5427 CK
+   - always compute readTimeout to use a value greater than default 3 seconds
+   - Check the bSeq value when receiving a CCID frame
+   - Avoid logging errors when a reader is removed
+   - Some other minor improvements
+
 1.4.36 - 30 August 2021, Ludovic Rousseau
    - Add support of
      - Lenovo Lenovo Smartcard Wired Keyboard II
