@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-01-05
+# Generated: 2022-01-27
 #
 # DO NOT EDIT BY HAND
 
@@ -821,6 +821,9 @@
 
 # Teridian Semiconductors
 0x1862:0x0000:Teridian Semiconductors TSC12xxFV.09
+
+# Thales
+0x08E6:0x34C7:Thales Shield M4 Reader
 
 # THURSBY SOFTWARE
 0x1976:0x0001:THURSBY SOFTWARE TSS-PK1
