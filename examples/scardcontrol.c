@@ -206,6 +206,15 @@ static const char *pinpad_return_codes(int length,
 		}
 	}
 
+	/* error codes specific to my test applet */
+	if (0x6A == bRecvBuffer[0])
+	{
+#define FORMAT "Error on data byte %2d"
+		static char ret2[] = FORMAT;
+		sprintf(ret2, FORMAT, (char)bRecvBuffer[1]);
+		ret = ret2;
+	}
+
 	return ret;
 }
 
@@ -237,6 +246,7 @@ int main(int argc, char *argv[])
 	PCSC_TLV_STRUCTURE *pcsc_tlv;
 #if defined(VERIFY_PIN) | defined(MODIFY_PIN)
 	int offset;
+	unsigned int sw1, sw2;
 #endif
 #ifdef VERIFY_PIN
 	PIN_VERIFY_STRUCTURE *pin_verify;
@@ -691,6 +701,13 @@ int main(int argc, char *argv[])
 	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
 	printf(NORMAL "\n");
 	PCSC_ERROR_CONT(rv, "SCardControl")
+	if (2 == length)
+	{
+		sw1 = bRecvBuffer[0];
+		sw2 = bRecvBuffer[1];
+	}
+	else
+		sw1 = sw2 = -1;
 
 	/* verify PIN dump */
 	printf("\nverify PIN dump:");
@@ -727,6 +744,15 @@ int main(int argc, char *argv[])
 			printf(" %02X", bRecvBuffer[i]);
 		printf("\n");
 		PCSC_ERROR_EXIT(rv, "SCardTransmit")
+	}
+
+	/* error codes specific to my test applet */
+	if (0x6A == sw1)
+	{
+		printf(" error at ---------------------");
+		for (i=0; i<sw2; i++)
+			printf("---");
+		printf("^^\n");
 	}
 #endif
 
@@ -854,6 +880,13 @@ int main(int argc, char *argv[])
 	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
 	printf(NORMAL "\n");
 	PCSC_ERROR_CONT(rv, "SCardControl")
+	if (2 == length)
+	{
+		sw1 = bRecvBuffer[0];
+		sw2 = bRecvBuffer[1];
+	}
+	else
+		sw1 = sw2 = -1;
 
 	/* modify PIN dump */
 	printf("\nmodify PIN dump:");
@@ -890,6 +923,15 @@ int main(int argc, char *argv[])
 			printf(" %02X", bRecvBuffer[i]);
 		printf("\n");
 		PCSC_ERROR_EXIT(rv, "SCardTransmit")
+	}
+
+	/* error codes specific to my test applet */
+	if (0x6A == sw1)
+	{
+		printf(" error at ---------------------");
+		for (i=0; i<sw2; i++)
+			printf("---");
+		printf("^^\n");
 	}
 #endif
 
