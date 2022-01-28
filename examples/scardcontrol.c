@@ -68,13 +68,13 @@ if (rv != SCARD_S_SUCCESS) \
 	goto end; \
 } \
 else \
-	printf(text ": " BLUE "OK\n\n" NORMAL);
+	printf(text ": " BLUE "OK\n" NORMAL);
 
 #define PCSC_ERROR_CONT(rv, text) \
 if (rv != SCARD_S_SUCCESS) \
 	printf(text ": " RED "%s (0x%"LF"X)\n" NORMAL, pcsc_stringify_error(rv), rv); \
 else \
-	printf(text ": " BLUE "OK\n\n" NORMAL);
+	printf(text ": " BLUE "OK\n" NORMAL);
 
 #define PRINT_GREEN(text, value) \
 	printf("%s: " GREEN "%s\n" NORMAL, text, value)
@@ -606,7 +606,7 @@ int main(int argc, char *argv[])
 	printf(" card response:");
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
-	printf("\n");
+	printf("\n\n");
 	if ((bRecvBuffer[0] != 0x90) || (bRecvBuffer[1] != 0x00))
 	{
 		printf("Error: test applet not found!\n");
@@ -754,6 +754,7 @@ int main(int argc, char *argv[])
 			printf("---");
 		printf("^^\n");
 	}
+	printf("\n");
 #endif
 
 	/* check if the reader supports Modify PIN */
@@ -933,6 +934,7 @@ int main(int argc, char *argv[])
 			printf("---");
 		printf("^^\n");
 	}
+	printf("\n");
 #endif
 
 	/* card disconnect */
