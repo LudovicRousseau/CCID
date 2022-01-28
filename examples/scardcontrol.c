@@ -602,11 +602,11 @@ int main(int argc, char *argv[])
 	length = sizeof(bRecvBuffer);
 	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
 		&pioRecvPci, bRecvBuffer, &length);
+	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	printf(" card response:");
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
 	printf("\n");
-	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	if ((bRecvBuffer[0] != 0x90) || (bRecvBuffer[1] != 0x00))
 	{
 		printf("Error: test applet not found!\n");
@@ -694,13 +694,13 @@ int main(int argc, char *argv[])
 	if (length != 2 || bRecvBuffer[0] != 0x90 || bRecvBuffer[1] != 0x00)
 		error = TRUE;
 
+	PCSC_ERROR_CONT(rv, "SCardControl")
 	printf(error ? RED : GREEN);
 	printf(" card response [%"LF"d bytes]:", length);
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
 	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
 	printf(NORMAL "\n");
-	PCSC_ERROR_CONT(rv, "SCardControl")
 	if (2 == length)
 	{
 		sw1 = bRecvBuffer[0];
@@ -720,11 +720,11 @@ int main(int argc, char *argv[])
 	length = sizeof(bRecvBuffer);
 	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
 		&pioRecvPci, bRecvBuffer, &length);
+	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	printf(" card response:");
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
 	printf("\n");
-	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 
 	if ((2 == length) && (0x6C == bRecvBuffer[0]))
 	{
@@ -739,11 +739,11 @@ int main(int argc, char *argv[])
 		length = sizeof(bRecvBuffer);
 		rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
 			&pioRecvPci, bRecvBuffer, &length);
+		PCSC_ERROR_EXIT(rv, "SCardTransmit")
 		printf(" card response:");
 		for (i=0; i<length; i++)
 			printf(" %02X", bRecvBuffer[i]);
 		printf("\n");
-		PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	}
 
 	/* error codes specific to my test applet */
@@ -873,13 +873,13 @@ int main(int argc, char *argv[])
 	if (length != 2 || bRecvBuffer[0] != 0x90 || bRecvBuffer[1] != 0x00)
 		error = TRUE;
 
+	PCSC_ERROR_CONT(rv, "SCardControl")
 	printf(error ? RED : GREEN);
 	printf(" card response [%"LF"d bytes]:", length);
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
 	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
 	printf(NORMAL "\n");
-	PCSC_ERROR_CONT(rv, "SCardControl")
 	if (2 == length)
 	{
 		sw1 = bRecvBuffer[0];
@@ -899,11 +899,11 @@ int main(int argc, char *argv[])
 	length = sizeof(bRecvBuffer);
 	rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
 		&pioRecvPci, bRecvBuffer, &length);
+	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	printf(" card response:");
 	for (i=0; i<length; i++)
 		printf(" %02X", bRecvBuffer[i]);
 	printf("\n");
-	PCSC_ERROR_EXIT(rv, "SCardTransmit")
 
 	if ((2 == length) && (0x6C == bRecvBuffer[0]))
 	{
@@ -918,11 +918,11 @@ int main(int argc, char *argv[])
 		length = sizeof(bRecvBuffer);
 		rv = SCardTransmit(hCard, &pioSendPci, bSendBuffer, send_length,
 			&pioRecvPci, bRecvBuffer, &length);
+		PCSC_ERROR_EXIT(rv, "SCardTransmit")
 		printf(" card response:");
 		for (i=0; i<length; i++)
 			printf(" %02X", bRecvBuffer[i]);
 		printf("\n");
-		PCSC_ERROR_EXIT(rv, "SCardTransmit")
 	}
 
 	/* error codes specific to my test applet */
