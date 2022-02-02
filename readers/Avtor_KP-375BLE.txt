@@ -1,5 +1,5 @@
  idVendor: 0x096E
-  iManufacturer: Avtor
+  iManufacturer: ~Avtor
  idProduct: 0x0624
   iProduct: KP-375BLE
  bcdDevice: 2.20 (firmware release?)

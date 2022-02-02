@@ -1,5 +1,5 @@
  idVendor: 0x096E
-  iManufacturer: Avtor
+  iManufacturer: ~Avtor
  idProduct: 0x0608
   iProduct: SC Reader KP382
  bcdDevice: 6.00 (firmware release?)
