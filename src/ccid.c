@@ -404,11 +404,11 @@ int ccid_open_hack_post(unsigned int reader_index)
 				/* The other Unixes just use the LANG env variable */
 				lang = getenv("LANG");
 #endif
-				DEBUG_COMM2("Using lang: %s", lang);
 				if (NULL == lang)
 					l10n = en;
 				else
 				{
+                    DEBUG_COMM2("Using lang: %s", lang);
 					if (0 == strncmp(lang, "fr", 2))
 						l10n = fr;
 					else if (0 == strncmp(lang, "de", 2))
