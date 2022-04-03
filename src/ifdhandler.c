@@ -980,16 +980,16 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 		}
 	}
 
-	/* Now we must set the reader parameters */
-	if (ATR_MALFORMED == ATR_GetConvention(&atr, &convention))
-		return IFD_COMMUNICATION_ERROR;
-
 	/* specific mode and implicit parameters? (b5 of TA2) */
 	if (atr.ib[1][ATR_INTERFACE_BYTE_TA].present
 		&& (atr.ib[1][ATR_INTERFACE_BYTE_TA].value & 0x10))
 		return IFD_COMMUNICATION_ERROR;
 
 end:
+	/* Now we must set the reader parameters */
+	if (ATR_MALFORMED == ATR_GetConvention(&atr, &convention))
+		return IFD_COMMUNICATION_ERROR;
+
 	/* T=1 */
 	if (SCARD_PROTOCOL_T1 == Protocol)
 	{
