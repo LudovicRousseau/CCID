@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-04-30
+# Generated: 2022-05-20
 #
 # DO NOT EDIT BY HAND
 
@@ -256,6 +256,7 @@
 
 # BLUTRONICS
 0x1B0E:0x1079:BLUTRONICS BLUDRIVE II CCID
+0x1B0E:0x5A02:BLUTRONICS TAURUS NFC
 
 # Broadcom Corp
 0x0A5C:0x5802:Broadcom Corp 5880
