@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-05-20
+# Generated: 2022-06-20
 #
 # DO NOT EDIT BY HAND
 
@@ -181,6 +181,7 @@
 
 # Alcor Link
 0x2CE3:0x9563:Alcor Link AK9563
+0x2CE3:0x9567:Alcor Link AK9567
 
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522
