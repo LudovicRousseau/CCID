@@ -182,6 +182,7 @@
 # Alcor Link
 0x2CE3:0x9563:Alcor Link AK9563
 0x2CE3:0x9567:Alcor Link AK9567
+0x2CE3:0x9573:Alcor Link AK9572
 
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522
