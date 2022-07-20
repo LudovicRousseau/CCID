@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-06-21
+# Generated: 2022-07-20
 #
 # DO NOT EDIT BY HAND
 
@@ -761,6 +761,9 @@
 
 # SecuTech
 0x0403:0xC587:SecuTech SecuTech Token
+
+# Sensyl
+0x356F:0x22FC:Sensyl SSC-NFC Reader
 
 # Sitecom
 0x0DF6:0x800A:Sitecom Sitecom USB simcard reader MD-010
