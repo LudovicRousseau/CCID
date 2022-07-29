@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-07-20
+# Generated: 2022-07-29
 #
 # DO NOT EDIT BY HAND
 
@@ -613,6 +613,7 @@
 0x2C97:0x0001:Ledger Nano S
 0x2C97:0x0004:Ledger Nano X
 0x2C97:0x0005:Ledger Nano SP
+0x2C97:0x1009:Ledger Nano S
 
 # Lenovo
 0x17EF:0x6007:Lenovo Lenovo USB Smartcard Keyboard
