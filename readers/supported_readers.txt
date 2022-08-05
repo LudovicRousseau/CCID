@@ -398,8 +398,8 @@
 # Feitian Technologies
 0x096E:0x0505:Feitian Technologies FT SCR310
 
-# Flight
-0x2925:0x700A:Flight Incredist
+# Flight system consulting
+0x2925:0x700A:Flight system consulting Incredist
 
 # Free Software Initiative of Japan
 0x234B:0x0000:Free Software Initiative of Japan Gnuk
