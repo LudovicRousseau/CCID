@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-08-05
+# Generated: 2022-08-11
 #
 # DO NOT EDIT BY HAND
 
@@ -373,6 +373,7 @@
 0x1FFA:0x0002:ELYCTIS CL reader
 
 # ESMART
+0x2CE4:0x5020:ESMART Reader ER773x Dual & 1S
 0x2CE4:0x7479:ESMART Token GOST
 
 # F-Secure Foundry
