@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-08-11
+# Generated: 2022-08-23
 #
 # DO NOT EDIT BY HAND
 
@@ -343,6 +343,9 @@
 # COVADIS
 0x0982:0x0008:COVADIS VEGA-ALPHA
 0x0982:0x0040:COVADIS Auriga
+
+# CREATOR
+0x23D8:0x0603:CREATOR CRT-603(CZ1) CCR
 
 # DC.Ltd
 0x257B:0xC305:DC.Ltd DC4 5CCID READER
