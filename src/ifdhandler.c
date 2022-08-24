@@ -473,6 +473,8 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 					/* 2 CCID interfaces */
 					if ((GEMALTOPROXDU == readerID)
 						|| (GEMALTOPROXSU == readerID)
+						|| (ALCOR_LINK_AK9567 == readerID)
+						|| (ALCOR_LINK_AK9572 == readerID)
 						|| (HID_OMNIKEY_5422 == readerID))
 						*Value = 2;
 

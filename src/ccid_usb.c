@@ -448,6 +448,8 @@ again_libusb:
 				if ((GEMALTOPROXDU == readerID)
 					|| (GEMALTOPROXSU == readerID)
 					|| (HID_OMNIKEY_5422 == readerID)
+					|| (ALCOR_LINK_AK9567 == readerID)
+					|| (ALCOR_LINK_AK9572 == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 						/*
@@ -694,6 +696,8 @@ again:
 				if ((GEMALTOPROXDU == readerID)
 					|| (GEMALTOPROXSU == readerID)
 					|| (HID_OMNIKEY_5422 == readerID)
+					|| (ALCOR_LINK_AK9567 == readerID)
+					|| (ALCOR_LINK_AK9572 == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 					/* use the next interface for the next "slot" */
