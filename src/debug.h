@@ -50,6 +50,10 @@ extern int LogLevel;
 #include <debuglog.h>	/* from pcsc-lite */
 
 #ifdef USE_OS_LOG
+
+#define LOG_STRING "%{public}s"
+#define LOG_SENSIBLE_STRING "%s"
+
 #include <os/log.h>
 
 #define DEBUG_CRITICAL(fmt) os_log_fault(OS_LOG_DEFAULT, fmt)
@@ -77,6 +81,9 @@ extern int LogLevel;
 #define DEBUG_XXD(msg, buffer, size) do { if (LogLevel & DEBUG_LEVEL_COMM) log_xxd(PCSC_LOG_DEBUG, msg, buffer, size); } while (0)
 
 #else
+
+#define LOG_STRING "%s"
+#define LOG_SENSIBLE_STRING "%s"
 
 #define TO_PCSCD_LOG(fmt, CCID_LEVEL, PCSCD_LEVEL)  do { if (LogLevel & DEBUG_LEVEL_ ## CCID_LEVEL) Log1(PCSC_LOG_ ## PCSCD_LEVEL, fmt); } while (0)
 #define TO_PCSCD_LOG2(fmt, data, CCID_LEVEL, PCSCD_LEVEL)  do { if (LogLevel & DEBUG_LEVEL_ ## CCID_LEVEL) Log2(PCSC_LOG_ ## PCSCD_LEVEL, fmt, data); } while (0)
