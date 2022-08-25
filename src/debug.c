@@ -90,7 +90,7 @@ void log_xxd(const int priority, const char *msg, const unsigned char *buffer,
 		c += 3;
 	}
 
-	os_log(OS_LOG_DEFAULT, "%s", debug_buffer);
+	os_log(OS_LOG_DEFAULT, LOG_SENSIBLE_STRING, debug_buffer);
 } /* log_xxd */
 
 #else
