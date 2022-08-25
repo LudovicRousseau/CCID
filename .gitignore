@@ -1,3 +1,4 @@
+.DS_Store
 ChangeLog
 Makefile
 Makefile.in
@@ -8,10 +9,13 @@ compile
 config.guess
 config.h
 config.h.in
+config.h.in~
 config.log
 config.status
 config.sub
 configure
+configure.ac~
+configure~
 contrib/Kobil_mIDentity_switch/.deps/
 contrib/Kobil_mIDentity_switch/Kobil_mIDentity_switch
 contrib/Kobil_mIDentity_switch/Kobil_mIDentity_switch-Kobil_mIDentity_switch.o
