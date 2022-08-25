@@ -107,7 +107,7 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 
 	if (lpcDevice)
 	{
-		DEBUG_INFO3("Lun: " DWORD_X ", device: %s", Lun, lpcDevice);
+		DEBUG_INFO3("Lun: " DWORD_X ", device: " LOG_STRING, Lun, lpcDevice);
 	}
 	else
 	{
@@ -288,7 +288,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
+	DEBUG_INFO3(LOG_STRING " (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
 		Lun);
 
 	/* Restore the default timeout
@@ -314,7 +314,7 @@ static RESPONSECODE IFDHPolling(DWORD Lun, int timeout)
 
 	/* log only if DEBUG_LEVEL_PERIODIC is set */
 	if (LogLevel & DEBUG_LEVEL_PERIODIC)
-		DEBUG_INFO4("%s (lun: " DWORD_X ") %d ms",
+		DEBUG_INFO4(LOG_STRING " (lun: " DWORD_X ") %d ms",
 			CcidSlots[reader_index].readerName, Lun, timeout);
 
 	return InterruptRead(reader_index, timeout);
@@ -329,7 +329,7 @@ static RESPONSECODE IFDHSleep(DWORD Lun, int timeout)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("%s (lun: " DWORD_X ") %d ms",
+	DEBUG_INFO4(LOG_STRING " (lun: " DWORD_X ") %d ms",
 		CcidSlots[reader_index].readerName, Lun, timeout);
 
 	/* just sleep for 5 seconds since the polling thread is NOT killable
@@ -350,7 +350,7 @@ static RESPONSECODE IFDHStopPolling(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO3("%s (lun: " DWORD_X ")",
+	DEBUG_INFO3(LOG_STRING " (lun: " DWORD_X ")",
 		CcidSlots[reader_index].readerName, Lun);
 
 	(void)InterruptStop(reader_index);
@@ -385,7 +385,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("tag: 0x" DWORD_X ", %s (lun: " DWORD_X ")", Tag,
+	DEBUG_INFO4("tag: 0x" DWORD_X ", " LOG_STRING " (lun: " DWORD_X ")", Tag,
 		CcidSlots[reader_index].readerName, Lun);
 
 	switch (Tag)
@@ -683,7 +683,7 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("tag: 0x" DWORD_X ", %s (lun: " DWORD_X ")", Tag,
+	DEBUG_INFO4("tag: 0x" DWORD_X ", " LOG_STRING " (lun: " DWORD_X ")", Tag,
 		CcidSlots[reader_index].readerName, Lun);
 
 	switch (Tag)
@@ -739,7 +739,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("protocol T=" DWORD_D ", %s (lun: " DWORD_X ")",
+	DEBUG_INFO4("protocol T=" DWORD_D ", " LOG_STRING " (lun: " DWORD_X ")",
 		Protocol-SCARD_PROTOCOL_T0, CcidSlots[reader_index].readerName, Lun);
 
 	/* Set to zero buffer */
@@ -1215,7 +1215,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_INFO4("action: %s, %s (lun: " DWORD_X ")",
+	DEBUG_INFO4("action: " LOG_STRING ", " LOG_STRING " (lun: " DWORD_X ")",
 		actions[Action-IFD_POWER_UP], CcidSlots[reader_index].readerName, Lun);
 
 	switch (Action)
@@ -1367,7 +1367,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	DEBUG_INFO3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
+	DEBUG_INFO3(LOG_STRING " (lun: " DWORD_X ")", CcidSlots[reader_index].readerName,
 		Lun);
 
 	/* special APDU for the Kobil IDToken (CLASS = 0xFF) */
@@ -1475,7 +1475,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	DEBUG_INFO4("ControlCode: 0x" DWORD_X ", %s (lun: " DWORD_X ")",
+	DEBUG_INFO4("ControlCode: 0x" DWORD_X ", " LOG_STRING " (lun: " DWORD_X ")",
 		dwControlCode, CcidSlots[reader_index].readerName, Lun);
 	DEBUG_INFO_XXD("Control TxBuffer: ", TxBuffer, TxLength);
 
@@ -1924,7 +1924,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	if (-1 == (reader_index = LunToReaderIndex(Lun)))
 		return IFD_COMMUNICATION_ERROR;
 
-	DEBUG_PERIODIC3("%s (lun: " DWORD_X ")", CcidSlots[reader_index].readerName, Lun);
+	DEBUG_PERIODIC3(LOG_STRING " (lun: " DWORD_X ")", CcidSlots[reader_index].readerName, Lun);
 
 	ccid_descriptor = get_ccid_descriptor(reader_index);
 
@@ -2050,7 +2050,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 #endif
 
 end:
-	DEBUG_PERIODIC2("Card %s",
+	DEBUG_PERIODIC2("Card " LOG_STRING,
 		IFD_ICC_PRESENT == return_value ? "present" : "absent");
 
 	return return_value;

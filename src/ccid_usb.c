@@ -249,7 +249,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	int claim_failed = FALSE;
 	int return_value = STATUS_SUCCESS;
 
-	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, device);
+	DEBUG_COMM3("Reader index: %X, Device: " LOG_STRING, reader_index, device);
 
 #ifndef __APPLE__
 	/* device name specified */
@@ -314,7 +314,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	/* Info.plist full patch filename */
 	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
 		PCSCLITE_HP_DROPDIR, BUNDLE);
-	DEBUG_INFO2("Using: %s", infofile);
+	DEBUG_INFO2("Using: " LOG_STRING, infofile);
 
 	rv = bundleParse(infofile, &plist);
 	if (rv)
@@ -329,7 +329,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		goto end1; \
 	} \
 	else \
-		DEBUG_INFO2(key ": %s", (char *)list_get_at(values, 0));
+		DEBUG_INFO2(key ": " LOG_STRING, (char *)list_get_at(values, 0));
 
 	/* general driver info */
 	GET_KEY("ifdManufacturerString", values)
@@ -680,7 +680,7 @@ again:
 					continue;
 				}
 
-				DEBUG_INFO4("Found Vendor/Product: %04X/%04X (%s)",
+				DEBUG_INFO4("Found Vendor/Product: %04X/%04X (" LOG_STRING ")",
 					desc.idVendor, desc.idProduct, friendlyName);
 				DEBUG_INFO3("Using USB bus/device: %d/%d",
 					bus_number, device_address);
