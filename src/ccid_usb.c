@@ -442,61 +442,63 @@ again_libusb:
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 				/* use the first CCID interface on first call */
 				static int static_interface = -1;
-				int max_interface_number = 2;
+				int max_interface_number = -1;
 
-				/* simulate a composite device as when libudev is used */
-				if ((GEMALTOPROXDU == readerID)
-					|| (GEMALTOPROXSU == readerID)
-					|| (HID_OMNIKEY_5422 == readerID)
-					|| (ALCOR_LINK_AK9567 == readerID)
-					|| (ALCOR_LINK_AK9572 == readerID)
-					|| (FEITIANR502DUAL == readerID))
-				{
-						/*
-						 * We can't talk to the two CCID interfaces
-						 * at the same time (the reader enters a
-						 * dead lock). So we simulate a multi slot
-						 * reader. By default multi slot readers
-						 * can't use the slots at the same time. See
-						 * TAG_IFD_SLOT_THREAD_SAFE
-						 *
-						 * One side effect is that the two readers
-						 * are seen by pcscd as one reader so the
-						 * interface name is the same for the two.
-						 *
+				/*
+				 * We can't talk to the two CCID interfaces
+				 * at the same time (the reader enters a
+				 * dead lock). So we simulate a multi slot
+				 * reader. By default multi slot readers
+				 * can't use the slots at the same time. See
+				 * TAG_IFD_SLOT_THREAD_SAFE
+				 *
+				 * One side effect is that the two readers
+				 * are seen by pcscd as one reader so the
+				 * interface name is the same for the two.
+				 *
 	* So we have:
 	* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
 	* 1: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 01
 	* instead of
 	* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
 	* 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
-						 */
+				 */
 
-					/* for the Gemalto Prox-DU/SU the interfaces are:
+				/* simulate a composite device as when libudev is used */
+				switch (readerID)
+				{
+					/* For the HID Omnikey 5422 the interfaces are:
+					 * 0: OMNIKEY 5422CL Smartcard Reader
+					 * 1: OMNIKEY 5422 Smartcard Reader
+					 */
+					case HID_OMNIKEY_5422:
+					case ALCOR_LINK_AK9567:
+					case ALCOR_LINK_AK9572:
+						max_interface_number = 1; /* 2 interfaces */
+						break;
+
+					/* For the Gemalto Prox-DU/SU the interfaces are:
 					 * 0: Prox-DU HID (not used)
 					 * 1: Prox-DU Contactless (CCID)
 					 * 2: Prox-DU Contact (CCID)
-					 *
-					 * For the Feitian R502 the interfaces are:
+					 */
+					case GEMALTOPROXDU:
+					case GEMALTOPROXSU:
+						max_interface_number = 2; /* 3 interfaces */
+						break;
+
+					/* For the Feitian R502 the interfaces are:
 					 * 0: R502 Contactless Reader (CCID)
 					 * 1: R502 Contact Reader (CCID)
 					 * 2: R502 SAM1 Reader (CCID)
 					 * 3: R502 SAM2 Reader (CCID)
-					 *
-					 * For the HID Omnikey 5422 the interfaces are:
-					 * 0: OMNIKEY 5422CL Smartcard Reader
-					 * 1: OMNIKEY 5422 Smartcard Reader
 					 */
-					interface_number = static_interface;
-
-					if (HID_OMNIKEY_5422 == readerID)
-						/* only 2 interfaces for this device */
-						max_interface_number = 1;
-
-					if (FEITIANR502DUAL == readerID)
-						/* 4 interfaces for Feitian R502 reader */
-						max_interface_number = 3;
+					case FEITIANR502DUAL:
+						max_interface_number = 3; /* 4 interfaces */
+						break;
 				}
+
+				interface_number = static_interface;
 #endif
 				/* is it already opened? */
 				already_used = FALSE;
