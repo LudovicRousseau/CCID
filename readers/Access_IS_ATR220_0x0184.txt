@@ -1,0 +1,277 @@
+ idVendor: 0x0DB5
+  iManufacturer: Access IS
+ idProduct: 0x0184
+  Can't get iProduct string: LIBUSB_ERROR_INVALID_PARAM
+ bcdDevice: 0.18 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: NFC0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 13.560 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: LIBUSB_ERROR_PIPE
+  dwDataRate: 106000 bps
+  dwMaxDataRate: 848000 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: LIBUSB_ERROR_PIPE
+  dwMaxIFSD: 2048
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x0004007A
+   ....02 Automatic parameter configuration based on ATR data
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....40 Automatic parameters negotiation made by the CCID
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 2048 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
+ idVendor: 0x0DB5
+  iManufacturer: Access IS
+ idProduct: 0x0184
+  Can't get iProduct string: LIBUSB_ERROR_INVALID_PARAM
+ bcdDevice: 0.18 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 1
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: SMC0
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: LIBUSB_ERROR_PIPE
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 10752 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: LIBUSB_ERROR_PIPE
+  dwMaxIFSD: 1024
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x0004067E
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....40 Automatic parameters negotiation made by the CCID
+   ..02.. NAD value other than 00 accepted (T=1)
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 1024 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
+ idVendor: 0x0DB5
+  iManufacturer: Access IS
+ idProduct: 0x0184
+  Can't get iProduct string: LIBUSB_ERROR_INVALID_PARAM
+ bcdDevice: 0.18 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 2
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: SMC1
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: LIBUSB_ERROR_PIPE
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 10752 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: LIBUSB_ERROR_PIPE
+  dwMaxIFSD: 1024
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x0004067E
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....40 Automatic parameters negotiation made by the CCID
+   ..02.. NAD value other than 00 accepted (T=1)
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 1024 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
+ idVendor: 0x0DB5
+  iManufacturer: Access IS
+ idProduct: 0x0184
+  Can't get iProduct string: LIBUSB_ERROR_INVALID_PARAM
+ bcdDevice: 0.18 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 3
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: SMC2
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: LIBUSB_ERROR_PIPE
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 10752 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: LIBUSB_ERROR_PIPE
+  dwMaxIFSD: 1024
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x0004067E
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....40 Automatic parameters negotiation made by the CCID
+   ..02.. NAD value other than 00 accepted (T=1)
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 1024 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
+ idVendor: 0x0DB5
+  iManufacturer: Access IS
+ idProduct: 0x0184
+  Can't get iProduct string: LIBUSB_ERROR_INVALID_PARAM
+ bcdDevice: 0.18 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 4
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface: SMC3
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.000 MHz
+  dwMaximumClock: 4.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: LIBUSB_ERROR_PIPE
+  dwDataRate: 10752 bps
+  dwMaxDataRate: 10752 bps
+  bNumDataRatesSupported: 0 (will use whatever is returned)
+   IFD does not support GET_DATA_RATES request: LIBUSB_ERROR_PIPE
+  dwMaxIFSD: 1024
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x0004067E
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....40 Automatic parameters negotiation made by the CCID
+   ..02.. NAD value other than 00 accepted (T=1)
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 1024 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1

@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-08-24
+# Generated: 2022-09-16
 #
 # DO NOT EDIT BY HAND
 
@@ -127,6 +127,7 @@
 0x0DB5:0x0164:Access IS NFC Smart Module
 0x0DB5:0x0170:Access IS ATR210
 0x0DB5:0x0180:Access IS ATR220
+0x0DB5:0x0184:Access IS ATR220
 
 # ACS
 0x072F:0x1204:ACS ACR101 ICC Reader
