@@ -2050,7 +2050,12 @@ static RESPONSECODE T0ProcSW1(unsigned int reader_index,
 	in_len--;
 	(*rcv_len)++;
 
+#ifdef NO_LOG
+	(void)sw1;
+	(void)sw2;
+#else
 	DEBUG_COMM3("Exit: SW=%02X %02X", sw1, sw2);
+#endif
 
 	return return_value;
 } /* T0ProcSW1 */
