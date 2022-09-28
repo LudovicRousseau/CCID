@@ -719,6 +719,12 @@ void ccid_error(int log_level, int error, const char *file, int line,
 			break;
 	}
 	log_msg(log_level, "%s:%d:%s %s", file, line, function, text);
+#else
+	(void)log_level;
+	(void)error;
+	(void)file;
+	(void)line;
+	(void)function;
 #endif
 
 } /* ccid_error */
