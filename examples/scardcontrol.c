@@ -123,9 +123,20 @@ static void parse_properties(unsigned char *bRecvBuffer, int length)
 		{
 			case PCSCv2_PART10_PROPERTY_wLcdLayout:
 				PRINT_GREEN_HEX4(" wLcdLayout", value);
+				if (value)
+					printf("  Display with %d lines of %d columns\n",
+						value >> 8, value & 0xFF);
+				else
+					printf("  No display\n");
 				break;
 			case PCSCv2_PART10_PROPERTY_bEntryValidationCondition:
 				PRINT_GREEN_HEX2(" bEntryValidationCondition", value);
+				if (value & 1)
+					printf("  Max size reached (1)\n");
+				if (value & 2)
+					printf("  Validation key pressed (2)\n");
+				if (value & 4)
+					printf("  Timeout occurred (3)\n");
 				break;
 			case PCSCv2_PART10_PROPERTY_bTimeOut2:
 				PRINT_GREEN_HEX2(" bTimeOut2", value);
@@ -512,7 +523,19 @@ int main(int argc, char *argv[])
 		pin_properties = (PIN_PROPERTIES_STRUCTURE *)bRecvBuffer;
 		bEntryValidationCondition = pin_properties ->	bEntryValidationCondition;
 		PRINT_GREEN_HEX4(" wLcdLayout", pin_properties -> wLcdLayout);
+		if (pin_properties -> wLcdLayout)
+			printf("  Display with %d lines of %d columns\n",
+				pin_properties -> wLcdLayout >> 8,
+				pin_properties -> wLcdLayout & 0xFF);
+		else
+			printf("  No display\n");
 		PRINT_GREEN_DEC(" bEntryValidationCondition", bEntryValidationCondition);
+		if (bEntryValidationCondition & 1)
+			printf("  Max size reached (1)\n");
+		if (bEntryValidationCondition & 2)
+			printf("  Validation key pressed (2)\n");
+		if (bEntryValidationCondition & 4)
+			printf("  Timeout occurred (4)\n");
 		PRINT_GREEN_DEC(" bTimeOut2", pin_properties -> bTimeOut2);
 
 		printf("\n");
