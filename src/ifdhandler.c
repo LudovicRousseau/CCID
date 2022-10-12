@@ -1892,53 +1892,61 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	{
 		DEBUG_INFO1("Control command for MEP");
 
-		/* Set T=1 NAD */
-		if (TxLength == 4
-			&& (TxBuffer[0] == 0x3E)
-			&& (TxBuffer[1] == 0x00)
-			&& (TxBuffer[2] == 0x01))
+		if (CCID_CLASS_TPDU != (ccid_descriptor->dwFeatures & CCID_CLASS_EXCHANGE_MASK))
 		{
-			RxBuffer[0] = 0x3E;
-			RxBuffer[1] = 0x00;
-			RxBuffer[2] = 0x01;
-			DEBUG_INFO1("Set NAD value");
-			if (t1_set_param(&CcidSlots[reader_index].t1, IFD_PROTOCOL_T1_NAD,
-				TxBuffer[3]))
-				/* error */
-				RxBuffer[3] = 0x01;
-			else
-				RxBuffer[3] = 0x00;
-			*pdwBytesReturned = 4;
-			return_value = IFD_SUCCESS;
+			DEBUG_INFO1("Reader is NOT in TPDU mode");
+			return_value = IFD_NOT_SUPPORTED;
 		}
-
-		/* Get T=1 NAD */
-		if (TxLength == 3
-			&& (TxBuffer[0] == 0x3F)
-			&& (TxBuffer[1] == 0x00)
-			&& (TxBuffer[2] == 0x00))
+		else
 		{
-			int value = 0;
+			/* Set T=1 NAD */
+			if (TxLength == 4
+				&& (TxBuffer[0] == 0x3E)
+				&& (TxBuffer[1] == 0x00)
+				&& (TxBuffer[2] == 0x01))
+			{
+				RxBuffer[0] = 0x3E;
+				RxBuffer[1] = 0x00;
+				RxBuffer[2] = 0x01;
+				DEBUG_INFO1("Set NAD value");
+				if (t1_set_param(&CcidSlots[reader_index].t1, IFD_PROTOCOL_T1_NAD,
+					TxBuffer[3]))
+					/* error */
+					RxBuffer[3] = 0x01;
+				else
+					RxBuffer[3] = 0x00;
+				*pdwBytesReturned = 4;
+				return_value = IFD_SUCCESS;
+			}
 
-			RxBuffer[0] = 0x3F;
-			RxBuffer[1] = 0x00;
-			RxBuffer[2] = 0x02;
-			DEBUG_INFO1("Get NAD value");
-			value = t1_get_param(&CcidSlots[reader_index].t1,
-				IFD_PROTOCOL_T1_NAD);
-			if (-1 == value)
+			/* Get T=1 NAD */
+			if (TxLength == 3
+				&& (TxBuffer[0] == 0x3F)
+				&& (TxBuffer[1] == 0x00)
+				&& (TxBuffer[2] == 0x00))
 			{
-				/* error */
-				RxBuffer[3] = 0x01;
-				RxBuffer[4] = 0x00;
+				int value = 0;
+
+				RxBuffer[0] = 0x3F;
+				RxBuffer[1] = 0x00;
+				RxBuffer[2] = 0x02;
+				DEBUG_INFO1("Get NAD value");
+				value = t1_get_param(&CcidSlots[reader_index].t1,
+					IFD_PROTOCOL_T1_NAD);
+				if (-1 == value)
+				{
+					/* error */
+					RxBuffer[3] = 0x01;
+					RxBuffer[4] = 0x00;
+				}
+				else
+				{
+					RxBuffer[3] = 0x00;
+					RxBuffer[4] = value;
+				}
+				*pdwBytesReturned = 5;
+				return_value = IFD_SUCCESS;
 			}
-			else
-			{
-				RxBuffer[3] = 0x00;
-				RxBuffer[4] = value;
-			}
-			*pdwBytesReturned = 5;
-			return_value = IFD_SUCCESS;
 		}
 	}
 
