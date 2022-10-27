@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-10-14
+# Generated: 2022-10-27
 #
 # DO NOT EDIT BY HAND
 
@@ -354,6 +354,9 @@
 # DESKO GmbH
 0x1AC2:0x0300:DESKO GmbH IDenty chrom
 0x1AC2:0x0302:DESKO GmbH PENTA Scanner
+
+# Dexon Tecnologias Digitais LTDA
+0x0483:0xA389:Dexon Tecnologias Digitais LTDA DXToken
 
 # Doctolib
 0x1C34:0xAFD0:Doctolib SR
