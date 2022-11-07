@@ -22,6 +22,7 @@ jobs:
           "--enable-strict --disable-pcsclite",
           "--enable-strict --disable-libusb",
           "--enable-strict --enable-composite-as-multislot",
+          "--enable-strict --enable-zlp",
         ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
