@@ -47,7 +47,9 @@ TOKEN_PARSER = tokenparser.l parser.h \
 	misc.h \
 	strlcpycat.h \
 	simclist.c \
-	simclist.h
+	simclist.h \
+	ccid_env.c \
+	ccid_env.h
 
 if WITHOUT_PCSC
 PROVIDED_BY_PCSC = debug.c
