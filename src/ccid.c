@@ -76,7 +76,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			 * connected to a USB 3 port */
 			if (0x0200 == ccid_descriptor->IFD_bcdDevice)
 			{
-				ccid_descriptor->zlp = TRUE;
+				ccid_descriptor->zlp = true;
 				DEBUG_INFO1("ZLP fixup");
 			}
 			break;
@@ -224,7 +224,7 @@ static void set_gemalto_firmware_features(unsigned int reader_index)
 		RESPONSECODE ret;
 
 		ret = CmdEscapeCheck(reader_index, cmd, sizeof cmd,
-			(unsigned char*)gf_features, &len_features, 0, TRUE);
+			(unsigned char*)gf_features, &len_features, 0, true);
 		if ((IFD_SUCCESS == ret) &&
 			(len_features == sizeof *gf_features))
 		{

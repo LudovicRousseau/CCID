@@ -21,6 +21,7 @@
 #define __PROTO_T1_H__
 
 #include <config.h>
+#include <stdbool.h>
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
@@ -65,7 +66,7 @@ typedef struct {
 
 	unsigned int	(*checksum)(const uint8_t *, size_t, unsigned char *);
 
-	char			more;	/* more data bit */
+	bool			more;	/* more data bit */
 	unsigned char	previous_block[4];	/* to store the last R-block */
 } t1_state_t;
 

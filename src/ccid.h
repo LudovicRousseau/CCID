@@ -17,6 +17,8 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <stdbool.h>
+
 typedef struct
 {
 	/*
@@ -152,7 +154,7 @@ typedef struct
 	/*
 	 * Zero Length Packet fixup (boolean)
 	 */
-	char zlp;
+	bool zlp;
 #endif
 } _ccid_descriptor;
 

@@ -77,7 +77,7 @@ struct usbDevice_MultiSlot_Extension
 	int reader_index;
 
 	/* The multi-threaded polling part */
-	_Atomic int terminated;
+	_Atomic bool terminated;
 	int status;
 	unsigned char buffer[CCID_INTERRUPT_SIZE];
 	pthread_t thread_proc;
@@ -118,7 +118,7 @@ typedef struct
 	/* pointer to the multislot extension (if any) */
 	struct usbDevice_MultiSlot_Extension *multislot_extension;
 
-	char disconnected;
+	bool disconnected;
 } _usbDevice;
 
 /* The _usbDevice structure must be defined before including ccid_usb.h */
@@ -133,7 +133,7 @@ static void Multi_PollingTerminate(struct usbDevice_MultiSlot_Extension *msExt);
 
 static int get_end_points(struct libusb_config_descriptor *desc,
 	_usbDevice *usbdevice, int num);
-int ccid_check_firmware(struct libusb_device_descriptor *desc);
+bool ccid_check_firmware(struct libusb_device_descriptor *desc);
 static unsigned int *get_data_rates(unsigned int reader_index,
 	struct libusb_config_descriptor *desc, int num);
 
@@ -187,16 +187,16 @@ unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
  ****************************************************************************/
 static void close_libusb_if_needed(void)
 {
-	int i, to_exit = TRUE;
+	bool to_exit = true;
 
 	if (NULL == ctx)
 		return;
 
 	/* if at least 1 reader is still in use we do not exit libusb */
-	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+	for (int i=0; i<CCID_DRIVER_MAX_READERS; i++)
 	{
 		if (usbDevice[i].dev_handle != NULL)
-			to_exit = FALSE;
+			to_exit = false;
 	}
 
 	if (to_exit)
@@ -246,7 +246,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	ssize_t cnt;
 	list_t plist, *values, *ifdVendorID, *ifdProductID, *ifdFriendlyName;
 	int rv;
-	int claim_failed = FALSE;
+	bool claim_failed = false;
 	int return_value = STATUS_SUCCESS;
 
 	DEBUG_COMM3("Reader index: %X, Device: " LOG_STRING, reader_index, device);
@@ -432,7 +432,7 @@ again_libusb:
 
 			if (desc.idVendor == vendorID && desc.idProduct == productID)
 			{
-				int already_used;
+				bool already_used;
 				const struct libusb_interface *usb_interface = NULL;
 				int interface;
 				int num = 0;
@@ -501,7 +501,7 @@ again_libusb:
 				interface_number = static_interface;
 #endif
 				/* is it already opened? */
-				already_used = FALSE;
+				already_used = false;
 
 				DEBUG_COMM3("Checking device: %d/%d",
 					bus_number, device_address);
@@ -512,7 +512,7 @@ again_libusb:
 						/* same bus, same address */
 						if (usbDevice[r].bus_number == bus_number
 							&& usbDevice[r].device_address == device_address)
-							already_used = TRUE;
+							already_used = true;
 					}
 				}
 
@@ -675,7 +675,7 @@ again:
 					(void)libusb_close(dev_handle);
 					DEBUG_CRITICAL4("Can't claim interface %d/%d: %s",
 						bus_number, device_address, libusb_error_name(r));
-					claim_failed = TRUE;
+					claim_failed = true;
 					interface_number = -1;
 					continue;
 				}
@@ -723,7 +723,7 @@ again:
 				usbDevice[reader_index].real_nb_opened_slots = 1;
 				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
 				atomic_init(&usbDevice[reader_index].polling_transfer, NULL);
-				usbDevice[reader_index].disconnected = FALSE;
+				usbDevice[reader_index].disconnected = false;
 
 				/* CCID common informations */
 				usbDevice[reader_index].ccid.real_bSeq = 0;
@@ -757,7 +757,7 @@ again:
 				usbDevice[reader_index].ccid.gemalto_firmware_features = NULL;
 				usbDevice[reader_index].ccid.dwProtocols = dw2i(device_descriptor, 6);
 #ifdef ENABLE_ZLP
-				usbDevice[reader_index].ccid.zlp = FALSE;
+				usbDevice[reader_index].ccid.zlp = false;
 #endif
 				if (desc.iSerialNumber)
 				{
@@ -1134,7 +1134,7 @@ status_t DisconnectUSB(unsigned int reader_index)
 		if (usbDevice[i].dev_handle == dev_handle)
 		{
 			DEBUG_COMM2("Disconnect reader: %d", i);
-			usbDevice[i].disconnected = TRUE;
+			usbDevice[i].disconnected = true;
 		}
 	}
 
@@ -1302,7 +1302,7 @@ uint8_t get_ccid_usb_device_address(int reader_index)
  *					ccid_check_firmware
  *
  ****************************************************************************/
-int ccid_check_firmware(struct libusb_device_descriptor *desc)
+bool ccid_check_firmware(struct libusb_device_descriptor *desc)
 {
 	unsigned int i;
 
@@ -1321,19 +1321,19 @@ int ccid_check_firmware(struct libusb_device_descriptor *desc)
 			{
 				DEBUG_INFO3("Firmware (%X.%02X) is bogus! but you choosed to use it",
 					desc->bcdDevice >> 8, desc->bcdDevice & 0xFF);
-				return FALSE;
+				return false;
 			}
 			else
 			{
 				DEBUG_CRITICAL3("Firmware (%X.%02X) is bogus! Upgrade the reader firmware or get a new reader.",
 					desc->bcdDevice >> 8, desc->bcdDevice & 0xFF);
-				return TRUE;
+				return true;
 			}
 		}
 	}
 
 	/* by default the firmware is not bogus */
-	return FALSE;
+	return false;
 } /* ccid_check_firmware */
 
 
@@ -1778,7 +1778,7 @@ static void Multi_PollingTerminate(struct usbDevice_MultiSlot_Extension *msExt)
 
 	if (msExt && !msExt->terminated)
 	{
-		msExt->terminated = TRUE;
+		msExt->terminated = true;
 
 		transfer = atomic_load(&usbDevice[msExt->reader_index].polling_transfer);
 
@@ -2005,7 +2005,7 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 	/* dev_handle of the physical reader */
 	msExt->dev_handle = usbDevice[reader_index].dev_handle;
 
-	atomic_init(&msExt->terminated, FALSE);
+	atomic_init(&msExt->terminated, false);
 	msExt->status = 0;
 
 	/* Create mutex and condition object for the interrupt polling */

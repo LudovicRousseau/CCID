@@ -19,16 +19,16 @@
 
 /*
  * DEBUG_CRITICAL("text");
- *	log "text" if (LogLevel & DEBUG_LEVEL_CRITICAL) is TRUE
+ *	log "text" if (LogLevel & DEBUG_LEVEL_CRITICAL) is true
  *
  * DEBUG_CRITICAL2("text: %d", 1234);
- *  log "text: 1234" if (DEBUG_LEVEL_CRITICAL & DEBUG_LEVEL_CRITICAL) is TRUE
+ *  log "text: 1234" if (DEBUG_LEVEL_CRITICAL & DEBUG_LEVEL_CRITICAL) is true
  * the format string can be anything printf() can understand
  *
  * same thing for DEBUG_INFO, DEBUG_COMM and DEBUG_PERIODIC
  *
  * DEBUG_XXD(msg, buffer, size);
- *  log a dump of buffer if (LogLevel & DEBUG_LEVEL_COMM) is TRUE
+ *  log a dump of buffer if (LogLevel & DEBUG_LEVEL_COMM) is true
  *
  */
 

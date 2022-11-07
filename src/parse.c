@@ -24,6 +24,7 @@
 # endif
 #include <errno.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "defs.h"
 #include "ccid.h"
@@ -31,11 +32,6 @@
 /* define DISPLAY_EXTRA_VALUES to display the extra (invalid) values
  * returned by bNumClockSupported and bNumDataRatesSupported */
 #undef DISPLAY_EXTRA_VALUES
-
-#ifndef TRUE
-#define TRUE 1
-#define FALSE 0
-#endif
 
 #define BLUE "\33[34m"
 #define RED "\33[31m"
@@ -48,7 +44,7 @@
 int LogLevel = 1+2+4+8; /* full debug */
 int DriverOptions = 0;
 
-static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
+static bool ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	struct libusb_device_descriptor desc,
 	struct libusb_config_descriptor *config_desc,
 	int num,
@@ -65,11 +61,11 @@ int main(int argc, char *argv[])
 	libusb_device **devs, *dev;
 	int nb = 0, r, i;
 	unsigned char buffer[256];
-	char class_ff = FALSE;
+	bool class_ff = false;
 	ssize_t cnt;
 
 	if ((argc > 1) && (0 == strcmp(argv[1], "-p")))
-		class_ff = TRUE;
+		class_ff = true;
 
 	r = libusb_init(NULL);
 	if (r < 0)
@@ -215,7 +211,7 @@ again:
 					 * reader */
 					continue;
 				else
-					return TRUE;
+					return true;
 			}
 			continue;
 		}
@@ -248,7 +244,7 @@ again:
  *					Parse a CCID USB Descriptor
  *
  ****************************************************************************/
-static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
+static bool ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	struct libusb_device_descriptor desc,
 	struct libusb_config_descriptor *config_desc,
 	int num,
@@ -273,7 +269,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		{
 			(void)fprintf(stderr,
 				BRIGHT_RED "Please, restart the command as root\n\n" NORMAL);
-			return TRUE;
+			return true;
 		}
 	}
 	else
@@ -327,7 +323,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	{
 		(void)printf("\n  NOT A CCID DEVICE\n");
 		if (usb_interface_descriptor->bInterfaceClass != 0xFF)
-			return TRUE;
+			return true;
 		else
 			(void)printf("  Class is 0xFF (proprietary)\n");
 	}
@@ -366,7 +362,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	if (NULL == device_descriptor)
 	{
 		(void)printf("\n  NOT A CCID DEVICE\n");
-		return TRUE;
+		return true;
 	}
 
 	/*
@@ -378,7 +374,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	if (device_descriptor[0] != 0x36)
 	{
 		(void)printf("   UNSUPPORTED bLength\n");
-		return TRUE;
+		return true;
 	}
 
 	(void)printf("  bDescriptorType: 0x%02X\n", device_descriptor[1]);
@@ -389,7 +385,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		else
 		{
 			(void)printf("   UNSUPPORTED bDescriptorType\n");
-			return TRUE;
+			return true;
 		}
 	}
 
@@ -440,7 +436,7 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			{
 				(void)fprintf(stderr,
 					BRIGHT_RED "   Please, stop pcscd and retry\n\n" NORMAL);
-				return TRUE;
+				return true;
 			}
 		}
 		else
@@ -606,6 +602,6 @@ static int ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		(void)printf("   PIN Modification supported\n");
 	(void)printf("  bMaxCCIDBusySlots: %d\n", device_descriptor[53]);
 
-	return FALSE;
+	return false;
 } /* ccid_parse_interface_descriptor */
 

@@ -17,11 +17,6 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef TRUE
-#define FALSE 0
-#define TRUE 1
-#endif
-
 void InitReaderIndex(void);
 int GetNewReaderIndex(const int Lun);
 int LunToReaderIndex(int Lun);

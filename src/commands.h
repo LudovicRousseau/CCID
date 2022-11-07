@@ -41,7 +41,7 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 RESPONSECODE CmdEscapeCheck(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout,
-	int mayfail);
+	bool mayfail);
 
 RESPONSECODE CmdPowerOff(unsigned int reader_index);
 

@@ -20,6 +20,7 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <stdbool.h>
 #include "pps.h"
 #include "atr.h"
 #ifdef HAVE_STDLIB_H
@@ -38,7 +39,7 @@
  * Not exported funtions declaration
  */
 
-static int PPS_Match (BYTE * request, unsigned len_request, BYTE * reply, unsigned len_reply);
+static bool PPS_Match (BYTE * request, unsigned len_request, BYTE * reply, unsigned len_reply);
 
 static unsigned PPS_GetLength (BYTE * block);
 
@@ -86,24 +87,24 @@ PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
   return ret;
 }
 
-static int
+static bool
 PPS_Match (BYTE * request, unsigned len_request, BYTE * confirm, unsigned len_confirm)
 {
   /* See if the reply differs from request */
   if ((len_request == len_confirm) &&	/* same length */
       memcmp (request, confirm, len_request))	/* different contents */
-	return FALSE;
+	return false;
 
   if (len_request < len_confirm)	/* confirm longer than request */
-    return FALSE;
+    return false;
 
   /* See if the card specifies other than default FI and D */
   if ((PPS_HAS_PPS1 (confirm))
 		&& (len_confirm > 2)
 		&& (confirm[2] != request[2]))
-    return FALSE;
+    return false;
 
-  return TRUE;
+  return true;
 }
 
 static unsigned

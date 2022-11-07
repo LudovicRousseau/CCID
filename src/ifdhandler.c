@@ -66,11 +66,11 @@ static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
 int DriverOptions = 0;
 int PowerOnVoltage = -1;
-static int DebugInitialized = FALSE;
+static bool DebugInitialized = false;
 
 /* local functions */
 static void init_driver(void);
-static char find_baud_rate(unsigned int baudrate, unsigned int *list);
+static bool find_baud_rate(unsigned int baudrate, unsigned int *list);
 static unsigned int T0_card_timeout(double f, double d, int TC1, int TC2,
 	int clock_frequency);
 static unsigned int T1_card_timeout(double f, double d, int TC1, int BWI,
@@ -1357,7 +1357,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	unsigned int rx_length;
 	int reader_index;
 	int old_read_timeout;
-	int restore_timeout = FALSE;
+	bool restore_timeout = false;
 	_ccid_descriptor *ccid_descriptor;
 
 	(void)RecvPci;
@@ -1426,7 +1426,7 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 	if (0 == memcmp(TxBuffer, "\xFF\xC2\x01", 3))
 	{
 		/* Yes, use the same timeout as for SCardControl() */
-		restore_timeout = TRUE;
+		restore_timeout = true;
 		old_read_timeout = ccid_descriptor -> readTimeout;
 		ccid_descriptor -> readTimeout = 90 * 1000;	/* 90 seconds */
 	}
@@ -1484,7 +1484,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 	if (IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE == dwControlCode)
 	{
-		int allowed = (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED);
+		bool allowed = (DriverOptions & DRIVER_OPTION_CCID_EXCHANGE_AUTHORIZED);
 		int readerID = ccid_descriptor -> readerID;
 
 		if (VENDOR_GEMALTO == GET_VENDOR(readerID))
@@ -1493,7 +1493,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 			/* get firmware version escape command */
 			if ((1 == TxLength) && (0x02 == TxBuffer[0]))
-				allowed = TRUE;
+				allowed = true;
 
 			/* switch interface escape command on the GemProx DU
 			 * the next byte in the command is the interface:
@@ -1503,12 +1503,12 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			if ((GEMALTOPROXDU == readerID)
 				&& (6 == TxLength)
 				&& (0 == memcmp(TxBuffer, switch_interface, sizeof(switch_interface))))
-				allowed = TRUE;
+				allowed = true;
 		}
 
 		/* allow APDU exchange with this reader without a card in the field */
 		if (HID_OMNIKEY_5427CK == readerID)
-			allowed = TRUE;
+			allowed = true;
 
 		if (!allowed)
 		{
@@ -2137,11 +2137,11 @@ void init_driver(void)
 	/* initialise the Lun to reader_index mapping */
 	InitReaderIndex();
 
-	DebugInitialized = TRUE;
+	DebugInitialized = true;
 } /* init_driver */
 
 
-static char find_baud_rate(unsigned int baudrate, unsigned int *list)
+static bool find_baud_rate(unsigned int baudrate, unsigned int *list)
 {
 	int i;
 
@@ -2160,10 +2160,10 @@ static char find_baud_rate(unsigned int baudrate, unsigned int *list)
 		 * is an approximative result, computed from the d/f float result.
 		 */
 		if ((baudrate < list[i] + 2) && (baudrate > list[i] - 2))
-			return TRUE;
+			return true;
 	}
 
-	return FALSE;
+	return false;
 } /* find_baud_rate */
 
 

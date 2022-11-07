@@ -20,6 +20,7 @@
 
 #include <config.h>
 
+#include <stdbool.h>
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
@@ -934,7 +935,7 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout)
 {
 	return CmdEscapeCheck(reader_index, TxBuffer, TxLength, RxBuffer, RxLength,
-		timeout, FALSE);
+		timeout, false);
 } /* CmdEscape */
 
 
@@ -946,7 +947,7 @@ RESPONSECODE CmdEscape(unsigned int reader_index,
 RESPONSECODE CmdEscapeCheck(unsigned int reader_index,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout,
-	int mayfail)
+	bool mayfail)
 {
 	unsigned char *cmd_in, *cmd_out;
 	int bSeq;

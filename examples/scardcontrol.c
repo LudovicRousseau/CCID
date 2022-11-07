@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <stdbool.h>
 #ifdef __APPLE__
 #include <PCSC/winscard.h>
 #include <PCSC/wintypes.h>
@@ -36,11 +37,6 @@
 #define VERIFY_PIN
 #undef MODIFY_PIN
 #undef GET_GEMPC_FIRMWARE
-
-#ifndef TRUE
-#define TRUE 1
-#define FALSE 0
-#endif
 
 #define IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE     SCARD_CTL_CODE(1)
 
@@ -265,7 +261,7 @@ int main(int argc, char *argv[])
 #ifdef MODIFY_PIN
 	PIN_MODIFY_STRUCTURE *pin_modify;
 #endif
-	char error;
+	bool error;
 	int PIN_min_size = 4;
 	int PIN_max_size = 8;
 
@@ -713,9 +709,9 @@ int main(int argc, char *argv[])
 			printf("\n");
 	}
 
-	error = FALSE;
+	error = false;
 	if (length != 2 || bRecvBuffer[0] != 0x90 || bRecvBuffer[1] != 0x00)
-		error = TRUE;
+		error = true;
 
 	PCSC_ERROR_CONT(rv, "SCardControl")
 	printf(error ? RED : GREEN);
@@ -893,9 +889,9 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	error = FALSE;
+	error = false;
 	if (length != 2 || bRecvBuffer[0] != 0x90 || bRecvBuffer[1] != 0x00)
-		error = TRUE;
+		error = true;
 
 	PCSC_ERROR_CONT(rv, "SCardControl")
 	printf(error ? RED : GREEN);
