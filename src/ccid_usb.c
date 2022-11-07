@@ -40,6 +40,7 @@
 #include "utils.h"
 #include "parser.h"
 #include "ccid_ifdhandler.h"
+#include "sys_generic.h"
 
 
 /* write timeout
@@ -248,6 +249,7 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	int rv;
 	bool claim_failed = false;
 	int return_value = STATUS_SUCCESS;
+	const char * hpDirPath;
 
 	DEBUG_COMM3("Reader index: %X, Device: " LOG_STRING, reader_index, device);
 
@@ -311,9 +313,14 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 		return STATUS_UNSUCCESSFUL;
 	}
 
+	/* Check if path override present in environment */
+	hpDirPath = SYS_GetEnv("PCSCLITE_HP_DROPDIR");
+	if (NULL == hpDirPath)
+		hpDirPath = PCSCLITE_HP_DROPDIR;
+
 	/* Info.plist full patch filename */
 	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
-		PCSCLITE_HP_DROPDIR, BUNDLE);
+		hpDirPath, BUNDLE);
 	DEBUG_INFO2("Using: " LOG_STRING, infofile);
 
 	rv = bundleParse(infofile, &plist);

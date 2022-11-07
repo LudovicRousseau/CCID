@@ -50,6 +50,7 @@
 #include "towitoko/pps.h"
 #include "parser.h"
 #include "strlcpycat.h"
+#include "sys_generic.h"
 
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
@@ -2069,12 +2070,18 @@ void init_driver(void)
 	char *e;
 	int rv;
 	list_t plist, *values;
+	const char * hpDirPath;
 
 	DEBUG_INFO1("Driver version: " VERSION);
 
+	/* Check if path override present in environment */
+	hpDirPath = SYS_GetEnv("PCSCLITE_HP_DROPDIR");
+	if (NULL == hpDirPath)
+		hpDirPath = PCSCLITE_HP_DROPDIR;
+
 	/* Info.plist full patch filename */
 	(void)snprintf(infofile, sizeof(infofile), "%s/%s/Contents/Info.plist",
-		PCSCLITE_HP_DROPDIR, BUNDLE);
+		hpDirPath, BUNDLE);
 
 	rv = bundleParse(infofile, &plist);
 	if (0 == rv)
