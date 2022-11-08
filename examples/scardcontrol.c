@@ -217,7 +217,7 @@ static const char *pinpad_return_codes(int length,
 	if (0x6A == bRecvBuffer[0])
 	{
 #define FORMAT "Error on data byte %2d"
-		static char ret2[] = FORMAT;
+		static char ret2[10 + sizeof FORMAT];
 		sprintf(ret2, FORMAT, (char)bRecvBuffer[1]);
 		ret = ret2;
 	}
