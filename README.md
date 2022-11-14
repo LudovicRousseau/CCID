@@ -117,6 +117,34 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.5.1 - 14 November 2022, Ludovic Rousseau
+   - Add support of
+     - Access IS ATR220 with idProduct: 0x0184
+     - Alcor Link AK9567
+     - Alcor Link AK9572
+     - BLUTRONICS TAURUS NFC
+     - CHERRY SmartTerminal ST-1144
+     - CREATOR CRT-603(CZ1) CCR
+     - Dexon Tecnologias Digitais LTDA DXToken
+     - ESMART Reader ER433x ICC
+     - ESMART Reader ER773x Dual & 1S
+     - Flight system consulting Incredist
+     - Ledger Nano S
+     - Ledger Nano S Plus
+     - Ledger Nano SP
+     - Ledger Nano X
+     - SafeNet eToken Fusion
+     - Sensyl SSC-NFC Reader
+   - Adjust USB drivers path at run-time via environment variable PCSCLITE_HP_DROPDIR
+   - configure.ac: add --enable-strict option
+   - Fix a problem with AUTO PPS readers and ATR convention inverse cards
+   - examples/scardcontrol:
+    - add support of 6A xx error codes
+    - check WinSCard error early
+    - parse wLcdLayout & bEntryValidationCondition
+   - macOS: log non sensitive strings as "%{public}s"
+   - Some other minor improvements
+
 1.5.0 - 27 January 2022, Ludovic Rousseau
    - Add support of
      - ACS ACR1281U
