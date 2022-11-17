@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-11-16
+# Generated: 2022-11-17
 #
 # DO NOT EDIT BY HAND
 
@@ -849,6 +849,7 @@
 
 # Thales
 0x08E6:0x34C7:Thales Shield M4 Reader
+0x17B9:0x400B:Thales RF Reader
 
 # THURSBY SOFTWARE
 0x1976:0x0001:THURSBY SOFTWARE TSS-PK1
