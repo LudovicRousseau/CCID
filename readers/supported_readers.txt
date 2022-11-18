@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-11-17
+# Generated: 2022-11-18
 #
 # DO NOT EDIT BY HAND
 
@@ -865,6 +865,9 @@
 
 # TOKEN2
 0x349E:0x0300:TOKEN2 Molto2
+
+# TOKEN2 MFA
+0x349E:0x0430:TOKEN2 MFA NFC Reader
 
 # TOPPAN FORMS CO.,LTD
 0x23EB:0x0003:TOPPAN FORMS CO.,LTD TC63CUT021
