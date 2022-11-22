@@ -102,6 +102,30 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			/* The SCM SCL011 reader needs 350 ms to answer */
 			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT * 4;
 			break;
+
+		case ALCORMICRO_AU9540:
+			unsigned int *uint_array = ccid_descriptor->arrayOfSupportedDataRates;
+			unsigned int max_speed = 200000;
+			unsigned int *after, current_speed;
+
+			/* keep in the list only the baud rates lower than max_speed */
+			after = uint_array;
+			while ((current_speed = *uint_array++) != 0)
+			{
+				if (current_speed > max_speed)
+				{
+					DEBUG_INFO2("Remove baudrate: %d", current_speed);
+					continue;
+				}
+
+				*after++ = current_speed;
+			}
+			/* terminate the (new) list */
+			*after = 0;
+
+			/* update the max data rate with the new value */
+			ccid_descriptor->dwMaxDataRate = max_speed;
+			break;
 	}
 
 	/* CCID */
