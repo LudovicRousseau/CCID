@@ -855,6 +855,8 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			default_baudrate = (unsigned int) (1000 * ccid_desc->dwDefaultClock
 				* ATR_DEFAULT_D / ATR_DEFAULT_F);
 
+			DEBUG_COMM2("Card can work at %d bauds", card_baudrate);
+
 			/* if the card does not try to lower the default speed */
 			if ((card_baudrate > default_baudrate)
 				/* and the reader is fast enough */
@@ -891,6 +893,9 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 					&& (atr.ib[0][ATR_INTERFACE_BYTE_TA].value <= 0x97))
 				{
 					unsigned char old_TA1;
+
+					DEBUG_COMM2("Reader can't do more than %d bauds",
+						ccid_desc->dwMaxDataRate);
 
 					old_TA1 = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
 					while (atr.ib[0][ATR_INTERFACE_BYTE_TA].value > 0x94)
