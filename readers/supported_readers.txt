@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2022-11-18
+# Generated: 2022-12-06
 #
 # DO NOT EDIT BY HAND
 
@@ -620,6 +620,9 @@
 # KRONEGGER
 0x2D25:0x0000:KRONEGGER NFC blue Reader Platform
 0x2D25:0x0001:KRONEGGER Micro Core Platform
+
+# LDU
+0x0925:0x900A:LDU LANDI
 
 # Ledger
 0x2C97:0x0001:Ledger Nano S
