@@ -104,6 +104,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			break;
 
 		case ALCORMICRO_AU9540:
+			{
 			unsigned int *uint_array = ccid_descriptor->arrayOfSupportedDataRates;
 			unsigned int max_speed = 200000;
 			unsigned int *after, current_speed;
@@ -125,6 +126,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 
 			/* update the max data rate with the new value */
 			ccid_descriptor->dwMaxDataRate = max_speed;
+			}
 			break;
 	}
 
