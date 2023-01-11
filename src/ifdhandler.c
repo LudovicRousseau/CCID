@@ -1083,7 +1083,23 @@ end:
 		{
 			ret = SetParameters(reader_index, 1, sizeof(param), param);
 			if (IFD_SUCCESS != ret)
-				return ret;
+			{
+				if (ALCORMICRO_AU9540 == ccid_desc -> readerID)
+				{
+					/* Set Parameters failed
+					 * reset the card and continue without Set Parameters */
+
+					UCHAR atr2[MAX_ATR_SIZE];
+					DWORD atr2length;
+					RESPONSECODE ret2;
+
+					ret2 = IFDHPowerICC(Lun, IFD_RESET, atr2, &atr2length);
+					if (IFD_SUCCESS != ret2)
+						return ret;
+				}
+				else
+					return ret;
+			}
 		}
 	}
 	else
