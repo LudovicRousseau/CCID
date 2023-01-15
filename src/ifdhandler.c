@@ -1093,6 +1093,12 @@ end:
 					DWORD atr2length;
 					RESPONSECODE ret2;
 
+					/* 1st (cold?) reset */
+					ret2 = IFDHPowerICC(Lun, IFD_RESET, atr2, &atr2length);
+					if (IFD_SUCCESS != ret2)
+						return ret;
+
+					/* hot reset */
 					ret2 = IFDHPowerICC(Lun, IFD_RESET, atr2, &atr2length);
 					if (IFD_SUCCESS != ret2)
 						return ret;
