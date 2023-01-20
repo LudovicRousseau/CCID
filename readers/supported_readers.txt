@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-01-18
+# Generated: 2023-01-20
 #
 # DO NOT EDIT BY HAND
 
@@ -786,6 +786,7 @@
 
 # Sensyl
 0x356F:0x22FC:Sensyl SSC-NFC Reader
+0x356F:0x23FE:Sensyl SSC-HV Reader
 
 # Sitecom
 0x0DF6:0x800A:Sitecom Sitecom USB simcard reader MD-010
