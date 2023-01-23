@@ -40,7 +40,8 @@ enum {
 	IFD_PROTOCOL_T1_IFSC,
 	IFD_PROTOCOL_T1_IFSD,
 	IFD_PROTOCOL_T1_STATE,
-	IFD_PROTOCOL_T1_MORE
+	IFD_PROTOCOL_T1_MORE,
+	IFD_PROTOCOL_T1_NAD
 };
 
 #define T1_BUFFER_SIZE		(3 + 254 + 2)
@@ -58,6 +59,8 @@ typedef struct {
 	unsigned int	ifsc;
 	unsigned int	ifsd;
 
+	unsigned int	nad;
+
 	unsigned char	wtx;
 	unsigned int	retries;
 	unsigned int	rc_bytes;
@@ -74,6 +77,7 @@ int t1_transceive(t1_state_t *t1, unsigned int dad,
 int t1_init(t1_state_t *t1, int lun);
 void t1_release(t1_state_t *t1);
 int t1_set_param(t1_state_t *t1, int type, long value);
+int t1_get_param(t1_state_t *t1, int type);
 int t1_negotiate_ifsd(t1_state_t *t1, unsigned int dad, int ifsd);
 unsigned int t1_build(t1_state_t *, unsigned char *,
 	unsigned char, unsigned char, ct_buf_t *, size_t *);

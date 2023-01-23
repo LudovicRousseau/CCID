@@ -2288,7 +2288,8 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int reader_index,
 
 	DEBUG_COMM3("T=1: %d and %d bytes", tx_length, *rx_length);
 
-	ret = t1_transceive(&((get_ccid_slot(reader_index)) -> t1), 0,
+	ret = t1_transceive(&((get_ccid_slot(reader_index)) -> t1),
+		get_ccid_slot(reader_index) -> t1.nad,
 		tx_buffer, tx_length, rx_buffer, *rx_length);
 
 	if (ret < 0)
