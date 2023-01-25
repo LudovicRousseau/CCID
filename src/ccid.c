@@ -109,20 +109,25 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			unsigned int max_speed = 200000;
 			unsigned int *after, current_speed;
 
-			/* keep in the list only the baud rates lower than max_speed */
-			after = uint_array;
-			while ((current_speed = *uint_array++) != 0)
+			/* check the list exists */
+			if (uint_array != NULL)
 			{
-				if (current_speed > max_speed)
+				/* keep in the list only the baud rates lower than
+				 * max_speed */
+				after = uint_array;
+				while ((current_speed = *uint_array++) != 0)
 				{
-					DEBUG_INFO2("Remove baudrate: %d", current_speed);
-					continue;
-				}
+					if (current_speed > max_speed)
+					{
+						DEBUG_INFO2("Remove baudrate: %d", current_speed);
+						continue;
+					}
 
-				*after++ = current_speed;
+					*after++ = current_speed;
+				}
+				/* terminate the (new) list */
+				*after = 0;
 			}
-			/* terminate the (new) list */
-			*after = 0;
 
 			/* update the max data rate with the new value */
 			ccid_descriptor->dwMaxDataRate = max_speed;
