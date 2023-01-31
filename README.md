@@ -117,6 +117,18 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.5.2 - 31 January 2023, Ludovic Rousseau
+   - Add support of
+     - KAPELSE KAP-LINK
+     - LDU LANDI
+     - Sensyl SSC-HV Reader
+     - TOKEN2 MFA NFC Reader
+     - TOKEN2 Molto2
+     - Thales RF Reader
+   - Alcor Micro AU9560: Remove high speeds since they are not supported
+   - Hack for AlcorMicro AU9560 and Acos-ID card
+   - configure.ac: disable the use of --disable-usbdropdir
+
 1.5.1 - 14 November 2022, Ludovic Rousseau
    - Add support of
      - Access IS ATR220 with idProduct: 0x0184
