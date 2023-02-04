@@ -1260,7 +1260,7 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 			return_value = CmdPowerOff(reader_index);
 			if (IFD_NO_SUCH_DEVICE == return_value)
 				goto end;
-			if (IFD_SUCCESS != CmdPowerOff(reader_index))
+			if (IFD_SUCCESS != return_value)
 			{
 				DEBUG_CRITICAL("PowerDown failed");
 				return_value = IFD_ERROR_POWER_ACTION;
