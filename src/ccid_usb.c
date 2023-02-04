@@ -1569,7 +1569,8 @@ void InterruptStop(int reader_index)
 		return;
 	}
 
-	transfer = atomic_load(&usbDevice[reader_index].polling_transfer);
+	transfer = atomic_exchange(&usbDevice[reader_index].polling_transfer,
+		NULL);
 	if (transfer)
 	{
 		int ret;
@@ -1787,7 +1788,7 @@ static void Multi_PollingTerminate(struct usbDevice_MultiSlot_Extension *msExt)
 	{
 		msExt->terminated = true;
 
-		transfer = atomic_load(&usbDevice[msExt->reader_index].polling_transfer);
+		transfer = atomic_exchange(&usbDevice[msExt->reader_index].polling_transfer, NULL);
 
 		if (transfer)
 		{
