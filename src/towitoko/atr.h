@@ -35,10 +35,10 @@
 #define ATR_MALFORMED	2	/* ATR could not be parsed */
 #define ATR_IO_ERROR	3	/* I/O stream error */
 
-/* Paramenters */
+/* Parameters */
 #define ATR_MAX_SIZE		33	/* Maximum size of ATR byte array */
 #define ATR_MAX_HISTORICAL	15	/* Maximum number of historical bytes */
-#define ATR_MAX_PROTOCOLS	7	/* Maximun number of protocols */
+#define ATR_MAX_PROTOCOLS	7	/* Maximum number of protocols */
 #define ATR_MAX_IB		4	/* Maximum number of interface bytes per protocol */
 #define ATR_CONVENTION_DIRECT	0	/* Direct convention */
 #define ATR_CONVENTION_INVERSE	1	/* Inverse convention */
@@ -63,7 +63,7 @@
 #define ATR_INTEGER_VALUE_N	4	/* Integer value N */
 #define ATR_INTEGER_VALUE_PI2	5	/* Integer value PI2 */
 
-/* Default values for paramenters */
+/* Default values for parameters */
 #define ATR_DEFAULT_F	372
 #define ATR_DEFAULT_D	1
 #define ATR_DEFAULT_I	50
@@ -92,7 +92,7 @@ typedef struct
 ATR_t;
 
 /*
- * Exported functions declaraton
+ * Exported functions declaration
  */
 
 /* Initialization */
