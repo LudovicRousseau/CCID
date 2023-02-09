@@ -468,7 +468,7 @@ History:
      - Gemalto K50
      - appidkey GmbH ID100-USB  SC Reader
      - appidkey GmbH ID50 -USB
-   - Remove suport of
+   - Remove support of
      - Broadcom Corp 5880 (idProduct: 0x5800)
      - Broadcom Corp 5880 (idProduct: 0x5805)
      - KEBTechnology KONA USB SmartCard
@@ -684,7 +684,7 @@ History:
      - Watchdata W5181
    - Add support of DRIVER_OPTION_DISABLE_PIN_RETRIES
       The Gemalto pinpad reader sends a VERIFY command with no PIN value
-      in order to retreive the remaining retries from the card.  Some
+      in order to retrieve the remaining retries from the card.  Some
       cards (like the OpenPGP card) do not support this.
       It is now possible to disable this behavior from the Gemalto
       Pinpad and Covadis Véga Alpha.
@@ -740,7 +740,7 @@ History:
    - Add support of Windows value for CM_IOCTL_GET_FEATURE_REQUEST
       Windows uses 0x313520 for SCARD_CTL_CODE(3400) pcsc-lite uses
       0x42000D48 for SCARD_CTL_CODE(3400)
-      RDP aplications (like rdesktop) will convert SCardControl()
+      RDP applications (like rdesktop) will convert SCardControl()
       commands from a Windows application (so using 0x313520) to
       pcsc-lite.
    - fix multi-slot support for card movement notification (introduced
@@ -906,8 +906,8 @@ History:
       InterFace Device i.e. the smart card reader.  We then return the
       USB iManufacturer string as SCARD_ATTR_VENDOR_NAME and USB
       bcdDevice as SCARD_ATTR_VENDOR_IFD_VERSION
-   - reduce binary size bu removing unused features from simclist
-   - Fix some warnings reported bu Coverity
+   - reduce binary size by removing unused features from simclist
+   - Fix some warnings reported by Coverity
 
 
 1.4.4 - 13 May 2011, Ludovic Rousseau
@@ -1349,7 +1349,7 @@ History:
    - some (bogus) cards require an extra EGT but the ATR does not say
       so. We try to detect the bogus cards and set TC1=2
    - IFDHSetProtocolParameters(): only use a data rate supported by the
-      reader in the PPS negociation, otherwise we stay at the default
+      reader in the PPS negotiation, otherwise we stay at the default
       speed.
    - calculate and store the read timeout according to the card ATR
       instead of using a fixed value of 60 seconds
@@ -1475,7 +1475,7 @@ History:
    - build but do not install the serial ccidtwin driver by default
       since it is useless on computers without a serial port or without
       this reader for example.
-   - read and write timeouts are not symmetric. write timout can be
+   - read and write timeouts are not symmetric. write timeout can be
       shorter since the reader and card is not supposed to do anything
       before receiving (write) a command
    - do not try to find usb.h and other libusb files if
@@ -1508,7 +1508,7 @@ History:
    - honor DESTDIR in install rules (closes [ #300110 ]). Thanks to
       Ville Skyttä for the patch.
    - src/ccid.c: do not switch the GemPC Key and GemPC Twin in APDU
-      mode since it also swicth in EMV mode and may not work with non
+      mode since it also switch in EMV mode and may not work with non
       EMV cards
    - src/ccid_serial.c: complete reimplementation of the Twin serial
       protocol using a finite state automata (code much simpler)
