@@ -383,7 +383,7 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 		}
 
 		/* The reader does not support, and actively reject, "max size reached"
-		 * and "timeout occured" validation conditions */
+		 * and "timeout occurred" validation conditions */
 		if (0x02 != TxBuffer[7])
 		{
 			DEBUG_INFO2("Fix bEntryValidationCondition for GemPC Pinpad (was %d)",
@@ -753,7 +753,7 @@ RESPONSECODE SecurePINModify(unsigned int reader_index,
 		|| (VEGAALPHA == ccid_descriptor->readerID))
 	{
 		/* The reader does not support, and actively reject, "max size reached"
-		 * and "timeout occured" validation conditions */
+		 * and "timeout occurred" validation conditions */
 		if (0x02 != TxBuffer[10])
 		{
 			DEBUG_INFO2("Fix bEntryValidationCondition for GemPC Pinpad (was %d)",
@@ -2147,7 +2147,7 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 		if (0x20 == pcbuffer[0])
 		{
 			/* backup apdu data length */
-			/* if no data recieved before - backup length must be zero */
+			/* if no data received before - backup length must be zero */
 			backup_len = (backup_len == *rcv_len) ? 0 : *rcv_len;
 
 			/* wait for 2 bytes (SW1-SW2) */
@@ -2158,7 +2158,7 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(unsigned int reader_index,
 			if (return_value != IFD_SUCCESS)
 				DEBUG_CRITICAL("CCID_Receive failed");
 
-			/* restore recieved length */
+			/* restore received length */
 			*rcv_len += backup_len;
 		}
 		return return_value;
@@ -2389,7 +2389,7 @@ static void i2dw(int value, unsigned char buffer[])
 
 /*****************************************************************************
 *
-*					bei2i (big endian integer to host order interger)
+*					bei2i (big endian integer to host order integer)
 *
 ****************************************************************************/
 
