@@ -75,7 +75,7 @@ typedef enum {
 /* Default communication read timeout in milliseconds */
 #define DEFAULT_COM_READ_TIMEOUT (3*1000)
 
-/* DWORD type formating */
+/* DWORD type formatting */
 #ifdef __APPLE__
 /* Apple defines DWORD as uint32_t */
 #define DWORD_X "%X"
