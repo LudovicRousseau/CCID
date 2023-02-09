@@ -32,15 +32,15 @@ building serial reader driver
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A serial CCID reader can also be connected on a serial port. By default
-the serial driver is not built. You must explicitely do:
+the serial driver is not built. You must explicitly do:
 
 $ ./configure --enable-twinserial
 $ make
 # make install
 
 
-builing serial reader driver only
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+building serial reader driver only
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is possible to generate the driver for the GemPC Twin using serial
 communication only (for example on an embedded system without USB).
@@ -122,7 +122,7 @@ Test procedure:
   If you can't find them add them (if you know what you do) and/or mail me.
 
 - (re)start pcscd with debug on stdout. Simply do 'pcscd --debug stdout'
-  (you will need to have root priviledges). And look for:
+  (you will need to have root privileges). And look for:
   [...]
   readerfactory.c:1319 RFInitializeReader: Attempting startup of ReaderName
   readerfactory.c:1061 RFBindFunctions: Loading IFD Handler 2.0
