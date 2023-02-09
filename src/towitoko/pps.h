@@ -30,7 +30,7 @@
  */
 
 #define PPS_OK			0	/* Negotiation OK */
-#define PPS_ICC_ERROR		1	/* Comunication error */
+#define PPS_ICC_ERROR		1	/* Communication error */
 #define PPS_HANDSAKE_ERROR	2	/* Agreement not reached */
 #define PPS_PROTOCOL_ERROR	3	/* Error starting protocol */
 #define PPS_MAX_LENGTH		6
