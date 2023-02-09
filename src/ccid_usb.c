@@ -732,7 +732,7 @@ again:
 				atomic_init(&usbDevice[reader_index].polling_transfer, NULL);
 				usbDevice[reader_index].disconnected = false;
 
-				/* CCID common informations */
+				/* CCID common information */
 				usbDevice[reader_index].ccid.real_bSeq = 0;
 				usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
 				usbDevice[reader_index].ccid.readerID =
@@ -1056,7 +1056,7 @@ status_t CloseUSB(unsigned int reader_index)
 	/* one slot closed */
 	(*usbDevice[reader_index].nb_opened_slots)--;
 
-	/* release the allocated ressources for the last slot only */
+	/* release the allocated resources for the last slot only */
 	if (0 == *usbDevice[reader_index].nb_opened_slots)
 	{
 		struct usbDevice_MultiSlot_Extension *msExt;
@@ -1326,7 +1326,7 @@ bool ccid_check_firmware(struct libusb_device_descriptor *desc)
 		{
 			if (DriverOptions & DRIVER_OPTION_USE_BOGUS_FIRMWARE)
 			{
-				DEBUG_INFO3("Firmware (%X.%02X) is bogus! but you choosed to use it",
+				DEBUG_INFO3("Firmware (%X.%02X) is bogus! but you chose to use it",
 					desc->bcdDevice >> 8, desc->bcdDevice & 0xFF);
 				return false;
 			}
@@ -1405,7 +1405,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 		return NULL;
 	}
 
-	/* convert in correct endianess */
+	/* convert in correct endianness */
 	for (i=0; i<n; i++)
 	{
 		uint_array[i] = dw2i(buffer, i*4);
@@ -1903,7 +1903,7 @@ static void Multi_InterruptStop(int reader_index)
 
 	pthread_mutex_lock(&msExt->mutex);
 
-	/* Broacast an interrupt to wake-up the slot's thread */
+	/* Broadcast an interrupt to wake-up the slot's thread */
 	msExt->buffer[interrupt_byte] |= interrupt_mask;
 	pthread_cond_broadcast(&msExt->condition);
 
