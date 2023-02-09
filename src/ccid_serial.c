@@ -880,7 +880,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 
 	/* perform a command to configure GemPC Twin reader card movement
 	 * notification to synchronous mode: the card movement is notified _after_
-	 * the host command and _before_ the reader anwser */
+	 * the host command and _before_ the reader answer */
 	if (0 != strcasecmp(reader_name,"SEC1210"))
 	{
 		unsigned char tx_buffer[] = { 0x01, 0x01, 0x01};
@@ -922,7 +922,7 @@ status_t CloseSerial(unsigned int reader_index)
 	/* Decrement number of opened slot */
 	(*serialDevice[reader_index].nb_opened_slots)--;
 
-	/* release the allocated ressources for the last slot only */
+	/* release the allocated resources for the last slot only */
 	if (0 == *serialDevice[reader_index].nb_opened_slots)
 	{
 		DEBUG_COMM("Last slot closed. Release resources");
