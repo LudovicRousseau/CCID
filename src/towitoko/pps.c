@@ -36,7 +36,7 @@
 #include "debug.h"
 
 /*
- * Not exported funtions declaration
+ * Not exported functions declaration
  */
 
 static bool PPS_Match (BYTE * request, unsigned len_request, BYTE * reply, unsigned len_reply);
@@ -80,7 +80,7 @@ PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
   if (PPS_HAS_PPS1 (params) && PPS_HAS_PPS1 (confirm))
       *pps1 = confirm[2];
 
-  /* Copy PPS handsake */
+  /* Copy PPS handshake */
   memcpy (params, confirm, len_confirm);
   (*length) = len_confirm;
 
