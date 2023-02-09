@@ -259,7 +259,7 @@ EXTERNAL RESPONSECODE IFDHCreateChannel(DWORD Lun, DWORD Channel)
 	 * port listed by Channel.  For example, the first serial reader on
 	 * COM1 would link to /dev/pcsc/1 which would be a sym link to
 	 * /dev/ttyS0 on some machines This is used to help with intermachine
-	 * independance.
+	 * independence.
 	 *
 	 * Once the channel is opened the reader must be in a state in which
 	 * it is possible to query IFDHICCPresence() for card status.
@@ -293,7 +293,7 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 		Lun);
 
 	/* Restore the default timeout
-	 * No need to wait too long if the reader disapeared */
+	 * No need to wait too long if the reader disappeared */
 	get_ccid_descriptor(reader_index)->readTimeout = DEFAULT_COM_READ_TIMEOUT;
 
 	(void)CmdPowerOff(reader_index);
@@ -864,7 +864,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 			{
 				/* the reader has no baud rates table */
 				if ((NULL == ccid_desc->arrayOfSupportedDataRates)
-					/* or explicitely support it */
+					/* or explicitly support it */
 					|| find_baud_rate(card_baudrate,
 						ccid_desc->arrayOfSupportedDataRates))
 				{
@@ -917,7 +917,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 							ccid_desc->arrayOfSupportedDataRates))
 							/* or the reader has NO baud rate table */
 							|| ((NULL == ccid_desc->arrayOfSupportedDataRates)
-							/* and the baud rate is bellow the limit */
+							/* and the baud rate is below the limit */
 							&& (card_baudrate <= ccid_desc->dwMaxDataRate)))
 						{
 							pps[1] |= 0x10; /* PTS1 presence */
@@ -956,7 +956,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 	/* Automatic PPS made by the ICC? */
 	if ((! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_PPS_CUR))
-		/* TA2 absent: negociable mode */
+		/* TA2 absent: negotiable mode */
 		&& (! atr.ib[1][ATR_INTERFACE_BYTE_TA].present))
 	{
 		int default_protocol;
@@ -1169,7 +1169,7 @@ end:
 			(void)t1_set_param(t1, IFD_PROTOCOL_T1_IFSC, ifsc);
 		}
 
-		/* IFSD not negociated by the reader? */
+		/* IFSD not negotiated by the reader? */
 		if (! (ccid_desc->dwFeatures & CCID_CLASS_AUTO_IFSD))
 		{
 			DEBUG_COMM2("Negotiate IFSD at %d", ccid_desc -> dwMaxIFSD);
@@ -1960,7 +1960,7 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 		&& (ccid_descriptor->IFD_bcdDevice < 0x0200))
 	{
 		/* GemCore SIM Pro firmware 2.00 and up features
-		 * a full independant second slot */
+		 * a full independent second slot */
 		return_value = ccid_descriptor->dwSlotStatus;
 		goto end;
 	}
@@ -2268,7 +2268,7 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 	 *   interface device and the last one (NAD PCB LN APDU CKS) = 260 EGT,
 	 * - delay between ISO in and ISO out = BWT,
 	 * - ISO out delay between leading edge of the first character sent by the
-	 *   card and the last one (NAD PCB LN DATAS CKS) = 260 CWT.
+	 *   card and the last one (NAD PCB LN DATA CKS) = 260 CWT.
 	 */
 
 	/* clock_frequency is in kHz so the times are in milliseconds and not
@@ -2290,7 +2290,7 @@ static unsigned int T1_card_timeout(double f, double d, int TC1,
 	BWT = 11 * etu + (1<<BWI) * 960 * 372 / clock_frequency;
 
 	/* card CWT */
-	/* see ch. 9.5.3.1 Caracter Waiting Time, page 20 of ISO 7816-3 */
+	/* see ch. 9.5.3.1 Character Waiting Time, page 20 of ISO 7816-3 */
 	CWT = (11 + (1<<CWI)) * etu;
 
 	timeout = 260*EGT + BWT + 260*CWT;
