@@ -87,7 +87,7 @@
 
 	0x40: DRIVER_OPTION_DISABLE_PIN_RETRIES
 		The Gemalto pinpad reader sends a VERIFY command with no PIN
-		value in order to retreive the remaining retries from the card.
+		value in order to retrieve the remaining retries from the card.
 		Some cards (like the OpenPGP card) do not support this.
 
 	Default value: 0
