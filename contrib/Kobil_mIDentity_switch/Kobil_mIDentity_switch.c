@@ -50,7 +50,7 @@ Here the interesting part of the kernel driver inside the probe function:
 		5000);
 	}
 
-Initally the it did not work with libusb because the ioctl gets ignored with
+Initially the it did not work with libusb because the ioctl gets ignored with
 the used RequestType of 0x22 in combination with index 0x0001, but index 0x0002
 worked.  See usb/devio.c functions  proc_control() ->  check_ctrlrecip() ->
 findintfep() in order to understand why.
