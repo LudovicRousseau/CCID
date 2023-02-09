@@ -265,7 +265,7 @@ AC_SUBST(NOCLASS)
 
 # --enable-embedded
 AC_ARG_ENABLE(embedded,
-  AS_HELP_STRING([--enable-embedded],[limit RAM and CPU ressources by disabling features (log)]),
+  AS_HELP_STRING([--enable-embedded],[limit RAM and CPU resources by disabling features (log)]),
   [ use_embedded="${enableval}" ])
 
 if test x$use_embedded = xyes; then
