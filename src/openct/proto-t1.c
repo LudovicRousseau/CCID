@@ -117,7 +117,7 @@ void t1_release(/*@unused@*/ t1_state_t * t1)
 }
 
 /*
- * Get/set parmaters for T1 protocol
+ * Get/set parameters for T1 protocol
  */
 int t1_set_param(t1_state_t * t1, int type, long value)
 {
@@ -707,7 +707,7 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 		if (n != IFD_SUCCESS)
 			return -1;
 
-		/* Get the response en bloc */
+		/* Get the response en block */
 		rmax_int = rmax;
 		n = CCID_Receive(t1 -> lun, &rmax_int, block, NULL);
 		rmax = rmax_int;
