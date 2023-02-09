@@ -67,7 +67,7 @@ If the attribute is not supported the applications receive the error
 
    maximum size of an APDU supported by the reader.
 
-   format is unsigned 32-bit unsing the byte order of the platform.
+   format is unsigned 32-bit using the byte order of the platform.
    Correct readers should support up to 261 bytes (CLA + INS + P1 + P2 +
    Lc + 255 bytes of data) but some readers support less (253 bytes only
    for example). It is a problem for T=1 cards when the reader works in
