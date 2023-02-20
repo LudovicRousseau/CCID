@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-01-20
+# Generated: 2023-02-20
 #
 # DO NOT EDIT BY HAND
 
@@ -920,6 +920,9 @@
 
 # Watchdata W5181
 0x163C:0x0A03:Watchdata W5181 
+
+# WCMi
+0x34EB:0x1506:WCMi SD5931
 
 # Winbond
 0x0416:0x3815:Winbond CCID SmartCard Controller
