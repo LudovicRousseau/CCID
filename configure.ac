@@ -32,7 +32,11 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
-AM_PROG_LEX
+AC_PROG_LEX([noyywrap])
+if test $LEX = ":"
+then
+    AC_MSG_ERROR([no lex or flex found])
+fi
 AM_PROG_AR
 PKG_PROG_PKG_CONFIG
 
