@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-02-20
+# Generated: 2023-03-17
 #
 # DO NOT EDIT BY HAND
 
@@ -340,6 +340,9 @@
 0x31AA:0x7004:Circle CIR315
 0x31AA:0x7005:Circle CCR7125 ICC
 0x31AA:0x7006:Circle CIR125-DOT ICC
+
+# CIRIGHT
+0x1FC9:0x0905:CIRIGHT ONE PASS U2F
 
 # COVADIS
 0x0982:0x0008:COVADIS VEGA-ALPHA
