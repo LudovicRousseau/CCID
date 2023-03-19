@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-03-17
+# Generated: 2023-03-19
 #
 # DO NOT EDIT BY HAND
 
@@ -472,6 +472,9 @@
 
 # German Privacy Foundation
 0x20A0:0x4107:German Privacy Foundation Crypto Stick v1.2
+
+# GHI
+0xAE68:0x8001:GHI NC001
 
 # Giesecke & Devrient GmbH
 0x1059:0x000C:Giesecke & Devrient GmbH Star Sign Card Token 350 (ICCD)
