@@ -67,25 +67,21 @@ CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
 # get the Mac OS X major version. Example: El Capitan 10.11 -> 10011
 MAC_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 * 1000 + $2}')
 
-# check for Universal Binary only on macOS Mavericks 10.9 and earlier
-if [ $MAC_VERSION -le 10009 ]
+# Build a Universal Binary?
+UB=$(file $LIBUSB_ARCHIVE | grep "Mach-O universal binary")
+echo $UB
+if [ -z "$UB" ]
 then
-	# Build a Universal Binary?
-	UB=$(file $LIBUSB_ARCHIVE | grep "Mach-O universal binary")
-	echo $UB
-	if [ -z "$UB" ]
-	then
-		echo -en $RED
-		echo "*************************"
-		echo "No Universal Binary build"
-		echo "*************************"
-		echo -en $NORMAL
-	else
-		echo "Universal Binary build"
-		CFLAGS="$CFLAGS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk -arch i386 -arch x86_64"
-	fi
-	echo
+	echo -en $RED
+	echo "*************************"
+	echo "No Universal Binary build"
+	echo "*************************"
+	echo -en $NORMAL
+else
+	echo "Universal Binary build"
+	CFLAGS="$CFLAGS -arch arm64 -arch x86_64"
 fi
+echo
 
 CONFIGURE_ARGS="--disable-dependency-tracking"
 
