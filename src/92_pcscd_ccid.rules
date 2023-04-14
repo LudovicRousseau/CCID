@@ -11,6 +11,10 @@ ENV{DEVTYPE}!="usb_device", GOTO="pcscd_ccid_rules_end"
 # Kobil mIDentity
 ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
+# disable USB-persist for CCID devices (including composite ones)
+# https://docs.kernel.org/driver-api/usb/persist.html
+ENV{ID_USB_INTERFACES}=="*:0b0000:*", TEST=="power/persist", ATTR{power/persist}="0"
+
 # Keep USB autosuspend off for the C3PO LTC31 v1 SmartCard Reader
 ATTR{idVendor}=="0783", ATTR{idProduct}=="0003", GOTO="pcscd_ccid_rules_end"
 
