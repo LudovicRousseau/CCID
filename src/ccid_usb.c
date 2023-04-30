@@ -1540,6 +1540,11 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 		case LIBUSB_TRANSFER_TIMED_OUT:
 			break;
 
+		case LIBUSB_TRANSFER_NO_DEVICE:
+			DEBUG_COMM("Simulate card removal");
+			get_ccid_slot(reader_index)->bPowerFlags = MASK_POWERFLAGS_PUP;
+			break;
+
 		default:
 			/* if libusb_interrupt_transfer() times out we get EILSEQ or EAGAIN */
 			DEBUG_COMM4("InterruptRead (%d/%d): %s",
