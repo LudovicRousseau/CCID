@@ -28,6 +28,7 @@
 
 #include "defs.h"
 #include "ccid.h"
+#include "ccid_ifdhandler.h"
 
 /* define DISPLAY_EXTRA_VALUES to display the extra (invalid) values
  * returned by bNumClockSupported and bNumDataRatesSupported */
@@ -604,4 +605,10 @@ static bool ccid_parse_interface_descriptor(libusb_device_handle *handle,
 
 	return false;
 } /* ccid_parse_interface_descriptor */
+
+CcidDesc *get_ccid_slot(unsigned int reader_index)
+{
+	(void)reader_index;
+	return NULL;
+} /* get_ccid_slot */
 
