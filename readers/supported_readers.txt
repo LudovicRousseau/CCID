@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-03-19
+# Generated: 2023-05-18
 #
 # DO NOT EDIT BY HAND
 
@@ -137,6 +137,7 @@
 0x072F:0x223E:ACS ACR1252 Reader
 0x072F:0x223F:ACS ACR1255U-J1
 0x072F:0x2259:ACS ACR1252IMP Reader
+0x072F:0x226B:ACS WalletMate 1S CL Reader
 0x072F:0x8201:ACS APG8201 PINhandy 1
 0x072F:0x8202:ACS APG8201 USB Reader
 0x072F:0x8300:ACS ACR33 ICC Reader
