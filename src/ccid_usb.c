@@ -481,6 +481,7 @@ again_libusb:
 					case HID_OMNIKEY_5422:
 					case ALCOR_LINK_AK9567:
 					case ALCOR_LINK_AK9572:
+					case ACS_WALLETMATE:
 						max_interface_number = 1; /* 2 interfaces */
 						break;
 
@@ -707,6 +708,7 @@ again:
 					|| (HID_OMNIKEY_5422 == readerID)
 					|| (ALCOR_LINK_AK9567 == readerID)
 					|| (ALCOR_LINK_AK9572 == readerID)
+					|| (ACS_WALLETMATE == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 					/* use the next interface for the next "slot" */
