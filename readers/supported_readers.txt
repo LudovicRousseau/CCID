@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-05-18
+# Generated: 2023-05-22
 #
 # DO NOT EDIT BY HAND
 
@@ -146,6 +146,7 @@
 0x072F:0xB100:ACS ACR39U ICC Reader
 0x072F:0xB106:ACS CryptoMate (T2)
 0x072F:0xB112:ACS CryptoMate EVO
+0x072F:0xB501:ACS ACR40T ICC Reader
 
 # AF Care
 0x1C34:0xAFC0:AF Care One
