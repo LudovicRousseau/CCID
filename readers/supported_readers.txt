@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-05-22
+# Generated: 2023-05-25
 #
 # DO NOT EDIT BY HAND
 
@@ -388,6 +388,9 @@
 0x2CE4:0x5001:ESMART Reader ER433x ICC
 0x2CE4:0x5020:ESMART Reader ER773x Dual & 1S
 0x2CE4:0x7479:ESMART Token GOST
+
+# Excelsecu
+0x1EA8:0x8013:Excelsecu Card reader
 
 # F-Secure Foundry
 0x1209:0x2702:F-Secure Foundry USB Armory Mk II
