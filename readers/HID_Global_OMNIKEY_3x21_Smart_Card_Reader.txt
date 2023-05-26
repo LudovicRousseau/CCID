@@ -2,7 +2,7 @@
   iManufacturer: HID Global
  idProduct: 0x3031
   iProduct: OMNIKEY 3x21 Smart Card Reader
- bcdDevice: 1.05 (firmware release?)
+ bcdDevice: 1.06 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -146,7 +146,8 @@
    I2C protocol
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x000407B8
+  dwFeatures: 0x000407BA
+   ....02 Automatic parameter configuration based on ATR data
    ....08 Automatic ICC voltage selection
    ....10 Automatic ICC clock frequency change according to parameters
    ....20 Automatic baud rate change according to frequency and Fi, Di params
