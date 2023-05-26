@@ -2,7 +2,7 @@
   iManufacturer: HID Global
  idProduct: 0x5022
   iProduct: OMNIKEY 5022 Smart Card Reader
- bcdDevice: 1.00 (firmware release?)
+ bcdDevice: 1.01 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
@@ -29,6 +29,7 @@
   dwDefaultClock: 4.800 MHz
   dwMaximumClock: 4.800 MHz
   bNumClockSupported: 0 (will use whatever is returned)
+   Got 4 clock frequencies but was expecting 256
    Support 4000 kHz
    Support 4800 kHz
    Support 6000 kHz
