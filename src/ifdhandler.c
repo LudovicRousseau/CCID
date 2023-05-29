@@ -480,6 +480,10 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 						|| (HID_OMNIKEY_5422 == readerID))
 						*Value = 2;
 
+					/* 3 CCID interfaces */
+					if (ACS_ACR1581 == readerID)
+						*Value = 3;
+
 					/* 4 CCID interfaces */
 					if (FEITIANR502DUAL == readerID)
 						*Value = 4;
