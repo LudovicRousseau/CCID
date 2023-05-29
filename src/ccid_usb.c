@@ -492,6 +492,7 @@ again_libusb:
 					 */
 					case GEMALTOPROXDU:
 					case GEMALTOPROXSU:
+					case ACS_ACR1581:
 						max_interface_number = 2; /* 3 interfaces */
 						break;
 
@@ -709,6 +710,7 @@ again:
 					|| (ALCOR_LINK_AK9567 == readerID)
 					|| (ALCOR_LINK_AK9572 == readerID)
 					|| (ACS_WALLETMATE == readerID)
+					|| (ACS_ACR1581 == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 					/* use the next interface for the next "slot" */
