@@ -478,6 +478,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 						|| (ALCOR_LINK_AK9572 == readerID)
 						|| (ACS_WALLETMATE == readerID)
 						|| (ACS_ACR1251 == readerID)
+						|| (ACS_ACR1252 == readerID)
 						|| (HID_OMNIKEY_5422 == readerID))
 						*Value = 2;
 
