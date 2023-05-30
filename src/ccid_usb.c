@@ -482,6 +482,7 @@ again_libusb:
 					case ALCOR_LINK_AK9567:
 					case ALCOR_LINK_AK9572:
 					case ACS_WALLETMATE:
+					case ACS_ACR1251:
 						max_interface_number = 1; /* 2 interfaces */
 						break;
 
@@ -711,6 +712,7 @@ again:
 					|| (ALCOR_LINK_AK9572 == readerID)
 					|| (ACS_WALLETMATE == readerID)
 					|| (ACS_ACR1581 == readerID)
+					|| (ACS_ACR1251 == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 					/* use the next interface for the next "slot" */
