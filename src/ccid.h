@@ -253,6 +253,7 @@ typedef struct
 #define ALCORMICRO_AU9540		0x058f9540
 #define ACS_WALLETMATE			0x072F226B
 #define ACS_ACR1581				0x072F2301
+#define ACS_ACR1251				0x072F221A
 
 #define VENDOR_GEMALTO 0x08E6
 #define GET_VENDOR(readerID) ((readerID >> 16) & 0xFFFF)
