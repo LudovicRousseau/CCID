@@ -69,8 +69,8 @@ libccidtwin_la_LIBADD = $(PTHREAD_LIBS)
 libccidtwin_la_LDFLAGS = -avoid-version
 
 parse_SOURCES = parse.c debug.c ccid_usb.c sys_unix.c $(TOKEN_PARSER)
-parse_LDADD = $(LIBUSB_LIBS)
-parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS) -DSIMCLIST_NO_DUMPRESTORE
+parse_LDADD = $(LIBUSB_LIBS) $(ZLIB_LIBS)
+parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS) $(ZLIB_CFLAGS) -DSIMCLIST_NO_DUMPRESTORE
 
 EXTRA_DIST = Info.plist.src create_Info_plist.pl reader.conf.in \
 	towitoko/COPYING towitoko/README openct/LICENSE openct/README \

@@ -95,6 +95,8 @@ SunOS)
 	;;
 	esac
 
+PKG_CHECK_MODULES(ZLIB, zlib)
+
 # --disable-libusb
 AC_ARG_ENABLE(libusb,
 	AS_HELP_STRING([--disable-libusb],[do not use libusb]),

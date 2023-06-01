@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <zlib.h>
 
 #include "defs.h"
 #include "ccid.h"
@@ -39,6 +40,10 @@
 #define GREEN "\33[32m"
 #define MAGENTA "\33[35m"
 #define NORMAL "\33[0m"
+
+#define _OUTPUT_FILENAME "output"
+#define OUTPUT_FILENAME     _OUTPUT_FILENAME ".txt"
+#define OUTPUT_FILENAME_BIN _OUTPUT_FILENAME ".bin"
 
 /* global variables used in ccid_usb.c but defined in ifdhandler.c */
 int LogLevel = 1+2+4+8; /* full debug */
@@ -65,6 +70,7 @@ int main(int argc, char *argv[])
 	bool class_ff = false;
 	ssize_t cnt;
 	FILE * fd;
+	gzFile zfd;
 
 	if ((argc > 1) && (0 == strcmp(argv[1], "-p")))
 		class_ff = true;
@@ -84,7 +90,12 @@ int main(int argc, char *argv[])
 		return (int)cnt;
 	}
 
-	fd = stdout;
+	fd = fopen(OUTPUT_FILENAME, "rw");
+	if (NULL == fd)
+	{
+		perror("fopen " OUTPUT_FILENAME);
+		return -1;
+	}
 
 	/* for every device */
 	i = 0;
@@ -238,6 +249,31 @@ again:
 			"Can't find any CCID device.\nMaybe you must run parse as root?\n");
 
 	libusb_exit(NULL);
+
+	printf("\n");
+	rewind(fd);
+	zfd = gzopen(OUTPUT_FILENAME_BIN, "wb");
+	if (NULL == zfd)
+	{
+		perror("gzopen " OUTPUT_FILENAME_BIN);
+		return -1;
+	}
+	while (!feof(fd))
+	{
+		size_t s;
+		char buff[256];
+
+		s = fread(buff, 1, sizeof buff, fd);
+		if (0 == s)
+		{
+			perror("fread");
+			return -1;
+		}
+		fwrite(buff, s, 1, stdout);
+		gzfwrite(buff, s, 1, zfd);
+	}
+	fclose(fd);
+	gzclose(zfd);
 
 	return 0;
 } /* main */
