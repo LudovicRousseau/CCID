@@ -1,6 +1,6 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-05-29
+# Generated: 2023-06-02
 #
 # DO NOT EDIT BY HAND
 
@@ -363,6 +363,7 @@
 
 # Dexon Tecnologias Digitais LTDA
 0x0483:0xA389:Dexon Tecnologias Digitais LTDA DXToken
+0x0483:0xA40B:Dexon Tecnologias Digitais LTDA eSmartDX
 
 # Doctolib
 0x1C34:0xAFD0:Doctolib SR
