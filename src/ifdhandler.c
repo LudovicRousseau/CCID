@@ -833,7 +833,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 	if (Flags & IFD_NEGOTIATE_PTS1)
 	{
 		/* just use the value passed in argument */
-		pps[1] |= 0x10; /* PTS1 presence */
+		pps[1] |= ((Protocol == SCARD_PROTOCOL_T0)?0x00:0x10); /* PTS1 presence */
 		pps[2] = PTS1;
 	}
 	else
@@ -876,7 +876,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 					|| find_baud_rate(card_baudrate,
 						ccid_desc->arrayOfSupportedDataRates))
 				{
-					pps[1] |= 0x10; /* PTS1 presence */
+					pps[1] |= ((Protocol == SCARD_PROTOCOL_T0)?0x00:0x10); /* PTS1 presence */
 					pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
 
 					DEBUG_COMM2("Set speed to %d bauds", card_baudrate);
@@ -928,7 +928,7 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 							/* and the baud rate is below the limit */
 							&& (card_baudrate <= ccid_desc->dwMaxDataRate)))
 						{
-							pps[1] |= 0x10; /* PTS1 presence */
+							pps[1] |= ((Protocol == SCARD_PROTOCOL_T0)?0x00:0x10); /* PTS1 presence */
 							pps[2] = atr.ib[0][ATR_INTERFACE_BYTE_TA].value;
 
 							DEBUG_COMM2("Set adapted speed to %d bauds",
