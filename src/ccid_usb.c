@@ -1181,6 +1181,11 @@ const unsigned char *get_ccid_device_descriptor(const struct libusb_interface *u
 	uint8_t last_endpoint;
 #endif
 
+	if (0 == usb_interface->num_altsetting) {
+		/* No interface descriptor available. */
+		return NULL;
+	}
+
 	if (54 == usb_interface->altsetting->extra_length)
 		return usb_interface->altsetting->extra;
 
@@ -1295,6 +1300,10 @@ uint8_t get_ccid_usb_device_address(int reader_index)
 	/* if multiple interfaces use the first one with CCID class type */
 	for (i = *num; i < desc->bNumInterfaces; i++)
 	{
+		if (desc->interface[i].num_altsetting == 0) {
+			/* No interface descriptor available. */
+			continue;
+		}
 		/* CCID Class? */
 		if (desc->interface[i].altsetting->bInterfaceClass == 0xb
 #ifdef ALLOW_PROPRIETARY_CLASS
