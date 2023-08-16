@@ -1,6 +1,5 @@
 #
 # List of readers supported by the CCID driver
-# Generated: 2023-08-14
 #
 # DO NOT EDIT BY HAND
 
