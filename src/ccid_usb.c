@@ -485,6 +485,7 @@ again_libusb:
 					case ACS_ACR1251:
 					case ACS_ACR1252:
 					case ACS_ACR1252IMP:
+					case ACS_ACR1552:
 						max_interface_number = 1; /* 2 interfaces */
 						break;
 
@@ -717,6 +718,7 @@ again:
 					|| (ACS_ACR1251 == readerID)
 					|| (ACS_ACR1252 == readerID)
 					|| (ACS_ACR1252IMP == readerID)
+					|| (ACS_ACR1552 == readerID)
 					|| (FEITIANR502DUAL == readerID))
 				{
 					/* use the next interface for the next "slot" */

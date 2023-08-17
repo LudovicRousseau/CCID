@@ -480,6 +480,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 						|| (ACS_ACR1251 == readerID)
 						|| (ACS_ACR1252 == readerID)
 						|| (ACS_ACR1252IMP == readerID)
+						|| (ACS_ACR1552 == readerID)
 						|| (HID_OMNIKEY_5422 == readerID))
 						*Value = 2;
 

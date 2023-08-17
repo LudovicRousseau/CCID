@@ -256,6 +256,7 @@ typedef struct
 #define ACS_ACR1251				0x072F221A
 #define ACS_ACR1252				0x072F223B
 #define ACS_ACR1252IMP			0x072F2259
+#define ACS_ACR1552				0x072F2303
 
 #define VENDOR_GEMALTO 0x08E6
 #define GET_VENDOR(readerID) ((readerID >> 16) & 0xFFFF)
