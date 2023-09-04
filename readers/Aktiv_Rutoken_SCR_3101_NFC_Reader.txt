@@ -1,0 +1,71 @@
+ idVendor: 0x0A89
+  iManufacturer: Aktiv
+ idProduct: 0x006A
+  iProduct: Rutoken SCR 3101 NFC Reader
+ bcdDevice: 5.13 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string: LIBUSB_ERROR_INVALID_PARAM
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.00
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x01
+   5.0V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 3.580 MHz
+  dwMaximumClock: 5.000 MHz
+  bNumClockSupported: 0 (will use whatever is returned)
+   IFD does not support GET CLOCK FREQUENCIES request: LIBUSB_ERROR_PIPE
+  dwDataRate: 9600 bps
+  dwMaxDataRate: 312500 bps
+  bNumDataRatesSupported: 19
+   Support 9600 bps
+   Support 13984 bps
+   Support 19200 bps
+   Support 19531 bps
+   Support 26881 bps
+   Support 27968 bps
+   Support 38400 bps
+   Support 39062 bps
+   Support 53763 bps
+   Support 55937 bps
+   Support 78125 bps
+   Support 111875 bps
+   Support 115200 bps
+   Support 156250 bps
+   Support 161290 bps
+   Support 223750 bps
+   Support 312500 bps
+   Support 447500 bps
+   Support 625000 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000204B8
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   02.... Short APDU level exchange
+  dwMaxCCIDMessageLength: 271 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
