@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 		return (int)cnt;
 	}
 
-	fd = fopen(OUTPUT_FILENAME, "rw");
+	fd = fopen(OUTPUT_FILENAME, "w+");
 	if (NULL == fd)
 	{
 		perror("fopen " OUTPUT_FILENAME);
