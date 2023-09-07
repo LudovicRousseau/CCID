@@ -264,9 +264,9 @@ again:
 		char buff[256];
 
 		s = fread(buff, 1, sizeof buff, fd);
-		if (0 == s)
+		if (0 == s && ferror(fd))
 		{
-			perror("fread");
+			perror("fread " OUTPUT_FILENAME);
 			return -1;
 		}
 		fwrite(buff, s, 1, stdout);
