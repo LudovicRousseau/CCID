@@ -275,6 +275,9 @@ again:
 	fclose(fd);
 	gzclose(zfd);
 
+	/* remove now useless output.txt */
+	unlink(OUTPUT_FILENAME);
+
 	return 0;
 } /* main */
 
