@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 		{
 			(void)fprintf(stderr, "  Can't get iManufacturer string: %s\n",
 				libusb_error_name(r));
-			if (getuid())
+			if (r != LIBUSB_ERROR_INVALID_PARAM && getuid())
 			{
 				(void)fprintf(stderr,
 					BRIGHT_RED "Please, restart the command as root\n" NORMAL);
