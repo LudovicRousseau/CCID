@@ -113,6 +113,9 @@ typedef struct
 	 */
 	_ccid_descriptor ccid;
 
+	/* whether the polling should be terminated */
+	_Atomic bool terminated;
+
 	/* libusb transfer for the polling (or NULL) */
 	_Atomic (struct libusb_transfer *) polling_transfer;
 
@@ -741,6 +744,7 @@ again:
 				usbDevice[reader_index].interface = interface;
 				usbDevice[reader_index].real_nb_opened_slots = 1;
 				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
+				atomic_init(&usbDevice[reader_index].terminated, false);
 				atomic_init(&usbDevice[reader_index].polling_transfer, NULL);
 				usbDevice[reader_index].disconnected = false;
 
@@ -1526,6 +1530,14 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 
 	atomic_store(&usbDevice[reader_index].polling_transfer, transfer);
 
+	// The termination might've been requested by the other thread before the
+	// polling_transfer field was written. In that case, we have to cancel the
+	// transfer here as opposed to InterruptStop().
+	bool terminated = atomic_load(&usbDevice[reader_index].terminated);
+	if (terminated) {
+		libusb_cancel_transfer(transfer);
+	}
+
 	while (!completed)
 	{
 		ret = libusb_handle_events_completed(ctx, &completed);
@@ -1589,6 +1601,11 @@ void InterruptStop(int reader_index)
 		Multi_InterruptStop(reader_index);
 		return;
 	}
+
+	// Set the termination flag to handle the case in which the polling_transfer
+	// value read below is null. The order of operations is important, and it has
+	// to be opposite to the one in InterruptRead() to avoid race conditions.
+	atomic_store(&usbDevice[reader_index].terminated, true);
 
 	transfer = atomic_exchange(&usbDevice[reader_index].polling_transfer,
 		NULL);
