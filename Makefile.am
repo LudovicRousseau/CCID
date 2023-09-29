@@ -3,6 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = readers examples contrib src
 
 EXTRA_DIST = bootstrap ChangeLog \
+	SCARDCONTOL.md \
 	SCARDGETATTRIB.md \
 	README.md \
 	$(AUX_DIST) \
