@@ -117,7 +117,8 @@ typedef struct
 	_Atomic bool terminated;
 
 	/* libusb transfer for the polling (or NULL) */
-	_Atomic (struct libusb_transfer *) polling_transfer;
+	pthread_mutex_t polling_transfer_mutex;
+	struct libusb_transfer *polling_transfer;
 
 	/* pointer to the multislot extension (if any) */
 	struct usbDevice_MultiSlot_Extension *multislot_extension;
@@ -745,7 +746,8 @@ again:
 				usbDevice[reader_index].real_nb_opened_slots = 1;
 				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
 				atomic_init(&usbDevice[reader_index].terminated, false);
-				atomic_init(&usbDevice[reader_index].polling_transfer, NULL);
+				pthread_mutex_init(&usbDevice[reader_index].polling_transfer_mutex, NULL);
+				usbDevice[reader_index].polling_transfer = NULL;
 				usbDevice[reader_index].disconnected = false;
 
 				/* CCID common information */
@@ -1114,6 +1116,8 @@ status_t CloseUSB(unsigned int reader_index)
 			/* Stop the slot */
 			usbDevice[reader_index].multislot_extension = NULL;
 		}
+
+		pthread_mutex_destroy(&usbDevice[reader_index].polling_transfer_mutex);
 
 		if (usbDevice[reader_index].ccid.gemalto_firmware_features)
 			free(usbDevice[reader_index].ccid.gemalto_firmware_features);
@@ -1528,7 +1532,9 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 		return IFD_COMMUNICATION_ERROR;
 	}
 
-	atomic_store(&usbDevice[reader_index].polling_transfer, transfer);
+	pthread_mutex_lock(&usbDevice[reader_index].polling_transfer_mutex);
+	usbDevice[reader_index].polling_transfer = transfer;
+	pthread_mutex_unlock(&usbDevice[reader_index].polling_transfer_mutex);
 
 	// The termination might've been requested by the other thread before the
 	// polling_transfer field was written. In that case, we have to cancel the
@@ -1559,7 +1565,9 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 	actual_length = transfer->actual_length;
 	ret = transfer->status;
 
-	atomic_store(&usbDevice[reader_index].polling_transfer, NULL);
+	pthread_mutex_lock(&usbDevice[reader_index].polling_transfer_mutex);
+	usbDevice[reader_index].polling_transfer = NULL;
+	pthread_mutex_unlock(&usbDevice[reader_index].polling_transfer_mutex);
 	libusb_free_transfer(transfer);
 
 	DEBUG_PERIODIC3("after (%d) (%d)", reader_index, ret);
@@ -1593,8 +1601,6 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
  ****************************************************************************/
 void InterruptStop(int reader_index)
 {
-	struct libusb_transfer *transfer;
-
 	/* Multislot reader: redirect to Multi_InterrupStop */
 	if (usbDevice[reader_index].multislot_extension != NULL)
 	{
@@ -1607,17 +1613,17 @@ void InterruptStop(int reader_index)
 	// to be opposite to the one in InterruptRead() to avoid race conditions.
 	atomic_store(&usbDevice[reader_index].terminated, true);
 
-	transfer = atomic_exchange(&usbDevice[reader_index].polling_transfer,
-		NULL);
-	if (transfer)
+	pthread_mutex_lock(&usbDevice[reader_index].polling_transfer_mutex);
+	if (usbDevice[reader_index].polling_transfer)
 	{
 		int ret;
 
-		ret = libusb_cancel_transfer(transfer);
+		ret = libusb_cancel_transfer(usbDevice[reader_index].polling_transfer);
 		if (ret < 0)
 			DEBUG_CRITICAL2("libusb_cancel_transfer failed: %s",
 				libusb_error_name(ret));
 	}
+	pthread_mutex_unlock(&usbDevice[reader_index].polling_transfer_mutex);
 } /* InterruptStop */
 
 
@@ -1668,8 +1674,9 @@ static void *Multi_PollingProc(void *p_ext)
 			break;
 		}
 
-		atomic_store(&usbDevice[msExt->reader_index].polling_transfer,
-			transfer);
+		pthread_mutex_lock(&usbDevice[msExt->reader_index].polling_transfer_mutex);
+		usbDevice[msExt->reader_index].polling_transfer = transfer;
+		pthread_mutex_unlock(&usbDevice[msExt->reader_index].polling_transfer_mutex);
 
 		completed = 0;
 		while (!completed && !msExt->terminated)
@@ -1695,8 +1702,9 @@ static void *Multi_PollingProc(void *p_ext)
 			}
 		}
 
-		atomic_store(&usbDevice[msExt->reader_index].polling_transfer,
-			NULL);
+		pthread_mutex_lock(&usbDevice[msExt->reader_index].polling_transfer_mutex);
+		usbDevice[msExt->reader_index].polling_transfer = NULL;
+		pthread_mutex_unlock(&usbDevice[msExt->reader_index].polling_transfer_mutex);
 
 		if (0 == rv)
 		{
@@ -1820,22 +1828,22 @@ end:
  ****************************************************************************/
 static void Multi_PollingTerminate(struct usbDevice_MultiSlot_Extension *msExt)
 {
-	struct libusb_transfer *transfer;
-
 	if (msExt && !msExt->terminated)
 	{
 		msExt->terminated = true;
 
-		transfer = atomic_exchange(&usbDevice[msExt->reader_index].polling_transfer, NULL);
+		pthread_mutex_lock(&usbDevice[msExt->reader_index].polling_transfer_mutex);
 
-		if (transfer)
+		if (usbDevice[msExt->reader_index].polling_transfer)
 		{
 			int ret;
 
-			ret = libusb_cancel_transfer(transfer);
+			ret = libusb_cancel_transfer(usbDevice[msExt->reader_index].polling_transfer);
 			if (ret < 0)
 				DEBUG_CRITICAL2("libusb_cancel_transfer failed: %d", ret);
 		}
+
+		pthread_mutex_unlock(&usbDevice[msExt->reader_index].polling_transfer_mutex);
 	}
 } /* Multi_PollingTerminate */
 
