@@ -453,6 +453,7 @@ again_libusb:
 				/* use the first CCID interface on first call */
 				static int static_interface = -1;
 				int max_interface_number = -1;
+				int num_CCID_interfaces = 1;
 
 				/*
 				 * We can't talk to the two CCID interfaces
@@ -490,6 +491,7 @@ again_libusb:
 					case ACS_ACR1252IMP:
 					case ACS_ACR1552:
 						max_interface_number = 1; /* 2 interfaces */
+						num_CCID_interfaces = 2;  /* 2 CCID interfaces */
 						break;
 
 					/* For the Gemalto Prox-DU/SU the interfaces are:
@@ -499,8 +501,13 @@ again_libusb:
 					 */
 					case GEMALTOPROXDU:
 					case GEMALTOPROXSU:
+						max_interface_number = 2; /* 3 interfaces */
+						num_CCID_interfaces = 2;  /* 2 CCID interfaces */
+						break;
+
 					case ACS_ACR1581:
 						max_interface_number = 2; /* 3 interfaces */
+						num_CCID_interfaces = 3;  /* 3 CCID interfaces */
 						break;
 
 					/* For the Feitian R502 the interfaces are:
@@ -511,6 +518,7 @@ again_libusb:
 					 */
 					case FEITIANR502DUAL:
 						max_interface_number = 3; /* 4 interfaces */
+						num_CCID_interfaces = 4;  /* 4 CCID interfaces */
 						break;
 				}
 
@@ -750,6 +758,9 @@ again:
 				usbDevice[reader_index].disconnected = false;
 
 				/* CCID common information */
+#ifdef USE_COMPOSITE_AS_MULTISLOT
+				usbDevice[reader_index].ccid.num_interfaces = num_CCID_interfaces;
+#endif
 				usbDevice[reader_index].ccid.real_bSeq = 0;
 				usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
 				usbDevice[reader_index].ccid.readerID =

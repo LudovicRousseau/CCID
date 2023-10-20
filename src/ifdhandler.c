@@ -463,35 +463,12 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			if (*Length >= 1)
 			{
 				*Length = 1;
-				*Value = 1 + get_ccid_descriptor(reader_index) -> bMaxSlotIndex;
 #ifdef USE_COMPOSITE_AS_MULTISLOT
-				{
-					/* On MacOS X or Linux+libusb we can simulate a
-					 * composite device with 2 CCID interfaces by a
-					 * multi-slot reader */
-					int readerID =  get_ccid_descriptor(reader_index) -> readerID;
-
-					/* 2 CCID interfaces */
-					if ((GEMALTOPROXDU == readerID)
-						|| (GEMALTOPROXSU == readerID)
-						|| (ALCOR_LINK_AK9567 == readerID)
-						|| (ALCOR_LINK_AK9572 == readerID)
-						|| (ACS_WALLETMATE == readerID)
-						|| (ACS_ACR1251 == readerID)
-						|| (ACS_ACR1252 == readerID)
-						|| (ACS_ACR1252IMP == readerID)
-						|| (ACS_ACR1552 == readerID)
-						|| (HID_OMNIKEY_5422 == readerID))
-						*Value = 2;
-
-					/* 3 CCID interfaces */
-					if (ACS_ACR1581 == readerID)
-						*Value = 3;
-
-					/* 4 CCID interfaces */
-					if (FEITIANR502DUAL == readerID)
-						*Value = 4;
-				}
+				/* On MacOS X we can simulate a composite device with 2
+				 * CCID interfaces by a multi-slot reader */
+				*Value = get_ccid_descriptor(reader_index) -> num_interfaces;
+#else
+				*Value = 1 + get_ccid_descriptor(reader_index) -> bMaxSlotIndex;
 #endif
 				DEBUG_INFO2("Reader supports %d slot(s)", *Value);
 			}
