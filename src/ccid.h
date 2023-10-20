@@ -145,6 +145,10 @@ typedef struct
 	 */
 	int IFD_bcdDevice;
 
+	#ifdef USE_COMPOSITE_AS_MULTISLOT
+		int max_num_interfaces;
+	#endif
+
 	/*
 	 * Gemalto extra features, if any
 	 */

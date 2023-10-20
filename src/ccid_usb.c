@@ -751,6 +751,9 @@ again:
 				usbDevice[reader_index].disconnected = false;
 
 				/* CCID common information */
+#ifdef USE_COMPOSITE_AS_MULTISLOT
+				usbDevice[reader_index].ccid.max_num_interfaces = max_interface_number + 1;
+#endif
 				usbDevice[reader_index].ccid.real_bSeq = 0;
 				usbDevice[reader_index].ccid.pbSeq = &usbDevice[reader_index].ccid.real_bSeq;
 				usbDevice[reader_index].ccid.readerID =
