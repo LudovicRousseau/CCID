@@ -40,7 +40,7 @@
 #define __FUNCTION__ ""
 #endif
 
-extern int LogLevel;
+extern _Atomic int LogLevel;
 
 #define DEBUG_LEVEL_CRITICAL 1
 #define DEBUG_LEVEL_INFO     2

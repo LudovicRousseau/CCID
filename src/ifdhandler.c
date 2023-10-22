@@ -64,7 +64,7 @@ static CcidDesc CcidSlots[CCID_DRIVER_MAX_READERS];
 static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
-int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
+_Atomic int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
 int DriverOptions = 0;
 int PowerOnVoltage = -1;
 static bool DebugInitialized = false;
