@@ -27,7 +27,7 @@
 #include "utils.h"
 #include "debug.h"
 
-int ReaderIndex[CCID_DRIVER_MAX_READERS];
+_Atomic int ReaderIndex[CCID_DRIVER_MAX_READERS];
 #define FREE_ENTRY -42
 
 void InitReaderIndex(void)
