@@ -113,12 +113,11 @@ typedef struct
 	 */
 	_ccid_descriptor ccid;
 
-	/* whether the polling should be terminated */
-	_Atomic bool terminated;
-
 	/* libusb transfer for the polling (or NULL) */
 	pthread_mutex_t polling_transfer_mutex;
 	struct libusb_transfer *polling_transfer;
+	/* whether the polling should be terminated */
+	bool terminate_requested;
 
 	/* pointer to the multislot extension (if any) */
 	struct usbDevice_MultiSlot_Extension *multislot_extension;
@@ -745,9 +744,9 @@ again:
 				usbDevice[reader_index].interface = interface;
 				usbDevice[reader_index].real_nb_opened_slots = 1;
 				usbDevice[reader_index].nb_opened_slots = &usbDevice[reader_index].real_nb_opened_slots;
-				atomic_init(&usbDevice[reader_index].terminated, false);
 				pthread_mutex_init(&usbDevice[reader_index].polling_transfer_mutex, NULL);
 				usbDevice[reader_index].polling_transfer = NULL;
+				usbDevice[reader_index].terminate_requested = false;
 				usbDevice[reader_index].disconnected = false;
 
 				/* CCID common information */
@@ -1534,13 +1533,14 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 
 	pthread_mutex_lock(&usbDevice[reader_index].polling_transfer_mutex);
 	usbDevice[reader_index].polling_transfer = transfer;
+	bool terminate_requested = usbDevice[reader_index].terminate_requested;
+	usbDevice[reader_index].terminate_requested = false;
 	pthread_mutex_unlock(&usbDevice[reader_index].polling_transfer_mutex);
 
 	// The termination might've been requested by the other thread before the
 	// polling_transfer field was written. In that case, we have to cancel the
 	// transfer here as opposed to InterruptStop().
-	bool terminated = atomic_load(&usbDevice[reader_index].terminated);
-	if (terminated) {
+	if (terminate_requested) {
 		libusb_cancel_transfer(transfer);
 	}
 
@@ -1608,11 +1608,6 @@ void InterruptStop(int reader_index)
 		return;
 	}
 
-	// Set the termination flag to handle the case in which the polling_transfer
-	// value read below is null. The order of operations is important, and it has
-	// to be opposite to the one in InterruptRead() to avoid race conditions.
-	atomic_store(&usbDevice[reader_index].terminated, true);
-
 	pthread_mutex_lock(&usbDevice[reader_index].polling_transfer_mutex);
 	if (usbDevice[reader_index].polling_transfer)
 	{
@@ -1622,6 +1617,10 @@ void InterruptStop(int reader_index)
 		if (ret < 0)
 			DEBUG_CRITICAL2("libusb_cancel_transfer failed: %s",
 				libusb_error_name(ret));
+	} else {
+		// Indicate that the next attempt to start an interrupt transfer shouldn't
+		// be proceeded.
+		usbDevice[reader_index].terminate_requested = true;
 	}
 	pthread_mutex_unlock(&usbDevice[reader_index].polling_transfer_mutex);
 } /* InterruptStop */
