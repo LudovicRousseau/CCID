@@ -117,6 +117,9 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.5.4 - 29 October 2023, Ludovic Rousseau
+   - fix a regression introduced in 1.5.3
+
 1.5.3 - 25 October 2023, Ludovic Rousseau
    - Add support of
      - ACS ACR1552 1S CL Reader
