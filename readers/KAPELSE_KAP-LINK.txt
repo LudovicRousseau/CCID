@@ -13,14 +13,15 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: 00402081 KAP-LINK 0
+ iInterface: 01810175 KAP-LINK 0
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
   bcdCCID: 1.10
   bMaxSlotIndex: 0x00
-  bVoltageSupport: 0x01
+  bVoltageSupport: 0x03
    5.0V
+   3.0V
   dwProtocols: 0x0000 0x0003
    T=0
    T=1
@@ -64,14 +65,15 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: 00402081 KAP-LINK 1
+ iInterface: 01810175 KAP-LINK 1
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
   bcdCCID: 1.10
   bMaxSlotIndex: 0x00
-  bVoltageSupport: 0x01
+  bVoltageSupport: 0x03
    5.0V
+   3.0V
   dwProtocols: 0x0000 0x0003
    T=0
    T=1
