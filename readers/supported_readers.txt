@@ -626,6 +626,7 @@
 
 # Kapelse
 0x2947:0x0111:Kapelse Ti-Kap
+0x2947:0x0113:Kapelse inSide
 
 # Kapsch TrafficCom
 0x28B9:0x0002:Kapsch TrafficCom USB SAM reader
