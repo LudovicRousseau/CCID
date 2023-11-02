@@ -623,6 +623,9 @@
 0x2947:0x0104:KAPELSE eS-KAP-Ad
 0x2947:0x0105:KAPELSE KAP-LINK2
 
+# Kapelse
+0x2947:0x0111:Kapelse Ti-Kap
+
 # Kapsch TrafficCom
 0x28B9:0x0002:Kapsch TrafficCom USB SAM reader
 
