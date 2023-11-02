@@ -618,6 +618,7 @@
 
 # KAPELSE
 0x2947:0x0101:KAPELSE KAP-LINK
+0x2947:0x0102:KAPELSE KAP-Care
 
 # Kapsch TrafficCom
 0x28B9:0x0002:Kapsch TrafficCom USB SAM reader
