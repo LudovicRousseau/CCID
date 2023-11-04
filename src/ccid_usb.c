@@ -1392,7 +1392,7 @@ static unsigned int *get_data_rates(unsigned int reader_index,
 	else
 		len = bNumDataRatesSupported;
 
-	/* See CCID 3.7.3 page 25 */
+	/* See CCID v1.1 ch. 5.3.3 GET_DATA_RATES page 24  */
 	n = ControlUSB(reader_index,
 		0xA1, /* request type */
 		0x03, /* GET_DATA_RATES */

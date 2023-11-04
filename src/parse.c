@@ -462,7 +462,7 @@ static bool ccid_parse_interface_descriptor(libusb_device_handle *handle,
 			/* read up to the buffer size */
 			bNumClockSupported = sizeof(buffer) / sizeof(int);
 
-		/* See CCID 5.3.2 page 24 */
+		/* See CCID v1.1 ch. 5.3.2 GET_CLOCK_FREQUENCIES page 24 */
 		n = libusb_control_transfer(handle,
 			0xA1, /* request type */
 			0x02, /* GET CLOCK FREQUENCIES */
@@ -522,7 +522,7 @@ static bool ccid_parse_interface_descriptor(libusb_device_handle *handle,
 		else
 			n_max = bNumDataRatesSupported;
 
-		/* See CCID 5.3.3 page 24 */
+		/* See CCID v1.1 ch. 5.3.3 GET_DATA_RATES page 24 */
 		n = libusb_control_transfer(handle,
 			0xA1, /* request type */
 			0x03, /* GET DATA RATES */
