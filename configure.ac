@@ -33,10 +33,7 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_PROG_LN_S
 AC_PROG_LEX([noyywrap])
-if test $LEX = ":"
-then
-    AC_MSG_ERROR([no lex or flex found])
-fi
+AS_IF([test $LEX = ":"], [AC_MSG_ERROR([no lex or flex found])])
 AM_PROG_AR
 PKG_PROG_PKG_CONFIG
 
@@ -45,11 +42,10 @@ PCSC_NEEDED_VERSION="1.8.3"
 PKG_CHECK_EXISTS([libpcsclite],
 	[PKG_CHECK_MODULES(PCSC, libpcsclite >= $PCSC_NEEDED_VERSION, [],
 	[
-	if test -f /usr/local/lib/pkgconfig/libpcsclite.pc -a "x$PKG_CONFIG" != x ; then
-		AC_MSG_ERROR([use PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure])
-	  else
-		AC_MSG_WARN([install pcsc-lite $PCSC_NEEDED_VERSION or later])
-	  fi
+	AS_IF(
+	  [test -f /usr/local/lib/pkgconfig/libpcsclite.pc -a "x$PKG_CONFIG" != x],
+	  [AC_MSG_ERROR([use PKG_CONFIG_PATH=/usr/local/lib/pkgconfig ./configure])],
+	  [AC_MSG_WARN([install pcsc-lite $PCSC_NEEDED_VERSION or later])])
 	])],
 	[AC_MSG_WARN([libpcsclite not found by pkg-config])]
 )
@@ -104,8 +100,9 @@ AC_ARG_ENABLE(libusb,
 
 # check if libusb is used
 LIBUSB_NEEDED_VERSION="1.0.9"
-if test "x$use_libusb" != xno ; then
-	PKG_CHECK_EXISTS([libusb-1.0], [
+AS_IF(
+	[test "x$use_libusb" != xno],
+	[PKG_CHECK_EXISTS([libusb-1.0], [
 	PKG_CHECK_MODULES(LIBUSB, libusb-1.0 >= $LIBUSB_NEEDED_VERSION, [],
 		[
 		AC_MSG_WARN([install libusb $LIBUSB_NEEDED_VERSION or later])
@@ -130,7 +127,7 @@ if test "x$use_libusb" != xno ; then
 	LIBS="$saved_LIBS"
 
 	use_libusb=yes
-fi
+	])
 AC_SUBST(LIBUSB_CFLAGS)
 AC_SUBST(LIBUSB_LIBS)
 AM_CONDITIONAL(WITH_LIBUSB, test "${use_libusb}" != "no")
@@ -141,9 +138,8 @@ AC_ARG_ENABLE(composite-as-multislot,
 	AS_HELP_STRING([--enable-composite-as-multislot],[composite device are seen as multi-slots]),
 	[ use_composite_as_multislot="${enableval}" ] )
 
-if test "x$use_composite_as_multislot" = xyes; then
-	AC_DEFINE(USE_COMPOSITE_AS_MULTISLOT, 1, [composite device are seen as multi-slots])
-fi
+AS_IF([test "x$use_composite_as_multislot" = xyes],
+	[AC_DEFINE(USE_COMPOSITE_AS_MULTISLOT, 1, [composite device are seen as multi-slots])])
 
 # check if the compiler support -fvisibility=hidden (GCC >= 4)
 saved_CFLAGS="$CFLAGS"
@@ -161,23 +157,21 @@ AC_ARG_ENABLE(multi-thread,
 	AS_HELP_STRING([--disable-multi-thread],[disable multi threading]),
 	[ multithread="${enableval}" ], [ multithread=yes ] )
 
-if test "${multithread}" != no ; then
-	AX_PTHREAD(
-		[ AC_DEFINE(HAVE_PTHREAD, 1,
-			[Define if you have POSIX threads libraries and header files.])
-	   	], [ AC_MSG_ERROR([POSIX thread support required]) ])
+AS_IF(
+	[test "${multithread}" != no],
+	[AX_PTHREAD(
+		[AC_DEFINE(HAVE_PTHREAD, 1,
+		[Define if you have POSIX threads libraries and header files.])],
+		[AC_MSG_ERROR([POSIX thread support required])])
 
-	multithread=yes
-fi
+	multithread=yes])
 
 # --enable-bundle=NAME
 AC_ARG_ENABLE(bundle,
 	AS_HELP_STRING([--enable-bundle=NAME],[bundle directory name
 	(default ifd-ccid.bundle)]),
 	[bundle="${enableval}"], [bundle=false])
-if test "${bundle}" = false ; then
-	bundle="ifd-ccid.bundle"
-fi
+AS_IF([test "${bundle}" = false], [bundle="ifd-ccid.bundle"])
 AC_DEFINE_UNQUOTED(BUNDLE, "$bundle", [bundle directory name])
 
 # --enable-usbdropdir=DIR
@@ -185,13 +179,11 @@ AC_ARG_ENABLE(usbdropdir,
 	AS_HELP_STRING([--enable-usbdropdir=DIR],[directory containing USB
 	drivers (default to pcscd config or $(prefix)/pcsc/drivers)]),
 	[usbdropdir="${enableval}"], [usbdropdir=false])
-if test "${usbdropdir}" = false ; then
-	usbdropdir=`$PKG_CONFIG libpcsclite --variable=usbdropdir`
-fi
+AS_IF([test "${usbdropdir}" = false],
+	[usbdropdir=`$PKG_CONFIG libpcsclite --variable=usbdropdir`])
 AC_DEFINE_UNQUOTED(PCSCLITE_HP_DROPDIR, "$usbdropdir", [directory containing USB drivers])
-if test "${usbdropdir}" = "" -o "${usbdropdir}" = "no" ; then
-	AC_MSG_ERROR([use --enable-usbdropdir=DIR])
-fi
+AS_IF([test "${usbdropdir}" = "" -o "${usbdropdir}" = "no"],
+	[AC_MSG_ERROR([use --enable-usbdropdir=DIR])])
 
 # --enable-twinserial
 AC_ARG_ENABLE(twinserial,
@@ -204,26 +196,24 @@ AC_ARG_ENABLE(ccidtwindir,
 	AS_HELP_STRING([--enable-ccidtwindir=DIR],[directory to install the
 	serial Twin driver (default to pcscd config or $(prefix)/pcsc/drivers/serial)]),
 	[ccidtwindir="${enableval}"], [ccidtwindir=false])
-if test "${ccidtwindir}" = false ; then
-	ccidtwindir=$usbdropdir/serial
-fi
+AS_IF([test "${ccidtwindir}" = false],
+	[ccidtwindir=$usbdropdir/serial])
 
 # --enable-serialconfdir=DIR
 AC_ARG_ENABLE(serialconfdir,
 	AS_HELP_STRING([--enable-serialconfdir=dir],[directory containing
 		serial drivers (default to pcscd config)]),
 	[serialconfdir="${enableval}"], [serialconfdir=false])
-if test "${serialconfdir}" = false ; then
-	serialconfdir=`$PKG_CONFIG libpcsclite --variable=serialconfdir`
-fi
+AS_IF([test "${serialconfdir}" = false],
+	[serialconfdir=`$PKG_CONFIG libpcsclite --variable=serialconfdir`])
 
 # --disable-pcsclite
 AC_ARG_ENABLE(pcsclite,
 	AS_HELP_STRING([--disable-pcsclite],[do not use pcsc-lite debug support]),
 	[ pcsclite="${enableval}" ], [ pcsclite=yes ] )
 
-if test "${pcsclite}" != no ; then
-	# check that pcsc-lite is installed
+AS_IF([test "${pcsclite}" != no],
+	[# check that pcsc-lite is installed
 	OLD_LIBS="$LIBS"
 	OLD_CFLAGS="$CFLAGS"
 	LIBS="$LIBS $PCSC_LIBS"
@@ -235,8 +225,7 @@ if test "${pcsclite}" != no ; then
 	LIBS="$OLD_LIBS"
 	CFLAGS="$OLD_CFLAGS"
 
-	pcsclite=yes
-fi
+	pcsclite=yes])
 AM_CONDITIONAL(WITHOUT_PCSC, test "${pcsclite}" != "yes")
 
 
@@ -246,27 +235,24 @@ AC_ARG_ENABLE(syslog,
 	AS_HELP_STRING([--enable-syslog],[use syslog(3) instead of printf() for debug (Yosemite 10.10)]),
 	[ use_syslog="${enableval}" ], [ use_syslog=no ] )
 
-if test x$use_syslog = xyes; then
-  AC_DEFINE(USE_SYSLOG, 1, [Use syslog(3) for debug])
-fi
+AS_IF([test x$use_syslog = xyes],
+	[AC_DEFINE(USE_SYSLOG, 1, [Use syslog(3) for debug])])
 
 # --enable-oslog
 AC_ARG_ENABLE(oslog,
 	AS_HELP_STRING([--enable-oslog],[use os_log(3) instead of printf() for debug (Sierra 10.12)]),
 	[ use_oslog="${enableval}" ], [ use_oslog=no ] )
 
-if test x$use_oslog = xyes; then
-  AC_DEFINE(USE_OS_LOG, 1, [Use os_log(3) for debug])
-fi
+AS_IF([test x$use_oslog = xyes],
+	[AC_DEFINE(USE_OS_LOG, 1, [Use os_log(3) for debug])])
 
 
 # --disable-class
 AC_ARG_ENABLE(class,
 	AS_HELP_STRING([--disable-class],[remove the CCIDCLASSDRIVER from Info.plist]),
 	[class="${enableval}"], [class=yes])
-if test "${class}" != yes ; then
-	NOCLASS="--no-class"
-fi
+AS_IF([test "${class}" != yes],
+	[NOCLASS="--no-class"])
 AC_SUBST(NOCLASS)
 
 # --enable-embedded
@@ -274,18 +260,16 @@ AC_ARG_ENABLE(embedded,
   AS_HELP_STRING([--enable-embedded],[limit RAM and CPU resources by disabling features (log)]),
   [ use_embedded="${enableval}" ])
 
-if test x$use_embedded = xyes; then
-  AC_DEFINE(NO_LOG, 1, [Disable logging support])
-fi
+AS_IF([test x$use_embedded = xyes],
+	[AC_DEFINE(NO_LOG, 1, [Disable logging support])])
 
 # --enable-zlp
 AC_ARG_ENABLE(zlp,
   AS_HELP_STRING([--enable-zlp],[enable the Zero Length Packet patch for some Gemalto readers]),
   [ use_zlp="${enableval}" ])
 
-if test x$use_zlp = xyes; then
-  AC_DEFINE(ENABLE_ZLP, 1, [Enable Zero Length Packet patch])
-fi
+AS_IF([test x$use_zlp = xyes],
+	[AC_DEFINE(ENABLE_ZLP, 1, [Enable Zero Length Packet patch])])
 
 # --enable-strict
 AC_ARG_ENABLE(
@@ -294,9 +278,8 @@ AC_ARG_ENABLE(
 	,
 	[enable_strict="no"]
 )
-if test "${enable_strict}" = "yes"; then
-	CFLAGS="-Wall -Wextra -Werror ${CFLAGS}"
-fi
+AS_IF([test "${enable_strict}" = "yes"],
+	[CFLAGS="-Wall -Wextra -Werror ${CFLAGS}"])
 
 # Setup dist stuff
 AC_SUBST(ac_aux_dir)
