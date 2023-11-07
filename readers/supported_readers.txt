@@ -194,6 +194,9 @@
 # Alcor Micro
 0x058F:0x9522:Alcor Micro AU9522
 
+# Alpha-Project
+0x2A0C:0x0021:Alpha-Project ANGARA Token
+
 # ANCUD
 0x0483:0xACD1:ANCUD CCID USB Reader & RNG
 
