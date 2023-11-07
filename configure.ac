@@ -81,15 +81,9 @@ AC_SUBST(BUNDLE_HOST)
 AC_SUBST(DYN_LIB_EXT)
 BUNDLE_HOST=`uname | sed -e s,/,_,`
 DYN_LIB_EXT="so"
-case "$BUNDLE_HOST" in
-Darwin)
-	BUNDLE_HOST=MacOS
-	DYN_LIB_EXT="dylib"
-	;;
-SunOS)
-	BUNDLE_HOST=Solaris
-	;;
-	esac
+AS_CASE([$BUNDLE_HOST],
+	[Darwin], [BUNDLE_HOST=MacOS DYN_LIB_EXT="dylib"],
+	[SunOS], [BUNDLE_HOST=Solaris])
 
 PKG_CHECK_MODULES(ZLIB, zlib)
 
