@@ -752,25 +752,13 @@ again:
 				}
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
-				if ((GEMALTOPROXDU == readerID)
-					|| (GEMALTOPROXSU == readerID)
-					|| (HID_OMNIKEY_5422 == readerID)
-					|| (ALCOR_LINK_AK9567 == readerID)
-					|| (ALCOR_LINK_AK9572 == readerID)
-					|| (ACS_WALLETMATE == readerID)
-					|| (ACS_ACR1581 == readerID)
-					|| (ACS_ACR1251 == readerID)
-					|| (ACS_ACR1252 == readerID)
-					|| (ACS_ACR1252IMP == readerID)
-					|| (ACS_ACR1552 == readerID)
-					|| (VENDOR_KAPELSE == GET_VENDOR(readerID))
-					|| (FEITIANR502DUAL == readerID))
+				/* only if max_interface_number has a value set earlier */
+				if (max_interface_number >= 0)
 				{
 					/* use the next interface for the next "slot" */
 					static_interface = interface + 1;
 
 					/* reset for a next reader */
-					/* max interface number for all 3 readers is 2 */
 					if (static_interface > max_interface_number)
 						static_interface = -1;
 				}
