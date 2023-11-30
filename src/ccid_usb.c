@@ -656,31 +656,31 @@ again:
 				{
 					switch (readerID)
 					{
-						case KAPELSE_KAPECV :
-						    /* KAP-eCV : only first interface is a ccid one */
-						    max_interface_number=0;
-						    DEBUG_INFO1("Kapelse reader forced as monoslot!");
-						    break;
+						case KAPELSE_KAPECV:
+							/* KAP-eCV : only first interface is a ccid one */
+							max_interface_number = 0;
+							DEBUG_INFO1("Kapelse reader forced as monoslot!");
+							break;
 
-						case KAPELSE_KAPLIN2 :
-						    /* KAP&LINK2 : only 3 first interfaces are ccid ones */
-						    if(config_desc->bNumInterfaces > 3)
-						    {
-							max_interface_number=2;
-							DEBUG_INFO1("Kapelse reader restricted as multislot with 3 slots!");
-						    }
-						    else
-						    {
-							max_interface_number=config_desc->bNumInterfaces-1;
+						case KAPELSE_KAPLIN2:
+							/* KAP&LINK2 : only 3 first interfaces are ccid ones */
+							if (config_desc->bNumInterfaces > 3)
+							{
+								max_interface_number = 2;
+								DEBUG_INFO1("Kapelse reader restricted as multislot with 3 slots!");
+							}
+							else
+							{
+								max_interface_number = config_desc->bNumInterfaces-1;
+								DEBUG_INFO2("Kapelse reader forced as multislot with %d slots!",max_interface_number+1);
+							}
+							break;
+
+						default:
+							/* Kapelse : all interfaces are ccid ones */
+							max_interface_number = config_desc->bNumInterfaces-1;
 							DEBUG_INFO2("Kapelse reader forced as multislot with %d slots!",max_interface_number+1);
-						    }
-						    break;
-
-						default :
-						    /* Kapelse : all interfaces are ccid ones */
-						    max_interface_number=config_desc->bNumInterfaces-1;
-						    DEBUG_INFO2("Kapelse reader forced as multislot with %d slots!",max_interface_number+1);
-						    break;
+							break;
 					}
 				}
 #endif
