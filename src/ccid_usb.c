@@ -657,13 +657,26 @@ again:
 					switch (readerID)
 					{
 						case KAPELSE_KAPECV:
-							/* KAP-eCV : only first interface is a ccid one */
+							/* Kap-eCV: only first interface is a CCID one
+							 * 0: CCID contactless
+							 * 1: HID
+							 * 2: CDC
+							 * */
 							max_interface_number = 0;
 							DEBUG_INFO1("Kapelse reader forced as monoslot!");
 							break;
 
 						case KAPELSE_KAPLIN2:
-							/* KAP&LINK2 : only 3 first interfaces are ccid ones */
+							/* Kap&Link2: only 3 first interfaces are CCID ones
+							 * 0: CCID contact
+							 * 1: CCID contactless
+							 * 2: CCID contactless
+							 * or, depending on user configuration:
+							 * 0: CCID contact
+							 * 1: CCID contactless
+							 * 2: CCID contactless
+							 * 3: CDC-ACM
+							 * */
 							if (config_desc->bNumInterfaces > 3)
 							{
 								max_interface_number = 2;
@@ -677,7 +690,7 @@ again:
 							break;
 
 						default:
-							/* Kapelse : all interfaces are ccid ones */
+							/* Kapelse: all interfaces are CCID ones */
 							max_interface_number = config_desc->bNumInterfaces-1;
 							DEBUG_INFO2("Kapelse reader forced as multislot with %d slots!",max_interface_number+1);
 							break;
