@@ -253,6 +253,10 @@ status_t OpenUSBByName(unsigned int reader_index, /*@null@*/ char *device)
 	bool claim_failed = false;
 	int return_value = STATUS_SUCCESS;
 	const char * hpDirPath;
+#ifdef USE_COMPOSITE_AS_MULTISLOT
+	/* use the first CCID interface on first call */
+	static int static_interface = -1;
+#endif
 
 	DEBUG_COMM3("Reader index: %X, Device: " LOG_STRING, reader_index, device);
 
@@ -451,7 +455,6 @@ again_libusb:
 
 #ifdef USE_COMPOSITE_AS_MULTISLOT
 				/* use the first CCID interface on first call */
-				static int static_interface = -1;
 				int max_interface_number = -1;
 				int num_CCID_interfaces = 1;
 
@@ -890,6 +893,11 @@ end:
 		if (claim_failed)
 			return STATUS_COMM_ERROR;
 		DEBUG_INFO1("Device not found?");
+
+#ifdef USE_COMPOSITE_AS_MULTISLOT
+		static_interface = -1;
+#endif
+
 		return STATUS_NO_SUCH_DEVICE;
 	}
 
