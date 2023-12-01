@@ -663,6 +663,7 @@ again:
 							 * 2: CDC
 							 * */
 							max_interface_number = 0;
+							num_CCID_interfaces = max_interface_number+1;
 							DEBUG_INFO1("Kapelse reader forced as monoslot!");
 							break;
 
@@ -687,11 +688,13 @@ again:
 								max_interface_number = config_desc->bNumInterfaces-1;
 								DEBUG_INFO2("Kapelse reader forced as multislot with %d slots!",max_interface_number+1);
 							}
+							num_CCID_interfaces = max_interface_number+1;
 							break;
 
 						default:
 							/* Kapelse: all interfaces are CCID ones */
 							max_interface_number = config_desc->bNumInterfaces-1;
+							num_CCID_interfaces = max_interface_number+1;
 							DEBUG_INFO2("Kapelse reader forced as multislot with %d slots!",max_interface_number+1);
 							break;
 					}
