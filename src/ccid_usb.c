@@ -678,16 +678,7 @@ again:
 							 * 2: CCID contactless
 							 * 3: CDC-ACM
 							 * */
-							if (config_desc->bNumInterfaces > 3)
-							{
-								max_interface_number = 2;
-								DEBUG_INFO1("Kapelse reader restricted as multislot with 3 slots!");
-							}
-							else
-							{
-								max_interface_number = config_desc->bNumInterfaces-1;
-								DEBUG_INFO2("Kapelse reader forced as multislot with %d slots!",max_interface_number+1);
-							}
+							max_interface_number = 2;
 							num_CCID_interfaces = max_interface_number+1;
 							break;
 
