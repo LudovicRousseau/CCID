@@ -30,11 +30,11 @@ NORMAL="\033[0m"
 # run this script as ./MacOSX/configure to configure for Mac OS X
 if [ ! -d MacOSX ]
 then
-	echo -e $RED
+	echo -e "$RED"
 	echo "ERROR!"
 	echo "run ./MacOSX/configure from the source top directory"
-	echo -e $NORMAL
-	exit -1
+	echo -e "$NORMAL"
+	exit 255
 fi
 
 # find pcsc-lite header files in MacOSX/
@@ -50,13 +50,13 @@ LIBUSB_LIBS=$(pkg-config --libs --static libusb-1.0)
 
 if ls "$LIBUSB_DIR"/libusb-1.0*.dylib 2> /dev/null
 then
-	echo -en $RED
+	echo -en "$RED"
 	echo "*****************************"
 	echo "Dynamic library libusb found in $LIBUSB_DIR"
 	echo "*****************************"
-	echo -en $NORMAL
+	echo -en "$NORMAL"
 	echo "Rename it to force a static link"
-	exit -1
+	exit 255
 fi
 
 # RESPONSECODE is already defined by PCSC/wintypes.h
@@ -68,15 +68,15 @@ CFLAGS="$CFLAGS -DRESPONSECODE_DEFINED_IN_WINTYPES_H"
 MAC_VERSION=$(sw_vers -productVersion | awk -F '.' '{print $1 * 1000 + $2}')
 
 # Build a Universal Binary?
-UB=$(file $LIBUSB_ARCHIVE | grep "Mach-O universal binary")
+UB=$(file "$LIBUSB_ARCHIVE" | grep "Mach-O universal binary")
 echo $UB
 if [ -z "$UB" ]
 then
-	echo -en $RED
+	echo -en "$RED"
 	echo "*************************"
 	echo "No Universal Binary build"
 	echo "*************************"
-	echo -en $NORMAL
+	echo -en "$NORMAL"
 else
 	echo "Universal Binary build"
 	CFLAGS="$CFLAGS -arch arm64 -arch x86_64"
@@ -88,7 +88,7 @@ CONFIGURE_ARGS="--disable-dependency-tracking"
 # Are we on a CryptoTokenKit system? (like Mac OS X 10.10 Yosemite)
 if [ -d /System/Library/CryptoTokenKit ]
 then
-	if [ 10012 -gt $MAC_VERSION ]
+	if [ 10012 -gt "$MAC_VERSION" ]
 	then
 		# use syslog(3) to logs for macOS < 10.12
 		CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-syslog"
@@ -99,7 +99,7 @@ then
 fi
 
 # Check where to install the driver
-if [ 10011 -gt $MAC_VERSION ]
+if [ 10011 -gt "$MAC_VERSION" ]
 then
 	# Mac OS X < 10.11
 	DROPDIR="/usr/libexec/SmartCardServices/drivers"
