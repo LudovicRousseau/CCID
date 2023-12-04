@@ -818,6 +818,9 @@
 0x356F:0x22FC:Sensyl SSC-NFC Reader
 0x356F:0x23FE:Sensyl SSC-HV Reader
 
+# SIMHUB
+0x1677:0x0341:SIMHUB pcsc reader
+
 # Sitecom
 0x0DF6:0x800A:Sitecom Sitecom USB simcard reader MD-010
 
