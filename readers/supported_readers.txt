@@ -502,8 +502,9 @@
 # GoTrust
 0x32A3:0x3201:GoTrust Idem Key
 
-# HDZB
+# CIDC Group
 0x1677:0x0025:HDZB uKeyCI800-K18
+0x1677:0x0341:Heicard HID SIM Reader
 
 # Hewlett Packard
 0x03F0:0x104A:Hewlett Packard HP USB Smartcard CCID Keyboard

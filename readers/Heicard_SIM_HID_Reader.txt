@@ -1,0 +1,93 @@
+Bus 009 Device 013: ID 1677:0341 China Huada Integrated Circuit Design (Group) Co., Ltd. (CIDC Group) pcsc reader
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            0 [unknown]
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0
+  bMaxPacketSize0        16
+  idVendor           0x1677 China Huada Integrated Circuit Design (Group) Co., Ltd. (CIDC Group)
+  idProduct          0x0341 pcsc reader
+  bcdDevice            1.00
+  iManufacturer           1 SIMHUB
+  iProduct                2 pcsc reader
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x005d
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass        11 Chip/SmartCard
+      bInterfaceSubClass      0 [unknown]
+      bInterfaceProtocol      0
+      iInterface              0
+      ChipCard Interface Descriptor:
+        bLength                54
+        bDescriptorType        33
+        bcdCCID              1.10  (Warning: Only accurate for version 1.0)
+        nMaxSlotIndex           0
+        bVoltageSupport         1  5.0V
+        dwProtocols             1  T=0
+        dwDefaultClock       3580
+        dwMaxiumumClock      3580
+        bNumClockSupported      0
+        dwDataRate           9600 bps
+        dwMaxDataRate        9600 bps
+        bNumDataRatesSupp.      0
+        dwMaxIFSD               0
+        dwSyncProtocols  00000000
+        dwMechanical     00000000
+        dwFeatures       00020840
+          Auto parameter negotiation made by CCID
+          Short APDU level exchange
+        dwMaxCCIDMsgLen       271
+        bClassGetResponse    echo
+        bClassEnvelope       echo
+        wlcdLayout           none
+        bPINSupport             0
+        bMaxCCIDBusySlots       1
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0010  1x 16 bytes
+        bInterval             255
+Device Status:     0x0000
+  (Bus Powered)
