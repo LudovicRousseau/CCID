@@ -772,6 +772,9 @@
 0x0C4B:0x0580:REINER SCT cyberJack one
 0x0C4B:0x9102:REINER SCT cyberJack RFID basis
 
+# rf IDEAS
+0x0C27:0xCCDA:rf IDEAS USB CCID
+
 # Rocketek
 0x14CD:0x8166:Rocketek RT-SCR1
 
