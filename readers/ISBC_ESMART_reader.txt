@@ -1,7 +1,7 @@
  idVendor: 0x2CE4
-  iManufacturer: ISBC
+  iManufacturer: ESMART
  idProduct: 0x7479
-  iProduct: ESMART reader
+  iProduct: ESMART Reader
  bcdDevice: 1.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
@@ -13,7 +13,7 @@
  bInterfaceSubClass: 0
  bInterfaceProtocol: 0
   bulk transfer, optional interrupt-IN (CCID)
- iInterface: ESMART reader
+ iInterface: ESMART Reader
  CCID Class Descriptor
   bLength: 0x36
   bDescriptorType: 0x21
@@ -41,13 +41,13 @@
   dwSynchProtocols: 0x00000000
   dwMechanical: 0x00000000
    No special characteristics
-  dwFeatures: 0x0001077E
+  dwFeatures: 0x000107BE
    ....02 Automatic parameter configuration based on ATR data
    ....04 Automatic activation of ICC on inserting
    ....08 Automatic ICC voltage selection
    ....10 Automatic ICC clock frequency change according to parameters
    ....20 Automatic baud rate change according to frequency and Fi, Di params
-   ....40 Automatic parameters negotiation made by the CCID
+   ....80 Automatic PPS made by the CCID
    ..01.. CCID can set ICC in clock stop mode
    ..02.. NAD value other than 00 accepted (T=1)
    ..04.. Automatic IFSD exchange as first exchange (T=1)
