@@ -581,6 +581,9 @@
 0x03EB:0x9308:IIT E.Key Crystal-1
 0x03EB:0x9324:IIT E.Key Almaz-1C
 
+# Imprivata
+0x0C27:0xCCDB:Imprivata USB CCID
+
 # InfoCert
 0x2FD2:0x0100:InfoCert WirelessKey
 
