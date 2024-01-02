@@ -453,9 +453,6 @@
 0x0BF8:0x1017:FujitsuTechnologySolutions GmbH SmartCase KB SCR eSIG
 0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Keyboard KB SCR2
 
-# GEMALTO
-0x08E6:0x3440:GEMALTO CT1100
-
 # Gemalto
 0x0898:0x0101:Gemalto RF CR5400
 0x08E6:0x2202:Gemalto Gem e-Seal Pro USB Token
@@ -466,6 +463,9 @@
 0x08E6:0x4042:Gemalto SA .NET Dual
 0x08E6:0x5743:Gemalto Hybrid Smartcard Reader
 0x08E6:0x8108:Gemalto Smart Enterprise Guardian Secure USB Device
+
+# GEMALTO
+0x08E6:0x3440:GEMALTO CT1100
 
 # Gemplus
 0x08E6:0x3479:Gemplus GemCore POS Pro Smart Card Reader
