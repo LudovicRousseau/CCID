@@ -117,6 +117,25 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.5.5 - 5 January 2024, Ludovic Rousseau
+   - Add support of
+     - Alpha-Project ANGARA Token
+     - Broadcom Corp 58200 (idProduct: 0x5864)
+     - Broadcom Corp 58200 (idProduct: 0x5865)
+     - Imprivata USB CCID
+     - KAPELSE eS-KAP-Ad
+     - Kapelse inSide
+     - KAPELSE KAP-Care
+     - KAPELSE KAP-eCV
+     - KAPELSE KAP-GO
+     - KAPELSE KAP-LINK2
+     - Kapelse KAP-Move
+     - Kapelse Ti-Kap
+     - rf IDEAS USB CCID
+     - SIMHUB pcsc reader
+   - support Kapelse readers on macOS (composite as multislot)
+   - Some other minor improvements
+
 1.5.4 - 29 October 2023, Ludovic Rousseau
    - fix a regression introduced in 1.5.3
 
