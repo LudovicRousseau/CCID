@@ -452,6 +452,7 @@
 # FujitsuTechnologySolutions GmbH
 0x0BF8:0x1017:FujitsuTechnologySolutions GmbH SmartCase KB SCR eSIG
 0x0BF8:0x1021:FujitsuTechnologySolutions GmbH Keyboard KB SCR2
+0x0BF8:0x101B:Fujitsu Smartcard Reader D321
 
 # Gemalto
 0x0898:0x0101:Gemalto RF CR5400
