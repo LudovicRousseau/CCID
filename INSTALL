@@ -17,6 +17,16 @@ directory for hotplug drivers. The ./configure script try to get the
 directory used by pcscd using 'pkg-config libpcsclite --variable=usbdropdir'
 So you should not have to use the --enable-usbdropdir=DIR argument.
 
+Installation from git repo:
+"""""""""""""""""""""""""""
+
+$ git clone --recursive https://github.com/LudovicRousseau/CCID.git
+$ cd CCID
+$ autoreconf --install
+$ ./configure
+$ make
+$ sudo make install
+
 
 libusb not found
 ~~~~~~~~~~~~~~~~
