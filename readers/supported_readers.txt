@@ -667,6 +667,7 @@
 0x2C97:0x1009:Ledger Nano S
 0x2C97:0x4009:Ledger Nano X
 0x2C97:0x5009:Ledger Nano S Plus
+0x2C97:0x6009:Ledger Stax
 
 # Lenovo
 0x17EF:0x6007:Lenovo Lenovo USB Smartcard Keyboard
