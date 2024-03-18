@@ -49,5 +49,7 @@
   bClassGetResponse: 0x00
   bClassEnvelope: 0x00
   wLcdLayout: 0x0000
-  bPINSupport: 0x00
+  bPINSupport: 0x03
+   PIN Verification supported
+   PIN Modification supported
   bMaxCCIDBusySlots: 1
