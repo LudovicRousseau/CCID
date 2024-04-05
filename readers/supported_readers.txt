@@ -227,6 +227,9 @@
 # AvestUA
 0xC1A6:0x0131:AvestUA AvestKey
 
+# AvidCard
+0x04E6:0x5824:AvidCard CAC Smart Card Reader
+
 # Avtor
 0x15CF:0x0019:Avtor SecureToken
 0x15CF:0x001D:Avtor SC Reader 371
