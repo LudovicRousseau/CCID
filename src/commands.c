@@ -294,8 +294,8 @@ again:
 	atr_len = dw2i(buffer, 1);	/* ATR length */
 	if (atr_len > *nlength - 10)
 		atr_len = *nlength - 10;
-	else
-		*nlength = atr_len;
+
+	*nlength = atr_len;
 
 	/* the buffer length should be 10 + MAX_ATR_SIZE */
 	memmove(buffer, buffer+10, atr_len);
