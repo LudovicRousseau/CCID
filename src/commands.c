@@ -96,10 +96,11 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned char buffer[], int voltage)
 {
 	unsigned char cmd[10];
+	unsigned char resp[10 + MAX_ATR_SIZE];
 	int bSeq;
 	status_t res;
-	int length, count = 1;
-	unsigned int atr_len;
+	int count = 1;
+	unsigned int atr_len, length;
 	int init_voltage;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
@@ -184,9 +185,6 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	}
 #endif
 
-	/* store length of buffer[] */
-	length = *nlength;
-
 	if ((ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
 		|| (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_ACTIVATION))
 		voltage = 0;	/* automatic voltage selection */
@@ -231,24 +229,22 @@ again:
 	res = WritePort(reader_index, sizeof(cmd), cmd);
 	CHECK_STATUS(res)
 
-	/* reset available buffer size */
-	/* needed if we go back after a switch to ISO mode */
-	*nlength = length;
+	length = sizeof resp;
 
-	res = ReadPort(reader_index, nlength, buffer, bSeq);
+	res = ReadPort(reader_index, &length, resp, bSeq);
 	CHECK_STATUS(res)
 
-	if (*nlength < CCID_RESPONSE_HEADER_SIZE)
+	if (length < CCID_RESPONSE_HEADER_SIZE)
 	{
-		DEBUG_CRITICAL2("Not enough data received: %d bytes", *nlength);
+		DEBUG_CRITICAL2("Not enough data received: %d bytes", length);
 		return IFD_COMMUNICATION_ERROR;
 	}
 
-	if (buffer[STATUS_OFFSET] & CCID_COMMAND_FAILED)
+	if (resp[STATUS_OFFSET] & CCID_COMMAND_FAILED)
 	{
-		ccid_error(PCSC_LOG_ERROR, buffer[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);	/* bError */
+		ccid_error(PCSC_LOG_ERROR, resp[ERROR_OFFSET], __FILE__, __LINE__, __FUNCTION__);	/* bError */
 
-		if (0xBB == buffer[ERROR_OFFSET] &&	/* Protocol error in EMV mode */
+		if (0xBB == resp[ERROR_OFFSET] &&	/* Protocol error in EMV mode */
 			((GEMPC433 == ccid_descriptor->readerID)
 			|| (CHERRYXX33 == ccid_descriptor->readerID)))
 		{
@@ -291,14 +287,13 @@ again:
 	}
 
 	/* extract the ATR */
-	atr_len = dw2i(buffer, 1);	/* ATR length */
-	if (atr_len > *nlength - 10)
-		atr_len = *nlength - 10;
+	atr_len = dw2i(resp, 1);	/* ATR length */
+	if (atr_len > *nlength)
+		atr_len = *nlength;
 
 	*nlength = atr_len;
 
-	/* the buffer length should be 10 + MAX_ATR_SIZE */
-	memmove(buffer, buffer+10, atr_len);
+	memmove(buffer, resp+10, atr_len);
 
 	return return_value;
 } /* CmdPowerOn */
