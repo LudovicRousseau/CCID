@@ -135,8 +135,8 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 static struct usbDevice_MultiSlot_Extension *Multi_CreateNextSlot(int physical_reader_index);
 static void Multi_PollingTerminate(struct usbDevice_MultiSlot_Extension *msExt);
 
-static int get_end_points(struct libusb_config_descriptor *desc,
-	_usbDevice *usbdevice, int num);
+static int get_end_points(const struct libusb_interface *usb_interface,
+	_usbDevice *usbdevice);
 bool ccid_check_firmware(struct libusb_device_descriptor *desc);
 static unsigned int *get_data_rates(unsigned int reader_index,
 	struct libusb_config_descriptor *desc, int num);
@@ -772,7 +772,7 @@ again:
 #endif
 
 				/* Get Endpoints values*/
-				(void)get_end_points(config_desc, &usbDevice[reader_index], num);
+				(void)get_end_points(usb_interface, &usbDevice[reader_index]);
 
 				/* store device information */
 				usbDevice[reader_index].dev_handle = dev_handle;
@@ -1276,14 +1276,12 @@ const unsigned char *get_ccid_device_descriptor(const struct libusb_interface *u
  *					get_end_points
  *
  ****************************************************************************/
-static int get_end_points(struct libusb_config_descriptor *desc,
-	_usbDevice *usbdevice, int num)
+static int get_end_points(
+	const struct libusb_interface *usb_interface,
+	_usbDevice *usbdevice)
 {
 	int i;
 	int bEndpointAddress;
-	const struct libusb_interface *usb_interface;
-
-	usb_interface = get_ccid_usb_interface(desc, &num);
 
 	/*
 	 * 3 Endpoints maximum: Interrupt In, Bulk In, Bulk Out
