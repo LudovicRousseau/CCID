@@ -139,7 +139,7 @@ static int get_end_points(const struct libusb_interface *usb_interface,
 	_usbDevice *usbdevice);
 bool ccid_check_firmware(struct libusb_device_descriptor *desc);
 static unsigned int *get_data_rates(unsigned int reader_index,
-	struct libusb_config_descriptor *desc, int num);
+	const unsigned char bNumDataRatesSupported);
 
 /* ne need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
@@ -807,7 +807,7 @@ again:
 				usbDevice[reader_index].ccid.bCurrentSlotIndex = 0;
 				usbDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
 				if (device_descriptor[27])
-					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, config_desc, num);
+					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = get_data_rates(reader_index, device_descriptor[27]);
 				else
 				{
 					usbDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
@@ -1421,14 +1421,12 @@ bool ccid_check_firmware(struct libusb_device_descriptor *desc)
  *
  ****************************************************************************/
 static unsigned int *get_data_rates(unsigned int reader_index,
-	struct libusb_config_descriptor *desc, int num)
+	const unsigned char bNumDataRatesSupported)
 {
 	int n, i, len;
 	unsigned char buffer[256*sizeof(int)];	/* maximum is 256 records */
 	unsigned int *uint_array;
-	int bNumDataRatesSupported;
 
-	bNumDataRatesSupported = get_ccid_device_descriptor(get_ccid_usb_interface(desc, &num))[27];
 	if (0 == bNumDataRatesSupported)
 		/* read up to the buffer size */
 		len = sizeof(buffer) / sizeof(int);
