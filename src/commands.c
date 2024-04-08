@@ -293,7 +293,7 @@ again:
 
 	*nlength = atr_len;
 
-	memmove(buffer, resp+10, atr_len);
+	memcpy(buffer, resp+10, atr_len);
 
 	return return_value;
 } /* CmdPowerOn */
