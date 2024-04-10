@@ -12,6 +12,7 @@ lib_LTLIBRARIES += libccid.la
 LIBS_TO_INSTALL += install_ccid
 LIBS_TO_UNINSTALL += uninstall_ccid
 noinst_PROGRAMS = parse
+noinst_DATA = Info.plist
 endif
 if WITH_TWIN_SERIAL
 lib_LTLIBRARIES += libccidtwin.la
@@ -85,7 +86,7 @@ INSTALL_UDEV_RULE_FILE=@/bin/echo "***************" ; echo "copy the src/92_pcsc
 Info.plist: Info.plist.src $(srcdir)/../readers/supported_readers.txt
 	$(srcdir)/create_Info_plist.pl $(srcdir)/../readers/supported_readers.txt $(srcdir)/Info.plist.src --target=$(CCID_LIB) --version=$(VERSION) $(NOCLASS) > Info.plist
 
-DISTCLEANFILES = tokenparser.c Info.plist
+CLEANFILES = tokenparser.c Info.plist
 
 install_ccid: libccid.la Info.plist
 	$(mkinstalldirs) "$(DESTDIR)$(usbdropdir)/$(CCID_BUNDLE)/Contents/$(BUNDLE_HOST)/"
