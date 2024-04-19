@@ -1886,6 +1886,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 		}
 	}
 
+#ifdef ENABLE_MULTIPLE_ENABLED_PROFILES
 	/* Multiple Enabled Profiles (MEP)
 	 * https://source.android.com/docs/core/connect/esim-mep */
 	if (SCARD_CTL_CODE(3600) == dwControlCode)
@@ -1949,6 +1950,7 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			}
 		}
 	}
+#endif
 
 	if (IFD_SUCCESS != return_value)
 		*pdwBytesReturned = 0;
