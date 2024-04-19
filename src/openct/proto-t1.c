@@ -116,7 +116,7 @@ void t1_release(/*@unused@*/ t1_state_t * t1)
 }
 
 /*
- * Get/set parameters for T1 protocol
+ * Set parameters for T1 protocol
  */
 int t1_set_param(t1_state_t * t1, int type, long value)
 {
@@ -148,6 +148,9 @@ int t1_set_param(t1_state_t * t1, int type, long value)
 	return 0;
 }
 
+/*
+ * Get parameters for T1 protocol
+ */
 int t1_get_param(t1_state_t * t1, int type)
 {
 	int value = -1;
