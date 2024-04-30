@@ -225,6 +225,9 @@
 0x03EB:0x6012:ATMEL VaultIC420 Smart Object
 0x03EB:0x6014:ATMEL VaultIC440
 
+# authenton
+0x3606:0x5A11:authenton #1- CTAP2.1
+
 # AvestUA
 0xC1A6:0x0131:AvestUA AvestKey
 
