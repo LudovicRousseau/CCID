@@ -6,9 +6,7 @@
  */
 
 #include <config.h>
-#ifdef HAVE_STDINT_H
 #include <stdint.h>
-#endif
 #include "checksum.h"
 
 #define min( a, b )   ( ( ( a ) < ( b ) ) ? ( a ) : ( b ) )

@@ -24,9 +24,7 @@
 #include <stdbool.h>
 
 #include "atr.h"
-#ifdef HAVE_STRING_H
 #include <string.h>
-#endif
 #include "debug.h"
 
 /*

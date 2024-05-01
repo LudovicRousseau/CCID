@@ -22,9 +22,7 @@
 
 #include <config.h>
 #include <stdbool.h>
-#ifdef HAVE_STDINT_H
 #include <stdint.h>
-#endif
 
 #include "buffer.h"
 

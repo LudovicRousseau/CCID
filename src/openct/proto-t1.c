@@ -20,9 +20,7 @@
 
 #include "ccid.h"
 
-#ifdef HAVE_STRING_H
 #include <string.h>
-#endif
 
 /* I block */
 #define T1_I_SEQ_SHIFT		6
