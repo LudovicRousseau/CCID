@@ -1,0 +1,39 @@
+option('extra_bundle_id',
+  type : 'string',
+  value : '',
+  description : 'appended to the name of the bundle directory')
+
+option('class',
+  type : 'boolean',
+  value : 'true',
+  description : 'enable the CCIDCLASSDRIVER in Info.plist')
+
+option('composite-as-multislot',
+  type : 'boolean',
+  value : 'false',
+  description : 'composite device are seen as multi-slots')
+
+option('embedded',
+  type : 'boolean',
+  value : 'false',
+  description : 'for embedded systems [limit RAM and CPU resources by disabling features (log)]')
+
+option('os_log',
+  type : 'boolean',
+  value : 'false',
+  description : 'use os_log(3) instead of printf() for debug (Sierra 10.12 and up)]')
+
+option('pcsclite',
+  type : 'boolean',
+  value : 'true',
+  description : 'use pcsc-lite debug support')
+
+option('serial',
+  type : 'boolean',
+  value : 'false',
+  description : 'enable the driver for the serial CCID readers')
+
+option('zlp',
+  type : 'boolean',
+  value : 'false',
+  description : 'enable the Zero Length Packet patch for some Gemalto readers')
