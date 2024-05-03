@@ -18,6 +18,10 @@ AC_PREFIX_DEFAULT(/usr/local)
 
 # Automake boilerplate.
 AC_CANONICAL_HOST
+case "$host_os" in
+  *cygwin*) CYGWIN=yes;;
+         *) CYGWIN=no;;
+esac
 
 # create a config.h file (Automake will add -DHAVE_CONFIG_H)
 AC_CONFIG_HEADERS([config.h])
@@ -80,7 +84,13 @@ AC_CHECK_FUNCS(select strerror strncpy memcpy strlcpy strlcat)
 AC_SUBST(BUNDLE_HOST)
 AC_SUBST(DYN_LIB_EXT)
 BUNDLE_HOST=`uname | sed -e s,/,_,`
-DYN_LIB_EXT="so"
+
+if test "$CYGWIN" = yes ; then
+        DYN_LIB_EXT="la"
+else
+        DYN_LIB_EXT="so"
+fi
+
 AS_CASE([$BUNDLE_HOST],
 	[Darwin], [BUNDLE_HOST=MacOS DYN_LIB_EXT="dylib"],
 	[SunOS], [BUNDLE_HOST=Solaris])

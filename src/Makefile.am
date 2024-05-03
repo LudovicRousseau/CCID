@@ -97,8 +97,8 @@ install_ccid: libccid.la Info.plist
 install_ccidtwin: libccidtwin.la
 	$(mkinstalldirs) "$(DESTDIR)$(ccidtwindir)"
 	cp .libs/$(CCIDTWIN_LIB) "$(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)"
-	$(mkinstalldirs) "$(DESTDIR)/$(serialconfdir)" ; \
-		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB)| ; print" $(srcdir)/reader.conf.in > "$(DESTDIR)/$(serialconfdir)/libccidtwin"
+	$(mkinstalldirs) "$(serialconfdir)" ; \
+		perl -ne "s|TARGET|$(ccidtwindir)/$(CCIDTWIN_LIB)| ; print" $(srcdir)/reader.conf.in > "$(serialconfdir)/libccidtwin"
 
 # do not uninstall the serial driver by default
 # use explicitly 'make uninstall_ccidtwin'
@@ -109,5 +109,5 @@ uninstall_ccid:
 
 uninstall_ccidtwin:
 	rm -f "$(DESTDIR)$(ccidtwindir)/$(CCIDTWIN_LIB)"
-	rm -f "$(DESTDIR)/$(serialconfdir)/libccidtwin"
+	rm -f "$(serialconfdir)/libccidtwin"
 
