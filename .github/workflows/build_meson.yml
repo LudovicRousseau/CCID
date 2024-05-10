@@ -1,0 +1,45 @@
+name: build_meson
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on: [push, pull_request]
+
+# A workflow run is made up of one or more jobs that can run
+# sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job
+      # can access it
+      - uses: actions/checkout@v4
+
+      - name: setup prerequisites
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install \
+            debhelper-compat \
+            dpkg-dev \
+            flex \
+            libpcsclite-dev \
+            libusb-1.0-0-dev \
+            meson \
+            pkg-config
+          git submodule init
+          git submodule update
+
+      - name: compile
+        shell: bash
+        run: |
+          export CFLAGS="-Wall -Wextra -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wold-style-definition -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-enum -Wundef -Wuninitialized -Wunused -Wwrite-strings -Wmissing-noreturn -flto=auto -O2 -Wp,-D_FORTIFY_SOURCE=2"
+          meson setup builddir --werror
+          cd builddir
+
+          meson dist
+
+          meson setup --reconfigure -Dserial=true
+          meson compile
