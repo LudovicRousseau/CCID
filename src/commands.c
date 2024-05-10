@@ -1235,11 +1235,12 @@ again_status:
 		}
 		return IFD_SUCCESS;
 	}
-#endif
 
 #ifdef __APPLE__
 	if (MICROCHIP_SEC1100 == ccid_descriptor->readerID)
 		InterruptRead(reader_index, 10);
+#endif
+
 #endif
 
 	bSeq = (*ccid_descriptor->pbSeq)++;
