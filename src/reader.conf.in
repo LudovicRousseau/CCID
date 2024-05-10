@@ -11,4 +11,4 @@
 # example: /dev/ttyS0:GemPCPinPad
 #DEVICENAME        /dev/ttySn[:reader]
 #FRIENDLYNAME      "GemPCTwin serial"
-#LIBPATH           TARGET
+#LIBPATH           @TARGET@
