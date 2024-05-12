@@ -42,17 +42,13 @@
 #include "strlcpycat.h"
 #include "sys_generic.h"
 
-#ifdef HAVE_PTHREAD
 #include <pthread.h>
-#endif
 
 /* Array of structures to hold the ATR and other state value of each slot */
 static CcidDesc CcidSlots[CCID_DRIVER_MAX_READERS];
 
 /* global mutex */
-#ifdef HAVE_PTHREAD
 static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
-#endif
 
 _Atomic int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
 int DriverOptions = 0;
@@ -70,9 +66,7 @@ static int get_IFSC(ATR_t *atr, int *i);
 
 static void FreeChannel(int reader_index)
 {
-#ifdef HAVE_PTHREAD
 	(void)pthread_mutex_lock(&ifdh_context_mutex);
-#endif
 
 	(void)ClosePort(reader_index);
 
@@ -81,9 +75,7 @@ static void FreeChannel(int reader_index)
 
 	ReleaseReaderIndex(reader_index);
 
-#ifdef HAVE_PTHREAD
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
-#endif
 }
 
 static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
@@ -105,15 +97,11 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		DEBUG_INFO3("Lun: " DWORD_X ", Channel: " DWORD_X, Lun, Channel);
 	}
 
-#ifdef HAVE_PTHREAD
 	(void)pthread_mutex_lock(&ifdh_context_mutex);
-#endif
 
 	reader_index = GetNewReaderIndex(Lun);
 
-#ifdef HAVE_PTHREAD
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
-#endif
 
 	if (-1 == reader_index)
 		return IFD_COMMUNICATION_ERROR;
@@ -423,7 +411,6 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 				*Value = 0;
 			break;
 
-#ifdef HAVE_PTHREAD
 		case TAG_IFD_SIMULTANEOUS_ACCESS:
 			if (*Length >= 1)
 			{
@@ -447,7 +434,6 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			else
 				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 			break;
-#endif
 
 		case TAG_IFD_SLOTS_NUMBER:
 			if (*Length >= 1)
