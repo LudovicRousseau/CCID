@@ -8,7 +8,6 @@ EXTRA_DIST = bootstrap ChangeLog \
 	README.md \
 	$(AUX_DIST) \
 	MacOSX/configure \
-	MacOSX/convert_reader_h.pl \
 	MacOSX/debuglog.h \
 	MacOSX/ifdhandler.h \
 	MacOSX/pcsclite.h \
