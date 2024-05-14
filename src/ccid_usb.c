@@ -1011,7 +1011,7 @@ read_again:
 			time_t timeout_sec = usbDevice[reader_index].ccid.readTimeout  / 1000;
 			long timeout_msec = usbDevice[reader_index].ccid.readTimeout - timeout_sec * 1000;
 
-			clock_gettime(CLOCK_REALTIME, &timeout);
+			clock_gettime(CLOCK_MONOTONIC, &timeout);
 			timeout.tv_sec += timeout_sec;
 			timeout.tv_nsec += timeout_msec * 1000 * 1000;
 			if (timeout.tv_nsec > 1000 * 1000 * 1000)
@@ -1898,7 +1898,6 @@ static int Multi_InterruptRead(int reader_index, int timeout /* in ms */)
 	struct usbDevice_MultiSlot_Extension *msExt;
 	unsigned char buffer[CCID_INTERRUPT_SIZE];
 	struct timespec cond_wait_until;
-	struct timeval local_time;
 	int rv, status, interrupt_byte, interrupt_mask;
 
 	msExt = usbDevice[reader_index].multislot_extension;
@@ -1915,10 +1914,7 @@ static int Multi_InterruptRead(int reader_index, int timeout /* in ms */)
 	interrupt_mask = 0x02 << (2 * (usbDevice[reader_index].ccid.bCurrentSlotIndex % 4));
 
 	/* Wait until the condition is signaled or a timeout occurs */
-	gettimeofday(&local_time, NULL);
-	cond_wait_until.tv_sec = local_time.tv_sec;
-	cond_wait_until.tv_nsec = local_time.tv_usec * 1000;
-
+	clock_gettime(CLOCK_MONOTONIC, &cond_wait_until);
 	cond_wait_until.tv_sec += timeout / 1000;
 	cond_wait_until.tv_nsec += 1000000 * (timeout % 1000);
 
@@ -2087,6 +2083,7 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 {
 	struct usbDevice_MultiSlot_Extension *msExt;
 	struct multiSlot_ConcurrentAccess *concurrent;
+	pthread_condattr_t condattr;
 
 	/* Allocate a new extension buffer */
 	msExt = malloc(sizeof(struct usbDevice_MultiSlot_Extension));
@@ -2104,7 +2101,10 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 
 	/* Create mutex and condition object for the interrupt polling */
 	pthread_mutex_init(&msExt->mutex, NULL);
-	pthread_cond_init(&msExt->condition, NULL);
+	pthread_condattr_init(&condattr);
+	pthread_condattr_setclock(&condattr, CLOCK_MONOTONIC);
+	pthread_cond_init(&msExt->condition, &condattr);
+	pthread_condattr_destroy(&condattr);
 
 	/* concurrent USB read */
 	concurrent = calloc(usbDevice[reader_index].ccid.bMaxSlotIndex +1,
@@ -2119,7 +2119,10 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(int reader_in
 	{
 		/* Create mutex and condition object for the concurrent read */
 		pthread_mutex_init(&concurrent[slot].mutex, NULL);
-		pthread_cond_init(&concurrent[slot].condition, NULL);
+		pthread_condattr_init(&condattr);
+		pthread_condattr_setclock(&condattr, CLOCK_MONOTONIC);
+		pthread_cond_init(&concurrent[slot].condition, &condattr);
+		pthread_condattr_destroy(&condattr);
 	}
 	msExt->concurrent = concurrent;
 
