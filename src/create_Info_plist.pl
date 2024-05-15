@@ -31,8 +31,10 @@ my $version = "1.0.0";
 my $class = "<key>CFBundleName</key>
 	<string>CCIDCLASSDRIVER</string>";
 my $noclass = 0;
+my $extra_bundle_id = "";
 
 GetOptions(
+	"extra_bundle_id=s" => \$extra_bundle_id,
 	"target=s" => \$target,
 	"version=s" => \$version,
 	"no-class" => \$noclass);
@@ -40,6 +42,7 @@ GetOptions(
 if ($#ARGV < 1)
 {
 	print "usage: $0 supported_readers.txt Info.plist
+	--extra_bundle_id=$extra_bundle_id
 	--target=$target
 	--version=$version\n";
 	exit;
@@ -104,6 +107,13 @@ while (<IN>)
 		print;
 		next;
 	}
+	if (m/MAGIC_EXTRA_BUNDLE_ID/)
+	{
+		s/MAGIC_EXTRA_BUNDLE_ID/$extra_bundle_id/;
+		print;
+		next;
+	}
+
 	print;
 }
 
