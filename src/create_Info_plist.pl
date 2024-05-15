@@ -24,8 +24,8 @@ use warnings;
 use strict;
 use Getopt::Long;
 
-my (@manuf, @product, @name);
-my ($manuf, $product, $name);
+my (@vendor, @product, @name);
+my ($vendor, $product, $name);
 my $target = "libccid.so";
 my $version = "1.0.0";
 my $class = "<key>CFBundleName</key>
@@ -52,16 +52,16 @@ while (<IN>)
 	next if (m/^$/);
 
 	chomp;
-	($manuf, $product, $name) = split /:/;
-	# print "m: $manuf, p: $product, n: $name\n";
-	push @manuf, $manuf;
+	($vendor, $product, $name) = split /:/;
+	# print "m: $vendor, p: $product, n: $name\n";
+	push @vendor, $vendor;
 	push @product, $product;
 	$name =~ s/&/&amp;/g;
 	push @name, $name
 }
 close IN;
 
-map { $_ = "\t\t<string>$_</string>\n" } @manuf;
+map { $_ = "\t\t<string>$_</string>\n" } @vendor;
 map { $_ = "\t\t<string>$_</string>\n" } @product;
 map { $_ = "\t\t<string>$_</string>\n" } @name;
 
@@ -71,7 +71,7 @@ while (<IN>)
 {
 	if (m/MAGIC_VENDOR/)
 	{
-		print @manuf;
+		print @vendor;
 		next;
 	}
 	if (m/MAGIC_PRODUCT/)
