@@ -1,1 +1,0 @@
-PCSC/c.sh
