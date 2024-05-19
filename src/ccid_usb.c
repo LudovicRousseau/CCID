@@ -2034,25 +2034,16 @@ static void *Multi_ReadProc(void *p_ext)
 			if (LIBUSB_ERROR_TIMEOUT == rv)
 				continue;
 
-			if (LIBUSB_ERROR_NO_DEVICE == rv)
-			{
-				DEBUG_INFO4("read failed (%d/%d): %s",
-					usbDevice[reader_index].bus_number,
-					usbDevice[reader_index].device_address,
-					libusb_error_name(rv));
-			}
-			else
-			{
-				DEBUG_CRITICAL4("read failed (%d/%d): %s",
-					usbDevice[reader_index].bus_number,
-					usbDevice[reader_index].device_address,
-					libusb_error_name(rv));
-			}
+			DEBUG_CRITICAL4("read failed (%d/%d): %s",
+				usbDevice[reader_index].bus_number,
+				usbDevice[reader_index].device_address,
+				libusb_error_name(rv));
 
 			/* wait a bit to avoid a fast error loop */
 			(void)usleep(100*1000);
 
-			continue;
+			if (LIBUSB_ERROR_NO_DEVICE != rv)
+				continue;
 		}
 
 #define BSLOT_OFFSET 5
