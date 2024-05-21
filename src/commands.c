@@ -574,13 +574,13 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 				ret = CCID_Transmit(t1 -> lun, slen, RxBuffer, 0, t1->wtx);
 				if (ret != IFD_SUCCESS)
-					return ret;
+					goto end;
 
 				/* I guess we have at least 6 bytes in RxBuffer */
 				*RxLength = 6;
 				ret = CCID_Receive(reader_index, RxLength, RxBuffer, NULL);
 				if (ret != IFD_SUCCESS)
-					return ret;
+					goto end;
 
 				/* Restore initial timeout */
 				ccid_descriptor->readTimeout = oldReadTimeout;
