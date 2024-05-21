@@ -550,12 +550,10 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 				unsigned char sblk[1]; /* we only need 1 byte of data */
 				t1_state_t *t1 = &get_ccid_slot(reader_index)->t1;
 				unsigned int slen;
-				int oldReadTimeout;
 
 				DEBUG_COMM2("CT sent S-block with wtx=%u", RxBuffer[DATA]);
 				t1->wtx = RxBuffer[DATA];
 
-				oldReadTimeout = ccid_descriptor->readTimeout;
 				if (t1->wtx > 1)
 				{
 					/* set the new temporary timeout at WTX card request */
@@ -581,9 +579,6 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 				ret = CCID_Receive(reader_index, RxLength, RxBuffer, NULL);
 				if (ret != IFD_SUCCESS)
 					goto end;
-
-				/* Restore initial timeout */
-				ccid_descriptor->readTimeout = oldReadTimeout;
 			}
 
 			/* this should not happen. It will make coverity happy */
@@ -600,7 +595,9 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 	}
 
 end:
+	/* Restore initial timeout */
 	ccid_descriptor -> readTimeout = old_read_timeout;
+
 	return ret;
 } /* SecurePINVerify */
 
