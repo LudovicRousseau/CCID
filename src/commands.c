@@ -533,7 +533,10 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 			/* this should not happen. It will make coverity happy */
 			if (*RxLength < 4)
-				return IFD_COMMUNICATION_ERROR;
+			{
+				ret = IFD_COMMUNICATION_ERROR;
+				goto end;
+			}
 
 			/* WTX S-block */
 			if ((T1_S_BLOCK | T1_S_WTX) == RxBuffer[PCB])
