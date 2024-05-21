@@ -594,6 +594,9 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 				ccid_descriptor->readTimeout = oldReadTimeout;
 			}
 
+			if (RxLength < 4) {
+				return IFD_COMMUNICATION_ERROR;
+			}
 			/* get only the T=1 data */
 			memmove(RxBuffer, RxBuffer+3, *RxLength -4);
 			*RxLength -= 4;	/* remove NAD, PCB, LEN and CRC */
