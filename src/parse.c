@@ -270,7 +270,7 @@ again:
 			return -1;
 		}
 		fwrite(buff, s, 1, stdout);
-		gzfwrite(buff, s, 1, zfd);
+		(void)gzfwrite(buff, s, 1, zfd);
 	}
 	fclose(fd);
 	gzclose(zfd);
