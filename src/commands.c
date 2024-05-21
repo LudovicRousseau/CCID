@@ -531,13 +531,6 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 			#define T1_S_TYPE(pcb)		((pcb) & 0x0F)
 			#define T1_S_WTX		0x03
 
-			/* this should not happen. It will make coverity happy */
-			if (*RxLength < 4)
-			{
-				ret = IFD_COMMUNICATION_ERROR;
-				goto end;
-			}
-
 			/* WTX S-block */
 			if ((T1_S_BLOCK | T1_S_WTX) == RxBuffer[PCB])
 			{
@@ -591,6 +584,13 @@ RESPONSECODE SecurePINVerify(unsigned int reader_index,
 
 				/* Restore initial timeout */
 				ccid_descriptor->readTimeout = oldReadTimeout;
+			}
+
+			/* this should not happen. It will make coverity happy */
+			if (*RxLength < 4)
+			{
+				ret = IFD_COMMUNICATION_ERROR;
+				goto end;
 			}
 
 			/* get only the T=1 data */
