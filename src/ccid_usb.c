@@ -1956,14 +1956,17 @@ again:
 	{
 		if (0 == (buffer[interrupt_byte] & interrupt_mask))
 		{
-			DEBUG_PERIODIC2("Multi_InterruptRead (%d) -- skipped", reader_index);
+			DEBUG_PERIODIC2("Multi_InterruptRead (%d) -- skipped",
+				reader_index);
 			goto again;
 		}
-		DEBUG_PERIODIC2("Multi_InterruptRead (%d), got an interrupt", reader_index);
+		DEBUG_PERIODIC2("Multi_InterruptRead (%d), got an interrupt",
+			reader_index);
 	}
 	else
 	{
-		DEBUG_PERIODIC3("Multi_InterruptRead (%d), status=%d", reader_index, status);
+		DEBUG_PERIODIC3("Multi_InterruptRead (%d), %s",
+			reader_index, libusb_error_name(status));
 	}
 
 	return status;
