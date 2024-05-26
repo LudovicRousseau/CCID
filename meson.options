@@ -5,7 +5,6 @@ option('extra_bundle_id',
 
 option('class',
   type : 'boolean',
-  value : 'true',
   description : 'enable the CCIDCLASSDRIVER in Info.plist')
 
 option('composite-as-multislot',
@@ -25,7 +24,6 @@ option('os_log',
 
 option('pcsclite',
   type : 'boolean',
-  value : 'true',
   description : 'use pcsc-lite debug support')
 
 option('serial',
