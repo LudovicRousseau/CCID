@@ -1,42 +1,35 @@
 INSTALLATION PROCEDURE
 ======================
 
+Dependencies:
+"""""""""""""
+
+You need to install:
+- meson
+- flex
+- libusb-1
+
 Installation from source:
 """""""""""""""""""""""""
 
-Get the ccid-x.y.z.tar.bz2 archive from https://ccid.apdu.fr/files/ and do:
+Get the ccid-x.y.z.tar.xz archive from https://ccid.apdu.fr/files/ and do:
 
-$ tar xjvf ccid-x.y.z.tar.bz2
-$ cd ccid-x.y.z
-$ ./configure
-$ make
-$ sudo make install
-
-By default pcscd and my ccid driver use /usr/local/pcsc/drivers/ as
-directory for hotplug drivers. The ./configure script try to get the
-directory used by pcscd using 'pkg-config libpcsclite --variable=usbdropdir'
-So you should not have to use the --enable-usbdropdir=DIR argument.
+$ tar xjvf ccid-*.tar.xz
+$ cd ccid-*
+$ meson setup builddir
+$ cd builddir
+$ meson compile
+$ sudo meson install
 
 Installation from git repo:
 """""""""""""""""""""""""""
 
-$ git clone --recursive https://github.com/LudovicRousseau/CCID.git
+$ git clone https://salsa.debian.org/rousseau/CCID.git
 $ cd CCID
-$ autoreconf --install
-$ ./configure
-$ make
-$ sudo make install
-
-
-libusb not found
-~~~~~~~~~~~~~~~~
-
-If the ./configure script says something like:
-  configure: error: usb.h not found, use --enable-libusb=PATH
-You should use --enable-libusb=PATH to tell ./configure where to find
-the usb.h and libusb.so files. The ./configure script will use
-PATH/include/ to search for usb.h and PATH/lib/ to search for libusb.so
-
+$ meson setup builddir
+$ cd builddir
+$ meson compile
+$ sudo meson install
 
 building serial reader driver
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,26 +37,9 @@ building serial reader driver
 A serial CCID reader can also be connected on a serial port. By default
 the serial driver is not built. You must explicitly do:
 
-$ ./configure --enable-twinserial
-$ make
-# make install
-
-
-building serial reader driver only
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-It is possible to generate the driver for the GemPC Twin using serial
-communication only (for example on an embedded system without USB).
-Just do:
-$ ./configure --enable-twinserial --disable-libusb
-$ make
-# make install
-
-By default ./configure try to get the directory used by pcscd using
-'pkg-config libpcsclite --variable=usbdropdir' and add '/serial'.
-You should not have to use --enable-ccidtwindir=DIR to specify the
-target directory to use. 
-
+$ meson setup builddir -Dserial=true
+$ cd builddir
+$ meson compile
 
 configuring the driver for the serial reader
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,35 +90,3 @@ Binary installation:
 """"""""""""""""""""
 
 Contact your distribution support.
-
-
-Test procedure:
-"""""""""""""""
-
-- check the reader is supported by the driver.
-  Get your reader USB identification using the lsusb(1) command:
-  $ lsusb
-  [...]
-  Bus 001 Device 048: ID 08e6:4433 Gemplus
-
-  Look for 08E6 (ifdVendorID) and 4433 (ifdProductID) in
-  /usr/local/pcsc/drivers/ifd-ccid.bundle/Contents/Info.plist
-  Of course your numbers will be different.
-
-  If you can't find them add them (if you know what you do) and/or mail me.
-
-- (re)start pcscd with debug on stdout. Simply do 'pcscd --debug stdout'
-  (you will need to have root privileges). And look for:
-  [...]
-  readerfactory.c:1319 RFInitializeReader: Attempting startup of ReaderName
-  readerfactory.c:1061 RFBindFunctions: Loading IFD Handler 2.0
-  ifdhandler.c:76 Entering IFDHCreateChannel (lun: 0)
-  ccid_usb.c:131 Manufacturer: Ludovic Rousseau (ludovic.rousseau@free.fr)
-  ccid_usb.c:139 ProductString: Generic CCID reader v0.1.0
-  ccid_usb.c:143 Copyright: This driver is protected by terms of the GNU General Public License version 2, or (at your option) any later version.
-  ccid_usb.c:223 Found Vendor/Product: 08E6/4433 (GemPC433 SL)
-  ccid_usb.c:224 Using USB bus/device: 001/047
-
-  If you don't see this the driver is not installed correctly or your
-  reader is not yet supported. Read https://ccid.apdu.fr/#CCID_compliant
-  to know what to do.
