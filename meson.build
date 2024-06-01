@@ -6,7 +6,7 @@
 # meson setup --reconfigure --wipe
 
 project('ccid', 'c',
-  version : '1.5.6')
+  version : '1.6.0')
 
 # for config.h
 conf_data = configuration_data({

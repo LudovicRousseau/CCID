@@ -117,6 +117,21 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.6.0 - 1 June 2024, Ludovic Rousseau
+   - Add support of
+     - Aladdin R.D. JCR SecurBio
+     - AvidCard CAC Smart Card Reader
+     - FujitsuTechnologySolutions GmbH Dual Smartcard Reader D321
+     - Ledger Stax
+     - NXP Pegoda 3
+     - authenton #1- CTAP2.1
+   - provide files for meson build tool (replaces autoconf/automake)
+   - Add possibility to set/get NAD on T=1 for MEP
+   - multi-slots readers
+     - Better handling of reader removal
+     - Use CLOCK_MONOTONIC for timeouts
+   - Some other minor improvements
+
 1.5.5 - 5 January 2024, Ludovic Rousseau
    - Add support of
      - Alpha-Project ANGARA Token
