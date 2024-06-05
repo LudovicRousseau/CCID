@@ -32,7 +32,7 @@ def get_nad(cardConnection):
     res = cardConnection.control(SCARD_CTL_CODE(3600), get_NAD)
     print("  result:", toHexString(res))
     status = res[3]
-    if status is 0:
+    if status == 0:
         print("Success")
         nad = res[4]
         print("NAD:", nad)
@@ -48,7 +48,7 @@ def set_nad(cardConnection, nad):
     res = cardConnection.control(SCARD_CTL_CODE(3600), set_NAD)
     print("  result:", toHexString(res))
     status = res[3]
-    if status is 0:
+    if status == 0:
         print("Success")
     else:
         print("Failed!")
