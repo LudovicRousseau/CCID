@@ -136,6 +136,7 @@ parse_src = [
   'src/debug.c',
   'src/ccid_usb.c',
   'src/sys_unix.c',
+  'src/strlcpy.c',
   'src/simclist.c',
   ]
 parse_src += gen_src
