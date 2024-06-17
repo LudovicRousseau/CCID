@@ -42,6 +42,7 @@ pcsc_dep = dependency('libpcsclite')
 pcsc_cflags = pcsc_dep.partial_dependency(compile_args : true)
 libusb_dep = dependency('libusb-1.0')
 zlib_dep = dependency('zlib')
+threads_dep = dependency('threads')
 
 r = run_command('uname', check: true)
 pcsc_arch = r.stdout().strip()
@@ -144,7 +145,7 @@ parse_src += gen_src
 executable('parse',
   parse_src,
   include_directories : ['src'],
-  dependencies : [libusb_dep, pcsc_cflags, zlib_dep],
+  dependencies : [libusb_dep, pcsc_cflags, zlib_dep, threads_dep],
   )
 
 # scardcontrol
