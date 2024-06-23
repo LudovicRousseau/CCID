@@ -9,17 +9,17 @@ option('class',
 
 option('composite-as-multislot',
   type : 'boolean',
-  value : 'false',
+  value : false,
   description : 'composite device are seen as multi-slots')
 
 option('embedded',
   type : 'boolean',
-  value : 'false',
+  value : false,
   description : 'for embedded systems [limit RAM and CPU resources by disabling features (log)]')
 
 option('os_log',
   type : 'boolean',
-  value : 'false',
+  value : false,
   description : 'use os_log(3) instead of printf() for debug (Sierra 10.12 and up)]')
 
 option('pcsclite',
@@ -28,10 +28,10 @@ option('pcsclite',
 
 option('serial',
   type : 'boolean',
-  value : 'false',
+  value : false,
   description : 'enable the driver for the serial CCID readers')
 
 option('zlp',
   type : 'boolean',
-  value : 'false',
+  value : false,
   description : 'enable the Zero Length Packet patch for some Gemalto readers')
