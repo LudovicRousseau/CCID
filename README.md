@@ -117,6 +117,10 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.6.1 - 5 July 2024, Ludovic Rousseau
+   - fix 'parse' build issues on some systems (pthread & strlcpy)
+   - Some other minor improvements
+
 1.6.0 - 1 June 2024, Ludovic Rousseau
    - Add support of
      - Aladdin R.D. JCR SecurBio
