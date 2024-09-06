@@ -1020,6 +1020,9 @@
 # ATMEL
 0x03EB:0x6016:ATMEL VaultIC460
 
+# BHDC
+0x155B:0x8202:BHDC Reader-HHD02
+
 # Broadcom Corp
 0x0A5C:0x5800:Broadcom Corp 5880
 0x0A5C:0x5801:Broadcom Corp 5880
