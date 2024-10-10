@@ -81,6 +81,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 
 		case ElatecTWN4_CCID_CDC:
 		case ElatecTWN4_CCID:
+		case ACS_ACR122U:
 			/* Use a timeout of 1000 ms instead of 100 ms in
 			 * CmdGetSlotStatus() used by CreateChannelByNameOrChannel()
 			 * The reader answers after up to 1 s if no tag is present */
@@ -590,6 +591,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 		case ElatecTWN4_CCID_CDC:
 		case ElatecTWN4_CCID:
 		case SCM_SCL011:
+		case ACS_ACR122U:
 			/* restore default timeout (modified in ccid_open_hack_pre()) */
 			ccid_descriptor->readTimeout = DEFAULT_COM_READ_TIMEOUT;
 			break;
