@@ -142,16 +142,16 @@ typedef struct
 #include "ccid_serial.h"
 
 /* data rates supported by the GemPC Twin (serial and PCMCIA) */
-unsigned int SerialTwinDataRates[] = { ISO_DATA_RATES, 0 };
+static unsigned int SerialTwinDataRates[] = { ISO_DATA_RATES, 0 };
 
 /* data rates supported by the GemPC PinPad, GemCore Pos Pro & SIM Pro */
-unsigned int SerialExtendedDataRates[] = { ISO_DATA_RATES, 500000, 0 };
+static unsigned int SerialExtendedDataRates[] = { ISO_DATA_RATES, 500000, 0 };
 
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
-unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
+static unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 
 /* data rates supported by the GemCore SIM Pro 2 */
-unsigned int SIMPro2DataRates[] = { SIMPRO2_ISO_DATA_RATES, 0  };
+static unsigned int SIMPro2DataRates[] = { SIMPRO2_ISO_DATA_RATES, 0  };
 
 /* no need to initialize to 0 since it is static */
 static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];

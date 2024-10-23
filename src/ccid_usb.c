@@ -60,7 +60,7 @@
 /* Using the default libusb context */
 /* does not work for libusb <= 1.0.8 */
 /* #define ctx NULL */
-libusb_context *ctx = NULL;
+static libusb_context *ctx = NULL;
 
 #define CCID_INTERRUPT_SIZE 8
 
@@ -137,7 +137,7 @@ static void Multi_PollingTerminate(struct usbDevice_MultiSlot_Extension *msExt);
 
 static int get_end_points(const struct libusb_interface *usb_interface,
 	_usbDevice *usbdevice);
-bool ccid_check_firmware(struct libusb_device_descriptor *desc);
+static bool ccid_check_firmware(struct libusb_device_descriptor *desc);
 static unsigned int *get_data_rates(unsigned int reader_index,
 	const unsigned char bNumDataRatesSupported);
 
@@ -182,7 +182,7 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 };
 
 /* data rates supported by the secondary slots on the GemCore Pos Pro & SIM Pro */
-unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
+static unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 
 /*****************************************************************************
  *
