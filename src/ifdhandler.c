@@ -52,7 +52,7 @@ static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 _Atomic int LogLevel = DEBUG_LEVEL_CRITICAL | DEBUG_LEVEL_INFO;
 int DriverOptions = 0;
-int PowerOnVoltage = -1;
+static int PowerOnVoltage = -1;
 static bool DebugInitialized = false;
 
 /* local functions */
