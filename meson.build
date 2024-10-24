@@ -18,6 +18,9 @@ conf_data = configuration_data({
   'USE_COMPOSITE_AS_MULTISLOT' : get_option('composite-as-multislot'),
   })
 
+# global arguments
+add_global_arguments('-fvisibility=hidden', language : 'c')
+
 # tests for functions
 compiler = meson.get_compiler('c')
 if compiler.has_function('strlcpy')
