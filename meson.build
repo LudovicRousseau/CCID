@@ -152,27 +152,29 @@ executable('parse',
   dependencies : [libusb_dep, pcsc_cflags, zlib_dep, threads_dep],
   )
 
-# scardcontrol
-scardcontrol_src = [
-  'examples/scardcontrol.c',
-  'examples/PCSCv2part10.c',
-  ]
-executable('scardcontrol',
-  scardcontrol_src,
-  dependencies : [pcsc_dep],
-  )
+if get_option('enable-extras')
+  # examples scardcontrol
+  scardcontrol_src = [
+    'examples/scardcontrol.c',
+    'examples/PCSCv2part10.c',
+    ]
+  executable('scardcontrol',
+    scardcontrol_src,
+    dependencies : [pcsc_dep],
+    )
 
-# contrib Kobil_mIDentity_switch
-executable('Kobil_mIDentity_switch',
-  'contrib/Kobil_mIDentity_switch/Kobil_mIDentity_switch.c',
-  dependencies : [libusb_dep],
-  )
+  # contrib Kobil_mIDentity_switch
+  executable('Kobil_mIDentity_switch',
+    'contrib/Kobil_mIDentity_switch/Kobil_mIDentity_switch.c',
+    dependencies : [libusb_dep],
+    )
 
-# contrib RSA_SecurID_getpasswd
-executable('RSA_SecurID_getpasswd',
-  'contrib/RSA_SecurID/RSA_SecurID_getpasswd.c',
-  dependencies : [pcsc_dep],
-  )
+  # contrib RSA_SecurID_getpasswd
+  executable('RSA_SecurID_getpasswd',
+    'contrib/RSA_SecurID/RSA_SecurID_getpasswd.c',
+    dependencies : [pcsc_dep],
+    )
+endif
 
 # Info.plist
 command = [

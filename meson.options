@@ -35,3 +35,8 @@ option('zlp',
   type : 'boolean',
   value : false,
   description : 'enable the Zero Length Packet patch for some Gemalto readers')
+
+option('enable-extras',
+  type : 'boolean',
+  value : false,
+  description : 'also compile examples and contrib')
