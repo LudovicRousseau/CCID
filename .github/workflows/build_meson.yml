@@ -38,7 +38,7 @@ jobs:
           export CFLAGS="-Wall -Wextra -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wold-style-definition -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-enum -Wundef -Wuninitialized -Wunused -Wwrite-strings -Wmissing-noreturn -flto=auto -O2 -Wp,-D_FORTIFY_SOURCE=2"
 
           rm -rf builddir
-          meson setup builddir --werror
+          meson setup builddir --werror -Denable-extras=true
           cd builddir
 
           meson dist
@@ -52,7 +52,7 @@ jobs:
           export CFLAGS="-Wall -Wextra -Wformat -Wformat-security -Wmissing-declarations -Wmissing-prototypes -Wold-style-definition -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-enum -Wundef -Wuninitialized -Wunused -Wwrite-strings -Wmissing-noreturn -flto=auto -O2 -Wp,-D_FORTIFY_SOURCE=2"
 
           rm -rf builddir
-          CC=clang CC_LD=lld meson setup builddir --werror
+          CC=clang CC_LD=lld meson setup builddir --werror -Denable-extras=true
           cd builddir
 
           meson dist
