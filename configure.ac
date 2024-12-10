@@ -77,7 +77,7 @@ AC_C_CONST
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
-AC_CHECK_FUNCS(select strerror strncpy memcpy strlcpy strlcat secure_getenv pthread_condattr_setclock)
+AC_CHECK_FUNCS(strlcpy strlcat secure_getenv pthread_condattr_setclock)
 
 # Select OS specific versions of source files.
 AC_SUBST(BUNDLE_HOST)
