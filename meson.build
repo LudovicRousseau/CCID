@@ -32,6 +32,9 @@ endif
 if compiler.has_function('secure_getenv')
   conf_data.set('HAVE_SECURE_GETENV', true)
 endif
+if compiler.has_function('pthread_condattr_setclock')
+  conf_data.set('HAVE_PTHREAD_CONDATTR_SETCLOCK', true)
+endif
 
 # variables
 bundle_id = 'ifd-ccid.bundle'
