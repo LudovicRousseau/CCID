@@ -1620,7 +1620,21 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 	switch (ret)
 	{
 		case LIBUSB_TRANSFER_COMPLETED:
-			DEBUG_XXD("NotifySlotChange: ", buffer, actual_length);
+			if (actual_length > 0)
+			{
+				switch (buffer[0])
+				{
+					case RDR_to_PC_NotifySlotChange:
+						DEBUG_XXD("NotifySlotChange: ", buffer, actual_length);
+						break;
+					case RDR_to_PC_HardwareError:
+						DEBUG_XXD("HardwareError: ", buffer, actual_length);
+						break;
+					default:
+						DEBUG_XXD("Unrecognized notification: ", buffer, actual_length);
+						break;
+				}
+			}
 			break;
 
 		case LIBUSB_TRANSFER_TIMED_OUT:
@@ -1763,29 +1777,45 @@ static void *Multi_PollingProc(void *p_ext)
 					DEBUG_COMM3("Multi_PollingProc (%d/%d): OK",
 						usbDevice[msExt->reader_index].bus_number,
 						usbDevice[msExt->reader_index].device_address);
-					DEBUG_XXD("NotifySlotChange: ", buffer, actual_length);
-
-					/* log the RDR_to_PC_NotifySlotChange data */
-					slot = 0;
-					for (b=0; b<actual_length-1; b++)
+					if (actual_length > 0)
 					{
-						int s;
-
-						/* 4 slots per byte */
-						for (s=0; s<4; s++)
+						switch (buffer[0])
 						{
-							/* 2 bits per slot */
-							int slot_status = ((buffer[1+b] >> (s*2)) & 3);
-							const char *present, *change;
+							case RDR_to_PC_NotifySlotChange:
+								DEBUG_XXD("NotifySlotChange: ", buffer, actual_length);
 
-							present = (slot_status & 1) ? "present" : "absent";
-							change = (slot_status & 2) ? "status changed" : "no change";
+								/* log the RDR_to_PC_NotifySlotChange data */
+								slot = 0;
+								for (b=0; b<actual_length-1; b++)
+								{
+									int s;
 
-							DEBUG_COMM3("slot %d status: %d",
-								s + slot, slot_status);
-							DEBUG_COMM3("ICC %s, %s", present, change);
+									/* 4 slots per byte */
+									for (s=0; s<4; s++)
+									{
+										/* 2 bits per slot */
+										int slot_status = ((buffer[1+b] >> (s*2)) & 3);
+										const char *present, *change;
+
+										present = (slot_status & 1) ? "present" : "absent";
+										change = (slot_status & 2) ? "status changed" : "no change";
+
+										DEBUG_COMM3("slot %d status: %d",
+											s + slot, slot_status);
+										DEBUG_COMM3("ICC %s, %s", present, change);
+									}
+									slot += 4;
+								}
+								break;
+
+							case RDR_to_PC_HardwareError:
+								DEBUG_XXD("HardwareError: ", buffer, actual_length);
+								break;
+
+							default:
+								DEBUG_XXD("Unrecognized notification: ", buffer, actual_length);
+								break;
 						}
-						slot += 4;
 					}
 					break;
 
@@ -1954,7 +1984,8 @@ again:
 	/* Not stopped */
 	if (status == LIBUSB_TRANSFER_COMPLETED)
 	{
-		if (0 == (buffer[interrupt_byte] & interrupt_mask))
+		if (buffer[0] == RDR_to_PC_NotifySlotChange
+			&& 0 == (buffer[interrupt_byte] & interrupt_mask))
 		{
 			DEBUG_PERIODIC2("Multi_InterruptRead (%d) -- skipped",
 				reader_index);
