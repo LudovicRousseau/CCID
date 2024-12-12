@@ -194,6 +194,37 @@ typedef struct
 #define PROTOCOL_ICCD_A	1	/* ICCD Version A */
 #define PROTOCOL_ICCD_B	2	/* ICCD Version B */
 
+/* Known CCID bMessageType values. */
+enum
+{
+	/* Command Pipe, Bulk-OUT Messages */
+	CCID_MESSAGE_TYPE_PC_to_RDR_IccPowerOn = 0x62,
+	CCID_MESSAGE_TYPE_PC_to_RDR_IccPowerOff = 0x63,
+	CCID_MESSAGE_TYPE_PC_to_RDR_GetSlotStatus = 0x65,
+	CCID_MESSAGE_TYPE_PC_to_RDR_XfrBlock = 0x6F,
+	CCID_MESSAGE_TYPE_PC_to_RDR_GetParameters = 0x6C,
+	CCID_MESSAGE_TYPE_PC_to_RDR_ResetParameters = 0x6D,
+	CCID_MESSAGE_TYPE_PC_to_RDR_SetParameters = 0x61,
+	CCID_MESSAGE_TYPE_PC_to_RDR_Escape = 0x6B,
+	CCID_MESSAGE_TYPE_PC_to_RDR_IccClock = 0x6E,
+	CCID_MESSAGE_TYPE_PC_to_RDR_T0APDU = 0x6A,
+	CCID_MESSAGE_TYPE_PC_to_RDR_Secure = 0x69,
+	CCID_MESSAGE_TYPE_PC_to_RDR_Mechanical = 0x71,
+	CCID_MESSAGE_TYPE_PC_to_RDR_Abort = 0x72,
+	CCID_MESSAGE_TYPE_PC_to_RDR_SetDataRateAndClockFrequency = 0x73,
+
+	/* Response Pipe, Bulk-IN Messages */
+	CCID_MESSAGE_TYPE_RDR_to_PC_DataBlock = 0x80,
+	CCID_MESSAGE_TYPE_RDR_to_PC_SlotStatus = 0x81,
+	CCID_MESSAGE_TYPE_RDR_to_PC_Parameters = 0x82,
+	CCID_MESSAGE_TYPE_RDR_to_PC_Escape = 0x83,
+	CCID_MESSAGE_TYPE_RDR_to_PC_DataRateAndClockFrequency = 0x84,
+
+	/* Interrupt-IN Messages */
+	CCID_MESSAGE_TYPE_RDR_to_PC_NotifySlotChange = 0x50,
+	CCID_MESSAGE_TYPE_RDR_to_PC_HardwareError = 0x51,
+};
+
 /* Product identification for special treatments */
 #define GEMPC433	0x08E64433
 #define GEMPCKEY	0x08E63438

@@ -44,7 +44,6 @@
 #define SYNC 0x03
 #define CTRL_ACK 0x06
 #define CTRL_NAK 0x15
-#define RDR_to_PC_NotifySlotChange 0x50
 #define CARD_ABSENT 0x02
 #define CARD_PRESENT 0x03
 
@@ -239,7 +238,7 @@ start:
 	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
-	if (c == RDR_to_PC_NotifySlotChange)
+	if (c == CCID_MESSAGE_TYPE_RDR_to_PC_NotifySlotChange)
 		goto slot_change;
 
 	if (c == SYNC)
