@@ -44,7 +44,6 @@
 #define SYNC 0x03
 #define CTRL_ACK 0x06
 #define CTRL_NAK 0x15
-#define RDR_to_PC_NotifySlotChange 0x50
 #define CARD_ABSENT 0x02
 #define CARD_PRESENT 0x03
 
