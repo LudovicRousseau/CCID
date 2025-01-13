@@ -205,6 +205,9 @@
 0x2406:0x5004:appidkey GmbH ID100L-USB-SC-Reader
 0x2406:0x5006:appidkey GmbH ID60-USB
 
+# Arculus
+0x3752:0x0001:Arculus AuthentiKey
+
 # ArkSigner
 0x33B6:0x0001:ArkSigner Connect2Sign
 
