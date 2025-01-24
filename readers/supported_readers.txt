@@ -323,6 +323,7 @@
 0x046A:0x00A7:Cherry SmartTerminal XX44
 
 # CHERRY
+0x046A:0x0202:CHERRY Smart Terminal 1150
 
 # Cherry GmbH
 0x046A:0x005B:Cherry GmbH SmartBoard XX1X
