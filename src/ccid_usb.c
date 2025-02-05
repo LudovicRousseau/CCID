@@ -858,6 +858,60 @@ again:
 				else
 					usbDevice[reader_index].multislot_extension = NULL;
 
+
+#ifdef SEC1210_SYNC
+				if (SEC1210 == readerID)
+				{
+					usbDevice[reader_index].ccid.sec1210_interface = interface;
+
+					int other_interface_index = -1;
+					/* search the other interface */
+					for (unsigned int index=0; index<CCID_DRIVER_MAX_READERS ; index++)
+					{
+						/* ourself? */
+						if (index == reader_index)
+							continue;
+
+						/* empty slot */
+						if (! usbDevice[index].dev_handle)
+							continue;
+
+						if (bus_number == usbDevice[index].bus_number
+							&& device_address == usbDevice[index].device_address)
+						{
+							/* found it */
+							other_interface_index = index;
+							DEBUG_INFO2("found other interface at %d", index);
+							break;
+						}
+					}
+
+					if (other_interface_index >= 0)
+					{
+						DEBUG_INFO2("init SEC1210 2nd interface: %d",
+							interface);
+						/* point to the previous interface */
+						usbDevice[reader_index].ccid.sec1210_other_interface = &usbDevice[other_interface_index].ccid;
+						/* the previous interface points to us */
+						usbDevice[reader_index].ccid.sec1210_other_interface -> sec1210_other_interface = &usbDevice[reader_index].ccid;
+						/* share the cond struct */
+						usbDevice[reader_index].ccid.sec1210_shared = usbDevice[other_interface_index].ccid.sec1210_shared;
+					}
+					else
+					{
+						DEBUG_INFO2("init SEC1210 1st interface: %d",
+							interface);
+
+						/* init the cond struct */
+						struct _sec1210_cond *s = malloc(sizeof(struct _sec1210_cond));
+
+						pthread_cond_init(&s->sec1210_cond, NULL);
+						pthread_mutex_init(&s->sec1210_mutex, NULL);
+						usbDevice[reader_index].ccid.sec1210_shared = s;
+					}
+				}
+#endif
+
 				libusb_free_config_descriptor(config_desc);
 				goto end;
 			}
@@ -1166,6 +1220,26 @@ status_t CloseUSB(unsigned int reader_index)
 		}
 
 		pthread_mutex_destroy(&usbDevice[reader_index].polling_transfer_mutex);
+
+#ifdef SEC1210_SYNC
+		/* close the 2nd interface? */
+		_ccid_descriptor ccid_desc = usbDevice[reader_index].ccid;
+		DEBUG_INFO2("close interface: %d", ccid_desc.sec1210_interface);
+		if (ccid_desc.sec1210_other_interface)
+		{
+			/* the other interface is still present?
+			 * unregister ourself from it */
+			ccid_desc.sec1210_other_interface->sec1210_other_interface = NULL;
+		}
+		else
+		{
+			/* 2nd interface is closing */
+			/* Free the shared resources */
+			pthread_cond_destroy(&ccid_desc.sec1210_shared->sec1210_cond);
+			pthread_mutex_destroy(&ccid_desc.sec1210_shared->sec1210_mutex);
+			free(ccid_desc.sec1210_shared);
+		}
+#endif
 
 		if (usbDevice[reader_index].ccid.gemalto_firmware_features)
 			free(usbDevice[reader_index].ccid.gemalto_firmware_features);

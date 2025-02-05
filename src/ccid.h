@@ -18,8 +18,20 @@
 */
 
 #include <stdbool.h>
+#include <pthread.h>
 
-typedef struct
+// Uncomment if you want to synchronize the card movements on the 2
+// interfaces of the Microchip SEC 1210 reader
+// #define SEC1210_SYNC
+
+#ifdef SEC1210_SYNC
+struct _sec1210_cond {
+	pthread_cond_t sec1210_cond;
+	pthread_mutex_t sec1210_mutex;
+};
+#endif
+
+typedef struct _ccid_descriptor
 {
 	/*
 	 * CCID Sequence number
@@ -159,6 +171,12 @@ typedef struct
 	 * Zero Length Packet fixup (boolean)
 	 */
 	bool zlp;
+#endif
+
+#ifdef SEC1210_SYNC
+	struct _sec1210_cond * sec1210_shared;
+	struct _ccid_descriptor *sec1210_other_interface;
+	int sec1210_interface;
 #endif
 } _ccid_descriptor;
 
