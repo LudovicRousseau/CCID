@@ -2,7 +2,7 @@
   iManufacturer: CHERRY
  idProduct: 0x0202
   iProduct: Smart Terminal 1150
- bcdDevice: 1.01 (firmware release?)
+ bcdDevice: 1.02 (firmware release?)
  bLength: 9
  bDescriptorType: 4
  bInterfaceNumber: 0
