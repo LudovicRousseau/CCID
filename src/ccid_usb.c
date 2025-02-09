@@ -141,7 +141,7 @@ static bool ccid_check_firmware(struct libusb_device_descriptor *desc);
 static unsigned int *get_data_rates(unsigned int reader_index,
 	const unsigned char bNumDataRatesSupported);
 
-/* ne need to initialize to 0 since it is static */
+/* no need to initialize to 0 since it is static */
 static _usbDevice usbDevice[CCID_DRIVER_MAX_READERS];
 
 #define PCSCLITE_MANUKEY_NAME "ifdVendorID"
