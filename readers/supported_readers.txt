@@ -550,6 +550,9 @@
 0x04A4:0x00C7:Hitachi, Ltd. Hitachi Biometric Reader
 0x04A4:0x00D4:Hitachi, Ltd. Hitachi Portable Biometric Reader
 
+# HSIC
+0x1D99:0x0016:HSIC CCID-Reader
+
 # id3 Semiconductors
 0x0B81:0x0220:id3 Semiconductors CL1356A_HID
 
