@@ -8,6 +8,59 @@ ACTION!="add", GOTO="pcscd_ccid_rules_end"
 SUBSYSTEM!="usb", GOTO="pcscd_ccid_rules_end"
 ENV{DEVTYPE}!="usb_device", GOTO="pcscd_ccid_rules_end"
 
+# Generic CCID device (bInterfaceClass = 0x0b)
+ENV{ID_USB_INTERFACES}=="*:0b0000:*", GROUP="pcscd"
+
+# Non CCID generic (InterfaceClass: 0xFF)
+# CherrySmartTerminalST2XXX.txt
+ATTRS{idVendor}=="046A", ATTRS{idProduct}=="003E", GROUP="pcscd"
+# SCR331-DI-NTTCom.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="5120", GROUP="pcscd"
+# SCM_SDI011.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="512B", GROUP="pcscd"
+# SCM_SDI011_512C.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="512C", GROUP="pcscd"
+# SCL010.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="5291", GROUP="pcscd"
+# SCL01x.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="5292", GROUP="pcscd"
+# SCR3310-NTTCom.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="511A", GROUP="pcscd"
+# SCR331-DI-NTTCom.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="5120", GROUP="pcscd"
+# SCR331-DI.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="5111", GROUP="pcscd"
+# SDI010.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="5121", GROUP="pcscd"
+# SPR532.txt
+ATTRS{idVendor}=="04E6", ATTRS{idProduct}=="E003", GROUP="pcscd"
+# ReinerSCT.txt
+ATTRS{idVendor}=="0C4B", ATTRS{idProduct}=="0300", GROUP="pcscd"
+# ReinerSCT_cyberJack_RFID_standard.txt
+ATTRS{idVendor}=="0C4B", ATTRS{idProduct}=="0500", GROUP="pcscd"
+# OMNIKEY_5321_CLi_USB.txt
+ATTRS{idVendor}=="076B", ATTRS{idProduct}=="532A", GROUP="pcscd"
+# HID_5021_CL.txt
+ATTRS{idVendor}=="076B", ATTRS{idProduct}=="5340", GROUP="pcscd"
+# Gem_e-SealPro.txt
+ATTRS{idVendor}=="08E6", ATTRS{idProduct}=="2202", GROUP="pcscd"
+# MySmartPad.txt
+ATTRS{idVendor}=="09BE", ATTRS{idProduct}=="0002", GROUP="pcscd"
+# Verisign_secure_storage_token.txt
+ATTRS{idVendor}=="08E6", ATTRS{idProduct}=="1359", GROUP="pcscd"
+# Verisign_secure_token.txt
+ATTRS{idVendor}=="08E6", ATTRS{idProduct}=="ACE0", GROUP="pcscd"
+# e-gate.txt
+ATTRS{idVendor}=="0973", ATTRS{idProduct}=="0003", GROUP="pcscd"
+# Oberthur-CosmoCard.txt
+ATTRS{idVendor}=="1A74", ATTRS{idProduct}=="6354", GROUP="pcscd"
+# Oberthur-CosmoCard1.txt
+ATTRS{idVendor}=="1A74", ATTRS{idProduct}=="6356", GROUP="pcscd"
+# DUALi_DE-ABCM6.txt
+ATTRS{idVendor}=="1DB2", ATTRS{idProduct}=="0600", GROUP="pcscd"
+# DellSK-3106.txt
+ATTRS{idVendor}=="413C", ATTRS{idProduct}=="2100", GROUP="pcscd"
+
 # Kobil mIDentity
 ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"
 
@@ -23,7 +76,7 @@ ATTR{idVendor}=="058f", ATTR{idProduct}=="9520", GOTO="pcscd_ccid_rules_end"
 
 
 # set USB power management to auto.
-ENV{ID_USB_INTERFACES}==":0b0000:", TEST=="power/control", ATTR{power/control}="auto"
+ENV{ID_USB_INTERFACES}=="*:0b0000:*", TEST=="power/control", ATTR{power/control}="auto"
 
 # All done
 LABEL="pcscd_ccid_rules_end"
