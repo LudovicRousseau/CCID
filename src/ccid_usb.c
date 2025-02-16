@@ -1187,6 +1187,8 @@ status_t CloseUSB(unsigned int reader_index)
 	/* mark the resource unused */
 	usbDevice[reader_index].dev_handle = NULL;
 	usbDevice[reader_index].interface = 0;
+	usbDevice[reader_index].bus_number = 0;
+	usbDevice[reader_index].device_address = 0;
 
 	close_libusb_if_needed();
 
@@ -1202,11 +1204,13 @@ status_t CloseUSB(unsigned int reader_index)
 status_t DisconnectUSB(unsigned int reader_index)
 {
 	DEBUG_COMM("Disconnect reader");
-	libusb_device_handle * dev_handle = usbDevice[reader_index].dev_handle;
+	int bus_number = usbDevice[reader_index].bus_number;
+	int device_address = usbDevice[reader_index].device_address;
 
 	for (int i=0; i<CCID_DRIVER_MAX_READERS; i++)
 	{
-		if (usbDevice[i].dev_handle == dev_handle)
+		if ((usbDevice[i].bus_number == bus_number)
+			&& (usbDevice[i].device_address == device_address))
 		{
 			DEBUG_COMM2("Disconnect reader: %d", i);
 			usbDevice[i].disconnected = true;
