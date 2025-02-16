@@ -202,6 +202,13 @@ custom_target('Info.plist',
   install : true,
   install_dir : join_paths(pcsc_dep.get_variable('usbdropdir'), bundle_id, 'Contents'))
 
+# udev rules
+if get_option('udev-rules')
+  udev = dependency('udev')
+  install_data('src/92_pcscd_ccid.rules',
+    install_dir : join_paths(udev.get_variable(pkgconfig: 'udevdir'), 'rules.d'))
+endif
+
 # generate config.h
 configure_file(output : 'config.h',
   configuration : conf_data)

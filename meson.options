@@ -40,3 +40,8 @@ option('enable-extras',
   type : 'boolean',
   value : false,
   description : 'also compile examples and contrib')
+
+option('udev-rules',
+  type: 'boolean',
+  value: true,
+  description: 'install udev rules')
