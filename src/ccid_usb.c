@@ -1560,6 +1560,12 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 	if (usbDevice[reader_index].multislot_extension != NULL)
 		return Multi_InterruptRead(reader_index, timeout);
 
+	if (usbDevice[reader_index].disconnected)
+	{
+		DEBUG_COMM("Reader disconnected");
+		return IFD_NO_SUCH_DEVICE;
+	}
+
 	DEBUG_PERIODIC3("before (%d), timeout: %d ms", reader_index, timeout);
 
 	transfer = libusb_alloc_transfer(0);
