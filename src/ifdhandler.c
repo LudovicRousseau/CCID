@@ -1303,7 +1303,13 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 
 			/* The German eID card is bogus and need to be powered off
 			 * before a power on */
-			if (KOBIL_IDTOKEN == ccid_descriptor -> readerID)
+			if ((KOBIL_IDTOKEN == ccid_descriptor -> readerID)
+#ifdef SEC1210_SYNC
+				/* power down before power up on the Microchip SEC1210
+				 * second interface */
+				|| ((SEC1210 == ccid_descriptor -> readerID) && (1 == ccid_descriptor->sec1210_interface))
+#endif
+				)
 			{
 				/* send the command */
 				if (IFD_SUCCESS != CmdPowerOff(reader_index))
