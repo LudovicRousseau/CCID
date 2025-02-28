@@ -179,7 +179,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 
 	if ((ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_VOLTAGE)
 		|| (ccid_descriptor->dwFeatures & CCID_CLASS_AUTO_ACTIVATION))
-		voltage = 0;	/* automatic voltage selection */
+		voltage = VOLTAGE_AUTO;	/* automatic voltage selection */
 	else
 	{
 		int bVoltageSupport = ccid_descriptor->bVoltageSupport;
@@ -188,19 +188,19 @@ check_again:
 		if ((1 == voltage) && !(bVoltageSupport & 1))
 		{
 			DEBUG_INFO1("5V requested but not supported by reader");
-			voltage = 2;	/* 3V */
+			voltage = VOLTAGE_3V;	/* 3V */
 		}
 
 		if ((2 == voltage) && !(bVoltageSupport & 2))
 		{
 			DEBUG_INFO1("3V requested but not supported by reader");
-			voltage = 3;	/* 1.8V */
+			voltage = VOLTAGE_1_8V;	/* 1.8V */
 		}
 
 		if ((3 == voltage) && !(bVoltageSupport & 4))
 		{
 			DEBUG_INFO1("1.8V requested but not supported by reader");
-			voltage = 1;	/* 5V */
+			voltage = VOLTAGE_5V;	/* 5V */
 
 			/* do not (infinite) loop if bVoltageSupport == 0 */
 			if (bVoltageSupport)
