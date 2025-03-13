@@ -17,6 +17,11 @@ Authors:
   towitoto driver) in towitoko/ directory.
 - Olaf Kirch for the T=1 TPDU code (from the OpenCT package) in openct/
   directory. I (Ludovic Rousseau) greatly improved this code.
+- and many others
+
+<a href="https://github.com/LudovicRousseau/CCID/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=LudovicRousseau/CCID" />
+</a>
 
 
 CCID and ICCD readers:
