@@ -122,6 +122,23 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.6.2 - 19 March 2025, Ludovic Rousseau
+   - Add support of
+     - Arculus AuthentiKey
+     - BHDC Reader-HHD02
+     - CHERRY Smart Terminal 1150
+     - HSIC CCID-Reader
+     - Ledger Flex
+     - SYC USB CCID Reader
+     - Thales RF CR2000
+     - TOKEN2 FIDO2 Security Key(0026)
+   - Give more time to initialize the ACS ACR122U
+   - Do not build examples and contrib by default
+   - meson: add missing check for pthread_condattr_setclock
+   - Don't assume that all notifications are NotifySlotChange
+   - Hide unexported functions and variables
+   - Some other minor improvements
+
 1.6.1 - 5 July 2024, Ludovic Rousseau
    - fix 'parse' build issues on some systems (pthread & strlcpy)
    - Some other minor improvements
