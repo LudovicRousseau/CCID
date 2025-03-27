@@ -101,6 +101,7 @@
 0x04E6:0x5116:SCM Microsystems Inc. SCR 3310
 0x04E6:0x511D:SCM Microsystems Inc. SCR 3311
 0x04E6:0x5410:SCM Microsystems Inc. SCR 355
+0x04E6:0x5727:SCM Microsystems Inc. Identiv SmartOS Reader
 0x04E6:0xE001:SCM Microsystems Inc. SCR 331
 0x04E6:0xE003:SCM Microsystems Inc. SPR 532
 
