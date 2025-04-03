@@ -533,6 +533,10 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 		readerID = GEMPCPINPAD;
 	else if (0 == strcasecmp(reader_name,"SEC1210"))
 		readerID = SEC1210;
+	else if (0 == strcasecmp(reader_name,"SEC1210URT"))
+		readerID = SEC1210URT;
+	else if (0 == strcasecmp(reader_name,"SEC1210UR2"))
+		readerID = SEC1210UR2;
 
 	/* check if the same channel is not already used to manage multi-slots readers*/
 	for (i = 0; i < CCID_DRIVER_MAX_READERS; i++)
@@ -582,7 +586,8 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 					serialDevice[reader_index].ccid.dwMaxDataRate = 125000;
 					break;
 
-				case SEC1210:
+				case SEC1210URT:
+				case SEC1210UR2: 
 					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
 					serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
 					break;
@@ -665,13 +670,21 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
 			break;
 
-		case SEC1210:
+		case SEC1210URT:
+		case SEC1210UR2: /* This has the same ReaderID value as the SEC1210 so will catch that too */
 			serialDevice[reader_index].ccid.dwFeatures = 0x000100B2;
 			serialDevice[reader_index].ccid.dwDefaultClock = 4800;
 			serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
 			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
-			serialDevice[reader_index].ccid.bMaxSlotIndex = 1;	/* 2 slots */
 			serialDevice[reader_index].echo = false;
+			if (readerID == SEC1210URT)
+			{
+				serialDevice[reader_index].ccid.bMaxSlotIndex = 0;	/* URT Varient has 1 slot */
+			}
+			else
+			{
+				serialDevice[reader_index].ccid.bMaxSlotIndex = 1;	/* UR2 Varient has 2 slots (Defaults to this if no varient specified)*/
+			}
 			break;
 
 	}
@@ -717,6 +730,11 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	}
 
 	ret = set_ccid_descriptor(reader_index, reader_name, dev_name);
+
+	/* Fix up the name for SEC1210 devices */
+	if (0 == strcasecmp(reader_name,"SEC1210URT") || 0 == strcasecmp(reader_name,"SEC1210UR2"))
+		strcpy(reader_name, "SEC1210");
+	
 	if (STATUS_UNSUCCESSFUL == ret)
 		return STATUS_UNSUCCESSFUL;
 
