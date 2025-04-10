@@ -1156,7 +1156,8 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
  *					CmdGetSlotStatus
  *
  ****************************************************************************/
-RESPONSECODE CmdGetSlotStatus(unsigned int reader_index, unsigned char buffer[])
+RESPONSECODE CmdGetSlotStatus(unsigned int reader_index,
+	unsigned char buffer[static SIZE_GET_SLOT_STATUS])
 {
 	unsigned char cmd[10];
 	int bSeq;

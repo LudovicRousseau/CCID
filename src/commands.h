@@ -46,7 +46,7 @@ RESPONSECODE CmdEscapeCheck(unsigned int reader_index,
 RESPONSECODE CmdPowerOff(unsigned int reader_index);
 
 RESPONSECODE CmdGetSlotStatus(unsigned int reader_index,
-	/*@out@*/ unsigned char buffer[]);
+	/*@out@*/ unsigned char buffer[static SIZE_GET_SLOT_STATUS]);
 
 RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
