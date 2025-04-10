@@ -17,7 +17,17 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#define SIZE_GET_SLOT_STATUS 10
+/* Round `num` up to be a multiple of `multiple`. */
+#define ROUND_UP(num, multiple) (((num) + (multiple) - 1) / (multiple) * (multiple))
+
+/* Round up buffer sizes to avoid LIBUSB_TRANSFER_OVERFLOW errors from devices
+ * which erroneously send larger responses than expected. 1024 is taken as a
+ * safe maximum wMaxPacketSize for CCID devices. See:
+ * https://libusb.sourceforge.io/api-1.0/libusb_packetoverflow.html */
+#define ROUND_UP_BUF(needed) ROUND_UP(needed, 1024)
+
+/* Needed buffer size for CmdGetSlotStatus. */
+#define SIZE_GET_SLOT_STATUS ROUND_UP_BUF(10)
 #define STATUS_OFFSET 7
 #define ERROR_OFFSET 8
 #define CHAIN_PARAMETER_OFFSET 9
