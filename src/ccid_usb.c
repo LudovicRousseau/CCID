@@ -1646,11 +1646,10 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 	if (NULL == transfer)
 		return LIBUSB_ERROR_NO_MEM;
 
-	libusb_fill_bulk_transfer(transfer,
+	libusb_fill_interrupt_transfer(transfer,
 		usbDevice[reader_index].dev_handle,
 		usbDevice[reader_index].interrupt, buffer, sizeof(buffer),
 		bulk_transfer_cb, &completed, timeout);
-	transfer->type = LIBUSB_TRANSFER_TYPE_INTERRUPT;
 
 	ret = libusb_submit_transfer(transfer);
 	if (ret < 0) {
@@ -1801,13 +1800,11 @@ static void *Multi_PollingProc(void *p_ext)
 			usbDevice[msExt->reader_index].device_address);
 
 		completed = 0;
-		libusb_fill_bulk_transfer(transfer,
+		libusb_fill_interrupt_transfer(transfer,
 			usbDevice[msExt->reader_index].dev_handle,
 			usbDevice[msExt->reader_index].interrupt,
 			buffer, CCID_INTERRUPT_SIZE,
 			bulk_transfer_cb, &completed, 0); /* No timeout ! */
-
-		transfer->type = LIBUSB_TRANSFER_TYPE_INTERRUPT;
 
 		rv = libusb_submit_transfer(transfer);
 		if (rv)
