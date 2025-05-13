@@ -1800,6 +1800,7 @@ static void *Multi_PollingProc(void *p_ext)
 			usbDevice[msExt->reader_index].bus_number,
 			usbDevice[msExt->reader_index].device_address);
 
+		completed = 0;
 		libusb_fill_bulk_transfer(transfer,
 			usbDevice[msExt->reader_index].dev_handle,
 			usbDevice[msExt->reader_index].interrupt,
@@ -1820,7 +1821,6 @@ static void *Multi_PollingProc(void *p_ext)
 		usbDevice[msExt->reader_index].polling_transfer = transfer;
 		pthread_mutex_unlock(&usbDevice[msExt->reader_index].polling_transfer_mutex);
 
-		completed = 0;
 		while (!completed && !msExt->terminated)
 		{
 			rv = libusb_handle_events_completed(ctx, &completed);
