@@ -1721,6 +1721,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 			break;
 
 		case LIBUSB_TRANSFER_TIMED_OUT:
+		case LIBUSB_TRANSFER_CANCELLED:
 			break;
 
 		default:
