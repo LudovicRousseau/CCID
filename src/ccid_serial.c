@@ -789,7 +789,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	current_termios.c_lflag = 0;
 
 	readerID = serialDevice[reader].ccid.readerID;
-	if (readerID == GEMCORESIMPRO2)
+	if (GEMCORESIMPRO2 == readerID)
 	{
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
 		unsigned int old_timeout;
@@ -861,7 +861,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
-		if (readerID == SEC1210)
+		if (SEC1210 == readerID)
 			tx_buffer[0] = 0x06; // unknown but supported command
 		else
 			tx_buffer[0] = 0x02; // get reader firmware
@@ -882,7 +882,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	/* perform a command to configure GemPC Twin reader card movement
 	 * notification to synchronous mode: the card movement is notified _after_
 	 * the host command and _before_ the reader answer */
-	if (readerID != SEC1210)
+	if (SEC1210 != readerID)
 	{
 		unsigned char tx_buffer[] = { 0x01, 0x01, 0x01};
 		unsigned char rx_buffer[50];
