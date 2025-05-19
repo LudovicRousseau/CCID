@@ -531,8 +531,14 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 		readerID = GEMCORESIMPRO2;
 	else if (0 == strcasecmp(reader_name,"GemPCPinPad"))
 		readerID = GEMPCPINPAD;
-	else if (0 == strcasecmp(reader_name,"SEC1210"))
+	/* SEC1210 has been in CCID driver for some time and assumed SEC1210UR2,
+	so check for both the previously working reader name to maintain legacy behavior
+	 as well as check for the more explicit device name that specifies a varient. */
+	else if ((0 == strcasecmp(reader_name,"SEC1210")) ||
+			(0 == strcasecmp(reader_name,"SEC1210UR2"))) // Dual slot varient of SEC1210
 		readerID = SEC1210;
+	else if (0 == strcasecmp(reader_name,"SEC1210URT")) // Single slot varient of SEC1210
+		readerID = SEC1210URT;
 
 	/* check if the same channel is not already used to manage multi-slots readers*/
 	for (i = 0; i < CCID_DRIVER_MAX_READERS; i++)
@@ -583,6 +589,7 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 					break;
 
 				case SEC1210:
+				case SEC1210URT:
 					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
 					serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
 					break;
@@ -665,13 +672,22 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
 			break;
 
+		/* Most settings are shared between both SEC1210 varients */
 		case SEC1210:
+		case SEC1210URT:
 			serialDevice[reader_index].ccid.dwFeatures = 0x000100B2;
 			serialDevice[reader_index].ccid.dwDefaultClock = 4800;
 			serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
 			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
-			serialDevice[reader_index].ccid.bMaxSlotIndex = 1;	/* 2 slots */
 			serialDevice[reader_index].echo = false;
+			if (SEC1210URT == readerID)
+			{
+				serialDevice[reader_index].ccid.bMaxSlotIndex = 0;	/* SEC1210URT Varient has 1 slot */
+			}
+			else
+			{
+				serialDevice[reader_index].ccid.bMaxSlotIndex = 1;	/* SEC1210UR2 Varient has 2 slots */
+			}
 			break;
 
 	}
@@ -861,7 +877,8 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
-		if (SEC1210 == readerID)
+
+		if ((SEC1210 == readerID) || (SEC1210URT == readerID))
 			tx_buffer[0] = 0x06; // unknown but supported command
 		else
 			tx_buffer[0] = 0x02; // get reader firmware
@@ -882,7 +899,8 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	/* perform a command to configure GemPC Twin reader card movement
 	 * notification to synchronous mode: the card movement is notified _after_
 	 * the host command and _before_ the reader answer */
-	if (SEC1210 != readerID)
+
+	if ((SEC1210 != readerID) && (SEC1210URT != readerID))
 	{
 		unsigned char tx_buffer[] = { 0x01, 0x01, 0x01};
 		unsigned char rx_buffer[50];
