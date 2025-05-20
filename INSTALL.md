@@ -63,6 +63,8 @@ should contain something like:
 #     GemCoreSIMPro2
 #     GemPCPinPad
 #     GemPCTwin (default value)
+#     SEC1210UR2 (Dual slot SEC1210 Reader)
+#     SEC1210URT (single slot SEC1210 Reader)
 # example: /dev/ttyS0:GemPCPinPad
 #DEVICENAME        /dev/ttySn[:reader]
 #FRIENDLYNAME      "GemPCTwin serial"
@@ -84,7 +86,8 @@ DEVICENAME field. Supported values are:
 - GemCoreSIMPro2 for IDBridge CR30
 - GemPCPinPad for GemPC PinPad
 - GemPCTwin for GemPC Twin (default value)
-- SEC1210 for Microchip SEC1210
+- SEC1210UR2 for Microchip SEC1210 with 2 slots
+- SEC1210URT for Microchip SEC1210 with 1 slot
 
 You will then have something like:
 ```
