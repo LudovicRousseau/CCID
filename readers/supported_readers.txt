@@ -29,6 +29,9 @@
 # C3PO
 0x0783:0x0006:C3PO LTC31 v2
 
+# CHERRY
+0x046A:0x0202:CHERRY Smart Terminal 1150
+
 # Cherry GmbH
 0x046A:0x0005:Cherry GmbH SmartBoard XX33
 0x046A:0x0010:Cherry GmbH SmartBoard XX44
@@ -323,7 +326,6 @@
 0x046A:0x00A7:Cherry SmartTerminal XX44
 
 # CHERRY
-0x046A:0x0202:CHERRY Smart Terminal 1150
 
 # Cherry GmbH
 0x046A:0x005B:Cherry GmbH SmartBoard XX1X
