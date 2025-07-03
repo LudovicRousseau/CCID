@@ -1,6 +1,6 @@
  idVendor: 0x2C97
   iManufacturer: Ledger
- idProduct: 0x6009
+ idProduct: 0x6000
   iProduct: Ledger Stax
  bcdDevice: 2.01 (firmware release?)
  bLength: 9

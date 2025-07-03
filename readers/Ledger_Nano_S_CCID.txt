@@ -1,6 +1,6 @@
  idVendor: 0x2C97
   iManufacturer: Ledger
- idProduct: 0x1009
+ idProduct: 0x1000
   iProduct: Nano S
  bcdDevice: 2.01 (firmware release?)
  bLength: 9

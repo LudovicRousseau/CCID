@@ -1,6 +1,6 @@
  idVendor: 0x2C97
   iManufacturer: Ledger
- idProduct: 0x7009
+ idProduct: 0x7000
   iProduct: Ledger Flex
  bcdDevice: 2.01 (firmware release?)
  bLength: 9
