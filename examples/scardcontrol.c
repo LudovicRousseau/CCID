@@ -714,12 +714,15 @@ int main(int argc, char *argv[])
 		error = true;
 
 	PCSC_ERROR_CONT(rv, "SCardControl")
-	printf(error ? RED : GREEN);
-	printf(" card response [%"LF"d bytes]:", length);
-	for (i=0; i<length; i++)
-		printf(" %02X", bRecvBuffer[i]);
-	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
-	printf(NORMAL "\n");
+	if (SCARD_S_SUCCESS == rv)
+	{
+		printf(error ? RED : GREEN);
+		printf(" card response [%"LF"d bytes]:", length);
+		for (i=0; i<length; i++)
+			printf(" %02X", bRecvBuffer[i]);
+		printf(": %s", pinpad_return_codes(length, bRecvBuffer));
+		printf(NORMAL "\n");
+	}
 	if (2 == length)
 	{
 		sw1 = bRecvBuffer[0];
@@ -894,12 +897,15 @@ int main(int argc, char *argv[])
 		error = true;
 
 	PCSC_ERROR_CONT(rv, "SCardControl")
-	printf(error ? RED : GREEN);
-	printf(" card response [%"LF"d bytes]:", length);
-	for (i=0; i<length; i++)
-		printf(" %02X", bRecvBuffer[i]);
-	printf(": %s", pinpad_return_codes(length, bRecvBuffer));
-	printf(NORMAL "\n");
+	if (SCARD_S_SUCCESS == rv)
+	{
+		printf(error ? RED : GREEN);
+		printf(" card response [%"LF"d bytes]:", length);
+		for (i=0; i<length; i++)
+			printf(" %02X", bRecvBuffer[i]);
+		printf(": %s", pinpad_return_codes(length, bRecvBuffer));
+		printf(NORMAL "\n");
+	}
 	if (2 == length)
 	{
 		sw1 = bRecvBuffer[0];
