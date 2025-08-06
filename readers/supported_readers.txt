@@ -506,6 +506,9 @@
 0x1059:0x000C:Giesecke & Devrient GmbH Star Sign Card Token 350 (ICCD)
 0x1059:0x000D:Giesecke & Devrient GmbH Star Sign Card Token 550 (ICCD)
 
+# GIGA-TMS
+0x1667:0x0053:GIGA-TMS NFC CCID Reader
+
 # GIS Ltd
 0x0F1A:0x0002:GIS Ltd SmartMouse USB
 
