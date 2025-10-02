@@ -1092,6 +1092,11 @@ end:
 			(param[3] & 0xF0) >> 4 /* BWI */, param[3] & 0x0F /* CWI */,
 			ccid_desc->dwDefaultClock);
 
+		/* special case for the Thales eToken Fusion NFC */
+		if (THALES_FUSION_NFC == ccid_desc->readerID)
+			/* at least 5 minutes for On Board Key Generation (OBKG) */
+			ccid_desc->readTimeout += 5 * 60 * 1000;
+
 		ifsc = get_IFSC(&atr, &i);
 		if (ifsc > 0)
 		{

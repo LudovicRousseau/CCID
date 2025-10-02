@@ -244,6 +244,7 @@ typedef struct _ccid_descriptor
 #define GEMPCTWIN	0x08E63437
 #define GEMPCPINPAD 0x08E63478
 #define GEMCORESIMPRO 0x08E63480
+#define THALES_FUSION_NFC 0x08E634D2
 #define GEMCORESIMPRO2 0x08E60000 /* Does NOT match a real VID/PID as new firmware release exposes same VID/PID */
 #define GEMCOREPOSPRO 0x08E63479
 #define GEMALTOPROXDU 0x08E65503
