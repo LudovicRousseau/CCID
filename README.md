@@ -122,6 +122,31 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.7.0 - 2 October 2025, Ludovic Rousseau
+   - Add support of
+    - GIGA-TMS NFC CCID Reader
+    - Identiv Identiv SmartOS Reader
+    - SEC1210URT, single slot variant of SEC1210 serial
+    - TOKEN2 FIDO2 Security Key(0013),PIN+ Mini with OTP + PGP
+    - TOKEN2 FIDO2 Security Key(0014),PIN+ Mini with FIDO + PGP
+    - TOKEN2 FIDO2 Security Key(0015),PIN+ Mini with PGP
+    - TOKEN2 FIDO2 Security Key(0016),PIN+ Mini with OTP + PGP + FIDO
+    - TOKEN2 FIDO2 Security Key(0023),PIN+ Series with OTP + PGP
+    - TOKEN2 FIDO2 Security Key(0024),PIN+ Series with FIDO + PGP
+    - TOKEN2 FIDO2 Security Key(0025),PIN+ Series with PGP
+    - TOKEN2 FIDO2 Security Key(0203),Bio3 Dual with OTP + PGP
+    - TOKEN2 FIDO2 Security Key(0204),Bio3 Dual with FIDO + PGP
+    - TOKEN2 FIDO2 Security Key(0205),Bio3 Dual with PGP
+    - TOKEN2 FIDO2 Security Key(0206),Bio3 Dual with OTP + PGP + FIDO
+    - TOKEN2 Molto2 (older version)
+    - VIX TECHNOLOGY SECURE READER
+   - Remove support of
+    - SIMHUB pcsc reader
+   - Give pcscd group permission to CCID devices in udev rule
+   - Avoid a timeout issue with the Thales Fusion NFC reader
+   - Provide the option to synchronize the 2 interfaces of a SEC1210
+   - Some other minor improvements
+
 1.6.2 - 19 March 2025, Ludovic Rousseau
    - Add support of
      - Arculus AuthentiKey

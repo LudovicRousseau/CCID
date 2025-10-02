@@ -7,7 +7,7 @@
 
 project('ccid', 'c',
   meson_version : '>=0.58.0',
-  version : '1.6.2')
+  version : '1.7.0')
 
 # for config.h
 conf_data = configuration_data({
