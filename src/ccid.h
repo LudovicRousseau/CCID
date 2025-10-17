@@ -322,6 +322,17 @@ typedef struct _ccid_descriptor
  */
 #define O2MICRO_OZ776_PATCH
 
+/*
+ * The O2Micro OZ776_7772 reader randomly times out in bulk read.
+ * (This is very depending on the smartcard. Even same types of the
+ * same batch behave completely different. Another hardware bug?)
+ * In order to avoid operations to fail, do some resync and retries
+ * during transceiving. This seems to help in all observed cases.
+ *
+ * Observed, tested and fixed on Fujitsu Lifebook E754
+ */
+#define O2MICRO_OZ776_TIMEOUTPATCH	5 /* number of max. resyncs using this reader */
+
 /* Escape sequence codes */
 #define ESC_GEMPC_SET_ISO_MODE		1
 #define ESC_GEMPC_SET_APDU_MODE		2
