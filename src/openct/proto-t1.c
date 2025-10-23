@@ -4,7 +4,7 @@
  * Copyright (C) 2003, Olaf Kirch <okir@suse.de>
  *
  * improvements by:
- * Copyright (C) 2004 Ludovic Rousseau <ludovic.rousseau@free.fr>
+ * Copyright (C) 2004-2024 Ludovic Rousseau <ludovic.rousseau@free.fr>
  */
 
 #include <config.h>

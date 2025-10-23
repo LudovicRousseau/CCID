@@ -2,6 +2,7 @@
  * Checksum handling
  *
  * Copyright Matthias Bruestle 1999-2002
+ * Copyright (C) 2004-2024, Ludovic Rousseau <ludovic.rousseau@free.fr>
  * For licensing, see the file LICENCE
  */
 

@@ -1,6 +1,6 @@
 /*
 	parse.c: parse CCID structure
-	Copyright (C) 2003-2010   Ludovic Rousseau
+	Copyright (C) 2003-2024   Ludovic Rousseau
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

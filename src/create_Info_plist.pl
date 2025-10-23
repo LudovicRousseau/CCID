@@ -3,7 +3,7 @@
 #    create_Info_plist.pl: generate Info.plist from a template and a
 #    list of supported readers
 #
-#    Copyright (C) 2004-2009  Ludovic Rousseau  <ludovic.rousseau@free.fr>
+#    Copyright (C) 2004-2024  Ludovic Rousseau  <ludovic.rousseau@free.fr>
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 /*
     checksum.h: header file checksum.c
-    Copyright (C) 2004   Ludovic Rousseau
+    Copyright (C) 2004-2024   Ludovic Rousseau
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public

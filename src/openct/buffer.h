@@ -2,6 +2,7 @@
  * Buffer handling functions of the IFD handler library
  *
  * Copyright (C) 2003, Olaf Kirch <okir@suse.de>
+ * Copyright (C) 2004-2024, Ludovic Rousseau <ludovic.rousseau@free.fr>
  */
 
 #ifndef OPENCT_BUFFER_H
