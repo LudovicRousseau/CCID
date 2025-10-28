@@ -180,6 +180,7 @@ if get_option('enable-extras')
 endif
 
 # Info.plist
+find_program('perl', required : true)
 command = [
     find_program('src/create_Info_plist.pl'),
     files('readers/supported_readers.txt'),
