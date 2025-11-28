@@ -737,6 +737,7 @@
 0x20A0:0x4211:Nitrokey Nitrokey Start
 0x20A0:0x4230:Nitrokey Nitrokey HSM
 0x20A0:0x42B2:Nitrokey Nitrokey 3
+0x20A0:0x42F3:Nitrokey Nitrokey Passkey
 
 # NTT Communications Corp.
 0x04E6:0x511A:NTT Communications Corp. SCR3310-NTTCom USB SmartCard Reader
