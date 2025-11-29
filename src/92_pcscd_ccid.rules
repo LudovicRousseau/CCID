@@ -36,8 +36,6 @@ ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="5121", GROUP="pcscd"
 ATTRS{idVendor}=="04e6", ATTRS{idProduct}=="e003", GROUP="pcscd"
 # ReinerSCT.txt
 ATTRS{idVendor}=="0c4b", ATTRS{idProduct}=="0300", GROUP="pcscd"
-# ReinerSCT_cyberJack_RFID_standard.txt
-ATTRS{idVendor}=="0c4b", ATTRS{idProduct}=="0500", GROUP="pcscd"
 # OMNIKEY_5321_CLi_USB.txt
 ATTRS{idVendor}=="076b", ATTRS{idProduct}=="532a", GROUP="pcscd"
 # HID_5021_CL.txt
