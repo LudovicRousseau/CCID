@@ -670,6 +670,11 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			}
 			break;
 #endif
+		case SCARD_ATTR_USB_PATH:
+			{
+				return_value = get_ccid_usb_device_path(reader_index, Value, Length);
+			}
+			break;
 
 		default:
 			return_value = IFD_ERROR_TAG;

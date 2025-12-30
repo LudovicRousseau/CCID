@@ -40,6 +40,7 @@ const unsigned char *get_ccid_device_descriptor(const struct libusb_interface *u
 
 uint8_t get_ccid_usb_bus_number(int reader_index);
 uint8_t get_ccid_usb_device_address(int reader_index);
+int get_ccid_usb_device_path(int reader_index, unsigned char *buf, size_t *buflen);
 
 int ControlUSB(int reader_index, int requesttype, int request, int value,
 	unsigned char *bytes, unsigned int size);
