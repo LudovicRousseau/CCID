@@ -32,7 +32,13 @@ status_t ReadUSB(unsigned int reader_index, unsigned int *length,
 status_t CloseUSB(unsigned int reader_index);
 status_t DisconnectUSB(unsigned int reader_index);
 
+/* Use libusb shim for QNX, native libusb for other platforms */
+#ifdef __QNX__
+#include "libusb_shim.h"
+#else
 #include <libusb.h>
+#endif
+
 /*@null@*/ const struct libusb_interface *get_ccid_usb_interface(
 	struct libusb_config_descriptor *desc, int *num);
 
