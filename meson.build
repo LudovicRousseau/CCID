@@ -48,16 +48,7 @@ dyn_lib_ext = '.so'
 pcsc_dep = dependency('libpcsclite')
 pcsc_cflags = pcsc_dep.partial_dependency(compile_args : true)
 
-# Detect QNX platform
-is_qnx = host_machine.system() == 'qnx'
-conf_data.set('HAVE_QNX', is_qnx)
-
-# For QNX, use libusb shim; for other platforms, use native libusb
-if is_qnx
-  libusb_dep = []  # QNX uses native USB API, no external libusb dependency needed
-else
-  libusb_dep = dependency('libusb-1.0')
-endif
+libusb_dep = dependency('libusb-1.0')
 
 zlib_dep = dependency('zlib')
 threads_dep = dependency('threads')
@@ -67,11 +58,7 @@ pcsc_arch = r.stdout().strip()
 if pcsc_arch == 'Darwin'
   pcsc_arch = 'MacOS'
   dyn_lib_ext = '.dylib'
-  if not is_qnx
-    libusb_dep = dependency('libusb-1.0', static : true)
-  endif
-elif is_qnx
-  pcsc_arch = 'QNX'
+  libusb_dep = dependency('libusb-1.0', static : true)
 endif
 
 # flex generator
@@ -101,10 +88,6 @@ libccid_src = [
 gen_src = gen_flex.process('src/tokenparser.l')
 libccid_src += gen_src
 
-# Add libusb shim implementation for QNX
-if is_qnx
-  libccid_src += 'src/libusb_shim_qnx.c'
-endif
 if not get_option('pcsclite')
   libccid_src += 'src/debug.c'
 endif
@@ -168,11 +151,6 @@ parse_src = [
   'src/simclist.c',
   ]
 parse_src += gen_src
-
-# Add libusb shim implementation for QNX
-if is_qnx
-  parse_src += 'src/libusb_shim_qnx.c'
-endif
 
 executable('parse',
   parse_src,

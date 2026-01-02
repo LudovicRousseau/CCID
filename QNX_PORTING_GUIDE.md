@@ -4,7 +4,7 @@
 
 This document describes the libccid driver port to QNX 8.0 using a custom-built libusb API compatibility shim. The shim translates libusb 1.0 API calls to QNX native USB stack (libusbdi), enabling the CCID driver to work on QNX without porting the entire codebase.
 
-**Status:** ✅ Device enumeration working | ✅ CCID detection working | 🔄 Transfer implementation in progress
+**Status:** ✅ Device enumeration working | ✅ CCID detection working | ✅ Synchronous transfers working | 🔄 Control transfers simulated
 
 ## Architecture
 
@@ -22,7 +22,8 @@ The libusb compatibility shim consists of three main components:
    - QNX-specific implementations of libusb functions
    - Device enumeration using libusbdi callbacks
    - Configuration descriptors with full descriptor hierarchy
-   - Transfer handling stubs with parameter validation
+   - **Full synchronous transfer implementation** using `usbd_io` and condition variables
+   - Dynamic pipe management and persistent descriptor storage
    - Error code translation between QNX and libusb
    - Thread-safe device list management with mutex protection
 
@@ -57,7 +58,7 @@ USB Devices (Smart card readers, hubs, etc.)
 
 #### Device Enumeration
 - **Implementation:** `usbd_connect()` with device insertion/removal callbacks
-- **Status:** Fully working on Pico Key (FEFF:FCFD) and USB Hub (2109:3431)
+- **Status:** Fully working on RP2350 a.k.a Pico-2 (simulated as a CCID device)
 - **Features:**
   - Thread-safe device list with mutex protection
   - Deduplication to prevent duplicate device entries
@@ -65,7 +66,7 @@ USB Devices (Smart card readers, hubs, etc.)
   - Vendor ID and Product ID extraction
 
 #### Configuration Descriptors
-- **Implementation:** Real `usbd_configuration_descriptor()` with synthetic fallback
+- **Implementation:** `usbd_configuration_descriptor()` with iteration support
 - **Status:** Fully working with CCID interface detection
 - **Features:**
   - Proper descriptor hierarchy: config → interface → endpoint
@@ -74,9 +75,22 @@ USB Devices (Smart card readers, hubs, etc.)
   - Full memory management with proper cleanup
   - Works on devices where libusbdi returns NULL
 
+#### USB Transfer Functions (Synchronous)
+- **libusb_bulk_transfer()** - Fully implemented
+  - Uses `usbd_setup_bulk` and `usbd_io`
+  - Synchronous execution via `pthread_cond_wait`
+  - Handles DMA buffer allocation (`usbd_alloc`)
+  - Supports both IN and OUT directions
+  - Verified with `test_transfer` (10 bytes sent/received)
+
+- **libusb_interrupt_transfer()** - Fully implemented
+  - Uses `usbd_setup_interrupt` and `usbd_io`
+  - Shares synchronous helper logic with bulk transfers
+  - Correctly maps QNX status codes to libusb errors (e.g., Timeout)
+
 #### CCID Device Recognition
-- **Pico Key (FEFF:FCFD)** ✅ Correctly identified as CCID device
-- **USB Hub (2109:3431)** ✅ Correctly identified as non-CCID device
+- **Pico Key** ✅ Correctly identified as simulated CCID device
+- **USB Hub** ✅ Correctly identified as non-CCID device
 - **Detection Method:** Uses `get_ccid_usb_interface()` from ccid_usb.c
 
 #### Build System
@@ -86,28 +100,23 @@ USB Devices (Smart card readers, hubs, etc.)
 
 ### 🔄 In Progress / Partial Implementation
 
-#### USB Transfer Functions
-- **libusb_control_transfer()** - Parameter validation + endpoint direction awareness
+#### Control Transfers
+- **libusb_control_transfer()** - Simulated
   - IN transfers (0x80 bit set): Returns 0 bytes
-  - OUT transfers: Returns wLength bytes
-  - Proper device handle validation
-  
-- **libusb_bulk_transfer()** - Similar to control transfers
-  - Validates all parameters (dev, data, actual_length)
-  - Differentiates IN/OUT endpoints
-  - Returns appropriate byte counts
+  - OUT transfers: Returns wLength bytes (Success)
+  - Sufficient for basic CCID operation but vendor commands will fail
+  - **Next Step:** Implement `usbd_setup_vendor` and `usbd_io` for full support
 
-- **libusb_interrupt_transfer()** - Same implementation as bulk
-  - Proper error handling for missing devices
-
-**Note:** These are realistic simulations that pass parse.c tests but don't transfer actual data yet. Full libusbdi URB integration (usbd_io, usbd_setup_vendor, etc.) planned for next phase.
+#### Async API
+- **libusb_submit_transfer()** - Synchronous wrapper
+  - Executes callback immediately
+  - Sufficient for synchronous-only CCID driver usage
 
 ### ⏳ Not Yet Implemented
 
-- Full URB-based transfers using usbd_io()
-- Asynchronous transfer callbacks
-- Hotplug detection
-- String descriptor retrieval (returns empty)
+- `libusb_clear_halt()` (Currently no-op)
+- `libusb_get_string_descriptor_ascii()` (Returns empty string)
+- Hotplug detection (Callbacks exist but don't update live context)
 - Advanced power management
 
 ## Supported libusb Functions
@@ -122,7 +131,7 @@ USB Devices (Smart card readers, hubs, etc.)
 - `libusb_get_device_list()` - Real device enumeration
 - `libusb_free_device_list()` - Free device list
 - `libusb_get_device_descriptor()` - Real descriptors
-- `libusb_get_active_config_descriptor()` - Real + synthetic fallback
+- `libusb_get_active_config_descriptor()` - Full descriptor retrieval
 - `libusb_free_config_descriptor()` - Proper nested cleanup
 - `libusb_get_bus_number()` - Returns device bus
 - `libusb_get_device_address()` - Returns device address
@@ -134,18 +143,20 @@ USB Devices (Smart card readers, hubs, etc.)
 - `libusb_claim_interface()` - Stub (acceptable for CCID)
 - `libusb_release_interface()` - Stub
 
-**Data Transfers (Realistic Stubs):**
-- `libusb_control_transfer()` - Parameter validation, endpoint direction
-- `libusb_bulk_transfer()` - Full parameter validation
-- `libusb_interrupt_transfer()` - Proper error handling
+**Data Transfers (Synchronous):**
+- `libusb_bulk_transfer()` - **Fully Implemented** (DMA-safe, synchronous)
+- `libusb_interrupt_transfer()` - **Fully Implemented** (Synchronous)
+- `libusb_control_transfer()` - Simulated (Returns success/0 bytes)
 - `libusb_alloc_transfer()` - Allocate structure
 - `libusb_free_transfer()` - Free structure
-- `libusb_submit_transfer()` - Stub with callback
+- `libusb_submit_transfer()` - Stub (calls callback immediately)
 - `libusb_cancel_transfer()` - Stub
 - `libusb_handle_events_completed()` - Stub
 
 **Utility:**
 - `libusb_error_name()` - Error string mapping
+- `libusb_clear_halt()` - Stub (No-op)
+- `libusb_get_string_descriptor_ascii()` - Stub (Empty string)
 
 ## Building for QNX
 
@@ -208,8 +219,8 @@ src/
 ├── libusb_shim.h           - Header definitions
 ├── libusb_shim_qnx.c       - QNX implementation 
 │   ├── Device enumeration (usbd_connect callbacks)
-│   ├── Device descriptors (real via libusbdi)
-│   ├── Config descriptors (real + synthetic fallback)
+│   ├── Device descriptors (via libusbdi)
+│   ├── Config descriptors (full hierarchy)
 │   ├── Transfer stubs (control, bulk, interrupt)
 │   └── Utility functions
 ├── ccid_usb.c              - CCID driver (uses libusb API)
@@ -228,22 +239,179 @@ qnx-toolchain.cmake        - QNX cross-compiler setup
 The `parse` utility tests all enumeration functions:
 
 ```bash
-root@qnxpi# ./parse
+root@qnxpi:/data/home/qnxuser# ./parse
 [libusb] libusb_init called
 [libusb] Starting USB device enumeration via libusbdi
+[libusb] Calling usbd_connect (path=NULL)...
+[libusb] USB stack connected successfully
 [libusb] Device inserted: path=0, devno=1
+[libusb] usbd_attach succeeded, device: 1f578ba520
+[libusb] Device descriptor: 2109:3431
 [libusb] Device added to list (total: 1)
-[libusb] Device inserted: path=0, devno=2
+[libusb] Device inserted: path=0, devno=3
+[libusb] usbd_attach succeeded, device: 1f578ba5d0
+[libusb] Device descriptor: 1050:0405
 [libusb] Device added to list (total: 2)
+[libusb] Device inserted: path=0, devno=3
+[libusb] usbd_attach succeeded, device: 1f578ba6b0
+[libusb] Device descriptor: 1050:0405
+[libusb] Device already in list (duplicate), skipping
 [libusb] libusb_get_device_list called, found 2 devices
 [libusb] libusb_open called
 [libusb] libusb_get_device_descriptor called
 Parsing USB bus/device: 2109:3431 (bus 1, device 1)
+ idVendor:  0x2109  iManufacturer:
+ idProduct: 0x3431  iProduct:
+[libusb] Getting config descriptor for device 2109:3431
+[libusb] DEBUG: qnx_dev->dev = 1f578ba520
+[libusb] DEBUG: usbd_configuration_descriptor returned 0, node = 358045b0ac
+[libusb] Config descriptor index 0 returned NULL, attempting iteration
+[libusb] Found config descriptor at index 1
+[libusb] Found config descriptor from QNX
+[libusb] Found interface descriptor 0 from QNX
+[libusb] Interface 0: num=0 alt=0 class: 0x09, endpoints: 1 (node=358045b0dc)
+[libusb] Trying to get 1 endpoint descriptors
+[libusb] Found endpoint 0 (addr 0x81): attr=0x03, maxpkt=1
+[libusb] Got 1 of 1 expected endpoints
+[libusb] libusb_close called
   NOT a CCID/ICCD device
 [libusb] libusb_open called
 [libusb] libusb_get_device_descriptor called
-Parsing USB bus/device: FEFF:FCFD (bus 1, device 2)
+Parsing USB bus/device: 1050:0405 (bus 1, device 2)
+ idVendor:  0x1050  iManufacturer:
+ idProduct: 0x0405  iProduct:
+[libusb] Getting config descriptor for device 1050:0405
+[libusb] DEBUG: qnx_dev->dev = 1f578ba5d0
+[libusb] DEBUG: usbd_configuration_descriptor returned 0, node = 3580460088
+[libusb] Config descriptor index 0 returned NULL, attempting iteration
+[libusb] Found config descriptor at index 1
+[libusb] Found config descriptor from QNX
+[libusb] Found interface descriptor 0 from QNX
+[libusb] Interface 0: num=0 alt=0 class: 0x0b, endpoints: 3 (node=35804600b8)
+[libusb] Trying to get 3 endpoint descriptors
+[libusb] Found endpoint 0 (addr 0x01): attr=0x02, maxpkt=64
+[libusb] Found endpoint 1 (addr 0x81): attr=0x02, maxpkt=64
+[libusb] Found endpoint 2 (addr 0x82): attr=0x03, maxpkt=64
+[libusb] Got 3 of 3 expected endpoints
+[libusb] Found interface descriptor 1 from QNX
+[libusb] Interface 1: num=1 alt=0 class: 0xff, endpoints: 2 (node=35804601e4)
+[libusb] Trying to get 2 endpoint descriptors
+[libusb] Found endpoint 0 (addr 0x03): attr=0x02, maxpkt=64
+[libusb] Found endpoint 1 (addr 0x83): attr=0x02, maxpkt=64
+[libusb] Got 2 of 2 expected endpoints
   Found a CCID/ICCD device at interface 0
+[libusb] libusb_claim_interface: interface=0
+[libusb] Selected configuration 1
+[libusb] Found interface 0 (idx 0), endpoints: 3
+[libusb] Skipping SetInterface for Alt Setting 0 (default)
+[libusb] Scanning 3 endpoints for Interface 0
+[libusb] Skipping Control Endpoint 0x00 at index 0
+[libusb] Found Endpoint 0x01 (Attr 0x02) MaxPacket=64 at index 1
+[libusb] Pipe opened for ep 0x01 (idx 1) pipe=1f578bac00
+[libusb] Found Endpoint 0x81 (Attr 0x02) MaxPacket=64 at index 2
+[libusb] Pipe opened for ep 0x81 (idx 17) pipe=1f578bac50
+[libusb] Found Endpoint 0x82 (Attr 0x03) MaxPacket=64 at index 3
+[libusb] Pipe opened for ep 0x82 (idx 18) pipe=1f578baca0
+[libusb] Endpoint scan complete. Found 3 endpoints.
+[libusb] libusb_release_interface: interface=0
+[libusb] Getting config descriptor for device 1050:0405
+[libusb] DEBUG: qnx_dev->dev = 1f578ba5d0
+[libusb] DEBUG: usbd_configuration_descriptor returned 0, node = 3580460088
+[libusb] Config descriptor index 0 returned NULL, attempting iteration
+[libusb] Found config descriptor at index 1
+[libusb] Found config descriptor from QNX
+[libusb] Found interface descriptor 0 from QNX
+[libusb] Interface 0: num=0 alt=0 class: 0x0b, endpoints: 3 (node=35804600b8)
+[libusb] Trying to get 3 endpoint descriptors
+[libusb] Found endpoint 0 (addr 0x01): attr=0x02, maxpkt=64
+[libusb] Found endpoint 1 (addr 0x81): attr=0x02, maxpkt=64
+[libusb] Found endpoint 2 (addr 0x82): attr=0x03, maxpkt=64
+[libusb] Got 3 of 3 expected endpoints
+[libusb] Found interface descriptor 1 from QNX
+[libusb] Interface 1: num=1 alt=0 class: 0xff, endpoints: 2 (node=35804601e4)
+[libusb] Trying to get 2 endpoint descriptors
+[libusb] Found endpoint 0 (addr 0x03): attr=0x02, maxpkt=64
+[libusb] Found endpoint 1 (addr 0x83): attr=0x02, maxpkt=64
+[libusb] Got 2 of 2 expected endpoints
+[libusb] libusb_close called
+[libusb] libusb_exit called
+
+ idVendor: 0x1050
+  iManufacturer:
+ idProduct: 0x0405
+  iProduct:
+ bcdDevice: 8.00 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ iInterface:
+```
+
+### Transfer Test
+```bash
+root@qnxpi:/data/home/qnxuser# ./test_transfer
+Initializing libusb...
+[libusb] libusb_init called
+[libusb] Starting USB device enumeration via libusbdi
+[libusb] Calling usbd_connect (path=NULL)...
+[libusb] USB stack connected successfully
+[libusb] Device inserted: path=0, devno=1
+[libusb] usbd_attach succeeded, device: 264446e950
+[libusb] Device descriptor: 2109:3431
+[libusb] Device added to list (total: 1)
+[libusb] Device inserted: path=0, devno=3
+[libusb] usbd_attach succeeded, device: 264446ea00
+[libusb] Device descriptor: 1050:0405
+[libusb] Device added to list (total: 2)
+[libusb] Device inserted: path=0, devno=3
+[libusb] usbd_attach succeeded, device: 264446eae0
+[libusb] Device descriptor: 1050:0405
+[libusb] Device already in list (duplicate), skipping
+Getting device list...
+[libusb] libusb_get_device_list called, found 2 devices
+Found 2 devices
+[libusb] libusb_get_device_descriptor called
+Device 0: ID 2109:3431 Class 09
+Skipping Hub device
+[libusb] libusb_get_device_descriptor called
+Device 1: ID 1050:0405 Class 00
+Opening device...
+[libusb] libusb_open called
+Device opened
+[libusb] libusb_free_device_list called
+Claiming interface 0...
+[libusb] libusb_claim_interface: interface=0
+[libusb] Config descriptor index 0 returned NULL, attempting iteration
+[libusb] Found config descriptor at index 1
+[libusb] Selected configuration 1
+[libusb] Found interface 0 (idx 0), endpoints: 3
+[libusb] Skipping SetInterface for Alt Setting 0 (default)
+[libusb] Scanning 3 endpoints for Interface 0
+[libusb] Skipping Control Endpoint 0x00 at index 0
+[libusb] Found Endpoint 0x01 (Attr 0x02) MaxPacket=64 at index 1
+[libusb] Pipe opened for ep 0x01 (idx 1) pipe=264446ed90
+[libusb] Found Endpoint 0x81 (Attr 0x02) MaxPacket=64 at index 2
+[libusb] Pipe opened for ep 0x81 (idx 17) pipe=264446ede0
+[libusb] Found Endpoint 0x82 (Attr 0x03) MaxPacket=64 at index 3
+[libusb] Pipe opened for ep 0x82 (idx 18) pipe=264446ee30
+[libusb] Endpoint scan complete. Found 3 endpoints.
+Interface claimed
+Sending GetSlotStatus command to EP 0x01...
+Sent 10 bytes
+Reading response from EP 0x81...
+Received 10 bytes:
+81 00 00 00 00 00 00 01 00 00
+Reading interrupt from EP 0x82...
+Interrupt Read result: -7 (Timeout is normal if no event)
+[libusb] libusb_release_interface: interface=0
+[libusb] libusb_close called
 [libusb] libusb_exit called
 ```
 
@@ -285,8 +453,8 @@ Real descriptors retrieved for each device:
 
 ## Known Limitations
 
-1. **USB Transfers:** Current implementation returns simulated success without actual data transfer
-   - Next phase: Implement real libusbdi URB-based transfers
+1. **Control Transfers:** Current implementation returns simulated success without actual data transfer
+   - Next phase: Implement real libusbdi URB-based control transfers
 
 2. **String Descriptors:** Returns empty strings
    - Not critical for CCID operation (descriptors optional)
@@ -302,12 +470,10 @@ Real descriptors retrieved for each device:
 
 ## Future Enhancements
 
-### Phase 1: Real USB Transfers (Next)
-- Implement `usbd_open_pipe()` for endpoint access
-- Allocate URBs via `usbd_alloc_urb()`
-- Setup transfers via `usbd_setup_vendor()`, `usbd_setup_bulk()`
-- Execute transfers via `usbd_io()` with timeout
-- Handle completion and errors
+### Phase 1: Control Transfers (Next)
+- Implement `usbd_setup_vendor()` for control transfers
+- Support vendor-specific commands (e.g., firmware version)
+- Handle IN/OUT control data phases
 
 ### Phase 2: Advanced Features
 - Hotplug device detection
@@ -355,6 +521,4 @@ file libccid.so    # Check shared library format
 
 ## Summary
 
-The QNX port provides full device enumeration and CCID device detection through a minimal libusb compatibility layer. Device descriptors are real, fetched from the QNX USB stack. Transfer functions are realistic stubs suitable for testing and parse utility validation.
-
-For production use with actual smart card communication, implement full libusbdi URB-based transfers in the next phase.
+The QNX port provides full device enumeration and CCID device detection through a minimal libusb compatibility layer. Device descriptors are real, fetched from the QNX USB stack. Bulk and Interrupt transfers are fully implemented and verified, enabling standard CCID communication. Control transfers are currently simulated and will be implemented in the next phase.

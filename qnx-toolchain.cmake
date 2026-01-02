@@ -16,7 +16,7 @@ endif()
 if(DEFINED ENV{QNX_TARGET})
     set(QNX_TARGET_PATH "$ENV{QNX_TARGET}")
 else()
-    set(QNX_TARGET_PATH "/qnx/qnx800/target/qnx8")
+    set(QNX_TARGET_PATH "/home/harynath922/qnx800/target/qnx")
 endif()
 
 # Export QNX environment variables for QCC compiler

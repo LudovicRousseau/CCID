@@ -70,6 +70,15 @@ find_package(Threads REQUIRED)
 # libusb_dep is replaced by libusb_shim_qnx.c
 
 if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
+    # Ensure QNX_TARGET is set
+    if(NOT DEFINED QNX_TARGET)
+        if(DEFINED ENV{QNX_TARGET})
+            set(QNX_TARGET "$ENV{QNX_TARGET}")
+        else()
+            message(FATAL_ERROR "QNX_TARGET not set. Please set QNX_TARGET environment variable.")
+        endif()
+    endif()
+
     # For QNX, use pcsclite headers from /home/harynath922/PCSC/src/PCSC
     include_directories(/home/harynath922/PCSC/src/PCSC)
     # Also include QNX system headers (devctl.h, etc.)
@@ -225,6 +234,30 @@ if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
         DHAVE_QNX
         D__QNX__
     )
+endif()
+
+# Test transfer utility
+if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
+    add_executable(test_transfer 
+        examples/test_transfer.c
+        src/libusb_shim_qnx.c
+    )
+    target_link_libraries(test_transfer PRIVATE usbdi)
+    target_compile_definitions(test_transfer PRIVATE -DHAVE_QNX -D__QNX__)
+
+    # QNX Native Test (No libusb shim)
+    add_executable(qnx_native_test
+        examples/qnx_native_test.c
+    )
+    target_link_libraries(qnx_native_test PRIVATE usbdi)
+    target_compile_definitions(qnx_native_test PRIVATE -DHAVE_QNX -D__QNX__)
+
+    # QNX Reference Test (From Documentation)
+    add_executable(qnx_reference_test
+        examples/qnx_reference_test.c
+    )
+    target_link_libraries(qnx_reference_test PRIVATE usbdi)
+    target_compile_definitions(qnx_reference_test PRIVATE -DHAVE_QNX -D__QNX__)
 endif()
 
 install(TARGETS parse

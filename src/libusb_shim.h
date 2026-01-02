@@ -1,6 +1,6 @@
 /*
  * libusb_shim.h: libusb API compatibility shim for QNX 8.0
- * Copyright (C) 2025   Harinath Nampally
+ * Copyright (C) 2025-2026   Harinath Nampally
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
