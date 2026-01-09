@@ -66,3 +66,8 @@ code.
 
     See PC/SC v2.02.08 Part 10
 
+* `SCARD_CTL_CODE(3601)`
+
+	Returns the USB path of the reader following the format
+	`<bus>-<port[.port[.port]]>:<config>.<interface>`
+	(e.g., `1-1.3.2:1.0`) as in `/sys/bus/usb/devices/`.
