@@ -896,6 +896,11 @@ again:
 						usbDevice[reader_index].ccid.sec1210_other_interface -> sec1210_other_interface = &usbDevice[reader_index].ccid;
 						/* share the cond struct */
 						usbDevice[reader_index].ccid.sec1210_shared = usbDevice[other_interface_index].ccid.sec1210_shared;
+						/* signal change if first interface comes after second */
+						if (interface == 0) {
+							DEBUG_INFO1("SEC1210: First interface came second, signaling");
+							pthread_cond_signal(&usbDevice[reader_index].ccid.sec1210_shared->sec1210_cond);
+						}
 					}
 					else
 					{
