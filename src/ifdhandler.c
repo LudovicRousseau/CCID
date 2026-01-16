@@ -2025,6 +2025,18 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	}
 #endif
 
+#if !defined(TWIN_SERIAL)
+	if (SCARD_CTL_CODE(3601) == dwControlCode)
+	{
+		unsigned int iBytesReturned;
+		iBytesReturned = RxLength;
+
+		return_value = get_ccid_usb_device_path(reader_index, RxBuffer, &iBytesReturned);
+
+		*pdwBytesReturned = iBytesReturned;
+	}
+#endif
+
 	if (IFD_SUCCESS != return_value)
 		*pdwBytesReturned = 0;
 

@@ -1427,6 +1427,78 @@ uint8_t get_ccid_usb_device_address(int reader_index)
 
 /*****************************************************************************
  *
+ *					get_ccid_usb_device_path
+ *
+ ****************************************************************************/
+int get_ccid_usb_device_path(int reader_index, unsigned char *buf, unsigned int *buflen)
+{
+	// Maxumum amount of ports is 7 per USB 3.0 spec
+    uint8_t ports[7];
+    int nports;
+	int s;
+    unsigned int len = 0;
+	struct libusb_config_descriptor *cfg = NULL;
+	int res = IFD_SUCCESS;
+
+    if (!buf || !buflen || *buflen == 0) {
+        res = IFD_ERROR_INSUFFICIENT_BUFFER;
+		goto end;
+	}
+
+	libusb_device_handle *handle = usbDevice[reader_index].dev_handle;
+	if (!handle) {
+		res = IFD_COMMUNICATION_ERROR;
+		goto end;
+	}
+
+    libusb_device *dev = libusb_get_device(handle);
+    dev = libusb_get_device(handle);
+    if (!dev) {
+        res = IFD_COMMUNICATION_ERROR;
+		goto end;
+	}
+
+    nports = libusb_get_port_numbers(dev, ports, sizeof(ports));
+    if (nports < 0) {
+        res = IFD_COMMUNICATION_ERROR;
+		goto end;
+	}
+
+	if (libusb_get_active_config_descriptor(dev, &cfg) != 0) {
+		res = IFD_COMMUNICATION_ERROR;
+		goto end;
+	}
+
+    s = snprintf((char *)buf, *buflen, "%u-%u", libusb_get_bus_number(dev), ports[0]);
+	if (s < 0 || (len += s) >= *buflen) {
+		res = IFD_ERROR_INSUFFICIENT_BUFFER;
+		goto end;
+	}
+
+    for (int i = 1; i < nports; i++) {
+        s = snprintf((char *)buf + len, *buflen - len, ".%u", ports[i]);
+		if (s < 0 || (len += s) >= *buflen) {
+			res = IFD_ERROR_INSUFFICIENT_BUFFER;
+			goto end;
+		}
+	}
+
+	s = snprintf((char *)buf + len, *buflen - len, ":%u.%u", cfg->bConfigurationValue,
+			usbDevice[reader_index].interface);
+	if (s < 0 || (len += s) >= *buflen) {
+		res = IFD_ERROR_INSUFFICIENT_BUFFER;
+		goto end;
+	}
+
+	*buflen = len + 1; // Account for null character
+
+end:
+	libusb_free_config_descriptor(cfg);
+	return res;
+}
+
+/*****************************************************************************
+ *
  *					get_ccid_usb_interface
  *
  ****************************************************************************/
