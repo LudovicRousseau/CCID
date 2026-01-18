@@ -1430,9 +1430,10 @@ uint8_t get_ccid_usb_device_address(int reader_index)
  *					get_ccid_usb_device_path
  *
  ****************************************************************************/
-int get_ccid_usb_device_path(int reader_index, unsigned char *buf, unsigned int *buflen)
+int get_ccid_usb_device_path(int reader_index, unsigned char *buf,
+	unsigned int *buflen)
 {
-	// Maxumum amount of ports is 7 per USB 3.0 spec
+	// Maximum amount of ports is 7 per USB 3.0 spec
     uint8_t ports[7];
     int nports;
 	int s;
@@ -1469,7 +1470,8 @@ int get_ccid_usb_device_path(int reader_index, unsigned char *buf, unsigned int 
 		goto end;
 	}
 
-    s = snprintf((char *)buf, *buflen, "%u-%u", libusb_get_bus_number(dev), ports[0]);
+    s = snprintf((char *)buf, *buflen, "%u-%u", libusb_get_bus_number(dev),
+		ports[0]);
 	if (s < 0 || (len += s) >= *buflen) {
 		res = IFD_ERROR_INSUFFICIENT_BUFFER;
 		goto end;
@@ -1483,8 +1485,8 @@ int get_ccid_usb_device_path(int reader_index, unsigned char *buf, unsigned int 
 		}
 	}
 
-	s = snprintf((char *)buf + len, *buflen - len, ":%u.%u", cfg->bConfigurationValue,
-			usbDevice[reader_index].interface);
+	s = snprintf((char *)buf + len, *buflen - len, ":%u.%u",
+		cfg->bConfigurationValue, usbDevice[reader_index].interface);
 	if (s < 0 || (len += s) >= *buflen) {
 		res = IFD_ERROR_INSUFFICIENT_BUFFER;
 		goto end;
