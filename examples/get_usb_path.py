@@ -22,6 +22,7 @@ import struct
 import smartcard
 from smartcard.pcsc.PCSCPart10 import SCARD_CTL_CODE
 from smartcard.scard import (
+    SCARD_E_NOT_TRANSACTED,
     SCARD_E_INVALID_PARAMETER,
     SCARD_ATTR_CHANNEL_ID,
     SCARD_SHARE_DIRECT,
@@ -43,7 +44,9 @@ def get_usb_path(reader):
     try:
         res = card_connection.control(ioctl_get_usb_path)
     except smartcard.Exceptions.SmartcardException as ex:
-        if ex.hresult == SCARD_E_INVALID_PARAMETER:
+        # SCARD_E_NOT_TRANSACTED returned by pcsc-lite
+        # SCARD_E_INVALID_PARAMETER retruned by macOS
+        if ex.hresult in [SCARD_E_NOT_TRANSACTED, SCARD_E_INVALID_PARAMETER]:
             print("Your driver does not (yet) support SCARD_CTL_CODE(3601)")
             return
         raise
