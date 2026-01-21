@@ -24,7 +24,12 @@
 # ifdef S_SPLINT_S
 # include <sys/types.h>
 # endif
+/* Use libusb shim for QNX, native libusb for other platforms */
+#ifdef __QNX__
+#include "libusb_shim.h"
+#else
 #include <libusb.h>
+#endif
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
@@ -1700,7 +1705,42 @@ static void bulk_transfer_cb(struct libusb_transfer *transfer)
  *
  *					InterruptRead
  *
- ****************************************************************************/
+****************************************************************************/
+
+#ifdef __QNX__
+
+/* QNX STUB IMPLEMENTATION - Minimal interrupt reading for QNX platform */
+int InterruptRead(int reader_index, int timeout /* in ms */)
+{
+	int return_value = IFD_SUCCESS;
+
+	DEBUG_PERIODIC3("InterruptRead stub (%d), timeout: %d ms", reader_index, timeout);
+
+	/* Multislot reader: redirect to Multi_InterruptRead */
+	if (usbDevice[reader_index].multislot_extension != NULL)
+		return Multi_InterruptRead(reader_index, timeout);
+
+	if (usbDevice[reader_index].disconnected)
+	{
+		DEBUG_COMM("Reader disconnected");
+		return IFD_NO_SUCH_DEVICE;
+	}
+
+	/* QNX USB Stub: 
+	 * A real implementation would:
+	 * 1. Use libusb_interrupt_transfer() directly instead of manual transfer setup
+	 * 2. Call QNX USB device manager APIs to read interrupt data
+	 * 3. Parse the interrupt buffer for slot status changes
+	 *
+	 * For now, return success with no data
+	 */
+
+	return return_value;
+} /* InterruptRead - QNX */
+
+#else
+
+/* Standard libusb platform: Full interrupt transfer implementation */
 int InterruptRead(int reader_index, int timeout /* in ms */)
 {
 	int ret, actual_length;
@@ -1815,6 +1855,7 @@ int InterruptRead(int reader_index, int timeout /* in ms */)
 	return return_value;
 } /* InterruptRead */
 
+#endif /* __QNX__ */
 
 /*****************************************************************************
  *
@@ -1853,6 +1894,103 @@ void InterruptStop(int reader_index)
  *					Multi_PollingProc
  *
  ****************************************************************************/
+#ifdef __QNX__
+
+/* QNX platform: Simplified polling thread for multi-slot readers */
+static void *Multi_PollingProc(void *p_ext)
+{
+	struct usbDevice_MultiSlot_Extension *msExt = p_ext;
+	unsigned char buffer[CCID_INTERRUPT_SIZE];
+	int status;
+
+	/* QNX USB stub: Simplified polling thread for multi-slot readers
+	 * In a real implementation, this would:
+	 * 1. Allocate a USB transfer structure
+	 * 2. Set up interrupt endpoint polling
+	 * 3. Wait for hardware interrupts with timeout
+	 * 4. Parse notification messages (slot changes, hardware errors)
+	 * 5. Broadcast status to all reader slots
+	 * For now, we provide a minimal stub that allows the reader to function
+	 */
+
+	DEBUG_COMM3("Multi_PollingProc (%d/%d): thread starting",
+		usbDevice[msExt->reader_index].bus_number,
+		usbDevice[msExt->reader_index].device_address);
+
+	status = LIBUSB_TRANSFER_COMPLETED;
+
+	while (!msExt->terminated)
+	{
+		DEBUG_COMM3("Multi_PollingProc (%d/%d): waiting",
+			usbDevice[msExt->reader_index].bus_number,
+			usbDevice[msExt->reader_index].device_address);
+
+		/* QNX stub: Sleep briefly to simulate polling interval */
+		usleep(100000); /* 100ms polling interval */
+
+		/* Check if reader is still connected */
+		if (usbDevice[msExt->reader_index].dev_handle == NULL)
+		{
+			DEBUG_COMM3("Multi_PollingProc (%d/%d): Device disconnected",
+				usbDevice[msExt->reader_index].bus_number,
+				usbDevice[msExt->reader_index].device_address);
+			status = LIBUSB_ERROR_NO_DEVICE;
+			break;
+		}
+
+		/* Initialize interrupt buffer as no change */
+		memset(buffer, 0, sizeof(buffer));
+		buffer[0] = RDR_to_PC_NotifySlotChange;
+		buffer[1] = 0; /* No slot changes in stub mode */
+
+		/* Broadcast to all slots */
+		DEBUG_COMM3("Multi_PollingProc (%d/%d): Broadcast to slot(s)",
+			usbDevice[msExt->reader_index].bus_number,
+			usbDevice[msExt->reader_index].device_address);
+
+		/* Lock the mutex */
+		pthread_mutex_lock(&msExt->mutex);
+
+		/* Set the status and the interrupt buffer */
+		msExt->status = status;
+		memset(msExt->buffer, 0, sizeof(msExt->buffer));
+		memcpy(msExt->buffer, buffer, 2); /* Minimal notification */
+
+		/* Broadcast the condition and unlock */
+		pthread_cond_broadcast(&msExt->condition);
+		pthread_mutex_unlock(&msExt->mutex);
+	}
+
+	/* Wake up the slot threads so they will exit as well */
+	DEBUG_COMM3("Multi_PollingProc (%d/%d): Waking slots",
+		usbDevice[msExt->reader_index].bus_number,
+		usbDevice[msExt->reader_index].device_address);
+
+	/* Lock the mutex */
+	pthread_mutex_lock(&msExt->mutex);
+
+	/* Set the status and fill-in the interrupt buffer */
+	msExt->status = 0;
+	memset(msExt->buffer, 0xFF, sizeof(msExt->buffer));
+
+	/* Broadcast the condition */
+	pthread_cond_broadcast(&msExt->condition);
+
+	/* Unlock */
+	pthread_mutex_unlock(&msExt->mutex);
+
+	/* Now exit */
+	DEBUG_COMM3("Multi_PollingProc (%d/%d): Thread terminated",
+		usbDevice[msExt->reader_index].bus_number,
+		usbDevice[msExt->reader_index].device_address);
+
+	pthread_exit(NULL);
+	return NULL;
+} /* Multi_PollingProc - QNX */
+
+#else
+
+/* Standard libusb platform: Full interrupt transfer polling */
 static void *Multi_PollingProc(void *p_ext)
 {
 	struct usbDevice_MultiSlot_Extension *msExt = p_ext;
@@ -2053,8 +2191,9 @@ end:
 
 	pthread_exit(NULL);
 	return NULL;
-} /* Multi_PollingProc */
+} /* Multi_PollingProc - libusb */
 
+#endif /* __QNX__ */
 
 /*****************************************************************************
  *
