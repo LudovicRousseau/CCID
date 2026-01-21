@@ -180,6 +180,9 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 	unsigned int slen, resyncs;
 	int retries;
 	size_t last_send = 0;
+#ifdef	O2MICRO_OZ776_TIMEOUTPATCH
+	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(t1->lun);
+#endif
 
 	if (snd_len == 0)
 		return -1;
@@ -193,6 +196,11 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 
 	t1->state = SENDING;
 	retries = t1->retries;
+#if	((O2MICRO_OZ776_TIMEOUTPATCH) > 0)
+	if (ccid_descriptor->readerID == OZ776_7772) {
+	  resyncs = (O2MICRO_OZ776_TIMEOUTPATCH);
+	} else
+#endif
 	resyncs = 3;
 
 	/* Initialize send/recv buffer */
@@ -232,6 +240,14 @@ int t1_transceive(t1_state_t * t1, unsigned int dad,
 
 		if (n < 0) {
 			DEBUG_CRITICAL("fatal: transmit/receive failed");
+#ifdef O2MICRO_OZ776_TIMEOUTPATCH
+			if (ccid_descriptor->readerID == OZ776_7772) {
+			  DEBUG_INFO2("patching timeout bug for O2MICRO_OZ776, retries=%u",retries);
+			  if (retries <= 0) {
+			    goto resync;
+			  } else continue;
+			}
+#endif
 			t1->state = DEAD;
 			goto error;
 		}
