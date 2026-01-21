@@ -88,7 +88,7 @@ RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
 	unsigned char buffer[], int voltage)
 {
 	unsigned char cmd[10];
-	unsigned char resp[10 + MAX_ATR_SIZE];
+	unsigned char resp[ROUND_UP_BUF(10 + MAX_ATR_SIZE)];
 	int bSeq;
 	status_t res;
 	int count = 1;
@@ -964,7 +964,7 @@ again:
 		goto end;
 	}
 
-	length_out = 10 + *RxLength;
+	length_out = ROUND_UP_BUF(10 + *RxLength);
 	if (NULL == (cmd_out = malloc(length_out)))
 	{
 		free(cmd_in);
@@ -995,7 +995,7 @@ again:
 	}
 
 time_request:
-	length_out = 10 + *RxLength;
+	length_out = ROUND_UP_BUF(10 + *RxLength);
 	res = ReadPort(reader_index, &length_out, cmd_out, bSeq);
 
 	/* replay the command if NAK
@@ -1067,7 +1067,7 @@ end:
  ****************************************************************************/
 RESPONSECODE CmdPowerOff(unsigned int reader_index)
 {
-	unsigned char cmd[10];
+	unsigned char cmd[ROUND_UP_BUF(10)];
 	int bSeq;
 	status_t res;
 	unsigned int length;
@@ -1128,7 +1128,7 @@ RESPONSECODE CmdPowerOff(unsigned int reader_index)
 	cmd[6] = bSeq;
 	cmd[7] = cmd[8] = cmd[9] = 0; /* RFU */
 
-	res = WritePort(reader_index, sizeof(cmd), cmd);
+	res = WritePort(reader_index, 10, cmd);
 	CHECK_STATUS(res)
 
 	length = sizeof(cmd);
@@ -1418,7 +1418,7 @@ RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
 RESPONSECODE CCID_Receive(unsigned int reader_index, unsigned int *rx_length,
 	unsigned char rx_buffer[], unsigned char *chain_parameter)
 {
-	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
+	unsigned char cmd[ROUND_UP_BUF(10+CMD_BUF_SIZE)];	/* CCID + APDU buffer */
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	status_t ret;
@@ -2310,7 +2310,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(unsigned int reader_index,
 RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
 	unsigned int length, unsigned char buffer[])
 {
-	unsigned char cmd[10+length+2];	/* CCID + Protocol Data Structure */
+	unsigned char cmd[ROUND_UP_BUF(10+length+2)];	/* CCID + Protocol Data Structure */
 	int bSeq;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 	status_t res;
