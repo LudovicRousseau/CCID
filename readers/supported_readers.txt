@@ -388,6 +388,9 @@
 0x0483:0xA389:Dexon Tecnologias Digitais LTDA DXToken
 0x0483:0xA40B:Dexon Tecnologias Digitais LTDA eSmartDX
 
+# Diebold Nixdorf
+0x2F7C:0x6007:Diebold Nixdorf PN7362au CCID
+
 # Doctolib
 0x1C34:0xAFD0:Doctolib SR
 0x1C34:0xAFD1:Doctolib SR
