@@ -122,6 +122,18 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.7.1 - 4 February 2026, Ludovic Rousseau
+   - Add support of
+    - ACS APG8201-B2
+    - BUDGET E-ID BUD001
+    - CHERRY Smart Board 1150
+    - CryptnoxCR CryptnoxCR
+    - Diebold Nixdorf PN7362au CCID
+    - FT BioPass FIDO2 Pro
+    - Nitrokey Nitrokey Passkey
+   - Add SCARD_CTL_CODE(3601): USB path of the reader
+   - Some other minor improvements
+
 1.7.0 - 2 October 2025, Ludovic Rousseau
    - Add support of
     - GIGA-TMS NFC CCID Reader
