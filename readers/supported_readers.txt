@@ -798,6 +798,7 @@
 # Pol Henarejos
 0x2E8A:0x10FD:Pol Henarejos Pico HSM
 0x2E8A:0x10FE:Pol Henarejos Pico Fido
+0x2E8A:0x10FF:Pol Henarejos Pico OpenPGP
 
 # Purism, SPC
 0x316D:0x4C4B:Purism, SPC Librem Key
