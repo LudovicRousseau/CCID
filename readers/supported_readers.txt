@@ -795,6 +795,9 @@
 # Planeta
 0x21AB:0x0010:Planeta RC700-NFC CCID
 
+# Pol Henarejos
+0x2E8A:0x10FD:Pol Henarejos Pico HSM
+
 # Purism, SPC
 0x316D:0x4C4B:Purism, SPC Librem Key
 
