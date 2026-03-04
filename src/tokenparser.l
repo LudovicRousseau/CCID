@@ -5,7 +5,7 @@
  *
  * Copyright (C) 2001-2003
  *  David Corcoran <corcoran@musclecard.com>
- * Copyright (C) 2003-2024
+ * Copyright (C) 2003-2026
  *  Ludovic Rousseau <ludovic.rousseau@free.fr>
  *
 Redistribution and use in source and binary forms, with or without
@@ -59,6 +59,7 @@ void tperrorCheck (char *pcToken_error);
 
 static list_t *ListKeys;
 static list_t *ListValues;
+static const char * Filename;
 
 %}
 
@@ -119,6 +120,15 @@ static void eval_value(char *pcToken, list_t *list_values)
 
 	/* <string>foobar</string>
 	 * 012345678 : 8 is the first string character index */
+
+	/* list_values may be NULL if the Info.plist file is corrupted and
+	 * eval_key() has not yet been called */
+	if (! list_values)
+	{
+		Log3(PCSC_LOG_CRITICAL, "Corrupted bundle file %s before: %s",
+			Filename, pcToken);
+		return;
+	}
 
 	/* calculate the argument length */
 	for (len=0; pcToken[len+8] != '<'; len++)
@@ -215,6 +225,7 @@ int bundleParse(const char *fileName, list_t *l)
 			fileName, strerror(errno));
 		return 1;
 	}
+	Filename = fileName;
 
 	r = list_init(l);
 	assert(r >= 0);
