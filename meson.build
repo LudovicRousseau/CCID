@@ -47,7 +47,9 @@ dyn_lib_ext = '.so'
 
 pcsc_dep = dependency('libpcsclite')
 pcsc_cflags = pcsc_dep.partial_dependency(compile_args : true)
+
 libusb_dep = dependency('libusb-1.0')
+
 zlib_dep = dependency('zlib')
 threads_dep = dependency('threads')
 
@@ -85,6 +87,7 @@ libccid_src = [
   ]
 gen_src = gen_flex.process('src/tokenparser.l')
 libccid_src += gen_src
+
 if not get_option('pcsclite')
   libccid_src += 'src/debug.c'
 endif
