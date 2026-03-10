@@ -63,10 +63,6 @@ static RESPONSECODE CmdXfrBlockAPDU_extended(unsigned int reader_index,
 	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[]);
 
-static RESPONSECODE CmdXfrBlockAPDU(unsigned int reader_index,
-	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
-	unsigned char rx_buffer[], int protocol);
-
 static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[]);
@@ -1312,8 +1308,8 @@ RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
 			break;
 
 		case CCID_CLASS_SHORT_APDU:
-			return_value = CmdXfrBlockAPDU(reader_index,
-				tx_length, tx_buffer, rx_length, rx_buffer, 1);
+			return_value = CmdXfrBlockTPDU_T0(reader_index,
+				tx_length, tx_buffer, rx_length, rx_buffer);
 			break;
 
 		case CCID_CLASS_EXTENDED_APDU:
@@ -1795,17 +1791,17 @@ receive_next_block:
 
 /*****************************************************************************
  *
- *					CmdXfrBlockAPDU
+ *					CmdXfrBlockTPDU_T0
  *
  ****************************************************************************/
-static RESPONSECODE CmdXfrBlockAPDU(unsigned int reader_index,
+static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
 	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
-	unsigned char rx_buffer[], int protocol)
+	unsigned char rx_buffer[])
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
 
-	DEBUG_COMM3("T=%d: %d bytes", protocol, tx_length);
+	DEBUG_COMM2("T=0: %d bytes", tx_length);
 
 	/* command length too big for CCID reader? */
 	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength-10)
@@ -1839,33 +1835,6 @@ static RESPONSECODE CmdXfrBlockAPDU(unsigned int reader_index,
 		return return_value;
 
 	return CCID_Receive(reader_index, rx_length, rx_buffer, NULL);
-} /* CmdXfrBlockAPDU */
-
-
-/*****************************************************************************
- *
- *					CmdXfrBlockTPDU_T0
- *
- ****************************************************************************/
-static RESPONSECODE CmdXfrBlockTPDU_T0(unsigned int reader_index,
-	unsigned int tx_length, unsigned char tx_buffer[], unsigned int *rx_length,
-	unsigned char rx_buffer[])
-{
-	unsigned char tpdu[5];
-
-	/* Case 1 APDU and T=0 card */
-	if (4 == tx_length)
-	{
-		/* convert into a 5-bytes T=0 TPDU */
-		memcpy(tpdu, tx_buffer, 4);
-		tpdu[4] = 0; /* mandatory P3 parameter */
-
-		/* use the new parameters */
-		tx_buffer = tpdu;
-		tx_length = 5;
-	}
-
-	return CmdXfrBlockAPDU(reader_index, tx_length, tx_buffer, rx_length, rx_buffer, 0);
 } /* CmdXfrBlockTPDU_T0 */
 
 
