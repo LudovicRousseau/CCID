@@ -1037,6 +1037,9 @@
 0x1050:0x0406:Yubico YubiKey FIDO+CCID
 0x1050:0x0407:Yubico YubiKey OTP+FIDO+CCID
 
+# Tokey 3 FIDO
+0x0d7a:0x0200:Tokey 3 FIDO
+
 # ~Avtor
 
 # ~ELYCTIS
