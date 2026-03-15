@@ -819,6 +819,9 @@
 # rf IDEAS
 0x0C27:0xCCDA:rf IDEAS USB CCID
 
+# Richmond Technologies CO. LLC
+0x3969:0x0002:Richmond Technologies CO. LLC AEGIS PRO4 Smart Card Reader
+
 # Rocketek
 0x14CD:0x8166:Rocketek RT-SCR1
 
