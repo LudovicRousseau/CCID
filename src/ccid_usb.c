@@ -1881,7 +1881,7 @@ static void *Multi_PollingProc(void *p_ext)
 
 		completed = 0;
 		libusb_fill_interrupt_transfer(transfer,
-			usbDevice[msExt->reader_index].dev_handle,
+			msExt->dev_handle,
 			usbDevice[msExt->reader_index].interrupt,
 			buffer, CCID_INTERRUPT_SIZE,
 			bulk_transfer_cb, &completed, 0); /* No timeout ! */
