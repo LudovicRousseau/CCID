@@ -43,8 +43,47 @@ Supported operating systems:
 
 - GNU/Linux (libusb 1.0)
 - MacOS X/Darwin (libusb 1.0)
+- QNX 8.0 Neutrino (libusbdi - QNX USB stack)
 
 See also https://ccid.apdu.fr/ for more information.
+
+
+QNX 8.0 Port
+============
+
+This version includes a port to QNX 8.0 Neutrino with native USB support via libusbdi.
+
+**Features:**
+- Full libusb 1.0 API compatibility layer for QNX
+- Device enumeration via libusbdi callbacks
+- Real configuration descriptors with CCID interface support
+- USB control and bulk transfer stubs
+- Cross-compilation support with CMake toolchain
+
+**Building for QNX:**
+
+1. Source the QNX 8.0 SDK environment:
+   ```bash
+   source ~/qnx800/qnxsdp-env.sh
+   ```
+
+2. Build with CMake:
+   ```bash
+   rm -rf build
+   cmake -DCMAKE_TOOLCHAIN_FILE=qnx-toolchain.cmake -B build/
+   cmake --build ./build/
+   ```
+
+3. Binaries are created in `./build/`:
+   - `libccid.so` - CCID driver library
+   - `parse` - USB device discovery utility
+
+**Device Support:**
+- Tested with Pico Key (FEFF:FCFD) smart card reader
+- Automatic CCID interface detection
+- Full descriptor hierarchy (config → interface → endpoint)
+
+See [QNX_PORTING_GUIDE.md](QNX_PORTING_GUIDE.md) for detailed implementation notes.
 
 
 Debug information:
