@@ -715,6 +715,9 @@
 # Macally
 0x08AE:0x0BDF:Macally NFC CCID eNetPad
 
+# MARX CryptoTech LP
+0x0D7A:0x0200:MARX CryptoTech LP Tokey 3 FIDO
+
 # mCore
 0x1403:0x7502:mCore SCard-Reader
 
