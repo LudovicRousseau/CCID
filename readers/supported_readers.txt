@@ -594,6 +594,7 @@
 0x04E6:0x581C:Identiv SCR35xx USB Smart Card Reader
 0x04E6:0x581D:Identiv SCR3500 C Contact Reader
 0x04E6:0x5826:Identiv uTrust Token Flex
+0x04E6:0x5A11:Identiv uTrust FIDO2 Security Key
 
 # Identive
 0x04E6:0x5710:Identive CLOUD 2700 F Smart Card Reader
