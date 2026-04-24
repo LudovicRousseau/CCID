@@ -1,0 +1,67 @@
+ idVendor: 0x1403
+  iManufacturer: Generic
+ idProduct: 0x7530
+  iProduct: DualSlot-Reader
+ bcdDevice: 0.17 (firmware release?)
+ bLength: 9
+ bDescriptorType: 4
+ bInterfaceNumber: 0
+ bAlternateSetting: 0
+ bNumEndpoints: 3
+  bulk-IN, bulk-OUT and Interrupt-IN
+ bInterfaceClass: 0x0B [Chip Card Interface Device Class (CCID)]
+ bInterfaceSubClass: 0
+ bInterfaceProtocol: 0
+  bulk transfer, optional interrupt-IN (CCID)
+ Can't get iInterface string: LIBUSB_ERROR_INVALID_PARAM
+ CCID Class Descriptor
+  bLength: 0x36
+  bDescriptorType: 0x21
+  bcdCCID: 1.10
+  bMaxSlotIndex: 0x00
+  bVoltageSupport: 0x07
+   5.0V
+   3.0V
+   1.8V
+  dwProtocols: 0x0000 0x0003
+   T=0
+   T=1
+  dwDefaultClock: 4.800 MHz
+  dwMaximumClock: 4.800 MHz
+  bNumClockSupported: 1
+   Support 4800 kHz
+  dwDataRate: 12903 bps
+  dwMaxDataRate: 600000 bps
+  bNumDataRatesSupported: 11
+   Support 600000 bps
+   Support 300000 bps
+   Support 154839 bps
+   Support 150000 bps
+   Support 75000 bps
+   Support 51613 bps
+   Support 37500 bps
+   Support 25806 bps
+   Support 18750 bps
+   Support 12903 bps
+   Support 9376 bps
+  dwMaxIFSD: 254
+  dwSynchProtocols: 0x00000000
+  dwMechanical: 0x00000000
+   No special characteristics
+  dwFeatures: 0x000404BE
+   ....02 Automatic parameter configuration based on ATR data
+   ....04 Automatic activation of ICC on inserting
+   ....08 Automatic ICC voltage selection
+   ....10 Automatic ICC clock frequency change according to parameters
+   ....20 Automatic baud rate change according to frequency and Fi, Di params
+   ....80 Automatic PPS made by the CCID
+   ..04.. Automatic IFSD exchange as first exchange (T=1)
+   04.... Short and Extended APDU level exchange
+  dwMaxCCIDMessageLength: 273 bytes
+  bClassGetResponse: 0xFF
+   echoes the APDU class
+  bClassEnvelope: 0xFF
+   echoes the APDU class
+  wLcdLayout: 0x0000
+  bPINSupport: 0x00
+  bMaxCCIDBusySlots: 1
