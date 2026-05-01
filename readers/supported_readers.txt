@@ -671,6 +671,9 @@
 # Kapsch TrafficCom
 0x28B9:0x0002:Kapsch TrafficCom USB SAM reader
 
+# Kensington
+0x047D:0x8203:Kensington VeriMark NFC+ USB-C Security Key
+
 # KeyXentic Inc.
 0x2F76:0x0906:KeyXentic Inc. KX906 Smart Card Reader
 
