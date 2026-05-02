@@ -17,6 +17,9 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#ifndef __CCID_H__
+#define __CCID_H__
+
 #include <stdbool.h>
 #include <pthread.h>
 
@@ -436,3 +439,4 @@ struct GEMALTO_FIRMWARE_FEATURES
 	unsigned char	RFUb6[3];
 };
 
+#endif
