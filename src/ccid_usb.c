@@ -924,9 +924,9 @@ status_t WriteUSB(CcidDesc * ccid_reader, unsigned int length,
 	_usbDevice * usb_device = &ccid_reader->device;
 	int rv;
 	int actual_length;
-	char debug_header[] = "-> 121234 ";
+	char debug_header[] = "-> lun: 123, ";
 
-	(void)snprintf(debug_header, sizeof(debug_header), "-> %06d ",
+	(void)snprintf(debug_header, sizeof(debug_header), "-> lun: %d, ",
 		ccid_reader->lun);
 
 	if (usb_device->disconnected)
@@ -980,7 +980,7 @@ status_t ReadUSB(CcidDesc * ccid_reader, unsigned int * length,
 	_usbDevice * usb_device = &ccid_reader->device;
 	int rv;
 	int actual_length;
-	char debug_header[] = "<- 121234 ";
+	char debug_header[] = "<- lun: 123, ";
 	int duplicate_frame = 0;
 
 	if (usb_device->disconnected)
@@ -990,7 +990,7 @@ status_t ReadUSB(CcidDesc * ccid_reader, unsigned int * length,
 	}
 
 read_again:
-	(void)snprintf(debug_header, sizeof(debug_header), "<- %06d ",
+	(void)snprintf(debug_header, sizeof(debug_header), "<- lun: %d, ",
 		ccid_reader->lun);
 
 	if (usb_device->multislot_extension)

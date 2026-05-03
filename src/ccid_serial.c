@@ -122,9 +122,9 @@ status_t WriteSerial(CcidDesc * ccid_reader, unsigned int length,
 	unsigned char lrc;
 	unsigned char low_level_buffer[GEMPCTWIN_MAXBUF];
 
-	char debug_header[] = "-> 123456 ";
+	char debug_header[] = "-> lun: 123, ";
 
-	(void)snprintf(debug_header, sizeof(debug_header), "-> %06X ",
+	(void)snprintf(debug_header, sizeof(debug_header), "-> lun: %d, ",
 		ccid_reader->lun);
 
 	if (length > GEMPCTWIN_MAXBUF-3)
@@ -369,9 +369,9 @@ static int ReadChunk(CcidDesc * ccid_reader, unsigned char *buffer,
 	struct timeval t;
 	int i, rv = 0;
 	int already_read;
-	char debug_header[] = "<- 123456 ";
+	char debug_header[] = "<- lun: 123, ";
 
-	(void)snprintf(debug_header, sizeof(debug_header), "<- %06X ",
+	(void)snprintf(debug_header, sizeof(debug_header), "<- lun: %d, ",
 		ccid_reader->lun);
 
 	already_read = 0;
