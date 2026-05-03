@@ -142,7 +142,6 @@ endif
 parse_src = [
   'src/parse.c',
   'src/debug.c',
-  'src/ccid_usb.c',
   'src/sys_unix.c',
   'src/strlcpy.c',
   'src/simclist.c',

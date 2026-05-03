@@ -43,7 +43,7 @@ static unsigned PPS_GetLength (BYTE * block);
 static BYTE PPS_GetPCK (BYTE * block, unsigned length);
 
 int
-PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
+PPS_Exchange (CcidDesc * ccid_reader, BYTE * params, unsigned *length, unsigned char *pps1)
 {
   BYTE confirm[PPS_MAX_LENGTH];
   unsigned len_request, len_confirm;
@@ -55,13 +55,13 @@ PPS_Exchange (int lun, BYTE * params, unsigned *length, unsigned char *pps1)
   DEBUG_XXD ("PPS: Sending request: ", params, len_request);
 
   /* Send PPS request */
-  if (CCID_Transmit (lun, len_request, params, isCharLevel(lun) ? 4 : 0, 0)
+  if (CCID_Transmit (ccid_reader, len_request, params, isCharLevel(ccid_reader) ? 4 : 0, 0)
 	!= IFD_SUCCESS)
     return PPS_ICC_ERROR;
 
   /* Get PPS confirm */
   len_confirm = sizeof(confirm);
-  if (CCID_Receive (lun, &len_confirm, confirm, NULL) != IFD_SUCCESS)
+  if (CCID_Receive (ccid_reader, &len_confirm, confirm, NULL) != IFD_SUCCESS)
     return PPS_ICC_ERROR;
 
   DEBUG_XXD ("PPS: Receiving confirm: ", confirm, len_confirm);

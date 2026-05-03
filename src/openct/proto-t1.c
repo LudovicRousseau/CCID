@@ -93,7 +93,7 @@ static void t1_set_checksum(t1_state_t * t1, int csum)
 /*
  * Attach t1 protocol
  */
-int t1_init(t1_state_t * t1, int lun)
+int t1_init(t1_state_t * t1, struct CCID_DESC * ccid_reader)
 {
 	t1_set_defaults(t1);
 	t1_set_param(t1, IFD_PROTOCOL_T1_CHECKSUM_LRC, 0);
@@ -101,7 +101,7 @@ int t1_init(t1_state_t * t1, int lun)
 	t1_set_param(t1, IFD_PROTOCOL_T1_MORE, false);
 	t1_set_param(t1, IFD_PROTOCOL_T1_NAD, 0);
 
-	t1->lun = lun;
+	t1->ccid_reader = ccid_reader;
 
 	return 0;
 }
@@ -670,28 +670,28 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 	size_t rmax)
 {
 	int n;
-	_ccid_descriptor *ccid_desc ;
+	struct CCID_DESC * ccid_reader = t1->ccid_reader;
 	int oldReadTimeout;
 	unsigned int rmax_int;
 
 	DEBUG_XXD("sending: ", block, slen);
 
-	ccid_desc = get_ccid_descriptor(t1->lun);
-	oldReadTimeout = ccid_desc->readTimeout;
+	oldReadTimeout = set_read_timeout(ccid_reader, -1);
 
 	if (t1->wtx > 1)
 	{
 		/* set the new temporary timeout at WTX card request */
-		ccid_desc->readTimeout *=  t1->wtx;
+		int newReadTimeout =  oldReadTimeout * t1->wtx;
+		set_read_timeout(ccid_reader, newReadTimeout);
 		DEBUG_INFO2("New timeout at WTX request: %d sec",
-			ccid_desc->readTimeout);
+			newReadTimeout);
 	}
 
-	if (isCharLevel(t1->lun))
+	if (isCharLevel(ccid_reader))
 	{
 		rmax = 3;
 
-		n = CCID_Transmit(t1 -> lun, slen, block, rmax, t1->wtx);
+		n = CCID_Transmit(ccid_reader, slen, block, rmax, t1->wtx);
 		if (n != IFD_SUCCESS)
 			return -1;
 
@@ -699,7 +699,7 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 		 * so we can't use &rmax since &rmax is a (size_t *) and may not
 		 * be the same on 64-bits architectures for example (iMac G5) */
 		rmax_int = rmax;
-		n = CCID_Receive(t1 -> lun, &rmax_int, block, NULL);
+		n = CCID_Receive(ccid_reader, &rmax_int, block, NULL);
 
 		if (n == IFD_PARITY_ERROR)
 			return -2;
@@ -708,12 +708,12 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 
 		rmax = block[2] + 1;
 
-		n = CCID_Transmit(t1 -> lun, 0, block, rmax, t1->wtx);
+		n = CCID_Transmit(ccid_reader, 0, block, rmax, t1->wtx);
 		if (n != IFD_SUCCESS)
 			return -1;
 
 		rmax_int = rmax;
-		n = CCID_Receive(t1 -> lun, &rmax_int, &block[3], NULL);
+		n = CCID_Receive(ccid_reader, &rmax_int, &block[3], NULL);
 		rmax = rmax_int;
 		if (n == IFD_PARITY_ERROR)
 			return -2;
@@ -724,14 +724,14 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 	}
 	else
 	{
-		n = CCID_Transmit(t1 -> lun, slen, block, 0, t1->wtx);
+		n = CCID_Transmit(ccid_reader, slen, block, 0, t1->wtx);
 		t1->wtx = 0;	/* reset to default value */
 		if (n != IFD_SUCCESS)
 			return -1;
 
 		/* Get the response en block */
 		rmax_int = rmax;
-		n = CCID_Receive(t1 -> lun, &rmax_int, block, NULL);
+		n = CCID_Receive(ccid_reader, &rmax_int, block, NULL);
 		rmax = rmax_int;
 		if (n == IFD_PARITY_ERROR)
 			return -2;
@@ -754,7 +754,7 @@ static int t1_xcv(t1_state_t * t1, unsigned char *block, size_t slen,
 		DEBUG_XXD("received: ", block, n);
 
 	/* Restore initial timeout */
-	ccid_desc->readTimeout = oldReadTimeout;
+	set_read_timeout(ccid_reader, oldReadTimeout);
 
 	return n;
 }

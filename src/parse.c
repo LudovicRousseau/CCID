@@ -26,9 +26,9 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <zlib.h>
+#include <libusb.h>
 
-#include "defs.h"
-#include "ccid.h"
+#include "debug.h"
 
 /* define DISPLAY_EXTRA_VALUES to display the extra (invalid) values
  * returned by bNumClockSupported and bNumDataRatesSupported */
@@ -46,7 +46,7 @@
 #define OUTPUT_FILENAME_BIN _OUTPUT_FILENAME ".bin"
 
 /* global variables used in ccid_usb.c but defined in ifdhandler.c */
-int LogLevel = 1+2+4+8; /* full debug */
+_Atomic int LogLevel = 1+2+4+8; /* full debug */
 int DriverOptions = 0;
 
 static bool ccid_parse_interface_descriptor(libusb_device_handle *handle,
@@ -55,6 +55,48 @@ static bool ccid_parse_interface_descriptor(libusb_device_handle *handle,
 	int num,
 	const struct libusb_interface *usb_interface,
 	FILE * fd);
+
+/* convert a 4 byte integer in USB format into an int */
+#define dw2i(a, x) (unsigned int)(((((((unsigned int)a[x+3] << 8) + (unsigned int)a[x+2]) << 8) + (unsigned int)a[x+1]) << 8) + (unsigned int)a[x])
+
+#define ALLOW_PROPRIETARY_CLASS
+#define O2MICRO_OZ776_PATCH
+
+/*****************************************************************************
+ *
+ *					get_ccid_usb_interface
+ *
+ ****************************************************************************/
+static const struct libusb_interface * get_ccid_usb_interface(
+	struct libusb_config_descriptor *desc, int *num)
+{
+	const struct libusb_interface *usb_interface = NULL;
+	int i;
+
+	/* if multiple interfaces use the first one with CCID class type */
+	for (i = *num; i < desc->bNumInterfaces; i++)
+	{
+		if (desc->interface[i].num_altsetting == 0) {
+			/* No interface descriptor available. */
+			continue;
+		}
+		/* CCID Class? */
+		if (desc->interface[i].altsetting->bInterfaceClass == 0xb
+#ifdef ALLOW_PROPRIETARY_CLASS
+			|| (desc->interface[i].altsetting->bInterfaceClass == 0xff
+			&& 54 == desc->interface[i].altsetting->extra_length)
+#endif
+			)
+		{
+			usb_interface = &desc->interface[i];
+			/* store the interface number for further reference */
+			*num = i;
+			break;
+		}
+	}
+
+	return usb_interface;
+} /* get_ccid_usb_interface */
 
 
 /*****************************************************************************
@@ -280,6 +322,53 @@ again:
 
 	return 0;
 } /* main */
+
+
+/*****************************************************************************
+ *
+ *					get_ccid_device_descriptor
+ *
+ ****************************************************************************/
+static const unsigned char *get_ccid_device_descriptor(const struct libusb_interface *usb_interface)
+{
+#ifdef O2MICRO_OZ776_PATCH
+	uint8_t last_endpoint;
+#endif
+
+	if (0 == usb_interface->num_altsetting) {
+		/* No interface descriptor available. */
+		return NULL;
+	}
+
+	if (54 == usb_interface->altsetting->extra_length)
+		return usb_interface->altsetting->extra;
+
+	if (0 != usb_interface->altsetting->extra_length)
+	{
+		/* If extra_length is zero, the descriptor might be at
+		 * the end, but if it's not zero, we have a
+		 * problem. */
+		DEBUG_CRITICAL2("Extra field has a wrong length: %d",
+			usb_interface->altsetting->extra_length);
+		return NULL;
+	}
+
+#ifdef O2MICRO_OZ776_PATCH
+	/* Some devices, such as the Oz776, Reiner SCT and bludrive II
+	 * report the device descriptor at the end of the endpoint
+	 * descriptors; to support those, look for it at the end as well.
+	 */
+	last_endpoint = usb_interface->altsetting->bNumEndpoints-1;
+	if (usb_interface->altsetting->endpoint
+		&& usb_interface->altsetting->endpoint[last_endpoint].extra_length == 54)
+		return usb_interface->altsetting->endpoint[last_endpoint].extra;
+#else
+	DEBUG_CRITICAL2("Extra field has a wrong length: %d",
+		usb_interface->altsetting->extra_length);
+#endif
+
+	return NULL;
+} /* get_ccid_device_descriptor */
 
 
 /*****************************************************************************

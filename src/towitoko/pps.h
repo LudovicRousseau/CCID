@@ -25,6 +25,7 @@
 #define _PPS_
 
 #include "defines.h"
+#include "defs.h"
 
 /*
  * Exported constants definition
@@ -65,7 +66,7 @@ PPS;
  * Exported functions declaration
  */
 
-int PPS_Exchange (int lun, BYTE * params, /*@out@*/ unsigned *length,
+int PPS_Exchange (CcidDesc * ccid_reader, BYTE * params, /*@out@*/ unsigned *length,
 	unsigned char *pps1);
 
 #endif /* _PPS_ */

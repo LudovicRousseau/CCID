@@ -51,7 +51,7 @@ enum {
 #define IFD_PARITY_ERROR 699
 
 typedef struct {
-	int		lun;
+	struct CCID_DESC * ccid_reader;
 	int		state;
 
 	unsigned char	ns;	/* reader side */
@@ -74,7 +74,7 @@ typedef struct {
 int t1_transceive(t1_state_t *t1, unsigned int dad,
 		const void *snd_buf, size_t snd_len,
 		void *rcv_buf, size_t rcv_len);
-int t1_init(t1_state_t *t1, int lun);
+int t1_init(t1_state_t *t1, struct CCID_DESC * ccid_reader);
 void t1_release(t1_state_t *t1);
 int t1_set_param(t1_state_t *t1, int type, long value);
 int t1_get_param(t1_state_t *t1, int type);

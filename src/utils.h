@@ -20,6 +20,7 @@
 void InitReaderIndex(void);
 int GetNewReaderIndex(const int Lun);
 int LunToReaderIndex(int Lun);
+CcidDesc * LunToCcidDesc(const int Lun);
 void ReleaseReaderIndex(const int idx);
 
 uint16_t get_U16(void *);

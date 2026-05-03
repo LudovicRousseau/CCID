@@ -20,168 +20,9 @@
 #ifndef __CCID_H__
 #define __CCID_H__
 
-#include <stdbool.h>
 #include <pthread.h>
 
-// Uncomment if you want to synchronize the card movements on the 2
-// interfaces of the Microchip SEC 1210 reader
-// #define SEC1210_SYNC
-
-#ifdef SEC1210_SYNC
-struct _sec1210_cond {
-	pthread_cond_t sec1210_cond;
-	pthread_mutex_t sec1210_mutex;
-};
-#endif
-
-typedef struct _ccid_descriptor
-{
-	/*
-	 * CCID Sequence number
-	 */
-	unsigned char *pbSeq;
-	unsigned char real_bSeq;
-
-	/*
-	 * VendorID << 16 + ProductID
-	 */
-	int readerID;
-
-	/*
-	 * Maximum message length
-	 */
-	unsigned int dwMaxCCIDMessageLength;
-
-	/*
-	 * Maximum IFSD
-	 */
-	int dwMaxIFSD;
-
-	/*
-	 * Features supported by the reader (directly from Class Descriptor)
-	 */
-	int dwFeatures;
-
-	/*
-	 * PIN support of the reader (directly from Class Descriptor)
-	 */
-	char bPINSupport;
-
-	/*
-	 * Display dimensions of the reader (directly from Class Descriptor)
-	 */
-	unsigned int wLcdLayout;
-
-	/*
-	 * Default Clock
-	 */
-	int dwDefaultClock;
-
-	/*
-	 * Max Data Rate
-	 */
-	unsigned int dwMaxDataRate;
-
-	/*
-	 * Number of available slots
-	 */
-	char bMaxSlotIndex;
-
-	/*
-	 * Maximum number of slots which can be simultaneously busy
-	 */
-	char bMaxCCIDBusySlots;
-
-	/*
-	 * Slot in use
-	 */
-	char bCurrentSlotIndex;
-
-	/*
-	 * The array of data rates supported by the reader
-	 */
-	unsigned int *arrayOfSupportedDataRates;
-
-	/*
-	 * Read communication port timeout
-	 * value is milliseconds
-	 * this value can evolve dynamically if card request it (time processing).
-	 */
-	unsigned int readTimeout;
-
-	/*
-	 * Card protocol
-	 */
-	int cardProtocol;
-
-	/*
-	 * Reader protocols
-	 */
-	int dwProtocols;
-
-	/*
-	 * bInterfaceProtocol (CCID, ICCD-A, ICCD-B)
-	 */
-	int bInterfaceProtocol;
-
-	/*
-	 * bNumEndpoints
-	 */
-	int bNumEndpoints;
-
-	/*
-	 * GemCore SIM PRO slot status management
-	 * The reader always reports a card present even if no card is inserted.
-	 * If the Power Up fails the driver will report IFD_ICC_NOT_PRESENT instead
-	 * of IFD_ICC_PRESENT
-	 */
-	int dwSlotStatus;
-
-	/*
-	 * bVoltageSupport (bit field)
-	 * 1 = 5.0V
-	 * 2 = 3.0V
-	 * 4 = 1.8V
-	 */
-	int bVoltageSupport;
-
-	/*
-	 * USB serial number of the device (if any)
-	 */
-	char *sIFD_serial_number;
-
-	/*
-	 * USB iManufacturer string
-	 */
-	char *sIFD_iManufacturer;
-
-	/*
-	 * USB bcdDevice
-	 */
-	int IFD_bcdDevice;
-
-#ifdef USE_COMPOSITE_AS_MULTISLOT
-	int num_interfaces;
-#endif
-
-	/*
-	 * Gemalto extra features, if any
-	 */
-	struct GEMALTO_FIRMWARE_FEATURES *gemalto_firmware_features;
-
-#ifdef ENABLE_ZLP
-	/*
-	 * Zero Length Packet fixup (boolean)
-	 */
-	bool zlp;
-#endif
-
-#ifdef SEC1210_SYNC
-	struct _sec1210_cond * sec1210_shared;
-	struct _ccid_descriptor *sec1210_other_interface;
-	int sec1210_interface;
-#endif
-} _ccid_descriptor;
+#include "defs.h"
 
 /* Features from dwFeatures */
 #define CCID_CLASS_AUTO_CONF_ATR	0x00000002
@@ -347,11 +188,11 @@ typedef struct _ccid_descriptor
 #define VOLTAGE_3V 2
 #define VOLTAGE_1_8V 3
 
-int ccid_open_hack_pre(unsigned int reader_index);
-int ccid_open_hack_post(unsigned int reader_index);
+int set_read_timeout(CcidDesc * ccid_reader, int new_timeout);
+int ccid_open_hack_pre(CcidDesc * ccid_reader);
+int ccid_open_hack_post(CcidDesc * ccid_reader);
 void ccid_error(int log_level, int error, const char *file, int line,
 	const char *function);
-_ccid_descriptor *get_ccid_descriptor(unsigned int reader_index);
 
 /* convert a 4 byte integer in USB format into an int */
 #define dw2i(a, x) (unsigned int)(((((((unsigned int)a[x+3] << 8) + (unsigned int)a[x+2]) << 8) + (unsigned int)a[x+1]) << 8) + (unsigned int)a[x])

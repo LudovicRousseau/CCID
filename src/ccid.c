@@ -40,12 +40,25 @@
 
 /*****************************************************************************
  *
+ *					set_read_timeout
+ *
+ ****************************************************************************/
+int set_read_timeout(CcidDesc * ccid_reader, int new_timeout)
+{
+	int old_timeout = ccid_reader->device.ccid.readTimeout;
+	if (new_timeout > 0)
+		ccid_reader->device.ccid.readTimeout = new_timeout;
+	return old_timeout;
+} /* set_read_timeout */
+
+/*****************************************************************************
+ *
  *					ccid_open_hack_pre
  *
  ****************************************************************************/
-int ccid_open_hack_pre(unsigned int reader_index)
+int ccid_open_hack_pre(CcidDesc * ccid_reader)
 {
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	_ccid_descriptor *ccid_descriptor = &ccid_reader->device.ccid;
 
 	switch (ccid_descriptor->readerID)
 	{
@@ -134,7 +147,7 @@ int ccid_open_hack_pre(unsigned int reader_index)
 	{
 #ifndef TWIN_SERIAL
 		/* just wait for 100ms in case a notification is in the pipe */
-		(void)InterruptRead(reader_index, 100);
+		(void)InterruptRead(ccid_reader, 100);
 #endif
 	}
 
@@ -145,9 +158,9 @@ int ccid_open_hack_pre(unsigned int reader_index)
 		unsigned int n = sizeof(tmp);
 
 		DEBUG_COMM("ICCD type A");
-		(void)CmdPowerOff(reader_index);
-		(void)CmdPowerOn(reader_index, &n, tmp, VOLTAGE_AUTO);
-		(void)CmdPowerOff(reader_index);
+		(void)CmdPowerOff(ccid_reader);
+		(void)CmdPowerOn(ccid_reader, &n, tmp, VOLTAGE_AUTO);
+		(void)CmdPowerOff(ccid_reader);
 	}
 
 	/* ICCD type B */
@@ -165,9 +178,9 @@ int ccid_open_hack_pre(unsigned int reader_index)
 			ccid_descriptor->dwFeatures |= CCID_CLASS_EXTENDED_APDU;
 		}
 
-		(void)CmdPowerOff(reader_index);
-		(void)CmdPowerOn(reader_index, &n, tmp, VOLTAGE_AUTO);
-		(void)CmdPowerOff(reader_index);
+		(void)CmdPowerOff(ccid_reader);
+		(void)CmdPowerOn(ccid_reader, &n, tmp, VOLTAGE_AUTO);
+		(void)CmdPowerOff(ccid_reader);
 	}
 
 	return 0;
@@ -235,9 +248,9 @@ static void dump_gemalto_firmware_features(struct GEMALTO_FIRMWARE_FEATURES *gff
  *					set_gemalto_firmware_features
  *
  ****************************************************************************/
-static void set_gemalto_firmware_features(unsigned int reader_index)
+static void set_gemalto_firmware_features(CcidDesc * ccid_reader)
 {
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	_ccid_descriptor *ccid_descriptor = &ccid_reader->device.ccid;
 	struct GEMALTO_FIRMWARE_FEATURES *gf_features;
 
 	gf_features = malloc(sizeof(struct GEMALTO_FIRMWARE_FEATURES));
@@ -247,7 +260,7 @@ static void set_gemalto_firmware_features(unsigned int reader_index)
 		unsigned int len_features = sizeof *gf_features;
 		RESPONSECODE ret;
 
-		ret = CmdEscapeCheck(reader_index, cmd, sizeof cmd,
+		ret = CmdEscapeCheck(ccid_reader, cmd, sizeof cmd,
 			(unsigned char*)gf_features, &len_features, 0, true);
 		if ((IFD_SUCCESS == ret) &&
 			(len_features == sizeof *gf_features))
@@ -274,9 +287,9 @@ static void set_gemalto_firmware_features(unsigned int reader_index)
  *					ccid_open_hack_post
  *
  ****************************************************************************/
-int ccid_open_hack_post(unsigned int reader_index)
+int ccid_open_hack_post(CcidDesc * ccid_reader)
 {
-	_ccid_descriptor *ccid_descriptor = get_ccid_descriptor(reader_index);
+	_ccid_descriptor *ccid_descriptor = &ccid_reader->device.ccid;
 	RESPONSECODE return_value = IFD_SUCCESS;
 
 	switch (ccid_descriptor->readerID)
@@ -290,7 +303,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 				unsigned char res[10];
 				unsigned int length_res = sizeof(res);
 
-				if (CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res, 0) == IFD_SUCCESS)
+				if (CmdEscape(ccid_reader, cmd, sizeof(cmd), res, &length_res, 0) == IFD_SUCCESS)
 				{
 					ccid_descriptor->dwFeatures &= ~CCID_CLASS_EXCHANGE_MASK;
 					ccid_descriptor->dwFeatures |= CCID_CLASS_SHORT_APDU;
@@ -475,7 +488,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 				}
 
 				(void)sleep(1);
-				if (IFD_SUCCESS == CmdEscape(reader_index, cmd, sizeof(cmd), res, &length_res, DEFAULT_COM_READ_TIMEOUT))
+				if (IFD_SUCCESS == CmdEscape(ccid_reader, cmd, sizeof(cmd), res, &length_res, DEFAULT_COM_READ_TIMEOUT))
 				{
 					DEBUG_COMM("l10n string loaded successfully");
 				}
@@ -490,7 +503,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 					/* disable VERIFY from reader */
 					const unsigned char cmd2[] = {0xb5, 0x00};
 					length_res = sizeof(res);
-					if (IFD_SUCCESS == CmdEscape(reader_index, cmd2, sizeof(cmd2), res, &length_res, DEFAULT_COM_READ_TIMEOUT))
+					if (IFD_SUCCESS == CmdEscape(ccid_reader, cmd2, sizeof(cmd2), res, &length_res, DEFAULT_COM_READ_TIMEOUT))
 					{
 						DEBUG_COMM("Disable SPE retry counter successful");
 					}
@@ -561,8 +574,8 @@ int ccid_open_hack_post(unsigned int reader_index)
 				unsigned char res[20];
 				unsigned int length_res = sizeof(res);
 
-				if ((IFD_SUCCESS == CmdEscape(reader_index, cmd1, sizeof(cmd1), res, &length_res, 0))
-					&& (IFD_SUCCESS == CmdEscape(reader_index, cmd2, sizeof(cmd2), res, &length_res, 0)))
+				if ((IFD_SUCCESS == CmdEscape(ccid_reader, cmd1, sizeof(cmd1), res, &length_res, 0))
+					&& (IFD_SUCCESS == CmdEscape(ccid_reader, cmd2, sizeof(cmd2), res, &length_res, 0)))
 				{
 					DEBUG_COMM("SCM SCR331-DI contactless detected");
 				}
@@ -619,7 +632,7 @@ int ccid_open_hack_post(unsigned int reader_index)
 
 	/* Gemalto readers may report additional information */
 	if (GET_VENDOR(ccid_descriptor->readerID) == VENDOR_GEMALTO)
-		set_gemalto_firmware_features(reader_index);
+		set_gemalto_firmware_features(ccid_reader);
 
 	return return_value;
 } /* ccid_open_hack_post */

@@ -30,6 +30,8 @@
 static _Atomic int ReaderIndex[CCID_DRIVER_MAX_READERS];
 #define FREE_ENTRY -42
 
+extern CcidDesc CcidSlots[];
+
 void InitReaderIndex(void)
 {
 	int i;
@@ -74,6 +76,18 @@ int LunToReaderIndex(const int Lun)
 
 	DEBUG_CRITICAL2("Lun: %X not found", Lun);
 	return -1;
+} /* LunToReaderIndex */
+
+CcidDesc * LunToCcidDesc(const int Lun)
+{
+	int i;
+
+	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
+		if (Lun == ReaderIndex[i])
+			return &CcidSlots[i];
+
+	DEBUG_CRITICAL2("Lun: %X not found", Lun);
+	return NULL;
 } /* LunToReaderIndex */
 
 void ReleaseReaderIndex(const int index)

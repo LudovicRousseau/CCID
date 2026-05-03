@@ -17,50 +17,52 @@
 	Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "defs.h"
+
 #define SIZE_GET_SLOT_STATUS 10
 #define STATUS_OFFSET 7
 #define ERROR_OFFSET 8
 #define CHAIN_PARAMETER_OFFSET 9
 #define CCID_RESPONSE_HEADER_SIZE 10
 
-RESPONSECODE CmdPowerOn(unsigned int reader_index, unsigned int * nlength,
+RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
 	/*@out@*/ unsigned char buffer[], int voltage);
 
-RESPONSECODE SecurePINVerify(unsigned int reader_index,
+RESPONSECODE SecurePINVerify(CcidDesc * ccid_slot,
 	unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength);
 
-RESPONSECODE SecurePINModify(unsigned int reader_index,
+RESPONSECODE SecurePINModify(CcidDesc * ccid_slot,
 	unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength);
 
-RESPONSECODE CmdEscape(unsigned int reader_index,
+RESPONSECODE CmdEscape(CcidDesc * ccid_reader,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout);
 
-RESPONSECODE CmdEscapeCheck(unsigned int reader_index,
+RESPONSECODE CmdEscapeCheck(CcidDesc * ccid_reader,
 	const unsigned char TxBuffer[], unsigned int TxLength,
 	unsigned char RxBuffer[], unsigned int *RxLength, unsigned int timeout,
 	bool mayfail);
 
-RESPONSECODE CmdPowerOff(unsigned int reader_index);
+RESPONSECODE CmdPowerOff(CcidDesc * ccid_reader);
 
-RESPONSECODE CmdGetSlotStatus(unsigned int reader_index,
+RESPONSECODE CmdGetSlotStatus(CcidDesc * ccid_reader,
 	/*@out@*/ unsigned char buffer[static SIZE_GET_SLOT_STATUS]);
 
-RESPONSECODE CmdXfrBlock(unsigned int reader_index, unsigned int tx_length,
+RESPONSECODE CmdXfrBlock(CcidDesc * ccid_slot, unsigned int tx_length,
 	unsigned char tx_buffer[], unsigned int *rx_length,
 	unsigned char rx_buffer[], int protoccol);
 
-RESPONSECODE CCID_Transmit(unsigned int reader_index, unsigned int tx_length,
+RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
 	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI);
 
-RESPONSECODE CCID_Receive(unsigned int reader_index,
+RESPONSECODE CCID_Receive(CcidDesc * ccid_reader,
 	/*@out@*/ unsigned int *rx_length,
 	/*@out@*/ unsigned char rx_buffer[], unsigned char *chain_parameter);
 
-RESPONSECODE SetParameters(unsigned int reader_index, char protocol,
+RESPONSECODE SetParameters(CcidDesc * ccid_reader, char protocol,
 	unsigned int length, unsigned char buffer[]);
 
-int isCharLevel(int reader_index);
+int isCharLevel(CcidDesc * ccid_reader);
 
