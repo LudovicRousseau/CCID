@@ -194,8 +194,8 @@ status_t OpenUSBByName(CcidDesc * ccid_reader, /*@null@*/ char *device)
 	static int static_interface = -1;
 #endif
 
-	DEBUG_COMM3("Reader nb: %d, Device: " LOG_STRING,
-		ccid_reader->monotonic_number, device);
+	DEBUG_COMM3("Reader lun: %d, Device: " LOG_STRING,
+		ccid_reader->lun, device);
 
 #ifndef __APPLE__
 	/* device name specified */
@@ -253,7 +253,7 @@ status_t OpenUSBByName(CcidDesc * ccid_reader, /*@null@*/ char *device)
 	if (ccid_reader->device.dev_handle != NULL)
 	{
 		DEBUG_CRITICAL2("USB driver with index %d already in use",
-			ccid_reader->monotonic_number);
+			ccid_reader->lun);
 		return STATUS_UNSUCCESSFUL;
 	}
 
@@ -927,7 +927,7 @@ status_t WriteUSB(CcidDesc * ccid_reader, unsigned int length,
 	char debug_header[] = "-> 121234 ";
 
 	(void)snprintf(debug_header, sizeof(debug_header), "-> %06d ",
-		ccid_reader->monotonic_number);
+		ccid_reader->lun);
 
 	if (usb_device->disconnected)
 	{
@@ -991,7 +991,7 @@ status_t ReadUSB(CcidDesc * ccid_reader, unsigned int * length,
 
 read_again:
 	(void)snprintf(debug_header, sizeof(debug_header), "<- %06d ",
-		ccid_reader->monotonic_number);
+		ccid_reader->lun);
 
 	if (usb_device->multislot_extension)
 	{
@@ -1629,8 +1629,7 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 		return IFD_NO_SUCH_DEVICE;
 	}
 
-	DEBUG_PERIODIC3("before (%d), timeout: %d ms",
-		ccid_reader->monotonic_number, timeout);
+	DEBUG_PERIODIC3("before (%d), timeout: %d ms", ccid_reader->lun, timeout);
 
 	transfer = libusb_alloc_transfer(0);
 	if (NULL == transfer)
@@ -1688,7 +1687,7 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 	pthread_mutex_unlock(&usb_device->polling_transfer_mutex);
 	libusb_free_transfer(transfer);
 
-	DEBUG_PERIODIC3("after (%d) (%d)", ccid_reader->monotonic_number, ret);
+	DEBUG_PERIODIC3("after (%d) (%d)", ccid_reader->lun, ret);
 
 	switch (ret)
 	{
@@ -2017,7 +2016,7 @@ static int Multi_InterruptRead(CcidDesc * ccid_reader, int timeout /* in ms */)
 		return IFD_NO_SUCH_DEVICE;
 
 	DEBUG_PERIODIC3("Multi_InterruptRead (%d), timeout: %d ms",
-		ccid_reader->monotonic_number, timeout);
+		ccid_reader->lun, timeout);
 
 	/* Select the relevant bit in the interrupt buffer */
 	interrupt_byte = (ccid_reader->device.ccid.bCurrentSlotIndex / 4) + 1;
@@ -2064,16 +2063,16 @@ again:
 			&& 0 == (buffer[interrupt_byte] & interrupt_mask))
 		{
 			DEBUG_PERIODIC2("Multi_InterruptRead (%d) -- skipped",
-				ccid_reader->monotonic_number);
+				ccid_reader->lun);
 			goto again;
 		}
 		DEBUG_PERIODIC2("Multi_InterruptRead (%d), got an interrupt",
-			ccid_reader->monotonic_number);
+			ccid_reader->lun);
 	}
 	else
 	{
 		DEBUG_PERIODIC3("Multi_InterruptRead (%d), %s",
-			ccid_reader->monotonic_number, libusb_error_name(status));
+			ccid_reader->lun, libusb_error_name(status));
 	}
 
 	return status;
@@ -2096,7 +2095,7 @@ static void Multi_InterruptStop(CcidDesc * ccid_reader)
 	if ((NULL == msExt) || msExt->terminated)
 		return;
 
-	DEBUG_PERIODIC2("Stop (%d)", ccid_reader->monotonic_number);
+	DEBUG_PERIODIC2("Stop (%d)", ccid_reader->lun);
 
 	interrupt_byte = (ccid_reader->device.ccid.bCurrentSlotIndex / 4) + 1;
 	interrupt_mask = 0x02 << (2 * (ccid_reader->device.ccid.bCurrentSlotIndex % 4));
@@ -2139,7 +2138,7 @@ static void *Multi_ReadProc(void *p_ext)
 	{
 		int slot;
 
-		DEBUG_COMM2("Waiting read for reader %d", ccid_reader->monotonic_number);
+		DEBUG_COMM2("Waiting read for reader %d", ccid_reader->lun);
 		rv = libusb_bulk_transfer(msExt->dev_handle,
 			usb_device->bulk_in, buffer, sizeof buffer,
 			&length, 5 * 1000);
@@ -2172,8 +2171,7 @@ static void *Multi_ReadProc(void *p_ext)
 		memcpy(concurrent[slot].buffer, buffer, length);
 		concurrent[slot].length = length;
 		pthread_cond_signal(&concurrent[slot].condition);
-		DEBUG_COMM3("Signaled reader %d slot %d",
-			ccid_reader->monotonic_number, slot);
+		DEBUG_COMM3("Signaled reader %d slot %d", ccid_reader->lun, slot);
 
 		pthread_mutex_unlock(&concurrent[slot].mutex);
 	}

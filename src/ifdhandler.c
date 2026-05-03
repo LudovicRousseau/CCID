@@ -85,7 +85,6 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 	int reader_index;
 	CcidDesc * ccid_reader;
 	status_t ret;
-	static unsigned int monotonic_number = 0;
 
 	if (! DebugInitialized)
 		init_driver();
@@ -109,7 +108,7 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 		return IFD_COMMUNICATION_ERROR;
 
 	ccid_reader = &CcidSlots[reader_index];
-	ccid_reader->monotonic_number = monotonic_number++;
+	ccid_reader->lun = Lun;
 	ccid_reader->reader_index = reader_index;
 
 	/* Reset ATR buffer */

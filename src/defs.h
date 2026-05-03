@@ -287,8 +287,8 @@ typedef struct CCID_DESC
 	/* reader name passed to IFDHCreateChannelByName() */
 	char *readerName;
 
-	/* reader number for logs */
-	unsigned int monotonic_number;
+	/* reader lun for logs */
+	unsigned int lun;
 
 	/* USB or serial device */
 	_Device device;
