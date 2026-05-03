@@ -20,18 +20,18 @@
 #ifndef __CCID_SERAL_H__
 #define __CCID_SERAL_H__
 
-status_t OpenSerial(unsigned int reader_index, int channel);
+status_t OpenSerial(CcidDesc * ccid_reader, int channel);
 
-status_t OpenSerialByName(unsigned int reader_index, char *dev_name);
+status_t OpenSerialByName(CcidDesc * ccid_reader, char *dev_name);
 
-status_t WriteSerial(unsigned int reader_index, unsigned int length,
+status_t WriteSerial(CcidDesc * ccid_reader, unsigned int length,
 	unsigned char *Buffer);
 
-status_t ReadSerial(unsigned int reader_index, unsigned int *length,
+status_t ReadSerial(CcidDesc * ccid_reader, unsigned int *length,
 	unsigned char *Buffer, int bSeq);
 
-status_t CloseSerial(unsigned int reader_index);
+status_t CloseSerial(CcidDesc * ccid_reader);
 
-status_t DisconnectSerial(unsigned int reader_index);
+status_t DisconnectSerial(CcidDesc * ccid_reader);
 
 #endif

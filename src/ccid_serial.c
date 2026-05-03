@@ -85,58 +85,6 @@
  * powered off) or just inserted (and not yet powered on).
  */
 
-/* 271 = max size for short APDU
- * 2 bytes for header
- * 1 byte checksum
- * doubled for echo
- */
-#define GEMPCTWIN_MAXBUF (271 +2 +1) * 2
-
-typedef struct
-{
-	/*
-	 * File handle on the serial port
-	 */
-	int fd;
-
-	/*
-	 * device used ("/dev/ttyS?" under Linux)
-	 */
-	/*@null@*/ char *device;
-
-	/*
-	 * Number of slots using the same device
-	 */
-	int real_nb_opened_slots;
-	int *nb_opened_slots;
-
-	/*
-	 * does the reader echoes the serial communication bytes?
-	 */
-	bool echo;
-
-	/*
-	 * serial communication buffer
-	 */
-	unsigned char buffer[GEMPCTWIN_MAXBUF];
-
-	/*
-	 * next available byte
-	 */
-	int buffer_offset;
-
-	/*
-	 * number of available bytes
-	 */
-	int buffer_offset_last;
-
-	/*
-	 * CCID infos common to USB and serial
-	 */
-	_ccid_descriptor ccid;
-
-} _serialDevice;
-
 /* The _serialDevice structure must be defined before including ccid_serial.h */
 #include "ccid_serial.h"
 
@@ -152,14 +100,13 @@ static unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 /* data rates supported by the GemCore SIM Pro 2 */
 static unsigned int SIMPro2DataRates[] = { SIMPRO2_ISO_DATA_RATES, 0  };
 
-/* no need to initialize to 0 since it is static */
-static _serialDevice serialDevice[CCID_DRIVER_MAX_READERS];
+extern CcidDesc CcidSlots[];
 
 /* unexported functions */
-static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
+static int ReadChunk(CcidDesc * ccid_reader, unsigned char *buffer,
 	int buffer_length, int min_length);
 
-static int get_bytes(unsigned int reader_index, /*@out@*/ unsigned char *buffer,
+static int get_bytes(CcidDesc * ccid_reader, /*@out@*/ unsigned char *buffer,
 	int length);
 
 
@@ -168,7 +115,7 @@ static int get_bytes(unsigned int reader_index, /*@out@*/ unsigned char *buffer,
  *				WriteSerial: Send bytes to the card reader
  *
  *****************************************************************************/
-status_t WriteSerial(unsigned int reader_index, unsigned int length,
+status_t WriteSerial(CcidDesc * ccid_reader, unsigned int length,
 	unsigned char *buffer)
 {
 	unsigned int i;
@@ -178,7 +125,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 	char debug_header[] = "-> 123456 ";
 
 	(void)snprintf(debug_header, sizeof(debug_header), "-> %06X ",
-		reader_index);
+		ccid_reader->lun);
 
 	if (length > GEMPCTWIN_MAXBUF-3)
 	{
@@ -202,7 +149,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
 
 	DEBUG_XXD(debug_header, low_level_buffer, length+3);
 
-	if (write(serialDevice[reader_index].fd, low_level_buffer,
+	if (write(ccid_reader->device.fd, low_level_buffer,
 		length+3) != length+3)
 	{
 		DEBUG_CRITICAL2("write error: %s", strerror(errno));
@@ -218,7 +165,7 @@ status_t WriteSerial(unsigned int reader_index, unsigned int length,
  *				ReadSerial: Receive bytes from the card reader
  *
  *****************************************************************************/
-status_t ReadSerial(unsigned int reader_index,
+status_t ReadSerial(CcidDesc * ccid_reader,
 	unsigned int *length, unsigned char *buffer, int bSeq)
 {
 	unsigned char c;
@@ -231,11 +178,11 @@ status_t ReadSerial(unsigned int reader_index,
 	(void)bSeq;
 
 	/* we get the echo first */
-	echo = serialDevice[reader_index].echo;
+	echo = ccid_reader->device.echo;
 
 start:
 	DEBUG_COMM("start");
-	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(ccid_reader, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c == RDR_to_PC_NotifySlotChange)
@@ -255,7 +202,7 @@ start:
 
 slot_change:
 	DEBUG_COMM("slot change");
-	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(ccid_reader, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c == CARD_ABSENT)
@@ -275,7 +222,7 @@ slot_change:
 
 sync:
 	DEBUG_COMM("sync");
-	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(ccid_reader, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c == CTRL_ACK)
@@ -289,7 +236,7 @@ sync:
 
 nak:
 	DEBUG_COMM("nak");
-	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(ccid_reader, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	if (c != (SYNC ^ CTRL_NAK))
@@ -306,7 +253,7 @@ nak:
 ack:
 	DEBUG_COMM("ack");
 	/* normal CCID frame */
-	if ((rv = get_bytes(reader_index, buffer, 5)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(ccid_reader, buffer, 5)) != STATUS_SUCCESS)
 		return rv;
 
 	/* total frame size */
@@ -319,14 +266,14 @@ ack:
 	}
 
 	DEBUG_COMM2("frame size: %d", to_read);
-	if ((rv = get_bytes(reader_index, buffer+5, to_read-5)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(ccid_reader, buffer+5, to_read-5)) != STATUS_SUCCESS)
 		return rv;
 
 	DEBUG_XXD("frame: ", buffer, to_read);
 
 	/* lrc */
 	DEBUG_COMM("lrc");
-	if ((rv = get_bytes(reader_index, &c, 1)) != STATUS_SUCCESS)
+	if ((rv = get_bytes(ccid_reader, &c, 1)) != STATUS_SUCCESS)
 		return rv;
 
 	DEBUG_COMM2("lrc: 0x%02X", c);
@@ -354,10 +301,10 @@ ack:
  *				get_bytes: get n bytes
  *
  *****************************************************************************/
-int get_bytes(unsigned int reader_index, unsigned char *buffer, int length)
+int get_bytes(CcidDesc * ccid_reader, unsigned char *buffer, int length)
 {
-	int offset = serialDevice[reader_index].buffer_offset;
-	int offset_last = serialDevice[reader_index].buffer_offset_last;
+	int offset = ccid_reader->device.buffer_offset;
+	int offset_last = ccid_reader->device.buffer_offset_last;
 
 	DEBUG_COMM3("available: %d, needed: %d", offset_last-offset,
 		length);
@@ -365,8 +312,8 @@ int get_bytes(unsigned int reader_index, unsigned char *buffer, int length)
 	if (offset + length <= offset_last)
 	{
 		DEBUG_COMM("data available");
-		memcpy(buffer, serialDevice[reader_index].buffer + offset, length);
-		serialDevice[reader_index].buffer_offset += length;
+		memcpy(buffer, ccid_reader->device.buffer + offset, length);
+		ccid_reader->device.buffer_offset += length;
 	}
 	else
 	{
@@ -378,29 +325,29 @@ int get_bytes(unsigned int reader_index, unsigned char *buffer, int length)
 		if (present > 0)
 		{
 			DEBUG_COMM2("some data available: %d", present);
-			memcpy(buffer, serialDevice[reader_index].buffer + offset,
+			memcpy(buffer, ccid_reader->device.buffer + offset,
 				present);
 		}
 
 		/* get fresh data */
 		DEBUG_COMM2("get more data: %d", length - present);
-		rv = ReadChunk(reader_index, serialDevice[reader_index].buffer,
-			sizeof(serialDevice[reader_index].buffer), length - present);
+		rv = ReadChunk(ccid_reader, ccid_reader->device.buffer,
+			sizeof(ccid_reader->device.buffer), length - present);
 		if (rv < 0)
 		{
-			serialDevice[reader_index].buffer_offset = 0;
-			serialDevice[reader_index].buffer_offset_last = 0;
+			ccid_reader->device.buffer_offset = 0;
+			ccid_reader->device.buffer_offset_last = 0;
 			return STATUS_COMM_ERROR;
 		}
 
 		/* fill the buffer */
-		memcpy(buffer + present, serialDevice[reader_index].buffer,
+		memcpy(buffer + present, ccid_reader->device.buffer,
 			length - present);
-		serialDevice[reader_index].buffer_offset = length - present;
-		serialDevice[reader_index].buffer_offset_last = rv;
+		ccid_reader->device.buffer_offset = length - present;
+		ccid_reader->device.buffer_offset_last = rv;
 		DEBUG_COMM3("offset: %d, last_offset: %d",
-			serialDevice[reader_index].buffer_offset,
-			serialDevice[reader_index].buffer_offset_last);
+			ccid_reader->device.buffer_offset,
+			ccid_reader->device.buffer_offset_last);
 	}
 
 	return STATUS_SUCCESS;
@@ -412,10 +359,10 @@ int get_bytes(unsigned int reader_index, unsigned char *buffer, int length)
  *				ReadChunk: read a minimum number of bytes
  *
  *****************************************************************************/
-static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
+static int ReadChunk(CcidDesc * ccid_reader, unsigned char *buffer,
 	int buffer_length, int min_length)
 {
-	int fd = serialDevice[reader_index].fd;
+	int fd = ccid_reader->device.fd;
 # ifndef S_SPLINT_S
 	fd_set fdset;
 # endif
@@ -425,7 +372,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 	char debug_header[] = "<- 123456 ";
 
 	(void)snprintf(debug_header, sizeof(debug_header), "<- %06X ",
-		reader_index);
+		ccid_reader->lun);
 
 	already_read = 0;
 	while (already_read < min_length)
@@ -433,8 +380,8 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		/* use select() to, eventually, timeout */
 		FD_ZERO(&fdset);
 		FD_SET(fd, &fdset);
-		t.tv_sec = serialDevice[reader_index].ccid.readTimeout / 1000;
-		t.tv_usec = (serialDevice[reader_index].ccid.readTimeout - t.tv_sec*1000)*1000;
+		t.tv_sec = ccid_reader->device.ccid.readTimeout / 1000;
+		t.tv_usec = (ccid_reader->device.ccid.readTimeout - t.tv_sec*1000)*1000;
 
 		i = select(fd+1, &fdset, NULL, NULL, &t);
 		if (i == -1)
@@ -445,7 +392,7 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
 		else
 			if (i == 0)
 			{
-				DEBUG_COMM2("Timeout! (%d ms)", serialDevice[reader_index].ccid.readTimeout);
+				DEBUG_COMM2("Timeout! (%d ms)", ccid_reader->device.ccid.readTimeout);
 				return -1;
 			}
 
@@ -472,11 +419,11 @@ static int ReadChunk(unsigned int reader_index, unsigned char *buffer,
  *				OpenSerial: open the port
  *
  *****************************************************************************/
-status_t OpenSerial(unsigned int reader_index, int channel)
+status_t OpenSerial(CcidDesc * ccid_reader, int channel)
 {
 	char dev_name[FILENAME_MAX];
 
-	DEBUG_COMM3("Reader index: %X, Channel: %d", reader_index, channel);
+	DEBUG_COMM3("Reader lun: %X, Channel: %d", ccid_reader->lun, channel);
 
 	/*
 	 * Conversion of old-style ifd-hanler 1.0 CHANNELID
@@ -501,7 +448,7 @@ status_t OpenSerial(unsigned int reader_index, int channel)
 
 	(void)snprintf(dev_name, sizeof(dev_name), "/dev/pcsc/%d", channel);
 
-	return OpenSerialByName(reader_index, dev_name);
+	return OpenSerialByName(ccid_reader, dev_name);
 } /* OpenSerial */
 
 /*****************************************************************************
@@ -514,13 +461,13 @@ status_t OpenSerial(unsigned int reader_index, int channel)
  *						-1 (Reader already used)
  *
  *****************************************************************************/
-static status_t set_ccid_descriptor(unsigned int reader_index,
+static status_t set_ccid_descriptor(CcidDesc * ccid_reader,
 	const char *reader_name, const char *dev_name)
 {
 	int readerID;
 	int i;
 	bool already_used = false;
-	static int previous_reader_index = -1;
+	CcidDesc * previous_ccid_reader = NULL;
 
 	readerID = GEMPCTWIN;
 	if (0 == strcasecmp(reader_name,"GemCorePOSPro"))
@@ -543,8 +490,8 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 	/* check if the same channel is not already used to manage multi-slots readers*/
 	for (i = 0; i < CCID_DRIVER_MAX_READERS; i++)
 	{
-		if (serialDevice[i].device
-			&& strcmp(serialDevice[i].device, dev_name) == 0)
+		if (CcidSlots[i].device.device
+			&& strcmp(CcidSlots[i].device.device, dev_name) == 0)
 		{
 			already_used = true;
 
@@ -556,19 +503,19 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 	/* this reader is already managed by us */
 	if (already_used)
 	{
-		if ((previous_reader_index != -1)
-			&& serialDevice[previous_reader_index].device
-			&& (strcmp(serialDevice[previous_reader_index].device, dev_name) == 0)
-			&& serialDevice[previous_reader_index].ccid.bCurrentSlotIndex < serialDevice[previous_reader_index].ccid.bMaxSlotIndex)
+		if ((previous_ccid_reader != NULL)
+			&& previous_ccid_reader->device.device
+			&& (strcmp(previous_ccid_reader->device.device, dev_name) == 0)
+			&& previous_ccid_reader->device.ccid.bCurrentSlotIndex < previous_ccid_reader->device.ccid.bMaxSlotIndex)
 		{
 			/* we reuse the same device and the reader is multi-slot */
-			serialDevice[reader_index] = serialDevice[previous_reader_index];
+			ccid_reader->device = previous_ccid_reader->device;
 
-			*serialDevice[reader_index].nb_opened_slots += 1;
-			serialDevice[reader_index].ccid.bCurrentSlotIndex++;
-			serialDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
+			*ccid_reader->device.nb_opened_slots += 1;
+			ccid_reader->device.ccid.bCurrentSlotIndex++;
+			ccid_reader->device.ccid.dwSlotStatus = IFD_ICC_PRESENT;
 			DEBUG_INFO2("Opening slot: %d",
-					serialDevice[reader_index].ccid.bCurrentSlotIndex);
+					ccid_reader->device.ccid.bCurrentSlotIndex);
 			switch (readerID)
 			{
 				case GEMCOREPOSPRO:
@@ -583,21 +530,21 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 									sizeof SerialCustomDataRates);
 						}
 
-						serialDevice[reader_index].ccid.arrayOfSupportedDataRates = ptr;
+						ccid_reader->device.ccid.arrayOfSupportedDataRates = ptr;
 					}
-					serialDevice[reader_index].ccid.dwMaxDataRate = 125000;
+					ccid_reader->device.ccid.dwMaxDataRate = 125000;
 					break;
 
 				case SEC1210:
 				case SEC1210URT:
-					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
-					serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
+					ccid_reader->device.ccid.arrayOfSupportedDataRates = NULL;
+					ccid_reader->device.ccid.dwMaxDataRate = 826000;
 					break;
 
 				/* GemPC Twin or GemPC Card */
 				default:
-					serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialTwinDataRates;
-					serialDevice[reader_index].ccid.dwMaxDataRate = 344086;
+					ccid_reader->device.ccid.arrayOfSupportedDataRates = SerialTwinDataRates;
+					ccid_reader->device.ccid.dwMaxDataRate = 344086;
 					break;
 			}
 			goto end;
@@ -611,82 +558,82 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 	}
 
 	/* Common to all readers */
-	serialDevice[reader_index].ccid.real_bSeq = 0;
-	serialDevice[reader_index].ccid.pbSeq = &serialDevice[reader_index].ccid.real_bSeq;
-	serialDevice[reader_index].real_nb_opened_slots = 1;
-	serialDevice[reader_index].nb_opened_slots = &serialDevice[reader_index].real_nb_opened_slots;
-	serialDevice[reader_index].ccid.bCurrentSlotIndex = 0;
+	ccid_reader->device.ccid.real_bSeq = 0;
+	ccid_reader->device.ccid.pbSeq = &ccid_reader->device.ccid.real_bSeq;
+	ccid_reader->device.real_nb_opened_slots = 1;
+	ccid_reader->device.nb_opened_slots = &ccid_reader->device.real_nb_opened_slots;
+	ccid_reader->device.ccid.bCurrentSlotIndex = 0;
 
-	serialDevice[reader_index].ccid.dwMaxCCIDMessageLength = 271;
-	serialDevice[reader_index].ccid.dwMaxIFSD = 254;
-	serialDevice[reader_index].ccid.dwFeatures = 0x00010230;
-	serialDevice[reader_index].ccid.dwDefaultClock = 4000;
+	ccid_reader->device.ccid.dwMaxCCIDMessageLength = 271;
+	ccid_reader->device.ccid.dwMaxIFSD = 254;
+	ccid_reader->device.ccid.dwFeatures = 0x00010230;
+	ccid_reader->device.ccid.dwDefaultClock = 4000;
 
-	serialDevice[reader_index].buffer_offset = 0;
-	serialDevice[reader_index].buffer_offset_last = 0;
+	ccid_reader->device.buffer_offset = 0;
+	ccid_reader->device.buffer_offset_last = 0;
 
-	serialDevice[reader_index].ccid.readerID = readerID;
-	serialDevice[reader_index].ccid.bPINSupport = 0x0;
-	serialDevice[reader_index].ccid.dwMaxDataRate = 344086;
-	serialDevice[reader_index].ccid.bMaxSlotIndex = 0;
-	serialDevice[reader_index].ccid.bMaxCCIDBusySlots = 1;
-	serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialTwinDataRates;
-	serialDevice[reader_index].ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
-	serialDevice[reader_index].ccid.dwSlotStatus = IFD_ICC_PRESENT;
-	serialDevice[reader_index].ccid.bVoltageSupport = 0x07;	/* 1.8V, 3V and 5V */
-	serialDevice[reader_index].ccid.gemalto_firmware_features = NULL;
-	serialDevice[reader_index].ccid.dwProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
+	ccid_reader->device.ccid.readerID = readerID;
+	ccid_reader->device.ccid.bPINSupport = 0x0;
+	ccid_reader->device.ccid.dwMaxDataRate = 344086;
+	ccid_reader->device.ccid.bMaxSlotIndex = 0;
+	ccid_reader->device.ccid.bMaxCCIDBusySlots = 1;
+	ccid_reader->device.ccid.arrayOfSupportedDataRates = SerialTwinDataRates;
+	ccid_reader->device.ccid.readTimeout = DEFAULT_COM_READ_TIMEOUT;
+	ccid_reader->device.ccid.dwSlotStatus = IFD_ICC_PRESENT;
+	ccid_reader->device.ccid.bVoltageSupport = 0x07;	/* 1.8V, 3V and 5V */
+	ccid_reader->device.ccid.gemalto_firmware_features = NULL;
+	ccid_reader->device.ccid.dwProtocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
 #ifdef ENABLE_ZLP
-	serialDevice[reader_index].ccid.zlp = false;
+	ccid_reader->device.ccid.zlp = false;
 #endif
-	serialDevice[reader_index].echo = true;
+	ccid_reader->device.echo = true;
 
 	/* change some values depending on the reader */
 	switch (readerID)
 	{
 		case GEMCOREPOSPRO:
-			serialDevice[reader_index].ccid.bMaxSlotIndex = 4;	/* 5 slots */
-			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
-			serialDevice[reader_index].echo = false;
-			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
+			ccid_reader->device.ccid.bMaxSlotIndex = 4;	/* 5 slots */
+			ccid_reader->device.ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
+			ccid_reader->device.echo = false;
+			ccid_reader->device.ccid.dwMaxDataRate = 500000;
 			break;
 
 		case GEMCORESIMPRO:
-			serialDevice[reader_index].ccid.bMaxSlotIndex = 1; /* 2 slots */
-			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
-			serialDevice[reader_index].echo = false;
-			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
+			ccid_reader->device.ccid.bMaxSlotIndex = 1; /* 2 slots */
+			ccid_reader->device.ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
+			ccid_reader->device.echo = false;
+			ccid_reader->device.ccid.dwMaxDataRate = 500000;
 			break;
 
 		case GEMCORESIMPRO2:
-			serialDevice[reader_index].ccid.dwDefaultClock = 4800;
-			serialDevice[reader_index].ccid.bMaxSlotIndex = 1; /* 2 slots */
-			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SIMPro2DataRates;
-			serialDevice[reader_index].echo = false;
-			serialDevice[reader_index].ccid.dwMaxDataRate = 825806;
+			ccid_reader->device.ccid.dwDefaultClock = 4800;
+			ccid_reader->device.ccid.bMaxSlotIndex = 1; /* 2 slots */
+			ccid_reader->device.ccid.arrayOfSupportedDataRates = SIMPro2DataRates;
+			ccid_reader->device.echo = false;
+			ccid_reader->device.ccid.dwMaxDataRate = 825806;
 			break;
 
 		case GEMPCPINPAD:
-			serialDevice[reader_index].ccid.bPINSupport = 0x03;
-			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
-			serialDevice[reader_index].ccid.dwMaxDataRate = 500000;
+			ccid_reader->device.ccid.bPINSupport = 0x03;
+			ccid_reader->device.ccid.arrayOfSupportedDataRates = SerialExtendedDataRates;
+			ccid_reader->device.ccid.dwMaxDataRate = 500000;
 			break;
 
 		/* Most settings are shared between both SEC1210 varients */
 		case SEC1210:
 		case SEC1210URT:
-			serialDevice[reader_index].ccid.dwFeatures = 0x000100B2;
-			serialDevice[reader_index].ccid.dwDefaultClock = 4800;
-			serialDevice[reader_index].ccid.dwMaxDataRate = 826000;
-			serialDevice[reader_index].ccid.arrayOfSupportedDataRates = NULL;
-			serialDevice[reader_index].echo = false;
+			ccid_reader->device.ccid.dwFeatures = 0x000100B2;
+			ccid_reader->device.ccid.dwDefaultClock = 4800;
+			ccid_reader->device.ccid.dwMaxDataRate = 826000;
+			ccid_reader->device.ccid.arrayOfSupportedDataRates = NULL;
+			ccid_reader->device.echo = false;
 			if (SEC1210URT == readerID)
 			{
-				serialDevice[reader_index].ccid.bMaxSlotIndex = 0;	/* SEC1210URT Varient has 1 slot */
+				ccid_reader->device.ccid.bMaxSlotIndex = 0;	/* SEC1210URT Varient has 1 slot */
 			}
 			else
 			{
-				serialDevice[reader_index].ccid.bMaxSlotIndex = 1;	/* SEC1210UR2 Varient has 2 slots */
+				ccid_reader->device.ccid.bMaxSlotIndex = 1;	/* SEC1210UR2 Varient has 2 slots */
 			}
 			break;
 
@@ -695,7 +642,7 @@ static status_t set_ccid_descriptor(unsigned int reader_index,
 end:
 	/* memorise the current reader_index so we can detect
 	 * a new OpenSerialByName on a multi slot reader */
-	previous_reader_index = reader_index;
+	previous_ccid_reader = ccid_reader;
 
 	/* we just created a secondary slot on a multi-slot reader */
 	if (already_used)
@@ -710,17 +657,16 @@ end:
  *				OpenSerialByName: open the port
  *
  *****************************************************************************/
-status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
+status_t OpenSerialByName(CcidDesc * ccid_reader, char *dev_name)
 {
 	struct termios current_termios;
-	unsigned int reader = reader_index;
 	/* 255 is MAX_DEVICENAME in pcscd.h */
 	char reader_name[255] = "GemPCTwin";
 	char *p;
 	status_t ret;
 	int readerID;
 
-	DEBUG_COMM3("Reader index: %X, Device: %s", reader_index, dev_name);
+	DEBUG_COMM3("Reader lun: %X, Device: %s", ccid_reader->lun, dev_name);
 
 	/* parse dev_name using the pattern "device:name" */
 	p = strchr(dev_name, ':');
@@ -733,7 +679,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		*p = '\0';
 	}
 
-	ret = set_ccid_descriptor(reader_index, reader_name, dev_name);
+	ret = set_ccid_descriptor(ccid_reader, reader_name, dev_name);
 	if (STATUS_UNSUCCESSFUL == ret)
 		return STATUS_UNSUCCESSFUL;
 
@@ -741,9 +687,9 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	if (STATUS_SECONDARY_SLOT == ret)
 		return STATUS_SUCCESS;
 
-	serialDevice[reader].fd = open(dev_name, O_RDWR | O_NOCTTY);
+	ccid_reader->device.fd = open(dev_name, O_RDWR | O_NOCTTY);
 
-	if (-1 == serialDevice[reader].fd)
+	if (-1 == ccid_reader->device.fd)
 	{
 		DEBUG_CRITICAL3("open %s: %s", dev_name, strerror(errno));
 		return STATUS_UNSUCCESSFUL;
@@ -754,7 +700,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	{
 		int flags;
 
-		if (ioctl(serialDevice[reader].fd, TIOCMGET, &flags) < 0)
+		if (ioctl(ccid_reader->device.fd, TIOCMGET, &flags) < 0)
 		{
 			DEBUG_CRITICAL2("Get RS232 signals state failed: %s",
 				strerror(errno));
@@ -762,7 +708,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		else
 		{
 			flags &= ~TIOCM_RTS;
-			if (ioctl(serialDevice[reader].fd, TIOCMSET, &flags) < 0)
+			if (ioctl(ccid_reader->device.fd, TIOCMSET, &flags) < 0)
 			{
 				DEBUG_CRITICAL2("Set RTS to low failed: %s", strerror(errno));
 			}
@@ -774,18 +720,18 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	}
 
 	/* set channel used */
-	serialDevice[reader].device = strdup(dev_name);
+	ccid_reader->device.device = strdup(dev_name);
 
 	/* empty in and out serial buffers */
-	if (tcflush(serialDevice[reader].fd, TCIOFLUSH))
+	if (tcflush(ccid_reader->device.fd, TCIOFLUSH))
 			DEBUG_INFO2("tcflush() function error: %s", strerror(errno));
 
 	/* get config attributes */
-	if (tcgetattr(serialDevice[reader].fd, &current_termios) == -1)
+	if (tcgetattr(ccid_reader->device.fd, &current_termios) == -1)
 	{
 		DEBUG_INFO2("tcgetattr() function error: %s", strerror(errno));
-		(void)close(serialDevice[reader].fd);
-		serialDevice[reader].fd = -1;
+		(void)close(ccid_reader->device.fd);
+		ccid_reader->device.fd = -1;
 
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -804,7 +750,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	 * will echo characters for you.  Don't generate signals. */
 	current_termios.c_lflag = 0;
 
-	readerID = serialDevice[reader].ccid.readerID;
+	readerID = ccid_reader->device.ccid.readerID;
 	if (GEMCORESIMPRO2 == readerID)
 	{
 		unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
@@ -816,10 +762,10 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		/* set serial port speed to 9600 bauds */
 		(void)cfsetspeed(&current_termios, B9600);
 		DEBUG_INFO1("Set serial port baudrate to 9600 and correct configuration");
-		if (tcsetattr(serialDevice[reader_index].fd, TCSANOW, &current_termios) == -1)
+		if (tcsetattr(ccid_reader->device.fd, TCSANOW, &current_termios) == -1)
 		{
-			(void)close(serialDevice[reader_index].fd);
-			serialDevice[reader_index].fd = -1;
+			(void)close(ccid_reader->device.fd);
+			ccid_reader->device.fd = -1;
 			DEBUG_CRITICAL2("tcsetattr error: %s", strerror(errno));
 
 			return STATUS_UNSUCCESSFUL;
@@ -827,13 +773,13 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 
 		/* Test current speed issuing a CmdGetSlotStatus with a very
 		 * short time out of 1 seconds */
-		old_timeout = serialDevice[reader_index].ccid.readTimeout;
+		old_timeout = ccid_reader->device.ccid.readTimeout;
 
-		serialDevice[reader_index].ccid.readTimeout = 1*1000;
-		r = CmdGetSlotStatus(reader_index, pcbuffer);
+		ccid_reader->device.ccid.readTimeout = 1*1000;
+		r = CmdGetSlotStatus(ccid_reader, pcbuffer);
 
 		/* Restore default time out value */
-		serialDevice[reader_index].ccid.readTimeout = old_timeout;
+		ccid_reader->device.ccid.readTimeout = old_timeout;
 
 		if (IFD_SUCCESS == r)
 		{
@@ -842,7 +788,7 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			unsigned char rx_buffer[50];
 			unsigned int rx_length = sizeof(rx_buffer);
 
-			if (IFD_SUCCESS == CmdEscape(reader_index, tx_buffer,
+			if (IFD_SUCCESS == CmdEscape(ccid_reader, tx_buffer,
 				sizeof(tx_buffer), rx_buffer, &rx_length, 0))
 			{
 				/* Let the reader setup its new communication speed */
@@ -861,10 +807,10 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 	(void)cfsetspeed(&current_termios, B115200);
 
 	DEBUG_INFO1("Set serial port baudrate to 115200 and correct configuration");
-	if (tcsetattr(serialDevice[reader].fd, TCSANOW, &current_termios) == -1)
+	if (tcsetattr(ccid_reader->device.fd, TCSANOW, &current_termios) == -1)
 	{
-		(void)close(serialDevice[reader].fd);
-		serialDevice[reader].fd = -1;
+		(void)close(ccid_reader->device.fd);
+		ccid_reader->device.fd = -1;
 		DEBUG_INFO2("tcsetattr error: %s", strerror(errno));
 
 		return STATUS_UNSUCCESSFUL;
@@ -884,11 +830,11 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 			tx_buffer[0] = 0x02; // get reader firmware
 
 		/* 2 seconds timeout to not wait too long if no reader is connected */
-		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
+		if (IFD_SUCCESS != CmdEscape(ccid_reader, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length, 2*1000))
 		{
 			DEBUG_CRITICAL("Get firmware failed. Maybe the reader is not connected");
-			(void)CloseSerial(reader_index);
+			(void)CloseSerial(ccid_reader);
 			return STATUS_UNSUCCESSFUL;
 		}
 
@@ -906,18 +852,18 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
 		unsigned char rx_buffer[50];
 		unsigned int rx_length = sizeof(rx_buffer);
 
-		if (IFD_SUCCESS != CmdEscape(reader_index, tx_buffer, sizeof(tx_buffer),
+		if (IFD_SUCCESS != CmdEscape(ccid_reader, tx_buffer, sizeof(tx_buffer),
 			rx_buffer, &rx_length, 0))
 		{
 			DEBUG_CRITICAL("Change card movement notification failed.");
-			(void)CloseSerial(reader_index);
+			(void)CloseSerial(ccid_reader);
 			return STATUS_UNSUCCESSFUL;
 		}
 	}
 
-	serialDevice[reader_index].ccid.sIFD_serial_number = NULL;
-	serialDevice[reader_index].ccid.sIFD_iManufacturer = NULL;
-	serialDevice[reader_index].ccid.IFD_bcdDevice = 0;
+	ccid_reader->device.ccid.sIFD_serial_number = NULL;
+	ccid_reader->device.ccid.sIFD_iManufacturer = NULL;
+	ccid_reader->device.ccid.IFD_bcdDevice = 0;
 
 	return STATUS_SUCCESS;
 } /* OpenSerialByName */
@@ -928,29 +874,27 @@ status_t OpenSerialByName(unsigned int reader_index, char *dev_name)
  *				CloseSerial: close the port
  *
  *****************************************************************************/
-status_t CloseSerial(unsigned int reader_index)
+status_t CloseSerial(CcidDesc * ccid_reader)
 {
-	unsigned int reader = reader_index;
-
 	/* device not opened */
-	if (NULL == serialDevice[reader_index].device)
+	if (NULL == ccid_reader->device.device)
 		return STATUS_UNSUCCESSFUL;
 
-	DEBUG_COMM2("Closing serial device: %s", serialDevice[reader_index].device);
+	DEBUG_COMM2("Closing serial device: %s", ccid_reader->device.device);
 
 	/* Decrement number of opened slot */
-	(*serialDevice[reader_index].nb_opened_slots)--;
+	(*ccid_reader->device.nb_opened_slots)--;
 
 	/* release the allocated resources for the last slot only */
-	if (0 == *serialDevice[reader_index].nb_opened_slots)
+	if (0 == *ccid_reader->device.nb_opened_slots)
 	{
 		DEBUG_COMM("Last slot closed. Release resources");
 
-		(void)close(serialDevice[reader].fd);
-		serialDevice[reader].fd = -1;
+		(void)close(ccid_reader->device.fd);
+		ccid_reader->device.fd = -1;
 
-		free(serialDevice[reader].device);
-		serialDevice[reader].device = NULL;
+		free(ccid_reader->device.device);
+		ccid_reader->device.device = NULL;
 	}
 
 	return STATUS_SUCCESS;
@@ -962,24 +906,12 @@ status_t CloseSerial(unsigned int reader_index)
  *					DisconnectSerial
  *
  ****************************************************************************/
-status_t DisconnectSerial(unsigned int reader_index)
+status_t DisconnectSerial(CcidDesc * ccid_reader)
 {
-	(void)reader_index;
+	(void)ccid_reader;
 
 	DEBUG_COMM("Disconnect reader");
 
 	return STATUS_UNSUCCESSFUL;
 } /* DisconnectSerial */
-
-
-/*****************************************************************************
- *
- *					get_ccid_descriptor
- *
- ****************************************************************************/
-_ccid_descriptor *get_ccid_descriptor(unsigned int reader_index)
-{
-	return &serialDevice[reader_index].ccid;
-} /* get_ccid_descriptor */
-
 

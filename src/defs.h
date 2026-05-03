@@ -188,9 +188,61 @@ typedef struct _ccid_descriptor
 #endif
 } _ccid_descriptor;
 
-#ifdef SERIAL_READER
+#ifdef TWIN_SERIAL
 
-#error a
+/* 271 = max size for short APDU
+ * 2 bytes for header
+ * 1 byte checksum
+ * doubled for echo
+ */
+#define GEMPCTWIN_MAXBUF (271 +2 +1) * 2
+
+typedef struct
+{
+	/*
+	 * File handle on the serial port
+	 */
+	int fd;
+
+	/*
+	 * device used ("/dev/ttyS?" under Linux)
+	 */
+	/*@null@*/ char *device;
+
+	/*
+	 * Number of slots using the same device
+	 */
+	int real_nb_opened_slots;
+	int *nb_opened_slots;
+
+	/*
+	 * does the reader echoes the serial communication bytes?
+	 */
+	bool echo;
+
+	/*
+	 * serial communication buffer
+	 */
+	unsigned char buffer[GEMPCTWIN_MAXBUF];
+
+	/*
+	 * next available byte
+	 */
+	int buffer_offset;
+
+	/*
+	 * number of available bytes
+	 */
+	int buffer_offset_last;
+
+	/*
+	 * CCID infos common to USB and serial
+	 */
+	_ccid_descriptor ccid;
+
+} _serialDevice;
+
+typedef _serialDevice _Device;
 
 #else
 
