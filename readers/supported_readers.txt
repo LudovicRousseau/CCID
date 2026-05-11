@@ -524,6 +524,9 @@
 # GIS Ltd
 0x0F1A:0x0002:GIS Ltd SmartMouse USB
 
+# GLSolutions
+0x298C:0x00FF:GLSolutions NM61 PC/SC
+
 # GoldKey Security
 0x19C8:0x0012:GoldKey Security PIV Token
 
