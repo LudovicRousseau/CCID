@@ -77,7 +77,8 @@ static bool ccid_check_firmware(struct libusb_device_descriptor *desc);
 static unsigned int *get_data_rates(CcidDesc * ccid_reader,
 	const unsigned char bNumDataRatesSupported);
 
-extern CcidDesc CcidSlots[];
+extern CcidDesc **CcidSlots;
+extern int ccid_driver_max_readers;
 
 #define PCSCLITE_MANUKEY_NAME "ifdVendorID"
 #define PCSCLITE_PRODKEY_NAME "ifdProductID"
@@ -132,9 +133,9 @@ static void close_libusb_if_needed(void)
 		return;
 
 	/* if at least 1 reader is still in use we do not exit libusb */
-	for (int i=0; i<CCID_DRIVER_MAX_READERS; i++)
+	for (int i=0; i<ccid_driver_max_readers; i++)
 	{
-		if (CcidSlots[i].device.dev_handle != NULL)
+		if (CcidSlots[i]->device.dev_handle != NULL)
 			to_exit = false;
 	}
 
@@ -497,13 +498,13 @@ again_libusb:
 
 				DEBUG_COMM3("Checking device: %d/%d",
 					bus_number, device_address);
-				for (r=0; r<CCID_DRIVER_MAX_READERS; r++)
+				for (r=0; r<ccid_driver_max_readers; r++)
 				{
-					if (CcidSlots[r].device.dev_handle)
+					if (CcidSlots[r]->device.dev_handle)
 					{
 						/* same bus, same address */
-						if (CcidSlots[r].device.bus_number == bus_number
-							&& CcidSlots[r].device.device_address == device_address)
+						if (CcidSlots[r]->device.bus_number == bus_number
+							&& CcidSlots[r]->device.device_address == device_address)
 							already_used = true;
 					}
 				}
@@ -803,7 +804,7 @@ again:
 
 					int other_interface_index = -1;
 					/* search the other interface */
-					for (unsigned int index=0; index<CCID_DRIVER_MAX_READERS ; index++)
+					for (unsigned int index=0; index<ccid_driver_max_readers ; index++)
 					{
 						/* ourself? */
 						if (index == reader_index)
@@ -1227,13 +1228,13 @@ status_t DisconnectUSB(CcidDesc * ccid_reader)
 	int bus_number = ccid_reader->device.bus_number;
 	int device_address = ccid_reader->device.device_address;
 
-	for (int i=0; i<CCID_DRIVER_MAX_READERS; i++)
+	for (int i=0; i<ccid_driver_max_readers; i++)
 	{
-		if ((CcidSlots[i].device.bus_number == bus_number)
-			&& (CcidSlots[i].device.device_address == device_address))
+		if ((CcidSlots[i]->device.bus_number == bus_number)
+			&& (CcidSlots[i]->device.device_address == device_address))
 		{
 			DEBUG_COMM2("Disconnect reader: %d", i);
-			CcidSlots[i].device.disconnected = true;
+			CcidSlots[i]->device.disconnected = true;
 		}
 	}
 

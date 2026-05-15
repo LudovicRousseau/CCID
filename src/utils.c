@@ -18,6 +18,7 @@
 */
 
 #include <string.h>
+#include <stdlib.h>
 #include <pcsclite.h>
 
 #include <config.h>
@@ -27,17 +28,23 @@
 #include "utils.h"
 #include "debug.h"
 
-static _Atomic int ReaderIndex[CCID_DRIVER_MAX_READERS];
 #define FREE_ENTRY -42
 
-extern CcidDesc CcidSlots[];
+#define INITIAL_CCID_DRIVER_MAX_READERS 2
+
+CcidDesc **CcidSlots;
+int ccid_driver_max_readers = -1;
 
 void InitReaderIndex(void)
 {
-	int i;
+	ccid_driver_max_readers = INITIAL_CCID_DRIVER_MAX_READERS;
+	CcidSlots = calloc(ccid_driver_max_readers, sizeof(CcidSlots[0]));
 
-	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
-		ReaderIndex[i] = FREE_ENTRY;
+	for (int i=0; i<ccid_driver_max_readers; i++)
+	{
+		CcidSlots[i] = calloc(1, sizeof(*CcidSlots[0]));
+		CcidSlots[i]->lun = FREE_ENTRY;
+	}
 } /* InitReaderIndex */
 
 int GetNewReaderIndex(const int Lun)
@@ -45,24 +52,24 @@ int GetNewReaderIndex(const int Lun)
 	int i;
 
 	/* check that Lun is NOT already used */
-	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
-		if (Lun == ReaderIndex[i])
+	for (i=0; i<ccid_driver_max_readers; i++)
+		if (Lun == CcidSlots[i]->lun)
 			break;
 
-	if (i < CCID_DRIVER_MAX_READERS)
+	if (i < ccid_driver_max_readers)
 	{
 		DEBUG_CRITICAL2("Lun: %d is already used", Lun);
 		return -1;
 	}
 
-	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
-		if (FREE_ENTRY == ReaderIndex[i])
+	for (i=0; i<ccid_driver_max_readers; i++)
+		if (FREE_ENTRY == CcidSlots[i]->lun)
 		{
-			ReaderIndex[i] = Lun;
+			CcidSlots[i]->lun = Lun;
 			return i;
 		}
 
-	DEBUG_CRITICAL("ReaderIndex[] is full");
+	DEBUG_CRITICAL("CcidSlots[] is full");
 	return -1;
 } /* GetReaderIndex */
 
@@ -70,8 +77,8 @@ int LunToReaderIndex(const int Lun)
 {
 	int i;
 
-	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
-		if (Lun == ReaderIndex[i])
+	for (i=0; i<ccid_driver_max_readers; i++)
+		if (Lun == CcidSlots[i]->lun)
 			return i;
 
 	DEBUG_CRITICAL2("Lun: %X not found", Lun);
@@ -82,9 +89,9 @@ CcidDesc * LunToCcidDesc(const int Lun)
 {
 	int i;
 
-	for (i=0; i<CCID_DRIVER_MAX_READERS; i++)
-		if (Lun == ReaderIndex[i])
-			return &CcidSlots[i];
+	for (i=0; i<ccid_driver_max_readers; i++)
+		if (Lun == CcidSlots[i]->lun)
+			return CcidSlots[i];
 
 	DEBUG_CRITICAL2("Lun: %X not found", Lun);
 	return NULL;
@@ -92,7 +99,7 @@ CcidDesc * LunToCcidDesc(const int Lun)
 
 void ReleaseReaderIndex(const int index)
 {
-	ReaderIndex[index] = FREE_ENTRY;
+	CcidSlots[index]->lun = FREE_ENTRY;
 } /* ReleaseReaderIndex */
 
 /* Read a non aligned 16-bit integer */

@@ -45,7 +45,7 @@
 #include <pthread.h>
 
 /* Array of structures to hold the ATR and other state value of each slot */
-CcidDesc CcidSlots[CCID_DRIVER_MAX_READERS];
+extern CcidDesc **CcidSlots;
 
 /* global mutex */
 static pthread_mutex_t ifdh_context_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -107,8 +107,7 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 	if (-1 == reader_index)
 		return IFD_COMMUNICATION_ERROR;
 
-	ccid_reader = &CcidSlots[reader_index];
-	ccid_reader->lun = Lun;
+	ccid_reader = CcidSlots[reader_index];
 	ccid_reader->reader_index = reader_index;
 
 	/* Reset ATR buffer */
@@ -466,7 +465,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 			if (*Length >= 1)
 			{
 				*Length = 1;
-				*Value = CCID_DRIVER_MAX_READERS;
+				*Value = 255;
 			}
 			else
 				return_value = IFD_ERROR_INSUFFICIENT_BUFFER;

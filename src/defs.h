@@ -340,7 +340,7 @@ typedef struct CCID_DESC
 	char *readerName;
 
 	/* reader lun for logs */
-	unsigned int lun;
+	int lun;
 
 	/* USB or serial device */
 	_Device device;
