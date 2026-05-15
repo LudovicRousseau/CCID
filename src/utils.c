@@ -50,6 +50,7 @@ void InitReaderIndex(void)
 int GetNewReaderIndex(const int Lun)
 {
 	int i;
+	int ret;
 
 	/* check that Lun is NOT already used */
 	for (i=0; i<ccid_driver_max_readers; i++)
@@ -66,8 +67,23 @@ int GetNewReaderIndex(const int Lun)
 			return i;
 		}
 
-	DEBUG_CRITICAL("CcidSlots[] is full");
-	return -1;
+	/* all the slots are used */
+	int new_size = ccid_driver_max_readers + INITIAL_CCID_DRIVER_MAX_READERS;
+	Log3(PCSC_LOG_DEBUG, "from %d to %d", ccid_driver_max_readers, new_size);
+
+	CcidSlots = realloc(CcidSlots, new_size * sizeof(CcidSlots[0]));
+	for (i=ccid_driver_max_readers; i<new_size; i++)
+	{
+		CcidSlots[i] = calloc(1, sizeof(*CcidSlots[0]));
+		CcidSlots[i]->lun = FREE_ENTRY;
+	}
+
+	ret = ccid_driver_max_readers;
+	CcidSlots[ret]->lun = Lun;
+
+	ccid_driver_max_readers = new_size;
+
+	return ret;
 } /* GetReaderIndex */
 
 int LunToReaderIndex(const int Lun)
