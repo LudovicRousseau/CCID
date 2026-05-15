@@ -82,7 +82,7 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
 	int reader_index;
-	CcidDesc * ccid_reader;
+	CcidDesc * ccid_reader = NULL;
 	status_t ret;
 
 	if (! DebugInitialized)
