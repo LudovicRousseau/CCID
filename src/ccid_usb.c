@@ -253,7 +253,7 @@ status_t OpenUSBByName(CcidDesc * ccid_reader, /*@null@*/ char *device)
 	/* is the reader already used? */
 	if (ccid_reader->device.dev_handle != NULL)
 	{
-		DEBUG_CRITICAL2("USB driver with index %d already in use",
+		DEBUG_CRITICAL2("USB driver with lun %d already in use",
 			ccid_reader->lun);
 		return STATUS_UNSUCCESSFUL;
 	}
