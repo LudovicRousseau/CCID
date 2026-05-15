@@ -69,7 +69,7 @@ libccidtwin_la_CFLAGS = $(PCSC_CFLAGS) $(PTHREAD_CFLAGS) $(SYMBOL_VISIBILITY) \
 libccidtwin_la_LIBADD = $(PTHREAD_LIBS)
 libccidtwin_la_LDFLAGS = -avoid-version
 
-parse_SOURCES = parse.c debug.c ccid_usb.c sys_unix.c $(TOKEN_PARSER)
+parse_SOURCES = parse.c debug.c sys_unix.c $(TOKEN_PARSER)
 parse_LDADD = $(LIBUSB_LIBS) $(ZLIB_LIBS)
 parse_CFLAGS = $(PCSC_CFLAGS) $(LIBUSB_CFLAGS) $(ZLIB_CFLAGS) -DSIMCLIST_NO_DUMPRESTORE
 
