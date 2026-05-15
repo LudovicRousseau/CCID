@@ -54,13 +54,10 @@ int GetNewReaderIndex(const int Lun)
 	/* check that Lun is NOT already used */
 	for (i=0; i<ccid_driver_max_readers; i++)
 		if (Lun == CcidSlots[i]->lun)
-			break;
-
-	if (i < ccid_driver_max_readers)
-	{
-		DEBUG_CRITICAL2("Lun: %d is already used", Lun);
-		return -1;
-	}
+		{
+			DEBUG_CRITICAL2("Lun: %X is already used", Lun);
+			return -1;
+		}
 
 	for (i=0; i<ccid_driver_max_readers; i++)
 		if (FREE_ENTRY == CcidSlots[i]->lun)
