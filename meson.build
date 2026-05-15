@@ -134,7 +134,7 @@ library('ccidtwin',
 conf_data.set('TARGET', join_paths(libccidtwin_dir, 'libccidtwin' + dyn_lib_ext))
 configure_file(output : 'libccidtwin',
   input : 'src/reader.conf.in',
-  install_dir : join_paths(get_option('sysconfdir'), 'reader.conf.d'),
+  install_dir : pcsc_dep.get_variable('serialconfdir'),
   configuration : conf_data)
 endif
 
