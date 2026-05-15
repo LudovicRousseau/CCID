@@ -71,7 +71,6 @@ static void FreeChannel(CcidDesc * ccid_reader)
 	(void)ClosePort(ccid_reader);
 
 	free(ccid_reader->readerName);
-	memset(ccid_reader, 0, sizeof(*ccid_reader));
 
 	ReleaseReaderIndex(ccid_reader->reader_index);
 

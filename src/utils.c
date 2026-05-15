@@ -96,6 +96,7 @@ CcidDesc * LunToCcidDesc(const int Lun)
 
 void ReleaseReaderIndex(const int index)
 {
+	memset(CcidSlots[index], 0, sizeof(*CcidSlots[0]));
 	CcidSlots[index]->lun = FREE_ENTRY;
 } /* ReleaseReaderIndex */
 
