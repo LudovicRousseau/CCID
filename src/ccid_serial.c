@@ -100,7 +100,7 @@ static unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 /* data rates supported by the GemCore SIM Pro 2 */
 static unsigned int SIMPro2DataRates[] = { SIMPRO2_ISO_DATA_RATES, 0  };
 
-extern CcidDesc CcidSlots[];
+extern CcidDesc **CcidSlots;
 
 /* unexported functions */
 static int ReadChunk(CcidDesc * ccid_reader, unsigned char *buffer,
@@ -490,8 +490,8 @@ static status_t set_ccid_descriptor(CcidDesc * ccid_reader,
 	/* check if the same channel is not already used to manage multi-slots readers*/
 	for (i = 0; i < CCID_DRIVER_MAX_READERS; i++)
 	{
-		if (CcidSlots[i].device.device
-			&& strcmp(CcidSlots[i].device.device, dev_name) == 0)
+		if (CcidSlots[i]->device.device
+			&& strcmp(CcidSlots[i]->device.device, dev_name) == 0)
 		{
 			already_used = true;
 
