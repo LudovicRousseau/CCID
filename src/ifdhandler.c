@@ -101,13 +101,16 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 
 	reader_index = GetNewReaderIndex(Lun);
 
+	if (reader_index >= 0)
+	{
+		ccid_reader = CcidSlots[reader_index];
+		ccid_reader->reader_index = reader_index;
+	}
+
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 
 	if (-1 == reader_index)
 		return IFD_COMMUNICATION_ERROR;
-
-	ccid_reader = CcidSlots[reader_index];
-	ccid_reader->reader_index = reader_index;
 
 	/* Reset ATR buffer */
 	ccid_reader->nATRLength = 0;
