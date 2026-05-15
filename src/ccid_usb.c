@@ -195,7 +195,7 @@ status_t OpenUSBByName(CcidDesc * ccid_reader, /*@null@*/ char *device)
 	static int static_interface = -1;
 #endif
 
-	DEBUG_COMM3("Reader lun: %d, Device: " LOG_STRING,
+	DEBUG_COMM3("Reader lun: %X, Device: " LOG_STRING,
 		ccid_reader->lun, device);
 
 #ifndef __APPLE__
@@ -925,9 +925,9 @@ status_t WriteUSB(CcidDesc * ccid_reader, unsigned int length,
 	_usbDevice * usb_device = &ccid_reader->device;
 	int rv;
 	int actual_length;
-	char debug_header[] = "-> lun: 123, ";
+	char debug_header[] = "-> lun: 12345678, ";
 
-	(void)snprintf(debug_header, sizeof(debug_header), "-> lun: %d, ",
+	(void)snprintf(debug_header, sizeof(debug_header), "-> lun: %X, ",
 		ccid_reader->lun);
 
 	if (usb_device->disconnected)
@@ -981,7 +981,7 @@ status_t ReadUSB(CcidDesc * ccid_reader, unsigned int * length,
 	_usbDevice * usb_device = &ccid_reader->device;
 	int rv;
 	int actual_length;
-	char debug_header[] = "<- lun: 123, ";
+	char debug_header[] = "<- lun: 12345678, ";
 	int duplicate_frame = 0;
 
 	if (usb_device->disconnected)
@@ -991,7 +991,7 @@ status_t ReadUSB(CcidDesc * ccid_reader, unsigned int * length,
 	}
 
 read_again:
-	(void)snprintf(debug_header, sizeof(debug_header), "<- lun: %d, ",
+	(void)snprintf(debug_header, sizeof(debug_header), "<- lun: %X, ",
 		ccid_reader->lun);
 
 	if (usb_device->multislot_extension)
