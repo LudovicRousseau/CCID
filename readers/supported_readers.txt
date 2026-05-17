@@ -871,6 +871,9 @@
 0x04E6:0x5291:SCM Microsystems Inc. SCL010 Contactless Reader
 0x04E6:0x5293:SCM Microsystems Inc. SCL01x Contactless Reader
 
+# SCR
+0x04D9:0xC001:SCR Prime
+
 # Secure Device Solutions
 0x0B81:0x8007:Secure Device Solutions DOMINO-Key TWIN
 
