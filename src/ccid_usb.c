@@ -42,6 +42,12 @@
 #include "ccid_ifdhandler.h"
 #include "sys_generic.h"
 
+/* Round up `num` to a multiple of `multiple` (must be > 0). */
+#define ROUND_UP(num, multiple) (((num) + (multiple) - 1) / (multiple) * (multiple))
+
+/* Offset of the bSeq field in the CCID RDR_to_PC header. */
+#define BSEQ_OFFSET 6
+
 
 /* write timeout
  * we don't have to wait a long time since the card was doing nothing */
@@ -1121,9 +1127,28 @@ read_again:
 	}
 	else
 	{
+		/* Issue #161: some CCID devices send USB packets that cross the
+		 * caller-buffer boundary, triggering LIBUSB_ERROR_OVERFLOW which
+		 * leaves the endpoint in a stuck state. Workaround per
+		 * https://libusb.sourceforge.io/api-1.0/libusb_packetoverflow.html
+		 * is to receive into a temporary buffer whose size is a multiple
+		 * of the endpoint's wMaxPacketSize. 1024 covers every CCID
+		 * endpoint size up to USB 3.2. The payload is then memcpy()'d
+		 * back into the caller's buffer after a sanity check. */
+		unsigned int rounded_length = ROUND_UP(*length, 1024);
+		unsigned char *tmp_buffer = malloc(rounded_length);
+
+		if (NULL == tmp_buffer)
+		{
+			*length = 0;
+			DEBUG_CRITICAL2("malloc(%u) failed", rounded_length);
+			return STATUS_UNSUCCESSFUL;
+		}
+
 		rv = libusb_bulk_transfer(usbDevice[reader_index].dev_handle,
-			usbDevice[reader_index].bulk_in, buffer, *length,
-			&actual_length, usbDevice[reader_index].ccid.readTimeout);
+			usbDevice[reader_index].bulk_in, tmp_buffer,
+			rounded_length, &actual_length,
+			usbDevice[reader_index].ccid.readTimeout);
 
 		if (rv < 0)
 		{
@@ -1132,6 +1157,7 @@ read_again:
 				usbDevice[reader_index].bus_number,
 				usbDevice[reader_index].device_address,
 				libusb_error_name(rv));
+			free(tmp_buffer);
 
 			if (LIBUSB_ERROR_NO_DEVICE == rv)
 				return STATUS_NO_SUCH_DEVICE;
@@ -1139,13 +1165,45 @@ read_again:
 			return STATUS_UNSUCCESSFUL;
 		}
 
+		DEBUG_XXD(debug_header, tmp_buffer, actual_length);
+
+		/* bSeq mismatch BEFORE the size check, so stale frames (left
+		 * over from previous commands) are discarded and we retry
+		 * instead of being rejected outright. */
+		if ((actual_length >= BSEQ_OFFSET + 1)
+			&& (bSeq != -1)
+			&& (tmp_buffer[BSEQ_OFFSET] != bSeq))
+		{
+			duplicate_frame++;
+			if (duplicate_frame > 10)
+			{
+				DEBUG_CRITICAL("Too many duplicate frame detected");
+				free(tmp_buffer);
+				return STATUS_UNSUCCESSFUL;
+			}
+			DEBUG_INFO1("Invalid frame detected");
+			free(tmp_buffer);
+			goto read_again;
+		}
+
+		if ((unsigned int)actual_length > *length)
+		{
+			DEBUG_CRITICAL3("Received %d bytes but caller buffer is only %u",
+				actual_length, *length);
+			free(tmp_buffer);
+			*length = 0;
+			return STATUS_UNSUCCESSFUL;
+		}
+
+		memcpy(buffer, tmp_buffer, actual_length);
+		free(tmp_buffer);
 		*length = actual_length;
 	}
 
-	DEBUG_XXD(debug_header, buffer, *length);
-
-#define BSEQ_OFFSET 6
-	if ((*length >= BSEQ_OFFSET +1)
+	/* multislot_extension path: legacy bSeq check on the caller buffer.
+	 * For the simple (libusb_bulk_transfer) path this is already done
+	 * above on tmp_buffer, so the check here is a no-op. */
+	if ((*length >= BSEQ_OFFSET + 1)
 		&& (bSeq != -1)
 		&& (buffer[BSEQ_OFFSET] != bSeq))
 	{
