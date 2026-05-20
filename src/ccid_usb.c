@@ -45,6 +45,9 @@
 /* Round up `num` to a multiple of `multiple` (must be > 0). */
 #define ROUND_UP(num, multiple) (((num) + (multiple) - 1) / (multiple) * (multiple))
 
+/* Offset of the bSeq field in the CCID RDR_to_PC header. */
+#define BSEQ_OFFSET 6
+
 
 /* write timeout
  * we don't have to wait a long time since the card was doing nothing */
@@ -1162,6 +1165,27 @@ read_again:
 			return STATUS_UNSUCCESSFUL;
 		}
 
+		DEBUG_XXD(debug_header, tmp_buffer, actual_length);
+
+		/* bSeq mismatch BEFORE the size check, so stale frames (left
+		 * over from previous commands) are discarded and we retry
+		 * instead of being rejected outright. */
+		if ((actual_length >= BSEQ_OFFSET + 1)
+			&& (bSeq != -1)
+			&& (tmp_buffer[BSEQ_OFFSET] != bSeq))
+		{
+			duplicate_frame++;
+			if (duplicate_frame > 10)
+			{
+				DEBUG_CRITICAL("Too many duplicate frame detected");
+				free(tmp_buffer);
+				return STATUS_UNSUCCESSFUL;
+			}
+			DEBUG_INFO1("Invalid frame detected");
+			free(tmp_buffer);
+			goto read_again;
+		}
+
 		if ((unsigned int)actual_length > *length)
 		{
 			DEBUG_CRITICAL3("Received %d bytes but caller buffer is only %u",
@@ -1176,10 +1200,10 @@ read_again:
 		*length = actual_length;
 	}
 
-	DEBUG_XXD(debug_header, buffer, *length);
-
-#define BSEQ_OFFSET 6
-	if ((*length >= BSEQ_OFFSET +1)
+	/* multislot_extension path: legacy bSeq check on the caller buffer.
+	 * For the simple (libusb_bulk_transfer) path this is already done
+	 * above on tmp_buffer, so the check here is a no-op. */
+	if ((*length >= BSEQ_OFFSET + 1)
 		&& (bSeq != -1)
 		&& (buffer[BSEQ_OFFSET] != bSeq))
 	{
