@@ -109,7 +109,7 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 
-	if (-1 == reader_index)
+	if (! ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
 	/* Reset ATR buffer */
