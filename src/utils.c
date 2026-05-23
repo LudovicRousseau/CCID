@@ -47,6 +47,14 @@ void InitReaderIndex(void)
 	}
 } /* InitReaderIndex */
 
+__attribute__ ((destructor)) static void FiniReaderIndex(void)
+{
+	for (int i=0; i<ccid_driver_max_readers; i++)
+		free(CcidSlots[i]);
+
+	free(CcidSlots);
+} /* FiniReaderIndex */
+
 int GetNewReaderIndex(const int Lun)
 {
 	int i;
