@@ -2015,7 +2015,7 @@ static RESPONSECODE T0ProcSW1(CcidDesc * ccid_reader,
 	unsigned char *in_buf, unsigned int in_len)
 {
 	RESPONSECODE return_value = IFD_SUCCESS;
-	UCHAR tmp_buf[512];
+	UCHAR tmp_buf[512] = { 0 };
 	unsigned char sw1, sw2;
 
 	/* store the SW1 */
