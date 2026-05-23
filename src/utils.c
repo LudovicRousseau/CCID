@@ -39,6 +39,11 @@ void InitReaderIndex(void)
 {
 	ccid_driver_max_readers = INITIAL_CCID_DRIVER_MAX_READERS;
 	CcidSlots = calloc(ccid_driver_max_readers, sizeof(CcidSlots[0]));
+	if (! CcidSlots)
+	{
+		DEBUG_CRITICAL("No memory");
+		return;
+	}
 
 	for (int i=0; i<ccid_driver_max_readers; i++)
 	{
