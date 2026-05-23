@@ -94,18 +94,6 @@ int GetNewReaderIndex(const int Lun)
 	return ret;
 } /* GetReaderIndex */
 
-int LunToReaderIndex(const int Lun)
-{
-	int i;
-
-	for (i=0; i<ccid_driver_max_readers; i++)
-		if (Lun == CcidSlots[i]->lun)
-			return i;
-
-	DEBUG_CRITICAL2("Lun: %X not found", Lun);
-	return -1;
-} /* LunToReaderIndex */
-
 CcidDesc * LunToCcidDesc(const int Lun)
 {
 	int i;
@@ -116,7 +104,7 @@ CcidDesc * LunToCcidDesc(const int Lun)
 
 	DEBUG_CRITICAL2("Lun: %X not found", Lun);
 	return NULL;
-} /* LunToReaderIndex */
+} /* LunToCcidDesc */
 
 void ReleaseReaderIndex(const int index)
 {
