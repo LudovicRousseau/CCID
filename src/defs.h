@@ -306,7 +306,7 @@ typedef struct
 	/* pointer to the multislot extension (if any) */
 	struct usbDevice_MultiSlot_Extension *multislot_extension;
 
-	bool disconnected;
+	_Atomic bool disconnected;
 } _usbDevice;
 
 typedef _usbDevice _Device;
