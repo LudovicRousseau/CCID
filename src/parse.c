@@ -25,7 +25,9 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdbool.h>
+#ifndef __QNX__
 #include <zlib.h>
+#endif
 
 #include "defs.h"
 #include "ccid.h"
@@ -70,7 +72,9 @@ int main(int argc, char *argv[])
 	bool class_ff = false;
 	ssize_t cnt;
 	FILE * fd;
+#ifndef __QNX__
 	gzFile zfd;
+#endif
 
 	if ((argc > 1) && (0 == strcmp(argv[1], "-p")))
 		class_ff = true;
@@ -252,12 +256,14 @@ again:
 
 	printf("\n");
 	rewind(fd);
+#ifndef __QNX__
 	zfd = gzopen(OUTPUT_FILENAME_BIN, "wb");
 	if (NULL == zfd)
 	{
 		perror("gzopen " OUTPUT_FILENAME_BIN);
 		return -1;
 	}
+#endif
 	while (!feof(fd))
 	{
 		size_t s;
@@ -270,10 +276,14 @@ again:
 			return -1;
 		}
 		fwrite(buff, s, 1, stdout);
+#ifndef __QNX__
 		(void)gzfwrite(buff, s, 1, zfd);
+#endif
 	}
 	fclose(fd);
+#ifndef __QNX__
 	gzclose(zfd);
+#endif
 
 	/* remove now useless output.txt */
 	unlink(OUTPUT_FILENAME);

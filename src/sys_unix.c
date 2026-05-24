@@ -167,7 +167,10 @@ INTERNAL void SYS_InitRandom(void)
  */
 INTERNAL const char * SYS_GetEnv(const char *name)
 {
-#ifdef HAVE_SECURE_GETENV
+#ifdef __QNX__
+	/* QNX: Use simple getenv, security checks not available */
+	return getenv(name);
+#elif defined(HAVE_SECURE_GETENV)
 	return secure_getenv(name);
 #else
 	/* Otherwise, make sure current process is not tainted by uid or gid
