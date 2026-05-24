@@ -336,11 +336,13 @@ again_libusb:
 	for (alias=0; alias<list_size(ifdVendorID); alias++)
 	{
 		unsigned int vendorID, productID;
+#ifndef NO_LOG
 		char *friendlyName;
+		friendlyName = list_get_at(ifdFriendlyName, alias);
+#endif
 
 		vendorID = strtoul(list_get_at(ifdVendorID, alias), NULL, 0);
 		productID = strtoul(list_get_at(ifdProductID, alias), NULL, 0);
-		friendlyName = list_get_at(ifdFriendlyName, alias);
 
 #ifndef __APPLE__
 		/* the device was specified but is not the one we are trying to find */
