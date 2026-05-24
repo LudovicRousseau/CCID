@@ -270,7 +270,9 @@ EXTERNAL RESPONSECODE IFDHCloseChannel(DWORD Lun)
 	 */
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -295,7 +297,9 @@ static RESPONSECODE IFDHPolling(DWORD Lun, int timeout)
 {
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -312,7 +316,9 @@ static RESPONSECODE IFDHPollingSEC1210(DWORD Lun, int timeout)
 {
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -332,7 +338,9 @@ static RESPONSECODE IFDHStopPollingSEC1210(DWORD Lun)
 {
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -354,7 +362,9 @@ static RESPONSECODE IFDHSleep(DWORD Lun, int timeout)
 {
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -376,7 +386,9 @@ static RESPONSECODE IFDHStopPolling(DWORD Lun)
 {
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -412,7 +424,9 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 	CcidDesc * ccid_reader;
 	RESPONSECODE return_value = IFD_SUCCESS;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -718,7 +732,9 @@ EXTERNAL RESPONSECODE IFDHSetCapabilities(DWORD Lun, DWORD Tag,
 
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -775,7 +791,9 @@ EXTERNAL RESPONSECODE IFDHSetProtocolParameters(DWORD Lun, DWORD Protocol,
 
 	CcidDesc * ccid_reader;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -1283,7 +1301,9 @@ EXTERNAL RESPONSECODE IFDHPowerICC(DWORD Lun, DWORD Action,
 	/* By default, assume it won't work :) */
 	*AtrLength = 0;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -1440,7 +1460,9 @@ EXTERNAL RESPONSECODE IFDHTransmitToICC(DWORD Lun, SCARD_IO_HEADER SendPci,
 
 	(void)RecvPci;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -1548,7 +1570,9 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 	CcidDesc * ccid_reader;
 	_ccid_descriptor *ccid_descriptor;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
@@ -2078,7 +2102,9 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	_ccid_descriptor *ccid_descriptor;
 	unsigned int oldReadTimeout;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
+	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 	if (NULL == ccid_reader)
 		return IFD_COMMUNICATION_ERROR;
 
