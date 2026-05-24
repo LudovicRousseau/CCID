@@ -59,3 +59,9 @@ jobs:
 
           meson setup --reconfigure -Dserial=true
           meson compile
+
+          meson setup --reconfigure -Dcomposite-as-multislot=true
+          meson compile
+
+          meson setup --reconfigure -Dembedded=true
+          meson compile
