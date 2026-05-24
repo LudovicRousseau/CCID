@@ -1841,8 +1841,6 @@ static void *Multi_PollingProc(void *p_ext)
 
 		if (0 == rv)
 		{
-			int b, slot;
-
 			actual_length = transfer->actual_length;
 			status = transfer->status;
 
@@ -1859,9 +1857,10 @@ static void *Multi_PollingProc(void *p_ext)
 							case RDR_to_PC_NotifySlotChange:
 								DEBUG_XXD("NotifySlotChange: ", buffer, actual_length);
 
+#ifndef NO_LOG
 								/* log the RDR_to_PC_NotifySlotChange data */
-								slot = 0;
-								for (b=0; b<actual_length-1; b++)
+								int slot = 0;
+								for (int b=0; b<actual_length-1; b++)
 								{
 									int s;
 
@@ -1881,6 +1880,7 @@ static void *Multi_PollingProc(void *p_ext)
 									}
 									slot += 4;
 								}
+#endif
 								break;
 
 							case RDR_to_PC_HardwareError:
