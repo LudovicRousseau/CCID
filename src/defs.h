@@ -21,6 +21,7 @@
 #define __DEFS_H__
 
 #include <stdbool.h>
+#include <pthread.h>
 
 #define max( a, b )   ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 
