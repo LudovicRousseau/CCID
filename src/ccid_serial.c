@@ -467,7 +467,7 @@ static status_t set_ccid_descriptor(CcidDesc * ccid_reader,
 	int readerID;
 	int i;
 	bool already_used = false;
-	CcidDesc * previous_ccid_reader = NULL;
+	static CcidDesc * previous_ccid_reader = NULL;
 
 	readerID = GEMPCTWIN;
 	if (0 == strcasecmp(reader_name,"GemCorePOSPro"))
