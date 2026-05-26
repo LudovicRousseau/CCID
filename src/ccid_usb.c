@@ -1365,7 +1365,6 @@ int get_ccid_usb_device_path(CcidDesc * ccid_reader, unsigned char *buf,
 	}
 
     libusb_device *dev = libusb_get_device(handle);
-    dev = libusb_get_device(handle);
     if (!dev) {
         res = IFD_COMMUNICATION_ERROR;
 		goto end;
