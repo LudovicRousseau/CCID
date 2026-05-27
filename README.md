@@ -122,6 +122,29 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.8.0 - 27 May 2026, Ludovic Rousseau
+   - Add support of
+    - GLSolutions NM61 PC/SC
+    - Identiv uTrust FIDO2 Security Key
+    - Kensington VeriMark NFC+ USB-C Security Key
+    - MARX CryptoTech LP Tokey 3 FIDO
+    - mCore Contact-Reader
+    - mCore Contactless-Reader
+    - mCore DualSlot-Reader
+    - Pol Henarejos Pico Fido
+    - Pol Henarejos Pico HSM
+    - Pol Henarejos Pico OpenPGP
+    - Richmond Technologies CO. LLC AEGIS PRO4 Smart Card Reader
+    - SCR Prime
+   - Remove the limitation to 16 readers
+   - udev: Update rules file to comply with systemd documentation
+           (and fix permissions issue)
+   - meson: install serial config file in correct dir
+   - Remove support of autotools
+   - Fix crash in multi slots readers code
+   - Fix some race conditions
+   - Some other minor improvements
+
 1.7.1 - 4 February 2026, Ludovic Rousseau
    - Add support of
     - ACS APG8201-B2
