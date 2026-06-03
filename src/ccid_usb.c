@@ -253,7 +253,7 @@ status_t OpenUSBByName(CcidDesc * ccid_reader, /*@null@*/ char *device)
 	/* is the reader already used? */
 	if (ccid_reader->device.dev_handle != NULL)
 	{
-		DEBUG_CRITICAL2("USB driver with lun %d already in use",
+		DEBUG_CRITICAL2("USB driver with lun %X already in use",
 			ccid_reader->lun);
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -1631,7 +1631,7 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 		return IFD_NO_SUCH_DEVICE;
 	}
 
-	DEBUG_PERIODIC3("before (%d), timeout: %d ms", ccid_reader->lun, timeout);
+	DEBUG_PERIODIC3("before (%X), timeout: %d ms", ccid_reader->lun, timeout);
 
 	transfer = libusb_alloc_transfer(0);
 	if (NULL == transfer)
@@ -1689,7 +1689,7 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 	pthread_mutex_unlock(&usb_device->polling_transfer_mutex);
 	libusb_free_transfer(transfer);
 
-	DEBUG_PERIODIC3("after (%d) (%d)", ccid_reader->lun, ret);
+	DEBUG_PERIODIC3("after (%X) (%d)", ccid_reader->lun, ret);
 
 	switch (ret)
 	{
@@ -2017,7 +2017,7 @@ static int Multi_InterruptRead(CcidDesc * ccid_reader, int timeout /* in ms */)
 	if ((msExt == NULL) || msExt->terminated)
 		return IFD_NO_SUCH_DEVICE;
 
-	DEBUG_PERIODIC3("Multi_InterruptRead (%d), timeout: %d ms",
+	DEBUG_PERIODIC3("Multi_InterruptRead (%X), timeout: %d ms",
 		ccid_reader->lun, timeout);
 
 	/* Select the relevant bit in the interrupt buffer */
@@ -2064,16 +2064,16 @@ again:
 		if (buffer[0] == RDR_to_PC_NotifySlotChange
 			&& 0 == (buffer[interrupt_byte] & interrupt_mask))
 		{
-			DEBUG_PERIODIC2("Multi_InterruptRead (%d) -- skipped",
+			DEBUG_PERIODIC2("Multi_InterruptRead (%X) -- skipped",
 				ccid_reader->lun);
 			goto again;
 		}
-		DEBUG_PERIODIC2("Multi_InterruptRead (%d), got an interrupt",
+		DEBUG_PERIODIC2("Multi_InterruptRead (%X), got an interrupt",
 			ccid_reader->lun);
 	}
 	else
 	{
-		DEBUG_PERIODIC3("Multi_InterruptRead (%d), %s",
+		DEBUG_PERIODIC3("Multi_InterruptRead (%X), %s",
 			ccid_reader->lun, libusb_error_name(status));
 	}
 
@@ -2097,7 +2097,7 @@ static void Multi_InterruptStop(CcidDesc * ccid_reader)
 	if ((NULL == msExt) || msExt->terminated)
 		return;
 
-	DEBUG_PERIODIC2("Stop (%d)", ccid_reader->lun);
+	DEBUG_PERIODIC2("Stop (%X)", ccid_reader->lun);
 
 	interrupt_byte = (ccid_reader->device.ccid.bCurrentSlotIndex / 4) + 1;
 	interrupt_mask = 0x02 << (2 * (ccid_reader->device.ccid.bCurrentSlotIndex % 4));
@@ -2140,7 +2140,7 @@ static void *Multi_ReadProc(void *p_ext)
 	{
 		int slot;
 
-		DEBUG_COMM2("Waiting read for reader %d", ccid_reader->lun);
+		DEBUG_COMM2("Waiting read for reader %X", ccid_reader->lun);
 		rv = libusb_bulk_transfer(msExt->dev_handle,
 			usb_device->bulk_in, buffer, sizeof buffer,
 			&length, 5 * 1000);
@@ -2173,7 +2173,7 @@ static void *Multi_ReadProc(void *p_ext)
 		memcpy(concurrent[slot].buffer, buffer, length);
 		concurrent[slot].length = length;
 		pthread_cond_signal(&concurrent[slot].condition);
-		DEBUG_COMM3("Signaled reader %d slot %d", ccid_reader->lun, slot);
+		DEBUG_COMM3("Signaled reader %X slot %d", ccid_reader->lun, slot);
 
 		pthread_mutex_unlock(&concurrent[slot].mutex);
 	}
