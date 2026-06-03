@@ -553,6 +553,7 @@ again_libusb:
 						/* This is a multislot reader
 						 * Init the multislot stuff for this next slot */
 						usb_device->multislot_extension = previous_ccid_reader->device.multislot_extension;
+						usb_device->previous_slot = previous_ccid_reader;
 						goto end;
 					}
 					else
@@ -721,6 +722,7 @@ again:
 				usb_device->interface = interface;
 				usb_device->real_nb_opened_slots = 1;
 				usb_device->nb_opened_slots = &usb_device->real_nb_opened_slots;
+				usb_device->previous_slot = NULL;
 				pthread_mutex_init(&usb_device->polling_transfer_mutex, NULL);
 				usb_device->polling_transfer = NULL;
 				usb_device->terminate_requested = false;
@@ -1205,6 +1207,17 @@ status_t CloseUSB(CcidDesc * ccid_reader)
 		(void)libusb_release_interface(usb_device->dev_handle,
 			usb_device->interface);
 		(void)libusb_close(usb_device->dev_handle);
+
+		CcidDesc *tmp_reader = ccid_reader;
+		while (tmp_reader)
+		{
+			CcidDesc *previous_slot = tmp_reader->device.previous_slot;
+
+			Log2(PCSC_LOG_INFO, "Release lun: %X", tmp_reader->lun);
+			ReleaseReaderIndex(tmp_reader->reader_index);
+
+			tmp_reader = previous_slot;
+		}
 	}
 
 	/* mark the resource unused */

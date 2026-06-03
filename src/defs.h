@@ -292,6 +292,7 @@ typedef struct
 	/* Number of slots using the same device */
 	int real_nb_opened_slots;
 	int *nb_opened_slots;
+	struct CCID_DESC *previous_slot;
 
 	/*
 	 * CCID infos common to USB and serial

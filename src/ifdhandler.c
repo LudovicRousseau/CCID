@@ -72,8 +72,6 @@ static void FreeChannel(CcidDesc * ccid_reader)
 
 	free(ccid_reader->readerName);
 
-	ReleaseReaderIndex(ccid_reader->reader_index);
-
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
 }
 
