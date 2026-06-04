@@ -1660,6 +1660,8 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 		libusb_free_transfer(transfer);
 		DEBUG_CRITICAL2("libusb_submit_transfer failed: %s",
 			libusb_error_name(ret));
+		if (LIBUSB_ERROR_NO_DEVICE == ret)
+			return IFD_NO_SUCH_DEVICE;
 		return IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1726,6 +1728,10 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 
 		case LIBUSB_TRANSFER_TIMED_OUT:
 		case LIBUSB_TRANSFER_CANCELLED:
+			break;
+
+		case LIBUSB_TRANSFER_NO_DEVICE:
+			return_value = IFD_NO_SUCH_DEVICE;
 			break;
 
 		default:
