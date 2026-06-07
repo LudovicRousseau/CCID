@@ -307,6 +307,7 @@ RESPONSECODE SecurePINVerify(CcidDesc * ccid_reader,
 	int old_read_timeout;
 	RESPONSECODE ret;
 	status_t res;
+	unsigned int rx_capacity = *RxLength;
 
 	uint32_t ulDataLength;
 
@@ -576,6 +577,12 @@ RESPONSECODE SecurePINVerify(CcidDesc * ccid_reader,
 
 				/* I guess we have at least 6 bytes in RxBuffer */
 				*RxLength = 6;
+				/* Do not increase requested length past caller capacity */
+				if (rx_capacity < 6)
+				{
+					ret = IFD_ERROR_INSUFFICIENT_BUFFER;
+					goto end;
+				}
 				ret = CCID_Receive(ccid_reader, RxLength, RxBuffer, NULL);
 				if (ret != IFD_SUCCESS)
 					goto end;
