@@ -1625,7 +1625,7 @@ time_request:
 	{
 		DEBUG_CRITICAL3("Can't read all data (%d out of %d expected)",
 			length-10, dw2i(cmd, 1));
-		return_value = IFD_COMMUNICATION_ERROR;
+		return IFD_COMMUNICATION_ERROR;
 	}
 
 	length = dw2i(cmd, 1);
