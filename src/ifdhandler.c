@@ -563,7 +563,7 @@ EXTERNAL RESPONSECODE IFDHGetCapabilities(DWORD Lun, DWORD Tag,
 		case SCARD_ATTR_MAXINPUT:
 			*Length = sizeof(uint32_t);
 			if (Value)
-				*(uint32_t *)Value = ccid_reader->device.ccid.dwMaxCCIDMessageLength -10;
+				*(uint32_t *)Value = ccid_reader->device.ccid.dwMaxCCIDMessageLength - CCID_HEADER_SIZE;
 			break;
 
 #if !defined(TWIN_SERIAL)
