@@ -158,6 +158,12 @@ RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
 			return IFD_COMMUNICATION_ERROR;
 		}
 
+		if (r == 0)
+		{
+			DEBUG_INFO1("ICC Data Block failed: empty response");
+			return IFD_COMMUNICATION_ERROR;
+		}
+
 		if (tmp[0] != 0x00)
 		{
 			DEBUG_CRITICAL2("bResponseType: 0x%02X", tmp[0]);
