@@ -257,9 +257,9 @@ ack:
 		return rv;
 
 	/* total frame size */
-	to_read = 10+dw2i(buffer, 1);
+	to_read = CCID_RESPONSE_HEADER_SIZE + dw2i(buffer, 1);
 
-	if ((to_read < 10) || (to_read > (int)*length))
+	if ((to_read < CCID_RESPONSE_HEADER_SIZE) || (to_read > (int)*length))
 	{
 		DEBUG_CRITICAL2("Wrong value for frame size: %d", to_read);
 		return STATUS_COMM_ERROR;
