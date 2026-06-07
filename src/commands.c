@@ -87,8 +87,8 @@ static unsigned int bei2i(unsigned char *buffer);
 RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
 	unsigned char buffer[], int voltage)
 {
-	unsigned char cmd[10];
-	unsigned char resp[10 + MAX_ATR_SIZE];
+	unsigned char cmd[CCID_HEADER_SIZE];
+	unsigned char resp[CCID_HEADER_SIZE + MAX_ATR_SIZE];
 	int bSeq;
 	status_t res;
 	int count = 1;
@@ -291,7 +291,7 @@ again:
 
 	*nlength = atr_len;
 
-	memcpy(buffer, resp+10, atr_len);
+	memcpy(buffer, resp + CCID_HEADER_SIZE, atr_len);
 
 	return return_value;
 } /* CmdPowerOn */
@@ -496,10 +496,10 @@ RESPONSECODE SecurePINVerify(CcidDesc * ccid_reader,
 		cmd[6] = (*ccid_descriptor->pbSeq)++;
 	}
 
-	i2dw(a - 10, cmd + 1);  /* CCID message length */
+	i2dw(a - CCID_HEADER_SIZE, cmd + 1);  /* CCID message length */
 
 	old_read_timeout = ccid_descriptor -> readTimeout;
-	ccid_descriptor -> readTimeout = max(90, TxBuffer[0]+10)*1000;	/* at least 90 seconds */
+	ccid_descriptor -> readTimeout = max(90, TxBuffer[0] + 10)*1000;	/* at least 90 seconds */
 
 	res = WritePort(ccid_reader, a, cmd);
 	if (STATUS_SUCCESS != res)
@@ -884,7 +884,7 @@ RESPONSECODE SecurePINModify(CcidDesc * ccid_reader,
 #endif
 
 	/* We know the size of the CCID message now */
-	i2dw(a - 10, cmd + 1);	/* command length (includes bPINOperation) */
+	i2dw(a - CCID_HEADER_SIZE, cmd + 1);	/* command length (includes bPINOperation) */
 
 	old_read_timeout = ccid_descriptor -> readTimeout;
 	ccid_descriptor -> readTimeout = max(90, TxBuffer[0]+10)*1000;	/* at least 90 seconds */
@@ -970,14 +970,14 @@ RESPONSECODE CmdEscapeCheck(CcidDesc * ccid_reader,
 
 again:
 	/* allocate buffers */
-	length_in = 10 + TxLength;
+	length_in = CCID_HEADER_SIZE + TxLength;
 	if (NULL == (cmd_in = malloc(length_in)))
 	{
 		return_value = IFD_COMMUNICATION_ERROR;
 		goto end;
 	}
 
-	length_out = 10 + *RxLength;
+	length_out = CCID_HEADER_SIZE + *RxLength;
 	if (NULL == (cmd_out = malloc(length_out)))
 	{
 		free(cmd_in);
@@ -987,13 +987,13 @@ again:
 
 	bSeq = (*ccid_descriptor->pbSeq)++;
 	cmd_in[0] = PC_to_RDR_Escape;
-	i2dw(length_in - 10, cmd_in+1);	/* dwLength */
+	i2dw(length_in - CCID_HEADER_SIZE, cmd_in+1);	/* dwLength */
 	cmd_in[5] = ccid_descriptor->bCurrentSlotIndex;	/* slot number */
 	cmd_in[6] = bSeq;
 	cmd_in[7] = cmd_in[8] = cmd_in[9] = 0; /* RFU */
 
 	/* copy the command */
-	memcpy(&cmd_in[10], TxBuffer, TxLength);
+	memcpy(&cmd_in[CCID_HEADER_SIZE], TxBuffer, TxLength);
 
 	res = WritePort(ccid_reader, length_in, cmd_in);
 	free(cmd_in);
@@ -1008,7 +1008,7 @@ again:
 	}
 
 time_request:
-	length_out = 10 + *RxLength;
+	length_out = CCID_HEADER_SIZE + *RxLength;
 	res = ReadPort(ccid_reader, &length_out, cmd_out, bSeq);
 
 	/* replay the command if NAK
@@ -1061,7 +1061,7 @@ time_request:
 		return_value = IFD_ERROR_INSUFFICIENT_BUFFER;
 	}
 	*RxLength = length_out;
-	memcpy(RxBuffer, &cmd_out[10], length_out);
+	memcpy(RxBuffer, &cmd_out[CCID_HEADER_SIZE], length_out);
 
 	free(cmd_out);
 
@@ -1080,7 +1080,7 @@ end:
  ****************************************************************************/
 RESPONSECODE CmdPowerOff(CcidDesc * ccid_reader)
 {
-	unsigned char cmd[10];
+	unsigned char cmd[CCID_HEADER_SIZE];
 	int bSeq;
 	status_t res;
 	unsigned int length;
@@ -1172,7 +1172,7 @@ RESPONSECODE CmdPowerOff(CcidDesc * ccid_reader)
 RESPONSECODE CmdGetSlotStatus(CcidDesc * ccid_reader,
 	unsigned char buffer[static SIZE_GET_SLOT_STATUS])
 {
-	unsigned char cmd[10];
+	unsigned char cmd[CCID_HEADER_SIZE];
 	int bSeq;
 	status_t res;
 	unsigned int length;
@@ -1358,7 +1358,7 @@ RESPONSECODE CmdXfrBlock(CcidDesc * ccid_reader, unsigned int tx_length,
 RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
 	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI)
 {
-	unsigned char cmd[10+tx_length];	/* CCID + APDU buffer */
+	unsigned char cmd[CCID_HEADER_SIZE + tx_length];	/* CCID + APDU buffer */
 	_ccid_descriptor *ccid_descriptor = &ccid_reader->device.ccid;
 	status_t ret;
 
@@ -1414,9 +1414,9 @@ RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
 	cmd[9] = (rx_length >> 8) & 0xFF;
 
 	if (tx_buffer)
-		memcpy(cmd+10, tx_buffer, tx_length);
+		memcpy(cmd + CCID_HEADER_SIZE, tx_buffer, tx_length);
 
-	ret = WritePort(ccid_reader, 10+tx_length, cmd);
+	ret = WritePort(ccid_reader, CCID_HEADER_SIZE + tx_length, cmd);
 	CHECK_STATUS(ret)
 
 	return IFD_SUCCESS;
@@ -1431,7 +1431,7 @@ RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
 RESPONSECODE CCID_Receive(CcidDesc * ccid_reader, unsigned int *rx_length,
 	unsigned char rx_buffer[], unsigned char *chain_parameter)
 {
-	unsigned char cmd[10+CMD_BUF_SIZE];	/* CCID + APDU buffer */
+	unsigned char cmd[CCID_HEADER_SIZE + CMD_BUF_SIZE];	/* CCID + APDU buffer */
 	unsigned int length;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	status_t ret;
@@ -1621,10 +1621,10 @@ time_request:
 	}
 
 	/* we have read less (or more) data than the CCID frame says to contain */
-	if (length-10 != dw2i(cmd, 1))
+	if (length - CCID_HEADER_SIZE != dw2i(cmd, 1))
 	{
 		DEBUG_CRITICAL3("Can't read all data (%d out of %d expected)",
-			length-10, dw2i(cmd, 1));
+			length - CCID_HEADER_SIZE, dw2i(cmd, 1));
 		return IFD_COMMUNICATION_ERROR;
 	}
 
@@ -1646,7 +1646,7 @@ time_request:
 	}
 	else
 		if (length)
-			memcpy(rx_buffer, cmd+10, length);
+			memcpy(rx_buffer, cmd + CCID_HEADER_SIZE, length);
 
 	/* Extended case?
 	 * Only valid for RDR_to_PC_DataBlock frames */
@@ -1698,9 +1698,9 @@ static RESPONSECODE CmdXfrBlockAPDU_extended(CcidDesc * ccid_reader,
 		 * PC_to_RDR_XfrBlock */
 		chain_parameter = 0x01;
 	}
-	if (local_tx_length > ccid_descriptor->dwMaxCCIDMessageLength-10)
+	if (local_tx_length > ccid_descriptor->dwMaxCCIDMessageLength - CCID_HEADER_SIZE)
 	{
-		local_tx_length = ccid_descriptor->dwMaxCCIDMessageLength-10;
+		local_tx_length = ccid_descriptor->dwMaxCCIDMessageLength - CCID_HEADER_SIZE;
 		chain_parameter = 0x01;
 	}
 
@@ -1817,20 +1817,20 @@ static RESPONSECODE CmdXfrBlockTPDU_T0(CcidDesc * ccid_reader,
 	DEBUG_COMM2("T=0: %d bytes", tx_length);
 
 	/* command length too big for CCID reader? */
-	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength-10)
+	if (tx_length > ccid_descriptor->dwMaxCCIDMessageLength - CCID_HEADER_SIZE)
 	{
 #ifdef BOGUS_SCM_FIRMWARE_FOR_dwMaxCCIDMessageLength
 		if (263 == ccid_descriptor->dwMaxCCIDMessageLength)
 		{
 			DEBUG_INFO3("Command too long (%d bytes) for max: %d bytes."
 				" SCM reader with bogus firmware?",
-				tx_length, ccid_descriptor->dwMaxCCIDMessageLength-10);
+				tx_length, ccid_descriptor->dwMaxCCIDMessageLength - CCID_HEADER_SIZE);
 		}
 		else
 #endif
 		{
 			DEBUG_CRITICAL3("Command too long (%d bytes) for max: %d bytes",
-				tx_length, ccid_descriptor->dwMaxCCIDMessageLength-10);
+				tx_length, ccid_descriptor->dwMaxCCIDMessageLength - CCID_HEADER_SIZE);
 			return IFD_COMMUNICATION_ERROR;
 		}
 	}
@@ -1950,7 +1950,7 @@ static RESPONSECODE T0ProcACK(CcidDesc * ccid_reader,
 		memset(tmp_buf, 0, sizeof(tmp_buf));
 
 #ifdef O2MICRO_OZ776_PATCH
-		if((0 != remain_len) && (0 == (remain_len + 10) % 64))
+		if((0 != remain_len) && (0 == (remain_len + CCID_HEADER_SIZE) % 64))
 		{
 			/* special hack to avoid a command of size modulo 64
 			 * we send two commands instead */
@@ -2323,7 +2323,7 @@ static RESPONSECODE CmdXfrBlockTPDU_T1(CcidDesc * ccid_reader,
 RESPONSECODE SetParameters(CcidDesc * ccid_reader, char protocol,
 	unsigned int length, unsigned char buffer[])
 {
-	unsigned char cmd[10+length+2];	/* CCID + Protocol Data Structure */
+	unsigned char cmd[CCID_HEADER_SIZE + length + 2];	/* CCID + Protocol Data Structure */
 	int bSeq;
 	_ccid_descriptor *ccid_descriptor = &ccid_reader->device.ccid;
 	status_t res;
@@ -2338,9 +2338,9 @@ RESPONSECODE SetParameters(CcidDesc * ccid_reader, char protocol,
 	cmd[7] = protocol;	/* bProtocolNum */
 	cmd[8] = cmd[9] = 0; /* RFU */
 
-	memcpy(cmd+10, buffer, length);
+	memcpy(cmd + CCID_HEADER_SIZE, buffer, length);
 
-	res = WritePort(ccid_reader, 10+length, cmd);
+	res = WritePort(ccid_reader, CCID_HEADER_SIZE + length, cmd);
 	CHECK_STATUS(res)
 
 	length = sizeof(cmd);
