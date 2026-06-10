@@ -1005,7 +1005,7 @@ read_again:
 		struct multiSlot_ConcurrentAccess *concurrent = usb_device->multislot_extension->concurrent;
 
 		rv = 0;
-		pthread_mutex_lock(&concurrent[slot].mutex);
+		pthread_mutex_lock(&concurrent[slot].slot_mutex);
 
 		/* a frame is available? */
 		if (0 == concurrent[slot].length)
@@ -1029,8 +1029,8 @@ read_again:
 
 			/* wait for a new frame */
 			DEBUG_COMM2("Waiting data for slot %d", slot);
-			rv = pthread_cond_timedwait(&concurrent[slot].condition,
-				&concurrent[slot].mutex, &timeout);
+			rv = pthread_cond_timedwait(&concurrent[slot].slot_condition,
+				&concurrent[slot].slot_mutex, &timeout);
 		}
 
 		if (rv)
@@ -1058,7 +1058,7 @@ read_again:
 				rv = EINTR;
 		}
 
-		pthread_mutex_unlock(&concurrent[slot].mutex);
+		pthread_mutex_unlock(&concurrent[slot].slot_mutex);
 
 		if (rv)
 			return STATUS_UNSUCCESSFUL;
@@ -1158,8 +1158,8 @@ status_t CloseUSB(CcidDesc * ccid_reader)
 				slot++)
 			{
 				/* Create mutex and condition object for the concurrent read */
-				pthread_cond_destroy(&concurrent[slot].condition);
-				pthread_mutex_destroy(&concurrent[slot].mutex);
+				pthread_cond_destroy(&concurrent[slot].slot_condition);
+				pthread_mutex_destroy(&concurrent[slot].slot_mutex);
 			}
 			free(concurrent);
 
@@ -2187,14 +2187,14 @@ static void *Multi_ReadProc(void *p_ext)
 		DEBUG_COMM3("Read %d bytes for slot %d", length, slot);
 
 		/* copy and signal */
-		pthread_mutex_lock(&concurrent[slot].mutex);
+		pthread_mutex_lock(&concurrent[slot].slot_mutex);
 
 		memcpy(concurrent[slot].buffer, buffer, length);
 		concurrent[slot].length = length;
-		pthread_cond_signal(&concurrent[slot].condition);
+		pthread_cond_signal(&concurrent[slot].slot_condition);
 		DEBUG_COMM3("Signaled reader %X slot %d", ccid_reader->lun, slot);
 
-		pthread_mutex_unlock(&concurrent[slot].mutex);
+		pthread_mutex_unlock(&concurrent[slot].slot_mutex);
 	}
 
 	DEBUG_COMM3("Multi_ReadProc (%d/%d): Thread terminated",
@@ -2254,14 +2254,14 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(CcidDesc * cc
 	for (int slot=0; slot<=ccid_reader->device.ccid.bMaxSlotIndex; slot++)
 	{
 		/* Create mutex and condition object for the concurrent read */
-		pthread_mutex_init(&concurrent[slot].mutex, NULL);
+		pthread_mutex_init(&concurrent[slot].slot_mutex, NULL);
 #ifdef HAVE_PTHREAD_CONDATTR_SETCLOCK
 		pthread_condattr_init(&condattr);
 		pthread_condattr_setclock(&condattr, CLOCK_MONOTONIC);
-		pthread_cond_init(&concurrent[slot].condition, &condattr);
+		pthread_cond_init(&concurrent[slot].slot_condition, &condattr);
 		pthread_condattr_destroy(&condattr);
 #else
-		pthread_cond_init(&concurrent[slot].condition, NULL);
+		pthread_cond_init(&concurrent[slot].slot_condition, NULL);
 #endif
 	}
 	msExt->concurrent = concurrent;

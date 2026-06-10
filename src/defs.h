@@ -254,8 +254,8 @@ struct multiSlot_ConcurrentAccess
 	unsigned char buffer[10 + MAX_BUFFER_SIZE_EXTENDED];
 	int length;
 
-	pthread_mutex_t mutex;
-	pthread_cond_t condition;
+	pthread_mutex_t slot_mutex;
+	pthread_cond_t slot_condition;
 };
 
 struct usbDevice_MultiSlot_Extension
