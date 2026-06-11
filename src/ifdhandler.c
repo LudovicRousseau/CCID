@@ -204,6 +204,7 @@ error:
 	{
 		/* release the allocated resources */
 		FreeChannel(ccid_reader);
+		ReleaseReaderIndex(reader_index);
 	}
 
 	return return_value;
