@@ -512,6 +512,7 @@ static status_t set_ccid_descriptor(CcidDesc * ccid_reader,
 			ccid_reader->device = previous_ccid_reader->device;
 
 			*ccid_reader->device.nb_opened_slots += 1;
+			ccid_reader->device.previous_slot = previous_ccid_reader;
 			ccid_reader->device.ccid.bCurrentSlotIndex++;
 			ccid_reader->device.ccid.dwSlotStatus = IFD_ICC_PRESENT;
 			DEBUG_INFO2("Opening slot: %d",
@@ -562,6 +563,7 @@ static status_t set_ccid_descriptor(CcidDesc * ccid_reader,
 	ccid_reader->device.ccid.pbSeq = &ccid_reader->device.ccid.real_bSeq;
 	ccid_reader->device.real_nb_opened_slots = 1;
 	ccid_reader->device.nb_opened_slots = &ccid_reader->device.real_nb_opened_slots;
+	ccid_reader->device.previous_slot = NULL;
 	ccid_reader->device.ccid.bCurrentSlotIndex = 0;
 
 	ccid_reader->device.ccid.dwMaxCCIDMessageLength = 271;
@@ -895,6 +897,17 @@ status_t CloseSerial(CcidDesc * ccid_reader)
 
 		free(ccid_reader->device.device);
 		ccid_reader->device.device = NULL;
+
+		CcidDesc *tmp_reader = ccid_reader;
+		while (tmp_reader)
+		{
+			CcidDesc *previous_slot = tmp_reader->device.previous_slot;
+
+			Log2(PCSC_LOG_INFO, "Release lun: %X", tmp_reader->lun);
+			ReleaseReaderIndex(tmp_reader->reader_index);
+
+			tmp_reader = previous_slot;
+		}
 	}
 
 	return STATUS_SUCCESS;

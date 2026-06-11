@@ -215,6 +215,7 @@ typedef struct
 	 */
 	int real_nb_opened_slots;
 	int *nb_opened_slots;
+	struct CCID_DESC *previous_slot;
 
 	/*
 	 * does the reader echoes the serial communication bytes?
