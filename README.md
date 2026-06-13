@@ -122,6 +122,10 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.8.2 - 13 June 2026, Ludovic Rousseau
+   - Fix initialisation of composite devices (like Yubico tokens)
+   - Correctly close the slots of a multi-slots reader (serial
+
 1.8.1 - 10 June 2026, Ludovic Rousseau
    - Correctly close the slots of a multi-slots reader
    - Fix 3 minor issues "Found by AISLE in partnership with Red Hat"
