@@ -122,6 +122,23 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.8.3 - 29 August 2026, Ludovic Rousseau
+   - Add support of
+    - Broadcom Corp 58200 0x5884
+    - Broadcom Corp 58200 0x5885
+    - Broadcom Corp 58200 0x5886
+    - Broadcom Corp 58200 0x5887
+    - Circle CIR135 ICC
+    - DigiFlow LLP. KAZTOKEN
+    - HID Global Crescendo NFC Reader
+    - HID Global OMNIKEY Plug
+    - HID Global OMNIKEY SE Plug
+    - Neowave LinkeoC-PRO
+    - Swissbit iShield Key 2 Pro
+  - macOS: provide a sample script to build the driver with meson
+  - fix some minor issues found by an AI tool
+   - Some other minor improvements
+
 1.8.2 - 13 June 2026, Ludovic Rousseau
    - Fix initialisation of composite devices (like Yubico tokens)
    - Correctly close the slots of a multi-slots reader (serial
