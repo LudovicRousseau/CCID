@@ -962,6 +962,9 @@
 # Teridian Semiconductors
 0x1862:0x0000:Teridian Semiconductors TSC12xxFV.09
 
+# THALES
+0x08E6:0x34C8:THALES PKI Transaction Pad
+
 # Thales
 0x08E6:0x34C7:Thales Shield M4 Reader
 0x17B9:0x400B:Thales RF Reader
