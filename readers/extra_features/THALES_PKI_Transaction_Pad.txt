@@ -1,0 +1,32 @@
+Reader:    THALES PKI Transaction Pad [PKI Transaction Pad] (3286398F3133) 00 00
+IdVendor:  0x08E6
+IdProduct: 0x34C8
+[8, 17, 0, 2, 96, 0, 0, 0, 88, 0, 0, 0, 1, 4, 8, 1, 105, 130, 0, 0, 0]
+LogicalLCDLineNumber (Logical number of LCD lines): 8
+LogicalLCDRowNumber (Logical number of characters per LCD line): 17
+LcdInfo: 0
+  b0 indicates if scrolling available: False
+EntryValidationCondition: 2
+PC/SCv2 features:
+ VerifyPinStart: False
+ VerifyPinFinish: False
+ ModifyPinStart: False
+ ModifyPinFinish: False
+ GetKeyPressed: False
+ VerifyPinDirect: True
+ ModifyPinDirect: True
+ Abort: False
+ GetKey: False
+ WriteDisplay: False
+ SetSpeMessage: False
+ bTimeOut2: False
+ bListSupportedLanguages: False
+ bNumberMessageFix: False
+ bPPDUSupportOverXferBlock: True
+ bPPDUSupportOverEscape: True
+VersionNumber: 1
+MinimumPINSize: 4
+MaximumPINSize: 8
+Firewall: True
+FirewalledCommand_SW1: 0x69
+FirewalledCommand_SW2: 0x82
