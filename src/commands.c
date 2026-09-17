@@ -1521,6 +1521,13 @@ time_request_ICCD_B:
 			return IFD_COMMUNICATION_ERROR;
 		}
 
+		/* Need at least 1 byte (bResponseType) before switch and r-1 copy */
+		if (r < 1)
+		{
+			DEBUG_INFO1("ICC Data Block too short");
+			return IFD_COMMUNICATION_ERROR;
+		}
+
 		/* copy from the 4 bytes buffer if used */
 		if (old_rx_buffer)
 		{
