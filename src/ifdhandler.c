@@ -2167,13 +2167,10 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	LogLevel = oldLogLevel;
 
 	if (IFD_NO_SUCH_DEVICE == return_value)
-	{
 		return_value = IFD_ICC_NOT_PRESENT;
-		goto end;
-	}
 
 	if (return_value != IFD_SUCCESS)
-		return return_value;
+		goto end;
 
 	return_value = IFD_COMMUNICATION_ERROR;
 	switch (pcbuffer[7] & CCID_ICC_STATUS_MASK)	/* bStatus */
