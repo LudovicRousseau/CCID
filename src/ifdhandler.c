@@ -1583,6 +1583,14 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 
 	DEBUG_INFO4("ControlCode: 0x" DWORD_X ", " LOG_STRING " (lun: " DWORD_X ")",
 		dwControlCode, ccid_reader->readerName, Lun);
+
+	/* size should be less than 128 kB */
+	if (TxLength > (1 << 17))
+	{
+		DEBUG_CRITICAL2("TxLength too big: " DWORD_D, TxLength);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
 	DEBUG_INFO_XXD("Control TxBuffer: ", TxBuffer, TxLength);
 
 	/* Set the return length to 0 to avoid problems */
