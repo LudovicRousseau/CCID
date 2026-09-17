@@ -2109,6 +2109,9 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 	CcidDesc * ccid_reader;
 	_ccid_descriptor *ccid_descriptor;
 	unsigned int oldReadTimeout;
+#ifndef NO_LOG
+	const char *text;
+#endif
 
 	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	ccid_reader = LunToCcidDesc(Lun);
@@ -2273,8 +2276,16 @@ EXTERNAL RESPONSECODE IFDHICCPresence(DWORD Lun)
 #endif
 
 end:
-	DEBUG_PERIODIC2("Card " LOG_STRING,
-		IFD_ICC_PRESENT == return_value ? "present" : "absent");
+
+#ifndef NO_LOG
+	text= "absent";
+	if (IFD_ICC_PRESENT == return_value)
+		text = "present";
+	else
+		if (IFD_ICC_NOT_PRESENT != return_value)
+			text = "ERROR";
+	DEBUG_PERIODIC2("Card " LOG_STRING, text);
+#endif
 
 	return return_value;
 } /* IFDHICCPresence */
