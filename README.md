@@ -135,8 +135,8 @@ History:
     - HID Global OMNIKEY SE Plug
     - Neowave LinkeoC-PRO
     - Swissbit iShield Key 2 Pro
-  - macOS: provide a sample script to build the driver with meson
-  - fix some minor issues found by an AI tool
+   - macOS: provide a sample script to build the driver with meson
+   - fix some minor issues found by an AI tool
    - Some other minor improvements
 
 1.8.2 - 13 June 2026, Ludovic Rousseau
