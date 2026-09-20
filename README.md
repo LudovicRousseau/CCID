@@ -122,6 +122,12 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 History:
 ========
 
+1.8.4 - 20 September 2026, Ludovic Rousseau
+   - Add support of
+    - THALES PKI Transaction Pad
+   - fix some minor issues found by an AI tool
+   - Some other minor improvements
+
 1.8.3 - 29 August 2026, Ludovic Rousseau
    - Add support of
     - Broadcom Corp 58200 0x5884
