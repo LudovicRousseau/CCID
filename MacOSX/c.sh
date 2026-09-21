@@ -29,3 +29,4 @@ meson compile -C "$BUILD_DIR"
 DESTDIR="$INSTALL_DIR" meson install -C "$BUILD_DIR"
 find "$INSTALL_DIR"
 
+# meson dist -C "$BUILD_DIR"
