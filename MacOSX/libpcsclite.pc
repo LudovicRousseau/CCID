@@ -4,4 +4,4 @@ Name: PCSC Lite
 Description: PC/SC smart card interface
 Version: 0.0
 Libs: -framework PCSC
-Cflags: -I../MacOSX
+Cflags: -I../MacOSX -I../../../MacOSX
