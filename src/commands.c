@@ -94,8 +94,10 @@ RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
 	int count = 1;
 	unsigned int atr_len, length;
 	int init_voltage;
+	int requested_voltage = voltage;
 	RESPONSECODE return_value = IFD_SUCCESS;
 	_ccid_descriptor *ccid_descriptor = &ccid_reader->device.ccid;
+	int bVoltageSupport = ccid_descriptor->bVoltageSupport;
 
 #ifndef TWIN_SERIAL
 	if (PROTOCOL_ICCD_A == ccid_descriptor->bInterfaceProtocol)
@@ -188,8 +190,6 @@ RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
 		voltage = VOLTAGE_AUTO;	/* automatic voltage selection */
 	else
 	{
-		int bVoltageSupport = ccid_descriptor->bVoltageSupport;
-
 check_again:
 		if ((1 == voltage) && !(bVoltageSupport & 1))
 		{
@@ -279,6 +279,15 @@ again:
 			/* continue until we tried every values */
 			if (voltage != init_voltage)
 				goto again;
+		}
+		else if (requested_voltage != VOLTAGE_AUTO)
+		{
+			/* Some readers (SCM SCR3310 v2.0) report a mute card with
+			 * automatic voltage selection but work with a given voltage */
+			DEBUG_INFO1("Power up with automatic voltage selection failed. Try with explicit voltages.");
+			voltage = requested_voltage;
+			requested_voltage = VOLTAGE_AUTO;	/* fall back only once */
+			goto check_again;
 		}
 
 		return IFD_COMMUNICATION_ERROR;
