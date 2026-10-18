@@ -101,6 +101,7 @@ static unsigned int SerialCustomDataRates[] = { GEMPLUS_CUSTOM_DATA_RATES, 0 };
 static unsigned int SIMPro2DataRates[] = { SIMPRO2_ISO_DATA_RATES, 0  };
 
 extern CcidDesc **CcidSlots;
+extern int ccid_driver_max_readers;
 
 /* unexported functions */
 static int ReadChunk(CcidDesc * ccid_reader, unsigned char *buffer,
@@ -500,7 +501,7 @@ static status_t set_ccid_descriptor(CcidDesc * ccid_reader,
 		readerID = SEC1210URT;
 
 	/* check if the same channel is not already used to manage multi-slots readers*/
-	for (i = 0; i < CCID_DRIVER_MAX_READERS; i++)
+	for (i = 0; i < ccid_driver_max_readers; i++)
 	{
 		if (CcidSlots[i]->device.device
 			&& strcmp(CcidSlots[i]->device.device, dev_name) == 0)
