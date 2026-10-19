@@ -2315,6 +2315,14 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(CcidDesc * ccid_reader,
 			if (return_value != IFD_SUCCESS)
 				return return_value;
 
+			/* receiving: ask for the next procedure byte, as sending does */
+			if (is_rcv && 0 == in_len)
+			{
+				return_value = CCID_Transmit(ccid_reader, 0, cmd, 1, 0);
+				if (return_value != IFD_SUCCESS)
+					return return_value;
+			}
+
 			continue;
 		}
 		else if ((*in_buf & 0xF0) == 0x60 || (*in_buf & 0xF0) == 0x90)
