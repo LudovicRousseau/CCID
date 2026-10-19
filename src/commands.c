@@ -2212,6 +2212,11 @@ static RESPONSECODE CmdXfrBlockCHAR_T0(CcidDesc * ccid_reader,
 	in_len = 0;
 	*rcv_len = 0;
 
+	/* Case 4: T=0 has no room for Le, the card answers 61xx instead */
+	if (snd_len > 5 && snd_buf[4] != 0
+		&& snd_len == (unsigned int)(snd_buf[4] + 6))
+		snd_len--;
+
 	return_value = T0CmdParsing(snd_buf, snd_len, &exp_len);
 	if (return_value != IFD_SUCCESS)
 	{
