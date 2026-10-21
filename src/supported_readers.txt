@@ -680,6 +680,9 @@
 # Kensington
 0x047D:0x8203:Kensington VeriMark NFC+ USB-C Security Key
 
+# KeyNub
+0x2E8A:0x114B:KeyNub HSM
+
 # KeyXentic Inc.
 0x2F76:0x0906:KeyXentic Inc. KX906 Smart Card Reader
 
