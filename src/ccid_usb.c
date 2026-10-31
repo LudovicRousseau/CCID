@@ -64,6 +64,7 @@ static libusb_context *ctx = NULL;
 
 /* The _usbDevice structure must be defined before including ccid_usb.h */
 #include "ccid_usb.h"
+#include "commands.h"
 
 /* Specific hooks for multislot readers */
 static int Multi_InterruptRead(CcidDesc * ccid_reader, int timeout /* in ms */);
@@ -74,6 +75,9 @@ static void Multi_PollingTerminate(struct usbDevice_MultiSlot_Extension *msExt);
 static int get_end_points(const struct libusb_interface *usb_interface,
 	_usbDevice *usbdevice);
 static bool ccid_check_firmware(struct libusb_device_descriptor *desc);
+
+/* ICCD-A and ICCD-B transports, at the end of this file */
+static const struct ccid_transport_ops ccid_iccd_a_ops, ccid_iccd_b_ops;
 static unsigned int *get_data_rates(CcidDesc * ccid_reader,
 	const unsigned char bNumDataRatesSupported);
 
@@ -756,6 +760,12 @@ again:
 					DEBUG_INFO1("bNumDataRatesSupported is 0");
 				}
 				usb_device->ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
+				if (PROTOCOL_ICCD_A == usb_device->ccid.bInterfaceProtocol)
+					usb_device->ccid.ops = &ccid_iccd_a_ops;
+				else if (PROTOCOL_ICCD_B == usb_device->ccid.bInterfaceProtocol)
+					usb_device->ccid.ops = &ccid_iccd_b_ops;
+				else
+					usb_device->ccid.ops = &ccid_bulk_ops;
 				usb_device->ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
 				usb_device->ccid.dwSlotStatus = IFD_ICC_PRESENT;
 				usb_device->ccid.bVoltageSupport = device_descriptor[5];
@@ -2283,3 +2293,461 @@ static struct usbDevice_MultiSlot_Extension *Multi_CreateFirstSlot(CcidDesc * cc
 	return msExt;
 } /* Multi_CreateFirstSlot */
 
+
+/*
+ * ICCD-A and ICCD-B: USB control requests instead of CCID messages
+ */
+
+/*****************************************************************************
+ *
+ *					iccd_a_power_on
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_a_power_on(CcidDesc * ccid_reader, unsigned int * nlength,
+	unsigned char buffer[], int voltage)
+{
+	int r;
+	unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
+
+	(void)voltage;
+
+	/* first power off to reset the ICC state machine */
+	r = CmdPowerOff(ccid_reader);
+	if (r != IFD_SUCCESS)
+		return r;
+
+	/* wait for ready */
+	r = CmdGetSlotStatus(ccid_reader, pcbuffer);
+	if (r != IFD_SUCCESS)
+		return r;
+
+	/* Power On */
+	r = ControlUSB(ccid_reader, 0xA1, 0x62, 0, buffer, *nlength);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Power On failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	*nlength = r;
+
+	return IFD_SUCCESS;
+} /* iccd_a_power_on */
+
+/*****************************************************************************
+ *
+ *					iccd_a_power_off
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_a_power_off(CcidDesc * ccid_reader)
+{
+	int r;
+
+	/* PowerOff */
+	r = ControlUSB(ccid_reader, 0x21, 0x63, 0, NULL, 0);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Power Off failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	return IFD_SUCCESS;
+} /* iccd_a_power_off */
+
+/*****************************************************************************
+ *
+ *					iccd_a_slot_status
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_a_slot_status(CcidDesc * ccid_reader,
+	unsigned char buffer[static SIZE_GET_SLOT_STATUS])
+{
+	int r;
+	unsigned char status[1];
+
+again_status:
+	/* SlotStatus */
+	r = ControlUSB(ccid_reader, 0xA1, 0xA0, 0, status, sizeof(status));
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Slot Status failed: %s", strerror(errno));
+		if (ENODEV == errno)
+			return IFD_NO_SUCH_DEVICE;
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* busy */
+	if (status[0] & 0x40)
+	{
+		DEBUG_INFO2("Busy: 0x%02X", status[0]);
+		(void)usleep(1000 * 10);
+		goto again_status;
+	}
+
+	/* simulate a CCID bStatus */
+	/* present and active by default */
+	buffer[7] = CCID_ICC_PRESENT_ACTIVE;
+
+	/* mute */
+	if (0x80 == status[0])
+		buffer[7] = CCID_ICC_ABSENT;
+
+	/* store the status for CmdXfrBlockCHAR_T0() */
+	buffer[0] = status[0];
+
+	return IFD_SUCCESS;
+} /* iccd_a_slot_status */
+
+/*****************************************************************************
+ *
+ *					iccd_a_transmit
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_a_transmit(CcidDesc * ccid_reader, unsigned int tx_length,
+	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI)
+{
+	int r;
+
+	(void)rx_length;
+	(void)bBWI;
+
+	/* Xfr Block */
+	r = ControlUSB(ccid_reader, 0x21, 0x65, 0,
+		(unsigned char *)tx_buffer, tx_length);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Xfr Block failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	return IFD_SUCCESS;
+} /* iccd_a_transmit */
+
+/*****************************************************************************
+ *
+ *					iccd_a_receive
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_a_receive(CcidDesc * ccid_reader, unsigned int *rx_length,
+	unsigned char rx_buffer[], unsigned char *chain_parameter)
+{
+	unsigned char pcbuffer[SIZE_GET_SLOT_STATUS];
+	int r;
+
+	(void)chain_parameter;
+
+	/* wait for ready */
+	r = CmdGetSlotStatus(ccid_reader, pcbuffer);
+	if (r != IFD_SUCCESS)
+		return r;
+
+	/* Data Block */
+	r = ControlUSB(ccid_reader, 0xA1, 0x6F, 0, rx_buffer, *rx_length);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Data Block failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* we need to store returned value */
+	*rx_length = r;
+
+	return IFD_SUCCESS;
+} /* iccd_a_receive */
+
+/*****************************************************************************
+ *
+ *					iccd_b_power_on
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_b_power_on(CcidDesc * ccid_reader, unsigned int * nlength,
+	unsigned char buffer[], int voltage)
+{
+	int r;
+	unsigned char tmp[MAX_ATR_SIZE+1];
+
+	(void)voltage;
+
+	/* first power off to reset the ICC state machine */
+	r = CmdPowerOff(ccid_reader);
+	if (r != IFD_SUCCESS)
+		return r;
+
+	/* Power On */
+	r = ControlUSB(ccid_reader, 0x21, 0x62, 1, NULL, 0);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Power On failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* Data Block */
+	r = ControlUSB(ccid_reader, 0xA1, 0x6F, 0, tmp, sizeof(tmp));
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Data Block failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	if (r == 0)
+	{
+		DEBUG_INFO1("ICC Data Block failed: empty response");
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	if (tmp[0] != 0x00)
+	{
+		DEBUG_CRITICAL2("bResponseType: 0x%02X", tmp[0]);
+
+		/* Status Information? */
+		if (0x40 == tmp[0])
+			ccid_error(PCSC_LOG_ERROR, tmp[2], __FILE__, __LINE__, __FUNCTION__);
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	DEBUG_INFO_XXD("Data Block: ", tmp, r);
+	if ((int)*nlength > r-1)
+		*nlength = r-1;
+	memcpy(buffer, tmp+1, *nlength);
+
+	return IFD_SUCCESS;
+} /* iccd_b_power_on */
+
+/*****************************************************************************
+ *
+ *					iccd_b_power_off
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_b_power_off(CcidDesc * ccid_reader)
+{
+	int r;
+	unsigned char buffer[3];
+
+	/* PowerOff */
+	r = ControlUSB(ccid_reader, 0x21, 0x63, 0, NULL, 0);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Power Off failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* SlotStatus */
+	r = ControlUSB(ccid_reader, 0xA1, 0x81, 0, buffer, sizeof(buffer));
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC SlotStatus failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	return IFD_SUCCESS;
+} /* iccd_b_power_off */
+
+/*****************************************************************************
+ *
+ *					iccd_b_slot_status
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_b_slot_status(CcidDesc * ccid_reader,
+	unsigned char buffer[static SIZE_GET_SLOT_STATUS])
+{
+	int r;
+	unsigned char buffer_tmp[3] = {0, 2, 0};
+
+	/* SlotStatus */
+	r = ControlUSB(ccid_reader, 0xA1, 0x81, 0, buffer_tmp,
+		sizeof(buffer_tmp));
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Slot Status failed: %s", strerror(errno));
+		if (ENODEV == errno)
+			return IFD_NO_SUCH_DEVICE;
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* simulate a CCID bStatus */
+	switch (buffer_tmp[1] & 0x03)
+	{
+		case 0:
+			buffer[7] = CCID_ICC_PRESENT_ACTIVE;
+			break;
+		case 1:
+			buffer[7] = CCID_ICC_PRESENT_INACTIVE;
+			break;
+		case 2:
+		case 3:
+			buffer[7] = CCID_ICC_ABSENT;
+	}
+	return IFD_SUCCESS;
+} /* iccd_b_slot_status */
+
+/*****************************************************************************
+ *
+ *					iccd_b_transmit
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_b_transmit(CcidDesc * ccid_reader, unsigned int tx_length,
+	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI)
+{
+	int r;
+
+	(void)bBWI;
+
+	/* nul block so we are chaining */
+	if (NULL == tx_buffer)
+		rx_length = 0x10;	/* bLevelParameter */
+
+	/* Xfr Block */
+	DEBUG_COMM2("chain parameter: %d", rx_length);
+	r = ControlUSB(ccid_reader, 0x21, 0x65, rx_length << 8,
+		(unsigned char *)tx_buffer, tx_length);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Xfr Block failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	return IFD_SUCCESS;
+} /* iccd_b_transmit */
+
+/*****************************************************************************
+ *
+ *					iccd_b_receive
+ *
+ ****************************************************************************/
+static RESPONSECODE iccd_b_receive(CcidDesc * ccid_reader, unsigned int *rx_length,
+	unsigned char rx_buffer[], unsigned char *chain_parameter)
+{
+	int r;
+	unsigned char rx_tmp[4];
+	unsigned char *old_rx_buffer = NULL;
+	int old_rx_length = 0;
+
+	/* read a nul block. buffer need to be at least 4-bytes */
+	if (NULL == rx_buffer)
+	{
+		rx_buffer = rx_tmp;
+		*rx_length = sizeof(rx_tmp);
+	}
+
+	/* the buffer must be 4 bytes minimum for ICCD-B */
+	if (*rx_length < 4)
+	{
+		old_rx_buffer = rx_buffer;
+		old_rx_length = *rx_length;
+		rx_buffer = rx_tmp;
+		*rx_length = sizeof(rx_tmp);
+	}
+
+time_request_ICCD_B:
+	/* Data Block */
+	r = ControlUSB(ccid_reader, 0xA1, 0x6F, 0, rx_buffer, *rx_length);
+
+	/* we got an error? */
+	if (r < 0)
+	{
+		DEBUG_INFO2("ICC Data Block failed: %s", strerror(errno));
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* Need at least 1 byte (bResponseType) before switch and r-1 copy */
+	if (r < 1)
+	{
+		DEBUG_INFO1("ICC Data Block too short");
+		return IFD_COMMUNICATION_ERROR;
+	}
+
+	/* copy from the 4 bytes buffer if used */
+	if (old_rx_buffer)
+	{
+		memcpy(old_rx_buffer, rx_buffer, min(r, old_rx_length));
+		rx_buffer = old_rx_buffer;
+	}
+
+	/* bResponseType */
+	switch (rx_buffer[0])
+	{
+		case 0x00:
+			/* the abData field contains the information created by the
+			 * preceding request */
+			break;
+
+		case 0x40:
+			/* Status Information */
+			ccid_error(PCSC_LOG_ERROR, rx_buffer[2], __FILE__, __LINE__, __FUNCTION__);
+			return IFD_COMMUNICATION_ERROR;
+
+		case 0x80:
+			/* Polling */
+		{
+			int delay;
+
+			delay = (rx_buffer[2] << 8) + rx_buffer[1];
+			DEBUG_COMM2("Pooling delay: %d", delay);
+
+			if (0 == delay)
+				/* host select the delay */
+				delay = 1;
+			(void)usleep(delay * 1000 * 10);
+			goto time_request_ICCD_B;
+		}
+
+		case 0x01:
+		case 0x02:
+		case 0x03:
+		case 0x10:
+			/* Extended case
+			 * Only valid for Data Block frames */
+			if (chain_parameter)
+				*chain_parameter = rx_buffer[0];
+			break;
+
+		default:
+			DEBUG_CRITICAL2("Unknown bResponseType: 0x%02X", rx_buffer[0]);
+			return IFD_COMMUNICATION_ERROR;
+	}
+
+	memmove(rx_buffer, rx_buffer+1, r-1);
+	*rx_length = r-1;
+
+	return IFD_SUCCESS;
+} /* iccd_b_receive */
+
+static const struct ccid_transport_ops ccid_iccd_a_ops =
+{
+	.power_on = iccd_a_power_on,
+	.power_off = iccd_a_power_off,
+	.slot_status = iccd_a_slot_status,
+	.transmit = iccd_a_transmit,
+	.receive = iccd_a_receive,
+};
+
+static const struct ccid_transport_ops ccid_iccd_b_ops =
+{
+	.power_on = iccd_b_power_on,
+	.power_off = iccd_b_power_off,
+	.slot_status = iccd_b_slot_status,
+	.transmit = iccd_b_transmit,
+	.receive = iccd_b_receive,
+};

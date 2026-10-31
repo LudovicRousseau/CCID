@@ -26,6 +26,29 @@
 #define CCID_HEADER_SIZE 10
 #define CCID_RESPONSE_HEADER_SIZE CCID_HEADER_SIZE
 
+/*
+ * The operations that depend on how commands reach the reader.  Everything
+ * else (T=0 and T=1, PPS, PIN pad commands) is common code calling these
+ * through the functions below.
+ */
+struct ccid_transport_ops
+{
+	RESPONSECODE (*power_on)(CcidDesc * ccid_reader, unsigned int * nlength,
+		/*@out@*/ unsigned char buffer[], int voltage);
+	RESPONSECODE (*power_off)(CcidDesc * ccid_reader);
+	RESPONSECODE (*slot_status)(CcidDesc * ccid_reader,
+		/*@out@*/ unsigned char buffer[static SIZE_GET_SLOT_STATUS]);
+	RESPONSECODE (*transmit)(CcidDesc * ccid_reader, unsigned int tx_length,
+		const unsigned char tx_buffer[], unsigned short rx_length,
+		unsigned char bBWI);
+	RESPONSECODE (*receive)(CcidDesc * ccid_reader,
+		/*@out@*/ unsigned int *rx_length,
+		/*@out@*/ unsigned char rx_buffer[], unsigned char *chain_parameter);
+};
+
+/* CCID messages over the bulk endpoints or the serial port */
+extern const struct ccid_transport_ops ccid_bulk_ops;
+
 RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
 	/*@out@*/ unsigned char buffer[], int voltage);
 
