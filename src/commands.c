@@ -84,7 +84,7 @@ static unsigned int bei2i(unsigned char *buffer);
  *					CmdPowerOn
  *
  ****************************************************************************/
-RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
+static RESPONSECODE bulk_power_on(CcidDesc * ccid_reader, unsigned int * nlength,
 	unsigned char buffer[], int voltage)
 {
 	unsigned char cmd[CCID_HEADER_SIZE];
@@ -309,7 +309,7 @@ again:
 	memcpy(buffer, resp + CCID_HEADER_SIZE, atr_len);
 
 	return return_value;
-} /* CmdPowerOn */
+} /* bulk_power_on */
 
 
 /*****************************************************************************
@@ -1109,7 +1109,7 @@ end:
  *					CmdPowerOff
  *
  ****************************************************************************/
-RESPONSECODE CmdPowerOff(CcidDesc * ccid_reader)
+static RESPONSECODE bulk_power_off(CcidDesc * ccid_reader)
 {
 	unsigned char cmd[CCID_HEADER_SIZE];
 	int bSeq;
@@ -1192,7 +1192,7 @@ RESPONSECODE CmdPowerOff(CcidDesc * ccid_reader)
 	}
 
 	return return_value;
-} /* CmdPowerOff */
+} /* bulk_power_off */
 
 
 /*****************************************************************************
@@ -1200,7 +1200,7 @@ RESPONSECODE CmdPowerOff(CcidDesc * ccid_reader)
  *					CmdGetSlotStatus
  *
  ****************************************************************************/
-RESPONSECODE CmdGetSlotStatus(CcidDesc * ccid_reader,
+static RESPONSECODE bulk_slot_status(CcidDesc * ccid_reader,
 	unsigned char buffer[static SIZE_GET_SLOT_STATUS])
 {
 	unsigned char cmd[CCID_HEADER_SIZE];
@@ -1321,7 +1321,7 @@ again_status:
 	}
 
 	return return_value;
-} /* CmdGetSlotStatus */
+} /* bulk_slot_status */
 
 
 /*****************************************************************************
@@ -1386,7 +1386,7 @@ RESPONSECODE CmdXfrBlock(CcidDesc * ccid_reader, unsigned int tx_length,
  *					CCID_Transmit
  *
  ****************************************************************************/
-RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
+static RESPONSECODE bulk_transmit(CcidDesc * ccid_reader, unsigned int tx_length,
 	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI)
 {
 	unsigned char cmd[CCID_HEADER_SIZE + tx_length];	/* CCID + APDU buffer */
@@ -1451,7 +1451,7 @@ RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
 	CHECK_STATUS(ret)
 
 	return IFD_SUCCESS;
-} /* CCID_Transmit */
+} /* bulk_transmit */
 
 
 /*****************************************************************************
@@ -1459,7 +1459,7 @@ RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
  *					CCID_Receive
  *
  ****************************************************************************/
-RESPONSECODE CCID_Receive(CcidDesc * ccid_reader, unsigned int *rx_length,
+static RESPONSECODE bulk_receive(CcidDesc * ccid_reader, unsigned int *rx_length,
 	unsigned char rx_buffer[], unsigned char *chain_parameter)
 {
 	unsigned char cmd[CCID_HEADER_SIZE + CMD_BUF_SIZE];	/* CCID + APDU buffer */
@@ -1692,7 +1692,7 @@ time_request:
 		*chain_parameter = cmd[CHAIN_PARAMETER_OFFSET];
 
 	return return_value;
-} /* CCID_Receive */
+} /* bulk_receive */
 
 
 /*****************************************************************************
@@ -2454,4 +2454,52 @@ static void i2dw(int value, unsigned char buffer[])
 static unsigned int bei2i(unsigned char buffer[])
 {
 	return (buffer[0]<<24) + (buffer[1]<<16) + (buffer[2]<<8) + buffer[3];
+}
+
+
+const struct ccid_transport_ops ccid_bulk_ops =
+{
+	.power_on = bulk_power_on,
+	.power_off = bulk_power_off,
+	.slot_status = bulk_slot_status,
+	.transmit = bulk_transmit,
+	.receive = bulk_receive,
+};
+
+
+/*****************************************************************************
+ *
+ *		The exported functions call the reader's transport
+ *
+ ****************************************************************************/
+RESPONSECODE CmdPowerOn(CcidDesc * ccid_reader, unsigned int * nlength,
+	unsigned char buffer[], int voltage)
+{
+	return ccid_reader->device.ccid.ops->power_on(ccid_reader, nlength,
+		buffer, voltage);
+}
+
+RESPONSECODE CmdPowerOff(CcidDesc * ccid_reader)
+{
+	return ccid_reader->device.ccid.ops->power_off(ccid_reader);
+}
+
+RESPONSECODE CmdGetSlotStatus(CcidDesc * ccid_reader,
+	unsigned char buffer[static SIZE_GET_SLOT_STATUS])
+{
+	return ccid_reader->device.ccid.ops->slot_status(ccid_reader, buffer);
+}
+
+RESPONSECODE CCID_Transmit(CcidDesc * ccid_reader, unsigned int tx_length,
+	const unsigned char tx_buffer[], unsigned short rx_length, unsigned char bBWI)
+{
+	return ccid_reader->device.ccid.ops->transmit(ccid_reader, tx_length,
+		tx_buffer, rx_length, bBWI);
+}
+
+RESPONSECODE CCID_Receive(CcidDesc * ccid_reader, unsigned int *rx_length,
+	unsigned char rx_buffer[], unsigned char *chain_parameter)
+{
+	return ccid_reader->device.ccid.ops->receive(ccid_reader, rx_length,
+		rx_buffer, chain_parameter);
 }

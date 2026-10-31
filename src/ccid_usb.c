@@ -64,6 +64,7 @@ static libusb_context *ctx = NULL;
 
 /* The _usbDevice structure must be defined before including ccid_usb.h */
 #include "ccid_usb.h"
+#include "commands.h"
 
 /* Specific hooks for multislot readers */
 static int Multi_InterruptRead(CcidDesc * ccid_reader, int timeout /* in ms */);
@@ -756,6 +757,7 @@ again:
 					DEBUG_INFO1("bNumDataRatesSupported is 0");
 				}
 				usb_device->ccid.bInterfaceProtocol = usb_interface->altsetting->bInterfaceProtocol;
+				usb_device->ccid.ops = &ccid_bulk_ops;
 				usb_device->ccid.bNumEndpoints = usb_interface->altsetting->bNumEndpoints;
 				usb_device->ccid.dwSlotStatus = IFD_ICC_PRESENT;
 				usb_device->ccid.bVoltageSupport = device_descriptor[5];
