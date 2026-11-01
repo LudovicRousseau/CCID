@@ -1864,6 +1864,20 @@ EXTERNAL RESPONSECODE IFDHControl(DWORD Lun, DWORD dwControlCode,
 			RxBuffer[p++] = 0x02;	/* validation key pressed */
 		}
 
+		/* SCM Microsystems SPR 532 */
+		if (SPR532 == ccid_descriptor -> readerID)
+		{
+			/* bMinPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMinPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 0;	/* min PIN size */
+
+			/* bMaxPINSize */
+			RxBuffer[p++] = PCSCv2_PART10_PROPERTY_bMaxPINSize;
+			RxBuffer[p++] = 1;	/* length */
+			RxBuffer[p++] = 25;	/* max PIN size */
+		}
+
 		/* Cherry KC 1000 SC */
 		if (CHERRY_KC1000SC == ccid_descriptor -> readerID)
 		{
