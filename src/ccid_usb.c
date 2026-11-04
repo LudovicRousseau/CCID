@@ -1645,7 +1645,7 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 {
 	int ret, actual_length;
 	int return_value = IFD_SUCCESS;
-	unsigned char buffer[8];
+	unsigned char buffer[CCID_INTERRUPT_SIZE];
 	struct libusb_transfer *transfer;
 	int completed = 0;
 	_usbDevice * usb_device = &ccid_reader->device;
