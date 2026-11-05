@@ -806,7 +806,23 @@ again:
 
 				/* If this is a multislot reader, init the multislot stuff */
 				if (usb_device->ccid.bMaxSlotIndex)
+				{
+					/* first byte is bMessageType */
+					int max_slot = (CCID_INTERRUPT_SIZE -1) * 4;
+
+					if (usb_device->ccid.bMaxSlotIndex >= max_slot)
+					{
+						DEBUG_CRITICAL3("Too many slots: %d (max %d)",
+							usb_device->ccid.bMaxSlotIndex +1, max_slot);
+
+						libusb_free_config_descriptor(config_desc);
+						(void)libusb_close(dev_handle);
+						usb_device->dev_handle = NULL;
+
+						goto end;
+					}
 					usb_device->multislot_extension = Multi_CreateFirstSlot(ccid_reader);
+				}
 				else
 					usb_device->multislot_extension = NULL;
 
@@ -1639,7 +1655,7 @@ int InterruptRead(CcidDesc *ccid_reader, int timeout /* in ms */)
 {
 	int ret, actual_length;
 	int return_value = IFD_SUCCESS;
-	unsigned char buffer[8];
+	unsigned char buffer[CCID_INTERRUPT_SIZE];
 	struct libusb_transfer *transfer;
 	int completed = 0;
 	_usbDevice * usb_device = &ccid_reader->device;

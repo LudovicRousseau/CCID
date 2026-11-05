@@ -27,7 +27,8 @@
 
 #include <pcsclite.h>
 
-#define CCID_INTERRUPT_SIZE 8
+/* first byte is bMessageType */
+#define CCID_INTERRUPT_SIZE 1+7
 
 // Uncomment if you want to synchronize the card movements on the 2
 // interfaces of the Microchip SEC 1210 reader
