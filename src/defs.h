@@ -41,6 +41,8 @@ struct _sec1210_cond {
 };
 #endif
 
+struct ccid_transport_ops;
+
 typedef struct _ccid_descriptor
 {
 	/*
@@ -130,6 +132,11 @@ typedef struct _ccid_descriptor
 	 * bInterfaceProtocol (CCID, ICCD-A, ICCD-B)
 	 */
 	int bInterfaceProtocol;
+
+	/*
+	 * how commands reach the reader, see commands.h
+	 */
+	const struct ccid_transport_ops *ops;
 
 	/*
 	 * bNumEndpoints

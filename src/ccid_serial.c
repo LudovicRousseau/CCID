@@ -573,6 +573,7 @@ static status_t set_ccid_descriptor(CcidDesc * ccid_reader,
 
 	/* Common to all readers */
 	ccid_reader->device.ccid.real_bSeq = 0;
+	ccid_reader->device.ccid.ops = &ccid_bulk_ops;
 	ccid_reader->device.ccid.pbSeq = &ccid_reader->device.ccid.real_bSeq;
 	ccid_reader->device.real_nb_opened_slots = 1;
 	ccid_reader->device.nb_opened_slots = &ccid_reader->device.real_nb_opened_slots;
