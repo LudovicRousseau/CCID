@@ -101,14 +101,14 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0DC3, 0x1004, 0x0502 },	/* ASE IIIe USBv2 */
 	{ 0x0DC3, 0x1102, 0x0607 },	/* ASE IIIe KB USB */
 	{ 0x058F, 0x9520, 0x0102 },	/* Alcor AU9520-G */
-	{ 0x072F, 0x2200, 0x0206 }, /* ACS ACR122U-WB-R */
+	{ 0x072F, 0x2200, 0x0206 },	/* ACS ACR122U-WB-R */
 	{ 0x08C3, 0x0402, 0x5000 },	/* Precise Biometrics Precise 200 MC */
 	{ 0x08C3, 0x0401, 0x5000 },	/* Precise Biometrics Precise 250 MC */
 	{ 0x0B0C, 0x0050, 0x0101 },	/* Todos Argos Mini II */
-	{ 0x0DC3, 0x0900, 0x0200 }, /* Athena IDProtect Key v2 */
-	{ 0x03F0, 0x0036, 0x0124 }, /* HP USB CCID Smartcard Keyboard */
-	{ 0x062D, 0x0001, 0x0102 }, /* THRC Smart Card Reader */
-	{ 0x04E6, 0x5291, 0x0112 }, /* SCM SCL010 Contactless Reader */
+	{ 0x0DC3, 0x0900, 0x0200 },	/* Athena IDProtect Key v2 */
+	{ 0x03F0, 0x0036, 0x0124 },	/* HP USB CCID Smartcard Keyboard */
+	{ 0x062D, 0x0001, 0x0102 },	/* THRC Smart Card Reader */
+	{ 0x04E6, 0x5291, 0x0112 },	/* SCM SCL010 Contactless Reader */
 
 	/* the firmware version is not correct since I do not have received a
 	 * working reader yet */
@@ -410,12 +410,12 @@ again_libusb:
 				 * are seen by pcscd as one reader so the
 				 * interface name is the same for the two.
 				 *
-	* So we have:
-	* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
-	* 1: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 01
-	* instead of
-	* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
-	* 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
+				 * So we have:
+				 * 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
+				 * 1: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 01
+				 * instead of
+				 * 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
+				 * 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
 				 */
 
 				/* simulate a composite device as when libudev is used */
