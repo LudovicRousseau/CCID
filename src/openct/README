@@ -3,3 +3,7 @@ project <http://www.opensc.org/>
 
 I (Ludovic Rousseau) greatly patched proto-t1.c to add all the needed
 code to reach the quality level requested by the EMV standard.
+
+I (Stephan Baerwolf) slightly modified error-handling in "t1_transceive"
+for "O2 Micro OZ776 CCID Smartcard Reader" devices (0b97:7772).
+(There some "random?" usb timeouts cause operations to fail otherwise.)
