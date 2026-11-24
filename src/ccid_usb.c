@@ -136,7 +136,10 @@ static void close_libusb_if_needed(void)
 	for (int i=0; i<ccid_driver_max_readers; i++)
 	{
 		if (CcidSlots[i]->device.dev_handle != NULL)
+		{
 			to_exit = false;
+			break;
+		}
 	}
 
 	if (to_exit)
