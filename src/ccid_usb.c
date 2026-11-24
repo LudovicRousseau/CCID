@@ -80,6 +80,9 @@ static unsigned int *get_data_rates(CcidDesc * ccid_reader,
 extern CcidDesc **CcidSlots;
 extern int ccid_driver_max_readers;
 
+/* global mutex */
+static pthread_mutex_t usb_context_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 #define PCSCLITE_MANUKEY_NAME "ifdVendorID"
 #define PCSCLITE_PRODKEY_NAME "ifdProductID"
 #define PCSCLITE_NAMEKEY_NAME "ifdFriendlyName"
@@ -129,8 +132,9 @@ static void close_libusb_if_needed(void)
 {
 	bool to_exit = true;
 
+	(void)pthread_mutex_lock(&usb_context_mutex);
 	if (NULL == ctx)
-		return;
+		goto ret_unlock;
 
 	/* if at least 1 reader is still in use we do not exit libusb */
 	for (int i=0; i<ccid_driver_max_readers; i++)
@@ -148,6 +152,9 @@ static void close_libusb_if_needed(void)
 		libusb_exit(ctx);
 		ctx = NULL;
 	}
+
+ret_unlock:
+	(void)pthread_mutex_unlock(&usb_context_mutex);
 } /* close_libusb_if_needed */
 
 /*****************************************************************************
@@ -291,16 +298,19 @@ status_t OpenUSBByName(CcidDesc * ccid_reader, /*@null@*/ char *device)
 	GET_KEY("ifdProductString", values)
 	GET_KEY("Copyright", values)
 
+	(void)pthread_mutex_lock(&usb_context_mutex);
 	if (NULL == ctx)
 	{
 		rv = libusb_init(&ctx);
 		if (rv != 0)
 		{
-			DEBUG_CRITICAL2("libusb_init failed: %s", libusb_error_name(rv));
 			return_value = STATUS_UNSUCCESSFUL;
+			(void)pthread_mutex_unlock(&usb_context_mutex);
+			DEBUG_CRITICAL2("libusb_init failed: %s", libusb_error_name(rv));
 			goto end1;
 		}
 	}
+	(void)pthread_mutex_unlock(&usb_context_mutex);
 
 #define GET_KEYS(key, values) \
 	rv = LTPBundleFindValueWithKey(&plist, key, values); \
