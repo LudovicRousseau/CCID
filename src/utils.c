@@ -34,13 +34,16 @@
 
 CcidDesc **CcidSlots;
 int ccid_driver_max_readers = -1;
+pthread_mutex_t ccid_driver_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void InitReaderIndex(void)
 {
+	(void)pthread_mutex_lock(&ccid_driver_mutex);
 	ccid_driver_max_readers = INITIAL_CCID_DRIVER_MAX_READERS;
 	CcidSlots = calloc(ccid_driver_max_readers, sizeof(CcidSlots[0]));
 	if (! CcidSlots)
 	{
+		(void)pthread_mutex_unlock(&ccid_driver_mutex);
 		DEBUG_CRITICAL("No memory");
 		return;
 	}
@@ -50,11 +53,14 @@ void InitReaderIndex(void)
 		CcidSlots[i] = calloc(1, sizeof(*CcidSlots[0]));
 		if (! CcidSlots[i])
 		{
+			(void)pthread_mutex_unlock(&ccid_driver_mutex);
 			DEBUG_CRITICAL("No memory");
 			return;
 		}
 		CcidSlots[i]->lun = FREE_ENTRY;
 	}
+
+	(void)pthread_mutex_unlock(&ccid_driver_mutex);
 } /* InitReaderIndex */
 
 __attribute__ ((destructor)) static void FiniReaderIndex(void)
@@ -75,10 +81,12 @@ int GetNewReaderIndex(const int Lun)
 	int i;
 	int ret;
 
+	(void)pthread_mutex_lock(&ccid_driver_mutex);
 	/* check that Lun is NOT already used */
 	for (i=0; i<ccid_driver_max_readers; i++)
 		if (Lun == CcidSlots[i]->lun)
 		{
+			(void)pthread_mutex_unlock(&ccid_driver_mutex);
 			DEBUG_CRITICAL2("Lun: %X is already used", Lun);
 			return -1;
 		}
@@ -87,6 +95,7 @@ int GetNewReaderIndex(const int Lun)
 		if (FREE_ENTRY == CcidSlots[i]->lun)
 		{
 			CcidSlots[i]->lun = Lun;
+			(void)pthread_mutex_unlock(&ccid_driver_mutex);
 			return i;
 		}
 
@@ -106,6 +115,7 @@ int GetNewReaderIndex(const int Lun)
 
 	ccid_driver_max_readers = new_size;
 
+	(void)pthread_mutex_unlock(&ccid_driver_mutex);
 	return ret;
 } /* GetReaderIndex */
 
@@ -113,18 +123,25 @@ CcidDesc * LunToCcidDesc(const int Lun)
 {
 	int i;
 
+	(void)pthread_mutex_lock(&ccid_driver_mutex);
 	for (i=0; i<ccid_driver_max_readers; i++)
 		if (Lun == CcidSlots[i]->lun)
+		{
+			(void)pthread_mutex_unlock(&ccid_driver_mutex);
 			return CcidSlots[i];
+		}
 
+	(void)pthread_mutex_unlock(&ccid_driver_mutex);
 	DEBUG_CRITICAL2("Lun: %X not found", Lun);
 	return NULL;
 } /* LunToCcidDesc */
 
 void ReleaseReaderIndex(const int index)
 {
+	(void)pthread_mutex_lock(&ccid_driver_mutex);
 	memset(CcidSlots[index], 0, sizeof(*CcidSlots[0]));
 	CcidSlots[index]->lun = FREE_ENTRY;
+	(void)pthread_mutex_unlock(&ccid_driver_mutex);
 } /* ReleaseReaderIndex */
 
 /* Read a non aligned 16-bit integer */
