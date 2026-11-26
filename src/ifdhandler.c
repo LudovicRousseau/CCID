@@ -83,19 +83,9 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 	CcidDesc * ccid_reader = NULL;
 	status_t ret;
 
+	(void)pthread_mutex_lock(&ifdh_context_mutex);
 	if (! DebugInitialized)
 		init_driver();
-
-	if (lpcDevice)
-	{
-		DEBUG_INFO3("Lun: " DWORD_X ", device: " LOG_STRING, Lun, lpcDevice);
-	}
-	else
-	{
-		DEBUG_INFO3("Lun: " DWORD_X ", Channel: " DWORD_X, Lun, Channel);
-	}
-
-	(void)pthread_mutex_lock(&ifdh_context_mutex);
 
 	reader_index = GetNewReaderIndex(Lun);
 
@@ -106,6 +96,16 @@ static RESPONSECODE CreateChannelByNameOrChannel(DWORD Lun,
 	}
 
 	(void)pthread_mutex_unlock(&ifdh_context_mutex);
+
+	if (lpcDevice)
+	{
+		DEBUG_INFO3("Lun: " DWORD_X ", device: " LOG_STRING, Lun, lpcDevice);
+	}
+	else
+	{
+		DEBUG_INFO3("Lun: " DWORD_X ", Channel: " DWORD_X, Lun, Channel);
+	}
+
 
 	if (! ccid_reader)
 		return IFD_COMMUNICATION_ERROR;

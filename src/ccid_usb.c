@@ -80,6 +80,9 @@ static unsigned int *get_data_rates(CcidDesc * ccid_reader,
 extern CcidDesc **CcidSlots;
 extern int ccid_driver_max_readers;
 
+/* global mutex */
+static pthread_mutex_t usb_context_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 #define PCSCLITE_MANUKEY_NAME "ifdVendorID"
 #define PCSCLITE_PRODKEY_NAME "ifdProductID"
 #define PCSCLITE_NAMEKEY_NAME "ifdFriendlyName"
@@ -101,14 +104,14 @@ static struct _bogus_firmware Bogus_firmwares[] = {
 	{ 0x0DC3, 0x1004, 0x0502 },	/* ASE IIIe USBv2 */
 	{ 0x0DC3, 0x1102, 0x0607 },	/* ASE IIIe KB USB */
 	{ 0x058F, 0x9520, 0x0102 },	/* Alcor AU9520-G */
-	{ 0x072F, 0x2200, 0x0206 }, /* ACS ACR122U-WB-R */
+	{ 0x072F, 0x2200, 0x0206 },	/* ACS ACR122U-WB-R */
 	{ 0x08C3, 0x0402, 0x5000 },	/* Precise Biometrics Precise 200 MC */
 	{ 0x08C3, 0x0401, 0x5000 },	/* Precise Biometrics Precise 250 MC */
 	{ 0x0B0C, 0x0050, 0x0101 },	/* Todos Argos Mini II */
-	{ 0x0DC3, 0x0900, 0x0200 }, /* Athena IDProtect Key v2 */
-	{ 0x03F0, 0x0036, 0x0124 }, /* HP USB CCID Smartcard Keyboard */
-	{ 0x062D, 0x0001, 0x0102 }, /* THRC Smart Card Reader */
-	{ 0x04E6, 0x5291, 0x0112 }, /* SCM SCL010 Contactless Reader */
+	{ 0x0DC3, 0x0900, 0x0200 },	/* Athena IDProtect Key v2 */
+	{ 0x03F0, 0x0036, 0x0124 },	/* HP USB CCID Smartcard Keyboard */
+	{ 0x062D, 0x0001, 0x0102 },	/* THRC Smart Card Reader */
+	{ 0x04E6, 0x5291, 0x0112 },	/* SCM SCL010 Contactless Reader */
 
 	/* the firmware version is not correct since I do not have received a
 	 * working reader yet */
@@ -129,14 +132,18 @@ static void close_libusb_if_needed(void)
 {
 	bool to_exit = true;
 
+	(void)pthread_mutex_lock(&usb_context_mutex);
 	if (NULL == ctx)
-		return;
+		goto ret_unlock;
 
 	/* if at least 1 reader is still in use we do not exit libusb */
 	for (int i=0; i<ccid_driver_max_readers; i++)
 	{
 		if (CcidSlots[i]->device.dev_handle != NULL)
+		{
 			to_exit = false;
+			break;
+		}
 	}
 
 	if (to_exit)
@@ -145,6 +152,9 @@ static void close_libusb_if_needed(void)
 		libusb_exit(ctx);
 		ctx = NULL;
 	}
+
+ret_unlock:
+	(void)pthread_mutex_unlock(&usb_context_mutex);
 } /* close_libusb_if_needed */
 
 /*****************************************************************************
@@ -288,16 +298,19 @@ status_t OpenUSBByName(CcidDesc * ccid_reader, /*@null@*/ char *device)
 	GET_KEY("ifdProductString", values)
 	GET_KEY("Copyright", values)
 
+	(void)pthread_mutex_lock(&usb_context_mutex);
 	if (NULL == ctx)
 	{
 		rv = libusb_init(&ctx);
 		if (rv != 0)
 		{
-			DEBUG_CRITICAL2("libusb_init failed: %s", libusb_error_name(rv));
 			return_value = STATUS_UNSUCCESSFUL;
+			(void)pthread_mutex_unlock(&usb_context_mutex);
+			DEBUG_CRITICAL2("libusb_init failed: %s", libusb_error_name(rv));
 			goto end1;
 		}
 	}
+	(void)pthread_mutex_unlock(&usb_context_mutex);
 
 #define GET_KEYS(key, values) \
 	rv = LTPBundleFindValueWithKey(&plist, key, values); \
@@ -410,12 +423,12 @@ again_libusb:
 				 * are seen by pcscd as one reader so the
 				 * interface name is the same for the two.
 				 *
-	* So we have:
-	* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
-	* 1: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 01
-	* instead of
-	* 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
-	* 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
+				 * So we have:
+				 * 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
+				 * 1: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 01
+				 * instead of
+				 * 0: Gemalto Prox-DU [Prox-DU Contact_09A00795] (09A00795) 00 00
+				 * 1: Gemalto Prox-DU [Prox-DU Contactless_09A00795] (09A00795) 01 00
 				 */
 
 				/* simulate a composite device as when libudev is used */
